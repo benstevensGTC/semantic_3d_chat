@@ -53,13 +53,13 @@ from semantic_3d_chat.language.prefix_injection import (
     scene_prefix_after_bos_setting,
     stack_prefix_batches,
 )
-from semantic_3d_chat.scene_encoder.map_io import MapTensorData, load_map_tensors
 from semantic_3d_chat.scene_encoder.global_residual import (
     GlobalSceneResidual,
     apply_global_scene_residual,
     construct_global_scene_residual,
     global_scene_residual_settings,
 )
+from semantic_3d_chat.scene_encoder.map_io import MapTensorData, load_map_tensors
 from semantic_3d_chat.scene_encoder.projector import SceneTokenizer
 from semantic_3d_chat.training.checkpointing import (
     load_adapter_checkpoint,
@@ -126,6 +126,66 @@ def optional_sha256_setting(settings: Mapping[str, object], key: str) -> str | N
     if not isinstance(value, str) or re.fullmatch(r"[0-9a-f]{64}", value) is None:
         raise ValueError(f"training.{key} must be a lowercase SHA-256 hex digest")
     return value
+
+
+def declared_global_scene_residual_parameter_count(config: Mapping[str, object]) -> int | None:
+    """Return an optional experiment-level assertion for the residual surface."""
+
+    experiment = config.get("experiment")
+    if experiment is None:
+        return None
+    if not isinstance(experiment, Mapping):
+        raise TypeError("experiment config must be a mapping")
+    value = experiment.get("residual_parameter_count")
+    if value is None:
+        return None
+    if isinstance(value, bool) or not isinstance(value, int) or value <= 0:
+        raise ValueError("experiment.residual_parameter_count must be a positive integer")
+    return value
+
+
+def validate_global_scene_residual_state(
+    module: GlobalSceneResidual,
+    *,
+    expected_parameter_count: int | None,
+    context: str,
+) -> dict[str, object]:
+    """Validate every persisted tensor and the optional declared parameter count."""
+
+    audit = module.validate_structural_state()
+    observed = module.parameter_count
+    if expected_parameter_count is not None and observed != expected_parameter_count:
+        raise ValueError(
+            f"Global scene residual parameter-count mismatch during {context}: "
+            f"expected={expected_parameter_count} observed={observed}"
+        )
+    if audit.get("parameter_count") != observed:
+        raise RuntimeError("Global scene residual structural audit reported a stale count")
+    return dict(audit)
+
+
+def global_scene_residual_resume_metadata_mismatch(
+    metadata: Mapping[str, object],
+    module: GlobalSceneResidual,
+    *,
+    expected_initial_state_sha256: str,
+) -> dict[str, object] | None:
+    """Compare strict residual provenance fields before restoring resume tensors."""
+
+    mismatches: dict[str, object] = {}
+    saved_initial = metadata.get("global_scene_residual_initial_state_sha256")
+    if saved_initial != expected_initial_state_sha256:
+        mismatches["global_scene_residual_initial_state_sha256"] = {
+            "checkpoint": saved_initial,
+            "runtime": expected_initial_state_sha256,
+        }
+    saved_count = metadata.get("global_scene_residual_parameter_count")
+    if saved_count != module.parameter_count:
+        mismatches["global_scene_residual_parameter_count"] = {
+            "checkpoint": saved_count,
+            "runtime": module.parameter_count,
+        }
+    return mismatches or None
 
 
 def verify_initialization_artifact_hashes(
@@ -608,9 +668,7 @@ def verify_zero_output_scene_residual_equivalence(
                         f"Fresh global scene residual changed update-0 tokens for {scene_id}"
                     )
                 core_prefix = composer.scene_prefix(core.scene_tokens.to(dtype=model_dtype))
-                adapted_prefix = composer.scene_prefix(
-                    adapted.scene_tokens.to(dtype=model_dtype)
-                )
+                adapted_prefix = composer.scene_prefix(adapted.scene_tokens.to(dtype=model_dtype))
                 if not torch.equal(core_prefix, adapted_prefix):
                     raise RuntimeError(
                         f"Fresh global scene residual changed update-0 prefix for {scene_id}"
@@ -2241,9 +2299,7 @@ def evaluate_pair_candidate_gate(
                 pair_margins: list[torch.Tensor] = []
                 pair_full_vocab_margins: list[torch.Tensor] = []
                 outputs = {
-                    scene_id: map_forward(
-                        scene_model, maps[scene_id], global_scene_residual
-                    )
+                    scene_id: map_forward(scene_model, maps[scene_id], global_scene_residual)
                     for scene_id in scene_ids
                 }
                 for offset in range(0, len(pair_units), units_per_batch):
@@ -2415,6 +2471,7 @@ def main() -> None:
     configured_lora = lora_banks_settings(config)
     configured_lora_optimizer = lora_banks_optimizer_settings(config, configured_lora)
     residual_settings = global_scene_residual_settings(config)
+    declared_residual_parameter_count = declared_global_scene_residual_parameter_count(config)
     freeze_scene_adapter = config["training"].get("freeze_scene_adapter", False)
     if not isinstance(freeze_scene_adapter, bool):
         raise TypeError("training.freeze_scene_adapter must be a boolean")
@@ -2744,6 +2801,11 @@ def main() -> None:
     )
     if global_scene_residual is not None:
         global_scene_residual = global_scene_residual.to(language.device)
+        validate_global_scene_residual_state(
+            global_scene_residual,
+            expected_parameter_count=declared_residual_parameter_count,
+            context="deterministic construction",
+        )
         observed_initial_residual_sha256 = module_collection_state_sha256(
             {"global_scene_residual": global_scene_residual}
         )
@@ -2756,6 +2818,10 @@ def main() -> None:
         if torch.count_nonzero(global_scene_residual.output_projection.weight).item() != 0:
             raise ValueError("Global scene residual is not exact zero-output at initialization")
     else:
+        if declared_residual_parameter_count is not None:
+            raise ValueError(
+                "experiment.residual_parameter_count requires an enabled global scene residual"
+            )
         observed_initial_residual_sha256 = None
     composer = ContinuousPrefixComposer(
         language.hidden_size,
@@ -2786,17 +2852,13 @@ def main() -> None:
         configured_lora_optimizer,
     )
     if global_scene_residual is not None:
-        expected_trainable_ids = {
-            id(parameter) for parameter in global_scene_residual.parameters()
-        }
+        expected_trainable_ids = {id(parameter) for parameter in global_scene_residual.parameters()}
         observed_trainable_ids = {id(parameter) for parameter in parameters}
         if observed_trainable_ids != expected_trainable_ids:
             raise RuntimeError(
                 "Residual-only optimizer surface contains missing or unexpected parameters"
             )
-        if [group.get("name") for group in optimizer.param_groups] != [
-            "global_scene_residual"
-        ]:
+        if [group.get("name") for group in optimizer.param_groups] != ["global_scene_residual"]:
             raise RuntimeError("Residual-only optimizer must contain exactly one named group")
     scene_checkpoint_modules = {
         "scene_model": scene_model,
@@ -2906,9 +2968,7 @@ def main() -> None:
         elif initialize_named_lora_freeze_transition:
             freeze_transition_mismatch = named_lora_freeze_transition_mismatch(
                 initialize_preflight,
-                lora_installation
-                if isinstance(lora_installation, LoRABankCollection)
-                else None,
+                lora_installation if isinstance(lora_installation, LoRABankCollection) else None,
             )
             if freeze_transition_mismatch is not None:
                 initialization_mismatches["named_lora_freeze_transition"] = (
@@ -2955,11 +3015,14 @@ def main() -> None:
         elif initialize_named_lora_freeze_transition:
             if not isinstance(lora_installation, LoRABankCollection):
                 raise TypeError("Named LoRA freeze transition did not install named banks")
-            validate_named_lora_freeze_transition_state(
-                loaded_initialization, lora_installation
-            )
+            validate_named_lora_freeze_transition_state(loaded_initialization, lora_installation)
             if global_scene_residual is None:
                 raise RuntimeError("Named LoRA freeze transition lost the residual module")
+            validate_global_scene_residual_state(
+                global_scene_residual,
+                expected_parameter_count=declared_residual_parameter_count,
+                context="source checkpoint initialization",
+            )
             residual_sha_after_source_load = module_collection_state_sha256(
                 {"global_scene_residual": global_scene_residual}
             )
@@ -3049,6 +3112,20 @@ def main() -> None:
                 f"checkpoint={resume_preflight.get('global_scene_residual')} "
                 f"runtime={residual_settings.contract()}"
             )
+        if global_scene_residual is not None:
+            expected_initial_hash = residual_settings.expected_initial_state_sha256
+            if expected_initial_hash is None:  # guarded by enabled settings validation
+                raise RuntimeError("Enabled residual lost its expected initial-state hash")
+            residual_metadata_mismatch = global_scene_residual_resume_metadata_mismatch(
+                resume_preflight,
+                global_scene_residual,
+                expected_initial_state_sha256=expected_initial_hash,
+            )
+            if residual_metadata_mismatch is not None:
+                raise ValueError(
+                    "Resume checkpoint global-scene-residual provenance mismatch: "
+                    f"{residual_metadata_mismatch}"
+                )
         if configured_lora.enabled:
             provenance_mismatch = source_provenance_resume_contract_mismatch(
                 resume_preflight, source_provenance
@@ -3100,6 +3177,11 @@ def main() -> None:
         if lora_installation is not None:
             validate_lora_banks_checkpoint_state(resume_metadata, lora_installation)
         if global_scene_residual is not None:
+            validate_global_scene_residual_state(
+                global_scene_residual,
+                expected_parameter_count=declared_residual_parameter_count,
+                context="resume checkpoint load",
+            )
             observed_resumed_residual_hash = module_collection_state_sha256(
                 {"global_scene_residual": global_scene_residual}
             )
@@ -3355,7 +3437,10 @@ def main() -> None:
             )
         else:
             saved_equivalence = resume_metadata.get("global_scene_residual_zero_output_equivalence")
-            if not isinstance(saved_equivalence, dict) or saved_equivalence.get("verified") is not True:
+            if (
+                not isinstance(saved_equivalence, dict)
+                or saved_equivalence.get("verified") is not True
+            ):
                 raise ValueError(
                     "Residual resume checkpoint lacks verified update-0 prefix equivalence"
                 )
@@ -4294,9 +4379,7 @@ def main() -> None:
                 if global_scene_residual is None
                 else sum(parameter.numel() for parameter in global_scene_residual.parameters())
             ),
-            "global_scene_residual_initial_state_sha256": (
-                observed_initial_residual_sha256
-            ),
+            "global_scene_residual_initial_state_sha256": (observed_initial_residual_sha256),
             "global_scene_residual_state_sha256": (
                 None
                 if global_scene_residual is None
@@ -4348,16 +4431,18 @@ def main() -> None:
         current_residual_hash = (
             None
             if global_scene_residual is None
-            else module_collection_state_sha256(
-                {"global_scene_residual": global_scene_residual}
-            )
+            else module_collection_state_sha256({"global_scene_residual": global_scene_residual})
         )
         if current_residual_hash != metadata["global_scene_residual_state_sha256"]:
-            raise RuntimeError("Global scene residual state changed during checkpoint metadata save")
-        if global_scene_residual is not None and not all(
-            torch.isfinite(parameter).all() for parameter in global_scene_residual.parameters()
-        ):
-            raise RuntimeError("Global scene residual contains NaN or infinity before save")
+            raise RuntimeError(
+                "Global scene residual state changed during checkpoint metadata save"
+            )
+        if global_scene_residual is not None:
+            validate_global_scene_residual_state(
+                global_scene_residual,
+                expected_parameter_count=declared_residual_parameter_count,
+                context="checkpoint save",
+            )
         current_frozen_bank_hashes = (
             {}
             if lora_installation is None
@@ -4566,9 +4651,7 @@ def main() -> None:
         "global_scene_residual_state_sha256": (
             None
             if global_scene_residual is None
-            else module_collection_state_sha256(
-                {"global_scene_residual": global_scene_residual}
-            )
+            else module_collection_state_sha256({"global_scene_residual": global_scene_residual})
         ),
         "global_scene_residual_zero_output_equivalence": zero_output_equivalence,
         "question_dependent_scene_processing": False,

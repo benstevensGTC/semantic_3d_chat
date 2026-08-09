@@ -39,13 +39,13 @@ from semantic_3d_chat.language.prefix_injection import (
     scene_prefix_after_bos_contract_mismatch,
     scene_prefix_after_bos_setting,
 )
-from semantic_3d_chat.scene_encoder.map_io import MapTensorData, load_map_tensors
 from semantic_3d_chat.scene_encoder.global_residual import (
     GlobalSceneResidual,
     apply_global_scene_residual,
     construct_global_scene_residual,
     global_scene_residual_settings,
 )
+from semantic_3d_chat.scene_encoder.map_io import MapTensorData, load_map_tensors
 from semantic_3d_chat.scene_encoder.projector import SceneTokenizer, SceneTokenizerOutput
 from semantic_3d_chat.training.checkpointing import (
     load_adapter_checkpoint,
@@ -126,6 +126,30 @@ def _scene_tokenizer_contract(config: dict[str, Any]) -> dict[str, int | float |
     }
 
 
+def _validate_global_scene_residual_state(
+    module: GlobalSceneResidual,
+    *,
+    expected_parameter_count: object,
+    context: str,
+) -> dict[str, Any]:
+    """Fail before inference on nonfinite or structurally inconsistent state."""
+
+    audit = module.validate_structural_state()
+    observed = module.parameter_count
+    if (
+        isinstance(expected_parameter_count, bool)
+        or not isinstance(expected_parameter_count, int)
+        or expected_parameter_count != observed
+    ):
+        raise ValueError(
+            f"Global scene residual parameter-count mismatch during {context}: "
+            f"checkpoint={expected_parameter_count} runtime={observed}"
+        )
+    if audit.get("parameter_count") != observed:
+        raise RuntimeError("Global scene residual structural audit reported a stale count")
+    return audit
+
+
 def validate_checkpoint_contract(
     metadata: dict[str, Any],
     config: dict[str, Any],
@@ -202,9 +226,10 @@ def validate_checkpoint_contract(
     for key, value in scene_tokenizer_contract.items():
         if key in metadata and not _equal_number(metadata[key], value):
             mismatches[key] = {"checkpoint": metadata[key], "runtime": value}
-    if "global_scene_residual" in metadata and metadata.get(
-        "global_scene_residual"
-    ) != residual_contract:
+    if (
+        "global_scene_residual" in metadata
+        and metadata.get("global_scene_residual") != residual_contract
+    ):
         mismatches["global_scene_residual"] = {
             "checkpoint": metadata.get("global_scene_residual"),
             "runtime": residual_contract,
@@ -357,6 +382,14 @@ class StaticChatRuntime:
         self.global_scene_residual = (
             None if global_scene_residual is None else global_scene_residual.eval()
         )
+        if self.global_scene_residual is not None:
+            _validate_global_scene_residual_state(
+                self.global_scene_residual,
+                expected_parameter_count=self.checkpoint_metadata.get(
+                    "global_scene_residual_parameter_count"
+                ),
+                context="runtime device initialization",
+            )
         self.composer = composer.eval()
         configured_layout = scene_prefix_after_bos_setting(config)
         if self.composer.scene_prefix_after_bos != configured_layout:
@@ -477,6 +510,12 @@ class StaticChatRuntime:
             scene_dim=language.hidden_size,
             latent_count=int(config["scene_encoder"]["global_latents"]),
         )
+        if global_scene_residual is not None:
+            _validate_global_scene_residual_state(
+                global_scene_residual,
+                expected_parameter_count=metadata.get("global_scene_residual_parameter_count"),
+                context="runtime deterministic construction",
+            )
         composer = ContinuousPrefixComposer(
             language.hidden_size,
             scene_prefix_after_bos=scene_prefix_after_bos_setting(config),
@@ -520,17 +559,11 @@ class StaticChatRuntime:
             validate_lora_banks_checkpoint_state(metadata, lora_installation)
             language.model.requires_grad_(False)
         if global_scene_residual is not None:
-            observed_residual_parameters = sum(
-                parameter.numel() for parameter in global_scene_residual.parameters()
+            _validate_global_scene_residual_state(
+                global_scene_residual,
+                expected_parameter_count=metadata.get("global_scene_residual_parameter_count"),
+                context="runtime checkpoint load",
             )
-            if observed_residual_parameters != metadata.get(
-                "global_scene_residual_parameter_count"
-            ):
-                raise ValueError(
-                    "Global scene residual parameter-count mismatch: "
-                    f"checkpoint={metadata.get('global_scene_residual_parameter_count')} "
-                    f"runtime={observed_residual_parameters}"
-                )
             observed_residual_hash = module_collection_state_sha256(
                 {"global_scene_residual": global_scene_residual}
             )

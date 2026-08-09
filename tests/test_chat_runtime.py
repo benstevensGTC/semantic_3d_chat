@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -26,9 +27,11 @@ from semantic_3d_chat.language.lora import (
     lora_checkpoint_contract,
     lora_optimizer_settings,
     lora_settings,
+    tensor_state_sha256,
 )
 from semantic_3d_chat.language.prefix_injection import ContinuousPrefixComposer
 from semantic_3d_chat.scene_encoder.global_residual import (
+    ZERO_SPATIAL_MEAN_CONTENT_GATE_V1,
     GlobalSceneResidual,
     construct_global_scene_residual,
     global_scene_residual_settings,
@@ -521,6 +524,8 @@ def _tiny_lora_language() -> LocalLanguageModel:
 
 def _tiny_global_residual_runtime_checkpoint(
     tmp_path: Path,
+    *,
+    content_gated: bool = False,
 ) -> tuple[dict, Path, GlobalSceneResidual, str]:
     """Build a fully strict synthetic checkpoint with a trained residual."""
 
@@ -528,22 +533,27 @@ def _tiny_global_residual_runtime_checkpoint(
     config = tiny_config()
     config["scene_encoder"]["architecture_version"] = "signal_preserving_resampler_v3"
     config["language"].update({"backend": "causal_lm", "dtype": "float32"})
+    architecture = (
+        {"architecture_version": ZERO_SPATIAL_MEAN_CONTENT_GATE_V1, "gate_temperature": 0.75}
+        if content_gated
+        else {}
+    )
     initial_residual = GlobalSceneResidual(
         scene_dim=8,
         latent_count=4,
         width=4,
         fourier_bands=2,
         initialization_seed=16162,
+        **architecture,
     )
-    initial_hash = module_collection_state_sha256(
-        {"global_scene_residual": initial_residual}
-    )
+    initial_hash = module_collection_state_sha256({"global_scene_residual": initial_residual})
     config["scene_encoder"]["global_scene_residual"] = {
         "enabled": True,
         "width": 4,
         "fourier_bands": 2,
         "initialization_seed": 16162,
         "expected_initial_state_sha256": initial_hash,
+        **architecture,
     }
     source_residual = construct_global_scene_residual(
         config,
@@ -553,9 +563,7 @@ def _tiny_global_residual_runtime_checkpoint(
     assert source_residual is not None
     with torch.no_grad():
         source_residual.output_projection.weight.fill_(0.03125)
-    trained_hash = module_collection_state_sha256(
-        {"global_scene_residual": source_residual}
-    )
+    trained_hash = module_collection_state_sha256({"global_scene_residual": source_residual})
 
     scene_model = construct_scene_tokenizer(config, semantic_dim=7, language_hidden_dim=8)
     composer = ContinuousPrefixComposer(8)
@@ -578,7 +586,8 @@ def _tiny_global_residual_runtime_checkpoint(
         "question_dependent_scene_processing": False,
     }
     checkpoint = save_adapter_checkpoint(
-        tmp_path / "runtime_global_residual",
+        tmp_path
+        / ("runtime_content_gated_residual" if content_gated else "runtime_global_residual"),
         {
             "scene_model": scene_model,
             "composer": composer,
@@ -610,8 +619,8 @@ def test_static_chat_roundtrips_global_residual_and_applies_it_before_questions(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    config, checkpoint, source_residual, trained_hash = (
-        _tiny_global_residual_runtime_checkpoint(tmp_path)
+    config, checkpoint, source_residual, trained_hash = _tiny_global_residual_runtime_checkpoint(
+        tmp_path
     )
     _mock_tiny_global_residual_runtime(monkeypatch)
 
@@ -619,9 +628,10 @@ def test_static_chat_roundtrips_global_residual_and_applies_it_before_questions(
 
     assert runtime.questions_answered == 0
     assert runtime.global_scene_residual is not None
-    assert module_collection_state_sha256(
-        {"global_scene_residual": runtime.global_scene_residual}
-    ) == trained_hash
+    assert (
+        module_collection_state_sha256({"global_scene_residual": runtime.global_scene_residual})
+        == trained_hash
+    )
     for name, expected in source_residual.state_dict().items():
         assert torch.equal(runtime.global_scene_residual.state_dict()[name], expected)
     model_dtype = next(runtime.language.model.parameters()).dtype
@@ -634,10 +644,43 @@ def test_static_chat_roundtrips_global_residual_and_applies_it_before_questions(
     assert runtime.startup_summary()["global_scene_residual_state_sha256"] == trained_hash
 
 
+def test_static_chat_roundtrips_content_gated_residual_contract_and_state(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    config, checkpoint, source_residual, trained_hash = _tiny_global_residual_runtime_checkpoint(
+        tmp_path, content_gated=True
+    )
+    _mock_tiny_global_residual_runtime(monkeypatch)
+
+    runtime = StaticChatRuntime.load(config, "scene_000001", checkpoint)
+
+    assert runtime.questions_answered == 0
+    assert runtime.global_scene_residual is not None
+    assert runtime.global_scene_residual.parameter_count == source_residual.parameter_count
+    assert (
+        runtime.global_scene_residual.validate_structural_state()["architecture_version"]
+        == ZERO_SPATIAL_MEAN_CONTENT_GATE_V1
+    )
+    assert torch.equal(
+        runtime.global_scene_residual.content_gate_projection.weight,
+        source_residual.content_gate_projection.weight,
+    )
+    assert torch.equal(
+        runtime.global_scene_residual.gate_temperature,
+        source_residual.gate_temperature,
+    )
+    assert runtime.checkpoint_metadata["global_scene_residual"]["schema_version"] == 2
+    assert runtime.startup_summary()["global_scene_residual_state_sha256"] == trained_hash
+    assert runtime.current_prefix_hash() == runtime.scene_prefix_hash
+
+
 @pytest.mark.parametrize(
     "tampered_key",
     [
         "global_scene_residual.output_projection.weight",
+        "global_scene_residual.content_gate_projection.weight",
+        "global_scene_residual.gate_temperature",
         "global_scene_residual.position_features",
     ],
 )
@@ -646,15 +689,92 @@ def test_static_chat_rejects_global_residual_parameter_or_buffer_tamper(
     monkeypatch: pytest.MonkeyPatch,
     tampered_key: str,
 ) -> None:
-    config, checkpoint, _source_residual, _trained_hash = (
-        _tiny_global_residual_runtime_checkpoint(tmp_path)
+    config, checkpoint, _source_residual, _trained_hash = _tiny_global_residual_runtime_checkpoint(
+        tmp_path, content_gated=True
     )
     _mock_tiny_global_residual_runtime(monkeypatch)
     tensors = load_file(checkpoint / "adapter.safetensors")
     tensors[tampered_key].view(-1)[0].add_(0.125)
     save_file(tensors, checkpoint / "adapter.safetensors")
 
-    with pytest.raises(ValueError, match="Global scene residual state mismatch or tamper"):
+    with pytest.raises(ValueError, match="Global scene residual|Persistent"):
+        StaticChatRuntime.load(config, "scene_000001", checkpoint)
+
+
+def _rewrite_residual_tensors_and_attest_hash(
+    checkpoint: Path,
+    tensors: dict[str, torch.Tensor],
+) -> None:
+    """Model an attacker changing both tensor state and its adjacent metadata hash."""
+
+    save_file(tensors, checkpoint / "adapter.safetensors")
+    metadata_path = checkpoint / "metadata.json"
+    metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
+    residual_state = {
+        name: value for name, value in tensors.items() if name.startswith("global_scene_residual.")
+    }
+    metadata["global_scene_residual_state_sha256"] = tensor_state_sha256(residual_state)
+    metadata_path.write_text(
+        json.dumps(metadata, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+
+
+@pytest.mark.parametrize(
+    ("tampered_key", "message"),
+    [
+        ("global_scene_residual.gate_temperature", "temperature"),
+        ("global_scene_residual.position_features", "position features"),
+    ],
+)
+def test_static_chat_rejects_rehashed_immutable_residual_buffer_tamper(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    tampered_key: str,
+    message: str,
+) -> None:
+    config, checkpoint, _source_residual, _trained_hash = _tiny_global_residual_runtime_checkpoint(
+        tmp_path, content_gated=True
+    )
+    _mock_tiny_global_residual_runtime(monkeypatch)
+    tensors = load_file(checkpoint / "adapter.safetensors")
+    tensors[tampered_key].view(-1)[0].add_(0.125)
+    _rewrite_residual_tensors_and_attest_hash(checkpoint, tensors)
+
+    with pytest.raises(ValueError, match=message):
+        StaticChatRuntime.load(config, "scene_000001", checkpoint)
+
+
+def test_static_chat_rejects_rehashed_nonfinite_residual_parameter(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    config, checkpoint, _source_residual, _trained_hash = _tiny_global_residual_runtime_checkpoint(
+        tmp_path, content_gated=True
+    )
+    _mock_tiny_global_residual_runtime(monkeypatch)
+    tensors = load_file(checkpoint / "adapter.safetensors")
+    tensors["global_scene_residual.content_gate_projection.weight"].view(-1)[0] = float("nan")
+    _rewrite_residual_tensors_and_attest_hash(checkpoint, tensors)
+
+    with pytest.raises(ValueError, match="nonfinite.*content_gate_projection.weight"):
+        StaticChatRuntime.load(config, "scene_000001", checkpoint)
+
+
+def test_static_chat_rejects_residual_parameter_count_metadata_mismatch(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    config, checkpoint, source_residual, _trained_hash = _tiny_global_residual_runtime_checkpoint(
+        tmp_path, content_gated=True
+    )
+    _mock_tiny_global_residual_runtime(monkeypatch)
+    metadata_path = checkpoint / "metadata.json"
+    metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
+    metadata["global_scene_residual_parameter_count"] = source_residual.parameter_count - 1
+    metadata_path.write_text(json.dumps(metadata, indent=2) + "\n", encoding="utf-8")
+
+    with pytest.raises(ValueError, match="parameter-count mismatch"):
         StaticChatRuntime.load(config, "scene_000001", checkpoint)
 
 
