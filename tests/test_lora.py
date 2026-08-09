@@ -15,6 +15,7 @@ from semantic_3d_chat.language.lora import (
     lora_checkpoint_contract_mismatch,
     lora_optimizer_settings,
     lora_settings,
+    tensor_state_sha256,
     validate_lora_checkpoint_state,
 )
 from semantic_3d_chat.training.checkpointing import (
@@ -54,6 +55,18 @@ class _TinyGemma(nn.Module):
         super().__init__()
         self.model = nn.Module()
         self.model.language_model = _TinyLanguageModel()
+
+
+def test_tensor_state_sha256_supports_scalars_without_changing_vector_bytes() -> None:
+    scalar = torch.tensor(1.25, dtype=torch.float32)
+    vector = scalar.reshape(1)
+
+    scalar_hash = tensor_state_sha256({"value": scalar})
+    vector_hash = tensor_state_sha256({"value": vector})
+
+    assert len(scalar_hash) == 64
+    assert scalar_hash != vector_hash  # The tensor shape remains part of the identity.
+    assert scalar_hash == tensor_state_sha256({"value": scalar.clone()})
 
 
 def _enabled_config() -> dict:

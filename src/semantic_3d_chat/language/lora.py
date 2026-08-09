@@ -431,7 +431,11 @@ def tensor_state_sha256(state: Mapping[str, torch.Tensor]) -> str:
         ).encode("utf-8")
         digest.update(len(header).to_bytes(8, "big"))
         digest.update(header)
-        digest.update(tensor.view(torch.uint8).numpy().tobytes())
+        # ``view(torch.uint8)`` rejects a zero-dimensional scalar when the
+        # element sizes differ. Flattening first preserves the exact byte
+        # order for every existing non-scalar state while making scalar model
+        # buffers hashable as well.
+        digest.update(tensor.reshape(-1).view(torch.uint8).numpy().tobytes())
     return digest.hexdigest()
 
 
