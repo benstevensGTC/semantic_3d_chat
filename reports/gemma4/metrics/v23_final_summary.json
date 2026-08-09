@@ -1,0 +1,275 @@
+{
+  "schema_version": 1,
+  "archive_type": "immutable_v23_final_summary",
+  "sealed_from_source": {
+    "training": {
+      "head_commit": "2a8cd075f7961092d756efaa1e619f62a14c1262",
+      "head_tree": "2018b80f79736809637bde1d20ade56cc18e40d5",
+      "is_clean": true,
+      "scope": "repository_excluding_generated_artifacts_v1",
+      "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "extension_controller": {
+      "head_commit": "39c12a1422aa01949efe32c0fa6f28221c6aa348",
+      "head_tree": "820ed21bc294f1999f34bc75873bfc236de331f0",
+      "is_clean": true,
+      "scope": "repository_excluding_generated_artifacts_v1",
+      "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "integrity_policy": {
+    "validator_is_source_head_independent": true,
+    "current_source_head_required": false,
+    "optimizer_replay_identity": "exact decoded state and adapter tensors; raw torch.save container bytes are recorded but not required to match",
+    "question_dependent_scene_processing": false
+  },
+  "config": {
+    "path": "configs/experiments/gemma4_color_mirror_shared_kv_v23.yaml",
+    "file_sha256": "d8df78fa62bd271adedfea7b7327153f3fa35cbaa1eaf8e50051c4aba068615c",
+    "resolved_config_sha256": "5416ac62c7670cea067a92e6edfaadda450f9f78c3412b18209e1c63c578053e",
+    "preflight_contract_sha256": "a26ebc16efff574e15c61a541f8d0f68700da6bbb54654cfa90855e48c2f9fe4"
+  },
+  "architecture": {
+    "source_checkpoint": "data_gemma4/checkpoints/gemma4_v21_phase_aware_local_field_extension_u8/epoch_008",
+    "frozen_scene_state_sha256": "690bd890bfda024dbb5c7d3c68087b8113bc3b8ee81dd6143c7eb2a884e7245b",
+    "frozen_global_scene_residual_state_sha256": "ce3bf864eed6dd4a50f1b67296981e144d6a79e9cf192ad9a9230f2ae18208dc",
+    "frozen_signed_x_scene_residual_state_sha256": "e8dabc69627f60723b89520b02dfee985e49b7b7e35fdd1213cc79f7b8164f58",
+    "trainable_bank": "extension_v23_shared_kv",
+    "trainable_parameter_count": 30720,
+    "rank": 4,
+    "alpha": 8.0,
+    "learning_rate": 0.0003,
+    "target_modules": [
+      "model.language_model.layers.13.self_attn.k_proj",
+      "model.language_model.layers.13.self_attn.v_proj",
+      "model.language_model.layers.14.self_attn.k_proj",
+      "model.language_model.layers.14.self_attn.v_proj"
+    ]
+  },
+  "preflight": {
+    "authorized": true,
+    "model_loaded": false,
+    "oracle_loaded": false,
+    "question_dependent_scene_processing": false,
+    "new_bank_exact_zero_output": true,
+    "new_bank_initial_state_sha256": "707defddb599baf670ab3fec6594d8f8ccccd6b31689393c1c7ca30abaeed59d"
+  },
+  "update_1_verification": {
+    "match": true,
+    "stage_2_authorized": true,
+    "model_loaded": false,
+    "oracle_loaded": false,
+    "report_only": true,
+    "adapter_sha256": "eacddd78b1cc640c29f753c6dfc2b46bcdc1af9ca491d8b7dbda92f73f625d52",
+    "metadata_sha256": "619c5fd56499342f15474cf2ffdae25a2db5703ecce561a08665cc5e5009ff2c",
+    "optimizer_sha256": "80a6811640f486d2321213217fc76224a13de87b8646ede150e79440b2f7ce0f",
+    "decoded_optimizer_state_sha256": "6d8b88c7b047ec77cbfc2d784d5e4686de55483b600d34586e8cbdd8ab369186"
+  },
+  "extension_replay": {
+    "match": true,
+    "stage_b_authorized": true,
+    "replayed_epochs": [3, 4],
+    "adapter_and_decoded_optimizer_exact_replay": true,
+    "optimizer_container_byte_identity_required": false,
+    "manifest_sha256": "7400d1b3d723ea7f69fa42e5cc7699103d2087437fa26130ed671d45503eaa93",
+    "replay_report_sha256": "afbd999eb9c9cc614f8bce7e771d79233587242d47b9f258f7179156e3b5c71b"
+  },
+  "outcome": {
+    "decision": "conditional_limit_reached_no_greedy_audit",
+    "selected_epoch": 2,
+    "screen_optimizer_updates": 4,
+    "conditional_max_optimizer_updates": 8,
+    "extension_executed": true,
+    "conditional_limit_reached": true,
+    "full_teacher_gate_passed": false,
+    "greedy_audit_authorized": false,
+    "promotion_authorized": false,
+    "static_chat_authorized": false,
+    "embodied_phase_authorized": false,
+    "question_dependent_scene_processing": false,
+    "report_only_final_selection": true,
+    "selected_color_full_vocab_sides": 12,
+    "selected_color_full_vocab_units": 6,
+    "selected_mirror_full_vocab_sides": 10,
+    "selected_mirror_full_vocab_units": 4,
+    "selected_mirror_mean_full_vocab_margin": 0.5729166865348816,
+    "selected_mirror_minimum_full_vocab_margin": -1.0,
+    "primary_training_elapsed_seconds": 159.7398220000323,
+    "novel_extension_training_elapsed_seconds": 217.28647825005464,
+    "measured_training_elapsed_seconds_total": 377.02630025008693,
+    "training_question_count": 24,
+    "validation_question_count": 0,
+    "failure_reason": "No epoch reached 12/12 mirror sides, 6/6 complete mirror units, and positive candidate/full-vocabulary minimum margins before the preregistered update-8 limit."
+  },
+  "trajectory": [
+    {
+      "epoch": 1,
+      "checkpoint_path": "data_gemma4/checkpoints/gemma4_v23_shared_kv/epoch_001",
+      "optimizer_step": 1,
+      "cumulative_microsteps": 12,
+      "train_loss": 2.8645833333333335,
+      "full_teacher_gate_passed": false,
+      "color": {"full_vocab_sides": 12, "full_vocab_units": 6, "mean_full_vocab_margin": 2.1276042461395264, "minimum_full_vocab_margin": 0.8125},
+      "mirror": {"full_vocab_sides": 8, "full_vocab_units": 2, "mean_full_vocab_margin": 0.5520833134651184, "minimum_full_vocab_margin": -0.8125},
+      "checkpoint_artifact_hashes": {"adapter_sha256": "eacddd78b1cc640c29f753c6dfc2b46bcdc1af9ca491d8b7dbda92f73f625d52", "metadata_sha256": "619c5fd56499342f15474cf2ffdae25a2db5703ecce561a08665cc5e5009ff2c", "optimizer_sha256": "80a6811640f486d2321213217fc76224a13de87b8646ede150e79440b2f7ce0f"},
+      "new_bank_state_sha256": "dca4b45b6f6e7703e7b46b965dd3480751cdb64879a58d967c4ac2564a017b7d",
+      "decoded_optimizer_state_sha256": "6d8b88c7b047ec77cbfc2d784d5e4686de55483b600d34586e8cbdd8ab369186"
+    },
+    {
+      "epoch": 2,
+      "checkpoint_path": "data_gemma4/checkpoints/gemma4_v23_shared_kv/epoch_002",
+      "optimizer_step": 2,
+      "cumulative_microsteps": 24,
+      "train_loss": 2.96875,
+      "full_teacher_gate_passed": false,
+      "color": {"full_vocab_sides": 12, "full_vocab_units": 6, "mean_full_vocab_margin": 2.0703125, "minimum_full_vocab_margin": 0.8125},
+      "mirror": {"full_vocab_sides": 10, "full_vocab_units": 4, "mean_full_vocab_margin": 0.5729166865348816, "minimum_full_vocab_margin": -1.0},
+      "checkpoint_artifact_hashes": {"adapter_sha256": "dba2511db49fa46af905b293fc999642286f8533fa1d4cca2c872ffda2980ea8", "metadata_sha256": "1c0436549e832c2ac9723e2556ad8bf09862020c6cda47db8358b2232b391ba0", "optimizer_sha256": "08c3618d765346a018e78e4a608361d29f1d0c88cf01d5c2af26e0b20c9a3daa"},
+      "new_bank_state_sha256": "91a9eea577cab5a37e840cdf4007722a398415846af91280713bcb2cda0f045c",
+      "decoded_optimizer_state_sha256": "87b09f0bd1951531ced90b2ea6a5df392385a63185a90a974c940b2b1ec867bb"
+    },
+    {
+      "epoch": 3,
+      "checkpoint_path": "data_gemma4/checkpoints/gemma4_v23_shared_kv_extension_u8/epoch_003",
+      "optimizer_step": 3,
+      "cumulative_microsteps": 36,
+      "train_loss": 2.9947916666666665,
+      "full_teacher_gate_passed": false,
+      "color": {"full_vocab_sides": 12, "full_vocab_units": 6, "mean_full_vocab_margin": 2.0677082538604736, "minimum_full_vocab_margin": 0.875},
+      "mirror": {"full_vocab_sides": 9, "full_vocab_units": 3, "mean_full_vocab_margin": 0.59375, "minimum_full_vocab_margin": -0.8125},
+      "checkpoint_artifact_hashes": {"adapter_sha256": "79ff17733e6e166d1f0d7e44f41abadeda6aa99d46b85d1fee562b0d1190029d", "metadata_sha256": "78521e5b9a3c9849479e5e35b6ba6010acfd691ae5a8a05a33b07a3dedfd0de9", "optimizer_sha256": "9e1297b2cab1233e20fd088e0df521b40db75e1605058d128032295d69490f35"},
+      "new_bank_state_sha256": "4e965ab9ed75b641c9c295a21dc6214614b461e5d05be92bf33201af4c70bb0e",
+      "decoded_optimizer_state_sha256": "46693dc47437a1832851d2f6e714ecda4851e55bfb5ce372cb98fd35a266cac8"
+    },
+    {
+      "epoch": 4,
+      "checkpoint_path": "data_gemma4/checkpoints/gemma4_v23_shared_kv_extension_u8/epoch_004",
+      "optimizer_step": 4,
+      "cumulative_microsteps": 48,
+      "train_loss": 2.8125,
+      "full_teacher_gate_passed": false,
+      "color": {"full_vocab_sides": 12, "full_vocab_units": 6, "mean_full_vocab_margin": 2.078125, "minimum_full_vocab_margin": 0.8125},
+      "mirror": {"full_vocab_sides": 9, "full_vocab_units": 3, "mean_full_vocab_margin": 0.5625, "minimum_full_vocab_margin": -0.9375},
+      "checkpoint_artifact_hashes": {"adapter_sha256": "3b3b3f890e099ca30f596c03e16de90f423ffe85c6e3b1cd251d5263ebe12f3e", "metadata_sha256": "ed89e0c3b5acefbc3b4e2c8abb534318c38424333031e6ff9293469285344f5d", "optimizer_sha256": "be3cdaeab98d7dc6e94e29d36d4411a78518be89ec8a034b01c79325784061a0"},
+      "new_bank_state_sha256": "b7fb404e4421d978894b6514faccdedaa57286d907e835b46645f2d606bd98c0",
+      "decoded_optimizer_state_sha256": "0cdbe9dc0ffa79d08746d5ae46c81b66810399c6d1d3176e2cc3260e9e3c0ac6"
+    },
+    {
+      "epoch": 5,
+      "checkpoint_path": "data_gemma4/checkpoints/gemma4_v23_shared_kv_extension_u8/epoch_005",
+      "optimizer_step": 5,
+      "cumulative_microsteps": 60,
+      "train_loss": 2.7083333333333335,
+      "full_teacher_gate_passed": false,
+      "color": {"full_vocab_sides": 12, "full_vocab_units": 6, "mean_full_vocab_margin": 2.0677082538604736, "minimum_full_vocab_margin": 0.8125},
+      "mirror": {"full_vocab_sides": 9, "full_vocab_units": 3, "mean_full_vocab_margin": 0.53125, "minimum_full_vocab_margin": -0.8125},
+      "checkpoint_artifact_hashes": {"adapter_sha256": "e03fb71cbb0c8bde5cddd35d0f8f80f79d428f64e4afca13995e40b370fe7ce8", "metadata_sha256": "9f3a1ca6ee4f55e2127d4471410d4ab18869055370126921dca2d0abb77ee530", "optimizer_sha256": "2cbd48fe09f7a0fc73bfe5d75b27c9b96807a602fb033568e812995731bab684"},
+      "new_bank_state_sha256": "e8be41f40de42687b6d566944e8a5c216e3d57582001e1f6e18c36d723b19421",
+      "decoded_optimizer_state_sha256": "40bb737412802b826828786e90628e7f771d19af2fcdbf2db59ee2fa2fa5b512"
+    },
+    {
+      "epoch": 6,
+      "checkpoint_path": "data_gemma4/checkpoints/gemma4_v23_shared_kv_extension_u8/epoch_006",
+      "optimizer_step": 6,
+      "cumulative_microsteps": 72,
+      "train_loss": 2.734375,
+      "full_teacher_gate_passed": false,
+      "color": {"full_vocab_sides": 12, "full_vocab_units": 6, "mean_full_vocab_margin": 2.1223957538604736, "minimum_full_vocab_margin": 0.75},
+      "mirror": {"full_vocab_sides": 9, "full_vocab_units": 3, "mean_full_vocab_margin": 0.5572916865348816, "minimum_full_vocab_margin": -0.75},
+      "checkpoint_artifact_hashes": {"adapter_sha256": "17f1dc0c254e68970323fb866816348124f34a168fcfbe7138fbb8e4b47186de", "metadata_sha256": "4d2e33339fcc61370070577dbb5d6726d2f18c883470c97d8bde3c4232ad72aa", "optimizer_sha256": "b38b1c93d7f0deb0a71b130894d2222388e9c561f4461b56c0fcd5c43fadba49"},
+      "new_bank_state_sha256": "0ab3dc628f4ac8118fd3712ebf5d517b0c1d0e11e26b16045a0d096cf4a87f0a",
+      "decoded_optimizer_state_sha256": "3e1d37388baa72b4abd8552e8f50a3317753bb1fa7396883c2b650899f7cbd6a"
+    },
+    {
+      "epoch": 7,
+      "checkpoint_path": "data_gemma4/checkpoints/gemma4_v23_shared_kv_extension_u8/epoch_007",
+      "optimizer_step": 7,
+      "cumulative_microsteps": 84,
+      "train_loss": 2.734375,
+      "full_teacher_gate_passed": false,
+      "color": {"full_vocab_sides": 12, "full_vocab_units": 6, "mean_full_vocab_margin": 2.1041667461395264, "minimum_full_vocab_margin": 0.84375},
+      "mirror": {"full_vocab_sides": 8, "full_vocab_units": 2, "mean_full_vocab_margin": 0.5364583134651184, "minimum_full_vocab_margin": -0.8125},
+      "checkpoint_artifact_hashes": {"adapter_sha256": "792cb2ef8b63d52b91fdfa858dccd6f0a93e45a9d3d4e5a13e275cf4bc8d7c27", "metadata_sha256": "ea21f18692a82360f4e2f19a9b76614095baedd398edfcefce71f78813ca583e", "optimizer_sha256": "2347ef537b58f14abfacc86551bbaee362e23b10b0651b0802c85189a66c10bd"},
+      "new_bank_state_sha256": "d254687634b5d0d3837555994d7a55af022d205d70f06fc2fa6b780bad5c4a1a",
+      "decoded_optimizer_state_sha256": "9fe4cd53e8f7c4bc4f3bc03994bd66998421630142309fb5eb0ef901a6aa12fc"
+    },
+    {
+      "epoch": 8,
+      "checkpoint_path": "data_gemma4/checkpoints/gemma4_v23_shared_kv_extension_u8/epoch_008",
+      "optimizer_step": 8,
+      "cumulative_microsteps": 96,
+      "train_loss": 2.6302083333333335,
+      "full_teacher_gate_passed": false,
+      "color": {"full_vocab_sides": 12, "full_vocab_units": 6, "mean_full_vocab_margin": 2.1145832538604736, "minimum_full_vocab_margin": 0.8125},
+      "mirror": {"full_vocab_sides": 8, "full_vocab_units": 2, "mean_full_vocab_margin": 0.546875, "minimum_full_vocab_margin": -0.6875},
+      "checkpoint_artifact_hashes": {"adapter_sha256": "dfff6eeb474802071f5dcd13be8e33a221bed7e24c32a3ef53f0603831d29be7", "metadata_sha256": "64d594349926a0d748f4a034f432b34c2fedb6cd7b6abcb4f7e04ebdaa9b50bf", "optimizer_sha256": "0e64326f17f704d123f0441297212a3dc926e3391cf363436b1a47b91cd461ae"},
+      "new_bank_state_sha256": "ca12057b1bd4b59c7a9a0a7e15e99b3fd179662cda5dfc0d7dc6c137b1e33309",
+      "decoded_optimizer_state_sha256": "65b52ff655ad45f5db9002f33268f9083c971c5caea6fd8996cca2257baa1b03"
+    }
+  ],
+  "selected_checkpoint": {
+    "epoch": 2,
+    "checkpoint_path": "data_gemma4/checkpoints/gemma4_v23_shared_kv/epoch_002",
+    "artifact_hashes": {
+      "adapter_sha256": "dba2511db49fa46af905b293fc999642286f8533fa1d4cca2c872ffda2980ea8",
+      "metadata_sha256": "1c0436549e832c2ac9723e2556ad8bf09862020c6cda47db8358b2232b391ba0",
+      "optimizer_sha256": "08c3618d765346a018e78e4a608361d29f1d0c88cf01d5c2af26e0b20c9a3daa"
+    },
+    "new_bank_state_sha256": "91a9eea577cab5a37e840cdf4007722a398415846af91280713bcb2cda0f045c",
+    "decoded_optimizer_state_sha256": "87b09f0bd1951531ced90b2ea6a5df392385a63185a90a974c940b2b1ec867bb"
+  },
+  "authoritative_artifacts": [
+    {"role": "config", "path": "configs/experiments/gemma4_color_mirror_shared_kv_v23.yaml", "sha256": "d8df78fa62bd271adedfea7b7327153f3fa35cbaa1eaf8e50051c4aba068615c"},
+    {"role": "structural_preflight", "path": "reports/gemma4/metrics/v23_structural_preflight.json", "sha256": "736975e190a7398f1d0a9bb9db2cf78eeefe3362c017fa1eec5f34659f33fcec"},
+    {"role": "update_1_exact_match", "path": "reports/gemma4/metrics/v23_update1_match.json", "sha256": "149b7f14ada0a2a9b0a9101355b3419a3820f863755e259809a1f20daad160a5"},
+    {"role": "primary_training", "path": "reports/gemma4/metrics/training_gemma4_v23_shared_kv.json", "sha256": "575a840ee9a6e9caccb9500d85f32be7d4a0ca92d26fd0a240ad321f6146d2c1"},
+    {"role": "training_selection", "path": "reports/gemma4/metrics/training_selection_gemma4_v23_shared_kv.json", "sha256": "64c6a17eec8b17a7a46aedc70ee15e59825d9c1f168e255f92f7bc8d03aee6b5"},
+    {"role": "epoch_screen", "path": "reports/gemma4/metrics/v23_epoch_screen.json", "sha256": "edc57280257a5610a81ea9e2e54f2adaa77f8d2bebf41002aaa7c2ce7383b4d4"},
+    {"role": "extension_launch", "path": "reports/gemma4/metrics/v23_extension_launch.json", "sha256": "7400d1b3d723ea7f69fa42e5cc7699103d2087437fa26130ed671d45503eaa93"},
+    {"role": "exact_replay", "path": "reports/gemma4/metrics/v23_extension_replay.json", "sha256": "afbd999eb9c9cc614f8bce7e771d79233587242d47b9f258f7179156e3b5c71b"},
+    {"role": "extension_training", "path": "reports/gemma4/metrics/training_gemma4_v23_shared_kv_extension_u8.json", "sha256": "2c3170b5ab42c14c33fd170271533d5f2fee8c75acd4cb5f19a222bd971b5ec9"},
+    {"role": "extension_selection", "path": "reports/gemma4/metrics/training_selection_gemma4_v23_shared_kv_extension_u8.json", "sha256": "64c6a17eec8b17a7a46aedc70ee15e59825d9c1f168e255f92f7bc8d03aee6b5"},
+    {"role": "final_selector", "path": "reports/gemma4/metrics/v23_extension_final.json", "sha256": "6f63b6ef1d0718eaa4ecb264e5939fe64d889107e00b1c38530265a3ad2460ec"}
+  ],
+  "superseded_lineage": [
+    {
+      "role": "raw_torch_save_container_false_positive",
+      "launch_path": "reports/gemma4/metrics/v23_extension_launch_attempt_raw_container_sha_1697fcc.json",
+      "launch_sha256": "f0d70b5b6445be709281726b6594363f9754d56c34bb12ec87cfc867ab5be552",
+      "controller_commit": "1697fcc3d547b9619d73352a93f4359cf1a8dc7e",
+      "checkpoint_root": "data_gemma4/checkpoints/gemma4_v23_shared_kv_extension_u8_attempt_raw_container_sha_1697fcc",
+      "checkpoint_artifact_hashes": {
+        "epoch_003": {
+          "adapter_sha256": "79ff17733e6e166d1f0d7e44f41abadeda6aa99d46b85d1fee562b0d1190029d",
+          "metadata_sha256": "78521e5b9a3c9849479e5e35b6ba6010acfd691ae5a8a05a33b07a3dedfd0de9",
+          "optimizer_sha256": "2d343043fd2c61b658a1b39e4c6be2b5a3706cab5f70138bdddf9546a5ea92dc"
+        },
+        "epoch_004": {
+          "adapter_sha256": "3b3b3f890e099ca30f596c03e16de90f423ffe85c6e3b1cd251d5263ebe12f3e",
+          "metadata_sha256": "ed89e0c3b5acefbc3b4e2c8abb534318c38424333031e6ff9293469285344f5d",
+          "optimizer_sha256": "a122e6b4acfbafe2eace4e9154fd59e424ae5bb2d329ddd5aa04d30505ff7554"
+        },
+        "best": {
+          "adapter_sha256": "79ff17733e6e166d1f0d7e44f41abadeda6aa99d46b85d1fee562b0d1190029d",
+          "metadata_sha256": "78521e5b9a3c9849479e5e35b6ba6010acfd691ae5a8a05a33b07a3dedfd0de9",
+          "optimizer_sha256": "2d343043fd2c61b658a1b39e4c6be2b5a3706cab5f70138bdddf9546a5ea92dc"
+        }
+      },
+      "stop_reason": "Raw torch.save ZIP container bytes differed because the temporary archive root name differed; adapters, archive-member payloads, and decoded optimizer state were exact."
+    }
+  ],
+  "forbidden_outputs": {
+    "checkpoint_roots": [
+      "data_gemma4/checkpoints/gemma4_v23_shared_kv",
+      "data_gemma4/checkpoints/gemma4_v23_shared_kv_extension_u8"
+    ],
+    "forbidden_checkpoint_filename": "promotion.json",
+    "forbidden_metric_globs": [
+      "*v23*greedy*.json",
+      "*v23*promotion*.json",
+      "*v23*static*qa*.json",
+      "*v23*leakage*.json",
+      "*v23*robot*.json"
+    ]
+  }
+}

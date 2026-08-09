@@ -1,0 +1,221 @@
+{
+  "a_tensors_unchanged": true,
+  "audit_type": "v23_shared_kv_update1_verifier",
+  "b_tensors_all_changed": true,
+  "checkpoint": "data_gemma4/checkpoints/gemma4_v23_shared_kv/epoch_001",
+  "checkpoint_artifact_hashes": {
+    "adapter_sha256": "eacddd78b1cc640c29f753c6dfc2b46bcdc1af9ca491d8b7dbda92f73f625d52",
+    "metadata_sha256": "619c5fd56499342f15474cf2ffdae25a2db5703ecce561a08665cc5e5009ff2c",
+    "optimizer_sha256": "80a6811640f486d2321213217fc76224a13de87b8646ede150e79440b2f7ce0f"
+  },
+  "color": {
+    "full_vocab_sides": 12,
+    "full_vocab_units": 6,
+    "mean_candidate_margin": 4.257161617279053,
+    "mean_full_vocab_margin": 2.1276042461395264,
+    "minimum_candidate_margin": 0.90625,
+    "minimum_full_vocab_margin": 0.8125
+  },
+  "config_sha256": "5416ac62c7670cea067a92e6edfaadda450f9f78c3412b18209e1c63c578053e",
+  "contract_sha256": "a26ebc16efff574e15c61a541f8d0f68700da6bbb54654cfa90855e48c2f9fe4",
+  "match": true,
+  "mirror": {
+    "full_vocab_sides": 8,
+    "full_vocab_units": 2,
+    "mean_candidate_margin": 0.5729166865348816,
+    "mean_full_vocab_margin": 0.5520833134651184,
+    "minimum_candidate_margin": -0.8125,
+    "minimum_full_vocab_margin": -0.8125
+  },
+  "model_loaded": false,
+  "new_bank_state_sha256": "dca4b45b6f6e7703e7b46b965dd3480751cdb64879a58d967c4ac2564a017b7d",
+  "optimizer_manifest": {
+    "all_state_tensors_sha256": "6d8b88c7b047ec77cbfc2d784d5e4686de55483b600d34586e8cbdd8ab369186",
+    "expected_step": 1,
+    "group": {
+      "amsgrad": false,
+      "betas": [
+        0.9,
+        0.999
+      ],
+      "capturable": false,
+      "decoupled_weight_decay": true,
+      "differentiable": false,
+      "eps": 1e-08,
+      "foreach": false,
+      "fused": false,
+      "lr": 0.0003,
+      "maximize": false,
+      "name": "language_lora",
+      "params": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "weight_decay": 0.0
+    },
+    "optimizer": "AdamW",
+    "parameter_states": [
+      {
+        "exp_avg_nonzero": 0,
+        "exp_avg_sq_nonzero": 0,
+        "parameter_id": 0,
+        "role": "A",
+        "shape": [
+          4,
+          1536
+        ],
+        "state_sha256": "f694355d52e224b521ad60ff41cf7711004a6d73332cc41c024ce4c22dada6b8",
+        "step": 1.0
+      },
+      {
+        "exp_avg_nonzero": 1024,
+        "exp_avg_sq_nonzero": 1024,
+        "parameter_id": 1,
+        "role": "B",
+        "shape": [
+          256,
+          4
+        ],
+        "state_sha256": "0a6fb0c007e981cb40e2ab7744e7923a90f4453fa4d12feebcbcea00f3a797d4",
+        "step": 1.0
+      },
+      {
+        "exp_avg_nonzero": 0,
+        "exp_avg_sq_nonzero": 0,
+        "parameter_id": 2,
+        "role": "A",
+        "shape": [
+          4,
+          1536
+        ],
+        "state_sha256": "f694355d52e224b521ad60ff41cf7711004a6d73332cc41c024ce4c22dada6b8",
+        "step": 1.0
+      },
+      {
+        "exp_avg_nonzero": 1024,
+        "exp_avg_sq_nonzero": 1024,
+        "parameter_id": 3,
+        "role": "B",
+        "shape": [
+          256,
+          4
+        ],
+        "state_sha256": "a551c2fe2740ae870eab83a0139b7cbf9746e728f518cd5c5077e75b49f18fbd",
+        "step": 1.0
+      },
+      {
+        "exp_avg_nonzero": 0,
+        "exp_avg_sq_nonzero": 0,
+        "parameter_id": 4,
+        "role": "A",
+        "shape": [
+          4,
+          1536
+        ],
+        "state_sha256": "f694355d52e224b521ad60ff41cf7711004a6d73332cc41c024ce4c22dada6b8",
+        "step": 1.0
+      },
+      {
+        "exp_avg_nonzero": 2048,
+        "exp_avg_sq_nonzero": 2048,
+        "parameter_id": 5,
+        "role": "B",
+        "shape": [
+          512,
+          4
+        ],
+        "state_sha256": "3eb57471e6bb11b7e89c3f0b4314d6691908ed4e1fd6c31301b18989aec877ee",
+        "step": 1.0
+      },
+      {
+        "exp_avg_nonzero": 0,
+        "exp_avg_sq_nonzero": 0,
+        "parameter_id": 6,
+        "role": "A",
+        "shape": [
+          4,
+          1536
+        ],
+        "state_sha256": "f694355d52e224b521ad60ff41cf7711004a6d73332cc41c024ce4c22dada6b8",
+        "step": 1.0
+      },
+      {
+        "exp_avg_nonzero": 2048,
+        "exp_avg_sq_nonzero": 2048,
+        "parameter_id": 7,
+        "role": "B",
+        "shape": [
+          512,
+          4
+        ],
+        "state_sha256": "62b527427a0fa36a6e45db1cf4181d320eb41d81ff682e6b53670b81c027bea0",
+        "step": 1.0
+      }
+    ]
+  },
+  "oracle_loaded": false,
+  "ordered_parameter_shapes": [
+    [
+      4,
+      1536
+    ],
+    [
+      256,
+      4
+    ],
+    [
+      4,
+      1536
+    ],
+    [
+      256,
+      4
+    ],
+    [
+      4,
+      1536
+    ],
+    [
+      512,
+      4
+    ],
+    [
+      4,
+      1536
+    ],
+    [
+      512,
+      4
+    ]
+  ],
+  "preflight_sha256": "736975e190a7398f1d0a9bb9db2cf78eeefe3362c017fa1eec5f34659f33fcec",
+  "recomputed_payload_hashes": {
+    "global_scene_residual_state_sha256": "ce3bf864eed6dd4a50f1b67296981e144d6a79e9cf192ad9a9230f2ae18208dc",
+    "lora_bank_state_sha256": {
+      "extension_v13": "4eb90fb9b0bea579d14cfcb0f61ebd5b6d566fd600bd3d5e1bfe5177a39e1b34",
+      "extension_v23_shared_kv": "dca4b45b6f6e7703e7b46b965dd3480751cdb64879a58d967c4ac2564a017b7d",
+      "inherited_v12": "dec768bed654c8c4e16da0318857543ad54d8f5f68f4d24a9a87cd19ec706594"
+    },
+    "scene_state_sha256": "690bd890bfda024dbb5c7d3c68087b8113bc3b8ee81dd6143c7eb2a884e7245b",
+    "signed_x_scene_residual_state_sha256": "e8dabc69627f60723b89520b02dfee985e49b7b7e35fdd1213cc79f7b8164f58",
+    "tensor_count": 133
+  },
+  "report_only": true,
+  "schema_version": 1,
+  "source_provenance": {
+    "available": true,
+    "head_commit": "2a8cd075f7961092d756efaa1e619f62a14c1262",
+    "head_tree": "2018b80f79736809637bde1d20ade56cc18e40d5",
+    "is_clean": true,
+    "schema_version": 1,
+    "scope": "repository_excluding_generated_artifacts_v1",
+    "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "stage_2_authorized": true
+}

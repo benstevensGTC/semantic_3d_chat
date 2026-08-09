@@ -1,0 +1,251 @@
+{
+  "audit_type": "v23_shared_kv_extension_launch",
+  "authorized": true,
+  "config_path": "configs/experiments/gemma4_color_mirror_shared_kv_v23.yaml",
+  "config_sha256": "5416ac62c7670cea067a92e6edfaadda450f9f78c3412b18209e1c63c578053e",
+  "contract_sha256": "a26ebc16efff574e15c61a541f8d0f68700da6bbb54654cfa90855e48c2f9fe4",
+  "control_plane_transition": {
+    "Makefile": "M",
+    "src/semantic_3d_chat/evaluation/v23_extension_controller.py": "A",
+    "src/semantic_3d_chat/evaluation/v23_shared_kv_controller.py": "M",
+    "tests/test_v23_extension_controller.py": "A",
+    "tests/test_v23_shared_kv_controller.py": "M"
+  },
+  "controller_source_provenance": {
+    "available": true,
+    "head_commit": "39c12a1422aa01949efe32c0fa6f28221c6aa348",
+    "head_tree": "820ed21bc294f1999f34bc75873bfc236de331f0",
+    "is_clean": true,
+    "schema_version": 1,
+    "scope": "repository_excluding_generated_artifacts_v1",
+    "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "expected_branch_epochs": [
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "extension_checkpoint_root": "data_gemma4/checkpoints/gemma4_v23_shared_kv_extension_u8",
+  "extension_namespace_absent_at_authorization": true,
+  "extension_output_namespace": "gemma4_v23_shared_kv_extension_u8",
+  "greedy_audit_authorized": false,
+  "microsteps_per_optimizer_update": 12,
+  "model_loaded": false,
+  "novel_epochs": [
+    5,
+    6,
+    7,
+    8
+  ],
+  "oracle_loaded": false,
+  "original_output_namespace": "gemma4_v23_shared_kv",
+  "question_dependent_scene_processing": false,
+  "replay_epochs": [
+    3,
+    4
+  ],
+  "replay_resume_epoch": 2,
+  "replay_target_epoch": 4,
+  "report_only": true,
+  "schema_version": 1,
+  "screen_decision": "screen_passed_extension_authorized_no_greedy_audit",
+  "screen_path": "reports/gemma4/metrics/v23_epoch_screen.json",
+  "screen_sha256": "edc57280257a5610a81ea9e2e54f2adaa77f8d2bebf41002aaa7c2ce7383b4d4",
+  "selected_checkpoint": "data_gemma4/checkpoints/gemma4_v23_shared_kv/epoch_002",
+  "selected_checkpoint_artifact_hashes": {
+    "adapter_sha256": "dba2511db49fa46af905b293fc999642286f8533fa1d4cca2c872ffda2980ea8",
+    "metadata_sha256": "1c0436549e832c2ac9723e2556ad8bf09862020c6cda47db8358b2232b391ba0",
+    "optimizer_sha256": "08c3618d765346a018e78e4a608361d29f1d0c88cf01d5c2af26e0b20c9a3daa"
+  },
+  "selected_epoch": 2,
+  "selected_new_bank_state_sha256": "91a9eea577cab5a37e840cdf4007722a398415846af91280713bcb2cda0f045c",
+  "selected_optimizer_manifest": {
+    "all_state_tensors_sha256": "87b09f0bd1951531ced90b2ea6a5df392385a63185a90a974c940b2b1ec867bb",
+    "expected_step": 2,
+    "group": {
+      "amsgrad": false,
+      "betas": [
+        0.9,
+        0.999
+      ],
+      "capturable": false,
+      "decoupled_weight_decay": true,
+      "differentiable": false,
+      "eps": 1e-08,
+      "foreach": false,
+      "fused": false,
+      "lr": 0.0003,
+      "maximize": false,
+      "name": "language_lora",
+      "params": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "weight_decay": 0.0
+    },
+    "optimizer": "AdamW",
+    "parameter_states": [
+      {
+        "exp_avg_nonzero": 6144,
+        "exp_avg_sq_nonzero": 6144,
+        "parameter_id": 0,
+        "role": "A",
+        "shape": [
+          4,
+          1536
+        ],
+        "state_sha256": "91b6ad8abd0fc6bf67158ef1d2e070041b4ef2276bca1b5e7c701c67bff1fcd6",
+        "step": 2.0
+      },
+      {
+        "exp_avg_nonzero": 1024,
+        "exp_avg_sq_nonzero": 1024,
+        "parameter_id": 1,
+        "role": "B",
+        "shape": [
+          256,
+          4
+        ],
+        "state_sha256": "b0aaf732e23800d6d1dd84da0972a8a7814309e4f8a09611ac899378414ff104",
+        "step": 2.0
+      },
+      {
+        "exp_avg_nonzero": 6144,
+        "exp_avg_sq_nonzero": 6144,
+        "parameter_id": 2,
+        "role": "A",
+        "shape": [
+          4,
+          1536
+        ],
+        "state_sha256": "6ed23fba031287795b3d9d3736cf47203c322060f311bc61f203ffdaabe5851f",
+        "step": 2.0
+      },
+      {
+        "exp_avg_nonzero": 1024,
+        "exp_avg_sq_nonzero": 1024,
+        "parameter_id": 3,
+        "role": "B",
+        "shape": [
+          256,
+          4
+        ],
+        "state_sha256": "18881fd85b4ce8268f27cbb3a7fb58544ebdf2d61893b52e4aaa1018626685e5",
+        "step": 2.0
+      },
+      {
+        "exp_avg_nonzero": 6144,
+        "exp_avg_sq_nonzero": 6144,
+        "parameter_id": 4,
+        "role": "A",
+        "shape": [
+          4,
+          1536
+        ],
+        "state_sha256": "8d16834aadd5f9b27bd67fbaa5a838c9df4f6df66e2ad965923b21445b7fac27",
+        "step": 2.0
+      },
+      {
+        "exp_avg_nonzero": 2048,
+        "exp_avg_sq_nonzero": 2048,
+        "parameter_id": 5,
+        "role": "B",
+        "shape": [
+          512,
+          4
+        ],
+        "state_sha256": "f1d812ab85fc9ed5effdfb7394153dec3b1c9cb0c0eb42c6b6dcf95e59f8f49e",
+        "step": 2.0
+      },
+      {
+        "exp_avg_nonzero": 6144,
+        "exp_avg_sq_nonzero": 6144,
+        "parameter_id": 6,
+        "role": "A",
+        "shape": [
+          4,
+          1536
+        ],
+        "state_sha256": "ef50d000524ba9e78f944824d4045f849775a08ae360bf4cecc948f0675bc89a",
+        "step": 2.0
+      },
+      {
+        "exp_avg_nonzero": 2048,
+        "exp_avg_sq_nonzero": 2048,
+        "parameter_id": 7,
+        "role": "B",
+        "shape": [
+          512,
+          4
+        ],
+        "state_sha256": "7adf002d67afb78efcc65fb5103e85dfb048a1fd5a4a208795f8a286f0232ada",
+        "step": 2.0
+      }
+    ]
+  },
+  "stage_b_authorized": false,
+  "target_optimizer_update": 8,
+  "trainer": {
+    "environment": {
+      "PYTHONPATH": "src"
+    },
+    "linked_ignored_inputs": [
+      "data/qa",
+      "data_gemma4/checkpoints",
+      "data_gemma4/features",
+      "data_gemma4/maps"
+    ],
+    "module": "semantic_3d_chat.training.train_adapter",
+    "novel_argv": [
+      "-m",
+      "semantic_3d_chat.training.train_adapter",
+      "--config",
+      "configs/experiments/gemma4_color_mirror_shared_kv_v23.yaml",
+      "--resume",
+      "data_gemma4/checkpoints/gemma4_v23_shared_kv_extension_u8/epoch_004",
+      "--output-namespace",
+      "gemma4_v23_shared_kv_extension_u8",
+      "--epochs",
+      "8"
+    ],
+    "novel_resume": "data_gemma4/checkpoints/gemma4_v23_shared_kv_extension_u8/epoch_004",
+    "novel_target_epochs": 8,
+    "python_executable": ".venv-gemma4/bin/python",
+    "replay_argv": [
+      "-m",
+      "semantic_3d_chat.training.train_adapter",
+      "--config",
+      "configs/experiments/gemma4_color_mirror_shared_kv_v23.yaml",
+      "--resume",
+      "data_gemma4/checkpoints/gemma4_v23_shared_kv/epoch_002",
+      "--output-namespace",
+      "gemma4_v23_shared_kv_extension_u8",
+      "--epochs",
+      "4"
+    ],
+    "replay_epochs": 4,
+    "replay_resume": "data_gemma4/checkpoints/gemma4_v23_shared_kv/epoch_002",
+    "requires_detached_training_source_worktree": true,
+    "requires_exact_provenance_preflight": true,
+    "training_source_commit": "2a8cd075f7961092d756efaa1e619f62a14c1262",
+    "working_directory": "temporary_detached_training_source_worktree"
+  },
+  "training_source_provenance": {
+    "available": true,
+    "head_commit": "2a8cd075f7961092d756efaa1e619f62a14c1262",
+    "head_tree": "2018b80f79736809637bde1d20ade56cc18e40d5",
+    "is_clean": true,
+    "schema_version": 1,
+    "scope": "repository_excluding_generated_artifacts_v1",
+    "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

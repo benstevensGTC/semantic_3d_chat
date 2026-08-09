@@ -51,9 +51,17 @@ epoch 3, which preserved color at 12/12 sides and 6/6 units but reached only
 continuation gate, so learning-rate tuning stopped without an extension or
 generation audit. V9 remains a color-wiring overfit milestone; v10-v17 are
 failed continuations, not promoted scene chatbots. V18's centered-content bridge
-also failed: it retained color at 12/12 sides and 6/6 units but reached only 5/12
-mirror sides and 0/6 units. Gemma held-out static QA,
-interactive chat, Gemma
+also failed at 5/12 mirror sides and 0/6 units; V19's reflection-odd global
+moment reached 6/12 and 0/6. V20 was rejected before a live update because its
+original BF16 eligibility statistic was confounded by quantization phase. V21's
+corrected phase-aware signed-X local field retained color at 12/12 sides and 6/6
+units and improved mirror to 8/12 and 2/6. V22's margin rebalance regressed to
+7/12 and 1/6. V23 then froze the V21 scene stack and adapted Gemma's real shared
+K/V path: its selected update 2 retained color at 12/12 and 6/6 and reached the
+project's strongest mirror result so far, 10/12 sides and 4/6 complete units.
+Updates 3--8 did not improve that peak, and no epoch reached the required 12/12,
+6/6 mirror gate. V23 therefore closed at its preregistered limit without greedy
+generation or promotion. Gemma held-out static QA, interactive chat, Gemma
 leakage claims, and language-conditioned robot navigation remain gated.
 
 ## Current primary stack
@@ -72,9 +80,12 @@ leakage claims, and language-conditioned robot navigation remain gated.
   listed 45,056-parameter layer-34 LoRA state. V13-v14 use a versioned,
   disjoint-bank checkpoint contract: that 45,056-parameter V12 bank is frozen and
   a 229,376-parameter rank-8 bank in layers 30-33 is trainable. The scene adapter
-  is also frozen. The decoder receives continuous scene tokens, numeric geometry,
-  and the user's question—never an environmental caption, label list, or oracle
-  metadata.
+  is also frozen. The completed V23 experiment instead starts from the sealed V21
+  scene stack, freezes both earlier decoder banks and every scene-side parameter,
+  and trains only a 30,720-parameter rank-4/alpha-8 bank on physical layers 13--14
+  shared K/V projections. The decoder receives continuous scene tokens, numeric
+  geometry, and the user's question—never an environmental caption, label list,
+  or oracle metadata.
 
 Gemma 4 is therefore used on both sides of the bridge: its native multimodal
 vision tower supplies the full-image patch field, and its causal language decoder
@@ -1054,7 +1065,7 @@ PYTHONPATH=src python -m semantic_3d_chat.evaluation.v22_archive_validator
 
 Use `--summary-only` when generated evidence and checkpoints are unavailable.
 
-### V23 shared-K/V falsifier
+### V23 shared-K/V falsifier — completed, partial improvement, gate failed
 
 V23 starts from the sealed V21 epoch-8 weights rather than the weaker V22
 checkpoint. It loads the 256-token scene adapter, global residual, signed-X
@@ -1064,13 +1075,40 @@ shared K/V projections at physical layers 13 and 14. This is 30,720 trainable
 FP32 parameters; no question-dependent retrieval or oracle runtime input is
 introduced. All learning-rate fields are pinned to `3e-4`.
 
-The run is deliberately staged. `make gemma4-v23-stage1` executes one complete
-12-microstep update and stops. `make gemma4-v23-verify-update1` then checks the
-exact frozen-state hashes, safetensors layout, ordered eight-parameter AdamW
-state, unchanged LoRA-A tensors, changed LoRA-B tensors, and behavioral gate.
-Only an authorized report allows `make gemma4-v23-screen` to execute updates
-2--4. Greedy evaluation remains forbidden until both color and mirror pairs
-reach 12/12 sides and 6/6 units with positive margins.
+The staged run completed from clean training source commit `2a8cd07`; its
+extension controller was clean commit `39c12a1`. Update 1 matched the predicted
+state exactly. The four-update screen selected update 2 and authorized only the
+predeclared bounded continuation. Before any new update, epochs 3--4 were replayed
+from update 2 in an isolated checkout: adapter tensors, decoded AdamW state,
+history, metrics, and normalized metadata matched exactly. Raw `torch.save` ZIP
+bytes differed because the temporary archive root name differed; both raw hashes
+are recorded, while replay identity correctly uses the decoded tensor state.
+
+Color stayed at 12/12 full-vocabulary sides and 6/6 complete units through all
+eight updates. Mirror followed this exact side/unit trajectory:
+
+| Update | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Mirror sides | 8/12 | **10/12** | 9/12 | 9/12 | 9/12 | 9/12 | 8/12 | 8/12 |
+| Mirror units | 2/6 | **4/6** | 3/6 | 3/6 | 3/6 | 3/6 | 2/6 | 2/6 |
+
+Update 2 is therefore the strict selected checkpoint. Its mirror mean
+full-vocabulary margin is `0.5729167`, but its minimum is still `-1.0`; it did
+not pass the complete gate. The final selector emitted
+`conditional_limit_reached_no_greedy_audit`. No greedy audit, promotion, static
+chat, Gemma leakage/oracle-deletion inference, or semantic embodied-agent result
+was authorized. The primary plus novel training segments took `377.0263 s` total
+(the exact replay is an additional control and is not included in that total).
+
+The source-HEAD-independent seal is
+`reports/gemma4/metrics/v23_final_summary.json`. Validate the tracked seal alone,
+or all eleven reports, eight checkpoint epochs, the exact-replay chain, preserved
+superseded raw-container attempt, and denial state, with:
+
+```bash
+PYTHONPATH=src python -m semantic_3d_chat.evaluation.v23_archive_validator --summary-only
+PYTHONPATH=src python -m semantic_3d_chat.evaluation.v23_archive_validator
+```
 
 ### Fail-closed Gemma static evaluation and chat
 

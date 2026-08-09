@@ -41,12 +41,18 @@
 > improvement from V22's margin-rebalanced restart: all four updates retained
 > 12/12 color sides and 6/6 units but stayed at 7/12 mirror sides and 1/6 unit.
 > Its selector denied the extension and greedy audit, and no promotion was
-> created. The exact closed result is sealed in `v22_final_summary.json`. There
-> is no
+> created. V23 then froze the V21 scene stack and trained only a 30,720-parameter
+> shared-K/V bank. It preserved 12/12 color sides and 6/6 units at every update
+> and peaked at 10/12 mirror sides and 4/6 units at update 2, the strongest
+> teacher-forced mirror result so far. Exact replay authorized its bounded run
+> through update 8, but later updates reached at most 9/12 and 3/6 before
+> regressing to 8/12 and 2/6. The complete gate never passed, so V23 closed
+> without greedy decoding or promotion. The exact closed V22 and V23 results are
+> sealed in `v22_final_summary.json` and `v23_final_summary.json`. There is no
 > accepted Gemma static-chat, Gemma leakage, semantic embodied-agent, or
 > one-command-demo result yet.
 
-Updated from local artifacts on `2026-08-09T13:29:00Z`. This report does not run models and does not infer missing measurements.
+Updated from local artifacts on `2026-08-09T19:29:50Z`. This report does not run models and does not infer missing measurements.
 
 ## 1. Research question
 
@@ -60,6 +66,45 @@ a 48×48 field of middle 768D, late 768D, and native projected 1536D features
 aggregated to 15 cm tokenizer input. Every occupied block feeds the
 question-independent `signal_preserving_resampler_v3`, producing 256 scene
 latents at model dimension 384 before projection to Gemma's 1536D hidden space.
+
+#### v23 frozen-scene shared-K/V bridge: strongest partial result, gate failed
+
+V23 starts from the sealed V21 update-8 adapter, including its 256-token scene
+encoder, global residual, signed-X local field, and two existing decoder banks.
+All of those parameters remain frozen. One exactly zero-output rank-4/alpha-8
+LoRA bank adapts only Gemma's real shared K/V projections at physical layers 13
+and 14: 30,720 trainable FP32 parameters at learning rate `3e-4`. The complete
+scene prefix remains fixed and question-independent; no runtime oracle input,
+textual environment representation, or question-dependent retrieval is added.
+
+The run used clean training source commit `2a8cd07` and clean extension-controller
+commit `39c12a1`. Update 1 matched the predicted tensor and optimizer state. The
+screen selected update 2 and authorized only the preregistered update-8 branch.
+Epochs 3--4 were first replayed in an isolated checkout: adapters, decoded AdamW
+state, metrics, history, and normalized metadata matched exactly. Differing raw
+`torch.save` ZIP bytes were traced to the random temporary archive-root name;
+both raw hashes and the exact decoded-state hashes are retained.
+
+| Update | Color sides / units | Mirror sides / units | Mirror full-vocab mean / min |
+| ---: | ---: | ---: | ---: |
+| 1 | 12/12 / 6/6 | 8/12 / 2/6 | 0.552083 / -0.8125 |
+| **2 (selected)** | **12/12 / 6/6** | **10/12 / 4/6** | **0.572917 / -1.0** |
+| 3 | 12/12 / 6/6 | 9/12 / 3/6 | 0.593750 / -0.8125 |
+| 4 | 12/12 / 6/6 | 9/12 / 3/6 | 0.562500 / -0.9375 |
+| 5 | 12/12 / 6/6 | 9/12 / 3/6 | 0.531250 / -0.8125 |
+| 6 | 12/12 / 6/6 | 9/12 / 3/6 | 0.557292 / -0.75 |
+| 7 | 12/12 / 6/6 | 8/12 / 2/6 | 0.536458 / -0.8125 |
+| 8 | 12/12 / 6/6 | 8/12 / 2/6 | 0.546875 / -0.6875 |
+
+The primary and novel training segments took `159.739822 s` and `217.286478 s`,
+respectively (`377.026300 s` total, excluding the replay control). The experiment
+used 24 supervised training questions and no validation questions; these are
+teacher-forced wiring metrics, not held-out QA. The final decision is
+`conditional_limit_reached_no_greedy_audit`: no greedy generation, held-out
+static QA, promotion, interactive chat, Gemma leakage/oracle-deletion test, or
+semantic embodied-agent evaluation was authorized. Validate the immutable result
+and all retained evidence with
+`PYTHONPATH=src python -m semantic_3d_chat.evaluation.v23_archive_validator`.
 
 #### v9 hardened color gate: exact trained generation, zero control transfer
 
@@ -905,13 +950,22 @@ PASS for checkpoint `data/checkpoints/best`. The oracle directory was atomically
   2e-3 at 5/12 mirror sides. Its exact continuation peaks discretely at 7/12
   mirror sides and 1/6 units, ends at 6/12 and 0/6 while restoring 12/12 color,
   and never passes the complete teacher gate. It has no greedy audit or promotion.
+- Gemma v15-v22 test shared-attention, scene-residual, centered-content, and
+  reflection-odd local-field bridges. V21 is the strongest of that group at 8/12
+  mirror sides and 2/6 units while preserving color; none passes the complete
+  teacher gate or receives a greedy audit.
+- Gemma v23 freezes V21 and adapts only physical layers 13--14 shared K/V. Its
+  selected update 2 preserves color at 12/12 sides and 6/6 units and improves
+  mirror to 10/12 and 4/6, but its minimum mirror full-vocabulary margin remains
+  `-1.0`. Updates 3--8 do not improve that discrete peak. The bounded experiment
+  is closed without greedy decoding or promotion.
 - No Gemma held-out static-QA, interactive-chat, prefix-invariance, or
-  oracle-deletion/leakage inference result exists for v9-v14.
+  oracle-deletion/leakage inference result exists for v9-v23.
 - The exact source hash loaded by the v7 process was not captured; current source
   hashes are post-run audited snapshots.
 - The v1 multi-scene adapter is scene-content-insensitive despite its raw held-out accuracy; wrong-scene and content-shuffle controls invalidate a scene-understanding claim for that checkpoint.
 - The v2 structural diagnostic preserves more scene signal, but no explicitly v2-tagged held-out QA artifact is available yet.
-- v8, v8-resume24, and v9-v14 wall-clock times are recorded where retained, but
+- v8, v8-resume24, and v9-v23 wall-clock times are recorded where retained, but
   the original v14 2e-3 screen time was overwritten by its resume report; peak
   training memory is not recorded.
 - Preserved legacy expected-change counterfactual consistency is zero.
@@ -924,19 +978,23 @@ PASS for checkpoint `data/checkpoints/best`. The oracle directory was atomically
 
 ## 28. Recommended next experiments
 
-1. Preserve V14 as a failed controlled ablation; do not extend its schedule blindly.
-   Its transient epoch-7 result and later oscillation call for a checkpoint policy
-   that respects protected-task integrity and complete discrete counterfactual
-   units before selecting another adapter architecture or loss.
-2. Require the next saved-and-reloaded candidate to preserve 12/12 strict color
+1. Preserve V23 as a failed but informative controlled ablation; do not extend it
+   past the declared update-8 limit. Its update-2 peak followed by regression
+   supports a newly versioned complementary readout intervention, not more K/V-only
+   optimizer steps.
+2. Test a zero-output query-only LoRA bridge on the last untouched sliding/full
+   attention consumers (physical layers 28 and 29) while freezing the selected
+   V23 update-2 K/V state and resetting optimizer history. Keep the V23 objective
+   and gates fixed so the architecture change is isolated.
+3. Require the next saved-and-reloaded candidate to preserve 12/12 strict color
    sides and reach 12/12 strict selected-mirror sides with 6/6 changed units. Only
    then rerun all-mirror and held-out support controls before static QA, chat,
    leakage, robot, or promotion work.
-3. Run the direct multi-view VLM and isolated oracle-text upper-bound baselines.
-4. Train and evaluate language-conditioned target-facing and approach behavior
+4. Run the direct multi-view VLM and isolated oracle-text upper-bound baselines.
+5. Train and evaluate language-conditioned target-facing and approach behavior
    only after the static semantic gate passes, without returning semantic labels
    through tools.
-5. Preserve the v1/v2 CLIP/Qwen runs as historical anti-collapse evidence, not as
+6. Preserve the v1/v2 CLIP/Qwen runs as historical anti-collapse evidence, not as
    primary-model results.
 
 ## Geometry validation detail
