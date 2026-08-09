@@ -18,11 +18,16 @@
 > own margin target. V13 passed its decoder-bank integrity, training, checkpoint-
 > reload, and runtime-prefix checks and retained 12/12 trained color sides, but it
 > still reached 0/12 selected mirror sides, 0/70 all-mirror sides, and 0/8 held-out
-> support sides. All 70 mirror outputs were literal `unknown` responses. V13 is not
-> promoted. There is no accepted Gemma static-chat, Gemma leakage, semantic
+> support sides. All 70 mirror outputs were literal `unknown` responses. V14's
+> four-arm learning-rate screen preserved 12/12 color sides in every arm and
+> selected 2e-3 after it reached 5/12 mirror sides at update 4. Its exact resume
+> peaked discretely at epoch 7 with 7/12 mirror sides and 1/6 complete units, but
+> final epoch 12 had 6/12 and 0/6. V14 never passed the complete teacher gate and
+> received no greedy audit or promotion. There is no accepted Gemma static-chat,
+> Gemma leakage, semantic
 > embodied-agent, or one-command-demo result yet.
 
-Updated from local artifacts on `2026-08-09T10:40:47Z`. This report does not run models and does not infer missing measurements.
+Updated from local artifacts on `2026-08-09T11:33:10Z`. This report does not run models and does not infer missing measurements.
 
 ## 1. Research question
 
@@ -328,6 +333,115 @@ V13 therefore falsifies this added-decoder-bank configuration: it preserves the
 trained color overfit but learns no complete mirror unit and transfers to no
 held-out support side. Held-out static QA, interactive chat, Gemma-specific
 leakage/prefix-invariance tests, and semantic robot navigation remain gated.
+
+#### v14 exact-restart learning-rate response: transient partial fit, no gate pass
+
+V14 changed only the learning rate of V13's trainable 229,376-parameter
+layers-30-33 extension. The scene adapter, inherited V12 layer-34 bank, Gemma base,
+V12 epoch-8 restart, 24 records, ordering, and objectives remained fixed. The
+screen contract is
+[`../configs/experiments/gemma4_color_mirror_decoder_banks_v14_lr_sweep.yaml`](../configs/experiments/gemma4_color_mirror_decoder_banks_v14_lr_sweep.yaml).
+Each arm began from exact-zero-output extension hash
+`b4ec0518e4759dda33fc93c9c1d4c76f52f1024fd5b8b1667ad1b4ef5da198af`
+and completed four MPS optimizer updates under clean commit
+`1ee8b5d13777e74ebdfe1f87e7d8320403ad5fbf` (tree
+`b606e85cbb5a786ba2e00f971cf07c174bc5cbef`; tracked-diff hash
+`e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855`).
+Selection hash
+`7f0714e3151c9ddb57c1da95a457820a833e490c070881a88a9fee4a9168f933`
+and pair-membership hash
+`99ee448c23fb71b7269a353a54b2156ac55701847af170597dcc351af15cbcbe`
+were identical across arms. Scene hash
+`690bd890bfda024dbb5c7d3c68087b8113bc3b8ee81dd6143c7eb2a884e7245b`
+and inherited-bank hash
+`dec768bed654c8c4e16da0318857543ad54d8f5f68f4d24a9a87cd19ec706594`
+remained frozen.
+
+Every arm retained the epoch-4 color requirement at 12/12 full-vocabulary sides
+and 6/6 complete units. The screen results were:
+
+| Learning rate | Recorded screen time (s) | Mirror full-vocab sides | Complete units | Mean / minimum mirror margin | Report SHA-256 |
+| ---: | ---: | ---: | ---: | ---: | --- |
+| 1e-4 | 180.22852345905267 | 0/12 | 0/6 | -19.5859375 / -25.4375 | `88593afc7998785afbe7e4e2c41e56bed7fb90f0f77ee55cd63ca5f5c7f95bfc` |
+| 3e-4 | 176.10611624992453 | 0/12 | 0/6 | -18.22395896911621 / -23.78125 | `f651cffc9d42eda7f9f89f010bcda9fee743240e32dfb1f78d405a6086db9ebe` |
+| 1e-3 | 179.8313142498955 | 0/12 | 0/6 | -8.165771484375 / -11.78125 | `5b789526563d82d86d29ec8b599ce485de273e939b4e494946168f74dfa4cbe2` |
+| 2e-3 | not retained separately | 5/12 | 0/6 | -0.2604166567325592 / -3.9375 | overwritten by resume; see below |
+
+The predeclared color-first ranking selected 2e-3 because it was the only arm to
+make five mirror target tokens full-vocabulary top-1 at update 4. Three of four
+arms satisfied the separate extension criterion; none passed the complete
+color-plus-mirror gate. The historical summary is
+[`gemma4/metrics/lr_sweep_gemma4_color_mirror_decoder_banks_v14.json`](gemma4/metrics/lr_sweep_gemma4_color_mirror_decoder_banks_v14.json),
+file SHA-256
+`b0643e4a09d147702efae58f0559a54fe8f61f98d4ef9d823392a365493ada4a`,
+with common provenance-contract hash
+`f016b57fd79dc3a229e5015a0d146424a16c345810133783a3ad6f960e3f7968`.
+The canonical evidence is the checkpoint-backed
+[`gemma4/metrics/lr_sweep_checkpoint_attestation_gemma4_color_mirror_decoder_banks_v14.json`](gemma4/metrics/lr_sweep_checkpoint_attestation_gemma4_color_mirror_decoder_banks_v14.json),
+file SHA-256
+`9f959226e1d10f16888c5f1b4db165912c286c84c21d98930fe635e3f290359e`.
+It loads no historical training report, validates the four intact `epoch_004`
+checkpoints and selection manifests, recomputes every trainable-bank hash from
+safetensors, checks optimizer slots, steps, and learning rates, and independently
+reproduces the ranking `lr2e3`, `lr1e3`, `lr3e4`, `lr1e4`.
+The selected epoch-4 extension state is
+`78839fc9683c8b9e4f0227d9c248a5ce916b44967f75424be8d484d50eb07681`.
+Its adapter, metadata, and optimizer file hashes are
+`0e41bc85b4c3e7bb8e9c71d3ed7ff43d8b4f7d3b682fa05c0f5f009b1e0a2203`,
+`9168e0e02ff5a92b23f0f6aeece937f17cc2eb37980dc34ffa88a1aa06001fda`,
+and `bbffc2feb60a780b43a483faa38ebd9ab740ff3b806861deb5a0161bd1129a7f`.
+
+The selected arm resumed exactly from epoch 4, including optimizer and history,
+and ran eight additional updates. That resume invocation took
+351.17732408316806 seconds. Its aggregate trace contains 12 epochs, 144 decoder
+microsteps, and 12 optimizer updates:
+
+| Epoch | Color full-vocab sides / units | Mirror full-vocab sides / units | Mirror mean / minimum full-vocab margin | Status |
+| ---: | ---: | ---: | ---: | --- |
+| 4 | 12/12 / 6/6 | 5/12 / 0/6 | -0.2604166567325592 / -3.9375 | selected screen arm |
+| 7 | 12/12 / 6/6 | 7/12 / 1/6 | 0.0416666679084301 / -2.3125 | best discrete result |
+| 8 | 10/12 / 4/6 | 6/12 / 0/6 | 0.0364583320915699 / -3.125 | color regression |
+| 9 | 10/12 / 4/6 | 6/12 / 0/6 | 0.078125 / -2.9375 | color regression |
+| 10 | 12/12 / 6/6 | 5/12 / 0/6 | 0.0833333358168602 / -1.375 | scalar-selected `best` |
+| 12 | 12/12 / 6/6 | 6/12 / 0/6 | 0.0572916679084301 / -2.25 | final |
+
+Epoch 7 is the best discrete teacher-forced relation result. The configured
+`pair_composite_full_vocab_gate_margin` monitor instead selected epoch 10 at loss
+0.700520858168602. The `best` directory is byte-identical to epoch 10: extension
+state SHA-256
+`5355e6849adfead434aa021d64af09e62b79af25b8d0075be9994921613c8888`,
+adapter SHA-256
+`b84c64cadfedb295c9c2806284f06675cc51146e09ea993cabb59c3bb9e15931`,
+metadata SHA-256
+`da791884ce7a8f89a1c63e4b5a58035b62ff3a16a4a3d47d29d9b7c8112050c2`,
+and optimizer SHA-256
+`6318ec44520ea8166860e3fdd3e6ad1389cee523f3203fdafbb68347a74b5933`.
+Final epoch 12 has extension hash
+`c6483c420210272335d041f1ae4ee7e0e5cdab6e57798d19cd4d2cd539092a1a`
+and adapter, metadata, and optimizer hashes
+`2e077d3f46e95898a0b33881bf5e11c7029e198bd775cd9d25ed6e60ce78d6a5`,
+`41d283be981c6a9dc03066298080f55ca3450a568d8a56d22ecb4235e93ccb9a`,
+and `fda344dbbe733cdf81683c3d9f4d2ecc03b25e8b542c512a8721524eaddcf036`.
+
+The aggregate report is
+[`gemma4/metrics/training_gemma4_color_mirror_decoder_banks_v14_lr2e3.json`](gemma4/metrics/training_gemma4_color_mirror_decoder_banks_v14_lr2e3.json),
+file SHA-256
+`5efe39c22985908afcd0cf720c06b94b87c5d7f6a4f4fe03ec6ca91b5313d38d`.
+That path was first consumed by the sweep summarizer at epoch 4 and later
+overwritten by the 12-epoch exact-resume aggregate. The checkpoint attestation
+now provides immutable file identities and verifies the summary directly from
+the epoch-4 checkpoint rather than trusting that mutable path. The original
+screen report and its elapsed time do not survive separately. Therefore
+351.17732408316806 is only the eight-update resume time and must not be reported
+as the screen time.
+
+V14 never achieved 12/12 mirror sides or 6/6 complete mirror units, and epochs
+8-9 temporarily damaged the protected color task. The complete teacher gate never
+passed. Following the predeclared fail-closed policy, no checkpoint received a
+greedy audit, no `promotion.json` was created, and no all-mirror, held-out support,
+static-chat, leakage, or semantic-navigation downstream claim is made. V14 shows
+that a larger learning rate can transiently move the relation decision; it does
+not establish usable scene understanding.
 
 The earlier v7 and v8 results remain below as historical adapter lineage.
 
@@ -731,6 +845,13 @@ trained only a disjoint 229,376-parameter bank across layers 30-33. It retained
 all mirror sides, and 0/8 held-out support sides. Every mirror response was still
 the literal `unknown`; passing decoder-gradient, checkpoint-integrity, and runtime-
 reload checks was not sufficient to produce the desired relation behavior.
+Gemma v14 screened four exact-restart learning rates for the same trainable bank.
+All four protected 12/12 color sides at update 4, and the selected 2e-3 arm reached
+5/12 mirror sides. Its continuation briefly reached 7/12 mirror sides and 1/6
+complete units at epoch 7, regressed color to 10/12 at epochs 8-9, and finished at
+12/12 color but only 6/12 mirror sides and 0/6 units. The complete teacher gate
+never passed, so generation was deliberately not audited and no downstream result
+was promoted.
 Fluent chat samples must not be treated as evidence of scene understanding; only the structured held-out and control measurements support behavioral claims.
 
 ## 25. Preserved legacy prefix-invariance evidence
@@ -761,14 +882,19 @@ PASS for checkpoint `data/checkpoints/best`. The oracle directory was atomically
   checkpoint-integrity, BF16 runtime-reload, and prefix-parity checks. It preserves
   12/12 exact color sides but reaches 0/12 selected mirror sides, 0/70 all-mirror
   sides, and 0/8 held-out support sides. It is not promoted.
+- Gemma v14's four-arm screen preserves 12/12 color sides at update 4 and selects
+  2e-3 at 5/12 mirror sides. Its exact continuation peaks discretely at 7/12
+  mirror sides and 1/6 units, ends at 6/12 and 0/6 while restoring 12/12 color,
+  and never passes the complete teacher gate. It has no greedy audit or promotion.
 - No Gemma held-out static-QA, interactive-chat, prefix-invariance, or
-  oracle-deletion/leakage inference result exists for v9-v13.
+  oracle-deletion/leakage inference result exists for v9-v14.
 - The exact source hash loaded by the v7 process was not captured; current source
   hashes are post-run audited snapshots.
 - The v1 multi-scene adapter is scene-content-insensitive despite its raw held-out accuracy; wrong-scene and content-shuffle controls invalidate a scene-understanding claim for that checkpoint.
 - The v2 structural diagnostic preserves more scene signal, but no explicitly v2-tagged held-out QA artifact is available yet.
-- v8, v8-resume24, and v9-v13 wall-clock times are recorded, but peak training
-  memory is not.
+- v8, v8-resume24, and v9-v14 wall-clock times are recorded where retained, but
+  the original v14 2e-3 screen time was overwritten by its resume report; peak
+  training memory is not recorded.
 - Preserved legacy expected-change counterfactual consistency is zero.
 - The direct multi-view image baseline is not scored.
 - The prohibited oracle-text upper bound is not scored.
@@ -779,9 +905,10 @@ PASS for checkpoint `data/checkpoints/best`. The oracle directory was atomically
 
 ## 28. Recommended next experiments
 
-1. Preserve V13 as a failed controlled ablation; do not extend its schedule blindly.
-   Localize why its non-cancelling decoder gradients fail to move the mirror
-   full-vocabulary decision before selecting another adapter architecture or loss.
+1. Preserve V14 as a failed controlled ablation; do not extend its schedule blindly.
+   Its transient epoch-7 result and later oscillation call for a checkpoint policy
+   that respects protected-task integrity and complete discrete counterfactual
+   units before selecting another adapter architecture or loss.
 2. Require the next saved-and-reloaded candidate to preserve 12/12 strict color
    sides and reach 12/12 strict selected-mirror sides with 6/6 changed units. Only
    then rerun all-mirror and held-out support controls before static QA, chat,

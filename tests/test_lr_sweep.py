@@ -6,13 +6,18 @@ from copy import deepcopy
 from pathlib import Path
 
 import pytest
+import torch
+from safetensors.torch import save_file
 
 from semantic_3d_chat.evaluation.lr_sweep import (
+    EXPECTED_V14_ARMS,
+    attest_v14_lr_sweep,
     main,
     parse_named_report,
     summarize_lr_sweep,
     write_summary,
 )
+from semantic_3d_chat.language.lora import tensor_state_sha256
 
 EMPTY_HASH = hashlib.sha256(b"").hexdigest()
 SCENE_HASH = "690bd890bfda024dbb5c7d3c68087b8113bc3b8ee81dd6143c7eb2a884e7245b"
@@ -23,15 +28,19 @@ TRAINABLE_INITIAL_HASH = "b4ec0518e4759dda33fc93c9c1d4c76f52f1024fd5b8b1667ad1b4
 TRAINABLE_FINAL_HASH = "6" * 64
 SELECTION_HASH = "7f0714e3151c9ddb57c1da95a457820a833e490c070881a88a9fee4a9168f933"
 MEMBERSHIP_HASH = "99ee448c23fb71b7269a353a54b2156ac55701847af170597dcc351af15cbcbe"
+SOURCE_HEAD = "1ee8b5d13777e74ebdfe1f87e7d8320403ad5fbf"
+SOURCE_TREE = "b606e85cbb5a786ba2e00f971cf07c174bc5cbef"
 
 
-def _source_provenance(commit: str = "a" * 40) -> dict[str, object]:
+def _source_provenance(
+    commit: str = SOURCE_HEAD, tree: str = SOURCE_TREE
+) -> dict[str, object]:
     return {
         "schema_version": 1,
         "scope": "repository_excluding_generated_artifacts_v1",
         "available": True,
         "head_commit": commit,
-        "head_tree": "b" * 40,
+        "head_tree": tree,
         "is_clean": True,
         "tracked_diff_sha256": EMPTY_HASH,
     }
@@ -136,7 +145,7 @@ def _report(
             "adapter_parameter_count": 10,
         },
         {
-            "name": "extension_v14",
+            "name": "extension_v13",
             "trainable": True,
             "rank": 8,
             "alpha": 16.0,
@@ -178,7 +187,7 @@ def _report(
         "frozen_lora_bank_state_sha256": {"inherited_v12": FROZEN_HASH},
         "lora_bank_state_sha256": {
             "inherited_v12": FROZEN_HASH,
-            "extension_v14": TRAINABLE_FINAL_HASH,
+            "extension_v13": TRAINABLE_FINAL_HASH,
         },
         "training_counterfactual_pair_membership_sha256": MEMBERSHIP_HASH,
         "selection": selection,
@@ -197,6 +206,80 @@ def _report(
 def _write(path: Path, payload: object) -> Path:
     path.write_text(json.dumps(payload, allow_nan=True), encoding="utf-8")
     return path
+
+
+def _v14_attestation_fixture(
+    tmp_path: Path,
+) -> tuple[dict[str, Path], dict[str, Path], Path]:
+    checkpoints: dict[str, Path] = {}
+    selections: dict[str, Path] = {}
+    historical_reports: dict[str, Path] = {}
+    for index, (name, contract) in enumerate(sorted(EXPECTED_V14_ARMS.items())):
+        mirror = {"full_unit": 0.5} if name == "lr2e3" else {"full_unit": 0.0}
+        report = _report(float(contract["learning_rate"]), mirror=mirror)
+        checkpoint = tmp_path / f"checkpoint_{name}" / "epoch_004"
+        checkpoint.mkdir(parents=True)
+        trainable_state = {
+            "adapters.0.lora_a": torch.tensor(
+                [[1.0 + index, 2.0, 3.0], [4.0, 5.0, 6.0]], dtype=torch.float32
+            ),
+            "adapters.0.lora_b": torch.tensor(
+                [[0.1, 0.2], [0.3, 0.4], [0.5, 0.6], [0.7, 0.8 + index]],
+                dtype=torch.float32,
+            ),
+        }
+        final_hash = tensor_state_sha256(trainable_state)
+        report["lora_bank_state_sha256"]["extension_v13"] = final_hash  # type: ignore[index]
+        report["lora"]["banks"][1]["adapter_parameter_count"] = 14  # type: ignore[index]
+        adapter_tensors = {
+            f"lora_banks.extension_v13.{key}": value for key, value in trainable_state.items()
+        }
+        save_file(adapter_tensors, checkpoint / "adapter.safetensors")
+        optimizer = {
+            "state": {
+                0: {"step": torch.tensor(4.0)},
+                1: {"step": torch.tensor(4.0)},
+            },
+            "param_groups": [
+                {
+                    "params": [0, 1],
+                    "lr": float(contract["learning_rate"]),
+                    "weight_decay": 0.0,
+                }
+            ],
+        }
+        torch.save(optimizer, checkpoint / "optimizer.pt")
+        metadata = deepcopy(report)
+        metadata.pop("selection")
+        metadata.pop("lora_optimizer")
+        metadata.update(
+            {
+                "schema_version": 3,
+                "config_hash": contract["config_hash"],
+                "output_namespace": contract["output_namespace"],
+                "epoch": 4,
+                "global_step": 48,
+                "optimizer_step": 4,
+            }
+        )
+        _write(checkpoint / "metadata.json", metadata)
+        selection = deepcopy(report["selection"])
+        selection.update(
+            {
+                "lora": deepcopy(report["lora"]),
+                "lora_optimizer": deepcopy(report["lora_optimizer"]),
+                "gradient_accumulation": 12,
+                "freeze_scene_adapter": True,
+            }
+        )
+        selection_path = _write(tmp_path / f"selection_{name}.json", selection)
+        historical_path = _write(tmp_path / f"historical_{name}.json", report)
+        checkpoints[name] = checkpoint
+        selections[name] = selection_path
+        historical_reports[name] = historical_path
+    summary_path = tmp_path / "historical_sweep.json"
+    write_summary(summarize_lr_sweep(historical_reports), summary_path)
+    return checkpoints, selections, summary_path
 
 
 def test_sweep_uses_declared_lexicographic_ranking_and_lower_lr_tiebreak(tmp_path: Path) -> None:
@@ -268,7 +351,7 @@ def test_sweep_uses_declared_lexicographic_ranking_and_lower_lr_tiebreak(tmp_pat
         ),
         (
             lambda report: report["lora_bank_state_sha256"].update(
-                {"extension_v14": TRAINABLE_INITIAL_HASH}
+                {"extension_v13": TRAINABLE_INITIAL_HASH}
             ),
             "frozen_state_violation",
         ),
@@ -396,14 +479,20 @@ def test_machine_readable_output_exposes_pinned_protocol(tmp_path: Path) -> None
     assert contract["selection_sha256"] == SELECTION_HASH
     assert contract["pair_membership_sha256"] == MEMBERSHIP_HASH
     assert contract["trainable_initial_state_sha256"] == TRAINABLE_INITIAL_HASH
+    assert contract["source_head_commit"] == SOURCE_HEAD
+    assert contract["source_head_tree"] == SOURCE_TREE
     assert contract["v13_candidate_hinge"] == pytest.approx(2.0455729961395264)
     assert contract["v13_full_vocab_hinge"] == pytest.approx(19.23177146911621)
 
 
 def test_writer_and_cli_emit_strict_machine_readable_json(tmp_path: Path, capsys: object) -> None:
     report_path = _write(tmp_path / "arm.json", _report(1e-3))
+    expected_input_hash = hashlib.sha256(report_path.read_bytes()).hexdigest()
     direct_output = tmp_path / "direct.json"
     summary = summarize_lr_sweep({"arm": report_path})
+    assert summary["arms"][0]["input_report_sha256"] == expected_input_hash
+    assert summary["ranking"][0]["input_report_sha256"] == expected_input_hash
+    assert summary["selected_report_sha256"] == expected_input_hash
     write_summary(summary, direct_output)
     assert json.loads(direct_output.read_text(encoding="utf-8"))["selected_arm"] == "arm"
 
@@ -412,3 +501,158 @@ def test_writer_and_cli_emit_strict_machine_readable_json(tmp_path: Path, capsys
     assert json.loads(cli_output.read_text(encoding="utf-8"))["selected_arm"] == "arm"
     assert '"selected_arm": "arm"' in capsys.readouterr().out  # type: ignore[attr-defined]
     assert parse_named_report(f"arm={report_path}") == ("arm", report_path)
+
+
+def test_ranked_summary_keeps_content_hash_when_report_path_is_overwritten(tmp_path: Path) -> None:
+    report_path = _write(tmp_path / "mutable.json", _report(1e-3))
+    summary = summarize_lr_sweep({"arm": report_path})
+    original_hash = summary["selected_report_sha256"]
+
+    _write(report_path, _report(2e-3, mirror={"full_unit": 1.0}))
+
+    assert hashlib.sha256(report_path.read_bytes()).hexdigest() != original_hash
+    assert summary["arms"][0]["input_report_sha256"] == original_hash
+    assert summarize_lr_sweep({"arm": report_path})["selected_report_sha256"] != original_hash
+
+
+def test_rejected_malformed_report_still_records_raw_input_hash(tmp_path: Path) -> None:
+    path = tmp_path / "malformed.json"
+    path.write_bytes(b'{"incomplete":')
+
+    summary = summarize_lr_sweep({"bad": path})
+
+    assert summary["arms"][0]["rejection_reasons"] == ["unreadable_report"]
+    assert summary["arms"][0]["input_report_sha256"] == hashlib.sha256(
+        path.read_bytes()
+    ).hexdigest()
+
+
+def test_v14_checkpoint_attestation_binds_all_raw_evidence_and_recomputed_bank(
+    tmp_path: Path,
+) -> None:
+    checkpoints, selections, sweep_summary = _v14_attestation_fixture(tmp_path)
+
+    attestation = attest_v14_lr_sweep(checkpoints, selections, sweep_summary)
+
+    assert attestation["all_arms_attested"] is True
+    assert attestation["historical_training_reports_loaded"] is False
+    assert attestation["validated_arm_count"] == 4
+    assert attestation["ranking"][0] == "lr2e3"
+    assert attestation["selected_arm"] == "lr2e3"
+    assert attestation["historical_sweep_summary"]["sha256"] == hashlib.sha256(
+        sweep_summary.read_bytes()
+    ).hexdigest()
+    for arm in attestation["arms"]:
+        name = arm["name"]
+        raw_hashes = arm["raw_file_sha256"]
+        assert raw_hashes == {
+            "metadata.json": hashlib.sha256(
+                (checkpoints[name] / "metadata.json").read_bytes()
+            ).hexdigest(),
+            "adapter.safetensors": hashlib.sha256(
+                (checkpoints[name] / "adapter.safetensors").read_bytes()
+            ).hexdigest(),
+            "optimizer.pt": hashlib.sha256(
+                (checkpoints[name] / "optimizer.pt").read_bytes()
+            ).hexdigest(),
+            "selection.json": hashlib.sha256(selections[name].read_bytes()).hexdigest(),
+        }
+        assert arm["recomputed_trainable_bank_state_sha256"]["extension_v13"] == (
+            json.loads((checkpoints[name] / "metadata.json").read_text(encoding="utf-8"))[
+                "lora_bank_state_sha256"
+            ]["extension_v13"]
+        )
+        assert arm["optimizer_validation"]["slot_optimizer_steps"] == [4]
+        assert arm["sweep_summary_correspondence"] is True
+
+
+@pytest.mark.parametrize(
+    ("evidence", "key_path", "replacement", "expected_code"),
+    [
+        ("metadata", ("epoch",), 3, "protocol_violation"),
+        ("metadata", ("global_step",), 47, "protocol_violation"),
+        ("metadata", ("optimizer_step",), 3, "protocol_violation"),
+        ("metadata", ("gradient_accumulation",), 11, "protocol_violation"),
+        ("metadata", ("source_provenance", "head_commit"), "0" * 40, "invalid_provenance"),
+        ("metadata", ("config_hash",), "bad", "invalid_provenance"),
+        ("metadata", ("frozen_scene_state_sha256",), "0" * 64, "frozen_state_violation"),
+        (
+            "metadata",
+            ("frozen_lora_bank_state_sha256", "inherited_v12"),
+            "0" * 64,
+            "frozen_state_violation",
+        ),
+        ("selection", ("train", "selected_ids_sha256"), "0" * 64, "invalid_provenance"),
+        (
+            "selection",
+            ("training_counterfactual_pair_membership_sha256",),
+            "0" * 64,
+            "invalid_provenance",
+        ),
+    ],
+)
+def test_v14_checkpoint_attestation_fails_closed_on_protocol_and_provenance_mutation(
+    tmp_path: Path,
+    evidence: str,
+    key_path: tuple[str, ...],
+    replacement: object,
+    expected_code: str,
+) -> None:
+    checkpoints, selections, sweep_summary = _v14_attestation_fixture(tmp_path)
+    target = (
+        checkpoints["lr2e3"] / "metadata.json"
+        if evidence == "metadata"
+        else selections["lr2e3"]
+    )
+    payload = json.loads(target.read_text(encoding="utf-8"))
+    cursor = payload
+    for key in key_path[:-1]:
+        cursor = cursor[key]
+    cursor[key_path[-1]] = replacement
+    _write(target, payload)
+
+    with pytest.raises(ValueError) as exc_info:
+        attest_v14_lr_sweep(checkpoints, selections, sweep_summary)
+
+    assert getattr(exc_info.value, "code", None) == expected_code
+
+
+def test_v14_checkpoint_attestation_recomputes_adapter_and_optimizer_state(
+    tmp_path: Path,
+) -> None:
+    checkpoints, selections, sweep_summary = _v14_attestation_fixture(tmp_path)
+    checkpoint = checkpoints["lr2e3"]
+    tensors = {
+        "lora_banks.extension_v13.adapters.0.lora_a": torch.zeros((2, 3)),
+        "lora_banks.extension_v13.adapters.0.lora_b": torch.zeros((4, 2)),
+    }
+    save_file(tensors, checkpoint / "adapter.safetensors")
+
+    with pytest.raises(ValueError) as adapter_error:
+        attest_v14_lr_sweep(checkpoints, selections, sweep_summary)
+    assert getattr(adapter_error.value, "code", None) == "adapter_state_hash_mismatch"
+
+    checkpoints, selections, sweep_summary = _v14_attestation_fixture(tmp_path / "optimizer")
+    checkpoint = checkpoints["lr2e3"]
+    optimizer = torch.load(checkpoint / "optimizer.pt", weights_only=True)
+    for slot in optimizer["state"].values():
+        slot["step"] = torch.tensor(3.0)
+    torch.save(optimizer, checkpoint / "optimizer.pt")
+
+    with pytest.raises(ValueError) as optimizer_error:
+        attest_v14_lr_sweep(checkpoints, selections, sweep_summary)
+    assert getattr(optimizer_error.value, "code", None) == "invalid_optimizer_checkpoint"
+
+
+def test_v14_checkpoint_attestation_rejects_historical_gate_mutation(tmp_path: Path) -> None:
+    checkpoints, selections, sweep_summary = _v14_attestation_fixture(tmp_path)
+    summary = json.loads(sweep_summary.read_text(encoding="utf-8"))
+    next(arm for arm in summary["arms"] if arm["name"] == "lr2e3")["mirror_metrics"][
+        "candidate_mean_margin"
+    ] += 1.0
+    _write(sweep_summary, summary)
+
+    with pytest.raises(ValueError) as exc_info:
+        attest_v14_lr_sweep(checkpoints, selections, sweep_summary)
+
+    assert getattr(exc_info.value, "code", None) == "sweep_summary_mismatch"

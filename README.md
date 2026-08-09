@@ -31,8 +31,15 @@ inherited layer-34 LoRA, trained a disjoint 229,376-parameter decoder bank in
 layers 30-33, and preserved the 12/12 color result. It nevertheless generated
 0/12 exact selected-mirror sides, 0/70 across all mirror sides, and 0/8 held-out
 support sides; all 70 mirror outputs were the literal model response `unknown`.
-V9 remains a color-wiring overfit milestone; v10-v13 are failed continuations,
-not promoted scene chatbots. Gemma held-out static QA, interactive chat, Gemma
+V14 then screened four exact-restart learning rates for that frozen-scene decoder
+bank. All four arms retained 12/12 full-vocabulary color sides after four updates;
+the predeclared ranker selected 2e-3 because it reached 5/12 mirror sides. An
+exact optimizer/history resume to 12 updates peaked discretely at epoch 7 with
+7/12 mirror sides and 1/6 complete mirror units while retaining 12/12 color, but
+the scalar-selected epoch 10 checkpoint had only 5/12 mirror sides and final
+epoch 12 had 6/12 and 0/6 units. The complete gate never passed, so no greedy
+audit was run. V9 remains a color-wiring overfit milestone; v10-v14 are failed
+continuations, not promoted scene chatbots. Gemma held-out static QA, interactive chat, Gemma
 leakage claims, and language-conditioned robot navigation remain gated.
 
 ## Current primary stack
@@ -48,7 +55,7 @@ leakage claims, and language-conditioned robot navigation remain gated.
   question-independent 384D scene latents, which are projected into Gemma's 1536D
   decoder space.
 - Gemma decoder base weights remain frozen. V9-v12 adapt only the explicitly
-  listed 45,056-parameter layer-34 LoRA state. V13 introduces a versioned,
+  listed 45,056-parameter layer-34 LoRA state. V13-v14 use a versioned,
   disjoint-bank checkpoint contract: that 45,056-parameter V12 bank is frozen and
   a 229,376-parameter rank-8 bank in layers 30-33 is trainable. The scene adapter
   is also frozen. The decoder receives continuous scene tokens, numeric geometry,
@@ -505,6 +512,100 @@ configuration: its integrity and reload gates pass, but selected mirror, all-mir
 and held-out support behavior do not. Held-out static QA, Gemma chat and leakage
 tests, and semantic robot navigation remain gated.
 
+#### Gemma v14 learning-rate response — transient partial relation fit, gate failed
+
+V14 retains V13's frozen scene adapter, frozen inherited V12 layer-34 bank,
+trainable 229,376-parameter layers-30-33 extension, exact V12 epoch-8 restart,
+24-record selection, training order, and losses. The only screened intervention
+was extension-bank learning rate. The four-arm contract is
+[`configs/experiments/gemma4_color_mirror_decoder_banks_v14_lr_sweep.yaml`](configs/experiments/gemma4_color_mirror_decoder_banks_v14_lr_sweep.yaml);
+all arms ran from clean source commit
+`1ee8b5d13777e74ebdfe1f87e7d8320403ad5fbf` (tree
+`b606e85cbb5a786ba2e00f971cf07c174bc5cbef`, empty tracked-diff hash
+`e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855`).
+The audited selection and pair-membership hashes were respectively
+`7f0714e3151c9ddb57c1da95a457820a833e490c070881a88a9fee4a9168f933`
+and `99ee448c23fb71b7269a353a54b2156ac55701847af170597dcc351af15cbcbe`.
+Every arm completed exactly four MPS optimizer updates and retained 12/12
+full-vocabulary color sides and 6/6 complete color units at epoch 4:
+
+| Learning rate | Recorded screen time (s) | Mirror full-vocab sides | Mirror units | Mean / minimum mirror margin | Screen report SHA-256 |
+| ---: | ---: | ---: | ---: | ---: | --- |
+| 1e-4 | 180.22852345905267 | 0/12 | 0/6 | -19.5859375 / -25.4375 | `88593afc7998785afbe7e4e2c41e56bed7fb90f0f77ee55cd63ca5f5c7f95bfc` |
+| 3e-4 | 176.10611624992453 | 0/12 | 0/6 | -18.22395896911621 / -23.78125 | `f651cffc9d42eda7f9f89f010bcda9fee743240e32dfb1f78d405a6086db9ebe` |
+| 1e-3 | 179.8313142498955 | 0/12 | 0/6 | -8.165771484375 / -11.78125 | `5b789526563d82d86d29ec8b599ce485de273e939b4e494946168f74dfa4cbe2` |
+| 2e-3 | not retained separately | 5/12 | 0/6 | -0.2604166567325592 / -3.9375 | see provenance note below |
+
+The predeclared color-first ranker therefore selected 2e-3. Its historical sweep
+summary is
+[`lr_sweep_gemma4_color_mirror_decoder_banks_v14.json`](reports/gemma4/metrics/lr_sweep_gemma4_color_mirror_decoder_banks_v14.json),
+SHA-256 `b0643e4a09d147702efae58f0559a54fe8f61f98d4ef9d823392a365493ada4a`.
+That summary embeds the four epoch-4 arm metrics and their common provenance
+contract hash
+`f016b57fd79dc3a229e5015a0d146424a16c345810133783a3ad6f960e3f7968`.
+Because a selected arm's convenience report path was later overwritten by its
+exact continuation, the canonical screen evidence is the independently generated
+[`lr_sweep_checkpoint_attestation_gemma4_color_mirror_decoder_banks_v14.json`](reports/gemma4/metrics/lr_sweep_checkpoint_attestation_gemma4_color_mirror_decoder_banks_v14.json),
+SHA-256 `9f959226e1d10f16888c5f1b4db165912c286c84c21d98930fe635e3f290359e`.
+It reads no historical training-report path: it validates all four intact
+`epoch_004` checkpoints and selection manifests, recomputes the trainable-bank
+hashes from safetensors, checks optimizer steps and learning rates, and reproduces
+the ranking `lr2e3`, `lr1e3`, `lr3e4`, `lr1e4`.
+The selected epoch-4 extension-state hash is
+`78839fc9683c8b9e4f0227d9c248a5ce916b44967f75424be8d484d50eb07681`;
+its adapter, metadata, and optimizer file hashes are respectively
+`0e41bc85b4c3e7bb8e9c71d3ed7ff43d8b4f7d3b682fa05c0f5f009b1e0a2203`,
+`9168e0e02ff5a92b23f0f6aeece937f17cc2eb37980dc34ffa88a1aa06001fda`,
+and `bbffc2feb60a780b43a483faa38ebd9ab740ff3b806861deb5a0161bd1129a7f`.
+
+The selected arm then resumed exactly from epoch 4 with its optimizer and history
+and ran eight additional updates. The resume invocation took
+351.17732408316806 seconds and produced a 12-epoch, 144-microstep, 12-update
+aggregate trace:
+
+| Epoch | Color full-vocab sides / units | Mirror full-vocab sides / units | Mirror mean / minimum margin | Interpretation |
+| ---: | ---: | ---: | ---: | --- |
+| 4 | 12/12 / 6/6 | 5/12 / 0/6 | -0.2604166567325592 / -3.9375 | screen winner |
+| 7 | 12/12 / 6/6 | 7/12 / 1/6 | 0.0416666679084301 / -2.3125 | best discrete mirror result |
+| 8 | 10/12 / 4/6 | 6/12 / 0/6 | 0.0364583320915699 / -3.125 | color regression |
+| 9 | 10/12 / 4/6 | 6/12 / 0/6 | 0.078125 / -2.9375 | color regression |
+| 10 | 12/12 / 6/6 | 5/12 / 0/6 | 0.0833333358168602 / -1.375 | scalar-selected `best` |
+| 12 | 12/12 / 6/6 | 6/12 / 0/6 | 0.0572916679084301 / -2.25 | final |
+
+The configured `pair_composite_full_vocab_gate_margin` monitor selected epoch 10
+at scalar loss 0.700520858168602, despite epoch 7's better discrete result. The
+epoch-10 extension-state hash is
+`5355e6849adfead434aa021d64af09e62b79af25b8d0075be9994921613c8888`;
+the byte-identical `best` adapter, metadata, and optimizer hashes are
+`b84c64cadfedb295c9c2806284f06675cc51146e09ea993cabb59c3bb9e15931`,
+`da791884ce7a8f89a1c63e4b5a58035b62ff3a16a4a3d47d29d9b7c8112050c2`,
+and `6318ec44520ea8166860e3fdd3e6ad1389cee523f3203fdafbb68347a74b5933`.
+Final epoch 12 has extension-state hash
+`c6483c420210272335d041f1ae4ee7e0e5cdab6e57798d19cd4d2cd539092a1a`
+and adapter hash
+`2e077d3f46e95898a0b33881bf5e11c7029e198bd775cd9d25ed6e60ce78d6a5`.
+Both frozen hashes remain exact: scene state
+`690bd890bfda024dbb5c7d3c68087b8113bc3b8ee81dd6143c7eb2a884e7245b`
+and inherited bank
+`dec768bed654c8c4e16da0318857543ad54d8f5f68f4d24a9a87cd19ec706594`.
+
+The aggregate trace is
+[`training_gemma4_color_mirror_decoder_banks_v14_lr2e3.json`](reports/gemma4/metrics/training_gemma4_color_mirror_decoder_banks_v14_lr2e3.json),
+SHA-256 `5efe39c22985908afcd0cf720c06b94b87c5d7f6a4f4fe03ec6ca91b5313d38d`.
+Provenance caveat: that same path was an input to the sweep summarizer at epoch 4
+and was later overwritten by the exact-resume aggregate report. The checkpoint
+attestation is therefore the canonical machine-readable evidence for the screen;
+it verifies the historical summary without opening the mutable report paths. The
+separate four-update 2e-3 wall time is not present in the surviving artifacts. The
+351.177-second value is the eight-update resume invocation, not the original
+screen.
+
+No epoch passed the complete color-plus-mirror teacher gate. Under the fail-closed
+policy, V14 therefore received no greedy audit, no `promotion.json`, no held-out
+control evaluation, and no downstream static chat, leakage, or semantic robot
+run. Its transient 7/12 and 1/6 epoch-7 result is evidence of learning response,
+not accepted scene understanding.
+
 ### Fail-closed Gemma static evaluation and chat
 
 Gemma evaluation must use the isolated Transformers 5 environment and the exact
@@ -695,7 +796,7 @@ Legacy runtime data is under `data/rendered`, `data/features`, `data/maps`, and
 `data_gemma4`. Semantic oracle specifications and QA supervision are isolated under
 `data/oracle` and `data/qa`. The recorded chat file audit and oracle-unavailable test
 apply to the legacy `data/checkpoints/best` lineage only; they have not been run for
-Gemma v9-v13 and do not transfer to those checkpoints. Their wiring and failure
+Gemma v9-v14 and do not transfer to those checkpoints. Their wiring and failure
 results are therefore not Gemma leakage-test results.
 
 ## Preserved legacy local web interface

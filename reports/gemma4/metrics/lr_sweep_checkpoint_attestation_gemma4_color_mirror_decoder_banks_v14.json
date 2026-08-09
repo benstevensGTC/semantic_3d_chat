@@ -1,0 +1,271 @@
+{
+  "all_arms_attested": true,
+  "arms": [
+    {
+      "checkpoint_path": "data_gemma4/checkpoints/gemma4_color_mirror_decoder_banks_v14_lr1e3/epoch_004",
+      "config_hash": "5dd4eb4176e2",
+      "counts": {
+        "epoch": 4,
+        "global_step": 48,
+        "gradient_accumulation": 12,
+        "optimizer_step": 4
+      },
+      "final_pair_gate_sha256": "a6ee9c58c54c47bae94d9a3de2a221d60ae044351876490eb0c24d158cf8f4c4",
+      "frozen_state": {
+        "lora_bank_state_sha256": {
+          "inherited_v12": "dec768bed654c8c4e16da0318857543ad54d8f5f68f4d24a9a87cd19ec706594"
+        },
+        "scene_state_sha256": "690bd890bfda024dbb5c7d3c68087b8113bc3b8ee81dd6143c7eb2a884e7245b"
+      },
+      "historical_report_path": "reports/gemma4/metrics/training_gemma4_color_mirror_decoder_banks_v14_lr1e3.json",
+      "learning_rate": 0.001,
+      "name": "lr1e3",
+      "optimizer_validation": {
+        "learning_rate": 0.001,
+        "parameter_group_count": 1,
+        "parameter_tensor_count": 16,
+        "slot_count": 16,
+        "slot_optimizer_steps": [
+          4
+        ],
+        "weight_decay": 0.0
+      },
+      "output_namespace": "gemma4_color_mirror_decoder_banks_v14_lr1e3",
+      "pair_membership_sha256": "99ee448c23fb71b7269a353a54b2156ac55701847af170597dcc351af15cbcbe",
+      "raw_file_sha256": {
+        "adapter.safetensors": "15ffb73d79b16ae0a47c254314ec85dc53e831466cb207de8334a2239f1b32a4",
+        "metadata.json": "56d66de46d26cc27fec9b27ee93ebe6c0f051d575d81b246f08cc88d289f18e4",
+        "optimizer.pt": "b9af045265ba092f823851c2ef235f3ab00dae6a04f96104474cdebe3b02915a",
+        "selection.json": "c9d09dc8378d75b898dd55f735ebe484997d2c91d54d22da86e56cc44106a108"
+      },
+      "recomputed_trainable_bank_parameter_count": {
+        "extension_v13": 229376
+      },
+      "recomputed_trainable_bank_state_sha256": {
+        "extension_v13": "013711c367b696d5b23ac8d04fed4ea20a650bba61e0e0368e1047a614887c92"
+      },
+      "selection_path": "reports/gemma4/metrics/training_selection_gemma4_color_mirror_decoder_banks_v14_lr1e3.json",
+      "selection_sha256": "7f0714e3151c9ddb57c1da95a457820a833e490c070881a88a9fee4a9168f933",
+      "source_provenance": {
+        "available": true,
+        "head_commit": "1ee8b5d13777e74ebdfe1f87e7d8320403ad5fbf",
+        "head_tree": "b606e85cbb5a786ba2e00f971cf07c174bc5cbef",
+        "is_clean": true,
+        "schema_version": 1,
+        "scope": "repository_excluding_generated_artifacts_v1",
+        "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "sweep_summary_correspondence": true
+    },
+    {
+      "checkpoint_path": "data_gemma4/checkpoints/gemma4_color_mirror_decoder_banks_v14_lr1e4/epoch_004",
+      "config_hash": "7c4523140639",
+      "counts": {
+        "epoch": 4,
+        "global_step": 48,
+        "gradient_accumulation": 12,
+        "optimizer_step": 4
+      },
+      "final_pair_gate_sha256": "7849f679d4898634ac2471ca9084a5abb32d2938a298c03edab1193583e09b75",
+      "frozen_state": {
+        "lora_bank_state_sha256": {
+          "inherited_v12": "dec768bed654c8c4e16da0318857543ad54d8f5f68f4d24a9a87cd19ec706594"
+        },
+        "scene_state_sha256": "690bd890bfda024dbb5c7d3c68087b8113bc3b8ee81dd6143c7eb2a884e7245b"
+      },
+      "historical_report_path": "reports/gemma4/metrics/training_gemma4_color_mirror_decoder_banks_v14_lr1e4.json",
+      "learning_rate": 0.0001,
+      "name": "lr1e4",
+      "optimizer_validation": {
+        "learning_rate": 0.0001,
+        "parameter_group_count": 1,
+        "parameter_tensor_count": 16,
+        "slot_count": 16,
+        "slot_optimizer_steps": [
+          4
+        ],
+        "weight_decay": 0.0
+      },
+      "output_namespace": "gemma4_color_mirror_decoder_banks_v14_lr1e4",
+      "pair_membership_sha256": "99ee448c23fb71b7269a353a54b2156ac55701847af170597dcc351af15cbcbe",
+      "raw_file_sha256": {
+        "adapter.safetensors": "98974c5b7c338cdb8e39bcb0bcbbf8f7b620b73bdbee546ebdb1ff53a8d0a8b4",
+        "metadata.json": "78840b1e8c02a954496af0d361b62f6dc66cfe35fa990c9951af91b87c969dc9",
+        "optimizer.pt": "86768a8aadf980559f57d84e3dbb1f7aefd98b68416d10c4d661bb468fd8ed74",
+        "selection.json": "a16ad73d147692a0d1af67eef0a80230488ba23d83224668e93c364c6e63250a"
+      },
+      "recomputed_trainable_bank_parameter_count": {
+        "extension_v13": 229376
+      },
+      "recomputed_trainable_bank_state_sha256": {
+        "extension_v13": "b117dc8eeedc9cac26179d3ea4bf209030a6d6289b1723c5f2f482ab366548b2"
+      },
+      "selection_path": "reports/gemma4/metrics/training_selection_gemma4_color_mirror_decoder_banks_v14_lr1e4.json",
+      "selection_sha256": "7f0714e3151c9ddb57c1da95a457820a833e490c070881a88a9fee4a9168f933",
+      "source_provenance": {
+        "available": true,
+        "head_commit": "1ee8b5d13777e74ebdfe1f87e7d8320403ad5fbf",
+        "head_tree": "b606e85cbb5a786ba2e00f971cf07c174bc5cbef",
+        "is_clean": true,
+        "schema_version": 1,
+        "scope": "repository_excluding_generated_artifacts_v1",
+        "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "sweep_summary_correspondence": true
+    },
+    {
+      "checkpoint_path": "data_gemma4/checkpoints/gemma4_color_mirror_decoder_banks_v14_lr2e3/epoch_004",
+      "config_hash": "93ff12019b76",
+      "counts": {
+        "epoch": 4,
+        "global_step": 48,
+        "gradient_accumulation": 12,
+        "optimizer_step": 4
+      },
+      "final_pair_gate_sha256": "7be4d86e248a5705d4e78e525d73ae8efea105a688411837f125659cbc1489d8",
+      "frozen_state": {
+        "lora_bank_state_sha256": {
+          "inherited_v12": "dec768bed654c8c4e16da0318857543ad54d8f5f68f4d24a9a87cd19ec706594"
+        },
+        "scene_state_sha256": "690bd890bfda024dbb5c7d3c68087b8113bc3b8ee81dd6143c7eb2a884e7245b"
+      },
+      "historical_report_path": "reports/gemma4/metrics/training_gemma4_color_mirror_decoder_banks_v14_lr2e3.json",
+      "learning_rate": 0.002,
+      "name": "lr2e3",
+      "optimizer_validation": {
+        "learning_rate": 0.002,
+        "parameter_group_count": 1,
+        "parameter_tensor_count": 16,
+        "slot_count": 16,
+        "slot_optimizer_steps": [
+          4
+        ],
+        "weight_decay": 0.0
+      },
+      "output_namespace": "gemma4_color_mirror_decoder_banks_v14_lr2e3",
+      "pair_membership_sha256": "99ee448c23fb71b7269a353a54b2156ac55701847af170597dcc351af15cbcbe",
+      "raw_file_sha256": {
+        "adapter.safetensors": "0e41bc85b4c3e7bb8e9c71d3ed7ff43d8b4f7d3b682fa05c0f5f009b1e0a2203",
+        "metadata.json": "9168e0e02ff5a92b23f0f6aeece937f17cc2eb37980dc34ffa88a1aa06001fda",
+        "optimizer.pt": "bbffc2feb60a780b43a483faa38ebd9ab740ff3b806861deb5a0161bd1129a7f",
+        "selection.json": "a5807bc56a7310c187a17394cc30d12fc5af02ceeb2159671f922b8ee2c91f1a"
+      },
+      "recomputed_trainable_bank_parameter_count": {
+        "extension_v13": 229376
+      },
+      "recomputed_trainable_bank_state_sha256": {
+        "extension_v13": "78839fc9683c8b9e4f0227d9c248a5ce916b44967f75424be8d484d50eb07681"
+      },
+      "selection_path": "reports/gemma4/metrics/training_selection_gemma4_color_mirror_decoder_banks_v14_lr2e3.json",
+      "selection_sha256": "7f0714e3151c9ddb57c1da95a457820a833e490c070881a88a9fee4a9168f933",
+      "source_provenance": {
+        "available": true,
+        "head_commit": "1ee8b5d13777e74ebdfe1f87e7d8320403ad5fbf",
+        "head_tree": "b606e85cbb5a786ba2e00f971cf07c174bc5cbef",
+        "is_clean": true,
+        "schema_version": 1,
+        "scope": "repository_excluding_generated_artifacts_v1",
+        "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "sweep_summary_correspondence": true
+    },
+    {
+      "checkpoint_path": "data_gemma4/checkpoints/gemma4_color_mirror_decoder_banks_v14_lr3e4/epoch_004",
+      "config_hash": "63744feeea44",
+      "counts": {
+        "epoch": 4,
+        "global_step": 48,
+        "gradient_accumulation": 12,
+        "optimizer_step": 4
+      },
+      "final_pair_gate_sha256": "1727d5947e06c742d3f52748868fdadf840f684085f7b132a67e8da39683a740",
+      "frozen_state": {
+        "lora_bank_state_sha256": {
+          "inherited_v12": "dec768bed654c8c4e16da0318857543ad54d8f5f68f4d24a9a87cd19ec706594"
+        },
+        "scene_state_sha256": "690bd890bfda024dbb5c7d3c68087b8113bc3b8ee81dd6143c7eb2a884e7245b"
+      },
+      "historical_report_path": "reports/gemma4/metrics/training_gemma4_color_mirror_decoder_banks_v14_lr3e4.json",
+      "learning_rate": 0.0003,
+      "name": "lr3e4",
+      "optimizer_validation": {
+        "learning_rate": 0.0003,
+        "parameter_group_count": 1,
+        "parameter_tensor_count": 16,
+        "slot_count": 16,
+        "slot_optimizer_steps": [
+          4
+        ],
+        "weight_decay": 0.0
+      },
+      "output_namespace": "gemma4_color_mirror_decoder_banks_v14_lr3e4",
+      "pair_membership_sha256": "99ee448c23fb71b7269a353a54b2156ac55701847af170597dcc351af15cbcbe",
+      "raw_file_sha256": {
+        "adapter.safetensors": "f525f24b6e4f215ef92dca399a0c98acc083cfd6df7f016a9c6920abcfc176f3",
+        "metadata.json": "07aff6da99512c4d260724669d61fa3e5d96bb3e61eedc4226e874ab9a09e02a",
+        "optimizer.pt": "53364b1eba74d0a8e8b934647caeb652389f26415efdef4d2cc31b280a4d8654",
+        "selection.json": "d1b740db1eac1d32633e4983798812f936538b591b8778fe4fa89dddf25a5d10"
+      },
+      "recomputed_trainable_bank_parameter_count": {
+        "extension_v13": 229376
+      },
+      "recomputed_trainable_bank_state_sha256": {
+        "extension_v13": "38dbee9c4490f874e609bfe2fa3700e88fddb9a5c6c6e6f877ef67897d99c69d"
+      },
+      "selection_path": "reports/gemma4/metrics/training_selection_gemma4_color_mirror_decoder_banks_v14_lr3e4.json",
+      "selection_sha256": "7f0714e3151c9ddb57c1da95a457820a833e490c070881a88a9fee4a9168f933",
+      "source_provenance": {
+        "available": true,
+        "head_commit": "1ee8b5d13777e74ebdfe1f87e7d8320403ad5fbf",
+        "head_tree": "b606e85cbb5a786ba2e00f971cf07c174bc5cbef",
+        "is_clean": true,
+        "schema_version": 1,
+        "scope": "repository_excluding_generated_artifacts_v1",
+        "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "sweep_summary_correspondence": true
+    }
+  ],
+  "attestation_type": "v14_epoch_004_checkpoint_sweep",
+  "canonical_evidence": "checkpoint_plus_selection",
+  "expected_sweep_contract": {
+    "epochs": 4,
+    "frozen_bank_name": "inherited_v12",
+    "frozen_bank_state_sha256": "dec768bed654c8c4e16da0318857543ad54d8f5f68f4d24a9a87cd19ec706594",
+    "frozen_scene_state_sha256": "690bd890bfda024dbb5c7d3c68087b8113bc3b8ee81dd6143c7eb2a884e7245b",
+    "gradient_accumulation": 12,
+    "optimizer_steps": 4,
+    "pair_membership_sha256": "99ee448c23fb71b7269a353a54b2156ac55701847af170597dcc351af15cbcbe",
+    "required_pair_side_count": 12,
+    "required_pair_unit_count": 6,
+    "selection_sha256": "7f0714e3151c9ddb57c1da95a457820a833e490c070881a88a9fee4a9168f933",
+    "source_adapter_sha256": "a4c85c14a214e4e594992e489a784cb4bacb64d3dfda519ad3da18b1595d9f22",
+    "source_head_commit": "1ee8b5d13777e74ebdfe1f87e7d8320403ad5fbf",
+    "source_head_tree": "b606e85cbb5a786ba2e00f971cf07c174bc5cbef",
+    "source_metadata_sha256": "f097c6477546460440e77a3d225afb55818cb13abf9cbb4a90500f75a879b0f5",
+    "steps": 48,
+    "trainable_initial_state_sha256": "b4ec0518e4759dda33fc93c9c1d4c76f52f1024fd5b8b1667ad1b4ef5da198af",
+    "v12_candidate_minimum_margin": -4.6875,
+    "v12_full_vocab_minimum_margin": -25.75,
+    "v13_candidate_hinge": 2.0455729961395264,
+    "v13_full_vocab_hinge": 19.23177146911621
+  },
+  "historical_sweep_summary": {
+    "canonical_provenance_contract_sha256": "f016b57fd79dc3a229e5015a0d146424a16c345810133783a3ad6f960e3f7968",
+    "path": "reports/gemma4/metrics/lr_sweep_gemma4_color_mirror_decoder_banks_v14.json",
+    "ranked_winner": "lr2e3",
+    "schema_version": 1,
+    "selected_arm": "lr2e3",
+    "sha256": "b0643e4a09d147702efae58f0559a54fe8f61f98d4ef9d823392a365493ada4a"
+  },
+  "historical_training_reports_loaded": false,
+  "ranking": [
+    "lr2e3",
+    "lr1e3",
+    "lr3e4",
+    "lr1e4"
+  ],
+  "schema_version": 1,
+  "selected_arm": "lr2e3",
+  "validated_arm_count": 4
+}
