@@ -234,6 +234,18 @@ def test_bfloat16_audit_matches_direct_module_forward_arithmetic() -> None:
     assert audit["algorithm"] == "bfloat16_cast_of_fp32_base_plus_fp32_delta"
 
 
+@pytest.mark.skipif(not torch.backends.mps.is_available(), reason="MPS is unavailable")
+def test_bfloat16_audit_moves_mps_diagnostics_to_cpu_before_float64() -> None:
+    base = torch.ones(1, 2, 3, device="mps", dtype=torch.float32)
+    raw = torch.full_like(base, 1.0e-3)
+    effective = torch.zeros_like(base)
+
+    audit = bf16_cast_audit(base, raw, effective)
+
+    assert audit["comparison_dtype"] == "float64"
+    assert audit["raw_delta_rms"] == pytest.approx(1.0e-3)
+
+
 def _scene_metric(ratio: float) -> dict[str, object]:
     return {
         "positive_finite_total_energy": True,

@@ -653,8 +653,10 @@ def bf16_cast_audit(
 
     if raw_delta.shape != base_tokens.shape or effective_delta.shape != base_tokens.shape:
         raise ValueError("Base, raw delta, and effective delta shapes must match")
-    raw = raw_delta.detach().float().double()
-    effective = effective_delta.detach().float().double()
+    # MPS does not implement float64 tensors. Diagnostics are detached, so move
+    # them to CPU before the high-precision reductions used by this audit.
+    raw = raw_delta.detach().float().cpu().double()
+    effective = effective_delta.detach().float().cpu().double()
     error = effective - raw
     raw_rms = float(raw.square().mean().sqrt())
     effective_rms = float(effective.square().mean().sqrt())
