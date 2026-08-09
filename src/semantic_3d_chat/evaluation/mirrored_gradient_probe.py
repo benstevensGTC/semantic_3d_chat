@@ -763,6 +763,61 @@ def run_probe(args: argparse.Namespace) -> dict[str, Any]:
     probe_before = tensor_state_sha256(probe_bank.state_module.state_dict())
     probe_bank.assert_only_lora_trainable(language.model)
 
+    # Compare like-for-like inference dispatch before enabling autograd for the
+    # actual probe.  MPS may choose different kernels when trainable parameters
+    # are present in a grad-enabled forward, so comparing that path against an
+    # inference-mode baseline would conflate dispatch with adapter function.
+    parity_records: list[dict[str, Any]] = []
+    with torch.inference_mode():
+        for unit in units:
+            for side_name, record in (
+                ("reference", unit.reference),
+                ("counterfactual", unit.counterfactual),
+            ):
+                prompt_ids = prompt_token_ids(
+                    language.tokenizer,
+                    config["language"]["system_prompt"],
+                    record.question,
+                    language.device,
+                )
+                answer_ids = tokenize_answer(language.tokenizer, record.answer, language.device)
+                batch = composer.compose(
+                    scene_tokens[record.scene_id],
+                    prompt_ids,
+                    language.model.get_input_embeddings(),
+                    answer_ids,
+                    prefix_backend=getattr(language, "prefix_backend", None),
+                )
+                parity_output = forward_prefix_batch(language, batch)
+                if batch.labels is None:
+                    raise RuntimeError("Teacher-forced parity composition returned no labels")
+                baseline_distribution = parity_baseline[(unit.question_key, side_name)]
+                probe_distribution = (
+                    first_answer_distribution(parity_output.logits, batch.labels)
+                    .detach()
+                    .cpu()
+                    .contiguous()
+                )
+                parity_equal = torch.equal(baseline_distribution, probe_distribution)
+                baseline_hash = tensor_state_sha256({"full_vocab_logits": baseline_distribution})
+                probe_hash = tensor_state_sha256({"full_vocab_logits": probe_distribution})
+                if not parity_equal or baseline_hash != probe_hash:
+                    raise RuntimeError(
+                        "Zero-output probe bank changed step-zero first-answer logits: "
+                        f"{unit.question_key}/{side_name}"
+                    )
+                parity_records.append(
+                    {
+                        "question_key": unit.question_key,
+                        "side": side_name,
+                        "vocabulary_size": int(probe_distribution.numel()),
+                        "baseline_sha256": baseline_hash,
+                        "zero_output_probe_sha256": probe_hash,
+                        "bitwise_equal": parity_equal,
+                    }
+                )
+                del parity_output, batch
+
     objective_names = (
         "language_nll",
         "candidate_hinge_weighted",
@@ -773,7 +828,6 @@ def run_probe(args: argparse.Namespace) -> dict[str, Any]:
     aggregate_sides: dict[str, dict[str, list[dict[str, torch.Tensor]]]] = {
         objective: {"reference": [], "counterfactual": []} for objective in objective_names
     }
-    parity_records: list[dict[str, Any]] = []
     for unit in units:
         reference_answer_ids = tokenize_answer(
             language.tokenizer, unit.reference.answer, language.device
@@ -815,31 +869,6 @@ def run_probe(args: argparse.Namespace) -> dict[str, Any]:
             output_value = forward_prefix_batch(language, batch)
             if batch.labels is None:
                 raise RuntimeError("Teacher-forced probe composition returned no labels")
-            baseline_distribution = parity_baseline[(unit.question_key, side_name)]
-            probe_distribution = (
-                first_answer_distribution(output_value.logits, batch.labels)
-                .detach()
-                .cpu()
-                .contiguous()
-            )
-            parity_equal = torch.equal(baseline_distribution, probe_distribution)
-            baseline_hash = tensor_state_sha256({"full_vocab_logits": baseline_distribution})
-            probe_hash = tensor_state_sha256({"full_vocab_logits": probe_distribution})
-            if not parity_equal or baseline_hash != probe_hash:
-                raise RuntimeError(
-                    "Zero-output probe bank changed step-zero first-answer logits: "
-                    f"{unit.question_key}/{side_name}"
-                )
-            parity_records.append(
-                {
-                    "question_key": unit.question_key,
-                    "side": side_name,
-                    "vocabulary_size": int(probe_distribution.numel()),
-                    "baseline_sha256": baseline_hash,
-                    "zero_output_probe_sha256": probe_hash,
-                    "bitwise_equal": parity_equal,
-                }
-            )
             terms, diagnostics = side_objective_terms(
                 output_value.logits,
                 batch.labels,
