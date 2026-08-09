@@ -12,11 +12,14 @@
 > regressed to 9/12 exact color sides, learned 0/6 selected mirror units, and scored
 > 0/8 on held-out support. V11 restored 12/12 color sides with a full-vocabulary
 > margin, but reached only 3/12 selected mirror sides, 0/6 complete mirror units,
-> 7/70 all-mirror sides, and 1/8 held-out support sides. There is no accepted
+> 7/70 all-mirror sides, and 1/8 held-out support sides. V12 preserved 12/12 color
+> sides but reached 0/12 selected mirror sides, 0/70 all-mirror sides, and 0/8
+> held-out support sides even after its ordered spatial auxiliary loss passed its
+> own margin target. There is no accepted
 > Gemma static-chat, Gemma leakage, semantic embodied-agent, or one-command-demo
 > result yet.
 
-Updated from local artifacts on `2026-08-09T08:00:06+00:00`. This report does not run models and does not infer missing measurements.
+Updated from local artifacts on `2026-08-09T09:41:26Z`. This report does not run models and does not infer missing measurements.
 
 ## 1. Research question
 
@@ -155,14 +158,77 @@ global scene-token collapse. Exact artifacts are
 `gemma4/metrics/scene_signal_audit_gemma4_color_mirror_full_vocab_v11_epoch012.json`.
 No `promotion.json` was created.
 
-V12 is staged at
+#### v12 ordered-relation retry: auxiliary margin passed, decoder still failed
+
+V12 used
 `configs/experiments/gemma4_color_mirror_spatial_relation_v12.yaml`. The old
 balanced hinge has an exact shared-preference saddle: margins `[d, -d]` yield zero
-gradient while both sides violate the margin. V12 keeps the v9 initialization,
-selection, decoder objective, and schedule, and adds an ordered
+gradient while both sides violate the margin. V12 kept the v9 initialization,
+selection, decoder objective, and schedule, and added an ordered
 target-minus-reference objective over dense soft pools of all 256 scene latents.
 The ordered coordinates are training/evaluation-only QA fields. They never enter
 the chat runtime, which retains the same global question-independent prefix.
+
+The auxiliary objective succeeded on its own terms. Its scene-only warmup stopped
+after 21 forward passes and 20 optimizer steps when all 12 eligible mirror sides
+exceeded the configured 0.1 margin (mean 0.246168; minimum 0.116128). The complete
+run then finished 12 epochs, 144 decoder microsteps, and 12 main optimizer updates
+in 1,073.493 seconds (17m 53.493s). The recorded source scope was clean at commit
+`6837426d2f8c943ae08646f17ff521d7df3d29c4`.
+
+The teacher-forced decoder result must be distinguished from the auxiliary loss
+and from actual generation. At both epochs 8 and 12, color reached 12/12 candidate
+sides and 12/12 full-vocabulary first-token sides (6/6 complete units). Mirror
+remained at 6/12 candidate sides and 0/6 units, while its full-vocabulary score was
+0/12 sides and 0/6 units. Thus the spatial objective separated its dense pooled
+representations, but Gemma's next-token distribution did not consume that signal
+as the required relation.
+
+Both model-validated greedy audits measured:
+
+| Checkpoint and intervention | Training status | Exact sides | Exact complete units | Changed predictions |
+| --- | --- | ---: | ---: | ---: |
+| Epoch 8 — color swap | selected | 12/12 | 6/6 | 6/6 |
+| Epoch 8 — mirror subset | selected | 0/12 | 0/6 | 0/6 |
+| Epoch 8 — all mirror units | selected + unselected | 0/70 | 0/35 | 0/35 |
+| Epoch 8 — cube support | held-out test | 0/8 | 0/4 | 0/4 |
+| Final/best epoch 12 — color swap | selected | 12/12 | 6/6 | 6/6 |
+| Final/best epoch 12 — mirror subset | selected | 0/12 | 0/6 | 0/6 |
+| Final/best epoch 12 — all mirror units | selected + unselected | 0/70 | 0/35 | 0/35 |
+| Final/best epoch 12 — cube support | held-out test | 0/8 | 0/4 | 0/4 |
+
+Every one of the 70 mirror outputs was the literal model response `unknown`.
+Neither audit used an answer fallback, observed an empty decode, nor exhausted its
+token budget. Both have zero checkpoint-contract warnings and validate native
+boundary embeddings, BF16 runtime dtype, and model-runtime prefix parity. These
+checks establish a clean execution contract, not behavioral correctness or a
+Gemma oracle-deletion result. Epoch 8's adapter SHA-256 is
+`a4c85c14a214e4e594992e489a784cb4bacb64d3dfda519ad3da18b1595d9f22`;
+final/best epoch 12 is
+`1d46e754873431b11e8dc58066f08f06c17e3bcaa4c47b139358bb0f28ceabb1`.
+
+The exact local artifacts are
+`gemma4/metrics/training_gemma4_color_mirror_spatial_relation_v12.json`,
+`gemma4/metrics/scene_signal_audit_gemma4_color_mirror_spatial_relation_v12_epoch008.json`,
+and
+`gemma4/metrics/scene_signal_audit_gemma4_color_mirror_spatial_relation_v12_best.json`.
+No `promotion.json` was created. The honest diagnosis is narrower than “the scene
+encoder collapsed”: the ordered auxiliary head can discriminate the selected
+regions, while the current shallow shared decoder adaptation fails to turn that
+discrimination into left/right tokens and retreats to `unknown`.
+
+V13 is specified as a falsification test of that shallow-decoder-capacity
+hypothesis. It freezes V12 epoch 8's scene encoder and inherited rank-4 layer-34
+q/o LoRA, then adds a disjoint zero-output rank-8 q/o bank in layers 30-33. A
+step-zero logit-parity test must first prove the added bank is an exact V12
+baseline. Before an optimizer step, a paired-side probe must show that the new
+bank's gradients under the unchanged language NLL plus candidate/full-vocabulary
+objectives are material and non-cancelling. Cosine near -1, negligible norms, or a
+low `||gA+gB||/(||gA||+||gB||)` ratio falsifies the hypothesis without spending a
+training run. Only a passing probe justifies training; the hypothesis is still
+falsified unless the saved-and-reloaded runtime preserves 12/12 strict color sides
+and reaches 12/12 strict selected-mirror sides with 6/6 changed units under actual
+greedy generation.
 
 The earlier v7 and v8 results remain below as historical adapter lineage.
 
@@ -554,6 +620,12 @@ Gemma v11 restored all trained color answers and made mirror outputs more decisi
 but it still completed none of the six trained mirror pairs and none of the four
 held-out support pairs. Its improved 7/70 strict mirror sides and 28/70 secondary
 canonical sides do not meet promotion criteria.
+Gemma v12 made all 12 selected relation sides pass its auxiliary spatial margin,
+but both epoch 8 and epoch 12 then generated 0/12 exact selected mirror sides,
+0/70 across all mirror sides, and 0/8 held-out support sides. All 70 mirror
+responses were literal `unknown` outputs, not audit fallbacks. This falsifies the
+claim that satisfying the current spatial auxiliary objective is sufficient for
+the existing decoder adapter to express the relation.
 Fluent chat samples must not be treated as evidence of scene understanding; only the structured held-out and control measurements support behavioral claims.
 
 ## 25. Preserved legacy prefix-invariance evidence
@@ -576,13 +648,17 @@ PASS for checkpoint `data/checkpoints/best`. The oracle directory was atomically
 - Gemma v11 restores 12/12 exact color sides but reaches only 3/12 selected mirror
   sides, 0/6 selected mirror units, 7/70 all-mirror sides, and 1/8 held-out support
   sides. It is not promoted.
+- Gemma v12 preserves 12/12 exact color sides and its spatial-relation warmup
+  reaches 12/12 auxiliary-margin sides, but greedy generation reaches 0/12
+  selected mirror sides, 0/70 all-mirror sides, and 0/8 held-out support sides.
+  It is not promoted.
 - No Gemma held-out static-QA, interactive-chat, prefix-invariance, or
-  oracle-deletion/leakage inference result exists for v9, v10, or v11.
+  oracle-deletion/leakage inference result exists for v9, v10, v11, or v12.
 - The exact source hash loaded by the v7 process was not captured; current source
   hashes are post-run audited snapshots.
 - The v1 multi-scene adapter is scene-content-insensitive despite its raw held-out accuracy; wrong-scene and content-shuffle controls invalidate a scene-understanding claim for that checkpoint.
 - The v2 structural diagnostic preserves more scene signal, but no explicitly v2-tagged held-out QA artifact is available yet.
-- v8, v8-resume24, v9, and v10 wall-clock times are recorded, but peak training
+- v8, v8-resume24, and v9-v12 wall-clock times are recorded, but peak training
   memory is not.
 - Preserved legacy expected-change counterfactual consistency is zero.
 - The direct multi-view image baseline is not scored.
@@ -594,11 +670,14 @@ PASS for checkpoint `data/checkpoints/best`. The oracle directory was atomically
 
 ## 28. Recommended next experiments
 
-1. Run the controlled v12 ordered spatial-relation stage from the same v9 epoch-36
-   weights, preserving v11 as its zero-ordered-relation-loss ablation.
-2. Require normalized-exact free generation on all trained color and mirror units,
-   then rerun the held-out cube-support control before static QA, chat, leakage, or
-   promotion work.
+1. Run the bounded v13 decoder-capacity falsification from V12 epoch 8: freeze its
+   scene encoder and inherited rank-4 layer-34 q/o LoRA, add a disjoint zero-output
+   rank-8 q/o bank in layers 30-33, require exact step-zero logit parity, and reject
+   the training run if paired mirror gradients are negligible or cancelling.
+2. If the gradient probe passes, still falsify V13 unless saved-and-reloaded greedy
+   generation preserves 12/12 strict color sides and reaches 12/12 strict selected-
+   mirror sides with 6/6 changed units; only then rerun all-mirror and held-out
+   support controls before static QA, chat, leakage, or promotion work.
 3. Run the direct multi-view VLM and isolated oracle-text upper-bound baselines.
 4. Train and evaluate language-conditioned target-facing and approach behavior without returning semantic labels through tools.
 5. Preserve the v1/v2 CLIP/Qwen runs as historical anti-collapse evidence, not as

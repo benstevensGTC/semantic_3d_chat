@@ -20,12 +20,16 @@ held-out cube-support sides. V11 restarted from the same v9 weights and added a
 full-vocabulary first-token margin. It restored color to 12/12 exact sides and
 6/6 units, but learned only 3/12 exact selected mirror sides and 0/6 complete
 mirror units; across all mirror questions it reached 7/70 exact sides and 0/35
-units, with 1/8 held-out support sides. V9 remains a color-wiring overfit
-milestone; v10 and v11 are failed continuations, not promoted scene chatbots.
-Gemma held-out static QA, interactive chat, Gemma leakage claims, and
-language-conditioned robot navigation remain gated. V12 is staged as a
-same-initialization retry with an ordered spatial-relation training objective that
-breaks v11's measured balanced left/right gradient saddle.
+units, with 1/8 held-out support sides. V12 then kept the same initialization and
+selection while adding an ordered spatial-relation objective. Its scene-only
+warmup separated all 12 selected relation sides past the configured margin, but
+the decoder gate remained at 6/12 mirror candidate sides and 0/12 mirror
+full-vocabulary sides. Greedy generation preserved color at 12/12 sides and 6/6
+units, yet scored 0/12 on the selected mirror subset, 0/70 over all mirror sides,
+and 0/8 on held-out support. V9 remains a color-wiring overfit milestone; v10-v12
+are failed continuations, not promoted scene chatbots. Gemma held-out static QA,
+interactive chat, Gemma leakage claims, and language-conditioned robot navigation
+remain gated.
 
 ## Current primary stack
 
@@ -39,11 +43,12 @@ breaks v11's measured balanced left/right gradient saddle.
   `signal_preserving_resampler_v3`: every occupied block contributes to 256
   question-independent 384D scene latents, which are projected into Gemma's 1536D
   decoder space.
-- Gemma decoder base weights remain frozen. V9-v11 train only the explicitly listed
-  45,056-parameter LoRA state; v10 and v11 started new optimizer histories from
-  the same v9 adapter weights and failed their color-plus-mirror gates. The decoder receives continuous
-  scene tokens, numeric geometry, and the user's question—never an environmental
-  caption, label list, or oracle metadata.
+- Gemma decoder base weights remain frozen. The only decoder weights adapted in
+  V9-v12 are the explicitly listed 45,056-parameter LoRA state; v10-v12 started new
+  optimizer histories from the same v9 adapter weights and failed their
+  color-plus-mirror gates. The decoder receives continuous scene tokens, numeric
+  geometry, and the user's question—never an environmental caption, label list, or
+  oracle metadata.
 
 Gemma choices are configurable in `configs/gemma4_e2b.yaml` and its experiment
 overlays. They target the detected 24 GB Apple Silicon machine. `configs/default.yaml`,
@@ -369,7 +374,9 @@ The exact evidence is
 `reports/gemma4/metrics/scene_signal_audit_gemma4_color_mirror_full_vocab_v11_epoch012.json`.
 No `promotion.json` was created.
 
-V12 is staged in
+#### Gemma v12 ordered-relation retry — auxiliary margin passed, decoder failed
+
+V12 is defined by
 `configs/experiments/gemma4_color_mirror_spatial_relation_v12.yaml`. It preserves
 V11's v9 initialization, 24-record deterministic selection, LoRA scope, decoder
 losses, and schedule. Its only training change is an ordered target-minus-reference
@@ -377,6 +384,53 @@ contrastive loss over dense soft pools of all 256 global scene latents, plus a
 scene-only warmup. Exact oracle coordinates remain confined to supervised QA
 artifacts; chat still receives the same global question-independent continuous
 prefix and no labels, coordinates, or text scene description.
+
+The scene-only warmup stopped early after 21 forward passes and 20 optimizer steps:
+all 12 eligible mirror sides exceeded the 0.1 margin, with mean margin 0.246168 and
+minimum margin 0.116128. The full run then completed 12 epochs, 144 decoder
+microsteps, and 12 main optimizer updates in 1,073.493 seconds (17m 53.493s). The
+teacher-forced gate nevertheless failed identically at epochs 8 and 12. Color was
+12/12 for both candidate and full-vocabulary first-token scoring, or 6/6 complete
+units. Mirror was 6/12 candidate sides and 0/6 complete units, but 0/12
+full-vocabulary sides and 0/6 units. Passing the auxiliary relation loss therefore
+did not make Gemma decode the ordered scene signal as `left` or `right`.
+
+Model-validated greedy generation produced the same strict results at epoch 8 and
+the final/best epoch 12:
+
+| Intervention | Exact sides | Complete units | Predictions changed |
+| --- | ---: | ---: | ---: |
+| Trained color swap | 12/12 | 6/6 | 6/6 |
+| Trained mirror subset | 0/12 | 0/6 | 0/6 |
+| Mirror, all units | 0/70 | 0/35 | 0/35 |
+| Held-out cube support | 0/8 | 0/4 | 0/4 |
+
+Every mirror answer was the model's literal `unknown`; the audit used no fallback,
+had no empty decodes, and exhausted no generation budget. Both audits report zero
+checkpoint-contract warnings, validate the native boundary embeddings and BF16
+runtime dtype, and prove parity with the model-validated runtime prefix. Epoch 8's
+adapter SHA-256 is
+`a4c85c14a214e4e594992e489a784cb4bacb64d3dfda519ad3da18b1595d9f22`;
+the final epoch-12 and `best` adapter SHA-256 is
+`1d46e754873431b11e8dc58066f08f06c17e3bcaa4c47b139358bb0f28ceabb1`.
+The exact evidence is
+`reports/gemma4/metrics/training_gemma4_color_mirror_spatial_relation_v12.json`,
+`reports/gemma4/metrics/scene_signal_audit_gemma4_color_mirror_spatial_relation_v12_epoch008.json`,
+and
+`reports/gemma4/metrics/scene_signal_audit_gemma4_color_mirror_spatial_relation_v12_best.json`.
+No `promotion.json` was created.
+
+V13 is a bounded falsification test for decoder capacity rather than another
+uncontrolled continuation. It freezes V12 epoch 8's scene encoder and inherited
+rank-4 layer-34 q/o LoRA, then adds a disjoint, zero-output rank-8 q/o bank in
+layers 30-33. A step-zero logit-parity check must first reproduce V12 exactly. Before
+any optimizer step, a paired-side probe will measure whether the new bank's
+language-objective gradients are material and non-cancelling; negligible gradients
+or cosine near -1 with a low `||gA+gB||/(||gA||+||gB||)` ratio falsify the
+hypothesis and stop the run. Only a passing probe justifies training, after which
+the hypothesis is still falsified unless saved-and-reloaded greedy generation both
+preserves 12/12 strict color sides and reaches 12/12 strict selected-mirror sides
+with 6/6 changed units.
 
 ### Fail-closed Gemma static evaluation and chat
 
@@ -566,7 +620,7 @@ Legacy runtime data is under `data/rendered`, `data/features`, `data/maps`, and
 `data_gemma4`. Semantic oracle specifications and QA supervision are isolated under
 `data/oracle` and `data/qa`. The recorded chat file audit and oracle-unavailable test
 apply to the legacy `data/checkpoints/best` lineage only; they have not been run for
-Gemma v9-v11 and do not transfer to those checkpoints. Their wiring and failure
+Gemma v9-v12 and do not transfer to those checkpoints. Their wiring and failure
 results are therefore not Gemma leakage-test results.
 
 ## Preserved legacy local web interface
