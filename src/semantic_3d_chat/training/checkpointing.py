@@ -10,6 +10,19 @@ import torch
 from safetensors.torch import load_file, save_file
 from torch import nn
 
+from semantic_3d_chat.language.lora import tensor_state_sha256
+
+
+def module_collection_state_sha256(modules: dict[str, nn.Module]) -> str:
+    """Hash a named module collection without including optimizer state."""
+
+    state = {
+        f"{module_name}.{name}": value
+        for module_name, module in modules.items()
+        for name, value in module.state_dict().items()
+    }
+    return tensor_state_sha256(state)
+
 
 def save_adapter_checkpoint(
     directory: str | Path,
@@ -51,7 +64,9 @@ def load_adapter_checkpoint(
     tensors = load_file(source / "adapter.safetensors", device=device)
     for module_name, module in modules.items():
         prefix = f"{module_name}."
-        state = {key[len(prefix) :]: value for key, value in tensors.items() if key.startswith(prefix)}
+        state = {
+            key[len(prefix) :]: value for key, value in tensors.items() if key.startswith(prefix)
+        }
         module.load_state_dict(state, strict=True)
     return json.loads((source / "metadata.json").read_text(encoding="utf-8"))
 

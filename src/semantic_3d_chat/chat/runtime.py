@@ -23,12 +23,12 @@ from semantic_3d_chat.language.local_lm import (
     question_token_ids,
 )
 from semantic_3d_chat.language.lora import (
-    install_lora_adapters,
-    lora_checkpoint_contract,
+    install_lora_banks,
+    lora_banks_checkpoint_contract,
+    lora_banks_optimizer_settings,
+    lora_banks_settings,
     lora_checkpoint_contract_mismatch,
-    lora_optimizer_settings,
-    lora_settings,
-    validate_lora_checkpoint_state,
+    validate_lora_banks_checkpoint_state,
 )
 from semantic_3d_chat.language.prefix_injection import (
     ContinuousPrefixComposer,
@@ -41,7 +41,10 @@ from semantic_3d_chat.language.prefix_injection import (
 )
 from semantic_3d_chat.scene_encoder.map_io import MapTensorData, load_map_tensors
 from semantic_3d_chat.scene_encoder.projector import SceneTokenizer, SceneTokenizerOutput
-from semantic_3d_chat.training.checkpointing import load_adapter_checkpoint
+from semantic_3d_chat.training.checkpointing import (
+    load_adapter_checkpoint,
+    module_collection_state_sha256,
+)
 from semantic_3d_chat.training.losses import QuestionGroundingHead, denormalize_xyz
 
 GenerationFunction = Callable[
@@ -124,6 +127,7 @@ def validate_checkpoint_contract(
     semantic_dim: int,
     language_hidden_dim: int,
     lora_parameter_count: int = 0,
+    lora_parameter_counts: dict[str, int] | None = None,
 ) -> list[str]:
     """Enforce adapter-shape compatibility while surfacing unrelated config drift."""
 
@@ -193,16 +197,46 @@ def validate_checkpoint_contract(
     )
     if boundary_mismatch is not None:
         mismatches["scene_boundary_mode"] = boundary_mismatch
-    configured_lora = lora_settings(config)
-    configured_lora_optimizer = lora_optimizer_settings(config, configured_lora)
-    configured_lora_contract = lora_checkpoint_contract(
+    configured_lora = lora_banks_settings(config)
+    configured_lora_optimizer = lora_banks_optimizer_settings(config, configured_lora)
+    if lora_parameter_counts is None:
+        if configured_lora.legacy_single_bank:
+            lora_parameter_counts = (
+                {configured_lora.banks[0].name: lora_parameter_count}
+                if configured_lora.banks
+                else {}
+            )
+        elif configured_lora.enabled:
+            raise ValueError("Named LoRA runtime validation requires per-bank parameter counts")
+        else:
+            lora_parameter_counts = {}
+    configured_lora_contract = lora_banks_checkpoint_contract(
         configured_lora,
         configured_lora_optimizer,
-        lora_parameter_count,
+        lora_parameter_counts,
     )
     lora_mismatch = lora_checkpoint_contract_mismatch(metadata, configured_lora_contract)
     if lora_mismatch is not None:
         mismatches["lora"] = lora_mismatch
+    configured_freeze_scene = config.get("training", {}).get("freeze_scene_adapter", False)
+    if not isinstance(configured_freeze_scene, bool):
+        raise TypeError("training.freeze_scene_adapter must be a boolean")
+    checkpoint_freeze_scene = metadata.get("freeze_scene_adapter", False)
+    if checkpoint_freeze_scene != configured_freeze_scene:
+        mismatches["freeze_scene_adapter"] = {
+            "checkpoint": checkpoint_freeze_scene,
+            "runtime": configured_freeze_scene,
+        }
+    if configured_freeze_scene:
+        frozen_scene_hash = metadata.get("frozen_scene_state_sha256")
+        if (
+            not isinstance(frozen_scene_hash, str)
+            or re.fullmatch(r"[0-9a-f]{64}", frozen_scene_hash) is None
+        ):
+            mismatches["frozen_scene_state_sha256"] = {
+                "checkpoint": frozen_scene_hash,
+                "runtime": "<required-lowercase-sha256>",
+            }
     if mismatches:
         raise ValueError(f"Checkpoint is incompatible with runtime architecture: {mismatches}")
     warnings: list[str] = []
@@ -366,8 +400,8 @@ class StaticChatRuntime:
                 "Loaded language model does not satisfy configured scene-boundary contract: "
                 f"loaded={loaded_native_contract} configured={configured_native_contract}"
             )
-        configured_lora = lora_settings(config)
-        lora_installation = install_lora_adapters(language.model, configured_lora)
+        configured_lora = lora_banks_settings(config)
+        lora_installation = install_lora_banks(language.model, configured_lora)
         checkpoint_backend = metadata.get("language_backend")
         if checkpoint_backend is not None and checkpoint_backend != language.backend_name:
             raise ValueError(
@@ -381,6 +415,9 @@ class StaticChatRuntime:
             language_hidden_dim=language.hidden_size,
             lora_parameter_count=(
                 0 if lora_installation is None else lora_installation.parameter_count
+            ),
+            lora_parameter_counts=(
+                {} if lora_installation is None else lora_installation.parameter_counts
             ),
         )
         scene_model = construct_scene_tokenizer(config, map_data.feature_dim, language.hidden_size)
@@ -397,13 +434,14 @@ class StaticChatRuntime:
             int(config["scene_encoder"]["global_latents"]),
             int(config["scene_encoder"]["model_dim"]),
         )
-        checkpoint_modules = {
+        scene_checkpoint_modules = {
             "scene_model": scene_model,
             "composer": composer,
             "grounding": grounding,
         }
+        checkpoint_modules = dict(scene_checkpoint_modules)
         if lora_installation is not None:
-            checkpoint_modules["lora"] = lora_installation.state_module
+            checkpoint_modules.update(lora_installation.state_modules())
         loaded_metadata = load_adapter_checkpoint(
             checkpoint_path,
             checkpoint_modules,
@@ -411,8 +449,17 @@ class StaticChatRuntime:
         )
         if loaded_metadata != metadata:
             raise RuntimeError("Checkpoint metadata changed while the runtime was loading")
+        expected_frozen_scene_hash = metadata.get("frozen_scene_state_sha256")
+        if expected_frozen_scene_hash is not None:
+            observed_frozen_scene_hash = module_collection_state_sha256(scene_checkpoint_modules)
+            if observed_frozen_scene_hash != expected_frozen_scene_hash:
+                raise ValueError(
+                    "Frozen scene checkpoint state mismatch or tamper detected: "
+                    f"checkpoint={expected_frozen_scene_hash} "
+                    f"runtime={observed_frozen_scene_hash}"
+                )
         if lora_installation is not None:
-            validate_lora_checkpoint_state(metadata, lora_installation)
+            validate_lora_banks_checkpoint_state(metadata, lora_installation)
             language.model.requires_grad_(False)
         device = language.device
         scene_model = scene_model.to(device)

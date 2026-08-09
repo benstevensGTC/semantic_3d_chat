@@ -34,11 +34,11 @@ from semantic_3d_chat.evaluation.metrics import canonical_relation, normalize_an
 from semantic_3d_chat.language.generation import generate_from_embeddings
 from semantic_3d_chat.language.local_lm import load_local_language_model, prompt_token_ids
 from semantic_3d_chat.language.lora import (
-    LoRAInstallation,
-    install_lora_adapters,
-    lora_optimizer_settings,
-    lora_settings,
-    validate_lora_checkpoint_state,
+    LoRABankCollection,
+    install_lora_banks,
+    lora_banks_optimizer_settings,
+    lora_banks_settings,
+    validate_lora_banks_checkpoint_state,
 )
 from semantic_3d_chat.language.prefix_injection import (
     SCENE_BOUNDARY_MODE_GEMMA4_NATIVE_IMAGE,
@@ -50,7 +50,11 @@ from semantic_3d_chat.language.prefix_injection import (
     scene_prefix_after_bos_setting,
 )
 from semantic_3d_chat.scene_encoder.map_io import MapTensorData, load_map_tensors
-from semantic_3d_chat.training.checkpointing import load_adapter_checkpoint
+from semantic_3d_chat.training.checkpointing import (
+    load_adapter_checkpoint,
+    module_collection_state_sha256,
+)
+from semantic_3d_chat.training.losses import QuestionGroundingHead
 from semantic_3d_chat.training.pair_curriculum import (
     cap_pair_units_per_pair,
     pair_curriculum_settings,
@@ -160,22 +164,22 @@ def _install_checkpoint_lora(
     language: Any,
     checkpoint: Path,
     metadata: dict[str, Any],
-) -> LoRAInstallation | None:
+) -> LoRABankCollection | None:
     """Install exact LoRA targets and restore/check A/B before any audit forward."""
 
-    configured_lora = lora_settings(config)
-    lora_optimizer_settings(config, configured_lora)
-    installation = install_lora_adapters(language.model, configured_lora)
+    configured_lora = lora_banks_settings(config)
+    lora_banks_optimizer_settings(config, configured_lora)
+    installation = install_lora_banks(language.model, configured_lora)
     if installation is None:
         return None
     loaded_metadata = load_adapter_checkpoint(
         checkpoint,
-        {"lora": installation.state_module},
+        installation.state_modules(),
         device="cpu",
     )
     if loaded_metadata != metadata:
         raise RuntimeError("Checkpoint metadata changed while loading LoRA for audit")
-    validate_lora_checkpoint_state(metadata, installation)
+    validate_lora_banks_checkpoint_state(metadata, installation)
     language.model.requires_grad_(False)
     language.model.eval()
     return installation
@@ -1249,8 +1253,14 @@ def main() -> None:
         ),
         scene_boundary_mode=scene_boundary_mode_setting(config),
     ).to(device)
-    configured_lora = lora_settings(config)
-    configured_lora_optimizer = lora_optimizer_settings(config, configured_lora)
+    grounding = QuestionGroundingHead(
+        int(config["scene_encoder"]["model_dim"]),
+        int(metadata["language_hidden_dim"]),
+        int(config["scene_encoder"]["global_latents"]),
+        int(config["scene_encoder"]["model_dim"]),
+    ).to(device)
+    configured_lora = lora_banks_settings(config)
+    lora_banks_optimizer_settings(config, configured_lora)
     audit_language = None
     lora_installation = None
     if configured_lora.enabled:
@@ -1272,16 +1282,31 @@ def main() -> None:
         lora_parameter_count=(
             0 if lora_installation is None else lora_installation.parameter_count
         ),
+        lora_parameter_counts=(
+            {} if lora_installation is None else lora_installation.parameter_counts
+        ),
     )
-    checkpoint_modules = {"scene_model": scene_model, "composer": composer}
+    checkpoint_modules = {
+        "scene_model": scene_model,
+        "composer": composer,
+        "grounding": grounding,
+    }
     load_adapter_checkpoint(
         checkpoint,
         checkpoint_modules,
         device="cpu",
     )
+    expected_frozen_scene_hash = metadata.get("frozen_scene_state_sha256")
+    if expected_frozen_scene_hash is not None:
+        observed_frozen_scene_hash = module_collection_state_sha256(checkpoint_modules)
+        if observed_frozen_scene_hash != expected_frozen_scene_hash:
+            raise ValueError(
+                "Frozen scene checkpoint state mismatch or tamper detected: "
+                f"checkpoint={expected_frozen_scene_hash} runtime={observed_frozen_scene_hash}"
+            )
     runtime_validation = _unvalidated_runtime_prefix_status(config, runtime_dtype)
     if lora_installation is not None:
-        assert audit_language is not None and configured_lora_optimizer is not None
+        assert audit_language is not None
         runtime_validation = _validate_runtime_prefix_against_loaded_model(
             config, audit_language, composer, runtime_dtype
         )

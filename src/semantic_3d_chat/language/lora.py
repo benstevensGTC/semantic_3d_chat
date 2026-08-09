@@ -11,6 +11,7 @@ from __future__ import annotations
 import hashlib
 import json
 import math
+import re
 from collections.abc import Callable, Iterator, Mapping, Sequence
 from dataclasses import dataclass
 from typing import Any
@@ -190,6 +191,114 @@ class LoRAOptimizerSettings:
         }
 
 
+_LORA_BANK_NAME = re.compile(r"[a-z][a-z0-9_]*")
+
+
+@dataclass(frozen=True)
+class LoRABankSettings:
+    """One named, disjoint LoRA bank in a multi-bank installation."""
+
+    name: str
+    trainable: bool
+    adapter: LoRASettings
+    initialization_algorithm: str = "module_default"
+    initialization_seed: int | None = None
+    expected_initial_state_sha256: str | None = None
+
+    def __post_init__(self) -> None:
+        if not _LORA_BANK_NAME.fullmatch(self.name):
+            raise ValueError(f"LoRA bank names must match [a-z][a-z0-9_]*: {self.name!r}")
+        if not isinstance(self.trainable, bool):
+            raise TypeError(f"LoRA bank {self.name!r} trainable must be a boolean")
+        if not self.adapter.enabled:
+            raise ValueError(f"LoRA bank {self.name!r} must contain an enabled adapter")
+        algorithms = {
+            "module_default",
+            "cpu_kaiming_uniform_a_exact_zero_b",
+            "checkpoint_overwrite",
+        }
+        if self.initialization_algorithm not in algorithms:
+            raise ValueError(
+                f"LoRA bank {self.name!r} has unsupported initialization algorithm: "
+                f"{self.initialization_algorithm!r}"
+            )
+        if self.initialization_algorithm == "cpu_kaiming_uniform_a_exact_zero_b":
+            if (
+                isinstance(self.initialization_seed, bool)
+                or not isinstance(self.initialization_seed, int)
+                or self.initialization_seed < 0
+            ):
+                raise ValueError(
+                    f"LoRA bank {self.name!r} deterministic initialization requires a "
+                    "non-negative integer seed"
+                )
+        elif self.initialization_seed is not None:
+            raise ValueError(
+                f"LoRA bank {self.name!r} initialization_seed is only valid for "
+                "cpu_kaiming_uniform_a_exact_zero_b"
+            )
+        if self.expected_initial_state_sha256 is not None and not re.fullmatch(
+            r"[0-9a-f]{64}", self.expected_initial_state_sha256
+        ):
+            raise ValueError(
+                f"LoRA bank {self.name!r} expected_initial_state_sha256 must be lowercase hex"
+            )
+
+
+@dataclass(frozen=True)
+class LoRABanksSettings:
+    """Canonical collection contract, including legacy single-bank mode."""
+
+    banks: tuple[LoRABankSettings, ...] = ()
+    legacy_single_bank: bool = False
+
+    def __post_init__(self) -> None:
+        names = [bank.name for bank in self.banks]
+        if len(set(names)) != len(names):
+            raise ValueError("language.lora_banks contains duplicate bank names")
+        targets = [target for bank in self.banks for target in bank.adapter.target_modules]
+        if len(set(targets)) != len(targets):
+            raise ValueError("LoRA target modules must be disjoint across all banks")
+        if self.legacy_single_bank and len(self.banks) > 1:
+            raise ValueError("Legacy LoRA mode can contain at most one bank")
+
+    @property
+    def enabled(self) -> bool:
+        return bool(self.banks)
+
+    @property
+    def trainable(self) -> bool:
+        return any(bank.trainable for bank in self.banks)
+
+    def bank(self, name: str) -> LoRABankSettings:
+        for bank in self.banks:
+            if bank.name == name:
+                return bank
+        raise KeyError(f"Unknown LoRA bank: {name}")
+
+    def contract(self) -> dict[str, Any]:
+        if self.legacy_single_bank:
+            return self.banks[0].adapter.contract() if self.banks else LoRASettings().contract()
+        return {
+            "schema_version": 2,
+            "enabled": self.enabled,
+            "banks": [
+                {
+                    "name": bank.name,
+                    "trainable": bank.trainable,
+                    "rank": int(bank.adapter.rank),
+                    "alpha": float(bank.adapter.alpha),
+                    "dropout": float(bank.adapter.dropout),
+                    "target_modules": list(bank.adapter.target_modules),
+                    "initialization_algorithm": bank.initialization_algorithm,
+                    "initialization_seed": bank.initialization_seed,
+                    "expected_initial_state_sha256": bank.expected_initial_state_sha256,
+                }
+                for bank in self.banks
+            ],
+        }
+
+
 def lora_settings(config: Mapping[str, Any]) -> LoRASettings:
     """Parse a strict opt-in LoRA contract; missing configuration is disabled."""
 
@@ -229,6 +338,83 @@ def lora_settings(config: Mapping[str, Any]) -> LoRASettings:
     )
 
 
+def lora_banks_settings(config: Mapping[str, Any]) -> LoRABanksSettings:
+    """Parse named banks while preserving the historical single-bank config.
+
+    ``language.lora`` remains byte-for-byte compatible with schema-1
+    checkpoints. New experiments may instead provide a mapping under
+    ``language.lora_banks``. The two forms are intentionally mutually
+    exclusive so a checkpoint can never depend on an implicit installation
+    order or an accidentally duplicated residual path.
+    """
+
+    language = config.get("language")
+    if not isinstance(language, Mapping):
+        raise TypeError("config.language must be a mapping")
+    if language.get("lora") is not None and language.get("lora_banks") is not None:
+        raise ValueError("language.lora and language.lora_banks are mutually exclusive")
+    raw_banks = language.get("lora_banks")
+    if raw_banks is None:
+        legacy = lora_settings(config)
+        if not legacy.enabled:
+            return LoRABanksSettings(legacy_single_bank=True)
+        return LoRABanksSettings(
+            banks=(LoRABankSettings("legacy", True, legacy),),
+            legacy_single_bank=True,
+        )
+    if str(language.get("backend", "auto")).casefold() != "gemma4":
+        raise ValueError("This controlled LoRA path requires language.backend: gemma4")
+    if not isinstance(raw_banks, Mapping) or not raw_banks:
+        raise TypeError("language.lora_banks must be a non-empty mapping keyed by bank name")
+
+    banks: list[LoRABankSettings] = []
+    allowed = {
+        "trainable",
+        "rank",
+        "alpha",
+        "dropout",
+        "target_modules",
+        "initialization_algorithm",
+        "initialization_seed",
+        "expected_initial_state_sha256",
+    }
+    required = allowed
+    for name, raw in raw_banks.items():
+        if not isinstance(name, str):
+            raise TypeError("LoRA bank names must be strings")
+        if not isinstance(raw, Mapping):
+            raise TypeError(f"language.lora_banks.{name} must be a mapping")
+        unknown = sorted(set(raw) - allowed)
+        if unknown:
+            raise ValueError(f"Unknown language.lora_banks.{name} settings: {unknown}")
+        missing = sorted(required - set(raw))
+        if missing:
+            raise ValueError(f"language.lora_banks.{name} is missing settings: {missing}")
+        targets = raw["target_modules"]
+        if not isinstance(targets, Sequence) or isinstance(targets, (str, bytes)):
+            raise TypeError(
+                f"language.lora_banks.{name}.target_modules must be a sequence of exact paths"
+            )
+        adapter = LoRASettings(
+            enabled=True,
+            rank=raw["rank"],
+            alpha=raw["alpha"],
+            dropout=raw["dropout"],
+            target_modules=tuple(targets),
+        )
+        banks.append(
+            LoRABankSettings(
+                name=name,
+                trainable=raw["trainable"],
+                adapter=adapter,
+                initialization_algorithm=raw["initialization_algorithm"],
+                initialization_seed=raw["initialization_seed"],
+                expected_initial_state_sha256=raw["expected_initial_state_sha256"],
+            )
+        )
+    return LoRABanksSettings(tuple(banks))
+
+
 def lora_optimizer_settings(
     config: Mapping[str, Any], settings: LoRASettings
 ) -> LoRAOptimizerSettings | None:
@@ -260,6 +446,25 @@ def lora_optimizer_settings(
     if not math.isfinite(float(weight_decay)) or float(weight_decay) < 0.0:
         raise ValueError("training.lora_weight_decay must be a finite non-negative number")
     return LoRAOptimizerSettings(float(learning_rate), float(weight_decay))
+
+
+def lora_banks_optimizer_settings(
+    config: Mapping[str, Any], settings: LoRABanksSettings
+) -> LoRAOptimizerSettings | None:
+    """Return the shared optimizer contract for all trainable named banks."""
+
+    if settings.legacy_single_bank:
+        legacy = settings.banks[0].adapter if settings.banks else LoRASettings()
+        return lora_optimizer_settings(config, legacy)
+    training = config.get("training")
+    if not settings.trainable:
+        if training is not None and not isinstance(training, Mapping):
+            raise TypeError("config.training must be a mapping")
+        return None
+    # Reuse the strict legacy numeric parser with an enabled sentinel. The
+    # actual targets/rank remain bank-specific and are never taken from it.
+    sentinel = settings.banks[0].adapter
+    return lora_optimizer_settings(config, sentinel)
 
 
 class _LoRAParameterPair(nn.Module):
@@ -375,6 +580,240 @@ class LoRAInstallation:
                     raise ValueError(f"{name}.{short_name} contains NaN or infinity")
 
 
+@dataclass(frozen=True)
+class InstalledLoRABank:
+    settings: LoRABankSettings
+    installation: LoRAInstallation
+
+
+@dataclass
+class LoRABankCollection:
+    """Auditable collection of disjoint frozen and trainable LoRA banks."""
+
+    settings: LoRABanksSettings
+    banks: tuple[InstalledLoRABank, ...]
+
+    def __post_init__(self) -> None:
+        expected = [bank.name for bank in self.settings.banks]
+        observed = [bank.settings.name for bank in self.banks]
+        if observed != expected:
+            raise ValueError(
+                f"Installed LoRA bank order mismatch: configured={expected}, installed={observed}"
+            )
+
+    @property
+    def bank_names(self) -> tuple[str, ...]:
+        return tuple(bank.settings.name for bank in self.banks)
+
+    @property
+    def adapters(self) -> tuple[LoRALinear, ...]:
+        """Flatten installed adapters for legacy audit/test introspection."""
+
+        return tuple(adapter for bank in self.banks for adapter in bank.installation.adapters)
+
+    def bank(self, name: str) -> InstalledLoRABank:
+        for bank in self.banks:
+            if bank.settings.name == name:
+                return bank
+        raise KeyError(f"Unknown installed LoRA bank: {name}")
+
+    def parameters(self) -> list[nn.Parameter]:
+        """Return only optimizer-authorized parameters."""
+
+        return [
+            parameter
+            for bank in self.banks
+            if bank.settings.trainable
+            for parameter in bank.installation.parameters()
+        ]
+
+    def all_parameters(self) -> list[nn.Parameter]:
+        return [parameter for bank in self.banks for parameter in bank.installation.parameters()]
+
+    @property
+    def parameter_counts(self) -> dict[str, int]:
+        return {bank.settings.name: bank.installation.parameter_count for bank in self.banks}
+
+    @property
+    def parameter_count(self) -> int:
+        return sum(self.parameter_counts.values())
+
+    @property
+    def trainable_parameter_count(self) -> int:
+        return sum(
+            bank.installation.parameter_count for bank in self.banks if bank.settings.trainable
+        )
+
+    @property
+    def wrapped_modules(self) -> dict[str, list[str]]:
+        return {bank.settings.name: list(bank.installation.target_names) for bank in self.banks}
+
+    @property
+    def trainable_parameter_counts(self) -> dict[str, dict[str, int]]:
+        return {
+            bank.settings.name: bank.installation.parameter_counts
+            for bank in self.banks
+            if bank.settings.trainable
+        }
+
+    def state_modules(self) -> dict[str, nn.Module]:
+        if self.settings.legacy_single_bank:
+            return {} if not self.banks else {"lora": self.banks[0].installation.state_module}
+        return {
+            f"lora_banks.{bank.settings.name}": bank.installation.state_module
+            for bank in self.banks
+        }
+
+    def state_sha256(self) -> dict[str, str]:
+        return {bank.settings.name: bank.installation.state_sha256() for bank in self.banks}
+
+    def checkpoint_metadata(self) -> dict[str, Any]:
+        if self.settings.legacy_single_bank:
+            if not self.banks:
+                return {}
+            installation = self.banks[0].installation
+            return {
+                "lora_wrapped_modules": list(installation.target_names),
+                "lora_trainable_parameter_counts": installation.parameter_counts,
+                "lora_trainable_parameter_count": installation.parameter_count,
+                "lora_state_sha256": installation.state_sha256(),
+            }
+        return {
+            "lora_bank_wrapped_modules": self.wrapped_modules,
+            "lora_bank_parameter_counts": {
+                bank.settings.name: bank.installation.parameter_counts for bank in self.banks
+            },
+            "lora_bank_state_sha256": self.state_sha256(),
+            "lora_parameter_count": self.parameter_count,
+            "lora_trainable_parameter_count": self.trainable_parameter_count,
+        }
+
+    def train(self, mode: bool = True) -> LoRABankCollection:
+        if not isinstance(mode, bool):
+            raise TypeError("LoRA train mode must be a boolean")
+        for bank in self.banks:
+            bank.installation.train(mode if bank.settings.trainable else False)
+        return self
+
+    @property
+    def training(self) -> bool:
+        modes = {bank.installation.training for bank in self.banks if bank.settings.trainable}
+        if not modes:
+            return False
+        if len(modes) != 1:
+            raise RuntimeError("Trainable LoRA banks have inconsistent train/eval modes")
+        return modes.pop()
+
+    def eval(self) -> LoRABankCollection:
+        return self.train(False)
+
+    def assert_trainable_surface(self, model: nn.Module) -> None:
+        trainable_ids = {id(parameter) for parameter in self.parameters()}
+        all_adapter_ids = {id(parameter) for parameter in self.all_parameters()}
+        missing = [
+            name
+            for name, parameter in model.named_parameters()
+            if id(parameter) in trainable_ids and not parameter.requires_grad
+        ]
+        frozen_bank_trainable = [
+            name
+            for name, parameter in model.named_parameters()
+            if id(parameter) in all_adapter_ids
+            and id(parameter) not in trainable_ids
+            and parameter.requires_grad
+        ]
+        unexpected = [
+            name
+            for name, parameter in model.named_parameters()
+            if parameter.requires_grad and id(parameter) not in trainable_ids
+        ]
+        if missing or frozen_bank_trainable or unexpected:
+            raise RuntimeError(
+                "Invalid multi-bank LoRA trainable parameter surface: "
+                f"frozen_trainable={frozen_bank_trainable}, "
+                f"missing_trainable={missing}, unexpected_trainable={unexpected}"
+            )
+
+    def gradient_norms(self) -> dict[str, Any]:
+        by_bank: dict[str, Any] = {}
+        squared_total = 0.0
+        for bank in self.banks:
+            if not bank.settings.trainable:
+                continue
+            values = bank.installation.gradient_norms()
+            by_bank[bank.settings.name] = values
+            squared_total += float(values["total_l2"]) ** 2
+        return {"total_l2": math.sqrt(squared_total), "by_bank": by_bank}
+
+    def validate_state(self) -> None:
+        for bank in self.banks:
+            bank.installation.validate_state()
+
+
+def install_lora_banks(model: nn.Module, settings: LoRABanksSettings) -> LoRABankCollection | None:
+    """Atomically install every exact target, then apply bank trainability."""
+
+    if not settings.enabled:
+        return None
+    resolved: list[tuple[LoRABankSettings, str, nn.Module, str, nn.Linear]] = []
+    for bank in settings.banks:
+        for path in bank.adapter.target_modules:
+            parent_path, separator, attribute = path.rpartition(".")
+            if not separator:
+                raise ValueError(f"LoRA target must include its complete parent path: {path!r}")
+            try:
+                parent = model.get_submodule(parent_path)
+            except AttributeError as exc:
+                raise ValueError(f"LoRA target module does not exist: {path}") from exc
+            base = getattr(parent, attribute, None)
+            if isinstance(base, LoRALinear):
+                raise TypeError(f"LoRA target is already wrapped: {path}")
+            if not isinstance(base, nn.Linear):
+                observed = type(base).__name__ if base is not None else "<missing>"
+                raise TypeError(f"LoRA target must be torch.nn.Linear: {path} ({observed})")
+            resolved.append((bank, path, parent, attribute, base))
+
+    installed: list[InstalledLoRABank] = []
+    for bank in settings.banks:
+        adapters: list[LoRALinear] = []
+        for resolved_bank, _path, parent, attribute, base in resolved:
+            if resolved_bank.name != bank.name:
+                continue
+            adapter = LoRALinear(
+                base,
+                rank=int(bank.adapter.rank),
+                alpha=float(bank.adapter.alpha),
+                dropout=float(bank.adapter.dropout),
+            )
+            if bank.trainable:
+                adapter.train(base.training)
+            else:
+                adapter.requires_grad_(False)
+                adapter.eval()
+            setattr(parent, attribute, adapter)
+            adapters.append(adapter)
+        installation = LoRAInstallation(
+            settings=bank.adapter,
+            adapters=tuple(adapters),
+            state_module=LoRAAdapterState(bank.adapter.target_modules, adapters),
+        )
+        if bank.initialization_algorithm == "cpu_kaiming_uniform_a_exact_zero_b":
+            assert bank.initialization_seed is not None
+            initialize_lora_adapter_state(installation, seed=bank.initialization_seed)
+            expected_hash = bank.expected_initial_state_sha256
+            observed_hash = installation.state_sha256()
+            if expected_hash is not None and observed_hash != expected_hash:
+                raise ValueError(
+                    f"LoRA bank {bank.name!r} deterministic initial-state hash mismatch: "
+                    f"expected={expected_hash} observed={observed_hash}"
+                )
+        installed.append(InstalledLoRABank(bank, installation))
+    collection = LoRABankCollection(settings=settings, banks=tuple(installed))
+    collection.assert_trainable_surface(model)
+    collection.validate_state()
+    return collection
+
+
 def install_lora_adapters(model: nn.Module, settings: LoRASettings) -> LoRAInstallation | None:
     """Replace exact configured linear modules after validating the full target set."""
 
@@ -416,6 +855,23 @@ def install_lora_adapters(model: nn.Module, settings: LoRASettings) -> LoRAInsta
     installation.assert_only_lora_trainable(model)
     installation.validate_state()
     return installation
+
+
+def initialize_lora_adapter_state(installation: LoRAInstallation, *, seed: int) -> None:
+    """Reset A deterministically on CPU and every B tensor exactly to zero."""
+
+    if isinstance(seed, bool) or not isinstance(seed, int) or seed < 0:
+        raise ValueError("LoRA initialization seed must be a non-negative integer")
+    generator = torch.Generator(device="cpu").manual_seed(seed)
+    with torch.no_grad():
+        for adapter in installation.adapters:
+            source = torch.empty(adapter.lora_a.shape, dtype=torch.float32, device="cpu")
+            nn.init.kaiming_uniform_(source, a=math.sqrt(5), generator=generator)
+            adapter.lora_a.copy_(source.to(adapter.lora_a.device))
+            adapter.lora_b.zero_()
+    installation.validate_state()
+    if any(torch.count_nonzero(adapter.lora_b).item() for adapter in installation.adapters):
+        raise RuntimeError("LoRA bank did not initialize to exact zero output")
 
 
 def tensor_state_sha256(state: Mapping[str, torch.Tensor]) -> str:
@@ -476,6 +932,57 @@ def lora_checkpoint_contract(
     }
 
 
+def lora_banks_checkpoint_contract(
+    settings: LoRABanksSettings,
+    optimizer: LoRAOptimizerSettings | None,
+    parameter_counts: Mapping[str, int],
+) -> dict[str, Any]:
+    """Build schema 1 for legacy configs or schema 2 for named banks."""
+
+    counts = dict(parameter_counts)
+    expected_names = [bank.name for bank in settings.banks]
+    if sorted(counts) != sorted(expected_names):
+        raise ValueError(
+            "LoRA bank parameter-count keys do not match configured banks: "
+            f"counts={sorted(counts)} configured={sorted(expected_names)}"
+        )
+    if any(
+        isinstance(value, bool) or not isinstance(value, int) or value <= 0
+        for value in counts.values()
+    ):
+        raise ValueError("Every enabled LoRA bank must have a positive integer parameter count")
+    if settings.legacy_single_bank:
+        legacy = settings.banks[0].adapter if settings.banks else LoRASettings()
+        count = counts[settings.banks[0].name] if settings.banks else 0
+        return lora_checkpoint_contract(legacy, optimizer, count)
+    if not settings.enabled:
+        if optimizer is not None or counts:
+            raise ValueError("Disabled LoRA banks must have no optimizer or parameters")
+        return {"schema_version": 2, "enabled": False, "banks": []}
+    if settings.trainable and optimizer is None:
+        raise ValueError("Trainable LoRA banks require an optimizer contract")
+    architecture = settings.contract()
+    architecture_by_name = {record["name"]: record for record in architecture["banks"]}
+    banks: list[dict[str, Any]] = []
+    for bank in settings.banks:
+        record = {
+            **architecture_by_name[bank.name],
+            "adapter_parameter_count": counts[bank.name],
+        }
+        if bank.trainable:
+            assert optimizer is not None
+            record.update(optimizer.contract())
+        banks.append(record)
+    return {
+        **architecture,
+        "banks": banks,
+        "adapter_parameter_count": sum(counts.values()),
+        "trainable_adapter_parameter_count": sum(
+            counts[bank.name] for bank in settings.banks if bank.trainable
+        ),
+    }
+
+
 def validate_lora_checkpoint_state(
     metadata: Mapping[str, Any], installation: LoRAInstallation
 ) -> None:
@@ -514,17 +1021,56 @@ def validate_lora_checkpoint_state(
         raise ValueError(f"LoRA checkpoint state mismatch or tamper detected: {mismatches}")
 
 
+def validate_lora_banks_checkpoint_state(
+    metadata: Mapping[str, Any], collection: LoRABankCollection
+) -> None:
+    """Validate legacy state or every named bank against checkpoint hashes."""
+
+    collection.validate_state()
+    if collection.settings.legacy_single_bank:
+        if collection.banks:
+            validate_lora_checkpoint_state(metadata, collection.banks[0].installation)
+        return
+    expected_metadata = collection.checkpoint_metadata()
+    mismatches: dict[str, Any] = {}
+    for key, runtime_value in expected_metadata.items():
+        checkpoint_value = metadata.get(key)
+        if checkpoint_value != runtime_value:
+            mismatches[key] = {"checkpoint": checkpoint_value, "runtime": runtime_value}
+    for bank in collection.banks:
+        expected_initial = bank.settings.expected_initial_state_sha256
+        if not bank.settings.trainable and expected_initial is not None:
+            observed = bank.installation.state_sha256()
+            if observed != expected_initial:
+                mismatches[f"{bank.settings.name}.frozen_expected_state_sha256"] = {
+                    "checkpoint": observed,
+                    "runtime": expected_initial,
+                }
+    if mismatches:
+        raise ValueError(f"LoRA bank checkpoint state mismatch or tamper detected: {mismatches}")
+
+
 __all__ = [
+    "InstalledLoRABank",
     "LoRAAdapterState",
+    "LoRABankCollection",
+    "LoRABankSettings",
+    "LoRABanksSettings",
     "LoRAInstallation",
     "LoRALinear",
     "LoRAOptimizerSettings",
     "LoRASettings",
+    "initialize_lora_adapter_state",
     "install_lora_adapters",
+    "install_lora_banks",
+    "lora_banks_checkpoint_contract",
+    "lora_banks_optimizer_settings",
+    "lora_banks_settings",
     "lora_checkpoint_contract",
     "lora_checkpoint_contract_mismatch",
     "lora_optimizer_settings",
     "lora_settings",
     "tensor_state_sha256",
+    "validate_lora_banks_checkpoint_state",
     "validate_lora_checkpoint_state",
 ]

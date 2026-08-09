@@ -31,6 +31,7 @@ from semantic_3d_chat.language.local_lm import load_local_language_model, prompt
 from semantic_3d_chat.language.lora import (
     LoRAInstallation,
     LoRASettings,
+    initialize_lora_adapter_state,
     install_lora_adapters,
     lora_optimizer_settings,
     lora_settings,
@@ -141,16 +142,7 @@ class ProbeBankSpec:
 def initialize_probe_bank(installation: LoRAInstallation, *, seed: int) -> None:
     """Reset A deterministically on CPU and B exactly to zero on its target device."""
 
-    generator = torch.Generator(device="cpu").manual_seed(seed)
-    with torch.no_grad():
-        for adapter in installation.adapters:
-            source = torch.empty(adapter.lora_a.shape, dtype=torch.float32, device="cpu")
-            nn.init.kaiming_uniform_(source, a=math.sqrt(5), generator=generator)
-            adapter.lora_a.copy_(source.to(adapter.lora_a.device))
-            adapter.lora_b.zero_()
-    installation.validate_state()
-    if any(torch.count_nonzero(adapter.lora_b).item() for adapter in installation.adapters):
-        raise RuntimeError("Probe LoRA bank did not initialize to exact zero output")
+    initialize_lora_adapter_state(installation, seed=seed)
 
 
 def probe_parameter_items(installation: LoRAInstallation) -> dict[str, nn.Parameter]:

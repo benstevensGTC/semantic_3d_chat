@@ -1,0 +1,61 @@
+_base_: gemma4_color_mirror_spatial_relation_v12.yaml
+
+# V12's scene encoder already separates every selected ordered region, while
+# the final decoder layer still fails strict mirrored free generation. Preserve
+# that exact continuous scene bridge and its proven color decoder residual,
+# then train a disjoint deeper decoder bank whose zero-output initialization is
+# bitwise pinned to the passing no-step gradient probe.
+language:
+  # Explicitly remove the inherited schema-1 config under deep YAML merge.
+  lora: null
+  lora_banks:
+    inherited_v12:
+      trainable: false
+      rank: 4
+      alpha: 8.0
+      dropout: 0.0
+      initialization_algorithm: checkpoint_overwrite
+      initialization_seed: null
+      expected_initial_state_sha256: dec768bed654c8c4e16da0318857543ad54d8f5f68f4d24a9a87cd19ec706594
+      target_modules:
+        - model.language_model.layers.34.self_attn.q_proj
+        - model.language_model.layers.34.self_attn.o_proj
+    extension_v13:
+      trainable: true
+      rank: 8
+      alpha: 16.0
+      dropout: 0.0
+      initialization_algorithm: cpu_kaiming_uniform_a_exact_zero_b
+      initialization_seed: 13008
+      expected_initial_state_sha256: b4ec0518e4759dda33fc93c9c1d4c76f52f1024fd5b8b1667ad1b4ef5da198af
+      target_modules:
+        - model.language_model.layers.30.self_attn.q_proj
+        - model.language_model.layers.30.self_attn.o_proj
+        - model.language_model.layers.31.self_attn.q_proj
+        - model.language_model.layers.31.self_attn.o_proj
+        - model.language_model.layers.32.self_attn.q_proj
+        - model.language_model.layers.32.self_attn.o_proj
+        - model.language_model.layers.33.self_attn.q_proj
+        - model.language_model.layers.33.self_attn.o_proj
+
+training:
+  output_namespace: gemma4_color_mirror_decoder_banks_v13
+  initialize_from: data_gemma4/checkpoints/gemma4_color_mirror_spatial_relation_v12/epoch_008
+  initialize_expected_adapter_sha256: a4c85c14a214e4e594992e489a784cb4bacb64d3dfda519ad3da18b1595d9f22
+  initialize_expected_metadata_sha256: f097c6477546460440e77a3d225afb55818cb13abf9cbb4a90500f75a879b0f5
+  initialize_legacy_lora_into_bank: inherited_v12
+  freeze_scene_adapter: true
+  lora_learning_rate: 0.00005
+  lora_weight_decay: 0.0
+
+  # These objectives act only on the scene encoder and are invalid when that
+  # bridge is frozen. Decoder CE and the candidate/full-vocabulary hinges stay
+  # exactly as configured by V12, including all 24 paired sides.
+  latent_diversity_weight: 0.0
+  paired_scene_separation_weight: 0.0
+  grounding_weight: 0.0
+  grounding_anchor_weight: 0.0
+  spatial_answer_contrastive_weight: 0.0
+  spatial_answer_warmup_steps: 0
+  spatial_relation_contrastive_weight: 0.0
+  spatial_relation_warmup_steps: 0

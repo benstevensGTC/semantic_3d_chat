@@ -19,6 +19,10 @@ from semantic_3d_chat.language.local_lm import LocalLanguageModel
 from semantic_3d_chat.language.lora import (
     LoRALinear,
     install_lora_adapters,
+    install_lora_banks,
+    lora_banks_checkpoint_contract,
+    lora_banks_optimizer_settings,
+    lora_banks_settings,
     lora_checkpoint_contract,
     lora_optimizer_settings,
     lora_settings,
@@ -26,7 +30,10 @@ from semantic_3d_chat.language.lora import (
 from semantic_3d_chat.language.prefix_injection import ContinuousPrefixComposer
 from semantic_3d_chat.scene_encoder.map_io import MapTensorData
 from semantic_3d_chat.scene_encoder.projector import SceneTokenizerOutput
-from semantic_3d_chat.training.checkpointing import save_adapter_checkpoint
+from semantic_3d_chat.training.checkpointing import (
+    module_collection_state_sha256,
+    save_adapter_checkpoint,
+)
 from semantic_3d_chat.training.losses import QuestionGroundingHead
 
 
@@ -507,6 +514,51 @@ def _tiny_lora_language() -> LocalLanguageModel:
     )
 
 
+def _tiny_lora_banks_runtime_config() -> dict:
+    config = tiny_config()
+    config["scene_encoder"]["architecture_version"] = "signal_preserving_resampler_v3"
+    config["language"].update(
+        {
+            "backend": "gemma4",
+            "dtype": "float32",
+            "lora_banks": {
+                "inherited": {
+                    "trainable": False,
+                    "rank": 2,
+                    "alpha": 4.0,
+                    "dropout": 0.0,
+                    "initialization_algorithm": "checkpoint_overwrite",
+                    "initialization_seed": None,
+                    "expected_initial_state_sha256": None,
+                    "target_modules": [
+                        "model.language_model.layers.0.self_attn.q_proj",
+                        "model.language_model.layers.0.self_attn.o_proj",
+                    ],
+                },
+                "extension": {
+                    "trainable": True,
+                    "rank": 3,
+                    "alpha": 6.0,
+                    "dropout": 0.0,
+                    "initialization_algorithm": "cpu_kaiming_uniform_a_exact_zero_b",
+                    "initialization_seed": 13008,
+                    "expected_initial_state_sha256": None,
+                    "target_modules": [
+                        "model.language_model.layers.1.self_attn.q_proj",
+                        "model.language_model.layers.1.self_attn.o_proj",
+                    ],
+                },
+            },
+        }
+    )
+    config["training"] = {
+        "lora_learning_rate": 5e-5,
+        "lora_weight_decay": 0.0,
+        "freeze_scene_adapter": True,
+    }
+    return config
+
+
 def test_static_chat_loads_exact_lora_state_and_rejects_tensor_tamper(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
@@ -560,6 +612,92 @@ def test_static_chat_loads_exact_lora_state_and_rejects_tensor_tamper(
 
     tensors = load_file(checkpoint / "adapter.safetensors")
     tensors["lora.adapters.0.lora_b"][0, 0].add_(1.0)
+    save_file(tensors, checkpoint / "adapter.safetensors")
+    with pytest.raises(ValueError, match="tamper"):
+        StaticChatRuntime.load(config, "scene_000001", checkpoint)
+
+
+def test_static_chat_roundtrips_all_named_lora_banks(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    config = _tiny_lora_banks_runtime_config()
+    settings = lora_banks_settings(config)
+    optimizer_settings = lora_banks_optimizer_settings(config, settings)
+    source_language = _tiny_lora_language()
+    source = install_lora_banks(source_language.model, settings)
+    assert source is not None and optimizer_settings is not None
+    with torch.no_grad():
+        source.bank("inherited").installation.adapters[0].lora_b.fill_(0.125)
+        source.bank("extension").installation.adapters[1].lora_b.fill_(-0.25)
+    scene_model = construct_scene_tokenizer(config, semantic_dim=7, language_hidden_dim=8)
+    composer = ContinuousPrefixComposer(8)
+    grounding = QuestionGroundingHead(6, 8, 4, 6)
+    scene_modules = {
+        "scene_model": scene_model,
+        "composer": composer,
+        "grounding": grounding,
+    }
+    metadata = {
+        **tiny_checkpoint_metadata(),
+        "config_hash": config_hash(config),
+        "language_backend": "gemma4",
+        "scene_encoder_architecture_version": "signal_preserving_resampler_v3",
+        "lora": lora_banks_checkpoint_contract(
+            settings, optimizer_settings, source.parameter_counts
+        ),
+        "freeze_scene_adapter": True,
+        "frozen_scene_state_sha256": module_collection_state_sha256(scene_modules),
+        **source.checkpoint_metadata(),
+    }
+    for frozen_hash in (None, "INVALID"):
+        invalid_metadata = dict(metadata)
+        if frozen_hash is None:
+            invalid_metadata.pop("frozen_scene_state_sha256")
+        else:
+            invalid_metadata["frozen_scene_state_sha256"] = frozen_hash
+        with pytest.raises(ValueError, match="frozen_scene_state_sha256"):
+            validate_checkpoint_contract(
+                invalid_metadata,
+                config,
+                semantic_dim=7,
+                language_hidden_dim=8,
+                lora_parameter_count=source.parameter_count,
+                lora_parameter_counts=source.parameter_counts,
+            )
+    checkpoint_modules = {
+        **scene_modules,
+        **source.state_modules(),
+    }
+    checkpoint = save_adapter_checkpoint(tmp_path / "runtime_banks", checkpoint_modules, metadata)
+    monkeypatch.setattr(runtime_module, "load_map_tensors", lambda *_args, **_kwargs: tiny_map())
+    monkeypatch.setattr(
+        runtime_module, "load_local_language_model", lambda *_args, **_kwargs: _tiny_lora_language()
+    )
+
+    runtime = StaticChatRuntime.load(config, "scene_000001", checkpoint)
+    layers = runtime.language.model.model.language_model.layers
+    assert torch.equal(
+        layers[0].self_attn.q_proj.lora_b,
+        source.bank("inherited").installation.adapters[0].lora_b,
+    )
+    assert torch.equal(
+        layers[1].self_attn.o_proj.lora_b,
+        source.bank("extension").installation.adapters[1].lora_b,
+    )
+    assert all(not parameter.requires_grad for parameter in runtime.language.model.parameters())
+
+    tensors = load_file(checkpoint / "adapter.safetensors")
+    scene_key = next(
+        key for key in tensors if key.startswith("scene_model.") and tensors[key].numel()
+    )
+    original_scene_tensor = tensors[scene_key].clone()
+    tensors[scene_key].view(-1)[0].add_(1.0)
+    save_file(tensors, checkpoint / "adapter.safetensors")
+    with pytest.raises(ValueError, match="Frozen scene checkpoint state mismatch"):
+        StaticChatRuntime.load(config, "scene_000001", checkpoint)
+
+    tensors[scene_key] = original_scene_tensor
+    tensors["lora_banks.extension.adapters.0.lora_b"][0, 0].add_(1.0)
     save_file(tensors, checkpoint / "adapter.safetensors")
     with pytest.raises(ValueError, match="tamper"):
         StaticChatRuntime.load(config, "scene_000001", checkpoint)

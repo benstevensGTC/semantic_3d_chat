@@ -30,13 +30,16 @@ from semantic_3d_chat.language.local_lm import (
     question_token_ids,
 )
 from semantic_3d_chat.language.lora import (
+    InstalledLoRABank,
+    LoRABankCollection,
     LoRAInstallation,
     LoRAOptimizerSettings,
-    install_lora_adapters,
-    lora_checkpoint_contract,
+    install_lora_banks,
+    lora_banks_checkpoint_contract,
+    lora_banks_optimizer_settings,
+    lora_banks_settings,
     lora_checkpoint_contract_mismatch,
-    lora_optimizer_settings,
-    lora_settings,
+    validate_lora_banks_checkpoint_state,
     validate_lora_checkpoint_state,
 )
 from semantic_3d_chat.language.prefix_injection import (
@@ -54,6 +57,7 @@ from semantic_3d_chat.scene_encoder.projector import SceneTokenizer
 from semantic_3d_chat.training.checkpointing import (
     load_adapter_checkpoint,
     load_optimizer_checkpoint,
+    module_collection_state_sha256,
     save_adapter_checkpoint,
     save_optimizer_checkpoint,
 )
@@ -104,6 +108,112 @@ def file_sha256(path: Path) -> str:
         for chunk in iter(lambda: handle.read(1024 * 1024), b""):
             digest.update(chunk)
     return digest.hexdigest()
+
+
+def optional_sha256_setting(settings: Mapping[str, object], key: str) -> str | None:
+    """Parse an optional lowercase SHA-256 configuration assertion."""
+
+    value = settings.get(key)
+    if value is None:
+        return None
+    if not isinstance(value, str) or re.fullmatch(r"[0-9a-f]{64}", value) is None:
+        raise ValueError(f"training.{key} must be a lowercase SHA-256 hex digest")
+    return value
+
+
+def verify_initialization_artifact_hashes(
+    checkpoint: Path,
+    *,
+    expected_adapter_sha256: str | None,
+    expected_metadata_sha256: str | None,
+) -> dict[str, str]:
+    """Fail before tensor load if a staged checkpoint differs from its pin."""
+
+    observed = {
+        "adapter_sha256": file_sha256(checkpoint / "adapter.safetensors"),
+        "metadata_sha256": file_sha256(checkpoint / "metadata.json"),
+    }
+    expected = {
+        "adapter_sha256": expected_adapter_sha256,
+        "metadata_sha256": expected_metadata_sha256,
+    }
+    mismatches = {
+        key: {"expected": value, "observed": observed[key]}
+        for key, value in expected.items()
+        if value is not None and observed[key] != value
+    }
+    if mismatches:
+        raise ValueError(f"Initialization checkpoint content hash mismatch: {mismatches}")
+    return observed
+
+
+def legacy_lora_bank_source_mismatch(
+    metadata: Mapping[str, object], bank: InstalledLoRABank
+) -> dict[str, object] | None:
+    """Compare a schema-1 checkpoint's architecture with one frozen named bank."""
+
+    settings = bank.settings
+    installation = bank.installation
+    if settings.trainable:
+        return {"target_bank_trainable": {"required": False, "runtime": True}}
+    observed = metadata.get("lora")
+    expected = settings.adapter.contract()
+    if not isinstance(observed, Mapping):
+        return {"lora": {"checkpoint": observed, "runtime": expected}}
+    keys = ("schema_version", "enabled", "rank", "alpha", "dropout", "target_modules")
+    mismatches = {
+        key: {"checkpoint": observed.get(key), "runtime": expected.get(key)}
+        for key in keys
+        if observed.get(key) != expected.get(key)
+    }
+    source_count = observed.get("adapter_parameter_count")
+    if source_count != installation.parameter_count:
+        mismatches["adapter_parameter_count"] = {
+            "checkpoint": source_count,
+            "runtime": installation.parameter_count,
+        }
+    expected_hash = settings.expected_initial_state_sha256
+    if expected_hash is not None and metadata.get("lora_state_sha256") != expected_hash:
+        mismatches["lora_state_sha256"] = {
+            "checkpoint": metadata.get("lora_state_sha256"),
+            "runtime": expected_hash,
+        }
+    return mismatches or None
+
+
+def assert_zero_output_lora_banks(
+    collection: LoRABankCollection, *, exclude: Sequence[str] = ()
+) -> None:
+    """Require every selected bank to be an exact zero-residual initialization."""
+
+    excluded = set(exclude)
+    nonzero = [
+        f"{bank.settings.name}:{name}"
+        for bank in collection.banks
+        if bank.settings.name not in excluded
+        for name, adapter in zip(
+            bank.installation.target_names, bank.installation.adapters, strict=True
+        )
+        if torch.count_nonzero(adapter.lora_b).item() != 0
+    ]
+    if nonzero:
+        raise ValueError(f"New LoRA bank B tensors are not exact zero-output: {nonzero}")
+
+
+def staged_legacy_lora_checkpoint_modules(
+    scene_modules: Mapping[str, torch.nn.Module], bank: InstalledLoRABank
+) -> dict[str, torch.nn.Module]:
+    """Alias only a schema-1 ``lora`` payload into one named frozen bank."""
+
+    if bank.settings.trainable:
+        raise ValueError("A staged legacy LoRA source bank must be frozen")
+    required = {"scene_model", "composer", "grounding"}
+    if set(scene_modules) != required:
+        raise ValueError(
+            "Staged legacy initialization requires exactly the scene checkpoint modules: "
+            f"expected={sorted(required)} observed={sorted(scene_modules)}"
+        )
+    return {**scene_modules, "lora": bank.installation.state_module}
 
 
 def resolve_checkpoint_sources(
@@ -252,38 +362,47 @@ def construct_scene_tokenizer(
 def build_adapter_optimizer(
     config: dict,
     scene_parameters: Sequence[torch.nn.Parameter],
-    lora_installation: LoRAInstallation | None,
+    lora_installation: LoRABankCollection | LoRAInstallation | None,
     configured_lora_optimizer: LoRAOptimizerSettings | None,
 ) -> tuple[torch.optim.AdamW, list[torch.nn.Parameter]]:
-    """Build the legacy single group or strict v8 scene/LoRA groups."""
+    """Build strict scene/LoRA groups, omitting intentionally frozen surfaces."""
 
-    scene_parameters = list(scene_parameters)
+    scene_parameters = [parameter for parameter in scene_parameters if parameter.requires_grad]
     if lora_installation is None:
+        if not scene_parameters:
+            raise ValueError("Adapter optimizer has no trainable parameters")
         optimizer = torch.optim.AdamW(
             scene_parameters,
             lr=float(config["training"]["learning_rate"]),
             weight_decay=float(config["training"]["weight_decay"]),
         )
         return optimizer, scene_parameters
-    if configured_lora_optimizer is None:
-        raise ValueError("Enabled LoRA requires explicit optimizer settings")
     lora_parameters = lora_installation.parameters()
-    optimizer = torch.optim.AdamW(
-        [
+    if lora_parameters and configured_lora_optimizer is None:
+        raise ValueError("Trainable LoRA requires explicit optimizer settings")
+    groups: list[dict] = []
+    if scene_parameters:
+        groups.append(
             {
                 "name": "scene_adapter",
                 "params": scene_parameters,
                 "lr": float(config["training"]["learning_rate"]),
                 "weight_decay": float(config["training"]["weight_decay"]),
-            },
+            }
+        )
+    if lora_parameters:
+        assert configured_lora_optimizer is not None
+        groups.append(
             {
                 "name": "language_lora",
                 "params": lora_parameters,
                 "lr": configured_lora_optimizer.learning_rate,
                 "weight_decay": configured_lora_optimizer.weight_decay,
-            },
-        ]
-    )
+            }
+        )
+    if not groups:
+        raise ValueError("Adapter optimizer has no trainable parameters")
+    optimizer = torch.optim.AdamW(groups)
     return optimizer, scene_parameters + lora_parameters
 
 
@@ -330,6 +449,20 @@ def map_forward(model: SceneTokenizer, data: MapTensorData):
         data.room_min,
         data.room_max,
     )
+
+
+def training_map_forward(model: SceneTokenizer, data: MapTensorData, *, freeze_scene_adapter: bool):
+    """Encode frozen scene tokens without creating inference tensors.
+
+    ``torch.inference_mode`` is deliberately not used: the resulting tokens
+    are constants, but the decoder must still save them for LoRA weight
+    gradients.
+    """
+
+    if not freeze_scene_adapter:
+        return map_forward(model, data)
+    with torch.no_grad():
+        return map_forward(model, data)
 
 
 def select_training_records(
@@ -1904,7 +2037,7 @@ def evaluate_pair_candidate_gate(
     prediction_flip_threshold: float,
     wrong_prefix_flip_threshold: float,
     first_answer_token_top1_accuracy_threshold: float | None = None,
-    lora_installation: LoRAInstallation | None = None,
+    lora_installation: LoRABankCollection | LoRAInstallation | None = None,
 ) -> dict[str, object]:
     """Evaluate all training pair units with the configured deterministic ranking."""
 
@@ -2001,7 +2134,7 @@ def validation_loss(
     grounding: QuestionGroundingHead,
     semantic_dim: int,
     batch_size: int,
-    lora_installation: LoRAInstallation | None = None,
+    lora_installation: LoRABankCollection | LoRAInstallation | None = None,
 ) -> dict[str, float] | None:
     """Evaluate held-out teacher-forced loss while loading one scene map at a time."""
 
@@ -2094,8 +2227,23 @@ def main() -> None:
     scene_prefix_after_bos = scene_prefix_after_bos_setting(config)
     scene_boundary_mode = scene_boundary_mode_setting(config)
     configured_native_boundary_contract = native_gemma4_image_contract_setting(config)
-    configured_lora = lora_settings(config)
-    configured_lora_optimizer = lora_optimizer_settings(config, configured_lora)
+    configured_lora = lora_banks_settings(config)
+    configured_lora_optimizer = lora_banks_optimizer_settings(config, configured_lora)
+    freeze_scene_adapter = config["training"].get("freeze_scene_adapter", False)
+    if not isinstance(freeze_scene_adapter, bool):
+        raise TypeError("training.freeze_scene_adapter must be a boolean")
+    initialize_legacy_lora_into_bank = config["training"].get("initialize_legacy_lora_into_bank")
+    if initialize_legacy_lora_into_bank is not None and (
+        not isinstance(initialize_legacy_lora_into_bank, str)
+        or not initialize_legacy_lora_into_bank
+    ):
+        raise TypeError("training.initialize_legacy_lora_into_bank must be a non-empty string")
+    initialize_expected_adapter_sha256 = optional_sha256_setting(
+        config["training"], "initialize_expected_adapter_sha256"
+    )
+    initialize_expected_metadata_sha256 = optional_sha256_setting(
+        config["training"], "initialize_expected_metadata_sha256"
+    )
     source_provenance = capture_git_source_provenance(PROJECT_ROOT)
     language_decoder_gradient_checkpointing = config["training"].get(
         "language_decoder_gradient_checkpointing", False
@@ -2155,6 +2303,28 @@ def main() -> None:
         raise ValueError("spatial_relation_contrastive_weight requires an enabled pair curriculum")
     if spatial_relation_warmup["steps"] > 0 and not pair_curriculum.enabled:
         raise ValueError("spatial_relation_warmup_steps requires an enabled pair curriculum")
+    if freeze_scene_adapter:
+        frozen_scene_objectives = {
+            "grounding_weight": float(config["training"].get("grounding_weight", 0.0)),
+            "grounding_anchor_weight": float(
+                config["training"].get("grounding_anchor_weight", 0.0)
+            ),
+            "latent_diversity_weight": float(anti_collapse["latent_diversity_weight"]),
+            "paired_scene_separation_weight": float(
+                anti_collapse["paired_scene_separation_weight"]
+            ),
+            "spatial_answer_contrastive_weight": float(spatial_answer_contrastive["weight"]),
+            "spatial_answer_warmup_steps": int(spatial_answer_warmup["steps"]),
+            "spatial_relation_contrastive_weight": float(spatial_relation_contrastive["weight"]),
+            "spatial_relation_warmup_steps": int(spatial_relation_warmup["steps"]),
+        }
+        active = {key: value for key, value in frozen_scene_objectives.items() if value != 0}
+        if active:
+            raise ValueError(
+                f"Frozen scene adapter requires all scene-only objectives to be disabled: {active}"
+            )
+        if not configured_lora.trainable:
+            raise ValueError("Frozen scene adapter requires at least one trainable LoRA bank")
     token_mixing = scene_token_mixing_settings(config)
     pair_units = build_exact_question_pair_units(records)
     if pair_curriculum.enabled and not pair_units:
@@ -2230,6 +2400,10 @@ def main() -> None:
         "spatial_relation_warmup": spatial_relation_warmup,
         "spatial_relation_warmup_target_audit": spatial_relation_warmup_targets,
         "language_decoder_gradient_checkpointing": (language_decoder_gradient_checkpointing),
+        "freeze_scene_adapter": freeze_scene_adapter,
+        "initialize_legacy_lora_into_bank": initialize_legacy_lora_into_bank,
+        "initialize_expected_adapter_sha256": initialize_expected_adapter_sha256,
+        "initialize_expected_metadata_sha256": initialize_expected_metadata_sha256,
         "scene_prefix_after_bos": scene_prefix_after_bos,
         "scene_boundary_mode": scene_boundary_mode,
         "gemma4_native_image_contract": configured_native_boundary_contract,
@@ -2256,11 +2430,14 @@ def main() -> None:
         },
     }
     if configured_lora.enabled:
-        assert configured_lora_optimizer is not None
         selection_report.update(
             {
                 "lora": configured_lora.contract(),
-                "lora_optimizer": configured_lora_optimizer.contract(),
+                "lora_optimizer": (
+                    None
+                    if configured_lora_optimizer is None
+                    else configured_lora_optimizer.contract()
+                ),
             }
         )
     selection_name = (
@@ -2302,11 +2479,11 @@ def main() -> None:
             f"loaded={loaded_native_boundary_contract} "
             f"configured={configured_native_boundary_contract}"
         )
-    lora_installation = install_lora_adapters(language.model, configured_lora)
-    configured_lora_checkpoint_contract = lora_checkpoint_contract(
+    lora_installation = install_lora_banks(language.model, configured_lora)
+    configured_lora_checkpoint_contract = lora_banks_checkpoint_contract(
         configured_lora,
         configured_lora_optimizer,
-        0 if lora_installation is None else lora_installation.parameter_count,
+        {} if lora_installation is None else lora_installation.parameter_counts,
     )
     if lora_installation is not None:
         print(
@@ -2314,10 +2491,14 @@ def main() -> None:
                 {
                     "phase": "lora_installed",
                     "contract": configured_lora_checkpoint_contract,
-                    "wrapped_modules": list(lora_installation.target_names),
-                    "trainable_parameter_counts": lora_installation.parameter_counts,
-                    "trainable_parameter_count": lora_installation.parameter_count,
-                    "optimizer": configured_lora_optimizer.contract(),
+                    "wrapped_modules": lora_installation.wrapped_modules,
+                    "parameter_counts": lora_installation.parameter_counts,
+                    "trainable_parameter_count": lora_installation.trainable_parameter_count,
+                    "optimizer": (
+                        None
+                        if configured_lora_optimizer is None
+                        else configured_lora_optimizer.contract()
+                    ),
                 }
             ),
             flush=True,
@@ -2353,6 +2534,10 @@ def main() -> None:
         int(config["scene_encoder"]["global_latents"]),
         int(config["scene_encoder"]["model_dim"]),
     ).to(language.device)
+    if freeze_scene_adapter:
+        scene_model.requires_grad_(False).eval()
+        composer.requires_grad_(False).eval()
+        grounding.requires_grad_(False).eval()
     scene_parameters = (
         list(scene_model.parameters()) + list(composer.parameters()) + list(grounding.parameters())
     )
@@ -2362,13 +2547,14 @@ def main() -> None:
         lora_installation,
         configured_lora_optimizer,
     )
-    checkpoint_modules = {
+    scene_checkpoint_modules = {
         "scene_model": scene_model,
         "composer": composer,
         "grounding": grounding,
     }
+    checkpoint_modules = dict(scene_checkpoint_modules)
     if lora_installation is not None:
-        checkpoint_modules["lora"] = lora_installation.state_module
+        checkpoint_modules.update(lora_installation.state_modules())
     batch_size = int(config["training"]["batch_size"])
     accumulation = gradient_accumulation
     epochs = args.epochs or int(config["training"]["epochs"])
@@ -2386,6 +2572,8 @@ def main() -> None:
         cli_initialize_from=args.initialize_from,
         training_config=config["training"],
     )
+    if initialize_legacy_lora_into_bank is not None and not (initialize_value or resume_value):
+        raise ValueError("initialize_legacy_lora_into_bank requires initialize_from for a new run")
     initialization_provenance: dict | None = None
     if initialize_value:
         initialize_path = Path(initialize_value).expanduser()
@@ -2397,6 +2585,11 @@ def main() -> None:
             raise ValueError(
                 f"initialize_from must be inside the configured checkpoint root: {checkpoint_root}"
             )
+        initialization_artifact_hashes = verify_initialization_artifact_hashes(
+            initialize_path,
+            expected_adapter_sha256=initialize_expected_adapter_sha256,
+            expected_metadata_sha256=initialize_expected_metadata_sha256,
+        )
         initialize_preflight = json.loads(
             (initialize_path / "metadata.json").read_text(encoding="utf-8")
         )
@@ -2430,32 +2623,74 @@ def main() -> None:
         )
         if boundary_mismatch is not None:
             initialization_mismatches["scene_boundary_mode"] = boundary_mismatch
-        lora_mismatch = lora_checkpoint_contract_mismatch(
-            initialize_preflight, configured_lora_checkpoint_contract
-        )
-        if lora_mismatch is not None:
-            initialization_mismatches["lora"] = lora_mismatch
+        legacy_initialization_bank: InstalledLoRABank | None = None
+        if initialize_legacy_lora_into_bank is not None:
+            if lora_installation is None or lora_installation.settings.legacy_single_bank:
+                initialization_mismatches["initialize_legacy_lora_into_bank"] = {
+                    "checkpoint": initialize_preflight.get("lora"),
+                    "runtime": initialize_legacy_lora_into_bank,
+                }
+            else:
+                try:
+                    legacy_initialization_bank = lora_installation.bank(
+                        initialize_legacy_lora_into_bank
+                    )
+                except KeyError:
+                    initialization_mismatches["initialize_legacy_lora_into_bank"] = {
+                        "checkpoint": initialize_preflight.get("lora"),
+                        "runtime": initialize_legacy_lora_into_bank,
+                    }
+                else:
+                    legacy_mismatch = legacy_lora_bank_source_mismatch(
+                        initialize_preflight, legacy_initialization_bank
+                    )
+                    if legacy_mismatch is not None:
+                        initialization_mismatches["legacy_lora_bank"] = legacy_mismatch
+        else:
+            lora_mismatch = lora_checkpoint_contract_mismatch(
+                initialize_preflight, configured_lora_checkpoint_contract
+            )
+            if lora_mismatch is not None:
+                initialization_mismatches["lora"] = lora_mismatch
         if initialization_mismatches:
             raise ValueError(
                 f"Initialization checkpoint architecture mismatch: {initialization_mismatches}"
             )
+        initialization_modules = checkpoint_modules
+        if legacy_initialization_bank is not None:
+            initialization_modules = staged_legacy_lora_checkpoint_modules(
+                scene_checkpoint_modules, legacy_initialization_bank
+            )
         loaded_initialization = load_adapter_checkpoint(
             initialize_path,
-            checkpoint_modules,
+            initialization_modules,
             device=str(language.device),
         )
         if loaded_initialization != initialize_preflight:
             raise RuntimeError("Initialization checkpoint metadata changed while loading")
         if loaded_native_boundary_embeddings is not None:
             composer.validate_native_boundary_embeddings(loaded_native_boundary_embeddings)
-        if lora_installation is not None:
-            validate_lora_checkpoint_state(loaded_initialization, lora_installation)
+        if legacy_initialization_bank is not None:
+            validate_lora_checkpoint_state(
+                loaded_initialization, legacy_initialization_bank.installation
+            )
+            assert lora_installation is not None
+            assert_zero_output_lora_banks(
+                lora_installation, exclude=(legacy_initialization_bank.settings.name,)
+            )
+        elif lora_installation is not None:
+            validate_lora_banks_checkpoint_state(loaded_initialization, lora_installation)
         initialization_provenance = {
-            "schema_version": 1,
-            "mode": "weights_only_new_curriculum",
+            "schema_version": 2 if legacy_initialization_bank is not None else 1,
+            "mode": (
+                "legacy_lora_into_frozen_named_bank"
+                if legacy_initialization_bank is not None
+                else "weights_only_new_curriculum"
+            ),
             "checkpoint": str(initialize_path.relative_to(PROJECT_ROOT)),
-            "adapter_sha256": file_sha256(initialize_path / "adapter.safetensors"),
-            "metadata_sha256": file_sha256(initialize_path / "metadata.json"),
+            **initialization_artifact_hashes,
+            "expected_adapter_sha256": initialize_expected_adapter_sha256,
+            "expected_metadata_sha256": initialize_expected_metadata_sha256,
             "checkpoint_epoch": initialize_preflight.get("epoch"),
             "checkpoint_output_namespace": initialize_preflight.get("output_namespace"),
             "checkpoint_config_hash": initialize_preflight.get("config_hash"),
@@ -2463,6 +2698,17 @@ def main() -> None:
             "optimizer_state_loaded": False,
             "history_loaded": False,
         }
+        if legacy_initialization_bank is not None:
+            initialization_provenance.update(
+                {
+                    "legacy_source_module": "lora",
+                    "target_bank": legacy_initialization_bank.settings.name,
+                    "target_bank_state_sha256": (
+                        legacy_initialization_bank.installation.state_sha256()
+                    ),
+                    "new_trainable_banks_zero_output": True,
+                }
+            )
         print(
             json.dumps({"phase": "adapter_initialized", **initialization_provenance}),
             flush=True,
@@ -2505,13 +2751,47 @@ def main() -> None:
         )
         if resume_metadata != resume_preflight:
             raise RuntimeError("Resume checkpoint metadata changed while loading")
+        saved_initialization_provenance = resume_metadata.get("initialization_provenance")
+        initialization_provenance = (
+            dict(saved_initialization_provenance)
+            if isinstance(saved_initialization_provenance, Mapping)
+            else None
+        )
+        expected_initialization_hashes = {
+            "adapter_sha256": initialize_expected_adapter_sha256,
+            "metadata_sha256": initialize_expected_metadata_sha256,
+        }
+        initialization_hash_mismatches = {
+            key: {
+                "checkpoint": (
+                    None
+                    if initialization_provenance is None
+                    else initialization_provenance.get(key)
+                ),
+                "runtime": value,
+            }
+            for key, value in expected_initialization_hashes.items()
+            if value is not None
+            and (initialization_provenance is None or initialization_provenance.get(key) != value)
+        }
+        if initialization_hash_mismatches:
+            raise ValueError(
+                "Resume checkpoint initialization artifact mismatch: "
+                f"{initialization_hash_mismatches}"
+            )
         if loaded_native_boundary_embeddings is not None:
             # The checkpoint load overwrites persistent BOI/EOI buffers. Verify
             # them immediately against the already loaded, pinned Gemma model
             # before optimizer restore, scene warmup, or any composed forward.
             composer.validate_native_boundary_embeddings(loaded_native_boundary_embeddings)
         if lora_installation is not None:
-            validate_lora_checkpoint_state(resume_metadata, lora_installation)
+            validate_lora_banks_checkpoint_state(resume_metadata, lora_installation)
+        saved_freeze_scene_adapter = resume_metadata.get("freeze_scene_adapter", False)
+        if saved_freeze_scene_adapter != freeze_scene_adapter:
+            raise ValueError(
+                "Resume checkpoint freeze_scene_adapter mismatch: "
+                f"checkpoint={saved_freeze_scene_adapter} runtime={freeze_scene_adapter}"
+            )
         expected = {
             "semantic_dim": semantic_dim,
             "language_hidden_dim": language.hidden_size,
@@ -2692,6 +2972,49 @@ def main() -> None:
                 f"Resume checkpoint already completed epoch {start_epoch - 1}; "
                 f"target epochs is {epochs}"
             )
+    scene_state_modules = scene_checkpoint_modules
+    current_scene_state_sha256 = module_collection_state_sha256(scene_state_modules)
+    current_frozen_lora_hashes = (
+        {}
+        if lora_installation is None
+        else {
+            bank.settings.name: bank.installation.state_sha256()
+            for bank in lora_installation.banks
+            if not bank.settings.trainable
+        }
+    )
+    if resume_metadata is None:
+        frozen_scene_state_sha256 = current_scene_state_sha256 if freeze_scene_adapter else None
+        frozen_lora_bank_state_sha256 = current_frozen_lora_hashes
+        if lora_installation is not None:
+            initial_hash_mismatches = {
+                bank.settings.name: {
+                    "expected": bank.settings.expected_initial_state_sha256,
+                    "observed": bank.installation.state_sha256(),
+                }
+                for bank in lora_installation.banks
+                if bank.settings.expected_initial_state_sha256 is not None
+                and bank.settings.expected_initial_state_sha256 != bank.installation.state_sha256()
+            }
+            if initial_hash_mismatches:
+                raise ValueError(
+                    "LoRA bank initial-state hash mismatch before training: "
+                    f"{initial_hash_mismatches}"
+                )
+    else:
+        frozen_scene_state_sha256 = resume_metadata.get("frozen_scene_state_sha256")
+        frozen_lora_bank_state_sha256 = resume_metadata.get("frozen_lora_bank_state_sha256", {})
+        if freeze_scene_adapter and frozen_scene_state_sha256 != current_scene_state_sha256:
+            raise ValueError(
+                "Frozen scene adapter changed across resume: "
+                f"checkpoint={frozen_scene_state_sha256} runtime={current_scene_state_sha256}"
+            )
+        if frozen_lora_bank_state_sha256 != current_frozen_lora_hashes:
+            raise ValueError(
+                "Frozen LoRA bank changed across resume: "
+                f"checkpoint={frozen_lora_bank_state_sha256} "
+                f"runtime={current_frozen_lora_hashes}"
+            )
     if resume_metadata is None:
         spatial_answer_warmup_metrics = run_spatial_answer_warmup(
             scene_model,
@@ -2788,9 +3111,9 @@ def main() -> None:
         pair_batch_count = sum(batch.kind == "pair" for batch in curriculum)
         actual_pair_batch_fraction = pair_batch_count / len(curriculum)
         separated_pair_ids: set[str] = set()
-        scene_model.train()
-        composer.train()
-        grounding.train()
+        scene_model.train(not freeze_scene_adapter)
+        composer.train(not freeze_scene_adapter)
+        grounding.train(not freeze_scene_adapter)
         if lora_installation is not None:
             lora_installation.train()
         for curriculum_batch in curriculum:
@@ -2806,7 +3129,9 @@ def main() -> None:
                 scene_id = str(curriculum_batch.scene_id)
                 batch_records = curriculum_batch.records
                 data = maps[scene_id]
-                output = map_forward(scene_model, data)
+                output = training_map_forward(
+                    scene_model, data, freeze_scene_adapter=freeze_scene_adapter
+                )
                 outputs_by_scene = {scene_id: output}
                 base_loss, language_loss, grounding_loss = batch_objective(
                     output,
@@ -2834,10 +3159,16 @@ def main() -> None:
                 if any(unit.scene_ids != scene_ids for unit in units):
                     raise ValueError("A pair batch contains inconsistent scene ordering")
                 outputs_by_scene = {
-                    scene_id: map_forward(scene_model, maps[scene_id]) for scene_id in scene_ids
+                    scene_id: training_map_forward(
+                        scene_model,
+                        maps[scene_id],
+                        freeze_scene_adapter=freeze_scene_adapter,
+                    )
+                    for scene_id in scene_ids
                 }
                 for scene_output in outputs_by_scene.values():
-                    scene_output.scene_tokens.retain_grad()
+                    if scene_output.scene_tokens.requires_grad:
+                        scene_output.scene_tokens.retain_grad()
                 (
                     base_loss,
                     language_loss,
@@ -2936,7 +3267,7 @@ def main() -> None:
             )
             (loss / accumulation).backward()
             pair_scene_token_gradient_norms = None
-            if curriculum_batch.kind == "pair":
+            if curriculum_batch.kind == "pair" and not freeze_scene_adapter:
                 pair_scene_token_gradient_norms = {
                     scene_id: (
                         None
@@ -2958,6 +3289,8 @@ def main() -> None:
             if accumulated_batches == accumulation:
                 if lora_gradient_norms is not None:
                     epoch_lora_gradient_norms.append(float(lora_gradient_norms["total_l2"]))
+                    if freeze_scene_adapter and float(lora_gradient_norms["total_l2"]) <= 0.0:
+                        raise RuntimeError("Frozen-scene training produced no LoRA-bank gradient")
                 torch.nn.utils.clip_grad_norm_(
                     parameters, float(config["training"]["gradient_clip_norm"])
                 )
@@ -3272,6 +3605,8 @@ def main() -> None:
             if lora_installation is not None:
                 lora_gradient_norms = lora_installation.gradient_norms()
                 epoch_lora_gradient_norms.append(float(lora_gradient_norms["total_l2"]))
+                if freeze_scene_adapter and float(lora_gradient_norms["total_l2"]) <= 0.0:
+                    raise RuntimeError("Frozen-scene training produced no LoRA-bank gradient")
                 print(
                     json.dumps(
                         {
@@ -3623,18 +3958,49 @@ def main() -> None:
             "training_counterfactual_pair_count": len(training_pairs),
             "training_counterfactual_pair_membership_sha256": (pair_membership_sha256),
         }
-        if lora_installation is not None:
-            assert configured_lora_optimizer is not None
-            lora_installation.validate_state()
+        current_scene_hash = module_collection_state_sha256(scene_state_modules)
+        current_frozen_bank_hashes = (
+            {}
+            if lora_installation is None
+            else {
+                bank.settings.name: bank.installation.state_sha256()
+                for bank in lora_installation.banks
+                if not bank.settings.trainable
+            }
+        )
+        if freeze_scene_adapter and current_scene_hash != frozen_scene_state_sha256:
+            raise RuntimeError(
+                "Frozen scene adapter changed before checkpoint save: "
+                f"expected={frozen_scene_state_sha256} observed={current_scene_hash}"
+            )
+        if current_frozen_bank_hashes != frozen_lora_bank_state_sha256:
+            raise RuntimeError(
+                "Frozen LoRA bank changed before checkpoint save: "
+                f"expected={frozen_lora_bank_state_sha256} "
+                f"observed={current_frozen_bank_hashes}"
+            )
+        if freeze_scene_adapter or not configured_lora.legacy_single_bank:
             metadata.update(
                 {
-                    "lora": configured_lora_checkpoint_contract,
-                    "lora_wrapped_modules": list(lora_installation.target_names),
-                    "lora_trainable_parameter_counts": lora_installation.parameter_counts,
-                    "lora_trainable_parameter_count": lora_installation.parameter_count,
-                    "lora_state_sha256": lora_installation.state_sha256(),
+                    "freeze_scene_adapter": freeze_scene_adapter,
+                    "frozen_scene_state_sha256": frozen_scene_state_sha256,
+                    "frozen_lora_bank_state_sha256": frozen_lora_bank_state_sha256,
                 }
             )
+        if (
+            initialize_expected_adapter_sha256 is not None
+            or initialize_expected_metadata_sha256 is not None
+        ):
+            metadata.update(
+                {
+                    "initialize_expected_adapter_sha256": (initialize_expected_adapter_sha256),
+                    "initialize_expected_metadata_sha256": (initialize_expected_metadata_sha256),
+                }
+            )
+        if lora_installation is not None:
+            lora_installation.validate_state()
+            metadata.update({"lora": configured_lora_checkpoint_contract})
+            metadata.update(lora_installation.checkpoint_metadata())
         checkpoint = save_adapter_checkpoint(
             output_root / f"epoch_{epoch:03d}",
             checkpoint_modules,
@@ -3786,6 +4152,11 @@ def main() -> None:
         "gemma4_native_image_contract": loaded_native_boundary_contract,
         "source_provenance": source_provenance,
         "initialization_provenance": initialization_provenance,
+        "initialize_expected_adapter_sha256": initialize_expected_adapter_sha256,
+        "initialize_expected_metadata_sha256": initialize_expected_metadata_sha256,
+        "freeze_scene_adapter": freeze_scene_adapter,
+        "frozen_scene_state_sha256": frozen_scene_state_sha256,
+        "frozen_lora_bank_state_sha256": frozen_lora_bank_state_sha256,
         "gradient_accumulation": gradient_accumulation,
         "semantic_dim": semantic_dim,
         "raw_voxel_count": max(data.source_voxel_count for data in maps.values()),
@@ -3837,14 +4208,15 @@ def main() -> None:
         "training_counterfactual_pair_membership_sha256": (pair_membership_sha256),
     }
     if lora_installation is not None:
-        assert configured_lora_optimizer is not None
         summary.update(
             {
                 "lora": configured_lora_checkpoint_contract,
-                "lora_optimizer": configured_lora_optimizer.contract(),
-                "lora_wrapped_modules": list(lora_installation.target_names),
-                "lora_trainable_parameter_counts": lora_installation.parameter_counts,
-                "lora_trainable_parameter_count": lora_installation.parameter_count,
+                "lora_optimizer": (
+                    None
+                    if configured_lora_optimizer is None
+                    else configured_lora_optimizer.contract()
+                ),
+                **lora_installation.checkpoint_metadata(),
             }
         )
     metrics_path.write_text(json.dumps(summary, indent=2) + "\n")
