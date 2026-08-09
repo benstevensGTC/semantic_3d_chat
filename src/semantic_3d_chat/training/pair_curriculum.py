@@ -9,6 +9,7 @@ scene's continuous prefix.
 
 from __future__ import annotations
 
+import hashlib
 import math
 import random
 from collections import defaultdict
@@ -77,6 +78,7 @@ class PairCurriculumSettings:
     steps_per_epoch: int | None
     pair_only: bool
     pair_only_scene_ids: tuple[str, ...]
+    max_units_per_pair: int | None
     gate_enabled: bool
     gate_every_epochs: int
     stop_when_gate_passes: bool
@@ -105,6 +107,7 @@ def pair_curriculum_settings(config: Mapping[str, object]) -> PairCurriculumSett
     if isinstance(scene_ids_value, str) or not isinstance(scene_ids_value, Sequence):
         raise TypeError("pair_only_scene_ids must be a sequence of opaque scene IDs")
     steps_value = raw_training.get("pair_steps_per_epoch")
+    max_units_value = raw_training.get("pair_max_units_per_pair")
     first_token_threshold_value = raw_training.get("pair_gate_first_answer_token_top1_accuracy")
     ranking_mode = str(raw_training.get("pair_ranking_mode", "nll"))
     if ranking_mode not in {"nll", "candidate_logit"}:
@@ -118,6 +121,7 @@ def pair_curriculum_settings(config: Mapping[str, object]) -> PairCurriculumSett
         steps_per_epoch=None if steps_value is None else int(steps_value),
         pair_only=pair_only,
         pair_only_scene_ids=tuple(str(value) for value in scene_ids_value),
+        max_units_per_pair=(None if max_units_value is None else int(max_units_value)),
         gate_enabled=bool(raw_training.get("pair_gate_enabled", pair_only)),
         gate_every_epochs=int(raw_training.get("pair_gate_every_epochs", 1)),
         stop_when_gate_passes=bool(raw_training.get("pair_gate_stop_when_passed", pair_only)),
@@ -148,6 +152,10 @@ def pair_curriculum_settings(config: Mapping[str, object]) -> PairCurriculumSett
         raise ValueError("pair_steps_per_epoch must be positive")
     if settings.pair_only and len(settings.pair_only_scene_ids) < 2:
         raise ValueError("Pair-only mode requires at least two pair_only_scene_ids")
+    if settings.max_units_per_pair is not None and settings.max_units_per_pair < 1:
+        raise ValueError("pair_max_units_per_pair must be positive")
+    if settings.max_units_per_pair is not None and not settings.pair_only:
+        raise ValueError("pair_max_units_per_pair requires pair_only_mode")
     if settings.gate_enabled and not settings.enabled:
         raise ValueError("pair_gate_enabled requires an enabled pair curriculum")
     if settings.gate_every_epochs < 1:
@@ -252,6 +260,37 @@ def select_pair_only_records(
         for record in candidate_records
         if (record.scene_id, record.question_id) in selected_ids
     ]
+
+
+def cap_pair_units_per_pair(
+    records: Sequence[QARecord], max_units_per_pair: int | None, *, seed: int
+) -> list[QARecord]:
+    """Deterministically cap complete units without question cherry-picking.
+
+    Stable hash ordering depends only on the experiment seed and opaque
+    pair/question keys. Both scene sides remain indivisible, and the original
+    record order is preserved in the returned training selection.
+    """
+
+    if max_units_per_pair is None:
+        return list(records)
+    if max_units_per_pair < 1:
+        raise ValueError("max_units_per_pair must be positive")
+    units_by_pair: defaultdict[str, list[CounterfactualPairUnit]] = defaultdict(list)
+    for unit in build_exact_question_pair_units(records):
+        units_by_pair[unit.pair_id].append(unit)
+    selected_ids: set[tuple[str, str]] = set()
+    for pair_id, pair_units in sorted(units_by_pair.items()):
+        ordered = sorted(
+            pair_units,
+            key=lambda unit: (
+                hashlib.sha256(f"{seed}:{pair_id}:{unit.question_key}".encode()).digest(),
+                unit.question_key,
+            ),
+        )
+        for unit in ordered[:max_units_per_pair]:
+            selected_ids.update((record.scene_id, record.question_id) for record in unit.records)
+    return [record for record in records if (record.scene_id, record.question_id) in selected_ids]
 
 
 def _cycled_sample(items: Sequence[T], count: int, rng: random.Random) -> list[T]:

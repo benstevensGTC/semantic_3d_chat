@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from types import SimpleNamespace
 
 import pytest
@@ -8,9 +9,16 @@ from torch import nn
 
 import semantic_3d_chat.evaluation.scene_signal_audit as audit_module
 from semantic_3d_chat.evaluation.scene_signal_audit import (
+    _checkpoint_epoch_fields,
     _configured_runtime_dtype,
     _encode_scene,
+    _generation_audit,
     _install_checkpoint_lora,
+    _left_right_reference_orientation_summary,
+    _normalized_generation_result,
+    _normalized_generation_summary,
+    _summary_findings,
+    _training_selected_pair_keys,
     _unvalidated_runtime_prefix_status,
     _validate_runtime_prefix_against_loaded_model,
 )
@@ -234,3 +242,309 @@ def test_audit_installs_and_hash_validates_checkpoint_lora_before_forward(tmp_pa
     assert torch.equal(restored.adapters[0].lora_b, source.adapters[0].lora_b)
     assert restored.training is False
     assert all(not parameter.requires_grad for parameter in runtime_model.parameters())
+
+
+def test_generation_audit_reports_exact_normalized_side_and_complete_unit_accuracy() -> None:
+    first = _normalized_generation_result(
+        "The RED!",
+        "orange",
+        "red",
+        "blue",
+    )
+    second = _normalized_generation_result(
+        "on the left",
+        "To the RIGHT.",
+        "on left",
+        "to right",
+    )
+
+    summary = _normalized_generation_summary([first, second])
+
+    assert first == {
+        "normalized_prediction_a": "red",
+        "normalized_prediction_b": "orange",
+        "normalized_expected_a": "red",
+        "normalized_expected_b": "blue",
+        "normalized_exact_correct_a": True,
+        "normalized_exact_correct_b": False,
+        "normalized_exact_complete_unit_correct": False,
+    }
+    assert second["normalized_exact_correct_a"] is True
+    assert second["normalized_exact_correct_b"] is True
+    assert second["normalized_exact_complete_unit_correct"] is True
+    assert summary == {
+        "normalized_exact_side_count": 4,
+        "normalized_exact_correct_side_count": 3,
+        "normalized_exact_side_accuracy": 0.75,
+        "normalized_exact_complete_unit_count": 2,
+        "normalized_exact_complete_unit_correct_count": 1,
+        "normalized_exact_complete_unit_accuracy": 0.5,
+    }
+
+
+def test_generation_accuracy_is_distinct_from_prediction_change() -> None:
+    result = _normalized_generation_result("orange", "purple", "red", "blue")
+
+    assert result["normalized_prediction_a"] != result["normalized_prediction_b"]
+    assert result["normalized_exact_complete_unit_correct"] is False
+    assert "prediction_changed" not in result
+
+
+def test_left_right_reference_orientation_macro_accuracy_balances_directions() -> None:
+    examples = [
+        {
+            **_normalized_generation_result("left", "right", "left", "right"),
+            "prediction_changed": True,
+        },
+        {
+            **_normalized_generation_result("left", "right", "left", "right"),
+            "prediction_changed": True,
+        },
+        {
+            **_normalized_generation_result("left", "right", "right", "left"),
+            "prediction_changed": True,
+        },
+    ]
+
+    summary = _left_right_reference_orientation_summary(examples)
+
+    assert summary["eligible_complete_unit_count"] == 3
+    assert summary["both_reference_orientations_present"] is True
+    assert summary["normalized_exact_reference_orientation_macro_accuracy"] == 0.5
+    assert summary["normalized_exact_complete_unit_reference_orientation_macro_accuracy"] == 0.5
+    assert (
+        summary["by_reference_expected_orientation"]["left"][
+            "normalized_exact_reference_side_accuracy"
+        ]
+        == 1.0
+    )
+    assert (
+        summary["by_reference_expected_orientation"]["right"][
+            "normalized_exact_reference_side_accuracy"
+        ]
+        == 0.0
+    )
+
+
+def test_training_pair_selection_reconstructs_seeded_complete_unit_cap(tmp_path) -> None:
+    qa_root = tmp_path / "qa"
+    qa_root.mkdir()
+    records = []
+    for pair_id, scene_ids in (
+        ("pair_a", ("scene_a", "scene_b")),
+        ("pair_b", ("scene_c", "scene_d")),
+    ):
+        for index in range(3):
+            key = f"question_{index}"
+            for role, scene_id, answer in (
+                ("reference", scene_ids[0], "left"),
+                ("counterfactual", scene_ids[1], "right"),
+            ):
+                records.append(
+                    {
+                        "scene_id": scene_id,
+                        "question_id": f"{pair_id}_{scene_id}_{index}",
+                        "question": f"Question {index}?",
+                        "answer": answer,
+                        "answer_type": "spatial_relation",
+                        "target_xyz": [0.0, 0.0, 0.0],
+                        "counterfactual_pair_id": pair_id,
+                        "counterfactual_question_key": key,
+                        "counterfactual_expected_change": True,
+                        "counterfactual_role": role,
+                        "counterfactual_change_type": "mirror_lr",
+                    }
+                )
+    (qa_root / "train.jsonl").write_text(
+        "".join(json.dumps(record) + "\n" for record in records), encoding="utf-8"
+    )
+    config = {
+        "seed": 17,
+        "paths": {"data_root": str(tmp_path), "qa_root": str(qa_root)},
+        "training": {
+            "pair_only_mode": True,
+            "pair_only_scene_ids": ["scene_a", "scene_b", "scene_c", "scene_d"],
+            "pair_max_units_per_pair": 2,
+            "pair_ranking_weight": 1.0,
+            "pair_batch_fraction": 1.0,
+        },
+    }
+
+    selected = _training_selected_pair_keys(config)
+
+    assert selected == _training_selected_pair_keys(config)
+    assert len(selected) == 4
+    assert {pair_id for pair_id, _ in selected} == {"pair_a", "pair_b"}
+    assert all(
+        sum(pair_id == expected for pair_id, _ in selected) == 2
+        for expected in ("pair_a", "pair_b")
+    )
+
+
+def test_generation_audit_attaches_exact_scores_to_each_pair(monkeypatch, tmp_path) -> None:
+    class Tokenizer:
+        def __init__(self) -> None:
+            self.token_ids = {"red": 0, "blue": 1}
+
+        def __call__(self, text, **_kwargs):
+            return SimpleNamespace(input_ids=torch.tensor([[self.token_ids[text.strip()]]]))
+
+        def decode(self, token_ids, **_kwargs):
+            inverse = {value: key for key, value in self.token_ids.items()}
+            return inverse[int(token_ids[0])]
+
+    record_a = {
+        "counterfactual_question_key": "color",
+        "question": "What color?",
+        "answer": "red",
+    }
+    record_b = {
+        "counterfactual_question_key": "color",
+        "question": "What color?",
+        "answer": "blue",
+    }
+    monkeypatch.setattr(
+        audit_module,
+        "_changed_question_pairs",
+        lambda _path, _pair_id: [(record_a, record_b)],
+    )
+    monkeypatch.setattr(
+        audit_module,
+        "_training_selected_pair_keys",
+        lambda _config: {("pair_000001", "color")},
+    )
+    answers = iter(
+        [
+            (torch.tensor([4.0, 1.0]), "The red!"),
+            (torch.tensor([1.0, 4.0]), "orange"),
+        ]
+    )
+    monkeypatch.setattr(
+        audit_module,
+        "_question_logits_and_answer",
+        lambda *_args, **_kwargs: next(answers),
+    )
+    validation = {"runtime_prefix_parity_validated": True}
+    monkeypatch.setattr(
+        audit_module,
+        "_validate_runtime_prefix_against_loaded_model",
+        lambda *_args, **_kwargs: validation,
+    )
+    spec = {
+        "pair_id": "pair_000001",
+        "change_type": "color_swap",
+        "split": "train",
+        "scene_a": "scene_a",
+        "scene_b": "scene_b",
+    }
+    representations = {
+        "scene_a": {"final_prefix_runtime_dtype": torch.zeros(1, 2, 2)},
+        "scene_b": {"final_prefix_runtime_dtype": torch.ones(1, 2, 2)},
+    }
+    language = SimpleNamespace(tokenizer=Tokenizer())
+
+    generation, returned_validation = _generation_audit(
+        _native_config(),
+        representations,
+        (spec,),
+        ContinuousPrefixComposer(2),
+        torch.bfloat16,
+        tmp_path,
+        {},
+        language=language,
+    )
+
+    pair = generation["pairs"][0]
+    assert returned_validation is validation
+    assert pair["prediction_changed_count"] == 1
+    assert pair["prediction_changed_rate"] == 1.0
+    assert pair["normalized_exact_correct_side_count"] == 1
+    assert pair["normalized_exact_side_accuracy"] == 0.5
+    assert pair["normalized_exact_complete_unit_correct_count"] == 0
+    assert pair["normalized_exact_complete_unit_accuracy"] == 0.0
+    assert pair["examples"][0]["training_selected"] is True
+    assert pair["training_selection_breakdown"]["selected"]["normalized_exact_side_accuracy"] == 0.5
+    assert (
+        pair["training_selection_breakdown"]["unselected"]["normalized_exact_side_accuracy"] is None
+    )
+    assert generation["training_pair_selection"]["selected_complete_unit_count"] == 1
+    assert pair["examples"][0]["normalized_exact_correct_a"] is True
+    assert pair["examples"][0]["normalized_exact_correct_b"] is False
+
+
+def test_checkpoint_epoch_fields_distinguish_selected_checkpoint_from_best_epoch() -> None:
+    assert _checkpoint_epoch_fields({"epoch": 36, "best_epoch": 30}) == {
+        "checkpoint_epoch": 36,
+        "checkpoint_best_epoch": 30,
+    }
+
+
+def _summary_pair(
+    *,
+    blocks: float,
+    native: float,
+    projected: float,
+    native_over_blocks: float,
+    latent_cosine: float,
+    runtime_changed: float = 0.8,
+) -> dict:
+    return {
+        "raw_map": {"semantic": {"relative_l2": 0.1}},
+        "block_tokens": {"common_block_tokens": {"relative_l2": blocks}},
+        "native_latents": {"relative_l2": native},
+        "projected_scene_tokens_float32": {"relative_l2": projected},
+        "final_prefix_runtime_dtype": {"changed_element_fraction_at_1e-6": runtime_changed},
+        "latent_diversity": {
+            "scene_a_native": {"mean_off_diagonal_cosine": latent_cosine},
+            "scene_b_native": {"mean_off_diagonal_cosine": latent_cosine},
+        },
+        "signal_retention": {
+            "native_latents_over_blocks": native_over_blocks,
+            "projected_over_native_latents": projected / native,
+        },
+    }
+
+
+def test_summary_diagnosis_does_not_repeat_stale_collapse_claim() -> None:
+    summary = _summary_findings(
+        [
+            _summary_pair(
+                blocks=0.2,
+                native=0.15,
+                projected=0.12,
+                native_over_blocks=0.75,
+                latent_cosine=0.93,
+            )
+        ],
+        "bfloat16",
+    )
+
+    assert summary["evidence_flags"] == {
+        "raw_signal_present_for_all_pairs": True,
+        "severe_native_attenuation_for_all_pairs_at_0_1": False,
+        "near_duplicate_native_latents_for_all_scenes_at_0_99": False,
+        "runtime_cast_erased_any_pair_at_1e_6": False,
+    }
+    assert (
+        "do not support the historical global Perceiver-collapse diagnosis" in summary["diagnosis"]
+    )
+    assert "Do not infer a resampler defect" in summary["recommended_fix"]
+
+
+def test_summary_reports_collapse_only_when_computed_thresholds_support_it() -> None:
+    summary = _summary_findings(
+        [
+            _summary_pair(
+                blocks=0.2,
+                native=0.01,
+                projected=0.005,
+                native_over_blocks=0.05,
+                latent_cosine=0.995,
+            )
+        ],
+        "float16",
+    )
+
+    assert summary["evidence_flags"]["severe_native_attenuation_for_all_pairs_at_0_1"]
+    assert summary["evidence_flags"]["near_duplicate_native_latents_for_all_scenes_at_0_99"]
+    assert "support severe global-resampler attenuation" in summary["diagnosis"]

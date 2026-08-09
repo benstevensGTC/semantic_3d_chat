@@ -13,6 +13,7 @@ from semantic_3d_chat.training.pair_curriculum import (
     build_epoch_curriculum,
     build_exact_question_pair_units,
     candidate_logit_margins,
+    cap_pair_units_per_pair,
     differing_answer_token_masks,
     first_answer_token_full_vocab_margins,
     pair_curriculum_settings,
@@ -27,6 +28,7 @@ from semantic_3d_chat.training.train_adapter import (
     best_pair_gate_passed_from_history,
     pair_batch_objective,
     pair_gate_checkpoint_improved,
+    pair_gate_monitor_value,
     should_stop_after_pair_gate,
 )
 
@@ -110,6 +112,31 @@ def test_pair_only_selection_excludes_unpaired_and_unconfigured_scenes() -> None
     )
 
     assert selected == [first, second]
+
+
+def test_pair_unit_cap_is_deterministic_complete_and_balanced_by_pair() -> None:
+    records: list[QARecord] = []
+    for pair_id in ("pair_1", "pair_2"):
+        for index in range(5):
+            first, second = _unit_records(f"question_{index}", pair_id)
+            if pair_id == "pair_2":
+                first = QARecord(**{**first.__dict__, "scene_id": "scene_c"})
+                second = QARecord(**{**second.__dict__, "scene_id": "scene_d"})
+            records.extend((first, second))
+
+    selected = cap_pair_units_per_pair(records, 2, seed=17)
+    units = build_exact_question_pair_units(selected)
+
+    assert selected == cap_pair_units_per_pair(records, 2, seed=17)
+    assert len(selected) == 8
+    assert len(units) == 4
+    assert {unit.pair_id for unit in units} == {"pair_1", "pair_2"}
+    assert all(
+        sum(unit.pair_id == pair_id for unit in units) == 2 for pair_id in ("pair_1", "pair_2")
+    )
+    assert cap_pair_units_per_pair(records, None, seed=17) == records
+    with pytest.raises(ValueError, match="positive"):
+        cap_pair_units_per_pair(records, 0, seed=17)
 
 
 def test_epoch_curriculum_interleaves_two_scene_pair_batches_at_requested_fraction() -> None:
@@ -379,6 +406,7 @@ def test_pair_gate_config_is_explicit_and_defaults_remain_disabled() -> None:
     gemma_v2 = load_config("configs/experiments/gemma4_color_wiring_v2.yaml")
     gemma_v8 = load_config("configs/experiments/gemma4_color_wiring_v8.yaml")
     gemma_v9 = load_config("configs/experiments/gemma4_color_wiring_v9.yaml")
+    gemma_v10 = load_config("configs/experiments/gemma4_color_mirror_wiring_v10.yaml")
     assert pair_curriculum_settings(gemma_v1).ranking_mode == "nll"
     assert pair_curriculum_settings(gemma_v2).ranking_mode == "candidate_logit"
     assert gemma_v1["training"]["output_namespace"] == "gemma4_color_wiring"
@@ -390,6 +418,16 @@ def test_pair_gate_config_is_explicit_and_defaults_remain_disabled() -> None:
     assert pair_curriculum_settings(gemma_v9).stop_when_gate_passes is False
     assert gemma_v9["training"]["output_namespace"] == "gemma4_color_wiring_v9"
     assert gemma_v9["training"]["epochs"] == 36
+    v10_curriculum = pair_curriculum_settings(gemma_v10)
+    assert v10_curriculum.max_units_per_pair == 6
+    assert v10_curriculum.pair_only_scene_ids == (
+        "scene_000003",
+        "scene_000004",
+        "scene_000007",
+        "scene_000008",
+    )
+    assert gemma_v10["training"]["gradient_accumulation"] == 12
+    assert gemma_v10["training"]["initialize_from"].endswith("epoch_036")
 
 
 def test_pair_gate_best_checkpoint_selection_is_gate_pass_first() -> None:
@@ -416,6 +454,29 @@ def test_pair_gate_best_checkpoint_selection_is_gate_pass_first() -> None:
     assert should_stop_after_pair_gate(True, {"pairwise_passed": True, "passed": True})
     assert not should_stop_after_pair_gate(True, {"pairwise_passed": True, "passed": False})
     assert not should_stop_after_pair_gate(False, {"pairwise_passed": True, "passed": True})
+
+
+def test_full_vocab_gate_monitor_prefers_larger_minimum_passing_margin() -> None:
+    failed = {
+        "passed": False,
+        "first_answer_token_target_vs_best_other_hinge": 0.4,
+        "ranking_hinge_at_configured_margin": 0.2,
+        "minimum_first_answer_token_target_vs_best_other_logit_margin": -1.0,
+    }
+    barely_passed = {
+        "passed": True,
+        "first_answer_token_target_vs_best_other_hinge": 0.0,
+        "ranking_hinge_at_configured_margin": 0.0,
+        "minimum_first_answer_token_target_vs_best_other_logit_margin": 0.03,
+    }
+    stronger_passed = {
+        **barely_passed,
+        "minimum_first_answer_token_target_vs_best_other_logit_margin": 1.0,
+    }
+
+    assert pair_gate_monitor_value(failed, full_vocab_gate=True) == pytest.approx(0.6)
+    assert pair_gate_monitor_value(barely_passed, full_vocab_gate=True) == pytest.approx(-0.03)
+    assert pair_gate_monitor_value(stronger_passed, full_vocab_gate=True) == pytest.approx(-1.0)
 
 
 class _TinyTokenizer:

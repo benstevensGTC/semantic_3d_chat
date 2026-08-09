@@ -28,7 +28,9 @@ from semantic_3d_chat.config import (
     project_path,
     reports_root,
 )
+from semantic_3d_chat.data.dataset import SceneQADataset
 from semantic_3d_chat.device import safe_dtype, select_device
+from semantic_3d_chat.evaluation.metrics import normalize_answer
 from semantic_3d_chat.language.generation import generate_from_embeddings
 from semantic_3d_chat.language.local_lm import load_local_language_model, prompt_token_ids
 from semantic_3d_chat.language.lora import (
@@ -49,6 +51,11 @@ from semantic_3d_chat.language.prefix_injection import (
 )
 from semantic_3d_chat.scene_encoder.map_io import MapTensorData, load_map_tensors
 from semantic_3d_chat.training.checkpointing import load_adapter_checkpoint
+from semantic_3d_chat.training.pair_curriculum import (
+    cap_pair_units_per_pair,
+    pair_curriculum_settings,
+    select_pair_only_records,
+)
 
 PAIR_SPECS = (
     {
@@ -180,6 +187,15 @@ def _sha256(path: Path) -> str:
         for chunk in iter(lambda: handle.read(1024 * 1024), b""):
             digest.update(chunk)
     return digest.hexdigest()
+
+
+def _checkpoint_epoch_fields(metadata: dict[str, Any]) -> dict[str, Any]:
+    """Keep the selected checkpoint epoch distinct from its training run's best epoch."""
+
+    return {
+        "checkpoint_epoch": metadata.get("epoch"),
+        "checkpoint_best_epoch": metadata.get("best_epoch"),
+    }
 
 
 def _structured_keys(values: np.ndarray) -> np.ndarray:
@@ -509,6 +525,36 @@ def _changed_question_pairs(qa_path: Path, pair_id: str) -> list[tuple[dict, dic
     return pairs
 
 
+def _training_selected_pair_keys(config: dict[str, Any]) -> set[tuple[str, str]]:
+    """Reconstruct the exact deterministic pair-only training selection.
+
+    This evaluation-only helper deliberately reads the supervised train split;
+    neither it nor its training-data imports are reachable from chat runtime.
+    A key is ``(opaque pair ID, opaque question key)`` so similarly named keys
+    from different counterfactual pairs cannot collide.
+    """
+
+    raw_training = config.get("training")
+    if not isinstance(raw_training, dict) or not bool(raw_training.get("pair_only_mode", False)):
+        return set()
+    settings = pair_curriculum_settings(config)
+    train_path = artifact_root(config, "qa") / "train.jsonl"
+    records = SceneQADataset(train_path).records
+    selected = select_pair_only_records(records, settings.pair_only_scene_ids)
+    selected = cap_pair_units_per_pair(
+        selected,
+        settings.max_units_per_pair,
+        seed=int(config["seed"]),
+    )
+    return {
+        (str(record.counterfactual_pair_id), str(record.counterfactual_question_key))
+        for record in selected
+        if record.counterfactual_expected_change is True
+        and record.counterfactual_pair_id
+        and record.counterfactual_question_key
+    }
+
+
 def _eos_ids(language) -> int | list[int] | None:
     values: list[int] = []
     for candidate in (
@@ -605,6 +651,122 @@ def _logit_pair_metrics(logits_a: torch.Tensor, logits_b: torch.Tensor) -> dict[
     }
 
 
+def _normalized_generation_result(
+    prediction_a: str,
+    prediction_b: str,
+    expected_a: Any,
+    expected_b: Any,
+) -> dict[str, Any]:
+    """Score both generated sides with the project's canonical exact normalization."""
+
+    normalized_prediction_a = normalize_answer(prediction_a)
+    normalized_prediction_b = normalize_answer(prediction_b)
+    normalized_expected_a = normalize_answer(expected_a)
+    normalized_expected_b = normalize_answer(expected_b)
+    side_a_correct = normalized_prediction_a == normalized_expected_a
+    side_b_correct = normalized_prediction_b == normalized_expected_b
+    return {
+        "normalized_prediction_a": normalized_prediction_a,
+        "normalized_prediction_b": normalized_prediction_b,
+        "normalized_expected_a": normalized_expected_a,
+        "normalized_expected_b": normalized_expected_b,
+        "normalized_exact_correct_a": side_a_correct,
+        "normalized_exact_correct_b": side_b_correct,
+        "normalized_exact_complete_unit_correct": side_a_correct and side_b_correct,
+    }
+
+
+def _normalized_generation_summary(examples: list[dict[str, Any]]) -> dict[str, Any]:
+    """Aggregate exact generation correctness without conflating it with change rate."""
+
+    side_count = 2 * len(examples)
+    correct_side_count = sum(
+        int(example[side])
+        for example in examples
+        for side in ("normalized_exact_correct_a", "normalized_exact_correct_b")
+    )
+    complete_unit_correct_count = sum(
+        int(example["normalized_exact_complete_unit_correct"]) for example in examples
+    )
+    return {
+        "normalized_exact_side_count": side_count,
+        "normalized_exact_correct_side_count": correct_side_count,
+        "normalized_exact_side_accuracy": (correct_side_count / side_count if side_count else None),
+        "normalized_exact_complete_unit_count": len(examples),
+        "normalized_exact_complete_unit_correct_count": complete_unit_correct_count,
+        "normalized_exact_complete_unit_accuracy": (
+            complete_unit_correct_count / len(examples) if examples else None
+        ),
+    }
+
+
+def _left_right_reference_orientation_summary(
+    examples: list[dict[str, Any]],
+) -> dict[str, Any]:
+    """Macro-average exact behavior across reference-left and reference-right units.
+
+    Counterfactual mirror sets can be imbalanced by orientation. Reporting only
+    micro accuracy would therefore reward a fixed per-scene direction prior.
+    The reference-side macro score gives left and right equal weight, while the
+    complete-unit companion additionally requires the mirrored side to be right.
+    """
+
+    opposite = {"left": "right", "right": "left"}
+    by_orientation: dict[str, dict[str, int | float | None]] = {}
+    reference_accuracies: list[float] = []
+    complete_unit_accuracies: list[float] = []
+    eligible_count = 0
+    for orientation in ("left", "right"):
+        members = [
+            example
+            for example in examples
+            if example.get("normalized_expected_a") == orientation
+            and example.get("normalized_expected_b") == opposite[orientation]
+        ]
+        eligible_count += len(members)
+        reference_correct = sum(int(example["normalized_exact_correct_a"]) for example in members)
+        complete_correct = sum(
+            int(example["normalized_exact_complete_unit_correct"]) for example in members
+        )
+        reference_accuracy = reference_correct / len(members) if members else None
+        complete_accuracy = complete_correct / len(members) if members else None
+        if reference_accuracy is not None:
+            reference_accuracies.append(reference_accuracy)
+        if complete_accuracy is not None:
+            complete_unit_accuracies.append(complete_accuracy)
+        by_orientation[orientation] = {
+            "complete_unit_count": len(members),
+            "normalized_exact_reference_side_correct_count": reference_correct,
+            "normalized_exact_reference_side_accuracy": reference_accuracy,
+            "normalized_exact_complete_unit_correct_count": complete_correct,
+            "normalized_exact_complete_unit_accuracy": complete_accuracy,
+        }
+    return {
+        "eligible_complete_unit_count": eligible_count,
+        "both_reference_orientations_present": len(reference_accuracies) == 2,
+        "normalized_exact_reference_orientation_macro_accuracy": (
+            float(np.mean(reference_accuracies)) if reference_accuracies else None
+        ),
+        "normalized_exact_complete_unit_reference_orientation_macro_accuracy": (
+            float(np.mean(complete_unit_accuracies)) if complete_unit_accuracies else None
+        ),
+        "by_reference_expected_orientation": by_orientation,
+    }
+
+
+def _generation_subset_summary(examples: list[dict[str, Any]]) -> dict[str, Any]:
+    """Aggregate exact, change-rate, and orientation-balanced subset behavior."""
+
+    changed_count = sum(int(example["prediction_changed"]) for example in examples)
+    return {
+        "changed_fact_question_count": len(examples),
+        "prediction_changed_count": changed_count,
+        "prediction_changed_rate": changed_count / len(examples) if examples else None,
+        **_normalized_generation_summary(examples),
+        "left_right_reference_orientation": _left_right_reference_orientation_summary(examples),
+    }
+
+
 def _generation_audit(
     config: dict[str, Any],
     representations: dict[str, dict[str, torch.Tensor]],
@@ -628,6 +790,7 @@ def _generation_audit(
     runtime_validation = _validate_runtime_prefix_against_loaded_model(
         config, language, composer, runtime_dtype
     )
+    training_selected_pair_keys = _training_selected_pair_keys(config)
     pair_results = []
     for spec in pair_specs:
         qa_path = artifact_root(config, "qa") / f"{spec['split']}.jsonl"
@@ -646,15 +809,27 @@ def _generation_audit(
             )
             token_a = _first_answer_token_id(language.tokenizer, record_a["answer"])
             token_b = _first_answer_token_id(language.tokenizer, record_b["answer"])
+            normalized_result = _normalized_generation_result(
+                prediction_a,
+                prediction_b,
+                record_a["answer"],
+                record_b["answer"],
+            )
             examples.append(
                 {
                     "question_key": record_a["counterfactual_question_key"],
+                    "training_selected": (
+                        str(spec["pair_id"]),
+                        str(record_a["counterfactual_question_key"]),
+                    )
+                    in training_selected_pair_keys,
                     "question": record_a["question"],
                     "expected_a": record_a["answer"],
                     "expected_b": record_b["answer"],
                     "prediction_a": prediction_a,
                     "prediction_b": prediction_b,
                     "prediction_changed": prediction_a != prediction_b,
+                    **normalized_result,
                     "logits": _logit_pair_metrics(logits_a, logits_b),
                     "expected_first_token": {
                         "token_a": token_a,
@@ -670,13 +845,24 @@ def _generation_audit(
                     },
                 }
             )
-        changed_count = sum(example["prediction_changed"] for example in examples)
+        changed_count = sum(int(example["prediction_changed"]) for example in examples)
+        normalized_summary = _normalized_generation_summary(examples)
+        selected_examples = [example for example in examples if example["training_selected"]]
+        unselected_examples = [example for example in examples if not example["training_selected"]]
         pair_results.append(
             {
                 **spec,
                 "changed_fact_question_count": len(examples),
                 "prediction_changed_count": changed_count,
                 "prediction_changed_rate": changed_count / len(examples) if examples else None,
+                **normalized_summary,
+                "training_selection_breakdown": {
+                    "selected": _generation_subset_summary(selected_examples),
+                    "unselected": _generation_subset_summary(unselected_examples),
+                },
+                "left_right_reference_orientation": (
+                    _left_right_reference_orientation_summary(examples)
+                ),
                 "mean_logit_rms_delta": float(
                     np.mean([example["logits"]["rms_delta"] for example in examples])
                 )
@@ -693,7 +879,18 @@ def _generation_audit(
     del language
     if torch.backends.mps.is_available():
         torch.mps.empty_cache()
-    return {"pairs": pair_results}, runtime_validation
+    serialized_selection = "\n".join(
+        f"{pair_id}:{question_key}" for pair_id, question_key in sorted(training_selected_pair_keys)
+    )
+    return {
+        "training_pair_selection": {
+            "selected_complete_unit_count": len(training_selected_pair_keys),
+            "selected_pair_question_keys_sha256": hashlib.sha256(
+                serialized_selection.encode("utf-8")
+            ).hexdigest(),
+        },
+        "pairs": pair_results,
+    }, runtime_validation
 
 
 def _make_figure(pair_results: list[dict[str, Any]], output: Path, runtime_dtype_name: str) -> None:
@@ -773,6 +970,72 @@ def _summary_findings(
         for pair in pair_results
         for scene in ("scene_a_native", "scene_b_native")
     ]
+    native_over_blocks = [
+        pair["signal_retention"]["native_latents_over_blocks"] for pair in pair_results
+    ]
+    projected_over_native = [
+        pair["signal_retention"]["projected_over_native_latents"] for pair in pair_results
+    ]
+    raw_signal_present = all(value > 0.0 for value in raw)
+    severe_native_attenuation = all(value <= 0.1 for value in native_over_blocks)
+    near_duplicate_native_latents = all(value >= 0.99 for value in latent_cosines)
+    runtime_erased_any_pair = any(value == 0.0 for value in runtime_changed)
+
+    if severe_native_attenuation and near_duplicate_native_latents:
+        diagnosis = (
+            "Current-checkpoint metrics support severe global-resampler attenuation: every "
+            "pair retains at most 10% of block-token relative L2 in native latents, and all "
+            "measured native-latent mean off-diagonal cosines are at least 0.99. This is a "
+            "structural warning, not by itself proof of behavioral failure."
+        )
+        recommended_fix = (
+            "Test a spatially anchored resampler or an explicit latent-diversity/separation "
+            "objective, then require normalized exact generation and held-out controls to "
+            "show that the intervention improves behavior."
+        )
+    elif severe_native_attenuation:
+        diagnosis = (
+            "Current-checkpoint metrics show severe attenuation between block tokens and "
+            "native latents for every audited pair, but latent-diversity measurements do not "
+            "meet the audit's near-duplicate threshold. The metrics therefore do not support "
+            "the stronger claim that duplicate Perceiver latents caused the attenuation."
+        )
+        recommended_fix = (
+            "Trace the resampler's scale and attention before changing its architecture, and "
+            "judge any intervention with normalized exact generation and held-out controls."
+        )
+    elif near_duplicate_native_latents:
+        diagnosis = (
+            "Native latents meet the audit's near-duplicate cosine threshold, but audited "
+            "scene-pair relative L2 is not uniformly attenuated by 10x at the resampler. "
+            "Duplicate-latent collapse is therefore not established by the current metrics."
+        )
+        recommended_fix = (
+            "Inspect token diversity alongside exact generation behavior before prescribing a "
+            "resampler change; pairwise signal magnitude alone is not a success metric."
+        )
+    else:
+        diagnosis = (
+            "The current-checkpoint measurements do not support the historical global "
+            "Perceiver-collapse diagnosis: native-latent/block-token relative-L2 retention "
+            f"ranges from {min(native_over_blocks):.6g} to {max(native_over_blocks):.6g}, and "
+            "native-latent mean off-diagonal cosine ranges from "
+            f"{min(latent_cosines):.6g} to {max(latent_cosines):.6g}. Behavioral usefulness "
+            "must be established by normalized exact generation and held-out controls, not by "
+            "prefix hashes or nonzero tensor differences."
+        )
+        recommended_fix = (
+            "Do not infer a resampler defect from this structural audit alone. Use the exact "
+            "generation scores and held-out counterfactual controls to localize the next "
+            "failure before changing the encoder."
+        )
+
+    if runtime_erased_any_pair:
+        diagnosis += (
+            f" Casting the final prefix to {runtime_dtype_name} erases all changes above the "
+            "audit threshold for at least one pair, so runtime quantization also requires "
+            "investigation."
+        )
     return {
         "raw_semantic_relative_l2_range": [min(raw), max(raw)],
         "block_token_relative_l2_range": [min(blocks), max(blocks)],
@@ -786,22 +1049,27 @@ def _summary_findings(
             min(latent_cosines),
             max(latent_cosines),
         ],
-        "diagnosis": (
-            "The counterfactual signal is present in raw and aggregated maps and remains "
-            "visible in spatial block tokens. The dominant loss occurs in the global "
-            "Perceiver resampler: its 256 native latents are almost duplicate vectors, and "
-            "scene-pair relative L2 falls by roughly two to three further orders of "
-            "magnitude before LM projection. Distinct SHA-256 hashes therefore certify only "
-            "bitwise inequality, not a behaviorally useful separation."
+        "native_latents_over_block_tokens_range": [
+            min(native_over_blocks),
+            max(native_over_blocks),
+        ],
+        "projected_tokens_over_native_latents_range": [
+            min(projected_over_native),
+            max(projected_over_native),
+        ],
+        "evidence_flags": {
+            "raw_signal_present_for_all_pairs": raw_signal_present,
+            "severe_native_attenuation_for_all_pairs_at_0_1": severe_native_attenuation,
+            "near_duplicate_native_latents_for_all_scenes_at_0_99": (near_duplicate_native_latents),
+            "runtime_cast_erased_any_pair_at_1e_6": runtime_erased_any_pair,
+        },
+        "diagnosis_basis": (
+            "Computed from this checkpoint's reported pair metrics. Thresholds are <=0.1 "
+            "native-latent/block-token relative-L2 retention for severe attenuation and "
+            ">=0.99 mean off-diagonal cosine for near-duplicate native latents."
         ),
-        "recommended_fix": (
-            "Preserve spatially anchored latent diversity (for example, regional latent "
-            "banks followed by global mixing), add an explicit counterfactual scene-token "
-            "separation/diversity objective, and keep the projected scene signal in float32 "
-            "until a learned gain produces differences safely above the "
-            f"{runtime_dtype_name} quantization floor. Re-evaluate changed-question "
-            "generation after each intervention."
-        ),
+        "diagnosis": diagnosis,
+        "recommended_fix": recommended_fix,
     }
 
 
@@ -1008,7 +1276,7 @@ def main() -> None:
         "config": str(Path(args.config)),
         "checkpoint": str(checkpoint.relative_to(PROJECT_ROOT)),
         "checkpoint_sha256": _sha256(checkpoint / "adapter.safetensors"),
-        "checkpoint_best_epoch": metadata.get("best_epoch"),
+        **_checkpoint_epoch_fields(metadata),
         "scene_prefix_after_bos": scene_prefix_after_bos_setting(config),
         "scene_boundary_mode": scene_boundary_mode_setting(config),
         "gemma4_native_image_contract": native_gemma4_image_contract_setting(config),

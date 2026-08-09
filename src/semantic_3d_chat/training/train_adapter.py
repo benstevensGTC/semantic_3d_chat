@@ -70,6 +70,7 @@ from semantic_3d_chat.training.pair_curriculum import (
     build_epoch_curriculum,
     build_exact_question_pair_units,
     candidate_logit_margins,
+    cap_pair_units_per_pair,
     differing_answer_token_masks,
     first_answer_token_full_vocab_margins,
     pair_curriculum_settings,
@@ -94,6 +95,16 @@ def set_seed(seed: int) -> None:
     torch.manual_seed(seed)
 
 
+def file_sha256(path: Path) -> str:
+    """Hash a local artifact without loading it into memory at once."""
+
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
 def pair_gate_checkpoint_improved(
     *,
     monitor_value: float,
@@ -112,6 +123,25 @@ def pair_gate_checkpoint_improved(
     if gate_passed != best_gate_passed:
         return gate_passed
     return monitor_value < best_monitor_value - min_delta
+
+
+def pair_gate_monitor_value(pair_gate: dict[str, object], *, full_vocab_gate: bool) -> float:
+    """Return a lower-is-better gate monitor that remains useful after passing.
+
+    A hinge saturates at zero as soon as the gate passes. For a strict
+    full-vocabulary gate, passing checkpoints are instead ranked by the
+    negative minimum target-versus-best-other margin. This preserves the first
+    genuine pass over every failure while allowing later, more stable passes to
+    replace a barely positive checkpoint.
+    """
+
+    if not full_vocab_gate:
+        return float(pair_gate["ranking_hinge_at_configured_margin"])
+    if bool(pair_gate["passed"]):
+        return -float(pair_gate["minimum_first_answer_token_target_vs_best_other_logit_margin"])
+    return float(pair_gate["first_answer_token_target_vs_best_other_hinge"]) + float(
+        pair_gate["ranking_hinge_at_configured_margin"]
+    )
 
 
 def should_stop_after_pair_gate(
@@ -1545,6 +1575,11 @@ def main() -> None:
         help="Write the deterministic training-selection audit and exit before model load",
     )
     parser.add_argument("--resume", type=Path)
+    parser.add_argument(
+        "--initialize-from",
+        type=Path,
+        help="Load compatible adapter weights for a new curriculum without optimizer/history",
+    )
     args = parser.parse_args()
     config = load_config(args.config)
     set_seed(int(config["seed"]))
@@ -1564,7 +1599,7 @@ def main() -> None:
         raise ValueError("gradient_accumulation must be positive")
     pair_curriculum = pair_curriculum_settings(config)
     pair_gate_monitor_name = (
-        "pair_first_answer_token_full_vocab_hinge"
+        "pair_composite_full_vocab_gate_margin"
         if pair_curriculum.first_answer_token_top1_accuracy_threshold is not None
         else "pair_candidate_gate_hinge"
     )
@@ -1577,6 +1612,11 @@ def main() -> None:
     if pair_curriculum.pair_only:
         available_training_records = select_pair_only_records(
             available_training_records, pair_curriculum.pair_only_scene_ids
+        )
+        available_training_records = cap_pair_units_per_pair(
+            available_training_records,
+            pair_curriculum.max_units_per_pair,
+            seed=int(config["seed"]),
         )
     configured_per_scene_cap = config["training"].get("max_questions_per_scene")
     per_scene_cap = (
@@ -1674,6 +1714,7 @@ def main() -> None:
             "enabled": pair_curriculum.enabled,
             "pair_only": pair_curriculum.pair_only,
             "pair_only_scene_ids": list(pair_curriculum.pair_only_scene_ids),
+            "max_units_per_pair": pair_curriculum.max_units_per_pair,
             "batch_fraction": pair_curriculum.batch_fraction,
             "units_per_batch": pair_curriculum.units_per_batch,
             "ranking_mode": pair_curriculum.ranking_mode,
@@ -1814,6 +1855,90 @@ def main() -> None:
     optimizer_step = 0
     start_epoch = 1
     resume_value = args.resume or config["training"].get("resume_from")
+    initialize_value = args.initialize_from or config["training"].get("initialize_from")
+    if resume_value and initialize_value:
+        raise ValueError("resume_from and initialize_from are mutually exclusive")
+    initialization_provenance: dict | None = None
+    if initialize_value:
+        initialize_path = Path(initialize_value).expanduser()
+        if not initialize_path.is_absolute():
+            initialize_path = PROJECT_ROOT / initialize_path
+        initialize_path = initialize_path.resolve()
+        checkpoint_root = artifact_root(config, "checkpoints").resolve()
+        if not initialize_path.is_relative_to(checkpoint_root):
+            raise ValueError(
+                f"initialize_from must be inside the configured checkpoint root: {checkpoint_root}"
+            )
+        initialize_preflight = json.loads(
+            (initialize_path / "metadata.json").read_text(encoding="utf-8")
+        )
+        initialization_mismatches: dict[str, object] = {}
+        expected_initialization = {
+            "semantic_dim": semantic_dim,
+            "language_hidden_dim": language.hidden_size,
+            "language_model_id": config["language"]["model_id"],
+            "language_revision": config["language"]["revision"],
+            "scene_latents": int(config["scene_encoder"]["global_latents"]),
+            "scene_model_dim": int(config["scene_encoder"]["model_dim"]),
+            "scene_encoder_architecture_version": config["scene_encoder"].get(
+                "architecture_version"
+            ),
+            "input_voxel_size_m": config["scene_encoder"].get("input_voxel_size_m"),
+            "scene_prefix_after_bos": scene_prefix_after_bos,
+            **token_mixing,
+        }
+        if "language_backend" in initialize_preflight:
+            expected_initialization["language_backend"] = language.backend_name
+        for key, runtime_value in expected_initialization.items():
+            if initialize_preflight.get(key) != runtime_value:
+                initialization_mismatches[key] = {
+                    "checkpoint": initialize_preflight.get(key),
+                    "runtime": runtime_value,
+                }
+        boundary_mismatch = scene_boundary_contract_mismatch(
+            initialize_preflight,
+            scene_boundary_mode,
+            loaded_native_boundary_contract,
+        )
+        if boundary_mismatch is not None:
+            initialization_mismatches["scene_boundary_mode"] = boundary_mismatch
+        lora_mismatch = lora_checkpoint_contract_mismatch(
+            initialize_preflight, configured_lora_checkpoint_contract
+        )
+        if lora_mismatch is not None:
+            initialization_mismatches["lora"] = lora_mismatch
+        if initialization_mismatches:
+            raise ValueError(
+                f"Initialization checkpoint architecture mismatch: {initialization_mismatches}"
+            )
+        loaded_initialization = load_adapter_checkpoint(
+            initialize_path,
+            checkpoint_modules,
+            device=str(language.device),
+        )
+        if loaded_initialization != initialize_preflight:
+            raise RuntimeError("Initialization checkpoint metadata changed while loading")
+        if loaded_native_boundary_embeddings is not None:
+            composer.validate_native_boundary_embeddings(loaded_native_boundary_embeddings)
+        if lora_installation is not None:
+            validate_lora_checkpoint_state(loaded_initialization, lora_installation)
+        initialization_provenance = {
+            "schema_version": 1,
+            "mode": "weights_only_new_curriculum",
+            "checkpoint": str(initialize_path.relative_to(PROJECT_ROOT)),
+            "adapter_sha256": file_sha256(initialize_path / "adapter.safetensors"),
+            "metadata_sha256": file_sha256(initialize_path / "metadata.json"),
+            "checkpoint_epoch": initialize_preflight.get("epoch"),
+            "checkpoint_output_namespace": initialize_preflight.get("output_namespace"),
+            "checkpoint_config_hash": initialize_preflight.get("config_hash"),
+            "checkpoint_source_provenance": initialize_preflight.get("source_provenance"),
+            "optimizer_state_loaded": False,
+            "history_loaded": False,
+        }
+        print(
+            json.dumps({"phase": "adapter_initialized", **initialization_provenance}),
+            flush=True,
+        )
     resume_metadata: dict | None = None
     if resume_value:
         resume_path = Path(resume_value)
@@ -1954,6 +2079,7 @@ def main() -> None:
             "enabled": pair_curriculum.enabled,
             "pair_only": pair_curriculum.pair_only,
             "pair_only_scene_ids": list(pair_curriculum.pair_only_scene_ids),
+            "max_units_per_pair": pair_curriculum.max_units_per_pair,
             "ranking_weight": pair_curriculum.ranking_weight,
             "ranking_margin": pair_curriculum.ranking_margin,
             "ranking_mode": pair_curriculum.ranking_mode,
@@ -1968,6 +2094,11 @@ def main() -> None:
             # objective exclusively. Treat the missing field as that legacy
             # default without allowing it to resume a candidate-logit run.
             saved_pair_curriculum = {**saved_pair_curriculum, "ranking_mode": "nll"}
+        if (
+            isinstance(saved_pair_curriculum, dict)
+            and "max_units_per_pair" not in saved_pair_curriculum
+        ):
+            saved_pair_curriculum = {**saved_pair_curriculum, "max_units_per_pair": None}
         if saved_pair_curriculum is not None and (
             saved_pair_curriculum != expected_pair_curriculum
         ):
@@ -2508,12 +2639,13 @@ def main() -> None:
         )
         validation_value = None if validation_metrics is None else validation_metrics["loss"]
         if pair_curriculum.pair_only and pair_gate is not None:
-            if pair_curriculum.first_answer_token_top1_accuracy_threshold is not None:
-                monitor_name = pair_gate_monitor_name
-                monitor_value = float(pair_gate["first_answer_token_target_vs_best_other_hinge"])
-            else:
-                monitor_name = pair_gate_monitor_name
-                monitor_value = float(pair_gate["ranking_hinge_at_configured_margin"])
+            monitor_name = pair_gate_monitor_name
+            monitor_value = pair_gate_monitor_value(
+                pair_gate,
+                full_vocab_gate=(
+                    pair_curriculum.first_answer_token_top1_accuracy_threshold is not None
+                ),
+            )
         else:
             monitor_name = "validation_loss" if validation_by_scene else "train_loss"
             monitor_value = validation_value if validation_by_scene else mean_loss
@@ -2631,6 +2763,7 @@ def main() -> None:
             "scene_boundary_mode": scene_boundary_mode,
             "gemma4_native_image_contract": loaded_native_boundary_contract,
             "source_provenance": source_provenance,
+            "initialization_provenance": initialization_provenance,
             "gradient_accumulation": gradient_accumulation,
             "pair_gate_policy": {
                 "stop_when_passed": pair_curriculum.stop_when_gate_passes,
@@ -2662,6 +2795,7 @@ def main() -> None:
                 "enabled": pair_curriculum.enabled,
                 "pair_only": pair_curriculum.pair_only,
                 "pair_only_scene_ids": list(pair_curriculum.pair_only_scene_ids),
+                "max_units_per_pair": pair_curriculum.max_units_per_pair,
                 "ranking_weight": pair_curriculum.ranking_weight,
                 "ranking_margin": pair_curriculum.ranking_margin,
                 "ranking_mode": pair_curriculum.ranking_mode,
@@ -2810,6 +2944,7 @@ def main() -> None:
         "scene_boundary_mode": scene_boundary_mode,
         "gemma4_native_image_contract": loaded_native_boundary_contract,
         "source_provenance": source_provenance,
+        "initialization_provenance": initialization_provenance,
         "gradient_accumulation": gradient_accumulation,
         "semantic_dim": semantic_dim,
         "raw_voxel_count": max(data.source_voxel_count for data in maps.values()),
@@ -2829,6 +2964,7 @@ def main() -> None:
             "enabled": pair_curriculum.enabled,
             "pair_only": pair_curriculum.pair_only,
             "pair_only_scene_ids": list(pair_curriculum.pair_only_scene_ids),
+            "max_units_per_pair": pair_curriculum.max_units_per_pair,
             "ranking_weight": pair_curriculum.ranking_weight,
             "ranking_margin": pair_curriculum.ranking_margin,
             "ranking_mode": pair_curriculum.ranking_mode,

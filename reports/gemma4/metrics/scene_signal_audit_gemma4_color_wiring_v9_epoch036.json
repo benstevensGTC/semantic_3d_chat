@@ -1,0 +1,5347 @@
+{
+  "checkpoint": "data_gemma4/checkpoints/gemma4_color_wiring_v9/epoch_036",
+  "checkpoint_best_epoch": 30,
+  "checkpoint_contract_warnings": [],
+  "checkpoint_epoch": 36,
+  "checkpoint_sha256": "8ecbf84fc8f544d67fe3e65a313023c3808870c5648b913de2839ec525630c90",
+  "comparison_note": "Map semantic/RGB metrics compare only shared spatial cells; topology metrics separately measure cells added or removed. Downstream token metrics compare corresponding block queries or fixed global latent indices.",
+  "config": "configs/experiments/gemma4_color_wiring_v9.yaml",
+  "device": "mps",
+  "figure": "reports/gemma4/figures/scene_signal_audit_gemma4_color_wiring_v9_epoch036.png",
+  "gemma4_native_image_contract": {
+    "boi_token_id": 255999,
+    "bos_token_id": 2,
+    "eoi_token_id": 258882,
+    "image_token_id": 258880,
+    "model_revision": "3e22461f65e89153144f8adb70e3b8c2cc9845a7",
+    "pad_token_id": 0,
+    "schema_version": 1,
+    "use_bidirectional_attention": null
+  },
+  "generation": {
+    "pairs": [
+      {
+        "change_type": "color_swap",
+        "changed_fact_question_count": 6,
+        "examples": [
+          {
+            "expected_a": "red",
+            "expected_b": "blue",
+            "expected_first_token": {
+              "decoded_a": "red",
+              "decoded_b": "blue",
+              "desired_margin_shift": 6.9765625,
+              "scene_a_preference_margin": 3.0390625,
+              "scene_b_preference_margin": 3.9375,
+              "token_a": 1192,
+              "token_b": 9503
+            },
+            "logits": {
+              "cosine": 0.9992045164108276,
+              "max_absolute_delta": 5.8125,
+              "rms_delta": 1.465493083000183,
+              "symmetric_kl_nats": 2.652047872543335
+            },
+            "normalized_exact_complete_unit_correct": true,
+            "normalized_exact_correct_a": true,
+            "normalized_exact_correct_b": true,
+            "normalized_expected_a": "red",
+            "normalized_expected_b": "blue",
+            "normalized_prediction_a": "red",
+            "normalized_prediction_b": "blue",
+            "prediction_a": "red",
+            "prediction_b": "blue",
+            "prediction_changed": true,
+            "question": "Tell me the cube's color.",
+            "question_key": "cfq_49752706535581bd",
+            "training_selected": true
+          },
+          {
+            "expected_a": "blue",
+            "expected_b": "red",
+            "expected_first_token": {
+              "decoded_a": "blue",
+              "decoded_b": "red",
+              "desired_margin_shift": 5.984375,
+              "scene_a_preference_margin": 4.984375,
+              "scene_b_preference_margin": 1.0,
+              "token_a": 9503,
+              "token_b": 1192
+            },
+            "logits": {
+              "cosine": 0.9995741844177246,
+              "max_absolute_delta": 4.953125,
+              "rms_delta": 1.3780362606048584,
+              "symmetric_kl_nats": 2.1241602897644043
+            },
+            "normalized_exact_complete_unit_correct": true,
+            "normalized_exact_correct_a": true,
+            "normalized_exact_correct_b": true,
+            "normalized_expected_a": "blue",
+            "normalized_expected_b": "red",
+            "normalized_prediction_a": "blue",
+            "normalized_prediction_b": "red",
+            "prediction_a": "blue",
+            "prediction_b": "red",
+            "prediction_changed": true,
+            "question": "What color is the chair?",
+            "question_key": "cfq_7fd85d7a17fa49d3",
+            "training_selected": true
+          },
+          {
+            "expected_a": "red",
+            "expected_b": "blue",
+            "expected_first_token": {
+              "decoded_a": "red",
+              "decoded_b": "blue",
+              "desired_margin_shift": 9.0455322265625,
+              "scene_a_preference_margin": 4.3970947265625,
+              "scene_b_preference_margin": 4.6484375,
+              "token_a": 1192,
+              "token_b": 9503
+            },
+            "logits": {
+              "cosine": 0.9993314743041992,
+              "max_absolute_delta": 6.359375,
+              "rms_delta": 1.2091736793518066,
+              "symmetric_kl_nats": 4.167790412902832
+            },
+            "normalized_exact_complete_unit_correct": true,
+            "normalized_exact_correct_a": true,
+            "normalized_exact_correct_b": true,
+            "normalized_expected_a": "red",
+            "normalized_expected_b": "blue",
+            "normalized_prediction_a": "red",
+            "normalized_prediction_b": "blue",
+            "prediction_a": "red",
+            "prediction_b": "blue",
+            "prediction_changed": true,
+            "question": "Tell me the bowl's color.",
+            "question_key": "cfq_9394f27a17f2d844",
+            "training_selected": true
+          },
+          {
+            "expected_a": "red",
+            "expected_b": "blue",
+            "expected_first_token": {
+              "decoded_a": "red",
+              "decoded_b": "blue",
+              "desired_margin_shift": 6.328125,
+              "scene_a_preference_margin": 2.5625,
+              "scene_b_preference_margin": 3.765625,
+              "token_a": 1192,
+              "token_b": 9503
+            },
+            "logits": {
+              "cosine": 0.9991685152053833,
+              "max_absolute_delta": 5.4375,
+              "rms_delta": 1.7437289953231812,
+              "symmetric_kl_nats": 2.433241844177246
+            },
+            "normalized_exact_complete_unit_correct": true,
+            "normalized_exact_correct_a": true,
+            "normalized_exact_correct_b": true,
+            "normalized_expected_a": "red",
+            "normalized_expected_b": "blue",
+            "normalized_prediction_a": "red",
+            "normalized_prediction_b": "blue",
+            "prediction_a": "red",
+            "prediction_b": "blue",
+            "prediction_changed": true,
+            "question": "What color is the cube?",
+            "question_key": "cfq_b6a1fb41fbd38ac8",
+            "training_selected": true
+          },
+          {
+            "expected_a": "red",
+            "expected_b": "blue",
+            "expected_first_token": {
+              "decoded_a": "red",
+              "decoded_b": "blue",
+              "desired_margin_shift": 9.244140625,
+              "scene_a_preference_margin": 4.0078125,
+              "scene_b_preference_margin": 5.236328125,
+              "token_a": 1192,
+              "token_b": 9503
+            },
+            "logits": {
+              "cosine": 0.9994511604309082,
+              "max_absolute_delta": 5.25,
+              "rms_delta": 0.7722356915473938,
+              "symmetric_kl_nats": 4.3917107582092285
+            },
+            "normalized_exact_complete_unit_correct": true,
+            "normalized_exact_correct_a": true,
+            "normalized_exact_correct_b": true,
+            "normalized_expected_a": "red",
+            "normalized_expected_b": "blue",
+            "normalized_prediction_a": "red",
+            "normalized_prediction_b": "blue",
+            "prediction_a": "red",
+            "prediction_b": "blue",
+            "prediction_changed": true,
+            "question": "What color is the bowl?",
+            "question_key": "cfq_be95c05c7f1b55a8",
+            "training_selected": true
+          },
+          {
+            "expected_a": "blue",
+            "expected_b": "red",
+            "expected_first_token": {
+              "decoded_a": "blue",
+              "decoded_b": "red",
+              "desired_margin_shift": 3.421875,
+              "scene_a_preference_margin": 2.140625,
+              "scene_b_preference_margin": 1.28125,
+              "token_a": 9503,
+              "token_b": 1192
+            },
+            "logits": {
+              "cosine": 0.9997459650039673,
+              "max_absolute_delta": 4.328125,
+              "rms_delta": 0.8478931188583374,
+              "symmetric_kl_nats": 1.0515327453613281
+            },
+            "normalized_exact_complete_unit_correct": true,
+            "normalized_exact_correct_a": true,
+            "normalized_exact_correct_b": true,
+            "normalized_expected_a": "blue",
+            "normalized_expected_b": "red",
+            "normalized_prediction_a": "blue",
+            "normalized_prediction_b": "red",
+            "prediction_a": "blue",
+            "prediction_b": "red",
+            "prediction_changed": true,
+            "question": "Tell me the chair's color.",
+            "question_key": "cfq_ff677fbc4af0e63a",
+            "training_selected": true
+          }
+        ],
+        "left_right_reference_orientation": {
+          "both_reference_orientations_present": false,
+          "by_reference_expected_orientation": {
+            "left": {
+              "complete_unit_count": 0,
+              "normalized_exact_complete_unit_accuracy": null,
+              "normalized_exact_complete_unit_correct_count": 0,
+              "normalized_exact_reference_side_accuracy": null,
+              "normalized_exact_reference_side_correct_count": 0
+            },
+            "right": {
+              "complete_unit_count": 0,
+              "normalized_exact_complete_unit_accuracy": null,
+              "normalized_exact_complete_unit_correct_count": 0,
+              "normalized_exact_reference_side_accuracy": null,
+              "normalized_exact_reference_side_correct_count": 0
+            }
+          },
+          "eligible_complete_unit_count": 0,
+          "normalized_exact_complete_unit_reference_orientation_macro_accuracy": null,
+          "normalized_exact_reference_orientation_macro_accuracy": null
+        },
+        "mean_logit_rms_delta": 1.2360934714476268,
+        "mean_symmetric_kl_nats": 2.803413987159729,
+        "normalized_exact_complete_unit_accuracy": 1.0,
+        "normalized_exact_complete_unit_correct_count": 6,
+        "normalized_exact_complete_unit_count": 6,
+        "normalized_exact_correct_side_count": 12,
+        "normalized_exact_side_accuracy": 1.0,
+        "normalized_exact_side_count": 12,
+        "pair_id": "pair_000001",
+        "prediction_changed_count": 6,
+        "prediction_changed_rate": 1.0,
+        "scene_a": "scene_000003",
+        "scene_b": "scene_000004",
+        "split": "train",
+        "training_selection_breakdown": {
+          "selected": {
+            "changed_fact_question_count": 6,
+            "left_right_reference_orientation": {
+              "both_reference_orientations_present": false,
+              "by_reference_expected_orientation": {
+                "left": {
+                  "complete_unit_count": 0,
+                  "normalized_exact_complete_unit_accuracy": null,
+                  "normalized_exact_complete_unit_correct_count": 0,
+                  "normalized_exact_reference_side_accuracy": null,
+                  "normalized_exact_reference_side_correct_count": 0
+                },
+                "right": {
+                  "complete_unit_count": 0,
+                  "normalized_exact_complete_unit_accuracy": null,
+                  "normalized_exact_complete_unit_correct_count": 0,
+                  "normalized_exact_reference_side_accuracy": null,
+                  "normalized_exact_reference_side_correct_count": 0
+                }
+              },
+              "eligible_complete_unit_count": 0,
+              "normalized_exact_complete_unit_reference_orientation_macro_accuracy": null,
+              "normalized_exact_reference_orientation_macro_accuracy": null
+            },
+            "normalized_exact_complete_unit_accuracy": 1.0,
+            "normalized_exact_complete_unit_correct_count": 6,
+            "normalized_exact_complete_unit_count": 6,
+            "normalized_exact_correct_side_count": 12,
+            "normalized_exact_side_accuracy": 1.0,
+            "normalized_exact_side_count": 12,
+            "prediction_changed_count": 6,
+            "prediction_changed_rate": 1.0
+          },
+          "unselected": {
+            "changed_fact_question_count": 0,
+            "left_right_reference_orientation": {
+              "both_reference_orientations_present": false,
+              "by_reference_expected_orientation": {
+                "left": {
+                  "complete_unit_count": 0,
+                  "normalized_exact_complete_unit_accuracy": null,
+                  "normalized_exact_complete_unit_correct_count": 0,
+                  "normalized_exact_reference_side_accuracy": null,
+                  "normalized_exact_reference_side_correct_count": 0
+                },
+                "right": {
+                  "complete_unit_count": 0,
+                  "normalized_exact_complete_unit_accuracy": null,
+                  "normalized_exact_complete_unit_correct_count": 0,
+                  "normalized_exact_reference_side_accuracy": null,
+                  "normalized_exact_reference_side_correct_count": 0
+                }
+              },
+              "eligible_complete_unit_count": 0,
+              "normalized_exact_complete_unit_reference_orientation_macro_accuracy": null,
+              "normalized_exact_reference_orientation_macro_accuracy": null
+            },
+            "normalized_exact_complete_unit_accuracy": null,
+            "normalized_exact_complete_unit_correct_count": 0,
+            "normalized_exact_complete_unit_count": 0,
+            "normalized_exact_correct_side_count": 0,
+            "normalized_exact_side_accuracy": null,
+            "normalized_exact_side_count": 0,
+            "prediction_changed_count": 0,
+            "prediction_changed_rate": null
+          }
+        }
+      },
+      {
+        "change_type": "mirror_lr",
+        "changed_fact_question_count": 35,
+        "examples": [
+          {
+            "expected_a": "left",
+            "expected_b": "right",
+            "expected_first_token": {
+              "decoded_a": "left",
+              "decoded_b": "right",
+              "desired_margin_shift": -0.125,
+              "scene_a_preference_margin": 6.1875,
+              "scene_b_preference_margin": -6.3125,
+              "token_a": 989,
+              "token_b": 898
+            },
+            "logits": {
+              "cosine": 0.999793529510498,
+              "max_absolute_delta": 1.8125,
+              "rms_delta": 0.8483997583389282,
+              "symmetric_kl_nats": 2.4640503397677094e-06
+            },
+            "normalized_exact_complete_unit_correct": false,
+            "normalized_exact_correct_a": false,
+            "normalized_exact_correct_b": false,
+            "normalized_expected_a": "left",
+            "normalized_expected_b": "right",
+            "normalized_prediction_a": "unknown",
+            "normalized_prediction_b": "unknown",
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the chair left or right of the picture frame?",
+            "question_key": "cfq_01977caf6dba1226",
+            "training_selected": false
+          },
+          {
+            "expected_a": "left",
+            "expected_b": "right",
+            "expected_first_token": {
+              "decoded_a": "left",
+              "decoded_b": "right",
+              "desired_margin_shift": 0.125,
+              "scene_a_preference_margin": 6.0,
+              "scene_b_preference_margin": -5.875,
+              "token_a": 989,
+              "token_b": 898
+            },
+            "logits": {
+              "cosine": 0.9998331665992737,
+              "max_absolute_delta": 1.125,
+              "rms_delta": 0.26612842082977295,
+              "symmetric_kl_nats": 3.846526510642434e-07
+            },
+            "normalized_exact_complete_unit_correct": false,
+            "normalized_exact_correct_a": false,
+            "normalized_exact_correct_b": false,
+            "normalized_expected_a": "left",
+            "normalized_expected_b": "right",
+            "normalized_prediction_a": "unknown",
+            "normalized_prediction_b": "unknown",
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the chair left or right of the cube?",
+            "question_key": "cfq_135c18742d0e985f",
+            "training_selected": false
+          },
+          {
+            "expected_a": "left",
+            "expected_b": "right",
+            "expected_first_token": {
+              "decoded_a": "left",
+              "decoded_b": "right",
+              "desired_margin_shift": -0.15625,
+              "scene_a_preference_margin": 4.09375,
+              "scene_b_preference_margin": -4.25,
+              "token_a": 989,
+              "token_b": 898
+            },
+            "logits": {
+              "cosine": 0.9998824000358582,
+              "max_absolute_delta": 0.875,
+              "rms_delta": 0.23084057867527008,
+              "symmetric_kl_nats": 7.865488669267506e-07
+            },
+            "normalized_exact_complete_unit_correct": false,
+            "normalized_exact_correct_a": false,
+            "normalized_exact_correct_b": false,
+            "normalized_expected_a": "left",
+            "normalized_expected_b": "right",
+            "normalized_prediction_a": "unknown",
+            "normalized_prediction_b": "unknown",
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the picture frame left or right of the plant pot?",
+            "question_key": "cfq_184db780f7c0e4ec",
+            "training_selected": false
+          },
+          {
+            "expected_a": "right",
+            "expected_b": "left",
+            "expected_first_token": {
+              "decoded_a": "right",
+              "decoded_b": "left",
+              "desired_margin_shift": 0.8828125,
+              "scene_a_preference_margin": -2.3125,
+              "scene_b_preference_margin": 3.1953125,
+              "token_a": 898,
+              "token_b": 989
+            },
+            "logits": {
+              "cosine": 0.99952632188797,
+              "max_absolute_delta": 2.7265625,
+              "rms_delta": 0.919685959815979,
+              "symmetric_kl_nats": 0.03014836460351944
+            },
+            "normalized_exact_complete_unit_correct": false,
+            "normalized_exact_correct_a": false,
+            "normalized_exact_correct_b": false,
+            "normalized_expected_a": "right",
+            "normalized_expected_b": "left",
+            "normalized_prediction_a": "unknown",
+            "normalized_prediction_b": "unknown",
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the chair left or right of the floor lamp?",
+            "question_key": "cfq_2205fd183b8b1294",
+            "training_selected": false
+          },
+          {
+            "expected_a": "left",
+            "expected_b": "right",
+            "expected_first_token": {
+              "decoded_a": "left",
+              "decoded_b": "right",
+              "desired_margin_shift": 0.125,
+              "scene_a_preference_margin": 4.875,
+              "scene_b_preference_margin": -4.75,
+              "token_a": 989,
+              "token_b": 898
+            },
+            "logits": {
+              "cosine": 0.9998738765716553,
+              "max_absolute_delta": 1.1875,
+              "rms_delta": 0.36064496636390686,
+              "symmetric_kl_nats": 7.90835883890395e-07
+            },
+            "normalized_exact_complete_unit_correct": false,
+            "normalized_exact_correct_a": false,
+            "normalized_exact_correct_b": false,
+            "normalized_expected_a": "left",
+            "normalized_expected_b": "right",
+            "normalized_prediction_a": "unknown",
+            "normalized_prediction_b": "unknown",
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the picture frame left or right of the cube?",
+            "question_key": "cfq_22e9cc563b37b2fc",
+            "training_selected": false
+          },
+          {
+            "expected_a": "right",
+            "expected_b": "left",
+            "expected_first_token": {
+              "decoded_a": "right",
+              "decoded_b": "left",
+              "desired_margin_shift": -0.1875,
+              "scene_a_preference_margin": -6.0625,
+              "scene_b_preference_margin": 5.875,
+              "token_a": 898,
+              "token_b": 989
+            },
+            "logits": {
+              "cosine": 0.9998668432235718,
+              "max_absolute_delta": 1.0625,
+              "rms_delta": 0.2894401550292969,
+              "symmetric_kl_nats": 5.5965116985134955e-08
+            },
+            "normalized_exact_complete_unit_correct": false,
+            "normalized_exact_correct_a": false,
+            "normalized_exact_correct_b": false,
+            "normalized_expected_a": "right",
+            "normalized_expected_b": "left",
+            "normalized_prediction_a": "unknown",
+            "normalized_prediction_b": "unknown",
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the table left or right of the chair?",
+            "question_key": "cfq_2bd6ff5367fe7096",
+            "training_selected": false
+          },
+          {
+            "expected_a": "right",
+            "expected_b": "left",
+            "expected_first_token": {
+              "decoded_a": "right",
+              "decoded_b": "left",
+              "desired_margin_shift": 0.3984375,
+              "scene_a_preference_margin": -3.9765625,
+              "scene_b_preference_margin": 4.375,
+              "token_a": 898,
+              "token_b": 989
+            },
+            "logits": {
+              "cosine": 0.9997009038925171,
+              "max_absolute_delta": 1.9765625,
+              "rms_delta": 0.8286363482475281,
+              "symmetric_kl_nats": 0.0001983254769584164
+            },
+            "normalized_exact_complete_unit_correct": false,
+            "normalized_exact_correct_a": false,
+            "normalized_exact_correct_b": false,
+            "normalized_expected_a": "right",
+            "normalized_expected_b": "left",
+            "normalized_prediction_a": "unknown",
+            "normalized_prediction_b": "unknown",
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the table left or right of the floor lamp?",
+            "question_key": "cfq_2e216ecb8a66abb4",
+            "training_selected": false
+          },
+          {
+            "expected_a": "left",
+            "expected_b": "right",
+            "expected_first_token": {
+              "decoded_a": "left",
+              "decoded_b": "right",
+              "desired_margin_shift": 0.0,
+              "scene_a_preference_margin": 5.625,
+              "scene_b_preference_margin": -5.625,
+              "token_a": 989,
+              "token_b": 898
+            },
+            "logits": {
+              "cosine": 0.9998821020126343,
+              "max_absolute_delta": 1.4375,
+              "rms_delta": 0.19015160202980042,
+              "symmetric_kl_nats": 4.449793777894229e-08
+            },
+            "normalized_exact_complete_unit_correct": false,
+            "normalized_exact_correct_a": false,
+            "normalized_exact_correct_b": false,
+            "normalized_expected_a": "left",
+            "normalized_expected_b": "right",
+            "normalized_prediction_a": "unknown",
+            "normalized_prediction_b": "unknown",
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the bowl left or right of the cabinet?",
+            "question_key": "cfq_32d36dc249d33c35",
+            "training_selected": false
+          },
+          {
+            "expected_a": "left",
+            "expected_b": "right",
+            "expected_first_token": {
+              "decoded_a": "left",
+              "decoded_b": "right",
+              "desired_margin_shift": 0.1875,
+              "scene_a_preference_margin": 5.75,
+              "scene_b_preference_margin": -5.5625,
+              "token_a": 989,
+              "token_b": 898
+            },
+            "logits": {
+              "cosine": 0.9998663663864136,
+              "max_absolute_delta": 1.125,
+              "rms_delta": 0.15290750563144684,
+              "symmetric_kl_nats": 5.1999048622519695e-08
+            },
+            "normalized_exact_complete_unit_correct": false,
+            "normalized_exact_correct_a": false,
+            "normalized_exact_correct_b": false,
+            "normalized_expected_a": "left",
+            "normalized_expected_b": "right",
+            "normalized_prediction_a": "unknown",
+            "normalized_prediction_b": "unknown",
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the cube left or right of the cabinet?",
+            "question_key": "cfq_43e076a47d06f1ef",
+            "training_selected": false
+          },
+          {
+            "expected_a": "left",
+            "expected_b": "right",
+            "expected_first_token": {
+              "decoded_a": "left",
+              "decoded_b": "right",
+              "desired_margin_shift": 0.4375,
+              "scene_a_preference_margin": 4.875,
+              "scene_b_preference_margin": -4.4375,
+              "token_a": 989,
+              "token_b": 898
+            },
+            "logits": {
+              "cosine": 0.9998288154602051,
+              "max_absolute_delta": 1.71875,
+              "rms_delta": 0.3593250811100006,
+              "symmetric_kl_nats": 3.0551191230188124e-06
+            },
+            "normalized_exact_complete_unit_correct": false,
+            "normalized_exact_correct_a": false,
+            "normalized_exact_correct_b": false,
+            "normalized_expected_a": "left",
+            "normalized_expected_b": "right",
+            "normalized_prediction_a": "unknown",
+            "normalized_prediction_b": "unknown",
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the book left or right of the plant pot?",
+            "question_key": "cfq_4a835ad15d901079",
+            "training_selected": false
+          },
+          {
+            "expected_a": "left",
+            "expected_b": "right",
+            "expected_first_token": {
+              "decoded_a": "left",
+              "decoded_b": "right",
+              "desired_margin_shift": 0.0625,
+              "scene_a_preference_margin": 5.625,
+              "scene_b_preference_margin": -5.5625,
+              "token_a": 989,
+              "token_b": 898
+            },
+            "logits": {
+              "cosine": 0.999876856803894,
+              "max_absolute_delta": 1.25,
+              "rms_delta": 0.17394477128982544,
+              "symmetric_kl_nats": 1.205086164191016e-07
+            },
+            "normalized_exact_complete_unit_correct": false,
+            "normalized_exact_correct_a": false,
+            "normalized_exact_correct_b": false,
+            "normalized_expected_a": "left",
+            "normalized_expected_b": "right",
+            "normalized_prediction_a": "unknown",
+            "normalized_prediction_b": "unknown",
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the bowl left or right of the book?",
+            "question_key": "cfq_4ce2d22bc5a467f0",
+            "training_selected": false
+          },
+          {
+            "expected_a": "left",
+            "expected_b": "right",
+            "expected_first_token": {
+              "decoded_a": "left",
+              "decoded_b": "right",
+              "desired_margin_shift": -0.0625,
+              "scene_a_preference_margin": 5.4375,
+              "scene_b_preference_margin": -5.5,
+              "token_a": 989,
+              "token_b": 898
+            },
+            "logits": {
+              "cosine": 0.9998627305030823,
+              "max_absolute_delta": 1.25,
+              "rms_delta": 0.5128510594367981,
+              "symmetric_kl_nats": 3.049723318326869e-07
+            },
+            "normalized_exact_complete_unit_correct": false,
+            "normalized_exact_correct_a": false,
+            "normalized_exact_correct_b": false,
+            "normalized_expected_a": "left",
+            "normalized_expected_b": "right",
+            "normalized_prediction_a": "unknown",
+            "normalized_prediction_b": "unknown",
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the table left or right of the cabinet?",
+            "question_key": "cfq_4f9267a181b75f9e",
+            "training_selected": false
+          },
+          {
+            "expected_a": "left",
+            "expected_b": "right",
+            "expected_first_token": {
+              "decoded_a": "left",
+              "decoded_b": "right",
+              "desired_margin_shift": 0.1875,
+              "scene_a_preference_margin": 5.5625,
+              "scene_b_preference_margin": -5.375,
+              "token_a": 989,
+              "token_b": 898
+            },
+            "logits": {
+              "cosine": 0.9998562335968018,
+              "max_absolute_delta": 0.9375,
+              "rms_delta": 0.28153905272483826,
+              "symmetric_kl_nats": 9.416103807780019e-08
+            },
+            "normalized_exact_complete_unit_correct": false,
+            "normalized_exact_correct_a": false,
+            "normalized_exact_correct_b": false,
+            "normalized_expected_a": "left",
+            "normalized_expected_b": "right",
+            "normalized_prediction_a": "unknown",
+            "normalized_prediction_b": "unknown",
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the picture frame left or right of the book?",
+            "question_key": "cfq_5cfd197523939c45",
+            "training_selected": false
+          },
+          {
+            "expected_a": "left",
+            "expected_b": "right",
+            "expected_first_token": {
+              "decoded_a": "left",
+              "decoded_b": "right",
+              "desired_margin_shift": -0.125,
+              "scene_a_preference_margin": 5.125,
+              "scene_b_preference_margin": -5.25,
+              "token_a": 989,
+              "token_b": 898
+            },
+            "logits": {
+              "cosine": 0.9999008774757385,
+              "max_absolute_delta": 1.0625,
+              "rms_delta": 0.2376299798488617,
+              "symmetric_kl_nats": 1.1837463631536593e-07
+            },
+            "normalized_exact_complete_unit_correct": false,
+            "normalized_exact_correct_a": false,
+            "normalized_exact_correct_b": false,
+            "normalized_expected_a": "left",
+            "normalized_expected_b": "right",
+            "normalized_prediction_a": "unknown",
+            "normalized_prediction_b": "unknown",
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the book left or right of the cabinet?",
+            "question_key": "cfq_659404854fcbf4ed",
+            "training_selected": false
+          },
+          {
+            "expected_a": "right",
+            "expected_b": "left",
+            "expected_first_token": {
+              "decoded_a": "right",
+              "decoded_b": "left",
+              "desired_margin_shift": 1.26611328125,
+              "scene_a_preference_margin": -2.3984375,
+              "scene_b_preference_margin": 3.66455078125,
+              "token_a": 898,
+              "token_b": 989
+            },
+            "logits": {
+              "cosine": 0.9996214509010315,
+              "max_absolute_delta": 3.5078125,
+              "rms_delta": 1.1546860933303833,
+              "symmetric_kl_nats": 0.00019364405306987464
+            },
+            "normalized_exact_complete_unit_correct": false,
+            "normalized_exact_correct_a": false,
+            "normalized_exact_correct_b": false,
+            "normalized_expected_a": "right",
+            "normalized_expected_b": "left",
+            "normalized_prediction_a": "unknown",
+            "normalized_prediction_b": "unknown",
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the picture frame left or right of the floor lamp?",
+            "question_key": "cfq_67534806b29daf8a",
+            "training_selected": false
+          },
+          {
+            "expected_a": "left",
+            "expected_b": "right",
+            "expected_first_token": {
+              "decoded_a": "left",
+              "decoded_b": "right",
+              "desired_margin_shift": 0.0625,
+              "scene_a_preference_margin": 6.0625,
+              "scene_b_preference_margin": -6.0,
+              "token_a": 989,
+              "token_b": 898
+            },
+            "logits": {
+              "cosine": 0.9998960494995117,
+              "max_absolute_delta": 1.0625,
+              "rms_delta": 0.31750985980033875,
+              "symmetric_kl_nats": 9.660018918111746e-08
+            },
+            "normalized_exact_complete_unit_correct": false,
+            "normalized_exact_correct_a": false,
+            "normalized_exact_correct_b": false,
+            "normalized_expected_a": "left",
+            "normalized_expected_b": "right",
+            "normalized_prediction_a": "unknown",
+            "normalized_prediction_b": "unknown",
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the chair left or right of the book?",
+            "question_key": "cfq_6e1fb3d8ac35c444",
+            "training_selected": false
+          },
+          {
+            "expected_a": "left",
+            "expected_b": "right",
+            "expected_first_token": {
+              "decoded_a": "left",
+              "decoded_b": "right",
+              "desired_margin_shift": 0.40625,
+              "scene_a_preference_margin": 5.5625,
+              "scene_b_preference_margin": -5.15625,
+              "token_a": 989,
+              "token_b": 898
+            },
+            "logits": {
+              "cosine": 0.9997545480728149,
+              "max_absolute_delta": 2.75,
+              "rms_delta": 0.7657084465026855,
+              "symmetric_kl_nats": 1.3139955626684241e-05
+            },
+            "normalized_exact_complete_unit_correct": false,
+            "normalized_exact_correct_a": false,
+            "normalized_exact_correct_b": false,
+            "normalized_expected_a": "left",
+            "normalized_expected_b": "right",
+            "normalized_prediction_a": "unknown",
+            "normalized_prediction_b": "unknown",
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the floor lamp left or right of the book?",
+            "question_key": "cfq_8381368f8fab1a6e",
+            "training_selected": false
+          },
+          {
+            "expected_a": "left",
+            "expected_b": "right",
+            "expected_first_token": {
+              "decoded_a": "left",
+              "decoded_b": "right",
+              "desired_margin_shift": 0.0625,
+              "scene_a_preference_margin": 5.875,
+              "scene_b_preference_margin": -5.8125,
+              "token_a": 989,
+              "token_b": 898
+            },
+            "logits": {
+              "cosine": 0.9998641014099121,
+              "max_absolute_delta": 0.9375,
+              "rms_delta": 0.2063627988100052,
+              "symmetric_kl_nats": 4.180944301879208e-08
+            },
+            "normalized_exact_complete_unit_correct": false,
+            "normalized_exact_correct_a": false,
+            "normalized_exact_correct_b": false,
+            "normalized_expected_a": "left",
+            "normalized_expected_b": "right",
+            "normalized_prediction_a": "unknown",
+            "normalized_prediction_b": "unknown",
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the chair left or right of the cabinet?",
+            "question_key": "cfq_875234fc958dbe32",
+            "training_selected": false
+          },
+          {
+            "expected_a": "left",
+            "expected_b": "right",
+            "expected_first_token": {
+              "decoded_a": "left",
+              "decoded_b": "right",
+              "desired_margin_shift": -0.1875,
+              "scene_a_preference_margin": 5.4375,
+              "scene_b_preference_margin": -5.625,
+              "token_a": 989,
+              "token_b": 898
+            },
+            "logits": {
+              "cosine": 0.9998846054077148,
+              "max_absolute_delta": 1.1875,
+              "rms_delta": 0.16275568306446075,
+              "symmetric_kl_nats": 7.267838952884631e-08
+            },
+            "normalized_exact_complete_unit_correct": false,
+            "normalized_exact_correct_a": false,
+            "normalized_exact_correct_b": false,
+            "normalized_expected_a": "left",
+            "normalized_expected_b": "right",
+            "normalized_prediction_a": "unknown",
+            "normalized_prediction_b": "unknown",
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the cube left or right of the book?",
+            "question_key": "cfq_915b33668198f6a4",
+            "training_selected": false
+          },
+          {
+            "expected_a": "left",
+            "expected_b": "right",
+            "expected_first_token": {
+              "decoded_a": "left",
+              "decoded_b": "right",
+              "desired_margin_shift": 0.890625,
+              "scene_a_preference_margin": 1.234375,
+              "scene_b_preference_margin": -0.34375,
+              "token_a": 989,
+              "token_b": 898
+            },
+            "logits": {
+              "cosine": 0.9997706413269043,
+              "max_absolute_delta": 1.953125,
+              "rms_delta": 0.3789801299571991,
+              "symmetric_kl_nats": 0.001946465577930212
+            },
+            "normalized_exact_complete_unit_correct": false,
+            "normalized_exact_correct_a": false,
+            "normalized_exact_correct_b": false,
+            "normalized_expected_a": "left",
+            "normalized_expected_b": "right",
+            "normalized_prediction_a": "unknown",
+            "normalized_prediction_b": "unknown",
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the floor lamp left or right of the plant pot?",
+            "question_key": "cfq_93d540d91eb6c145",
+            "training_selected": false
+          },
+          {
+            "expected_a": "left",
+            "expected_b": "right",
+            "expected_first_token": {
+              "decoded_a": "left",
+              "decoded_b": "right",
+              "desired_margin_shift": 0.92578125,
+              "scene_a_preference_margin": 4.640625,
+              "scene_b_preference_margin": -3.71484375,
+              "token_a": 989,
+              "token_b": 898
+            },
+            "logits": {
+              "cosine": 0.9997323751449585,
+              "max_absolute_delta": 3.234375,
+              "rms_delta": 0.5796413421630859,
+              "symmetric_kl_nats": 6.270772428251803e-05
+            },
+            "normalized_exact_complete_unit_correct": false,
+            "normalized_exact_correct_a": false,
+            "normalized_exact_correct_b": false,
+            "normalized_expected_a": "left",
+            "normalized_expected_b": "right",
+            "normalized_prediction_a": "unknown",
+            "normalized_prediction_b": "unknown",
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the cube left or right of the plant pot?",
+            "question_key": "cfq_9412442cbde9812f",
+            "training_selected": false
+          },
+          {
+            "expected_a": "left",
+            "expected_b": "right",
+            "expected_first_token": {
+              "decoded_a": "left",
+              "decoded_b": "right",
+              "desired_margin_shift": -0.125,
+              "scene_a_preference_margin": 5.5,
+              "scene_b_preference_margin": -5.625,
+              "token_a": 989,
+              "token_b": 898
+            },
+            "logits": {
+              "cosine": 0.9998694062232971,
+              "max_absolute_delta": 1.1875,
+              "rms_delta": 0.15318062901496887,
+              "symmetric_kl_nats": 4.438895828684508e-08
+            },
+            "normalized_exact_complete_unit_correct": false,
+            "normalized_exact_correct_a": false,
+            "normalized_exact_correct_b": false,
+            "normalized_expected_a": "left",
+            "normalized_expected_b": "right",
+            "normalized_prediction_a": "unknown",
+            "normalized_prediction_b": "unknown",
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the table left or right of the book?",
+            "question_key": "cfq_97111562c770aee1",
+            "training_selected": false
+          },
+          {
+            "expected_a": "left",
+            "expected_b": "right",
+            "expected_first_token": {
+              "decoded_a": "left",
+              "decoded_b": "right",
+              "desired_margin_shift": 0.0,
+              "scene_a_preference_margin": 5.3125,
+              "scene_b_preference_margin": -5.3125,
+              "token_a": 989,
+              "token_b": 898
+            },
+            "logits": {
+              "cosine": 0.9998911619186401,
+              "max_absolute_delta": 1.0,
+              "rms_delta": 0.16986407339572906,
+              "symmetric_kl_nats": 1.3568131862484734e-07
+            },
+            "normalized_exact_complete_unit_correct": false,
+            "normalized_exact_correct_a": false,
+            "normalized_exact_correct_b": false,
+            "normalized_expected_a": "left",
+            "normalized_expected_b": "right",
+            "normalized_prediction_a": "unknown",
+            "normalized_prediction_b": "unknown",
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the picture frame left or right of the cabinet?",
+            "question_key": "cfq_99e53cf3bc282ea0",
+            "training_selected": false
+          },
+          {
+            "expected_a": "right",
+            "expected_b": "left",
+            "expected_first_token": {
+              "decoded_a": "right",
+              "decoded_b": "left",
+              "desired_margin_shift": 0.4375,
+              "scene_a_preference_margin": -1.5,
+              "scene_b_preference_margin": 1.9375,
+              "token_a": 898,
+              "token_b": 989
+            },
+            "logits": {
+              "cosine": 0.9998179078102112,
+              "max_absolute_delta": 1.0625,
+              "rms_delta": 0.31927192211151123,
+              "symmetric_kl_nats": 0.00021386044682003558
+            },
+            "normalized_exact_complete_unit_correct": false,
+            "normalized_exact_correct_a": false,
+            "normalized_exact_correct_b": false,
+            "normalized_expected_a": "right",
+            "normalized_expected_b": "left",
+            "normalized_prediction_a": "unknown",
+            "normalized_prediction_b": "unknown",
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the bowl left or right of the floor lamp?",
+            "question_key": "cfq_9efeb9f6f3ebdcd2",
+            "training_selected": false
+          },
+          {
+            "expected_a": "left",
+            "expected_b": "right",
+            "expected_first_token": {
+              "decoded_a": "left",
+              "decoded_b": "right",
+              "desired_margin_shift": 0.91015625,
+              "scene_a_preference_margin": 4.48046875,
+              "scene_b_preference_margin": -3.5703125,
+              "token_a": 989,
+              "token_b": 898
+            },
+            "logits": {
+              "cosine": 0.9997739791870117,
+              "max_absolute_delta": 2.96875,
+              "rms_delta": 0.6826307773590088,
+              "symmetric_kl_nats": 8.50162687129341e-05
+            },
+            "normalized_exact_complete_unit_correct": false,
+            "normalized_exact_correct_a": false,
+            "normalized_exact_correct_b": false,
+            "normalized_expected_a": "left",
+            "normalized_expected_b": "right",
+            "normalized_prediction_a": "unknown",
+            "normalized_prediction_b": "unknown",
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the chair left or right of the plant pot?",
+            "question_key": "cfq_af381149c4b95493",
+            "training_selected": false
+          },
+          {
+            "expected_a": "left",
+            "expected_b": "right",
+            "expected_first_token": {
+              "decoded_a": "left",
+              "decoded_b": "right",
+              "desired_margin_shift": 0.09375,
+              "scene_a_preference_margin": 5.6875,
+              "scene_b_preference_margin": -5.59375,
+              "token_a": 989,
+              "token_b": 898
+            },
+            "logits": {
+              "cosine": 0.9998098611831665,
+              "max_absolute_delta": 1.625,
+              "rms_delta": 0.511960506439209,
+              "symmetric_kl_nats": 1.916376731969649e-06
+            },
+            "normalized_exact_complete_unit_correct": false,
+            "normalized_exact_correct_a": false,
+            "normalized_exact_correct_b": false,
+            "normalized_expected_a": "left",
+            "normalized_expected_b": "right",
+            "normalized_prediction_a": "unknown",
+            "normalized_prediction_b": "unknown",
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the floor lamp left or right of the cabinet?",
+            "question_key": "cfq_b46ef9691c5a634e",
+            "training_selected": false
+          },
+          {
+            "expected_a": "right",
+            "expected_b": "left",
+            "expected_first_token": {
+              "decoded_a": "right",
+              "decoded_b": "left",
+              "desired_margin_shift": -0.21875,
+              "scene_a_preference_margin": -6.15625,
+              "scene_b_preference_margin": 5.9375,
+              "token_a": 898,
+              "token_b": 989
+            },
+            "logits": {
+              "cosine": 0.9997968673706055,
+              "max_absolute_delta": 1.75,
+              "rms_delta": 0.8041855096817017,
+              "symmetric_kl_nats": 1.373588020214811e-06
+            },
+            "normalized_exact_complete_unit_correct": false,
+            "normalized_exact_correct_a": false,
+            "normalized_exact_correct_b": false,
+            "normalized_expected_a": "right",
+            "normalized_expected_b": "left",
+            "normalized_prediction_a": "unknown",
+            "normalized_prediction_b": "unknown",
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the table left or right of the picture frame?",
+            "question_key": "cfq_b900601986242f13",
+            "training_selected": false
+          },
+          {
+            "expected_a": "right",
+            "expected_b": "left",
+            "expected_first_token": {
+              "decoded_a": "right",
+              "decoded_b": "left",
+              "desired_margin_shift": -0.09375,
+              "scene_a_preference_margin": -6.0625,
+              "scene_b_preference_margin": 5.96875,
+              "token_a": 898,
+              "token_b": 989
+            },
+            "logits": {
+              "cosine": 0.9998275637626648,
+              "max_absolute_delta": 1.5625,
+              "rms_delta": 0.34891465306282043,
+              "symmetric_kl_nats": 1.7719169136398705e-06
+            },
+            "normalized_exact_complete_unit_correct": false,
+            "normalized_exact_correct_a": false,
+            "normalized_exact_correct_b": false,
+            "normalized_expected_a": "right",
+            "normalized_expected_b": "left",
+            "normalized_prediction_a": "unknown",
+            "normalized_prediction_b": "unknown",
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the chair left or right of the bowl?",
+            "question_key": "cfq_c3ee105cd26e0caf",
+            "training_selected": false
+          },
+          {
+            "expected_a": "left",
+            "expected_b": "right",
+            "expected_first_token": {
+              "decoded_a": "left",
+              "decoded_b": "right",
+              "desired_margin_shift": 0.55615234375,
+              "scene_a_preference_margin": 4.296875,
+              "scene_b_preference_margin": -3.74072265625,
+              "token_a": 989,
+              "token_b": 898
+            },
+            "logits": {
+              "cosine": 0.9998028874397278,
+              "max_absolute_delta": 1.796875,
+              "rms_delta": 0.31033578515052795,
+              "symmetric_kl_nats": 1.651067032071296e-05
+            },
+            "normalized_exact_complete_unit_correct": false,
+            "normalized_exact_correct_a": false,
+            "normalized_exact_correct_b": false,
+            "normalized_expected_a": "left",
+            "normalized_expected_b": "right",
+            "normalized_prediction_a": "unknown",
+            "normalized_prediction_b": "unknown",
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the table left or right of the plant pot?",
+            "question_key": "cfq_cc99d18414163382",
+            "training_selected": false
+          },
+          {
+            "expected_a": "left",
+            "expected_b": "right",
+            "expected_first_token": {
+              "decoded_a": "left",
+              "decoded_b": "right",
+              "desired_margin_shift": 0.8125,
+              "scene_a_preference_margin": 4.4453125,
+              "scene_b_preference_margin": -3.6328125,
+              "token_a": 989,
+              "token_b": 898
+            },
+            "logits": {
+              "cosine": 0.9998005032539368,
+              "max_absolute_delta": 2.3125,
+              "rms_delta": 0.6182147264480591,
+              "symmetric_kl_nats": 2.6490248274058104e-05
+            },
+            "normalized_exact_complete_unit_correct": false,
+            "normalized_exact_correct_a": false,
+            "normalized_exact_correct_b": false,
+            "normalized_expected_a": "left",
+            "normalized_expected_b": "right",
+            "normalized_prediction_a": "unknown",
+            "normalized_prediction_b": "unknown",
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the bowl left or right of the plant pot?",
+            "question_key": "cfq_d7634489597fde72",
+            "training_selected": false
+          },
+          {
+            "expected_a": "right",
+            "expected_b": "left",
+            "expected_first_token": {
+              "decoded_a": "right",
+              "decoded_b": "left",
+              "desired_margin_shift": -0.0625,
+              "scene_a_preference_margin": -5.9375,
+              "scene_b_preference_margin": 5.875,
+              "token_a": 898,
+              "token_b": 989
+            },
+            "logits": {
+              "cosine": 0.9998512268066406,
+              "max_absolute_delta": 1.25,
+              "rms_delta": 0.3364793062210083,
+              "symmetric_kl_nats": 5.989815008433652e-07
+            },
+            "normalized_exact_complete_unit_correct": false,
+            "normalized_exact_correct_a": false,
+            "normalized_exact_correct_b": false,
+            "normalized_expected_a": "right",
+            "normalized_expected_b": "left",
+            "normalized_prediction_a": "unknown",
+            "normalized_prediction_b": "unknown",
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the table left or right of the bowl?",
+            "question_key": "cfq_d93ed29ad49bf208",
+            "training_selected": false
+          },
+          {
+            "expected_a": "left",
+            "expected_b": "right",
+            "expected_first_token": {
+              "decoded_a": "left",
+              "decoded_b": "right",
+              "desired_margin_shift": 0.3223876953125,
+              "scene_a_preference_margin": 2.6383056640625,
+              "scene_b_preference_margin": -2.31591796875,
+              "token_a": 989,
+              "token_b": 898
+            },
+            "logits": {
+              "cosine": 0.9998502731323242,
+              "max_absolute_delta": 1.0,
+              "rms_delta": 0.2575502395629883,
+              "symmetric_kl_nats": 2.4849890905898064e-05
+            },
+            "normalized_exact_complete_unit_correct": false,
+            "normalized_exact_correct_a": false,
+            "normalized_exact_correct_b": false,
+            "normalized_expected_a": "left",
+            "normalized_expected_b": "right",
+            "normalized_prediction_a": "unknown",
+            "normalized_prediction_b": "unknown",
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the floor lamp left or right of the cube?",
+            "question_key": "cfq_e893b7c488b0087b",
+            "training_selected": false
+          },
+          {
+            "expected_a": "right",
+            "expected_b": "left",
+            "expected_first_token": {
+              "decoded_a": "right",
+              "decoded_b": "left",
+              "desired_margin_shift": -0.09375,
+              "scene_a_preference_margin": -5.4375,
+              "scene_b_preference_margin": 5.34375,
+              "token_a": 898,
+              "token_b": 989
+            },
+            "logits": {
+              "cosine": 0.9998489618301392,
+              "max_absolute_delta": 1.0,
+              "rms_delta": 0.36139434576034546,
+              "symmetric_kl_nats": 1.9813710139260365e-07
+            },
+            "normalized_exact_complete_unit_correct": false,
+            "normalized_exact_correct_a": false,
+            "normalized_exact_correct_b": false,
+            "normalized_expected_a": "right",
+            "normalized_expected_b": "left",
+            "normalized_prediction_a": "unknown",
+            "normalized_prediction_b": "unknown",
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the picture frame left or right of the bowl?",
+            "question_key": "cfq_e965d37e99b34683",
+            "training_selected": false
+          },
+          {
+            "expected_a": "left",
+            "expected_b": "right",
+            "expected_first_token": {
+              "decoded_a": "left",
+              "decoded_b": "right",
+              "desired_margin_shift": 0.34375,
+              "scene_a_preference_margin": 5.71875,
+              "scene_b_preference_margin": -5.375,
+              "token_a": 989,
+              "token_b": 898
+            },
+            "logits": {
+              "cosine": 0.9998244643211365,
+              "max_absolute_delta": 1.375,
+              "rms_delta": 0.2884654700756073,
+              "symmetric_kl_nats": 7.126487844288931e-07
+            },
+            "normalized_exact_complete_unit_correct": false,
+            "normalized_exact_correct_a": false,
+            "normalized_exact_correct_b": false,
+            "normalized_expected_a": "left",
+            "normalized_expected_b": "right",
+            "normalized_prediction_a": "unknown",
+            "normalized_prediction_b": "unknown",
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the bowl left or right of the cube?",
+            "question_key": "cfq_f1e3b385ca400a61",
+            "training_selected": false
+          },
+          {
+            "expected_a": "right",
+            "expected_b": "left",
+            "expected_first_token": {
+              "decoded_a": "right",
+              "decoded_b": "left",
+              "desired_margin_shift": -0.21875,
+              "scene_a_preference_margin": -5.8125,
+              "scene_b_preference_margin": 5.59375,
+              "token_a": 898,
+              "token_b": 989
+            },
+            "logits": {
+              "cosine": 0.999832272529602,
+              "max_absolute_delta": 1.4375,
+              "rms_delta": 0.22346623241901398,
+              "symmetric_kl_nats": 4.3565191276684345e-07
+            },
+            "normalized_exact_complete_unit_correct": false,
+            "normalized_exact_correct_a": false,
+            "normalized_exact_correct_b": false,
+            "normalized_expected_a": "right",
+            "normalized_expected_b": "left",
+            "normalized_prediction_a": "unknown",
+            "normalized_prediction_b": "unknown",
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the table left or right of the cube?",
+            "question_key": "cfq_fdafc0e247e0856d",
+            "training_selected": false
+          }
+        ],
+        "left_right_reference_orientation": {
+          "both_reference_orientations_present": true,
+          "by_reference_expected_orientation": {
+            "left": {
+              "complete_unit_count": 25,
+              "normalized_exact_complete_unit_accuracy": 0.0,
+              "normalized_exact_complete_unit_correct_count": 0,
+              "normalized_exact_reference_side_accuracy": 0.0,
+              "normalized_exact_reference_side_correct_count": 0
+            },
+            "right": {
+              "complete_unit_count": 10,
+              "normalized_exact_complete_unit_accuracy": 0.0,
+              "normalized_exact_complete_unit_correct_count": 0,
+              "normalized_exact_reference_side_accuracy": 0.0,
+              "normalized_exact_reference_side_correct_count": 0
+            }
+          },
+          "eligible_complete_unit_count": 35,
+          "normalized_exact_complete_unit_reference_orientation_macro_accuracy": 0.0,
+          "normalized_exact_reference_orientation_macro_accuracy": 0.0
+        },
+        "mean_logit_rms_delta": 0.41724810770579746,
+        "mean_symmetric_kl_nats": 0.0009412870017507252,
+        "normalized_exact_complete_unit_accuracy": 0.0,
+        "normalized_exact_complete_unit_correct_count": 0,
+        "normalized_exact_complete_unit_count": 35,
+        "normalized_exact_correct_side_count": 0,
+        "normalized_exact_side_accuracy": 0.0,
+        "normalized_exact_side_count": 70,
+        "pair_id": "pair_000003",
+        "prediction_changed_count": 0,
+        "prediction_changed_rate": 0.0,
+        "scene_a": "scene_000007",
+        "scene_b": "scene_000008",
+        "split": "train",
+        "training_selection_breakdown": {
+          "selected": {
+            "changed_fact_question_count": 0,
+            "left_right_reference_orientation": {
+              "both_reference_orientations_present": false,
+              "by_reference_expected_orientation": {
+                "left": {
+                  "complete_unit_count": 0,
+                  "normalized_exact_complete_unit_accuracy": null,
+                  "normalized_exact_complete_unit_correct_count": 0,
+                  "normalized_exact_reference_side_accuracy": null,
+                  "normalized_exact_reference_side_correct_count": 0
+                },
+                "right": {
+                  "complete_unit_count": 0,
+                  "normalized_exact_complete_unit_accuracy": null,
+                  "normalized_exact_complete_unit_correct_count": 0,
+                  "normalized_exact_reference_side_accuracy": null,
+                  "normalized_exact_reference_side_correct_count": 0
+                }
+              },
+              "eligible_complete_unit_count": 0,
+              "normalized_exact_complete_unit_reference_orientation_macro_accuracy": null,
+              "normalized_exact_reference_orientation_macro_accuracy": null
+            },
+            "normalized_exact_complete_unit_accuracy": null,
+            "normalized_exact_complete_unit_correct_count": 0,
+            "normalized_exact_complete_unit_count": 0,
+            "normalized_exact_correct_side_count": 0,
+            "normalized_exact_side_accuracy": null,
+            "normalized_exact_side_count": 0,
+            "prediction_changed_count": 0,
+            "prediction_changed_rate": null
+          },
+          "unselected": {
+            "changed_fact_question_count": 35,
+            "left_right_reference_orientation": {
+              "both_reference_orientations_present": true,
+              "by_reference_expected_orientation": {
+                "left": {
+                  "complete_unit_count": 25,
+                  "normalized_exact_complete_unit_accuracy": 0.0,
+                  "normalized_exact_complete_unit_correct_count": 0,
+                  "normalized_exact_reference_side_accuracy": 0.0,
+                  "normalized_exact_reference_side_correct_count": 0
+                },
+                "right": {
+                  "complete_unit_count": 10,
+                  "normalized_exact_complete_unit_accuracy": 0.0,
+                  "normalized_exact_complete_unit_correct_count": 0,
+                  "normalized_exact_reference_side_accuracy": 0.0,
+                  "normalized_exact_reference_side_correct_count": 0
+                }
+              },
+              "eligible_complete_unit_count": 35,
+              "normalized_exact_complete_unit_reference_orientation_macro_accuracy": 0.0,
+              "normalized_exact_reference_orientation_macro_accuracy": 0.0
+            },
+            "normalized_exact_complete_unit_accuracy": 0.0,
+            "normalized_exact_complete_unit_correct_count": 0,
+            "normalized_exact_complete_unit_count": 35,
+            "normalized_exact_correct_side_count": 0,
+            "normalized_exact_side_accuracy": 0.0,
+            "normalized_exact_side_count": 70,
+            "prediction_changed_count": 0,
+            "prediction_changed_rate": 0.0
+          }
+        }
+      },
+      {
+        "change_type": "cube_support",
+        "changed_fact_question_count": 4,
+        "examples": [
+          {
+            "expected_a": "book, cube",
+            "expected_b": "book",
+            "expected_first_token": {
+              "decoded_a": "book",
+              "decoded_b": "book",
+              "desired_margin_shift": 0.0,
+              "scene_a_preference_margin": 0.0,
+              "scene_b_preference_margin": 0.0,
+              "token_a": 3070,
+              "token_b": 3070
+            },
+            "logits": {
+              "cosine": 0.9993053674697876,
+              "max_absolute_delta": 2.890625,
+              "rms_delta": 0.9749281406402588,
+              "symmetric_kl_nats": 0.0004005884111393243
+            },
+            "normalized_exact_complete_unit_correct": false,
+            "normalized_exact_correct_a": false,
+            "normalized_exact_correct_b": false,
+            "normalized_expected_a": "book cube",
+            "normalized_expected_b": "book",
+            "normalized_prediction_a": "unknown",
+            "normalized_prediction_b": "unknown",
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "What is on the table?",
+            "question_key": "cfq_449e76a6b42904ac",
+            "training_selected": false
+          },
+          {
+            "expected_a": "cube",
+            "expected_b": "book",
+            "expected_first_token": {
+              "decoded_a": "cube",
+              "decoded_b": "book",
+              "desired_margin_shift": 0.59765625,
+              "scene_a_preference_margin": 0.390625,
+              "scene_b_preference_margin": 0.20703125,
+              "token_a": 45601,
+              "token_b": 3070
+            },
+            "logits": {
+              "cosine": 0.9993855953216553,
+              "max_absolute_delta": 2.46142578125,
+              "rms_delta": 0.6611058115959167,
+              "symmetric_kl_nats": 0.027644697576761246
+            },
+            "normalized_exact_complete_unit_correct": false,
+            "normalized_exact_correct_a": false,
+            "normalized_exact_correct_b": false,
+            "normalized_expected_a": "cube",
+            "normalized_expected_b": "book",
+            "normalized_prediction_a": "unknown",
+            "normalized_prediction_b": "unknown",
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Which object is closest to the camera?",
+            "question_key": "cfq_8da2afee4268c6e1",
+            "training_selected": false
+          },
+          {
+            "expected_a": "bowl, cabinet, chair, floor lamp, plant pot, table",
+            "expected_b": "bowl, cabinet, chair, cube, floor lamp, plant pot, table",
+            "expected_first_token": {
+              "decoded_a": "bowl",
+              "decoded_b": "bowl",
+              "desired_margin_shift": 0.0,
+              "scene_a_preference_margin": 0.0,
+              "scene_b_preference_margin": 0.0,
+              "token_a": 115256,
+              "token_b": 115256
+            },
+            "logits": {
+              "cosine": 0.9993554353713989,
+              "max_absolute_delta": 2.13671875,
+              "rms_delta": 0.7010180354118347,
+              "symmetric_kl_nats": 0.015491381287574768
+            },
+            "normalized_exact_complete_unit_correct": false,
+            "normalized_exact_correct_a": false,
+            "normalized_exact_correct_b": false,
+            "normalized_expected_a": "bowl cabinet chair floor lamp plant pot table",
+            "normalized_expected_b": "bowl cabinet chair cube floor lamp plant pot table",
+            "normalized_prediction_a": "floor is light gray color",
+            "normalized_prediction_b": "floor is light gray color",
+            "prediction_a": "The floor is a light gray color.",
+            "prediction_b": "The floor is a light gray color.",
+            "prediction_changed": false,
+            "question": "What is on the floor?",
+            "question_key": "cfq_9f4c9002322e39c3",
+            "training_selected": false
+          },
+          {
+            "expected_a": "below",
+            "expected_b": "above",
+            "expected_first_token": {
+              "decoded_a": "below",
+              "decoded_b": "above",
+              "desired_margin_shift": 0.078125,
+              "scene_a_preference_margin": 3.1328125,
+              "scene_b_preference_margin": -3.0546875,
+              "token_a": 60096,
+              "token_b": 46779
+            },
+            "logits": {
+              "cosine": 0.9998645186424255,
+              "max_absolute_delta": 0.8125,
+              "rms_delta": 0.18779094517230988,
+              "symmetric_kl_nats": 2.5563713279552758e-06
+            },
+            "normalized_exact_complete_unit_correct": false,
+            "normalized_exact_correct_a": false,
+            "normalized_exact_correct_b": false,
+            "normalized_expected_a": "below",
+            "normalized_expected_b": "above",
+            "normalized_prediction_a": "unknown",
+            "normalized_prediction_b": "unknown",
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the table above or below the cube?",
+            "question_key": "cfq_9ff79cf28297a75a",
+            "training_selected": false
+          }
+        ],
+        "left_right_reference_orientation": {
+          "both_reference_orientations_present": false,
+          "by_reference_expected_orientation": {
+            "left": {
+              "complete_unit_count": 0,
+              "normalized_exact_complete_unit_accuracy": null,
+              "normalized_exact_complete_unit_correct_count": 0,
+              "normalized_exact_reference_side_accuracy": null,
+              "normalized_exact_reference_side_correct_count": 0
+            },
+            "right": {
+              "complete_unit_count": 0,
+              "normalized_exact_complete_unit_accuracy": null,
+              "normalized_exact_complete_unit_correct_count": 0,
+              "normalized_exact_reference_side_accuracy": null,
+              "normalized_exact_reference_side_correct_count": 0
+            }
+          },
+          "eligible_complete_unit_count": 0,
+          "normalized_exact_complete_unit_reference_orientation_macro_accuracy": null,
+          "normalized_exact_reference_orientation_macro_accuracy": null
+        },
+        "mean_logit_rms_delta": 0.63121073320508,
+        "mean_symmetric_kl_nats": 0.010884805911700823,
+        "normalized_exact_complete_unit_accuracy": 0.0,
+        "normalized_exact_complete_unit_correct_count": 0,
+        "normalized_exact_complete_unit_count": 4,
+        "normalized_exact_correct_side_count": 0,
+        "normalized_exact_side_accuracy": 0.0,
+        "normalized_exact_side_count": 8,
+        "pair_id": "pair_000002",
+        "prediction_changed_count": 0,
+        "prediction_changed_rate": 0.0,
+        "scene_a": "scene_000005",
+        "scene_b": "scene_000006",
+        "split": "test",
+        "training_selection_breakdown": {
+          "selected": {
+            "changed_fact_question_count": 0,
+            "left_right_reference_orientation": {
+              "both_reference_orientations_present": false,
+              "by_reference_expected_orientation": {
+                "left": {
+                  "complete_unit_count": 0,
+                  "normalized_exact_complete_unit_accuracy": null,
+                  "normalized_exact_complete_unit_correct_count": 0,
+                  "normalized_exact_reference_side_accuracy": null,
+                  "normalized_exact_reference_side_correct_count": 0
+                },
+                "right": {
+                  "complete_unit_count": 0,
+                  "normalized_exact_complete_unit_accuracy": null,
+                  "normalized_exact_complete_unit_correct_count": 0,
+                  "normalized_exact_reference_side_accuracy": null,
+                  "normalized_exact_reference_side_correct_count": 0
+                }
+              },
+              "eligible_complete_unit_count": 0,
+              "normalized_exact_complete_unit_reference_orientation_macro_accuracy": null,
+              "normalized_exact_reference_orientation_macro_accuracy": null
+            },
+            "normalized_exact_complete_unit_accuracy": null,
+            "normalized_exact_complete_unit_correct_count": 0,
+            "normalized_exact_complete_unit_count": 0,
+            "normalized_exact_correct_side_count": 0,
+            "normalized_exact_side_accuracy": null,
+            "normalized_exact_side_count": 0,
+            "prediction_changed_count": 0,
+            "prediction_changed_rate": null
+          },
+          "unselected": {
+            "changed_fact_question_count": 4,
+            "left_right_reference_orientation": {
+              "both_reference_orientations_present": false,
+              "by_reference_expected_orientation": {
+                "left": {
+                  "complete_unit_count": 0,
+                  "normalized_exact_complete_unit_accuracy": null,
+                  "normalized_exact_complete_unit_correct_count": 0,
+                  "normalized_exact_reference_side_accuracy": null,
+                  "normalized_exact_reference_side_correct_count": 0
+                },
+                "right": {
+                  "complete_unit_count": 0,
+                  "normalized_exact_complete_unit_accuracy": null,
+                  "normalized_exact_complete_unit_correct_count": 0,
+                  "normalized_exact_reference_side_accuracy": null,
+                  "normalized_exact_reference_side_correct_count": 0
+                }
+              },
+              "eligible_complete_unit_count": 0,
+              "normalized_exact_complete_unit_reference_orientation_macro_accuracy": null,
+              "normalized_exact_reference_orientation_macro_accuracy": null
+            },
+            "normalized_exact_complete_unit_accuracy": 0.0,
+            "normalized_exact_complete_unit_correct_count": 0,
+            "normalized_exact_complete_unit_count": 4,
+            "normalized_exact_correct_side_count": 0,
+            "normalized_exact_side_accuracy": 0.0,
+            "normalized_exact_side_count": 8,
+            "prediction_changed_count": 0,
+            "prediction_changed_rate": 0.0
+          }
+        }
+      }
+    ],
+    "training_pair_selection": {
+      "selected_complete_unit_count": 6,
+      "selected_pair_question_keys_sha256": "99144999d79b1b6a73e599fe050d1a35b7fc64bf97475bfbc00d4735d6a64671"
+    }
+  },
+  "learned_query_diversity": {
+    "global_resampler_queries": {
+      "mean_feature_std_across_tokens": 0.019970392808318138,
+      "mean_off_diagonal_cosine": 0.00298587535507977,
+      "minimum_off_diagonal_cosine": -0.18538257479667664,
+      "std_off_diagonal_cosine": 0.05081583932042122,
+      "token_count": 256
+    },
+    "spatial_block_queries": {
+      "mean_feature_std_across_tokens": 0.014522124081850052,
+      "mean_off_diagonal_cosine": 0.17041431367397308,
+      "minimum_off_diagonal_cosine": 0.17041431367397308,
+      "std_off_diagonal_cosine": 0.0,
+      "token_count": 2
+    }
+  },
+  "lora": {
+    "adapter_parameter_count": 45056,
+    "alpha": 8.0,
+    "dropout": 0.0,
+    "enabled": true,
+    "learning_rate": 0.0001,
+    "rank": 4,
+    "schema_version": 1,
+    "target_modules": [
+      "model.language_model.layers.34.self_attn.q_proj",
+      "model.language_model.layers.34.self_attn.o_proj"
+    ],
+    "weight_decay": 0.0
+  },
+  "pairs": [
+    {
+      "aggregated_map": {
+        "rgb": {
+          "changed_element_fraction_at_1e-6": 0.028721248957216065,
+          "cosine_flat": 0.998249791359034,
+          "max_row_l2": 264.8715617443782,
+          "mean_absolute_difference": 1.0049040436020142,
+          "mean_row_cosine": 0.9980393811396538,
+          "mean_row_l2": 1.8642465782141906,
+          "minimum_row_cosine": 0.26880946223412394,
+          "relative_l2": 0.05916435375928576,
+          "rms_difference": 10.010004919167141,
+          "row_difference_concentration": {
+            "effective_changed_rows": 68.9556325677927,
+            "top_10_fraction": 0.22829050250199323,
+            "top_1_fraction": 0.027814234182250017,
+            "top_1_percent_fraction": 0.9718724485064095
+          },
+          "shape_common": [
+            8391,
+            3
+          ],
+          "top_changed_rows": [
+            {
+              "aligned_row": 4867,
+              "coordinate": [
+                0.5127906799316406,
+                0.5249999761581421,
+                0.9725290536880493
+              ],
+              "cosine": 0.29410705519395175,
+              "l2": 264.8715617443782,
+              "rank": 1
+            },
+            {
+              "aligned_row": 5002,
+              "coordinate": [
+                0.6634314060211182,
+                0.5249999761581421,
+                0.9728431105613708
+              ],
+              "cosine": 0.26880946223412394,
+              "l2": 262.9671556109895,
+              "rank": 2
+            },
+            {
+              "aligned_row": 4719,
+              "coordinate": [
+                0.42500001192092896,
+                0.6733572483062744,
+                0.9799280762672424
+              ],
+              "cosine": 0.44666720193809545,
+              "l2": 251.34899342639898,
+              "rank": 3
+            },
+            {
+              "aligned_row": 4715,
+              "coordinate": [
+                0.42500001192092896,
+                0.5619767308235168,
+                0.9766279458999634
+              ],
+              "cosine": 0.4569519238201907,
+              "l2": 250.5696185428938,
+              "rank": 4
+            },
+            {
+              "aligned_row": 3213,
+              "coordinate": [
+                -1.125,
+                0.32500001788139343,
+                0.42500001192092896
+              ],
+              "cosine": 0.4476289184672999,
+              "l2": 231.85510049282894,
+              "rank": 5
+            },
+            {
+              "aligned_row": 4724,
+              "coordinate": [
+                0.42500004172325134,
+                0.7930473685264587,
+                0.9767751097679138
+              ],
+              "cosine": 0.5351148126307814,
+              "l2": 230.13199095506457,
+              "rank": 6
+            },
+            {
+              "aligned_row": 4716,
+              "coordinate": [
+                0.42500001192092896,
+                0.5612385272979736,
+                1.0869266986846924
+              ],
+              "cosine": 0.6030063653802407,
+              "l2": 228.53050513278453,
+              "rank": 7
+            },
+            {
+              "aligned_row": 4720,
+              "coordinate": [
+                0.42500004172325134,
+                0.6729080080986023,
+                1.0877615213394165
+              ],
+              "cosine": 0.603592082357004,
+              "l2": 227.82415903417083,
+              "rank": 8
+            },
+            {
+              "aligned_row": 3600,
+              "coordinate": [
+                -0.8445945978164673,
+                0.7868243455886841,
+                0.6733108758926392
+              ],
+              "cosine": 0.6342597749126193,
+              "l2": 223.6400182510772,
+              "rank": 9
+            },
+            {
+              "aligned_row": 3599,
+              "coordinate": [
+                -0.8391509652137756,
+                0.7886792421340942,
+                0.5334905385971069
+              ],
+              "cosine": 0.6274866709893979,
+              "l2": 222.9206959651443,
+              "rank": 10
+            }
+          ]
+        },
+        "semantic": {
+          "changed_element_fraction_at_1e-6": 0.7935280049557065,
+          "cosine_flat": 0.9992652899185088,
+          "max_row_l2": 390.3408255424457,
+          "mean_absolute_difference": 0.25147807499452896,
+          "mean_row_cosine": 0.9992963578178394,
+          "mean_row_l2": 32.5808528982874,
+          "minimum_row_cosine": 0.9610919900158823,
+          "relative_l2": 0.038333212022677275,
+          "rms_difference": 0.9154183600622071,
+          "row_difference_concentration": {
+            "effective_changed_rows": 762.617328490506,
+            "top_10_fraction": 0.052527494949806235,
+            "top_1_fraction": 0.0070536479963767985,
+            "top_1_percent_fraction": 0.2643787675562217
+          },
+          "shape_common": [
+            8391,
+            3072
+          ],
+          "top_changed_rows": [
+            {
+              "aligned_row": 3167,
+              "coordinate": [
+                -1.1749999523162842,
+                -1.2549998760223389,
+                0.17499999701976776
+              ],
+              "cosine": 0.9610919900158823,
+              "l2": 390.3408255424457,
+              "rank": 1
+            },
+            {
+              "aligned_row": 3172,
+              "coordinate": [
+                -1.1750000715255737,
+                -1.1500000953674316,
+                0.17499999701976776
+              ],
+              "cosine": 0.9649586487605597,
+              "l2": 380.04936394447185,
+              "rank": 2
+            },
+            {
+              "aligned_row": 2996,
+              "coordinate": [
+                -1.2330000400543213,
+                -1.1130000352859497,
+                0.17499999701976776
+              ],
+              "cosine": 0.9653790609388121,
+              "l2": 365.9827171152058,
+              "rank": 3
+            },
+            {
+              "aligned_row": 4869,
+              "coordinate": [
+                0.5099009871482849,
+                0.678960382938385,
+                1.125
+              ],
+              "cosine": 0.9688992033333153,
+              "l2": 342.18309366496356,
+              "rank": 4
+            },
+            {
+              "aligned_row": 3402,
+              "coordinate": [
+                -0.9726414680480957,
+                0.5235849022865295,
+                0.5250000357627869
+              ],
+              "cosine": 0.9692186698057057,
+              "l2": 329.4997830563759,
+              "rank": 5
+            },
+            {
+              "aligned_row": 3061,
+              "coordinate": [
+                -1.2450001239776611,
+                1.315000057220459,
+                -0.02500000037252903
+              ],
+              "cosine": 0.9730970091641759,
+              "l2": 312.69755622144845,
+              "rank": 6
+            },
+            {
+              "aligned_row": 1920,
+              "coordinate": [
+                -2.2750000953674316,
+                2.325000047683716,
+                0.02500000037252903
+              ],
+              "cosine": 0.9767403064717401,
+              "l2": 310.60644861274403,
+              "rank": 7
+            },
+            {
+              "aligned_row": 3062,
+              "coordinate": [
+                -1.2374999523162842,
+                1.2999999523162842,
+                0.02500000037252903
+              ],
+              "cosine": 0.9741170125751247,
+              "l2": 309.88814468017927,
+              "rank": 8
+            },
+            {
+              "aligned_row": 2816,
+              "coordinate": [
+                -1.4250000715255737,
+                -1.384374976158142,
+                0.17499999701976776
+              ],
+              "cosine": 0.9774111439438496,
+              "l2": 307.7426412642298,
+              "rank": 9
+            },
+            {
+              "aligned_row": 1919,
+              "coordinate": [
+                -2.2750000953674316,
+                2.375,
+                -0.02500000037252903
+              ],
+              "cosine": 0.9754583333384964,
+              "l2": 305.3665132627072,
+              "rank": 10
+            }
+          ]
+        },
+        "voxel_topology": {
+          "common_count": 8391,
+          "common_fraction_of_smaller": 1.0,
+          "count_a": 8391,
+          "count_b": 8391,
+          "jaccard": 1.0,
+          "only_a_count": 0,
+          "only_b_count": 0,
+          "union_count": 8391
+        }
+      },
+      "block_tokens": {
+        "block_topology": {
+          "common_count": 2998,
+          "common_fraction_of_smaller": 1.0,
+          "count_a": 2998,
+          "count_b": 2998,
+          "jaccard": 1.0,
+          "only_a_count": 0,
+          "only_b_count": 0,
+          "union_count": 2998
+        },
+        "common_block_tokens": {
+          "changed_element_fraction_at_1e-6": 0.8165222127251501,
+          "cosine_flat": 0.9464959523516896,
+          "max_row_l2": 37.130934174512745,
+          "mean_absolute_difference": 0.10435474917073412,
+          "mean_row_cosine": 0.9459822607417165,
+          "mean_row_l2": 2.3695060057970103,
+          "minimum_row_cosine": -0.7939059945541729,
+          "relative_l2": 0.32712091860616516,
+          "rms_difference": 0.32866207934051084,
+          "row_difference_concentration": {
+            "effective_changed_rows": 304.84761070713427,
+            "top_10_fraction": 0.05427169318477569,
+            "top_1_fraction": 0.005543444525713532,
+            "top_1_percent_fraction": 0.300585012113255
+          },
+          "shape_common": [
+            5996,
+            384
+          ],
+          "top_changed_rows": [
+            {
+              "block_index": [
+                7,
+                13,
+                3
+              ],
+              "coordinate": [
+                -1.125,
+                0.875,
+                0.875
+              ],
+              "cosine": -0.7939059945541729,
+              "l2": 37.130934174512745,
+              "rank": 1,
+              "token_within_block": 0
+            },
+            {
+              "block_index": [
+                7,
+                13,
+                3
+              ],
+              "coordinate": [
+                -1.125,
+                0.875,
+                0.875
+              ],
+              "cosine": -0.7935503048183409,
+              "l2": 37.12724587618327,
+              "rank": 2,
+              "token_within_block": 1
+            },
+            {
+              "block_index": [
+                7,
+                12,
+                2
+              ],
+              "coordinate": [
+                -1.125,
+                0.625,
+                0.625
+              ],
+              "cosine": -0.7511960651015238,
+              "l2": 36.662539109903754,
+              "rank": 3,
+              "token_within_block": 0
+            },
+            {
+              "block_index": [
+                7,
+                12,
+                2
+              ],
+              "coordinate": [
+                -1.125,
+                0.625,
+                0.625
+              ],
+              "cosine": -0.7507732872960554,
+              "l2": 36.65823237789898,
+              "rank": 4,
+              "token_within_block": 1
+            },
+            {
+              "block_index": [
+                8,
+                13,
+                3
+              ],
+              "coordinate": [
+                -0.875,
+                0.875,
+                0.875
+              ],
+              "cosine": -0.7491892199403719,
+              "l2": 36.6553630096769,
+              "rank": 5,
+              "token_within_block": 0
+            },
+            {
+              "block_index": [
+                8,
+                13,
+                3
+              ],
+              "coordinate": [
+                -0.875,
+                0.875,
+                0.875
+              ],
+              "cosine": -0.7484536286674186,
+              "l2": 36.6476422106402,
+              "rank": 6,
+              "token_within_block": 1
+            },
+            {
+              "block_index": [
+                13,
+                12,
+                3
+              ],
+              "coordinate": [
+                0.375,
+                0.625,
+                0.875
+              ],
+              "cosine": -0.746715220438224,
+              "l2": 36.64106087430325,
+              "rank": 7,
+              "token_within_block": 0
+            },
+            {
+              "block_index": [
+                13,
+                12,
+                3
+              ],
+              "coordinate": [
+                0.375,
+                0.625,
+                0.875
+              ],
+              "cosine": -0.7462275903727089,
+              "l2": 36.63589048401353,
+              "rank": 8,
+              "token_within_block": 1
+            },
+            {
+              "block_index": [
+                14,
+                12,
+                3
+              ],
+              "coordinate": [
+                0.625,
+                0.625,
+                0.875
+              ],
+              "cosine": -0.7457897169118277,
+              "l2": 36.61873130975736,
+              "rank": 9,
+              "token_within_block": 0
+            },
+            {
+              "block_index": [
+                14,
+                12,
+                3
+              ],
+              "coordinate": [
+                0.625,
+                0.625,
+                0.875
+              ],
+              "cosine": -0.7451331693447102,
+              "l2": 36.611697744561184,
+              "rank": 10,
+              "token_within_block": 1
+            }
+          ]
+        },
+        "tokens_per_block": 2
+      },
+      "change_type": "color_swap",
+      "final_prefix_runtime_dtype": {
+        "changed_element_fraction_at_1e-6": 0.9024295461886305,
+        "cosine_flat": 0.9911218851790672,
+        "max_row_l2": 7.332951919698344,
+        "mean_absolute_difference": 0.030925676377925742,
+        "mean_row_cosine": 0.9877544757858321,
+        "mean_row_l2": 1.5423260313298666,
+        "minimum_row_cosine": 0.8695097951803024,
+        "relative_l2": 0.1332581569361712,
+        "rms_difference": 0.05831845077563914,
+        "row_difference_concentration": {
+          "effective_changed_rows": 55.80766071290948,
+          "top_10_fraction": 0.30501007085868437,
+          "top_1_fraction": 0.03989649984257621,
+          "top_1_percent_fraction": 0.11487158452900137
+        },
+        "shape": [
+          1,
+          258,
+          1536
+        ],
+        "shape_common": [
+          258,
+          1536
+        ],
+        "top_changed_rows": [
+          {
+            "cosine": 0.8727434970932274,
+            "l2": 7.332951919698344,
+            "rank": 1,
+            "token_index": 106
+          },
+          {
+            "cosine": 0.8695097951803024,
+            "l2": 7.258693889248156,
+            "rank": 2,
+            "token_index": 146
+          },
+          {
+            "cosine": 0.8793897204512341,
+            "l2": 6.954292442667122,
+            "rank": 3,
+            "token_index": 2
+          },
+          {
+            "cosine": 0.8925424565865041,
+            "l2": 6.555558385044881,
+            "rank": 4,
+            "token_index": 236
+          },
+          {
+            "cosine": 0.9129497418673808,
+            "l2": 6.150059606483045,
+            "rank": 5,
+            "token_index": 176
+          },
+          {
+            "cosine": 0.9238631326079939,
+            "l2": 6.115346755678283,
+            "rank": 6,
+            "token_index": 80
+          },
+          {
+            "cosine": 0.9126020170594137,
+            "l2": 6.112296325572062,
+            "rank": 7,
+            "token_index": 20
+          },
+          {
+            "cosine": 0.9140315408894965,
+            "l2": 5.9095535064677565,
+            "rank": 8,
+            "token_index": 202
+          },
+          {
+            "cosine": 0.9183114049702641,
+            "l2": 5.854365007299842,
+            "rank": 9,
+            "token_index": 137
+          },
+          {
+            "cosine": 0.9278462170550456,
+            "l2": 5.613778570908966,
+            "rank": 10,
+            "token_index": 140
+          }
+        ]
+      },
+      "latent_diversity": {
+        "scene_a_native": {
+          "mean_feature_std_across_tokens": 3.6036431789398193,
+          "mean_off_diagonal_cosine": 0.9179978370666504,
+          "minimum_off_diagonal_cosine": 0.195551335811615,
+          "std_off_diagonal_cosine": 0.11312760412693024,
+          "token_count": 256
+        },
+        "scene_a_projected": {
+          "mean_feature_std_across_tokens": 0.18938688933849335,
+          "mean_off_diagonal_cosine": 0.7895826697349548,
+          "minimum_off_diagonal_cosine": 0.25250503420829773,
+          "std_off_diagonal_cosine": 0.12681874632835388,
+          "token_count": 256
+        },
+        "scene_b_native": {
+          "mean_feature_std_across_tokens": 3.4311580657958984,
+          "mean_off_diagonal_cosine": 0.9292694926261902,
+          "minimum_off_diagonal_cosine": 0.4585988521575928,
+          "std_off_diagonal_cosine": 0.08234214782714844,
+          "token_count": 256
+        },
+        "scene_b_projected": {
+          "mean_feature_std_across_tokens": 0.18831808865070343,
+          "mean_off_diagonal_cosine": 0.7918832898139954,
+          "minimum_off_diagonal_cosine": 0.26926013827323914,
+          "std_off_diagonal_cosine": 0.12488798052072525,
+          "token_count": 256
+        }
+      },
+      "native_latents": {
+        "changed_element_fraction_at_1e-6": 1.0,
+        "cosine_flat": 0.9706834796526111,
+        "max_row_l2": 208.03409687976054,
+        "mean_absolute_difference": 1.7518472656665836,
+        "mean_row_cosine": 0.9590241508611396,
+        "mean_row_l2": 39.18067341603246,
+        "minimum_row_cosine": 0.5988874133239008,
+        "relative_l2": 0.2421825532844184,
+        "rms_difference": 3.1686836589940475,
+        "row_difference_concentration": {
+          "effective_changed_rows": 51.188052245475596,
+          "top_10_fraction": 0.33323913817499096,
+          "top_1_fraction": 0.043847020318432725,
+          "top_1_percent_fraction": 0.11634616946417359
+        },
+        "shape": [
+          1,
+          256,
+          384
+        ],
+        "shape_common": [
+          256,
+          384
+        ],
+        "top_changed_rows": [
+          {
+            "cosine": 0.6622882089800508,
+            "l2": 208.03409687976054,
+            "rank": 1,
+            "token_index": 79
+          },
+          {
+            "cosine": 0.6837122007240981,
+            "l2": 192.9803395738936,
+            "rank": 2,
+            "token_index": 175
+          },
+          {
+            "cosine": 0.6954236118033605,
+            "l2": 185.2490050938135,
+            "rank": 3,
+            "token_index": 19
+          },
+          {
+            "cosine": 0.6595210343488119,
+            "l2": 184.58889202864026,
+            "rank": 4,
+            "token_index": 235
+          },
+          {
+            "cosine": 0.5988874133239008,
+            "l2": 180.0335631615682,
+            "rank": 5,
+            "token_index": 145
+          },
+          {
+            "cosine": 0.7310238258265097,
+            "l2": 178.01132408043375,
+            "rank": 6,
+            "token_index": 139
+          },
+          {
+            "cosine": 0.7452598458803147,
+            "l2": 175.49031757935214,
+            "rank": 7,
+            "token_index": 199
+          },
+          {
+            "cosine": 0.646849652223043,
+            "l2": 175.2684947766586,
+            "rank": 8,
+            "token_index": 1
+          },
+          {
+            "cosine": 0.6153257492515725,
+            "l2": 167.67785130959558,
+            "rank": 9,
+            "token_index": 105
+          },
+          {
+            "cosine": 0.7803714439089604,
+            "l2": 162.09332576881343,
+            "rank": 10,
+            "token_index": 55
+          }
+        ]
+      },
+      "pair_id": "pair_000001",
+      "prefix_exactly_equal": false,
+      "prefix_hash_a": "0d37ed85dc52eab241e09051332c08c93919bf898b7a31c2c8918cae86bc5679",
+      "prefix_hash_b": "dc1095c22c1d8f511d264990ef494ac7bc99e52aa3bbc1e78a7eff94f5154eb7",
+      "projected_scene_tokens_float32": {
+        "changed_element_fraction_at_1e-6": 0.9998677571614584,
+        "cosine_flat": 0.9905249042898018,
+        "max_row_l2": 7.33275460287459,
+        "mean_absolute_difference": 0.031166230717040833,
+        "mean_row_cosine": 0.9876621885169492,
+        "mean_row_l2": 1.5516974580212883,
+        "minimum_row_cosine": 0.8695099689633213,
+        "relative_l2": 0.13766571597062763,
+        "rms_difference": 0.058536360009459824,
+        "row_difference_concentration": {
+          "effective_changed_rows": 55.78135734093307,
+          "top_10_fraction": 0.3050751572977323,
+          "top_1_fraction": 0.03990724022709653,
+          "top_1_percent_fraction": 0.11491304057868468
+        },
+        "shape": [
+          1,
+          256,
+          1536
+        ],
+        "shape_common": [
+          256,
+          1536
+        ],
+        "top_changed_rows": [
+          {
+            "cosine": 0.8727693191699718,
+            "l2": 7.33275460287459,
+            "rank": 1,
+            "token_index": 105
+          },
+          {
+            "cosine": 0.8695099689633213,
+            "l2": 7.258818804348006,
+            "rank": 2,
+            "token_index": 145
+          },
+          {
+            "cosine": 0.8793893548962335,
+            "l2": 6.954791300522676,
+            "rank": 3,
+            "token_index": 1
+          },
+          {
+            "cosine": 0.8925961626304316,
+            "l2": 6.553816293109874,
+            "rank": 4,
+            "token_index": 235
+          },
+          {
+            "cosine": 0.9129536401586865,
+            "l2": 6.1498736661461315,
+            "rank": 5,
+            "token_index": 175
+          },
+          {
+            "cosine": 0.923903743389952,
+            "l2": 6.113891444326365,
+            "rank": 6,
+            "token_index": 79
+          },
+          {
+            "cosine": 0.9126138808947547,
+            "l2": 6.11186950682763,
+            "rank": 7,
+            "token_index": 19
+          },
+          {
+            "cosine": 0.9140478111296494,
+            "l2": 5.909547515122455,
+            "rank": 8,
+            "token_index": 201
+          },
+          {
+            "cosine": 0.918331947559218,
+            "l2": 5.853747531108323,
+            "rank": 9,
+            "token_index": 136
+          },
+          {
+            "cosine": 0.9278244509989584,
+            "l2": 5.614181215067278,
+            "rank": 10,
+            "token_index": 139
+          }
+        ]
+      },
+      "projected_scene_tokens_runtime_dtype": {
+        "changed_element_fraction_at_1e-6": 0.9094797770182291,
+        "cosine_flat": 0.9905219343798782,
+        "max_row_l2": 7.332951919698344,
+        "mean_absolute_difference": 0.03116728322462829,
+        "mean_row_cosine": 0.9876588076279089,
+        "mean_row_l2": 1.554375453449631,
+        "minimum_row_cosine": 0.8695097951803024,
+        "relative_l2": 0.13768750129325916,
+        "rms_difference": 0.05854581401909702,
+        "row_difference_concentration": {
+          "effective_changed_rows": 55.80766071290948,
+          "top_10_fraction": 0.30501007085868437,
+          "top_1_fraction": 0.03989649984257621,
+          "top_1_percent_fraction": 0.11487158452900137
+        },
+        "shape": [
+          1,
+          256,
+          1536
+        ],
+        "shape_common": [
+          256,
+          1536
+        ],
+        "top_changed_rows": [
+          {
+            "cosine": 0.8727434970932274,
+            "l2": 7.332951919698344,
+            "rank": 1,
+            "token_index": 105
+          },
+          {
+            "cosine": 0.8695097951803024,
+            "l2": 7.258693889248156,
+            "rank": 2,
+            "token_index": 145
+          },
+          {
+            "cosine": 0.8793897204512341,
+            "l2": 6.954292442667122,
+            "rank": 3,
+            "token_index": 1
+          },
+          {
+            "cosine": 0.8925424565865041,
+            "l2": 6.555558385044881,
+            "rank": 4,
+            "token_index": 235
+          },
+          {
+            "cosine": 0.9129497418673808,
+            "l2": 6.150059606483045,
+            "rank": 5,
+            "token_index": 175
+          },
+          {
+            "cosine": 0.9238631326079939,
+            "l2": 6.115346755678283,
+            "rank": 6,
+            "token_index": 79
+          },
+          {
+            "cosine": 0.9126020170594137,
+            "l2": 6.112296325572062,
+            "rank": 7,
+            "token_index": 19
+          },
+          {
+            "cosine": 0.9140315408894965,
+            "l2": 5.9095535064677565,
+            "rank": 8,
+            "token_index": 201
+          },
+          {
+            "cosine": 0.9183114049702641,
+            "l2": 5.854365007299842,
+            "rank": 9,
+            "token_index": 136
+          },
+          {
+            "cosine": 0.9278462170550456,
+            "l2": 5.613778570908966,
+            "rank": 10,
+            "token_index": 139
+          }
+        ]
+      },
+      "raw_map": {
+        "rgb": {
+          "changed_element_fraction_at_1e-6": 0.01294559015742587,
+          "cosine_flat": 0.9985389601214153,
+          "max_row_l2": 270.4733278792984,
+          "mean_absolute_difference": 0.8059189114033878,
+          "mean_row_cosine": 0.9980995936055753,
+          "mean_row_l2": 1.4927129392782954,
+          "minimum_row_cosine": 0.023226003422147586,
+          "relative_l2": 0.05405632024972603,
+          "rms_difference": 9.477740283528055,
+          "row_difference_concentration": {
+            "effective_changed_rows": 482.18695881119544,
+            "top_10_fraction": 0.03612708538021095,
+            "top_1_fraction": 0.0036329860260334826,
+            "top_1_percent_fraction": 0.9995451691284112
+          },
+          "shape_common": [
+            74723,
+            3
+          ],
+          "top_changed_rows": [
+            {
+              "aligned_row": 43597,
+              "coordinate": [
+                0.625,
+                0.5250000357627869,
+                0.875
+              ],
+              "cosine": 0.19999881465851804,
+              "l2": 270.4733278792984,
+              "rank": 1
+            },
+            {
+              "aligned_row": 44060,
+              "coordinate": [
+                0.675000011920929,
+                0.5250000357627869,
+                0.925000011920929
+              ],
+              "cosine": 0.1994281876473242,
+              "l2": 270.4091908775298,
+              "rank": 2
+            },
+            {
+              "aligned_row": 44059,
+              "coordinate": [
+                0.675000011920929,
+                0.5250000357627869,
+                0.875
+              ],
+              "cosine": 0.1876117561714012,
+              "l2": 270.18890872555335,
+              "rank": 3
+            },
+            {
+              "aligned_row": 44061,
+              "coordinate": [
+                0.675000011920929,
+                0.5250000357627869,
+                0.9750000238418579
+              ],
+              "cosine": 0.21412394429383313,
+              "l2": 269.88884967852863,
+              "rank": 4
+            },
+            {
+              "aligned_row": 43598,
+              "coordinate": [
+                0.625,
+                0.5250000357627869,
+                0.925000011920929
+              ],
+              "cosine": 0.21603948806876458,
+              "l2": 269.8725806889158,
+              "rank": 5
+            },
+            {
+              "aligned_row": 43137,
+              "coordinate": [
+                0.574999988079071,
+                0.5250000357627869,
+                0.875
+              ],
+              "cosine": 0.21839454944911887,
+              "l2": 269.85931368091576,
+              "rank": 6
+            },
+            {
+              "aligned_row": 43599,
+              "coordinate": [
+                0.625,
+                0.5250000357627869,
+                0.9750000238418579
+              ],
+              "cosine": 0.22691224697580892,
+              "l2": 269.55447051330407,
+              "rank": 7
+            },
+            {
+              "aligned_row": 43138,
+              "coordinate": [
+                0.574999988079071,
+                0.5250000357627869,
+                0.925000011920929
+              ],
+              "cosine": 0.2361895873417636,
+              "l2": 269.16154111773494,
+              "rank": 8
+            },
+            {
+              "aligned_row": 44062,
+              "coordinate": [
+                0.675000011920929,
+                0.5250000357627869,
+                1.024999976158142
+              ],
+              "cosine": 0.2333504616409546,
+              "l2": 269.15305203169817,
+              "rank": 9
+            },
+            {
+              "aligned_row": 42676,
+              "coordinate": [
+                0.5250000357627869,
+                0.5250000357627869,
+                0.875
+              ],
+              "cosine": 0.24621243131296278,
+              "l2": 268.6072637444537,
+              "rank": 10
+            }
+          ]
+        },
+        "semantic": {
+          "changed_element_fraction_at_1e-6": 0.7107723544722397,
+          "cosine_flat": 0.9989162297748646,
+          "max_row_l2": 731.6371090612852,
+          "mean_absolute_difference": 0.30384522128519037,
+          "mean_row_cosine": 0.9989480117922354,
+          "mean_row_l2": 39.663613602312076,
+          "minimum_row_cosine": 0.8106050469783808,
+          "relative_l2": 0.046556856719475806,
+          "rms_difference": 1.1220128262345566,
+          "row_difference_concentration": {
+            "effective_changed_rows": 7426.215959254638,
+            "top_10_fraction": 0.012766694290101705,
+            "top_1_fraction": 0.0018523382543140607,
+            "top_1_percent_fraction": 0.23473885754272067
+          },
+          "shape_common": [
+            74723,
+            3072
+          ],
+          "top_changed_rows": [
+            {
+              "aligned_row": 29210,
+              "coordinate": [
+                -0.875,
+                1.3250000476837158,
+                0.02500000037252903
+              ],
+              "cosine": 0.8106050469783808,
+              "l2": 731.6371090612852,
+              "rank": 1
+            },
+            {
+              "aligned_row": 28607,
+              "coordinate": [
+                -0.925000011920929,
+                1.3250000476837158,
+                0.02500000037252903
+              ],
+              "cosine": 0.8270603266813243,
+              "l2": 705.5712642909776,
+              "rank": 2
+            },
+            {
+              "aligned_row": 16830,
+              "coordinate": [
+                -2.0250000953674316,
+                -1.125,
+                0.02500000037252903
+              ],
+              "cosine": 0.868488149322391,
+              "l2": 704.5432022983042,
+              "rank": 3
+            },
+            {
+              "aligned_row": 24369,
+              "coordinate": [
+                -1.274999976158142,
+                1.3250000476837158,
+                0.02500000037252903
+              ],
+              "cosine": 0.9180315946771855,
+              "l2": 625.5408744136939,
+              "rank": 4
+            },
+            {
+              "aligned_row": 28602,
+              "coordinate": [
+                -0.925000011920929,
+                1.274999976158142,
+                -0.02500000037252903
+              ],
+              "cosine": 0.8770753383592392,
+              "l2": 588.7788015128748,
+              "rank": 5
+            },
+            {
+              "aligned_row": 24958,
+              "coordinate": [
+                -1.225000023841858,
+                1.274999976158142,
+                -0.02500000037252903
+              ],
+              "cosine": 0.9248596690245786,
+              "l2": 579.8155109431646,
+              "rank": 6
+            },
+            {
+              "aligned_row": 20137,
+              "coordinate": [
+                -1.6750000715255737,
+                -0.875,
+                0.02500000037252903
+              ],
+              "cosine": 0.9178058554770998,
+              "l2": 550.4390179425872,
+              "rank": 7
+            },
+            {
+              "aligned_row": 12705,
+              "coordinate": [
+                -2.4750001430511475,
+                -1.475000023841858,
+                -0.02500000037252903
+              ],
+              "cosine": 0.9378653147836299,
+              "l2": 529.1522056101536,
+              "rank": 8
+            },
+            {
+              "aligned_row": 24963,
+              "coordinate": [
+                -1.225000023841858,
+                1.3250000476837158,
+                0.02500000037252903
+              ],
+              "cosine": 0.9387969779015048,
+              "l2": 506.1726533080931,
+              "rank": 9
+            },
+            {
+              "aligned_row": 29214,
+              "coordinate": [
+                -0.875,
+                1.375,
+                0.02500000037252903
+              ],
+              "cosine": 0.9172719979660348,
+              "l2": 496.48697577389163,
+              "rank": 10
+            }
+          ]
+        },
+        "voxel_topology": {
+          "common_count": 74723,
+          "common_fraction_of_smaller": 1.0,
+          "count_a": 74723,
+          "count_b": 74723,
+          "jaccard": 1.0,
+          "only_a_count": 0,
+          "only_b_count": 0,
+          "union_count": 74723
+        }
+      },
+      "scene_a": "scene_000003",
+      "scene_b": "scene_000004",
+      "signal_retention": {
+        "aggregation_over_raw": 0.8233634038837851,
+        "block_over_aggregated": 8.533616186732434,
+        "native_latents_over_blocks": 0.740345662748619,
+        "projected_over_native_latents": 0.5684377924984276,
+        "projected_over_raw": 2.95693750976618,
+        "raw_to_projected_attenuation_factor": 0.33818773535023916
+      },
+      "split": "train"
+    },
+    {
+      "aggregated_map": {
+        "rgb": {
+          "changed_element_fraction_at_1e-6": 0.6489146555211002,
+          "cosine_flat": 0.9775956737187554,
+          "max_row_l2": 257.86142668493113,
+          "mean_absolute_difference": 20.632202965688943,
+          "mean_row_cosine": 0.9985106668317867,
+          "mean_row_l2": 36.83251872703734,
+          "minimum_row_cosine": 0.8306200965160526,
+          "relative_l2": 0.21168054377827486,
+          "rms_difference": 35.08556447676872,
+          "row_difference_concentration": {
+            "effective_changed_rows": 1404.175024362887,
+            "top_10_fraction": 0.019668823752903086,
+            "top_1_fraction": 0.0024275394279872184,
+            "top_1_percent_fraction": 0.12238408005923582
+          },
+          "shape_common": [
+            7417,
+            3
+          ],
+          "top_changed_rows": [
+            {
+              "aligned_row": 3900,
+              "coordinate": [
+                0.1772727221250534,
+                0.875,
+                0.08181818574666977
+              ],
+              "cosine": 0.8970422732877247,
+              "l2": 257.86142668493113,
+              "rank": 1
+            },
+            {
+              "aligned_row": 2454,
+              "coordinate": [
+                -1.3874999284744263,
+                0.2571428716182709,
+                0.5196428894996643
+              ],
+              "cosine": 0.8306200965160526,
+              "l2": 252.36319662831593,
+              "rank": 2
+            },
+            {
+              "aligned_row": 4458,
+              "coordinate": [
+                0.824431836605072,
+                2.514772891998291,
+                2.0244319438934326
+              ],
+              "cosine": 0.9382810149233661,
+              "l2": 231.85027481064506,
+              "rank": 3
+            },
+            {
+              "aligned_row": 3076,
+              "coordinate": [
+                -0.8267698884010315,
+                2.424999952316284,
+                2.023672580718994
+              ],
+              "cosine": 0.9394702716261882,
+              "l2": 229.48443779969898,
+              "rank": 4
+            },
+            {
+              "aligned_row": 3504,
+              "coordinate": [
+                -0.2361111044883728,
+                0.8361110687255859,
+                0.02500000037252903
+              ],
+              "cosine": 0.9381449541787164,
+              "l2": 229.2786938938358,
+              "rank": 5
+            },
+            {
+              "aligned_row": 4605,
+              "coordinate": [
+                0.9725309014320374,
+                2.510802745819092,
+                2.0243828296661377
+              ],
+              "cosine": 0.963956378889477,
+              "l2": 227.18613749144038,
+              "rank": 6
+            },
+            {
+              "aligned_row": 2932,
+              "coordinate": [
+                -0.9585937261581421,
+                2.4320311546325684,
+                2.0210938453674316
+              ],
+              "cosine": 0.9647936077023932,
+              "l2": 226.34580093886515,
+              "rank": 7
+            },
+            {
+              "aligned_row": 119,
+              "coordinate": [
+                -3.0250000953674316,
+                -1.3950001001358032,
+                2.755000114440918
+              ],
+              "cosine": 0.999942855028849,
+              "l2": 222.01666603644424,
+              "rank": 8
+            },
+            {
+              "aligned_row": 5344,
+              "coordinate": [
+                1.8678570985794067,
+                -2.4869048595428467,
+                2.6202380657196045
+              ],
+              "cosine": 0.9999905119591581,
+              "l2": 220.75282524032278,
+              "rank": 9
+            },
+            {
+              "aligned_row": 2100,
+              "coordinate": [
+                -1.7220587730407715,
+                -2.482353448867798,
+                2.621323585510254
+              ],
+              "cosine": 0.999984606488923,
+              "l2": 220.70737389238883,
+              "rank": 10
+            }
+          ]
+        },
+        "semantic": {
+          "changed_element_fraction_at_1e-6": 0.9999540487646623,
+          "cosine_flat": 0.9685660607885319,
+          "max_row_l2": 938.4512267905523,
+          "mean_absolute_difference": 2.2437528294176494,
+          "mean_row_cosine": 0.9691492274236972,
+          "mean_row_l2": 290.4820920437963,
+          "minimum_row_cosine": 0.7823505966989462,
+          "relative_l2": 0.25074306731060175,
+          "rms_difference": 5.974068146984254,
+          "row_difference_concentration": {
+            "effective_changed_rows": 3429.6294181532594,
+            "top_10_fraction": 0.009710386160400647,
+            "top_1_fraction": 0.001083012770468758,
+            "top_1_percent_fraction": 0.056331191306904664
+          },
+          "shape_common": [
+            7417,
+            3072
+          ],
+          "top_changed_rows": [
+            {
+              "aligned_row": 553,
+              "coordinate": [
+                -3.0250000953674316,
+                2.424999952316284,
+                2.5250000953674316
+              ],
+              "cosine": 0.7823505966989462,
+              "l2": 938.4512267905523,
+              "rank": 1
+            },
+            {
+              "aligned_row": 1161,
+              "coordinate": [
+                -2.924999952316284,
+                2.5250000953674316,
+                2.200000047683716
+              ],
+              "cosine": 0.7979742353651562,
+              "l2": 923.0665314879566,
+              "rank": 2
+            },
+            {
+              "aligned_row": 7413,
+              "coordinate": [
+                3.0249998569488525,
+                2.450000047683716,
+                2.4750001430511475
+              ],
+              "cosine": 0.7989600660065562,
+              "l2": 906.8936183298317,
+              "rank": 3
+            },
+            {
+              "aligned_row": 1162,
+              "coordinate": [
+                -2.941666603088379,
+                2.497222423553467,
+                2.336111068725586
+              ],
+              "cosine": 0.7921230300115271,
+              "l2": 905.7401975675489,
+              "rank": 4
+            },
+            {
+              "aligned_row": 1163,
+              "coordinate": [
+                -2.9549996852874756,
+                2.495000123977661,
+                2.4749999046325684
+              ],
+              "cosine": 0.7985909400775568,
+              "l2": 877.5397783828624,
+              "rank": 5
+            },
+            {
+              "aligned_row": 524,
+              "coordinate": [
+                -3.0250000953674316,
+                2.075000047683716,
+                1.225000023841858
+              ],
+              "cosine": 0.8219371272120484,
+              "l2": 874.8650323987104,
+              "rank": 6
+            },
+            {
+              "aligned_row": 6850,
+              "coordinate": [
+                2.924999475479126,
+                2.494443893432617,
+                2.325000047683716
+              ],
+              "cosine": 0.7996304984941394,
+              "l2": 874.2357398561585,
+              "rank": 7
+            },
+            {
+              "aligned_row": 536,
+              "coordinate": [
+                -3.0250000953674316,
+                2.2250001430511475,
+                2.674999952316284
+              ],
+              "cosine": 0.8219575210525962,
+              "l2": 862.5892726577786,
+              "rank": 8
+            },
+            {
+              "aligned_row": 1683,
+              "coordinate": [
+                -2.1777777671813965,
+                -2.4749999046325684,
+                0.22777777910232544
+              ],
+              "cosine": 0.817703107502946,
+              "l2": 859.5841692609021,
+              "rank": 9
+            },
+            {
+              "aligned_row": 6849,
+              "coordinate": [
+                2.929166555404663,
+                2.500000238418579,
+                2.1541666984558105
+              ],
+              "cosine": 0.8136143628797261,
+              "l2": 859.1198659584796,
+              "rank": 10
+            }
+          ]
+        },
+        "voxel_topology": {
+          "common_count": 7417,
+          "common_fraction_of_smaller": 0.885294819766054,
+          "count_a": 8386,
+          "count_b": 8378,
+          "jaccard": 0.7935166363539103,
+          "only_a_count": 969,
+          "only_b_count": 961,
+          "union_count": 9347
+        }
+      },
+      "block_tokens": {
+        "block_topology": {
+          "common_count": 2642,
+          "common_fraction_of_smaller": 0.8827263615101905,
+          "count_a": 2999,
+          "count_b": 2993,
+          "jaccard": 0.7886567164179105,
+          "only_a_count": 357,
+          "only_b_count": 351,
+          "union_count": 3350
+        },
+        "common_block_tokens": {
+          "changed_element_fraction_at_1e-6": 0.9999945787597779,
+          "cosine_flat": 0.8154457145174316,
+          "max_row_l2": 35.05565341632657,
+          "mean_absolute_difference": 0.31898971585566466,
+          "mean_row_cosine": 0.8144911486542273,
+          "mean_row_l2": 7.624092971306858,
+          "minimum_row_cosine": -0.5941922685895932,
+          "relative_l2": 0.6075430612064585,
+          "rms_difference": 0.6105550191304479,
+          "row_difference_concentration": {
+            "effective_changed_rows": 1046.9765939324352,
+            "top_10_fraction": 0.016096162413360888,
+            "top_1_fraction": 0.001624697410222699,
+            "top_1_percent_fraction": 0.08292364133935867
+          },
+          "shape_common": [
+            5284,
+            384
+          ],
+          "top_changed_rows": [
+            {
+              "block_index": [
+                2,
+                1,
+                -1
+              ],
+              "coordinate": [
+                -2.375,
+                -2.125,
+                -0.125
+              ],
+              "cosine": -0.5941922685895932,
+              "l2": 35.05565341632657,
+              "rank": 1,
+              "token_within_block": 1
+            },
+            {
+              "block_index": [
+                2,
+                1,
+                -1
+              ],
+              "coordinate": [
+                -2.375,
+                -2.125,
+                -0.125
+              ],
+              "cosine": -0.5939541033532324,
+              "l2": 35.053031511366775,
+              "rank": 2,
+              "token_within_block": 0
+            },
+            {
+              "block_index": [
+                21,
+                0,
+                7
+              ],
+              "coordinate": [
+                2.375,
+                -2.375,
+                1.875
+              ],
+              "cosine": -0.5916783268887568,
+              "l2": 35.02059098605594,
+              "rank": 3,
+              "token_within_block": 0
+            },
+            {
+              "block_index": [
+                21,
+                0,
+                7
+              ],
+              "coordinate": [
+                2.375,
+                -2.375,
+                1.875
+              ],
+              "cosine": -0.5913180197998917,
+              "l2": 35.01660594733806,
+              "rank": 4,
+              "token_within_block": 1
+            },
+            {
+              "block_index": [
+                -1,
+                14,
+                1
+              ],
+              "coordinate": [
+                -3.125,
+                1.125,
+                0.375
+              ],
+              "cosine": -0.5734854440663395,
+              "l2": 34.81907737053901,
+              "rank": 5,
+              "token_within_block": 1
+            },
+            {
+              "block_index": [
+                -1,
+                14,
+                1
+              ],
+              "coordinate": [
+                -3.125,
+                1.125,
+                0.375
+              ],
+              "cosine": -0.573455806160168,
+              "l2": 34.818738842043935,
+              "rank": 6,
+              "token_within_block": 0
+            },
+            {
+              "block_index": [
+                18,
+                4,
+                -1
+              ],
+              "coordinate": [
+                1.625,
+                -1.375,
+                -0.125
+              ],
+              "cosine": -0.575801754509337,
+              "l2": 34.789667350259336,
+              "rank": 7,
+              "token_within_block": 0
+            },
+            {
+              "block_index": [
+                2,
+                1,
+                0
+              ],
+              "coordinate": [
+                -2.375,
+                -2.125,
+                0.125
+              ],
+              "cosine": -0.569721426889509,
+              "l2": 34.78673489786935,
+              "rank": 8,
+              "token_within_block": 1
+            },
+            {
+              "block_index": [
+                2,
+                1,
+                0
+              ],
+              "coordinate": [
+                -2.375,
+                -2.125,
+                0.125
+              ],
+              "cosine": -0.5694704012853337,
+              "l2": 34.78405794028222,
+              "rank": 9,
+              "token_within_block": 0
+            },
+            {
+              "block_index": [
+                18,
+                4,
+                -1
+              ],
+              "coordinate": [
+                1.625,
+                -1.375,
+                -0.125
+              ],
+              "cosine": -0.5749096704935662,
+              "l2": 34.77954632275885,
+              "rank": 10,
+              "token_within_block": 1
+            }
+          ]
+        },
+        "tokens_per_block": 2
+      },
+      "change_type": "mirror_lr",
+      "final_prefix_runtime_dtype": {
+        "changed_element_fraction_at_1e-6": 0.9857527858527132,
+        "cosine_flat": 0.9290542012224912,
+        "max_row_l2": 15.298895392294439,
+        "mean_absolute_difference": 0.11928167045501091,
+        "mean_row_cosine": 0.9163262712420259,
+        "mean_row_l2": 5.882083213001529,
+        "minimum_row_cosine": 0.5926950687252428,
+        "relative_l2": 0.3766941966805292,
+        "rms_difference": 0.1656686818497701,
+        "row_difference_concentration": {
+          "effective_changed_rows": 146.27358240975508,
+          "top_10_fraction": 0.13846538100205694,
+          "top_1_fraction": 0.021519312631368418,
+          "top_1_percent_fraction": 0.053220696744275764
+        },
+        "shape": [
+          1,
+          258,
+          1536
+        ],
+        "shape_common": [
+          258,
+          1536
+        ],
+        "top_changed_rows": [
+          {
+            "cosine": 0.5926950687252428,
+            "l2": 15.298895392294439,
+            "rank": 1,
+            "token_index": 80
+          },
+          {
+            "cosine": 0.6434456650024063,
+            "l2": 13.7167126326996,
+            "rank": 2,
+            "token_index": 215
+          },
+          {
+            "cosine": 0.6895599804325664,
+            "l2": 12.516147808347453,
+            "rank": 3,
+            "token_index": 8
+          },
+          {
+            "cosine": 0.6689307678846909,
+            "l2": 12.463305445976328,
+            "rank": 4,
+            "token_index": 152
+          },
+          {
+            "cosine": 0.688178637075033,
+            "l2": 12.09213318010792,
+            "rank": 5,
+            "token_index": 251
+          },
+          {
+            "cosine": 0.7109173770158534,
+            "l2": 11.384228696500964,
+            "rank": 6,
+            "token_index": 212
+          },
+          {
+            "cosine": 0.719677839768928,
+            "l2": 11.22500612853584,
+            "rank": 7,
+            "token_index": 71
+          },
+          {
+            "cosine": 0.7262586534021149,
+            "l2": 11.140228168470454,
+            "rank": 8,
+            "token_index": 95
+          },
+          {
+            "cosine": 0.7530411740261572,
+            "l2": 11.095694012166927,
+            "rank": 9,
+            "token_index": 128
+          },
+          {
+            "cosine": 0.7324511688192555,
+            "l2": 11.081296743583502,
+            "rank": 10,
+            "token_index": 203
+          }
+        ]
+      },
+      "latent_diversity": {
+        "scene_a_native": {
+          "mean_feature_std_across_tokens": 3.6083405017852783,
+          "mean_off_diagonal_cosine": 0.9154143929481506,
+          "minimum_off_diagonal_cosine": 0.16162729263305664,
+          "std_off_diagonal_cosine": 0.11771053075790405,
+          "token_count": 256
+        },
+        "scene_a_projected": {
+          "mean_feature_std_across_tokens": 0.19033183157444,
+          "mean_off_diagonal_cosine": 0.788613498210907,
+          "minimum_off_diagonal_cosine": 0.2045872062444687,
+          "std_off_diagonal_cosine": 0.12806612253189087,
+          "token_count": 256
+        },
+        "scene_b_native": {
+          "mean_feature_std_across_tokens": 3.759066343307495,
+          "mean_off_diagonal_cosine": 0.9086998105049133,
+          "minimum_off_diagonal_cosine": 0.08100879937410355,
+          "std_off_diagonal_cosine": 0.12188825011253357,
+          "token_count": 256
+        },
+        "scene_b_projected": {
+          "mean_feature_std_across_tokens": 0.1894593983888626,
+          "mean_off_diagonal_cosine": 0.7933107614517212,
+          "minimum_off_diagonal_cosine": 0.13610824942588806,
+          "std_off_diagonal_cosine": 0.12348350882530212,
+          "token_count": 256
+        }
+      },
+      "native_latents": {
+        "changed_element_fraction_at_1e-6": 1.0,
+        "cosine_flat": 0.9308054397243297,
+        "max_row_l2": 339.7699868776014,
+        "mean_absolute_difference": 3.1304619894381935,
+        "mean_row_cosine": 0.9216293142521149,
+        "mean_row_l2": 73.15000966870417,
+        "minimum_row_cosine": 0.10380896257281043,
+        "relative_l2": 0.37201348683132857,
+        "rms_difference": 4.843629578715708,
+        "row_difference_concentration": {
+          "effective_changed_rows": 68.59435090633642,
+          "top_10_fraction": 0.2872024110883299,
+          "top_1_fraction": 0.05005609795552052,
+          "top_1_percent_fraction": 0.12279019560467598
+        },
+        "shape": [
+          1,
+          256,
+          384
+        ],
+        "shape_common": [
+          256,
+          384
+        ],
+        "top_changed_rows": [
+          {
+            "cosine": 0.10380896257281043,
+            "l2": 339.7699868776014,
+            "rank": 1,
+            "token_index": 79
+          },
+          {
+            "cosine": 0.1854135241760766,
+            "l2": 308.59538067814134,
+            "rank": 2,
+            "token_index": 214
+          },
+          {
+            "cosine": 0.3551250992713888,
+            "l2": 269.2851143839376,
+            "rank": 3,
+            "token_index": 250
+          },
+          {
+            "cosine": 0.4385523605868848,
+            "l2": 262.0320754747035,
+            "rank": 4,
+            "token_index": 34
+          },
+          {
+            "cosine": 0.5644357492457591,
+            "l2": 240.30146547967308,
+            "rank": 5,
+            "token_index": 124
+          },
+          {
+            "cosine": 0.49096194483847105,
+            "l2": 236.88668166163248,
+            "rank": 6,
+            "token_index": 130
+          },
+          {
+            "cosine": 0.5169111539862286,
+            "l2": 236.55245885882732,
+            "rank": 7,
+            "token_index": 94
+          },
+          {
+            "cosine": 0.5209381501904156,
+            "l2": 225.82369072832617,
+            "rank": 8,
+            "token_index": 139
+          },
+          {
+            "cosine": 0.5404319557717485,
+            "l2": 218.4552499294769,
+            "rank": 9,
+            "token_index": 175
+          },
+          {
+            "cosine": 0.6481661148006305,
+            "l2": 204.90113507054343,
+            "rank": 10,
+            "token_index": 154
+          }
+        ]
+      },
+      "pair_id": "pair_000003",
+      "prefix_exactly_equal": false,
+      "prefix_hash_a": "13955d098443bbd885961ac0ae6f373eb22f197862a158e91d9f3952913c2f02",
+      "prefix_hash_b": "c7ac058bbb2d2e6f4034204bd2730df6721aeb840176d8290f9428355876e0b6",
+      "projected_scene_tokens_float32": {
+        "changed_element_fraction_at_1e-6": 0.9999898274739584,
+        "cosine_flat": 0.9243131506005094,
+        "max_row_l2": 15.298566555328701,
+        "mean_absolute_difference": 0.12021512342282896,
+        "mean_row_cosine": 0.915675431167392,
+        "mean_row_l2": 5.927870864306959,
+        "minimum_row_cosine": 0.5926579294712859,
+        "relative_l2": 0.38907790056457237,
+        "rms_difference": 0.16631168815416608,
+        "row_difference_concentration": {
+          "effective_changed_rows": 146.26483664010192,
+          "top_10_fraction": 0.1384747150195728,
+          "top_1_fraction": 0.021519132299674018,
+          "top_1_percent_fraction": 0.05322608652158239
+        },
+        "shape": [
+          1,
+          256,
+          1536
+        ],
+        "shape_common": [
+          256,
+          1536
+        ],
+        "top_changed_rows": [
+          {
+            "cosine": 0.5926579294712859,
+            "l2": 15.298566555328701,
+            "rank": 1,
+            "token_index": 79
+          },
+          {
+            "cosine": 0.6434233126522424,
+            "l2": 13.717129966867272,
+            "rank": 2,
+            "token_index": 214
+          },
+          {
+            "cosine": 0.6894690769832621,
+            "l2": 12.517633780653163,
+            "rank": 3,
+            "token_index": 7
+          },
+          {
+            "cosine": 0.6689252299299799,
+            "l2": 12.46380384716638,
+            "rank": 4,
+            "token_index": 151
+          },
+          {
+            "cosine": 0.6882070382481069,
+            "l2": 12.091734708334169,
+            "rank": 5,
+            "token_index": 250
+          },
+          {
+            "cosine": 0.7109351502422994,
+            "l2": 11.385379088984664,
+            "rank": 6,
+            "token_index": 211
+          },
+          {
+            "cosine": 0.7196402086794441,
+            "l2": 11.224824601126612,
+            "rank": 7,
+            "token_index": 70
+          },
+          {
+            "cosine": 0.7262465926851869,
+            "l2": 11.14056314856262,
+            "rank": 8,
+            "token_index": 94
+          },
+          {
+            "cosine": 0.753029507372643,
+            "l2": 11.094777876097385,
+            "rank": 9,
+            "token_index": 127
+          },
+          {
+            "cosine": 0.732449277368871,
+            "l2": 11.081241276311912,
+            "rank": 10,
+            "token_index": 202
+          }
+        ]
+      },
+      "projected_scene_tokens_runtime_dtype": {
+        "changed_element_fraction_at_1e-6": 0.9934539794921875,
+        "cosine_flat": 0.9243098870504637,
+        "max_row_l2": 15.298895392294439,
+        "mean_absolute_difference": 0.12021355850544069,
+        "mean_row_cosine": 0.9156725702361043,
+        "mean_row_l2": 5.928036988103104,
+        "minimum_row_cosine": 0.5926950687252428,
+        "relative_l2": 0.38908621580439073,
+        "rms_difference": 0.16631456609984505,
+        "row_difference_concentration": {
+          "effective_changed_rows": 146.27358240975508,
+          "top_10_fraction": 0.13846538100205694,
+          "top_1_fraction": 0.021519312631368418,
+          "top_1_percent_fraction": 0.053220696744275764
+        },
+        "shape": [
+          1,
+          256,
+          1536
+        ],
+        "shape_common": [
+          256,
+          1536
+        ],
+        "top_changed_rows": [
+          {
+            "cosine": 0.5926950687252428,
+            "l2": 15.298895392294439,
+            "rank": 1,
+            "token_index": 79
+          },
+          {
+            "cosine": 0.6434456650024063,
+            "l2": 13.7167126326996,
+            "rank": 2,
+            "token_index": 214
+          },
+          {
+            "cosine": 0.6895599804325664,
+            "l2": 12.516147808347453,
+            "rank": 3,
+            "token_index": 7
+          },
+          {
+            "cosine": 0.6689307678846909,
+            "l2": 12.463305445976328,
+            "rank": 4,
+            "token_index": 151
+          },
+          {
+            "cosine": 0.688178637075033,
+            "l2": 12.09213318010792,
+            "rank": 5,
+            "token_index": 250
+          },
+          {
+            "cosine": 0.7109173770158534,
+            "l2": 11.384228696500964,
+            "rank": 6,
+            "token_index": 211
+          },
+          {
+            "cosine": 0.719677839768928,
+            "l2": 11.22500612853584,
+            "rank": 7,
+            "token_index": 70
+          },
+          {
+            "cosine": 0.7262586534021149,
+            "l2": 11.140228168470454,
+            "rank": 8,
+            "token_index": 94
+          },
+          {
+            "cosine": 0.7530411740261572,
+            "l2": 11.095694012166927,
+            "rank": 9,
+            "token_index": 127
+          },
+          {
+            "cosine": 0.7324511688192555,
+            "l2": 11.081296743583502,
+            "rank": 10,
+            "token_index": 202
+          }
+        ]
+      },
+      "raw_map": {
+        "rgb": {
+          "changed_element_fraction_at_1e-6": 0.6944777849588116,
+          "cosine_flat": 0.9780061148996686,
+          "max_row_l2": 267.95148814664196,
+          "mean_absolute_difference": 21.849000026919015,
+          "mean_row_cosine": 0.9990310842704402,
+          "mean_row_l2": 38.73948119717011,
+          "minimum_row_cosine": 0.8340417920865233,
+          "relative_l2": 0.20973958388587116,
+          "rms_difference": 36.11392854176658,
+          "row_difference_concentration": {
+            "effective_changed_rows": 11705.850789864926,
+            "top_10_fraction": 0.0027133750392121735,
+            "top_1_fraction": 0.0002823721216889458,
+            "top_1_percent_fraction": 0.13605331268005266
+          },
+          "shape_common": [
+            64986,
+            3
+          ],
+          "top_changed_rows": [
+            {
+              "aligned_row": 1010,
+              "coordinate": [
+                -3.0250000953674316,
+                -0.875,
+                2.7250001430511475
+              ],
+              "cosine": 0.9996256843394188,
+              "l2": 267.95148814664196,
+              "rank": 1
+            },
+            {
+              "aligned_row": 966,
+              "coordinate": [
+                -3.0250000953674316,
+                -0.925000011920929,
+                2.7750000953674316
+              ],
+              "cosine": 0.9993529542828765,
+              "l2": 267.93655965545275,
+              "rank": 2
+            },
+            {
+              "aligned_row": 1157,
+              "coordinate": [
+                -3.0250000953674316,
+                -0.7250000238418579,
+                2.7750000953674316
+              ],
+              "cosine": 0.9995993350938681,
+              "l2": 265.0641431804762,
+              "rank": 3
+            },
+            {
+              "aligned_row": 57208,
+              "coordinate": [
+                2.9750001430511475,
+                -0.9750000238418579,
+                2.7250001430511475
+              ],
+              "cosine": 0.9996998022113615,
+              "l2": 264.21609185366214,
+              "rank": 4
+            },
+            {
+              "aligned_row": 57517,
+              "coordinate": [
+                2.9750001430511475,
+                -0.7250000238418579,
+                2.7750000953674316
+              ],
+              "cosine": 0.9995368337567809,
+              "l2": 263.92050953421216,
+              "rank": 5
+            },
+            {
+              "aligned_row": 819,
+              "coordinate": [
+                -3.0250000953674316,
+                -1.0750000476837158,
+                2.7250001430511475
+              ],
+              "cosine": 0.9997258260212089,
+              "l2": 262.74131764912806,
+              "rank": 6
+            },
+            {
+              "aligned_row": 1257,
+              "coordinate": [
+                -3.0250000953674316,
+                -0.625,
+                2.7750000953674316
+              ],
+              "cosine": 0.9996722009605981,
+              "l2": 261.0402267850685,
+              "rank": 7
+            },
+            {
+              "aligned_row": 57025,
+              "coordinate": [
+                2.9750001430511475,
+                -1.125,
+                2.7250001430511475
+              ],
+              "cosine": 0.9997821102839992,
+              "l2": 257.9850167724519,
+              "rank": 8
+            },
+            {
+              "aligned_row": 61540,
+              "coordinate": [
+                3.0250000953674316,
+                -1.225000023841858,
+                2.7250001430511475
+              ],
+              "cosine": 0.9996936883086105,
+              "l2": 257.79306856909716,
+              "rank": 9
+            },
+            {
+              "aligned_row": 61896,
+              "coordinate": [
+                3.0250000953674316,
+                -0.925000011920929,
+                2.7250001430511475
+              ],
+              "cosine": 0.9999002563977039,
+              "l2": 257.7263287419671,
+              "rank": 10
+            }
+          ]
+        },
+        "semantic": {
+          "changed_element_fraction_at_1e-6": 0.9993155627189574,
+          "cosine_flat": 0.9564688784807892,
+          "max_row_l2": 992.5782577845041,
+          "mean_absolute_difference": 2.7211694526500043,
+          "mean_row_cosine": 0.9570723870543698,
+          "mean_row_l2": 354.21924571805135,
+          "minimum_row_cosine": 0.7613786864254898,
+          "relative_l2": 0.29506713517660205,
+          "rms_difference": 7.092573752796962,
+          "row_difference_concentration": {
+            "effective_changed_rows": 35163.05737928542,
+            "top_10_fraction": 0.000957875699499462,
+            "top_1_fraction": 9.810265860245923e-05,
+            "top_1_percent_fraction": 0.04586231153480737
+          },
+          "shape_common": [
+            64986,
+            3072
+          ],
+          "top_changed_rows": [
+            {
+              "aligned_row": 8289,
+              "coordinate": [
+                -2.924999952316284,
+                2.4750001430511475,
+                2.2750000953674316
+              ],
+              "cosine": 0.763686130105591,
+              "l2": 992.5782577845041,
+              "rank": 1
+            },
+            {
+              "aligned_row": 64955,
+              "coordinate": [
+                3.0250000953674316,
+                2.424999952316284,
+                2.5250000953674316
+              ],
+              "cosine": 0.7747057616036047,
+              "l2": 992.2928623297885,
+              "rank": 2
+            },
+            {
+              "aligned_row": 60412,
+              "coordinate": [
+                2.9750001430511475,
+                2.424999952316284,
+                2.5250000953674316
+              ],
+              "cosine": 0.7774487928659847,
+              "l2": 990.5370812360035,
+              "rank": 3
+            },
+            {
+              "aligned_row": 8023,
+              "coordinate": [
+                -2.9750001430511475,
+                2.4750001430511475,
+                2.4750001430511475
+              ],
+              "cosine": 0.7624696176124597,
+              "l2": 990.0791295823755,
+              "rank": 4
+            },
+            {
+              "aligned_row": 3114,
+              "coordinate": [
+                -3.0250000953674316,
+                2.2250001430511475,
+                2.674999952316284
+              ],
+              "cosine": 0.7625214131395409,
+              "l2": 989.1845615123782,
+              "rank": 5
+            },
+            {
+              "aligned_row": 60413,
+              "coordinate": [
+                2.9750001430511475,
+                2.424999952316284,
+                2.575000047683716
+              ],
+              "cosine": 0.7763604496689802,
+              "l2": 977.6846549662024,
+              "rank": 6
+            },
+            {
+              "aligned_row": 8292,
+              "coordinate": [
+                -2.924999952316284,
+                2.4750001430511475,
+                2.4750001430511475
+              ],
+              "cosine": 0.7649703141462179,
+              "l2": 973.2356731459253,
+              "rank": 7
+            },
+            {
+              "aligned_row": 3148,
+              "coordinate": [
+                -3.0250000953674316,
+                2.375,
+                2.625
+              ],
+              "cosine": 0.7636521212879828,
+              "l2": 972.5738074146877,
+              "rank": 8
+            },
+            {
+              "aligned_row": 60393,
+              "coordinate": [
+                2.9750001430511475,
+                2.375,
+                2.575000047683716
+              ],
+              "cosine": 0.7839208428467455,
+              "l2": 967.5111102647364,
+              "rank": 9
+            },
+            {
+              "aligned_row": 8320,
+              "coordinate": [
+                -2.924999952316284,
+                2.5250000953674316,
+                2.2250001430511475
+              ],
+              "cosine": 0.780437219185387,
+              "l2": 961.6775845917841,
+              "rank": 10
+            }
+          ]
+        },
+        "voxel_topology": {
+          "common_count": 64986,
+          "common_fraction_of_smaller": 0.8722367626333803,
+          "count_a": 74505,
+          "count_b": 74533,
+          "jaccard": 0.7731642316661115,
+          "only_a_count": 9519,
+          "only_b_count": 9547,
+          "union_count": 84052
+        }
+      },
+      "scene_a": "scene_000007",
+      "scene_b": "scene_000008",
+      "signal_retention": {
+        "aggregation_over_raw": 0.8497831083781267,
+        "block_over_aggregated": 2.422970524061906,
+        "native_latents_over_blocks": 0.6123244763796405,
+        "projected_over_native_latents": 1.0458704168996453,
+        "projected_over_raw": 1.318608052813823,
+        "raw_to_projected_attenuation_factor": 0.7583754686360861
+      },
+      "split": "train"
+    },
+    {
+      "aggregated_map": {
+        "rgb": {
+          "changed_element_fraction_at_1e-6": 0.021125089010206502,
+          "cosine_flat": 0.9999467925445756,
+          "max_row_l2": 159.04979834967233,
+          "mean_absolute_difference": 0.05369935909850432,
+          "mean_row_cosine": 0.9999745103734115,
+          "mean_row_l2": 0.10663402056851597,
+          "minimum_row_cosine": 0.9254823560460473,
+          "relative_l2": 0.010317686388652771,
+          "rms_difference": 1.7483477001026713,
+          "row_difference_concentration": {
+            "effective_changed_rows": 4.644851012715431,
+            "top_10_fraction": 0.9860209572936229,
+            "top_1_fraction": 0.32739189447259526,
+            "top_1_percent_fraction": 0.9999808306112083
+          },
+          "shape_common": [
+            8426,
+            3
+          ],
+          "top_changed_rows": [
+            {
+              "aligned_row": 4891,
+              "coordinate": [
+                0.4750000238418579,
+                0.6768450140953064,
+                0.8456642031669617
+              ],
+              "cosine": 0.9254823560460473,
+              "l2": 159.04979834967233,
+              "rank": 1
+            },
+            {
+              "aligned_row": 5041,
+              "coordinate": [
+                0.67315274477005,
+                0.5392857193946838,
+                0.8376847505569458
+              ],
+              "cosine": 0.9647743842786815,
+              "l2": 128.3924657682605,
+              "rank": 2
+            },
+            {
+              "aligned_row": 4896,
+              "coordinate": [
+                0.4772421419620514,
+                0.8169282674789429,
+                0.8409192562103271
+              ],
+              "cosine": 0.9654847489360366,
+              "l2": 119.50819375118981,
+              "rank": 3
+            },
+            {
+              "aligned_row": 4888,
+              "coordinate": [
+                0.5160550475120544,
+                0.5340595841407776,
+                0.8371560573577881
+              ],
+              "cosine": 0.975565032226896,
+              "l2": 109.17608255898864,
+              "rank": 4
+            },
+            {
+              "aligned_row": 6305,
+              "coordinate": [
+                1.8899999856948853,
+                1.5249998569488525,
+                0.7150000333786011
+              ],
+              "cosine": 0.9640883314757799,
+              "l2": 70.76233236086955,
+              "rank": 5
+            },
+            {
+              "aligned_row": 4740,
+              "coordinate": [
+                0.37520578503608704,
+                0.6710905432701111,
+                0.8250000476837158
+              ],
+              "cosine": 0.9991519529229014,
+              "l2": 33.539349538607574,
+              "rank": 6
+            },
+            {
+              "aligned_row": 6459,
+              "coordinate": [
+                2.058333396911621,
+                1.524999976158142,
+                0.6791666150093079
+              ],
+              "cosine": 0.993312923119484,
+              "l2": 27.50689778177792,
+              "rank": 7
+            },
+            {
+              "aligned_row": 4737,
+              "coordinate": [
+                0.3741689622402191,
+                0.5164127349853516,
+                0.8249999284744263
+              ],
+              "cosine": 0.9996477524137464,
+              "l2": 22.546016267981916,
+              "rank": 8
+            },
+            {
+              "aligned_row": 5048,
+              "coordinate": [
+                0.625,
+                1.024999976158142,
+                0.824999988079071
+              ],
+              "cosine": 0.9994721656301113,
+              "l2": 21.457342088222603,
+              "rank": 9
+            },
+            {
+              "aligned_row": 5193,
+              "coordinate": [
+                0.8299180269241333,
+                0.5248361229896545,
+                0.8276229500770569
+              ],
+              "cosine": 0.9995880172214071,
+              "l2": 18.627300221243285,
+              "rank": 10
+            }
+          ]
+        },
+        "semantic": {
+          "changed_element_fraction_at_1e-6": 0.6486646228316124,
+          "cosine_flat": 0.999348106324195,
+          "max_row_l2": 730.5349342420965,
+          "mean_absolute_difference": 0.13185040874643258,
+          "mean_row_cosine": 0.9993705866564494,
+          "mean_row_l2": 17.247994868268623,
+          "minimum_row_cosine": 0.8712367172669717,
+          "relative_l2": 0.03610805543655825,
+          "rms_difference": 0.862541786419551,
+          "row_difference_concentration": {
+            "effective_changed_rows": 126.94301991847868,
+            "top_10_fraction": 0.19608573716643868,
+            "top_1_fraction": 0.02771271168343393,
+            "top_1_percent_fraction": 0.6348801679326339
+          },
+          "shape_common": [
+            8426,
+            3072
+          ],
+          "top_changed_rows": [
+            {
+              "aligned_row": 6475,
+              "coordinate": [
+                2.0250000953674316,
+                2.515000104904175,
+                0.5649999380111694
+              ],
+              "cosine": 0.8712367172669717,
+              "l2": 730.5349342420965,
+              "rank": 1
+            },
+            {
+              "aligned_row": 6771,
+              "coordinate": [
+                2.329545497894287,
+                2.5113637447357178,
+                0.5522727370262146
+              ],
+              "cosine": 0.872211823837957,
+              "l2": 708.0161281143836,
+              "rank": 2
+            },
+            {
+              "aligned_row": 6625,
+              "coordinate": [
+                2.1875,
+                2.5250000953674316,
+                0.574999988079071
+              ],
+              "cosine": 0.8798897496128094,
+              "l2": 705.1745070850028,
+              "rank": 3
+            },
+            {
+              "aligned_row": 5048,
+              "coordinate": [
+                0.625,
+                1.024999976158142,
+                0.824999988079071
+              ],
+              "cosine": 0.9109208844929243,
+              "l2": 588.7402933673475,
+              "rank": 4
+            },
+            {
+              "aligned_row": 7170,
+              "coordinate": [
+                2.7535717487335205,
+                2.5249998569488525,
+                0.4035714268684387
+              ],
+              "cosine": 0.9078202413587501,
+              "l2": 587.1442750462721,
+              "rank": 5
+            },
+            {
+              "aligned_row": 6910,
+              "coordinate": [
+                2.505000352859497,
+                2.515000104904175,
+                0.5449999570846558
+              ],
+              "cosine": 0.9077468338350081,
+              "l2": 567.1286242029586,
+              "rank": 6
+            },
+            {
+              "aligned_row": 5837,
+              "coordinate": [
+                1.4089999198913574,
+                2.505999803543091,
+                0.37000003457069397
+              ],
+              "cosine": 0.9144488253315395,
+              "l2": 559.9010197298683,
+              "rank": 7
+            },
+            {
+              "aligned_row": 5838,
+              "coordinate": [
+                1.4175373315811157,
+                2.508582353591919,
+                0.5264924764633179
+              ],
+              "cosine": 0.9142182044038173,
+              "l2": 556.7382260469775,
+              "rank": 8
+            },
+            {
+              "aligned_row": 7039,
+              "coordinate": [
+                2.6416666507720947,
+                2.508333444595337,
+                0.42500004172325134
+              ],
+              "cosine": 0.9164874458182286,
+              "l2": 551.6514409201928,
+              "rank": 9
+            },
+            {
+              "aligned_row": 6299,
+              "coordinate": [
+                1.9250000715255737,
+                1.475000023841858,
+                0.7250000238418579
+              ],
+              "cosine": 0.9340384676993883,
+              "l2": 550.5942628138805,
+              "rank": 10
+            }
+          ]
+        },
+        "voxel_topology": {
+          "common_count": 8426,
+          "common_fraction_of_smaller": 0.9983412322274882,
+          "count_a": 8440,
+          "count_b": 8469,
+          "jaccard": 0.993280679005069,
+          "only_a_count": 14,
+          "only_b_count": 43,
+          "union_count": 8483
+        }
+      },
+      "block_tokens": {
+        "block_topology": {
+          "common_count": 3015,
+          "common_fraction_of_smaller": 0.9983443708609272,
+          "count_a": 3020,
+          "count_b": 3031,
+          "jaccard": 0.9930830039525692,
+          "only_a_count": 5,
+          "only_b_count": 16,
+          "union_count": 3036
+        },
+        "common_block_tokens": {
+          "changed_element_fraction_at_1e-6": 0.6920566438640132,
+          "cosine_flat": 0.9935251945123466,
+          "max_row_l2": 33.93859275753075,
+          "mean_absolute_difference": 0.019379131203703187,
+          "mean_row_cosine": 0.9934822522573292,
+          "mean_row_l2": 0.4587082539539255,
+          "minimum_row_cosine": -0.4989306927867906,
+          "relative_l2": 0.11379635759446939,
+          "rms_difference": 0.11433284295280602,
+          "row_difference_concentration": {
+            "effective_changed_rows": 42.34767426434744,
+            "top_10_fraction": 0.3474031633816263,
+            "top_1_fraction": 0.0380537201029154,
+            "top_1_percent_fraction": 0.8893854936130696
+          },
+          "shape_common": [
+            6030,
+            384
+          ],
+          "top_changed_rows": [
+            {
+              "block_index": [
+                14,
+                13,
+                3
+              ],
+              "coordinate": [
+                0.625,
+                0.875,
+                0.875
+              ],
+              "cosine": -0.4989306927867906,
+              "l2": 33.93859275753075,
+              "rank": 1,
+              "token_within_block": 1
+            },
+            {
+              "block_index": [
+                14,
+                13,
+                3
+              ],
+              "coordinate": [
+                0.625,
+                0.875,
+                0.875
+              ],
+              "cosine": -0.49867464983064486,
+              "l2": 33.93580576383094,
+              "rank": 2,
+              "token_within_block": 0
+            },
+            {
+              "block_index": [
+                20,
+                20,
+                2
+              ],
+              "coordinate": [
+                2.125,
+                2.625,
+                0.625
+              ],
+              "cosine": -0.43151186446570944,
+              "l2": 33.230456068504665,
+              "rank": 3,
+              "token_within_block": 1
+            },
+            {
+              "block_index": [
+                20,
+                20,
+                2
+              ],
+              "coordinate": [
+                2.125,
+                2.625,
+                0.625
+              ],
+              "cosine": -0.43077151933516894,
+              "l2": 33.22187010696065,
+              "rank": 4,
+              "token_within_block": 0
+            },
+            {
+              "block_index": [
+                19,
+                20,
+                2
+              ],
+              "coordinate": [
+                1.875,
+                2.625,
+                0.625
+              ],
+              "cosine": -0.3459297723044416,
+              "l2": 32.22726163720978,
+              "rank": 5,
+              "token_within_block": 1
+            },
+            {
+              "block_index": [
+                19,
+                20,
+                2
+              ],
+              "coordinate": [
+                1.875,
+                2.625,
+                0.625
+              ],
+              "cosine": -0.34526373800074817,
+              "l2": 32.21930428362108,
+              "rank": 6,
+              "token_within_block": 0
+            },
+            {
+              "block_index": [
+                17,
+                20,
+                1
+              ],
+              "coordinate": [
+                1.375,
+                2.625,
+                0.375
+              ],
+              "cosine": -0.3020055219297564,
+              "l2": 31.706134081309433,
+              "rank": 7,
+              "token_within_block": 1
+            },
+            {
+              "block_index": [
+                17,
+                20,
+                1
+              ],
+              "coordinate": [
+                1.375,
+                2.625,
+                0.375
+              ],
+              "cosine": -0.3019394455415235,
+              "l2": 31.705348853026845,
+              "rank": 8,
+              "token_within_block": 0
+            },
+            {
+              "block_index": [
+                14,
+                12,
+                3
+              ],
+              "coordinate": [
+                0.625,
+                0.625,
+                0.875
+              ],
+              "cosine": -0.2413868264473555,
+              "l2": 30.95813496133968,
+              "rank": 9,
+              "token_within_block": 0
+            },
+            {
+              "block_index": [
+                14,
+                12,
+                3
+              ],
+              "coordinate": [
+                0.625,
+                0.625,
+                0.875
+              ],
+              "cosine": -0.24131963733116552,
+              "l2": 30.9571796225306,
+              "rank": 10,
+              "token_within_block": 1
+            }
+          ]
+        },
+        "tokens_per_block": 2
+      },
+      "change_type": "cube_support",
+      "final_prefix_runtime_dtype": {
+        "changed_element_fraction_at_1e-6": 0.8880687782622739,
+        "cosine_flat": 0.9970198339241512,
+        "max_row_l2": 5.818097706763873,
+        "mean_absolute_difference": 0.015214943804271136,
+        "mean_row_cosine": 0.9958754537264384,
+        "mean_row_l2": 0.750419177522453,
+        "minimum_row_cosine": 0.9195209061200393,
+        "relative_l2": 0.07728208694368448,
+        "rms_difference": 0.03383544033185979,
+        "row_difference_concentration": {
+          "effective_changed_rows": 27.80744073097253,
+          "top_10_fraction": 0.5119157085789712,
+          "top_1_fraction": 0.0746117855924421,
+          "top_1_percent_fraction": 0.21595924720469473
+        },
+        "shape": [
+          1,
+          258,
+          1536
+        ],
+        "shape_common": [
+          258,
+          1536
+        ],
+        "top_changed_rows": [
+          {
+            "cosine": 0.9195209061200393,
+            "l2": 5.818097706763873,
+            "rank": 1,
+            "token_index": 137
+          },
+          {
+            "cosine": 0.9285028375238631,
+            "l2": 5.721198811368806,
+            "rank": 2,
+            "token_index": 241
+          },
+          {
+            "cosine": 0.9368121315176805,
+            "l2": 5.603135896099791,
+            "rank": 3,
+            "token_index": 215
+          },
+          {
+            "cosine": 0.9496694102824158,
+            "l2": 4.796443867742989,
+            "rank": 4,
+            "token_index": 121
+          },
+          {
+            "cosine": 0.9455853111858806,
+            "l2": 4.698731235040783,
+            "rank": 5,
+            "token_index": 125
+          },
+          {
+            "cosine": 0.9452325882526481,
+            "l2": 4.670426010267391,
+            "rank": 6,
+            "token_index": 35
+          },
+          {
+            "cosine": 0.9549140188994634,
+            "l2": 4.3475602449218576,
+            "rank": 7,
+            "token_index": 97
+          },
+          {
+            "cosine": 0.9615283047554912,
+            "l2": 4.064111945733359,
+            "rank": 8,
+            "token_index": 142
+          },
+          {
+            "cosine": 0.958940657762189,
+            "l2": 4.017579785702198,
+            "rank": 9,
+            "token_index": 101
+          },
+          {
+            "cosine": 0.9605677008512256,
+            "l2": 3.976807415880621,
+            "rank": 10,
+            "token_index": 131
+          }
+        ]
+      },
+      "latent_diversity": {
+        "scene_a_native": {
+          "mean_feature_std_across_tokens": 3.7092912197113037,
+          "mean_off_diagonal_cosine": 0.9085961580276489,
+          "minimum_off_diagonal_cosine": 0.11869549751281738,
+          "std_off_diagonal_cosine": 0.1290750503540039,
+          "token_count": 256
+        },
+        "scene_a_projected": {
+          "mean_feature_std_across_tokens": 0.1908310204744339,
+          "mean_off_diagonal_cosine": 0.7852335572242737,
+          "minimum_off_diagonal_cosine": 0.23984681069850922,
+          "std_off_diagonal_cosine": 0.1295607089996338,
+          "token_count": 256
+        },
+        "scene_b_native": {
+          "mean_feature_std_across_tokens": 3.3523776531219482,
+          "mean_off_diagonal_cosine": 0.9318630695343018,
+          "minimum_off_diagonal_cosine": 0.545688271522522,
+          "std_off_diagonal_cosine": 0.074965700507164,
+          "token_count": 256
+        },
+        "scene_b_projected": {
+          "mean_feature_std_across_tokens": 0.18945688009262085,
+          "mean_off_diagonal_cosine": 0.7903128266334534,
+          "minimum_off_diagonal_cosine": 0.24714411795139313,
+          "std_off_diagonal_cosine": 0.12566086649894714,
+          "token_count": 256
+        }
+      },
+      "native_latents": {
+        "changed_element_fraction_at_1e-6": 1.0,
+        "cosine_flat": 0.9938916499024909,
+        "max_row_l2": 130.409485381214,
+        "mean_absolute_difference": 0.7052596509051909,
+        "mean_row_cosine": 0.9895923429022219,
+        "mean_row_l2": 16.306205611669185,
+        "minimum_row_cosine": 0.7369567156908086,
+        "relative_l2": 0.11056312425779971,
+        "rms_difference": 1.4381097033291248,
+        "row_difference_concentration": {
+          "effective_changed_rows": 25.10656528533807,
+          "top_10_fraction": 0.5513138128654044,
+          "top_1_fraction": 0.0836494595438489,
+          "top_1_percent_fraction": 0.22045056043681113
+        },
+        "shape": [
+          1,
+          256,
+          384
+        ],
+        "shape_common": [
+          256,
+          384
+        ],
+        "top_changed_rows": [
+          {
+            "cosine": 0.7369567156908086,
+            "l2": 130.409485381214,
+            "rank": 1,
+            "token_index": 136
+          },
+          {
+            "cosine": 0.7594091927763873,
+            "l2": 124.82987058584982,
+            "rank": 2,
+            "token_index": 240
+          },
+          {
+            "cosine": 0.8390421448073225,
+            "l2": 110.59073183030341,
+            "rank": 3,
+            "token_index": 214
+          },
+          {
+            "cosine": 0.86756969796558,
+            "l2": 106.43209156461619,
+            "rank": 4,
+            "token_index": 124
+          },
+          {
+            "cosine": 0.8361269463650894,
+            "l2": 104.03977142569687,
+            "rank": 5,
+            "token_index": 120
+          },
+          {
+            "cosine": 0.8762730162632174,
+            "l2": 102.71709194230792,
+            "rank": 6,
+            "token_index": 96
+          },
+          {
+            "cosine": 0.8644384143310835,
+            "l2": 100.52085715272565,
+            "rank": 7,
+            "token_index": 34
+          },
+          {
+            "cosine": 0.8885053023212981,
+            "l2": 94.52135096310647,
+            "rank": 8,
+            "token_index": 141
+          },
+          {
+            "cosine": 0.88897751705555,
+            "l2": 89.22611468758177,
+            "rank": 9,
+            "token_index": 40
+          },
+          {
+            "cosine": 0.8852911460012637,
+            "l2": 86.97338585986151,
+            "rank": 10,
+            "token_index": 100
+          }
+        ]
+      },
+      "pair_id": "pair_000002",
+      "prefix_exactly_equal": false,
+      "prefix_hash_a": "5954311f31971cff6fbd2527560eec37bbf72d5082e771cf11a05b10597da041",
+      "prefix_hash_b": "5692087ba529746bf2ed92a22a67f9b3e3992a256fdd298127ce47e6f7dfff2f",
+      "projected_scene_tokens_float32": {
+        "changed_element_fraction_at_1e-6": 0.9998626708984375,
+        "cosine_flat": 0.996821361577772,
+        "max_row_l2": 5.817382216783569,
+        "mean_absolute_difference": 0.015334750837045164,
+        "mean_row_cosine": 0.9958453728478779,
+        "mean_row_l2": 0.753265669099612,
+        "minimum_row_cosine": 0.9195333887561632,
+        "relative_l2": 0.07981969988621226,
+        "rms_difference": 0.03395507243570186,
+        "row_difference_concentration": {
+          "effective_changed_rows": 27.76450904847458,
+          "top_10_fraction": 0.5123530727095253,
+          "top_1_fraction": 0.07464740150330983,
+          "top_1_percent_fraction": 0.2161068987115795
+        },
+        "shape": [
+          1,
+          256,
+          1536
+        ],
+        "shape_common": [
+          256,
+          1536
+        ],
+        "top_changed_rows": [
+          {
+            "cosine": 0.9195333887561632,
+            "l2": 5.817382216783569,
+            "rank": 1,
+            "token_index": 136
+          },
+          {
+            "cosine": 0.9284820098487105,
+            "l2": 5.721319705207533,
+            "rank": 2,
+            "token_index": 240
+          },
+          {
+            "cosine": 0.9368162728481707,
+            "l2": 5.6034079235971355,
+            "rank": 3,
+            "token_index": 214
+          },
+          {
+            "cosine": 0.949626296760746,
+            "l2": 4.798174512208391,
+            "rank": 4,
+            "token_index": 120
+          },
+          {
+            "cosine": 0.945586357443644,
+            "l2": 4.698867283006432,
+            "rank": 5,
+            "token_index": 124
+          },
+          {
+            "cosine": 0.9452261240326687,
+            "l2": 4.670497378281413,
+            "rank": 6,
+            "token_index": 34
+          },
+          {
+            "cosine": 0.9549332367160233,
+            "l2": 4.346935075294662,
+            "rank": 7,
+            "token_index": 96
+          },
+          {
+            "cosine": 0.9614928700333176,
+            "l2": 4.066123297623528,
+            "rank": 8,
+            "token_index": 141
+          },
+          {
+            "cosine": 0.9589215915086725,
+            "l2": 4.018886977815305,
+            "rank": 9,
+            "token_index": 100
+          },
+          {
+            "cosine": 0.9605866183289696,
+            "l2": 3.976090764475818,
+            "rank": 10,
+            "token_index": 130
+          }
+        ]
+      },
+      "projected_scene_tokens_runtime_dtype": {
+        "changed_element_fraction_at_1e-6": 0.8950068155924479,
+        "cosine_flat": 0.9968190438938087,
+        "max_row_l2": 5.818097706763873,
+        "mean_absolute_difference": 0.015333810552742003,
+        "mean_row_cosine": 0.9958432307086761,
+        "mean_row_l2": 0.7562818273468472,
+        "minimum_row_cosine": 0.9195209061200393,
+        "relative_l2": 0.07984861451437535,
+        "rms_difference": 0.03396735288021045,
+        "row_difference_concentration": {
+          "effective_changed_rows": 27.80744073097253,
+          "top_10_fraction": 0.5119157085789712,
+          "top_1_fraction": 0.0746117855924421,
+          "top_1_percent_fraction": 0.21595924720469473
+        },
+        "shape": [
+          1,
+          256,
+          1536
+        ],
+        "shape_common": [
+          256,
+          1536
+        ],
+        "top_changed_rows": [
+          {
+            "cosine": 0.9195209061200393,
+            "l2": 5.818097706763873,
+            "rank": 1,
+            "token_index": 136
+          },
+          {
+            "cosine": 0.9285028375238631,
+            "l2": 5.721198811368806,
+            "rank": 2,
+            "token_index": 240
+          },
+          {
+            "cosine": 0.9368121315176805,
+            "l2": 5.603135896099791,
+            "rank": 3,
+            "token_index": 214
+          },
+          {
+            "cosine": 0.9496694102824158,
+            "l2": 4.796443867742989,
+            "rank": 4,
+            "token_index": 120
+          },
+          {
+            "cosine": 0.9455853111858806,
+            "l2": 4.698731235040783,
+            "rank": 5,
+            "token_index": 124
+          },
+          {
+            "cosine": 0.9452325882526481,
+            "l2": 4.670426010267391,
+            "rank": 6,
+            "token_index": 34
+          },
+          {
+            "cosine": 0.9549140188994634,
+            "l2": 4.3475602449218576,
+            "rank": 7,
+            "token_index": 96
+          },
+          {
+            "cosine": 0.9615283047554912,
+            "l2": 4.064111945733359,
+            "rank": 8,
+            "token_index": 141
+          },
+          {
+            "cosine": 0.958940657762189,
+            "l2": 4.017579785702198,
+            "rank": 9,
+            "token_index": 100
+          },
+          {
+            "cosine": 0.9605677008512256,
+            "l2": 3.976807415880621,
+            "rank": 10,
+            "token_index": 130
+          }
+        ]
+      },
+      "raw_map": {
+        "rgb": {
+          "changed_element_fraction_at_1e-6": 0.007563428754368647,
+          "cosine_flat": 0.9999676782025418,
+          "max_row_l2": 211.78953723846195,
+          "mean_absolute_difference": 0.03254805597413294,
+          "mean_row_cosine": 0.9999813616860899,
+          "mean_row_l2": 0.0641700788161211,
+          "minimum_row_cosine": 0.8333721898978351,
+          "relative_l2": 0.00804089233615915,
+          "rms_difference": 1.4113056450877366,
+          "row_difference_concentration": {
+            "effective_changed_rows": 14.854932938184476,
+            "top_10_fraction": 0.7465164274735598,
+            "top_1_fraction": 0.10013392786511831,
+            "top_1_percent_fraction": 0.9999998599558731
+          },
+          "shape_common": [
+            74966,
+            3
+          ],
+          "top_changed_rows": [
+            {
+              "aligned_row": 43415,
+              "coordinate": [
+                0.574999988079071,
+                0.574999988079071,
+                0.824999988079071
+              ],
+              "cosine": 0.8422095451439745,
+              "l2": 211.78953723846195,
+              "rank": 1
+            },
+            {
+              "aligned_row": 56742,
+              "coordinate": [
+                1.875,
+                1.524999976158142,
+                0.675000011920929
+              ],
+              "cosine": 0.8333721898978351,
+              "l2": 208.7547933314931,
+              "rank": 2
+            },
+            {
+              "aligned_row": 44317,
+              "coordinate": [
+                0.675000011920929,
+                0.574999988079071,
+                0.824999988079071
+              ],
+              "cosine": 0.855000525994039,
+              "l2": 208.52749643417377,
+              "rank": 3
+            },
+            {
+              "aligned_row": 42955,
+              "coordinate": [
+                0.5250000357627869,
+                0.574999988079071,
+                0.824999988079071
+              ],
+              "cosine": 0.8597231177593238,
+              "l2": 202.2039616511177,
+              "rank": 4
+            },
+            {
+              "aligned_row": 43866,
+              "coordinate": [
+                0.625,
+                0.574999988079071,
+                0.824999988079071
+              ],
+              "cosine": 0.8718475894729819,
+              "l2": 199.0426669631062,
+              "rank": 5
+            },
+            {
+              "aligned_row": 58129,
+              "coordinate": [
+                2.0250000953674316,
+                1.524999976158142,
+                0.625
+              ],
+              "cosine": 0.8530209851550066,
+              "l2": 196.8780412789975,
+              "rank": 6
+            },
+            {
+              "aligned_row": 44783,
+              "coordinate": [
+                0.7250000238418579,
+                0.574999988079071,
+                0.824999988079071
+              ],
+              "cosine": 0.891551577599397,
+              "l2": 190.81031705650824,
+              "rank": 7
+            },
+            {
+              "aligned_row": 42460,
+              "coordinate": [
+                0.4749999940395355,
+                0.675000011920929,
+                0.824999988079071
+              ],
+              "cosine": 0.9606835308749401,
+              "l2": 127.37185184814174,
+              "rank": 8
+            },
+            {
+              "aligned_row": 45264,
+              "coordinate": [
+                0.7750000357627869,
+                0.574999988079071,
+                0.824999988079071
+              ],
+              "cosine": 0.9689002746212286,
+              "l2": 123.7947295619557,
+              "rank": 9
+            },
+            {
+              "aligned_row": 57220,
+              "coordinate": [
+                1.9250000715255737,
+                1.524999976158142,
+                0.675000011920929
+              ],
+              "cosine": 0.8777642261904547,
+              "l2": 123.53492333554561,
+              "rank": 10
+            }
+          ]
+        },
+        "semantic": {
+          "changed_element_fraction_at_1e-6": 0.538369625132838,
+          "cosine_flat": 0.9988831124486592,
+          "max_row_l2": 853.6326403665528,
+          "mean_absolute_difference": 0.18082918475631024,
+          "mean_row_cosine": 0.9989065134899006,
+          "mean_row_l2": 23.953697359382442,
+          "minimum_row_cosine": 0.8125631759696242,
+          "relative_l2": 0.0472628408040663,
+          "rms_difference": 1.1390973131575317,
+          "row_difference_concentration": {
+            "effective_changed_rows": 1752.4237025325137,
+            "top_10_fraction": 0.021658293797548057,
+            "top_1_fraction": 0.002438567721163374,
+            "top_1_percent_fraction": 0.5406887389022659
+          },
+          "shape_common": [
+            74966,
+            3072
+          ],
+          "top_changed_rows": [
+            {
+              "aligned_row": 45753,
+              "coordinate": [
+                0.824999988079071,
+                0.625,
+                0.824999988079071
+              ],
+              "cosine": 0.8125631759696242,
+              "l2": 853.6326403665528,
+              "rank": 1
+            },
+            {
+              "aligned_row": 61111,
+              "coordinate": [
+                2.375,
+                2.5250000953674316,
+                0.5250000357627869
+              ],
+              "cosine": 0.8296187013645484,
+              "l2": 820.8958889626183,
+              "rank": 2
+            },
+            {
+              "aligned_row": 58190,
+              "coordinate": [
+                2.0250000953674316,
+                2.5250000953674316,
+                0.5250000357627869
+              ],
+              "cosine": 0.840822065825579,
+              "l2": 820.7171196101074,
+              "rank": 3
+            },
+            {
+              "aligned_row": 60686,
+              "coordinate": [
+                2.325000047683716,
+                2.4750001430511475,
+                0.5250000357627869
+              ],
+              "cosine": 0.8371953123252022,
+              "l2": 812.2088662575636,
+              "rank": 4
+            },
+            {
+              "aligned_row": 61083,
+              "coordinate": [
+                2.375,
+                2.4750001430511475,
+                0.5250000357627869
+              ],
+              "cosine": 0.8385968545766852,
+              "l2": 808.2541325000614,
+              "rank": 5
+            },
+            {
+              "aligned_row": 60714,
+              "coordinate": [
+                2.325000047683716,
+                2.5250000953674316,
+                0.5250000357627869
+              ],
+              "cosine": 0.8440009207904079,
+              "l2": 795.5666714368591,
+              "rank": 6
+            },
+            {
+              "aligned_row": 59062,
+              "coordinate": [
+                2.125,
+                2.5250000953674316,
+                0.574999988079071
+              ],
+              "cosine": 0.8514347165738977,
+              "l2": 789.0386066263713,
+              "rank": 7
+            },
+            {
+              "aligned_row": 57750,
+              "coordinate": [
+                1.975000023841858,
+                2.5250000953674316,
+                0.574999988079071
+              ],
+              "cosine": 0.8525002284941401,
+              "l2": 783.2550618391417,
+              "rank": 8
+            },
+            {
+              "aligned_row": 60331,
+              "coordinate": [
+                2.2750000953674316,
+                2.5250000953674316,
+                0.574999988079071
+              ],
+              "cosine": 0.8502573822047182,
+              "l2": 781.0015807673109,
+              "rank": 9
+            },
+            {
+              "aligned_row": 57711,
+              "coordinate": [
+                1.975000023841858,
+                2.4750001430511475,
+                0.574999988079071
+              ],
+              "cosine": 0.856855527976195,
+              "l2": 777.0722050271555,
+              "rank": 10
+            }
+          ]
+        },
+        "voxel_topology": {
+          "common_count": 74966,
+          "common_fraction_of_smaller": 0.9986412319496989,
+          "count_a": 75068,
+          "count_b": 75469,
+          "jaccard": 0.9919942835214567,
+          "only_a_count": 102,
+          "only_b_count": 503,
+          "union_count": 75571
+        }
+      },
+      "scene_a": "scene_000005",
+      "scene_b": "scene_000006",
+      "signal_retention": {
+        "aggregation_over_raw": 0.7639840268224347,
+        "block_over_aggregated": 3.151550428806926,
+        "native_latents_over_blocks": 0.9715875498564568,
+        "projected_over_native_latents": 0.7219378108391448,
+        "projected_over_raw": 1.6888468515279111,
+        "raw_to_projected_attenuation_factor": 0.5921200013460624
+      },
+      "split": "test"
+    }
+  ],
+  "prefix_hash_semantics": "SHA-256 over the final checkpoint-projected scene prefix after casting scene tokens and persisted boundaries to bfloat16; consult runtime_validation.runtime_prefix_parity_validated before treating it as a model-validated chat-runtime prefix",
+  "purpose": "Counterfactual signal audit from numeric maps through frozen-LM behavior",
+  "runtime_dtype": "bfloat16",
+  "runtime_validation": {
+    "base_model_loaded": true,
+    "configured_runtime_dtype": "bfloat16",
+    "loaded_model_runtime_dtype": "bfloat16",
+    "native_boundary_embeddings_validated": true,
+    "native_boundary_validation_required": true,
+    "reason": null,
+    "runtime_dtype_validated_against_loaded_model": true,
+    "runtime_prefix_parity_validated": true,
+    "status": "model_validated_runtime_prefix"
+  },
+  "scene_boundary_mode": "gemma4_native_image",
+  "scene_prefix_after_bos": true,
+  "schema_version": 2,
+  "summary_findings": {
+    "block_token_relative_l2_range": [
+      0.11379635759446939,
+      0.6075430612064585
+    ],
+    "diagnosis": "The current-checkpoint measurements do not support the historical global Perceiver-collapse diagnosis: native-latent/block-token relative-L2 retention ranges from 0.612324 to 0.971588, and native-latent mean off-diagonal cosine ranges from 0.908596 to 0.931863. Behavioral usefulness must be established by normalized exact generation and held-out controls, not by prefix hashes or nonzero tensor differences.",
+    "diagnosis_basis": "Computed from this checkpoint's reported pair metrics. Thresholds are <=0.1 native-latent/block-token relative-L2 retention for severe attenuation and >=0.99 mean off-diagonal cosine for near-duplicate native latents.",
+    "evidence_flags": {
+      "near_duplicate_native_latents_for_all_scenes_at_0_99": false,
+      "raw_signal_present_for_all_pairs": true,
+      "runtime_cast_erased_any_pair_at_1e_6": false,
+      "severe_native_attenuation_for_all_pairs_at_0_1": false
+    },
+    "native_latent_mean_off_diagonal_cosine_range": [
+      0.9085961580276489,
+      0.9318630695343018
+    ],
+    "native_latent_relative_l2_range": [
+      0.11056312425779971,
+      0.37201348683132857
+    ],
+    "native_latents_over_block_tokens_range": [
+      0.6123244763796405,
+      0.9715875498564568
+    ],
+    "projected_token_relative_l2_range": [
+      0.07981969988621226,
+      0.38907790056457237
+    ],
+    "projected_tokens_over_native_latents_range": [
+      0.5684377924984276,
+      1.0458704168996453
+    ],
+    "raw_semantic_relative_l2_range": [
+      0.046556856719475806,
+      0.29506713517660205
+    ],
+    "recommended_fix": "Do not infer a resampler defect from this structural audit alone. Use the exact generation scores and held-out counterfactual controls to localize the next failure before changing the encoder.",
+    "runtime_prefix_changed_element_fraction_range": [
+      0.8880687782622739,
+      0.9857527858527132
+    ]
+  }
+}

@@ -8,15 +8,16 @@ metadata.
 
 The current primary experiment uses `google/gemma-4-E2B-it`. Real-weight
 full-image feature extraction, 3D map fusion, and zero-shot semantic localization
-run locally on this Mac. Adapter wiring experiments v1 through v7, plus the longer
-v6 resumes through epochs 18 and 24, did **not** pass the six-unit teacher-forced
-counterfactual gate. A fresh v8 LoRA run also failed, but its controlled resume
-reached 6/6 changed units and 12/12 correct sides at epoch 22. That is a
-teacher-forced overfit milestone, not a promoted scene chatbot: free generation
-remained mostly `orange`/`unknown`, did not react to the 35-question mirror control
-or the four held-out cube-support changes, and therefore blocked promotion. Gemma
-held-out static QA, interactive chat, leakage claims for this checkpoint, and
-language-conditioned robot navigation remain gated.
+run locally on this Mac. The completed v9 LoRA run first passed its stricter
+teacher-forced full-vocabulary gate at epoch 30 and remained passed through epoch
+36. Both checkpoints then free-generated the trained color-swap answers at 12/12
+normalized-exact sides and 6/6 complete units. This is a real improvement over v8,
+but it did not transfer: both scored 0/70 exact mirror sides and 0/8 exact held-out
+cube-support sides, with no prediction changes for either control. V9 is therefore
+a color-wiring overfit milestone, not a promoted scene chatbot. The active v10
+experiment is a deterministic, weights-only color-plus-mirror stage initialized
+from v9 epoch 36. Gemma held-out static QA, interactive chat, Gemma leakage claims,
+and language-conditioned robot navigation remain gated.
 
 ## Current primary stack
 
@@ -30,8 +31,9 @@ language-conditioned robot navigation remain gated.
   `signal_preserving_resampler_v3`: every occupied block contributes to 256
   question-independent 384D scene latents, which are projected into Gemma's 1536D
   decoder space.
-- Gemma decoder base weights remain frozen. The v8 fallback trains only the
-  explicitly listed 45,056-parameter LoRA state. The decoder receives continuous
+- Gemma decoder base weights remain frozen. V9 trains only the explicitly listed
+  45,056-parameter LoRA state, and v10 starts a new optimizer/history from those
+  v9 adapter weights. The decoder receives continuous
   scene tokens, numeric geometry, and the user's question—never an environmental
   caption, label list, or oracle metadata.
 
@@ -233,6 +235,62 @@ PYTHONPATH=src .venv-gemma4/bin/python -m semantic_3d_chat.training.train_adapte
   --epochs 24 --output-namespace gemma4_color_wiring_v8_resume24
 ```
 
+#### Gemma v9 hardened gate — exact trained-color generation, no transfer
+
+V9 adds a strict teacher-forced full-vocabulary check to the earlier pairwise
+candidate gate: for every side, the canonical first answer token must be the unique
+top-1 token across the entire vocabulary. The fresh 36-epoch MPS run completed 216
+decoder microsteps and 36 optimizer updates in 1,539.387 seconds. The old pairwise
+gate was already 12/12 at epoch 22, but only 1/12 expected first tokens were
+full-vocabulary top-1 then. The composite gate first passed at epoch 30 with 12/12
+top-1 sides, 6/6 complete units, mean target-versus-best-other margin 1.500651,
+and minimum margin 0.03125. Epoch 36 was stronger at mean 2.903809 and minimum
+1.0. Exact training history is in
+`reports/gemma4/metrics/training_gemma4_color_wiring_v9.json`.
+
+The model-validated greedy generation audit gives the same decisive result for
+both the stored epoch-30 `best` checkpoint and epoch 36:
+
+| Counterfactual intervention | Normalized-exact sides | Complete units | Predictions changed |
+| --- | ---: | ---: | ---: |
+| Trained color swap | 12/12 | 6/6 | 6/6 |
+| Mirrored left/right room | 0/70 | 0/35 | 0/35 |
+| Held-out cube support | 0/8 | 0/4 | 0/4 |
+
+The checkpoint-specific audits are
+`reports/gemma4/metrics/scene_signal_audit_gemma4_color_wiring_v9_best_epoch30.json`
+and
+`reports/gemma4/metrics/scene_signal_audit_gemma4_color_wiring_v9_epoch036.json`.
+Prediction-change rate is reported separately from correctness; changing between
+two wrong answers never counts as an exact success. The calculated tensor metrics
+also do not support the old blanket Perceiver-collapse diagnosis for this
+checkpoint: scene signal remains measurably distinct through the current
+resampler. The behavioral failure is lack of transfer beyond the trained color
+intervention.
+
+V9's `best` alias points to epoch 30 because its original selection monitor was a
+hinge that became zero at the first pass and could not distinguish stronger later
+passes. The corrected checkpoint selector preserves the fail-before-pass ordering,
+then ranks passing full-vocabulary checkpoints by their minimum
+target-versus-best-other margin. A later robust pass can therefore replace a
+barely positive one.
+
+#### Gemma v10 staged color-plus-mirror gate
+
+V10 initializes from v9 epoch 36 in `weights_only_new_curriculum` mode. It restores
+compatible scene-encoder, projector, composer, and LoRA weights, but deliberately
+does not restore optimizer state, epoch history, or the v9 curriculum; source
+checkpoint and adapter/metadata hashes will be recorded in each v10 checkpoint.
+Its deterministic selection contains six complete color units and six complete
+mirror units—24 records across four opaque scenes. A seed hash over opaque
+pair/question keys applies the per-pair cap without inspecting question text or
+answers, and both physical scene sides remain indivisible. Held-out cube support
+remains evaluation-only. The staged config and selection audit are
+`configs/experiments/gemma4_color_mirror_wiring_v10.yaml` and
+`reports/gemma4/metrics/training_selection_gemma4_color_mirror_wiring_v10.json`.
+V10 must pass exact free generation for both trained interventions and the held-out
+control before promotion is considered.
+
 ### Fail-closed Gemma static evaluation and chat
 
 Gemma evaluation must use the isolated Transformers 5 environment and the exact
@@ -247,8 +305,8 @@ training writes automatically. It must have `status: "accepted"`, contain a
 non-empty list of supporting metric artifact paths in `evidence`, and bind the
 exact approved config, checkpoint metadata, and adapter with `config_hash`,
 `checkpoint_metadata_sha256`, and `checkpoint_adapter_sha256`. No such record
-exists today: v8-resume24 passed the teacher-forced gate, but its free-generation
-and unseen counterfactual controls failed. After a future checkpoint is accepted,
+exists today: v9 free-generates its trained color pair exactly, but mirror and
+held-out cube-support controls both score zero. After a future checkpoint is accepted,
 the invocation shape will be:
 
 ```bash
@@ -286,7 +344,7 @@ make gemma4-predict-controls \
   GEMMA4_EVAL_SPLIT=test
 ```
 
-Historical v1-v8 checkpoints remain inspectable failure or diagnostic artifacts,
+Historical v1-v9 checkpoints remain inspectable failure or diagnostic artifacts,
 but none is a default for these targets and none may be silently treated as
 promoted.
 
@@ -420,7 +478,8 @@ Legacy runtime data is under `data/rendered`, `data/features`, `data/maps`, and
 `data_gemma4`. Semantic oracle specifications and QA supervision are isolated under
 `data/oracle` and `data/qa`. The recorded chat file audit and oracle-unavailable test
 apply to the legacy `data/checkpoints/best` lineage only; they have not been run for
-Gemma v7 and do not transfer to it.
+Gemma v9 and do not transfer to it. V9's successful trained-color generation is
+therefore not a Gemma leakage-test result.
 
 ## Preserved legacy local web interface
 
