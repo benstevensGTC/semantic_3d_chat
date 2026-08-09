@@ -51,7 +51,10 @@ from semantic_3d_chat.training.source_provenance import (
     require_clean_committed_source,
 )
 
-EXTENSION_NAMESPACE = "gemma4_color_mirror_signed_x_local_field_phase_aware_v21_extension_u8"
+# Keep this component within the trainer's fail-closed 64-character namespace
+# contract. The longer descriptive primary namespace is recorded separately in
+# every launch/final report as ``original_output_namespace``.
+EXTENSION_NAMESPACE = "gemma4_v21_phase_aware_local_field_extension_u8"
 CONTROLLER_TYPE = "strict_v21_conditional_extension_controller"
 FINAL_SELECTOR_TYPE = "strict_v21_conditional_extension_final_selector"
 TARGET_OPTIMIZER_UPDATE = 8

@@ -10,10 +10,18 @@ from typing import Any
 import pytest
 
 from semantic_3d_chat.evaluation import v21_extension_controller as controller
+from semantic_3d_chat.training.train_adapter import validate_output_namespace
 
 
 def _digest(value: str) -> str:
     return hashlib.sha256(value.encode()).hexdigest()
+
+
+def test_extension_namespace_satisfies_trainer_path_contract() -> None:
+    assert len(controller.EXTENSION_NAMESPACE) <= 64
+    assert validate_output_namespace(controller.EXTENSION_NAMESPACE) == (
+        controller.EXTENSION_NAMESPACE
+    )
 
 
 def _pair_metrics(*, full: bool) -> dict[str, Any]:
