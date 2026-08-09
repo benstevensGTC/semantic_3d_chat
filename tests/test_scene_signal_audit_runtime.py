@@ -12,6 +12,7 @@ from semantic_3d_chat.evaluation.scene_signal_audit import (
     _canonical_relation_generation_summary,
     _checkpoint_epoch_fields,
     _configured_runtime_dtype,
+    _construct_audit_composer,
     _encode_scene,
     _generation_answer_and_provenance,
     _generation_audit,
@@ -35,7 +36,11 @@ from semantic_3d_chat.language.prefix_injection import (
     ContinuousPrefixComposer,
 )
 from semantic_3d_chat.scene_encoder.map_io import MapTensorData
-from semantic_3d_chat.training.checkpointing import save_adapter_checkpoint
+from semantic_3d_chat.training.checkpointing import (
+    load_adapter_checkpoint,
+    module_collection_state_sha256,
+    save_adapter_checkpoint,
+)
 
 
 def _native_contract() -> dict[str, object]:
@@ -193,6 +198,58 @@ def test_loaded_model_validation_checks_dtype_contract_and_checkpoint_boundaries
         _validate_runtime_prefix_against_loaded_model(
             _native_config(), language, fresh, torch.float16
         )
+
+
+def test_audit_composer_preserves_native_checkpoint_dtype_and_legacy_learned_mode(
+    tmp_path,
+) -> None:
+    native = (
+        torch.tensor([[[0.25, -0.5]]], dtype=torch.bfloat16),
+        torch.tensor([[[-0.75, 1.0]]], dtype=torch.bfloat16),
+    )
+    source = ContinuousPrefixComposer(
+        2,
+        scene_prefix_after_bos=True,
+        bos_token_id=2,
+        scene_boundary_mode=SCENE_BOUNDARY_MODE_GEMMA4_NATIVE_IMAGE,
+        native_boundary_embeddings=native,
+    )
+    expected_hash = module_collection_state_sha256({"composer": source})
+    checkpoint = save_adapter_checkpoint(
+        tmp_path / "native_composer",
+        {"composer": source},
+        {"frozen_scene_state_sha256": expected_hash},
+    )
+    language = _LoadedLanguage(_native_contract(), native, torch.bfloat16)
+    language.bos_token_id = 2
+
+    restored = _construct_audit_composer(
+        _native_config(), 2, torch.device("cpu"), torch.bfloat16, language
+    )
+    load_adapter_checkpoint(checkpoint, {"composer": restored}, device="cpu")
+
+    assert restored.scene_start.dtype is torch.bfloat16
+    assert restored.scene_end.dtype is torch.bfloat16
+    assert module_collection_state_sha256({"composer": restored}) == expected_hash
+
+    model_free = _construct_audit_composer(
+        _native_config(), 2, torch.device("cpu"), torch.bfloat16
+    )
+    load_adapter_checkpoint(checkpoint, {"composer": model_free}, device="cpu")
+    assert module_collection_state_sha256({"composer": model_free}) == expected_hash
+
+    learned_config = {
+        "language": {
+            "dtype": "float16",
+            "scene_prefix_after_bos": False,
+            "scene_boundary_mode": "learned",
+        }
+    }
+    learned = _construct_audit_composer(
+        learned_config, 2, torch.device("cpu"), torch.float16
+    )
+    assert learned.scene_start.dtype is torch.float32
+    assert learned.scene_end.dtype is torch.float32
 
 
 def test_audit_installs_and_hash_validates_checkpoint_lora_before_forward(tmp_path) -> None:

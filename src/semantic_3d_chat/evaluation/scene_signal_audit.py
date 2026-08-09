@@ -98,6 +98,47 @@ def _configured_runtime_dtype(config: dict[str, Any], device: torch.device) -> t
     return safe_dtype(device, str(config["language"].get("dtype", "float16")))
 
 
+def _construct_audit_composer(
+    config: dict[str, Any],
+    hidden_size: int,
+    device: torch.device,
+    runtime_dtype: torch.dtype,
+    language: Any | None = None,
+) -> ContinuousPrefixComposer:
+    """Construct checkpoint boundary storage with the runtime's exact dtype contract.
+
+    Native Gemma boundary buffers are BF16 for the selected model. Constructing
+    zero-filled FP32 placeholders before checkpoint load silently casts those
+    persisted buffers to FP32 and changes the tamper-evident scene-state hash.
+    When the model is already required for LoRA/generation, seed the composer
+    from its exact native embeddings just like training and chat runtime do. A
+    skip-generation audit can avoid loading the model while still allocating
+    native placeholders in the configured effective runtime dtype. Learned
+    boundaries retain their legacy FP32 parameter construction.
+    """
+
+    boundary_mode = scene_boundary_mode_setting(config)
+    native_contract = native_gemma4_image_contract_setting(config)
+    native_embeddings = (
+        None if language is None else language.scene_boundary_embeddings(boundary_mode)
+    )
+    bos_token_id = (
+        language.bos_token_id
+        if language is not None
+        else (None if native_contract is None else int(native_contract["bos_token_id"]))
+    )
+    composer = ContinuousPrefixComposer(
+        hidden_size,
+        scene_prefix_after_bos=scene_prefix_after_bos_setting(config),
+        bos_token_id=bos_token_id,
+        scene_boundary_mode=boundary_mode,
+        native_boundary_embeddings=native_embeddings,
+    )
+    if language is None and boundary_mode == SCENE_BOUNDARY_MODE_GEMMA4_NATIVE_IMAGE:
+        composer = composer.to(dtype=runtime_dtype)
+    return composer.to(device)
+
+
 def _unvalidated_runtime_prefix_status(
     config: dict[str, Any], runtime_dtype: torch.dtype
 ) -> dict[str, Any]:
@@ -1243,16 +1284,6 @@ def main() -> None:
         int(metadata["semantic_dim"]),
         int(metadata["language_hidden_dim"]),
     ).to(device)
-    composer = ContinuousPrefixComposer(
-        int(metadata["language_hidden_dim"]),
-        scene_prefix_after_bos=scene_prefix_after_bos_setting(config),
-        bos_token_id=(
-            None
-            if native_gemma4_image_contract_setting(config) is None
-            else int(native_gemma4_image_contract_setting(config)["bos_token_id"])
-        ),
-        scene_boundary_mode=scene_boundary_mode_setting(config),
-    ).to(device)
     grounding = QuestionGroundingHead(
         int(config["scene_encoder"]["model_dim"]),
         int(metadata["language_hidden_dim"]),
@@ -1274,6 +1305,13 @@ def main() -> None:
         )
         lora_installation = _install_checkpoint_lora(config, audit_language, checkpoint, metadata)
         assert lora_installation is not None
+    composer = _construct_audit_composer(
+        config,
+        int(metadata["language_hidden_dim"]),
+        device,
+        runtime_dtype,
+        audit_language,
+    )
     contract_warnings = validate_checkpoint_contract(
         metadata,
         config,
