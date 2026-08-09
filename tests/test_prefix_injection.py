@@ -28,6 +28,69 @@ def test_prefix_precedes_prompt_and_loss_only_covers_answer() -> None:
     assert torch.equal(batch.labels[:, 13:], answer)
 
 
+def test_generic_control_tokens_follow_complete_prompt_and_preserve_scene_identity() -> None:
+    torch.manual_seed(30)
+    embedding = nn.Embedding(20, 4)
+    composer = ContinuousPrefixComposer(4)
+    scene = torch.randn(1, 2, 4)
+    prompt = torch.tensor([[2, 3, 4]])
+    answer = torch.tensor([[5, 6]])
+    first_control = torch.randn(1, 2, 4)
+    second_control = torch.randn(1, 3, 4)
+    scene_hash = prefix_sha256(composer.scene_prefix(scene))
+
+    trained = composer.compose(
+        scene,
+        prompt,
+        embedding,
+        answer,
+        control_tokens=first_control,
+    )
+    generated = composer.compose(
+        scene,
+        prompt,
+        embedding,
+        control_tokens=second_control,
+    )
+    scene_prefix = composer.scene_prefix(scene)
+
+    assert trained.scene_prefix_length == generated.scene_prefix_length == 4
+    assert prefix_sha256(scene_prefix) == scene_hash
+    assert torch.equal(trained.inputs_embeds[:, :4], scene_prefix)
+    assert torch.equal(trained.inputs_embeds[:, 4:7], embedding(prompt))
+    assert torch.equal(trained.inputs_embeds[:, 7:9], first_control)
+    assert torch.equal(trained.inputs_embeds[:, 9:], embedding(answer))
+    assert torch.equal(trained.labels[:, :9], torch.full((1, 9), -100))
+    assert torch.equal(trained.labels[:, 9:], answer)
+    assert generated.labels is None
+    assert torch.equal(generated.inputs_embeds[:, :4], scene_prefix)
+    assert torch.equal(generated.inputs_embeds[:, 4:7], embedding(prompt))
+    assert torch.equal(generated.inputs_embeds[:, 7:], second_control)
+
+
+@pytest.mark.parametrize(
+    ("control_tokens", "message"),
+    [
+        (torch.randn(1, 4), "shape"),
+        (torch.randn(2, 1, 4), "batch sizes"),
+        (torch.randn(1, 1, 5), "hidden size"),
+        (torch.tensor([[[float("nan"), 0.0, 0.0, 0.0]]]), "finite"),
+    ],
+)
+def test_generic_control_tokens_reject_invalid_inputs(
+    control_tokens: torch.Tensor,
+    message: str,
+) -> None:
+    composer = ContinuousPrefixComposer(4)
+    with pytest.raises(ValueError, match=message):
+        composer.compose(
+            torch.randn(1, 2, 4),
+            torch.tensor([[2, 3]]),
+            nn.Embedding(20, 4),
+            control_tokens=control_tokens,
+        )
+
+
 def test_opt_in_generic_layout_keeps_native_bos_before_continuous_scene_prefix() -> None:
     torch.manual_seed(31)
     embedding = nn.Embedding(20, 4)

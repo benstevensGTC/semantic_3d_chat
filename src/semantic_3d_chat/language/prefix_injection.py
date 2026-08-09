@@ -167,6 +167,34 @@ def scene_prefix_after_bos_contract_mismatch(
     return None
 
 
+def _prepare_control_tokens(
+    control_tokens: torch.Tensor | None,
+    *,
+    batch_size: int,
+    hidden_size: int,
+    reference: torch.Tensor,
+) -> torch.Tensor | None:
+    """Validate and align optional decoder-side continuous control tokens."""
+
+    if control_tokens is None:
+        return None
+    if not isinstance(control_tokens, torch.Tensor):
+        raise TypeError("control_tokens must be a tensor with shape [B,C,H]")
+    if control_tokens.ndim != 3:
+        raise ValueError("control_tokens must have shape [B,C,H]")
+    if control_tokens.shape[0] != batch_size:
+        raise ValueError("Control-token and scene batch sizes must match")
+    if control_tokens.shape[-1] != hidden_size:
+        raise ValueError(
+            f"control_tokens hidden size must be {hidden_size}; "
+            f"got {control_tokens.shape[-1]}"
+        )
+    prepared = control_tokens.to(device=reference.device, dtype=reference.dtype)
+    if not bool(torch.isfinite(prepared).all().item()):
+        raise ValueError("control_tokens must contain only finite values")
+    return prepared
+
+
 @dataclass
 class PrefixBatch:
     inputs_embeds: torch.Tensor
@@ -301,19 +329,26 @@ class ContinuousPrefixComposer(nn.Module):
         embedding_layer: nn.Module,
         answer_ids: torch.Tensor | None = None,
         prefix_backend: object | None = None,
+        control_tokens: torch.Tensor | None = None,
     ) -> PrefixBatch:
         if prompt_ids.ndim != 2 or prompt_ids.shape[0] != scene_tokens.shape[0]:
             raise ValueError("Prompt and scene batch sizes must match")
         self._validate_bos_first_prompt(prompt_ids)
         prefix = self.scene_prefix(scene_tokens)
+        control_tokens = _prepare_control_tokens(
+            control_tokens,
+            batch_size=scene_tokens.shape[0],
+            hidden_size=prefix.shape[-1],
+            reference=prefix,
+        )
         if prefix_backend is not None:
-            prepared = prefix_backend.prepare(
-                prefix,
-                prompt_ids,
-                answer_ids,
-                scene_prefix_after_bos=self.scene_prefix_after_bos,
-                scene_boundary_mode=self.scene_boundary_mode,
-            )
+            backend_options = {
+                "scene_prefix_after_bos": self.scene_prefix_after_bos,
+                "scene_boundary_mode": self.scene_boundary_mode,
+            }
+            if control_tokens is not None:
+                backend_options["control_tokens"] = control_tokens
+            prepared = prefix_backend.prepare(prefix, prompt_ids, answer_ids, **backend_options)
             return PrefixBatch(
                 inputs_embeds=prepared.inputs_embeds,
                 attention_mask=prepared.attention_mask,
@@ -332,6 +367,8 @@ class ContinuousPrefixComposer(nn.Module):
             if self.scene_prefix_after_bos
             else [prefix, prompt_embeddings]
         )
+        if control_tokens is not None:
+            parts.append(control_tokens)
         labels = None
         if answer_ids is not None:
             if answer_ids.ndim != 2 or answer_ids.shape[0] != scene_tokens.shape[0]:
@@ -339,7 +376,12 @@ class ContinuousPrefixComposer(nn.Module):
             answer_embeddings = embedding_layer(answer_ids).to(prefix.dtype)
             parts.append(answer_embeddings)
             ignored = torch.full(
-                (scene_tokens.shape[0], prefix.shape[1] + prompt_ids.shape[1]),
+                (
+                    scene_tokens.shape[0],
+                    prefix.shape[1]
+                    + prompt_ids.shape[1]
+                    + (0 if control_tokens is None else control_tokens.shape[1]),
+                ),
                 -100,
                 dtype=torch.long,
                 device=scene_tokens.device,

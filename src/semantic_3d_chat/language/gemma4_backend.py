@@ -19,6 +19,7 @@ import torch
 from semantic_3d_chat.language.prefix_injection import (
     SCENE_BOUNDARY_MODE_GEMMA4_NATIVE_IMAGE,
     SCENE_BOUNDARY_MODE_LEARNED,
+    _prepare_control_tokens,
     validate_scene_boundary_mode,
 )
 
@@ -193,6 +194,7 @@ class Gemma4PrefixBackend:
         *,
         scene_prefix_after_bos: bool = False,
         scene_boundary_mode: str = SCENE_BOUNDARY_MODE_LEARNED,
+        control_tokens: torch.Tensor | None = None,
     ) -> Gemma4PrefixInputs:
         """Combine scene and text while preserving Gemma 4's auxiliary PLE stream."""
 
@@ -228,6 +230,12 @@ class Gemma4PrefixBackend:
                 )
         prompt_embeddings, prompt_ple = self._token_embeddings_and_ple(prompt_ids)
         scene_prefix = scene_prefix.to(dtype=prompt_embeddings.dtype)
+        control_tokens = _prepare_control_tokens(
+            control_tokens,
+            batch_size=scene_prefix.shape[0],
+            hidden_size=self.hidden_size,
+            reference=prompt_embeddings,
+        )
         if native_boundaries:
             if scene_prefix.shape[1] < 3:
                 raise ValueError(
@@ -307,6 +315,17 @@ class Gemma4PrefixBackend:
             embeddings = [scene_prefix, prompt_embeddings]
             ple_parts = [scene_ple, prompt_ple]
             mm_parts = [scene_mm_token_type_ids, torch.zeros_like(prompt_ids)]
+        if control_tokens is not None:
+            control_placeholder_ids = torch.full(
+                control_tokens.shape[:2],
+                int(self.text_config.pad_token_id),
+                dtype=torch.long,
+                device=scene_prefix.device,
+            )
+            _, control_ple = self._token_embeddings_and_ple(control_placeholder_ids)
+            embeddings.append(control_tokens)
+            ple_parts.append(control_ple)
+            mm_parts.append(torch.zeros_like(control_placeholder_ids))
         labels = None
         if answer_ids is not None:
             if answer_ids.ndim != 2 or answer_ids.shape[0] != scene_prefix.shape[0]:
@@ -317,7 +336,12 @@ class Gemma4PrefixBackend:
             ple_parts.append(answer_ple)
             mm_parts.append(torch.zeros_like(answer_ids))
             ignored = torch.full(
-                (scene_prefix.shape[0], scene_prefix.shape[1] + prompt_ids.shape[1]),
+                (
+                    scene_prefix.shape[0],
+                    scene_prefix.shape[1]
+                    + prompt_ids.shape[1]
+                    + (0 if control_tokens is None else control_tokens.shape[1]),
+                ),
                 -100,
                 dtype=torch.long,
                 device=scene_prefix.device,

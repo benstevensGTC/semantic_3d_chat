@@ -199,6 +199,84 @@ def test_native_prefix_exact_order_ple_types_and_answer_alignment() -> None:
     assert scene.grad is not None and scene.grad.abs().sum() > 0
 
 
+def test_native_control_tokens_use_pad_ple_text_modality_and_preserve_scene_identity() -> None:
+    backend = _backend()
+    composer = ContinuousPrefixComposer(
+        6,
+        scene_prefix_after_bos=True,
+        bos_token_id=2,
+        scene_boundary_mode=SCENE_BOUNDARY_MODE_GEMMA4_NATIVE_IMAGE,
+        native_boundary_embeddings=backend.native_boundary_embeddings(),
+    )
+    scene = torch.randn(1, 4, 6)
+    prompt_ids = torch.tensor([[2, 5, 6]])
+    answer_ids = torch.tensor([[7, 1]])
+    control_tokens = torch.randn(1, 2, 6)
+    scene_prefix = composer.scene_prefix(scene)
+    scene_hash = prefix_sha256(scene_prefix)
+
+    trained = composer.compose(
+        scene,
+        prompt_ids,
+        backend.model.get_input_embeddings(),
+        answer_ids,
+        prefix_backend=backend,
+        control_tokens=control_tokens,
+    )
+    generated = composer.compose(
+        scene,
+        prompt_ids,
+        backend.model.get_input_embeddings(),
+        prefix_backend=backend,
+        control_tokens=control_tokens + 1.0,
+    )
+
+    token_embeddings = backend.model.get_input_embeddings()
+    prompt_embeddings = token_embeddings(prompt_ids)
+    answer_embeddings = token_embeddings(answer_ids)
+    pad_ids = torch.zeros((1, 2), dtype=torch.long)
+    pad_embeddings = token_embeddings(pad_ids)
+    pad_ple = backend.text_model.get_per_layer_inputs(pad_ids, pad_embeddings)
+
+    assert trained.scene_prefix_length == generated.scene_prefix_length == 6
+    assert prefix_sha256(composer.scene_prefix(scene)) == scene_hash
+    assert torch.equal(trained.inputs_embeds[:, :1], prompt_embeddings[:, :1])
+    assert torch.equal(trained.inputs_embeds[:, 1:7], scene_prefix)
+    assert torch.equal(trained.inputs_embeds[:, 7:9], prompt_embeddings[:, 1:])
+    assert torch.equal(trained.inputs_embeds[:, 9:11], control_tokens)
+    assert torch.equal(trained.inputs_embeds[:, 11:], answer_embeddings)
+    assert torch.equal(trained.per_layer_inputs[:, 9:11], pad_ple)
+    assert torch.equal(trained.mm_token_type_ids[:, 9:11], torch.zeros((1, 2), dtype=torch.long))
+    assert torch.equal(trained.labels[:, :11], torch.full((1, 11), -100))
+    assert torch.equal(trained.labels[:, 11:], answer_ids)
+    assert generated.labels is None
+    assert torch.equal(generated.inputs_embeds[:, -2:], control_tokens + 1.0)
+    assert torch.equal(generated.per_layer_inputs[:, -2:], pad_ple)
+    assert torch.equal(generated.mm_token_type_ids[:, -2:], torch.zeros((1, 2), dtype=torch.long))
+
+
+@pytest.mark.parametrize(
+    ("control_tokens", "message"),
+    [
+        (torch.randn(1, 6), "shape"),
+        (torch.randn(2, 1, 6), "batch sizes"),
+        (torch.randn(1, 1, 5), "hidden size"),
+        (torch.tensor([[[float("inf"), 0.0, 0.0, 0.0, 0.0, 0.0]]]), "finite"),
+    ],
+)
+def test_gemma_backend_rejects_invalid_control_tokens(
+    control_tokens: torch.Tensor,
+    message: str,
+) -> None:
+    backend = _backend()
+    with pytest.raises(ValueError, match=message):
+        backend.prepare(
+            torch.randn(1, 4, 6),
+            torch.tensor([[2, 5]]),
+            control_tokens=control_tokens,
+        )
+
+
 def test_native_variable_length_stack_preserves_metadata_labels_and_padding() -> None:
     backend = _backend()
     composer = ContinuousPrefixComposer(
