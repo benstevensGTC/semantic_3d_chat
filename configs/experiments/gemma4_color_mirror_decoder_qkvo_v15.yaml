@@ -1,0 +1,104 @@
+_base_: gemma4_color_mirror_spatial_relation_v12.yaml
+
+# V14 showed that a deeper q/o decoder bank can remove Gemma's unrelated-token
+# prior, but its gradients and decisions still move the two mirrored scenes
+# mostly together. V15 changes one architectural factor: the new zero-output
+# bank also adapts the two physical key/value source layers shared by Gemma's
+# final 20 decoder layers, where the fixed, question-independent 256-token scene
+# prefix enters causal attention. No question-dependent scene preprocessing,
+# retrieval, control token, or oracle value is used at runtime.
+language:
+  # Explicitly replace V12's legacy schema-1 LoRA with two disjoint named banks.
+  lora: null
+  lora_banks:
+    inherited_v12:
+      trainable: false
+      rank: 4
+      alpha: 8.0
+      dropout: 0.0
+      initialization_algorithm: checkpoint_overwrite
+      initialization_seed: null
+      expected_initial_state_sha256: dec768bed654c8c4e16da0318857543ad54d8f5f68f4d24a9a87cd19ec706594
+      target_modules:
+        - model.language_model.layers.34.self_attn.q_proj
+        - model.language_model.layers.34.self_attn.o_proj
+    extension_v15_qkvo:
+      trainable: true
+      rank: 8
+      alpha: 16.0
+      dropout: 0.0
+      initialization_algorithm: cpu_kaiming_uniform_a_exact_zero_b
+      initialization_seed: 15015
+      # Pinned by a no-step local initialization probe: 290,816 trainable
+      # parameters and every LoRA-B tensor exactly zero.
+      expected_initial_state_sha256: 7ad3cd4296e78c6cb3daeae6bbce762b0f5399eeb85f01b6ffcb47233dc3d814
+      target_modules:
+        # Gemma 4 layers 15-34 have no K/V matrices: they reuse sliding K/V
+        # from layer 13 and full-attention K/V from layer 14. These four
+        # projections therefore change the actual late-layer shared K/V path.
+        - model.language_model.layers.13.self_attn.k_proj
+        - model.language_model.layers.13.self_attn.v_proj
+        - model.language_model.layers.14.self_attn.k_proj
+        - model.language_model.layers.14.self_attn.v_proj
+        - model.language_model.layers.30.self_attn.q_proj
+        - model.language_model.layers.30.self_attn.o_proj
+        - model.language_model.layers.31.self_attn.q_proj
+        - model.language_model.layers.31.self_attn.o_proj
+        - model.language_model.layers.32.self_attn.q_proj
+        - model.language_model.layers.32.self_attn.o_proj
+        - model.language_model.layers.33.self_attn.q_proj
+        - model.language_model.layers.33.self_attn.o_proj
+
+training:
+  output_namespace: gemma4_color_mirror_decoder_qkvo_v15
+  initialize_from: data_gemma4/checkpoints/gemma4_color_mirror_spatial_relation_v12/epoch_008
+  initialize_expected_adapter_sha256: a4c85c14a214e4e594992e489a784cb4bacb64d3dfda519ad3da18b1595d9f22
+  initialize_expected_metadata_sha256: f097c6477546460440e77a3d225afb55818cb13abf9cbb4a90500f75a879b0f5
+  initialize_legacy_lora_into_bank: inherited_v12
+  freeze_scene_adapter: true
+
+  # One MPS optimizer update per epoch. The four-update screen is extended
+  # with --epochs only if it preserves the complete color gate and beats V14's
+  # best discrete mirror result (7/12 sides and 1/6 complete units).
+  epochs: 4
+  pair_steps_per_epoch: 12
+  gradient_accumulation: 12
+  pair_gate_every_epochs: 1
+  pair_gate_stop_when_passed: false
+  early_stopping_patience: 0
+  lora_learning_rate: 0.002
+  lora_weight_decay: 0.0
+
+  # The scene bridge is frozen. Decoder CE plus the existing candidate and
+  # full-vocabulary hinges are the only active objectives.
+  latent_diversity_weight: 0.0
+  paired_scene_separation_weight: 0.0
+  grounding_weight: 0.0
+  grounding_anchor_weight: 0.0
+  spatial_answer_contrastive_weight: 0.0
+  spatial_answer_warmup_steps: 0
+  spatial_relation_contrastive_weight: 0.0
+  spatial_relation_warmup_steps: 0
+
+experiment:
+  schema_version: 1
+  role: fixed_prefix_qkvo_decoder_falsifier
+  question_dependent_scene_processing: false
+  screen_optimizer_updates: 4
+  conditional_max_optimizer_updates: 12
+  source_scene_state_sha256: 690bd890bfda024dbb5c7d3c68087b8113bc3b8ee81dd6143c7eb2a884e7245b
+  source_inherited_bank_sha256: dec768bed654c8c4e16da0318857543ad54d8f5f68f4d24a9a87cd19ec706594
+  screen_extension_requires:
+    color_full_vocab_sides: 12
+    color_full_vocab_units: 6
+    color_positive_minimum_candidate_margin: true
+    color_positive_minimum_full_vocab_margin: true
+    mirror_minimum_full_vocab_sides: 8
+    mirror_minimum_full_vocab_units: 2
+  full_teacher_gate_requires:
+    color_full_vocab_sides: 12
+    color_full_vocab_units: 6
+    mirror_full_vocab_sides: 12
+    mirror_full_vocab_units: 6
+    all_candidate_and_full_vocab_minimum_margins_positive: true
+  greedy_audit_only_after_full_teacher_gate: true
