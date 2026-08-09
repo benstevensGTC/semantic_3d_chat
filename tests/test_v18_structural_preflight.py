@@ -394,21 +394,26 @@ def test_fp64_pair_metrics_rejects_scene_independent_delta_as_nonzero_evidence()
 @pytest.mark.skipif(
     not torch.backends.mps.is_available(), reason="MPS portability regression"
 )
-def test_fp64_pair_metrics_transfer_to_cpu_before_float64_cast() -> None:
+def test_fp64_scene_and_pair_metrics_transfer_to_cpu_before_float64_cast() -> None:
     first_core = torch.tensor([[[2.0], [4.0]]], device="mps")
     second_core = torch.tensor([[[1.0], [2.0]]], device="mps")
     first_delta = torch.tensor([[[0.2], [-0.2]]], device="mps")
     second_delta = torch.tensor([[[-0.1], [0.1]]], device="mps")
 
-    metrics = fp64_pair_delta_metrics(
+    scene_metrics = fp64_delta_metrics(first_core, first_delta)
+    pair_metrics = fp64_pair_delta_metrics(
         first_core,
         second_core,
         first_delta,
         second_delta,
     )
 
-    assert metrics["positive_finite_core_difference"] is True
-    assert metrics["positive_finite_pair_delta"] is True
+    assert scene_metrics["positive_finite_core_rms"] is True
+    assert scene_metrics["positive_finite_total_energy"] is True
+    assert scene_metrics["core_rms"] > 0.0
+    assert scene_metrics["delta_rms"] > 0.0
+    assert pair_metrics["positive_finite_core_difference"] is True
+    assert pair_metrics["positive_finite_pair_delta"] is True
 
 
 def test_functional_simulation_reports_raw_and_effective_without_live_mutation() -> None:

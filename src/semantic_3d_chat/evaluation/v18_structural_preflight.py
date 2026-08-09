@@ -651,8 +651,11 @@ def fp64_delta_metrics(core: torch.Tensor, delta: torch.Tensor) -> dict[str, Any
 
     if core.shape != delta.shape or core.ndim != 3 or core.shape[0] != 1 or core.shape[1] < 2:
         raise ValueError("Core and delta must have matching [1,L,H] shapes with L > 1")
-    core64 = core.detach().to(device="cpu", dtype=torch.float64)
-    delta64 = delta.detach().to(device="cpu", dtype=torch.float64)
+    # Keep transfer and conversion separate. A combined MPS→CPU/FP64 ``to``
+    # can silently yield zeros even though a transfer followed by a CPU cast is
+    # correct; MPS itself has no FP64 execution support.
+    core64 = core.detach().cpu().to(torch.float64)
+    delta64 = delta.detach().cpu().to(torch.float64)
     if not torch.isfinite(core64).all() or not torch.isfinite(delta64).all():
         raise ValueError("Core and delta must be finite")
     slots = int(delta64.shape[1])
