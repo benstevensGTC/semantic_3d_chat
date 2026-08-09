@@ -232,20 +232,34 @@ def bundle(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> SyntheticBundle:
     assert predicted_signed_hash == predicted["predicted_signed_x_scene_residual_state_sha256"]
     assert predicted_output_hash == predicted["predicted_output_weight_sha256"]
 
-    prefix_rows = {
+    compact_prefix_rows = {
         scene_id: {
             "v18_base_prefix_sha256": _digest(f"prefix-{scene_id}"),
             "signed_x_adapted_prefix_sha256": _digest(f"prefix-{scene_id}"),
         }
         for scene_id in ("scene_000003", "scene_000004", "scene_000007", "scene_000008")
     }
-    zero_equivalence = {
+    checkpoint_zero_equivalence = {
         "verified": True,
         "base": "loaded_frozen_global_scene_residual",
         "question_dependent_scene_processing": False,
         "all_scene_slots_accounted": True,
         "scene_count": 4,
-        "scene_prefixes": prefix_rows,
+        "scene_prefixes": compact_prefix_rows,
+    }
+    preflight_zero_equivalence = {
+        **checkpoint_zero_equivalence,
+        "scene_prefixes": {
+            scene_id: {
+                "core_scene_token_sha256": _digest(f"core-{scene_id}"),
+                "v18_base_scene_token_sha256": _digest(f"v18-{scene_id}"),
+                **row,
+                "scene_tokens_exactly_equal": True,
+                "prefixes_exactly_equal": True,
+                "prefix_hashes_equal": True,
+            }
+            for scene_id, row in compact_prefix_rows.items()
+        },
     }
     combined_source_hash = _digest("combined-frozen-source")
     microsteps = [
@@ -316,7 +330,7 @@ def bundle(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> SyntheticBundle:
         "pair_membership_sha256": expected["pair_membership_sha256"],
         "pair_unit_selection_sha256": PAIR_UNIT_SHA256,
         "ordered_unit_sha256": expected["ordered_unit_sha256"],
-        "zero_output_prefix_equivalence": zero_equivalence,
+        "zero_output_prefix_equivalence": preflight_zero_equivalence,
         "signed_x_structural_state": signed.validate_structural_state(),
         "microsteps": microsteps,
         "microstep_losses": microsteps,
@@ -396,7 +410,7 @@ def bundle(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> SyntheticBundle:
         "signed_x_scene_residual_parameter_count": 196_608,
         "signed_x_scene_residual_initial_state_sha256": initial_signed_hash,
         "signed_x_scene_residual_state_sha256": predicted_signed_hash,
-        "signed_x_scene_residual_zero_output_equivalence": zero_equivalence,
+        "signed_x_scene_residual_zero_output_equivalence": checkpoint_zero_equivalence,
         "frozen_scene_state_sha256": expected["source_scene_state_sha256"],
         "frozen_lora_bank_state_sha256": expected["source_lora_bank_state_sha256"],
         "lora_bank_state_sha256": expected["source_lora_bank_state_sha256"],
@@ -493,6 +507,52 @@ def test_preflight_schema_or_authorization_tamper_is_rejected(
     _write_json(bundle.preflight_path, preflight)
 
     with pytest.raises(V19Update1Violation, match=match):
+        verify_update1(bundle.config, bundle.preflight_path, bundle.checkpoint)
+
+
+@pytest.mark.parametrize(
+    ("case", "match"),
+    [
+        ("extra_root", "root keys mismatch"),
+        ("missing_scene_evidence", "keys mismatch"),
+        ("false_scene_identity", "scene_tokens_exactly_equal"),
+        ("invalid_scene_digest", "core tokens"),
+        ("prefix_hash_mismatch", "identity"),
+    ],
+)
+def test_rich_preflight_zero_equivalence_tamper_is_rejected(
+    bundle: SyntheticBundle, case: str, match: str
+) -> None:
+    preflight = _read_json(bundle.preflight_path)
+    equivalence = preflight["zero_output_prefix_equivalence"]
+    row = equivalence["scene_prefixes"]["scene_000003"]
+    if case == "extra_root":
+        equivalence["unexpected"] = True
+    elif case == "missing_scene_evidence":
+        row.pop("core_scene_token_sha256")
+    elif case == "false_scene_identity":
+        row["scene_tokens_exactly_equal"] = False
+    elif case == "invalid_scene_digest":
+        row["core_scene_token_sha256"] = "bad"
+    else:
+        row["signed_x_adapted_prefix_sha256"] = _digest("wrong adapted prefix")
+    _write_json(bundle.preflight_path, preflight)
+
+    with pytest.raises(V19Update1Violation, match=match):
+        verify_update1(bundle.config, bundle.preflight_path, bundle.checkpoint)
+
+
+def test_compact_checkpoint_zero_equivalence_must_match_preflight(
+    bundle: SyntheticBundle,
+) -> None:
+    metadata_path = bundle.checkpoint / "metadata.json"
+    metadata = _read_json(metadata_path)
+    metadata["signed_x_scene_residual_zero_output_equivalence"]["scene_prefixes"]["scene_000003"][
+        "v18_base_prefix_sha256"
+    ] = _digest("wrong checkpoint prefix")
+    _write_json(metadata_path, metadata)
+
+    with pytest.raises(V19Update1Violation, match="checkpoint/preflight zero-output"):
         verify_update1(bundle.config, bundle.preflight_path, bundle.checkpoint)
 
 

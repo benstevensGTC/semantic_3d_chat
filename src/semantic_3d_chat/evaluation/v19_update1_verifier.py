@@ -24,6 +24,7 @@ from semantic_3d_chat.evaluation.v19_optimizer_state import (
     validate_v19_adamw_state_manifest,
 )
 from semantic_3d_chat.evaluation.v19_structural_preflight import (
+    EXPECTED_SCENE_IDS,
     V19_PREFLIGHT_ROLE,
     V19StructuralPreflightViolation,
     validate_v19_config_contract,
@@ -133,6 +134,16 @@ def _finite(value: Any, field: str) -> float:
 
 def _validate_zero_equivalence(value: Any) -> dict[str, Any]:
     equivalence = dict(_mapping(value, "preflight signed-X zero equivalence"))
+    expected_root_keys = {
+        "verified",
+        "base",
+        "question_dependent_scene_processing",
+        "all_scene_slots_accounted",
+        "scene_count",
+        "scene_prefixes",
+    }
+    if set(equivalence) != expected_root_keys:
+        _fail("Preflight zero equivalence root keys mismatch")
     for key, expected in {
         "verified": True,
         "base": "loaded_frozen_global_scene_residual",
@@ -145,17 +156,30 @@ def _validate_zero_equivalence(value: Any) -> dict[str, Any]:
         equivalence.get("scene_prefixes"),
         "preflight zero equivalence scene prefixes",
     )
-    if len(prefixes) != 4:
-        _fail("Preflight zero equivalence must contain exactly four scenes")
-    for scene_id, raw in prefixes.items():
-        if not isinstance(scene_id, str) or not scene_id:
-            _fail("Preflight zero equivalence has an invalid scene ID")
+    if set(prefixes) != set(EXPECTED_SCENE_IDS):
+        _fail("Preflight zero equivalence scene set mismatch")
+    compact_prefixes: dict[str, dict[str, str]] = {}
+    for scene_id in EXPECTED_SCENE_IDS:
+        raw = prefixes[scene_id]
         row = _mapping(raw, f"preflight zero equivalence {scene_id}")
         if set(row) != {
+            "core_scene_token_sha256",
+            "v18_base_scene_token_sha256",
             "v18_base_prefix_sha256",
             "signed_x_adapted_prefix_sha256",
+            "scene_tokens_exactly_equal",
+            "prefixes_exactly_equal",
+            "prefix_hashes_equal",
         }:
             _fail(f"Preflight zero equivalence {scene_id} keys mismatch")
+        _sha256(
+            row.get("core_scene_token_sha256"),
+            f"preflight zero equivalence {scene_id} core tokens",
+        )
+        _sha256(
+            row.get("v18_base_scene_token_sha256"),
+            f"preflight zero equivalence {scene_id} V18 tokens",
+        )
         base = _sha256(
             row.get("v18_base_prefix_sha256"),
             f"preflight zero equivalence {scene_id} base",
@@ -165,7 +189,28 @@ def _validate_zero_equivalence(value: Any) -> dict[str, Any]:
             f"preflight zero equivalence {scene_id} adapted",
         )
         _equal(adapted, base, f"preflight zero equivalence {scene_id} identity")
-    return equivalence
+        for key in (
+            "scene_tokens_exactly_equal",
+            "prefixes_exactly_equal",
+            "prefix_hashes_equal",
+        ):
+            _equal(
+                row.get(key),
+                True,
+                f"preflight zero equivalence {scene_id} {key}",
+            )
+        compact_prefixes[scene_id] = {
+            "v18_base_prefix_sha256": base,
+            "signed_x_adapted_prefix_sha256": adapted,
+        }
+    return {
+        "verified": True,
+        "base": "loaded_frozen_global_scene_residual",
+        "question_dependent_scene_processing": False,
+        "all_scene_slots_accounted": True,
+        "scene_count": len(compact_prefixes),
+        "scene_prefixes": compact_prefixes,
+    }
 
 
 def _validate_preflight(
