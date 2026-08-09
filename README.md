@@ -923,6 +923,26 @@ run the isolated update-8 branch. Cached completed checkpoints are reused, but
 fresh report-only evidence is required before a resume; incomplete namespaces
 are never overwritten.
 
+The real V20 preflight is now complete and **failed before any live optimizer
+was constructed or stepped**. All zero-output identity, source/config binding,
+local-dependence, all-slot coverage, spatial-rank, gradient-isolation, finite
+BF16 visibility, and per-scene `0.01` magnitude checks passed. Raw FP32
+mirror-versus-color normalized selectivity was `1.8667`, but the preregistered
+total-norm BF16 statistic was only `0.5066`, below its `1.5` threshold. The
+failure is preserved as `preflight_failed_no_optimizer_step`; V20 has no
+checkpoint, continuation, greedy audit, promotion, chat, or robot authorization.
+
+Post-failure diagnosis found no arithmetic mismatch. Each scene's exact
+decoder-boundary rounding error was approximately `0.001` RMS. That noise floor
+inflated the small color-pair differential from `0.000319` raw RMS to `0.001416`
+effective RMS, while the larger mirror differential changed from `0.002109` to
+`0.002539`. Thus subtracting two independently rounded responses confounds the
+intended pair signal with base-dependent quantization phase. V20's immutable
+decision is not being relaxed or reinterpreted. A separately versioned V21
+experiment will retain this diagnostic but gate eligibility on raw selectivity,
+per-scene BF16 survival, signal-aligned BF16 evidence with explicit phase-null
+controls, and exact predicted-update behavior through the frozen Gemma model.
+
 ### Fail-closed Gemma static evaluation and chat
 
 Gemma evaluation must use the isolated Transformers 5 environment and the exact
