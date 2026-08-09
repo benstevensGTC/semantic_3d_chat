@@ -28,6 +28,11 @@ from semantic_3d_chat.language.lora import (
     lora_settings,
 )
 from semantic_3d_chat.language.prefix_injection import ContinuousPrefixComposer
+from semantic_3d_chat.scene_encoder.global_residual import (
+    GlobalSceneResidual,
+    construct_global_scene_residual,
+    global_scene_residual_settings,
+)
 from semantic_3d_chat.scene_encoder.map_io import MapTensorData
 from semantic_3d_chat.scene_encoder.projector import SceneTokenizerOutput
 from semantic_3d_chat.training.checkpointing import (
@@ -512,6 +517,145 @@ def _tiny_lora_language() -> LocalLanguageModel:
         device=torch.device("cpu"),
         backend_name="gemma4",
     )
+
+
+def _tiny_global_residual_runtime_checkpoint(
+    tmp_path: Path,
+) -> tuple[dict, Path, GlobalSceneResidual, str]:
+    """Build a fully strict synthetic checkpoint with a trained residual."""
+
+    torch.manual_seed(16161)
+    config = tiny_config()
+    config["scene_encoder"]["architecture_version"] = "signal_preserving_resampler_v3"
+    config["language"].update({"backend": "causal_lm", "dtype": "float32"})
+    initial_residual = GlobalSceneResidual(
+        scene_dim=8,
+        latent_count=4,
+        width=4,
+        fourier_bands=2,
+        initialization_seed=16162,
+    )
+    initial_hash = module_collection_state_sha256(
+        {"global_scene_residual": initial_residual}
+    )
+    config["scene_encoder"]["global_scene_residual"] = {
+        "enabled": True,
+        "width": 4,
+        "fourier_bands": 2,
+        "initialization_seed": 16162,
+        "expected_initial_state_sha256": initial_hash,
+    }
+    source_residual = construct_global_scene_residual(
+        config,
+        scene_dim=8,
+        latent_count=4,
+    )
+    assert source_residual is not None
+    with torch.no_grad():
+        source_residual.output_projection.weight.fill_(0.03125)
+    trained_hash = module_collection_state_sha256(
+        {"global_scene_residual": source_residual}
+    )
+
+    scene_model = construct_scene_tokenizer(config, semantic_dim=7, language_hidden_dim=8)
+    composer = ContinuousPrefixComposer(8)
+    grounding = QuestionGroundingHead(6, 8, 4, 6)
+    metadata = {
+        **tiny_checkpoint_metadata(),
+        "config_hash": config_hash(config),
+        "language_backend": "causal_lm",
+        "scene_encoder_architecture_version": "signal_preserving_resampler_v3",
+        "global_scene_residual": global_scene_residual_settings(config).contract(),
+        "global_scene_residual_parameter_count": sum(
+            parameter.numel() for parameter in source_residual.parameters()
+        ),
+        "global_scene_residual_initial_state_sha256": initial_hash,
+        "global_scene_residual_state_sha256": trained_hash,
+        "global_scene_residual_zero_output_equivalence": {
+            "verified": True,
+            "question_dependent_scene_processing": False,
+        },
+        "question_dependent_scene_processing": False,
+    }
+    checkpoint = save_adapter_checkpoint(
+        tmp_path / "runtime_global_residual",
+        {
+            "scene_model": scene_model,
+            "composer": composer,
+            "grounding": grounding,
+            "global_scene_residual": source_residual,
+        },
+        metadata,
+    )
+    return config, checkpoint, source_residual, trained_hash
+
+
+def _mock_tiny_global_residual_runtime(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(runtime_module, "load_map_tensors", lambda *_args, **_kwargs: tiny_map())
+    monkeypatch.setattr(
+        runtime_module,
+        "load_local_language_model",
+        lambda *_args, **_kwargs: LocalLanguageModel(
+            model=TinyLanguageModel(hidden_size=8).eval().requires_grad_(False),
+            tokenizer=TinyTokenizer(),
+            device=torch.device("cpu"),
+            backend_name="causal_lm",
+        ),
+    )
+
+
+def test_static_chat_roundtrips_global_residual_and_applies_it_before_questions(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    config, checkpoint, source_residual, trained_hash = (
+        _tiny_global_residual_runtime_checkpoint(tmp_path)
+    )
+    _mock_tiny_global_residual_runtime(monkeypatch)
+
+    runtime = StaticChatRuntime.load(config, "scene_000001", checkpoint)
+
+    assert runtime.questions_answered == 0
+    assert runtime.global_scene_residual is not None
+    assert module_collection_state_sha256(
+        {"global_scene_residual": runtime.global_scene_residual}
+    ) == trained_hash
+    for name, expected in source_residual.state_dict().items():
+        assert torch.equal(runtime.global_scene_residual.state_dict()[name], expected)
+    model_dtype = next(runtime.language.model.parameters()).dtype
+    core_prefix = runtime.composer.scene_prefix(
+        runtime.core_scene_output.scene_tokens.to(dtype=model_dtype)
+    )
+    assert not torch.equal(runtime.scene_prefix, core_prefix)
+    assert runtime.scene_output.audit["global_scene_residual_delta_rms"].item() > 0.0
+    assert runtime.current_prefix_hash() == runtime.scene_prefix_hash
+    assert runtime.startup_summary()["global_scene_residual_state_sha256"] == trained_hash
+
+
+@pytest.mark.parametrize(
+    "tampered_key",
+    [
+        "global_scene_residual.output_projection.weight",
+        "global_scene_residual.position_features",
+    ],
+)
+def test_static_chat_rejects_global_residual_parameter_or_buffer_tamper(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    tampered_key: str,
+) -> None:
+    config, checkpoint, _source_residual, _trained_hash = (
+        _tiny_global_residual_runtime_checkpoint(tmp_path)
+    )
+    _mock_tiny_global_residual_runtime(monkeypatch)
+    tensors = load_file(checkpoint / "adapter.safetensors")
+    tensors[tampered_key].view(-1)[0].add_(0.125)
+    save_file(tensors, checkpoint / "adapter.safetensors")
+
+    with pytest.raises(ValueError, match="Global scene residual state mismatch or tamper"):
+        StaticChatRuntime.load(config, "scene_000001", checkpoint)
 
 
 def _tiny_lora_banks_runtime_config() -> dict:

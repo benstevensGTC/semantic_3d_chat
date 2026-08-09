@@ -1,0 +1,8 @@
+_base_: gemma4_color_mirror_global_scene_residual_v17_lr_sweep.yaml
+
+training:
+  output_namespace: gemma4_color_mirror_global_scene_residual_v17_lr3e4
+  learning_rate: 0.0003
+
+lr_response:
+  arm_learning_rate: 0.0003

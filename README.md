@@ -40,10 +40,11 @@ the scalar-selected epoch 10 checkpoint had only 5/12 mirror sides and final
 epoch 12 had 6/12 and 0/6 units. The complete gate never passed, so no greedy
 audit was run. V15's fixed-prefix shared-K/V screen preserved color through epoch
 3 but peaked at only 6/12 mirror sides and 0/6 units, below its continuation gate;
-epoch 4 also regressed color, so it was stopped. V16 is the next predeclared
-screen: a zero-output, question-independent global residual over all 256 scene
-tokens, initialized from the exact V14 epoch-7 checkpoint. V9 remains a
-color-wiring overfit milestone; v10-v15 are failed continuations, not promoted
+epoch 4 also regressed color, so it was stopped. V16 then trained a zero-output,
+question-independent global residual over all 256 scene tokens from the exact V14
+epoch-7 checkpoint. Its best screen epoch reached 11/12 color sides and 5/6 color
+units but only 5/12 mirror sides and 0/6 mirror units, so it also failed without
+extension or generation. V9 remains a color-wiring overfit milestone; v10-v16 are failed continuations, not promoted
 scene chatbots. Gemma held-out static QA, interactive chat, Gemma
 leakage claims, and language-conditioned robot navigation remain gated.
 
@@ -625,7 +626,7 @@ generation, promotion, held-out audit, chat, leakage claims, or robot work.
 The exact decision and checkpoint hashes are recorded in
 [`screen_decision_gemma4_color_mirror_decoder_qkvo_v15.json`](reports/gemma4/metrics/screen_decision_gemma4_color_mirror_decoder_qkvo_v15.json).
 
-#### Gemma V16 global scene residual — next fixed-prefix screen
+#### Gemma V16 global scene residual — failed, no extension
 
 V16 starts from the exact V14 epoch-7 checkpoint and freezes the core scene
 encoder, prefix composer, grounding head, and both persisted Gemma LoRA banks.
@@ -637,12 +638,56 @@ the V14 prefix bit-for-bit. The module API accepts only scene tokens; it has no
 question, answer, retrieval, label, or oracle input. The final adapted prefix is
 still computed and hashed before any user question.
 
-The pinned experiment is
+The pinned experiment was
 [`gemma4_color_mirror_global_scene_residual_v16.yaml`](configs/experiments/gemma4_color_mirror_global_scene_residual_v16.yaml).
-It receives a four-update screen and may be extended only if color remains
-12/12 sides and 6/6 units with positive margins while mirror reaches at least
-8/12 sides and 2/6 units. No generation audit is allowed before the complete
-teacher gate.
+Update-zero equivalence was exact for all four scenes, the frozen core and both
+LoRA-bank hashes remained unchanged, and the residual changed from its pinned
+initial hash to a nonzero trained state. The four teacher-forced updates produced
+color/mirror full-vocabulary side counts of 6/6, 6/5, 8/6, and 11/5 out of 12;
+the corresponding complete-unit counts were 0/1, 0/1, 2/0, and 5/0 out of 6.
+No epoch preserved the required 12/12 and 6/6 color result or reached the 8/12
+and 2/6 mirror continuation minimum. Training therefore stopped after exactly
+four updates with no extension, generation audit, promotion, held-out claim, or
+robot work.
+
+A real load-only runtime probe strictly reconstructed the epoch-4 checkpoint,
+built the `[1, 258, 1536]` prefix before any question, applied a nonzero residual,
+and recorded zero forbidden/oracle reads. This verifies checkpoint/runtime
+integrity only; it is not an answer-correctness or full oracle-deletion result.
+The exact decision, per-epoch counts, hashes, and claim limits are recorded in
+[`screen_decision_gemma4_color_mirror_global_scene_residual_v16.json`](reports/gemma4/metrics/screen_decision_gemma4_color_mirror_global_scene_residual_v16.json).
+
+#### Gemma V17 residual learning-rate response — predeclared exact restarts
+
+V16's first AdamW update could change only the initially zero 196,608-weight
+output projection. At 1e-3, that dense sign-like step produced a residual about
+13.4% as large as the frozen prefix RMS; roughly 99% of its energy was an
+across-slot mean shift, while pair-specific changes were only about 2% of the
+underlying color or mirror scene difference. This explains the immediate color
+regression and motivates an optimizer-response test before another architectural
+change. The color and mirror output-weight gradients have cosine `+0.281011`, so
+direct objective antagonism is not the primary failure; the destructive common
+step is. The reproducible offline audit is
+[`v16_zero_residual_gradient_audit.json`](reports/gemma4/metrics/v16_zero_residual_gradient_audit.json),
+SHA-256 `5e453933df459f7122ff8781bd2881838fb06a47c1a25e0193368edeedcede31`.
+It uses supervised QA metadata only as an offline loss probe, executes no
+optimizer step, and is not imported by chat runtime.
+
+V17 predeclares two independent four-update exact restarts at 1e-4 and 3e-4.
+Both start from the pinned V14 epoch-7 weights and the same zero-output residual,
+use the same 24 records and 12 complete paired units, and retain the same frozen
+core, frozen LoRA banks, loss, order, accumulation, and gates. An arm is eligible
+for comparison only if it preserves color at 12/12 sides and 6/6 units with
+strictly positive minimum margins. The selected eligible arm must also reach at
+least 8/12 mirror sides and 2/6 complete mirror units before any extension; no
+greedy audit is allowed before the full teacher gate. If neither arm qualifies,
+learning-rate tuning stops and the next change must remove the common-shift
+failure mode rather than adding epochs or decoder capacity.
+
+The immutable arm configs are
+[`gemma4_color_mirror_global_scene_residual_v17_lr1e4.yaml`](configs/experiments/gemma4_color_mirror_global_scene_residual_v17_lr1e4.yaml)
+and
+[`gemma4_color_mirror_global_scene_residual_v17_lr3e4.yaml`](configs/experiments/gemma4_color_mirror_global_scene_residual_v17_lr3e4.yaml).
 
 ### Fail-closed Gemma static evaluation and chat
 

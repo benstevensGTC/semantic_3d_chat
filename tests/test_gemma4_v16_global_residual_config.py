@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from copy import deepcopy
 from pathlib import Path
 
 import torch
@@ -23,7 +24,6 @@ from semantic_3d_chat.training.train_adapter import (
     named_lora_freeze_transition_mismatch,
 )
 
-
 V16_CONFIG = "configs/experiments/gemma4_color_mirror_global_scene_residual_v16.yaml"
 V14_ADAPTER_SHA256 = "9e15e8c93da083bd23c009bf67cdf4d532d6beb01b12f17f8bf664e2374294c7"
 V14_METADATA_SHA256 = "e4cf9134f5ef931df821820c80f96f1839fd2ae9a89b4c06ce4998db330e930e"
@@ -31,6 +31,9 @@ SCENE_SHA256 = "690bd890bfda024dbb5c7d3c68087b8113bc3b8ee81dd6143c7eb2a884e7245b
 INHERITED_SHA256 = "dec768bed654c8c4e16da0318857543ad54d8f5f68f4d24a9a87cd19ec706594"
 EXTENSION_SHA256 = "4eb90fb9b0bea579d14cfcb0f61ebd5b6d566fd600bd3d5e1bfe5177a39e1b34"
 RESIDUAL_SHA256 = "fb4ebaac06dccbc04a461b10546d00f48cdf8cfbb372cbe5f6fe925f71461bd3"
+V17_SWEEP_CONFIG = (
+    "configs/experiments/gemma4_color_mirror_global_scene_residual_v17_lr_sweep.yaml"
+)
 
 
 class _ShapeOnlyLinear(nn.Linear):
@@ -189,3 +192,59 @@ def test_v16_banks_are_frozen_persisted_and_optimizer_is_residual_only() -> None
     ]
     assert optimizer.param_groups[0]["lr"] == 0.001
     assert optimizer.param_groups[0]["weight_decay"] == 0.0
+
+
+def test_v17_lr_arms_are_exact_v16_restarts_with_only_optimizer_response_changed() -> None:
+    template = load_config(V17_SWEEP_CONFIG)
+    v16 = load_config(V16_CONFIG)
+    arms = {"lr1e4": 1e-4, "lr3e4": 3e-4}
+
+    assert template["sweep"] is None
+    assert template["lr_response"]["arms"] == [1e-4, 3e-4]
+    assert template["lr_response"]["updates_per_arm"] == 4
+    assert template["lr_response"]["conditional_max_updates"] == 12
+    assert template["lr_response"]["expected_source_adapter_sha256"] == V14_ADAPTER_SHA256
+    assert template["lr_response"]["expected_source_metadata_sha256"] == V14_METADATA_SHA256
+    assert template["lr_response"]["expected_frozen_scene_state_sha256"] == SCENE_SHA256
+    assert template["lr_response"]["expected_frozen_inherited_bank_sha256"] == INHERITED_SHA256
+    assert template["lr_response"]["expected_frozen_extension_bank_sha256"] == EXTENSION_SHA256
+    assert template["lr_response"]["expected_initial_residual_state_sha256"] == RESIDUAL_SHA256
+    assert template["lr_response"]["continuation_requires"] == (
+        v16["experiment"]["screen_extension_requires"]
+    )
+    assert template["lr_response"]["full_teacher_gate_requires"] == (
+        v16["experiment"]["full_teacher_gate_requires"]
+    )
+    assert template["lr_response"]["greedy_audit_only_after_full_teacher_gate"] is True
+
+    for suffix, learning_rate in arms.items():
+        config = load_config(
+            "configs/experiments/"
+            f"gemma4_color_mirror_global_scene_residual_v17_{suffix}.yaml"
+        )
+        normalized_template = deepcopy(template)
+        normalized_arm = deepcopy(config)
+        normalized_template.pop("_config_path", None)
+        normalized_arm.pop("_config_path", None)
+        normalized_arm["training"]["output_namespace"] = normalized_template["training"][
+            "output_namespace"
+        ]
+        normalized_arm["training"]["learning_rate"] = normalized_template["training"][
+            "learning_rate"
+        ]
+        arm_learning_rate = normalized_arm["lr_response"].pop("arm_learning_rate")
+        assert normalized_arm == normalized_template
+
+        assert arm_learning_rate == learning_rate
+        assert config["training"]["learning_rate"] == learning_rate
+        assert config["training"]["output_namespace"] == (
+            f"gemma4_color_mirror_global_scene_residual_v17_{suffix}"
+        )
+        assert config["training"]["initialize_from"] == v16["training"]["initialize_from"]
+        assert config["training"]["initialize_expected_adapter_sha256"] == V14_ADAPTER_SHA256
+        assert config["training"]["initialize_expected_metadata_sha256"] == (
+            V14_METADATA_SHA256
+        )
+        assert config["training"]["train_global_scene_residual_only"] is True
+        assert config["training"]["freeze_scene_adapter"] is True
+        assert config["experiment"]["question_dependent_scene_processing"] is False
