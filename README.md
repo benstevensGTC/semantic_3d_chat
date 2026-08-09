@@ -1054,6 +1054,24 @@ PYTHONPATH=src python -m semantic_3d_chat.evaluation.v22_archive_validator
 
 Use `--summary-only` when generated evidence and checkpoints are unavailable.
 
+### V23 shared-K/V falsifier
+
+V23 starts from the sealed V21 epoch-8 weights rather than the weaker V22
+checkpoint. It loads the 256-token scene adapter, global residual, signed-X
+local field, and both existing decoder banks exactly, freezes all of them, and
+adds one deterministic zero-output rank-4/alpha-8 LoRA bank to Gemma 4's real
+shared K/V projections at physical layers 13 and 14. This is 30,720 trainable
+FP32 parameters; no question-dependent retrieval or oracle runtime input is
+introduced. All learning-rate fields are pinned to `3e-4`.
+
+The run is deliberately staged. `make gemma4-v23-stage1` executes one complete
+12-microstep update and stops. `make gemma4-v23-verify-update1` then checks the
+exact frozen-state hashes, safetensors layout, ordered eight-parameter AdamW
+state, unchanged LoRA-A tensors, changed LoRA-B tensors, and behavioral gate.
+Only an authorized report allows `make gemma4-v23-screen` to execute updates
+2--4. Greedy evaluation remains forbidden until both color and mirror pairs
+reach 12/12 sides and 6/6 units with positive margins.
+
 ### Fail-closed Gemma static evaluation and chat
 
 Gemma evaluation must use the isolated Transformers 5 environment and the exact

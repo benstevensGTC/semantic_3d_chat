@@ -570,6 +570,183 @@ def validate_named_lora_freeze_transition_state(
         raise RuntimeError("A source LoRA bank remained trainable after freeze transition")
 
 
+def named_lora_extension_transition_mismatch(
+    metadata: Mapping[str, object], collection: LoRABankCollection | None
+) -> dict[str, object] | None:
+    """Validate adding zero-output trainable banks to a frozen named-bank source.
+
+    The source checkpoint must contain exactly the banks configured as frozen in
+    the destination.  Destination-trainable banks must be new, exact-path LoRA
+    banks and are deliberately absent from the source checkpoint.
+    """
+
+    if collection is None or collection.settings.legacy_single_bank:
+        return {"collection": "named LoRA banks are required"}
+    frozen_banks = tuple(bank for bank in collection.banks if not bank.settings.trainable)
+    new_banks = tuple(bank for bank in collection.banks if bank.settings.trainable)
+    if not frozen_banks or not new_banks:
+        return {
+            "bank_roles": {
+                "frozen": [bank.settings.name for bank in frozen_banks],
+                "new_trainable": [bank.settings.name for bank in new_banks],
+            }
+        }
+    source_contract = metadata.get("lora")
+    if not isinstance(source_contract, Mapping) or source_contract.get("schema_version") != 2:
+        return {"checkpoint_lora": source_contract}
+    source_records = source_contract.get("banks")
+    if not isinstance(source_records, list):
+        return {"checkpoint_banks": source_records}
+    expected_source_names = {bank.settings.name for bank in frozen_banks}
+    mismatches: dict[str, object] = {}
+    source_by_name: dict[str, Mapping[str, object]] = {}
+    malformed_records: list[dict[str, object]] = []
+    duplicate_names: list[str] = []
+    for index, record in enumerate(source_records):
+        if not isinstance(record, Mapping):
+            malformed_records.append({"index": index, "reason": "not_mapping"})
+            continue
+        name = record.get("name")
+        if not isinstance(name, str) or not name:
+            malformed_records.append({"index": index, "reason": "missing_name"})
+            continue
+        if name in source_by_name:
+            duplicate_names.append(name)
+            continue
+        source_by_name[name] = record
+    if len(source_records) != len(expected_source_names):
+        mismatches["bank_record_count"] = {
+            "checkpoint": len(source_records),
+            "runtime_frozen_source": len(expected_source_names),
+        }
+    if malformed_records:
+        mismatches["malformed_bank_records"] = malformed_records
+    if duplicate_names:
+        mismatches["duplicate_bank_names"] = sorted(set(duplicate_names))
+    if set(source_by_name) != expected_source_names:
+        mismatches["bank_names"] = {
+            "checkpoint": sorted(source_by_name),
+            "runtime_frozen_source": sorted(expected_source_names),
+        }
+    source_hashes = metadata.get("lora_bank_state_sha256")
+    if not isinstance(source_hashes, Mapping):
+        mismatches["lora_bank_state_sha256"] = source_hashes
+        source_hashes = {}
+    source_wrapped = metadata.get("lora_bank_wrapped_modules")
+    source_counts = metadata.get("lora_bank_parameter_counts")
+    for field, value in (
+        ("lora_bank_state_sha256", source_hashes),
+        ("lora_bank_wrapped_modules", source_wrapped),
+        ("lora_bank_parameter_counts", source_counts),
+    ):
+        if not isinstance(value, Mapping):
+            mismatches[field] = value
+        elif set(value) != expected_source_names:
+            mismatches[f"{field}.keys"] = {
+                "checkpoint": sorted(value),
+                "runtime": sorted(expected_source_names),
+            }
+    for bank in frozen_banks:
+        name = bank.settings.name
+        record = source_by_name.get(name)
+        if record is None:
+            continue
+        if record.get("trainable") is not False:
+            mismatches[f"{name}.source_trainable"] = record.get("trainable")
+        expected_architecture = {
+            "rank": bank.settings.adapter.rank,
+            "alpha": bank.settings.adapter.alpha,
+            "dropout": bank.settings.adapter.dropout,
+            "target_modules": list(bank.settings.adapter.target_modules),
+            "initialization_algorithm": bank.settings.initialization_algorithm,
+            "initialization_seed": bank.settings.initialization_seed,
+            "expected_initial_state_sha256": (bank.settings.expected_initial_state_sha256),
+            "adapter_parameter_count": bank.installation.parameter_count,
+        }
+        expected_record_keys = {"name", "trainable", *expected_architecture}
+        if set(record) != expected_record_keys:
+            mismatches[f"{name}.record_keys"] = {
+                "checkpoint": sorted(record),
+                "runtime": sorted(expected_record_keys),
+            }
+        observed_architecture = {key: record.get(key) for key in expected_architecture}
+        if observed_architecture != expected_architecture:
+            mismatches[f"{name}.architecture"] = {
+                "checkpoint": observed_architecture,
+                "runtime": expected_architecture,
+            }
+        expected_hash = bank.settings.expected_initial_state_sha256
+        source_hash = source_hashes.get(name)
+        if expected_hash is None or source_hash != expected_hash:
+            mismatches[f"{name}.source_state"] = {
+                "checkpoint": source_hash,
+                "runtime_expected": expected_hash,
+            }
+        if not isinstance(source_wrapped, Mapping) or source_wrapped.get(name) != list(
+            bank.installation.target_names
+        ):
+            mismatches[f"{name}.wrapped_modules"] = (
+                source_wrapped.get(name) if isinstance(source_wrapped, Mapping) else source_wrapped
+            )
+        if not isinstance(source_counts, Mapping) or source_counts.get(name) != (
+            bank.installation.parameter_counts
+        ):
+            mismatches[f"{name}.parameter_counts"] = (
+                source_counts.get(name) if isinstance(source_counts, Mapping) else source_counts
+            )
+    return mismatches or None
+
+
+def named_lora_extension_checkpoint_modules(
+    checkpoint_modules: Mapping[str, torch.nn.Module], collection: LoRABankCollection
+) -> dict[str, torch.nn.Module]:
+    """Exclude new trainable banks while loading the exact frozen source stack."""
+
+    modules = dict(checkpoint_modules)
+    for bank in collection.banks:
+        if bank.settings.trainable:
+            key = f"lora_banks.{bank.settings.name}"
+            if modules.pop(key, None) is None:
+                raise KeyError(f"Missing new LoRA bank checkpoint module: {key}")
+    return modules
+
+
+def validate_named_lora_extension_transition_state(
+    metadata: Mapping[str, object], collection: LoRABankCollection
+) -> None:
+    """Prove source banks loaded exactly and new banks remained zero-output."""
+
+    source_hashes = metadata.get("lora_bank_state_sha256")
+    if not isinstance(source_hashes, Mapping):
+        raise TypeError("Named LoRA extension source is missing bank hashes")
+    observed_hashes = collection.state_sha256()
+    for bank in collection.banks:
+        name = bank.settings.name
+        observed = observed_hashes[name]
+        expected = (
+            bank.settings.expected_initial_state_sha256
+            if bank.settings.trainable
+            else source_hashes.get(name)
+        )
+        if expected is None or observed != expected:
+            raise ValueError(
+                "Named LoRA extension state mismatch or tamper detected: "
+                f"bank={name} expected={expected} observed={observed}"
+            )
+        parameters = tuple(bank.installation.parameters())
+        if bank.settings.trainable:
+            if not parameters or not all(parameter.requires_grad for parameter in parameters):
+                raise RuntimeError(f"New LoRA bank {name!r} is not wholly trainable")
+        elif any(parameter.requires_grad for parameter in parameters):
+            raise RuntimeError(f"Source LoRA bank {name!r} remained trainable")
+    assert_zero_output_lora_banks(
+        collection,
+        exclude=tuple(
+            bank.settings.name for bank in collection.banks if not bank.settings.trainable
+        ),
+    )
+
+
 def resolve_checkpoint_sources(
     *,
     cli_resume: Path | None,
@@ -2848,22 +3025,45 @@ def main() -> None:
     )
     if not isinstance(train_signed_x_scene_residual_only, bool):
         raise TypeError("training.train_signed_x_scene_residual_only must be a boolean")
-    if train_global_scene_residual_only and train_signed_x_scene_residual_only:
-        raise ValueError("Global-residual-only and signed-X-only training are mutually exclusive")
+    train_lora_with_frozen_scene_residual_stack = config["training"].get(
+        "train_lora_with_frozen_scene_residual_stack", False
+    )
+    if not isinstance(train_lora_with_frozen_scene_residual_stack, bool):
+        raise TypeError("training.train_lora_with_frozen_scene_residual_stack must be a boolean")
+    exclusive_training_modes = sum(
+        (
+            train_global_scene_residual_only,
+            train_signed_x_scene_residual_only,
+            train_lora_with_frozen_scene_residual_stack,
+        )
+    )
+    if exclusive_training_modes > 1:
+        raise ValueError(
+            "Global-residual-only, signed-X-only, and frozen-residual-stack LoRA "
+            "training are mutually exclusive"
+        )
     if residual_settings.enabled != (
-        train_global_scene_residual_only or train_signed_x_scene_residual_only
+        train_global_scene_residual_only
+        or train_signed_x_scene_residual_only
+        or train_lora_with_frozen_scene_residual_stack
     ):
         raise ValueError(
             "Training residual-base enablement must be explicit and exclusive: "
             f"residual_enabled={residual_settings.enabled} "
             f"train_global_scene_residual_only={train_global_scene_residual_only} "
-            f"train_signed_x_scene_residual_only={train_signed_x_scene_residual_only}"
+            f"train_signed_x_scene_residual_only={train_signed_x_scene_residual_only} "
+            "train_lora_with_frozen_scene_residual_stack="
+            f"{train_lora_with_frozen_scene_residual_stack}"
         )
-    if signed_x_residual_settings.enabled != train_signed_x_scene_residual_only:
+    if signed_x_residual_settings.enabled != (
+        train_signed_x_scene_residual_only or train_lora_with_frozen_scene_residual_stack
+    ):
         raise ValueError(
             "Training signed-X enablement must be explicit and exclusive: "
             f"signed_x_enabled={signed_x_residual_settings.enabled} "
-            f"train_signed_x_scene_residual_only={train_signed_x_scene_residual_only}"
+            f"train_signed_x_scene_residual_only={train_signed_x_scene_residual_only} "
+            "train_lora_with_frozen_scene_residual_stack="
+            f"{train_lora_with_frozen_scene_residual_stack}"
         )
     if train_signed_x_scene_residual_only and (
         residual_settings.architecture_version != ZERO_SPATIAL_MEAN_CONTENT_GATE_V1
@@ -2877,6 +3077,13 @@ def main() -> None:
         raise ValueError("Signed-X-only training requires the core scene adapter to be frozen")
     if train_signed_x_scene_residual_only and configured_lora.trainable:
         raise ValueError("Signed-X-only training requires every language LoRA bank to be frozen")
+    if train_lora_with_frozen_scene_residual_stack:
+        if not freeze_scene_adapter:
+            raise ValueError("Frozen-residual-stack LoRA training requires a frozen scene adapter")
+        if not configured_lora.trainable:
+            raise ValueError(
+                "Frozen-residual-stack LoRA training requires at least one trainable LoRA bank"
+            )
     initialize_legacy_lora_into_bank = config["training"].get("initialize_legacy_lora_into_bank")
     if initialize_legacy_lora_into_bank is not None and (
         not isinstance(initialize_legacy_lora_into_bank, str)
@@ -2909,9 +3116,16 @@ def main() -> None:
     initialize_expected_metadata_sha256 = optional_sha256_setting(
         config["training"], "initialize_expected_metadata_sha256"
     )
+    initialize_expected_scene_state_sha256 = optional_sha256_setting(
+        config["training"], "initialize_expected_scene_state_sha256"
+    )
     initialize_expected_global_scene_residual_state_sha256 = optional_sha256_setting(
         config["training"],
         "initialize_expected_global_scene_residual_state_sha256",
+    )
+    initialize_expected_signed_x_scene_residual_state_sha256 = optional_sha256_setting(
+        config["training"],
+        "initialize_expected_signed_x_scene_residual_state_sha256",
     )
     if (
         initialize_source_residual_into_frozen_base
@@ -2920,6 +3134,15 @@ def main() -> None:
         raise ValueError(
             "Source-residual freeze transition requires "
             "training.initialize_expected_global_scene_residual_state_sha256"
+        )
+    if train_lora_with_frozen_scene_residual_stack and (
+        initialize_expected_scene_state_sha256 is None
+        or initialize_expected_global_scene_residual_state_sha256 is None
+        or initialize_expected_signed_x_scene_residual_state_sha256 is None
+    ):
+        raise ValueError(
+            "Frozen-residual-stack LoRA training requires exact source scene, global, and "
+            "signed-X residual state hashes"
         )
     source_provenance = capture_git_source_provenance(PROJECT_ROOT)
     language_decoder_gradient_checkpointing = config["training"].get(
@@ -3123,6 +3346,9 @@ def main() -> None:
         "freeze_scene_adapter": freeze_scene_adapter,
         "train_global_scene_residual_only": train_global_scene_residual_only,
         "train_signed_x_scene_residual_only": train_signed_x_scene_residual_only,
+        "train_lora_with_frozen_scene_residual_stack": (
+            train_lora_with_frozen_scene_residual_stack
+        ),
         "global_scene_residual": residual_settings.contract(),
         "signed_x_scene_residual": signed_x_residual_settings.contract(),
         "initialize_legacy_lora_into_bank": initialize_legacy_lora_into_bank,
@@ -3132,8 +3358,12 @@ def main() -> None:
         ),
         "initialize_expected_adapter_sha256": initialize_expected_adapter_sha256,
         "initialize_expected_metadata_sha256": initialize_expected_metadata_sha256,
+        "initialize_expected_scene_state_sha256": initialize_expected_scene_state_sha256,
         "initialize_expected_global_scene_residual_state_sha256": (
             initialize_expected_global_scene_residual_state_sha256
+        ),
+        "initialize_expected_signed_x_scene_residual_state_sha256": (
+            initialize_expected_signed_x_scene_residual_state_sha256
         ),
         "scene_prefix_after_bos": scene_prefix_after_bos,
         "scene_boundary_mode": scene_boundary_mode,
@@ -3338,6 +3568,11 @@ def main() -> None:
         if global_scene_residual is None or signed_x_scene_residual is None:
             raise RuntimeError("Signed-X-only training lost one of its residual modules")
         global_scene_residual.requires_grad_(False).eval()
+    if train_lora_with_frozen_scene_residual_stack:
+        if global_scene_residual is None or signed_x_scene_residual is None:
+            raise RuntimeError("Frozen-residual-stack LoRA training lost a residual module")
+        global_scene_residual.requires_grad_(False).eval()
+        signed_x_scene_residual.requires_grad_(False).eval()
     scene_parameters = (
         list(scene_model.parameters()) + list(composer.parameters()) + list(grounding.parameters())
     )
@@ -3374,6 +3609,19 @@ def main() -> None:
         ]:
             raise RuntimeError(
                 "Signed-X-only optimizer must contain exactly one named output group"
+            )
+    if train_lora_with_frozen_scene_residual_stack:
+        assert lora_installation is not None
+        expected_trainable_ids = [id(parameter) for parameter in lora_installation.parameters()]
+        observed_trainable_ids = [id(parameter) for parameter in parameters]
+        if not expected_trainable_ids or observed_trainable_ids != expected_trainable_ids:
+            raise RuntimeError(
+                "Frozen-residual-stack optimizer surface contains missing, reordered, or "
+                "unexpected parameters"
+            )
+        if [group.get("name") for group in optimizer.param_groups] != ["language_lora"]:
+            raise RuntimeError(
+                "Frozen-residual-stack optimizer must contain exactly one language-LoRA group"
             )
     scene_checkpoint_modules = {
         "scene_model": scene_model,
@@ -3413,6 +3661,10 @@ def main() -> None:
     if initialize_source_residual_into_frozen_base and not (initialize_value or resume_value):
         raise ValueError(
             "initialize_source_residual_into_frozen_base requires initialize_from for a new run"
+        )
+    if train_lora_with_frozen_scene_residual_stack and not (initialize_value or resume_value):
+        raise ValueError(
+            "Frozen-residual-stack LoRA training requires initialize_from for a new run"
         )
     initialization_provenance: dict | None = None
     if initialize_value:
@@ -3495,6 +3747,45 @@ def main() -> None:
                 initialization_mismatches["named_lora_freeze_transition"] = (
                     freeze_transition_mismatch
                 )
+        elif train_lora_with_frozen_scene_residual_stack:
+            extension_transition_mismatch = named_lora_extension_transition_mismatch(
+                initialize_preflight,
+                lora_installation if isinstance(lora_installation, LoRABankCollection) else None,
+            )
+            if extension_transition_mismatch is not None:
+                initialization_mismatches["named_lora_extension_transition"] = (
+                    extension_transition_mismatch
+                )
+            source_scene_hash = initialize_preflight.get("frozen_scene_state_sha256")
+            if source_scene_hash != initialize_expected_scene_state_sha256:
+                initialization_mismatches["frozen_scene_state_sha256"] = {
+                    "checkpoint": source_scene_hash,
+                    "runtime": initialize_expected_scene_state_sha256,
+                }
+            if initialize_preflight.get("global_scene_residual") != residual_settings.contract():
+                initialization_mismatches["global_scene_residual"] = {
+                    "checkpoint": initialize_preflight.get("global_scene_residual"),
+                    "runtime": residual_settings.contract(),
+                }
+            if initialize_preflight.get("signed_x_scene_residual") != (
+                signed_x_residual_settings.contract()
+            ):
+                initialization_mismatches["signed_x_scene_residual"] = {
+                    "checkpoint": initialize_preflight.get("signed_x_scene_residual"),
+                    "runtime": signed_x_residual_settings.contract(),
+                }
+            source_global_hash = initialize_preflight.get("global_scene_residual_state_sha256")
+            if source_global_hash != initialize_expected_global_scene_residual_state_sha256:
+                initialization_mismatches["global_scene_residual_state_sha256"] = {
+                    "checkpoint": source_global_hash,
+                    "runtime": initialize_expected_global_scene_residual_state_sha256,
+                }
+            source_signed_x_hash = initialize_preflight.get("signed_x_scene_residual_state_sha256")
+            if source_signed_x_hash != initialize_expected_signed_x_scene_residual_state_sha256:
+                initialization_mismatches["signed_x_scene_residual_state_sha256"] = {
+                    "checkpoint": source_signed_x_hash,
+                    "runtime": initialize_expected_signed_x_scene_residual_state_sha256,
+                }
         elif initialize_source_residual_into_frozen_base:
             lora_mismatch = lora_checkpoint_contract_mismatch(
                 initialize_preflight, configured_lora_checkpoint_contract
@@ -3533,6 +3824,13 @@ def main() -> None:
                 for name, module in checkpoint_modules.items()
                 if name != "global_scene_residual"
             }
+        elif train_lora_with_frozen_scene_residual_stack:
+            if not isinstance(lora_installation, LoRABankCollection):
+                raise TypeError("Named LoRA extension transition requires named banks")
+            initialization_modules = named_lora_extension_checkpoint_modules(
+                checkpoint_modules,
+                lora_installation,
+            )
         elif initialize_source_residual_into_frozen_base:
             initialization_modules = {
                 name: module
@@ -3572,6 +3870,50 @@ def main() -> None:
             )
             if residual_sha_after_source_load != observed_initial_residual_sha256:
                 raise RuntimeError("Source checkpoint mutated the fresh residual state")
+        elif train_lora_with_frozen_scene_residual_stack:
+            if not isinstance(lora_installation, LoRABankCollection):
+                raise TypeError("Named LoRA extension transition requires named banks")
+            if global_scene_residual is None or signed_x_scene_residual is None:
+                raise RuntimeError("Named LoRA extension transition lost a residual module")
+            validate_named_lora_extension_transition_state(
+                loaded_initialization,
+                lora_installation,
+            )
+            loaded_scene_hash = module_collection_state_sha256(scene_checkpoint_modules)
+            if loaded_scene_hash != initialize_expected_scene_state_sha256:
+                raise ValueError(
+                    "Loaded source scene stack differs from its exact pin: "
+                    f"expected={initialize_expected_scene_state_sha256} "
+                    f"observed={loaded_scene_hash}"
+                )
+            validate_global_scene_residual_state(
+                global_scene_residual,
+                expected_parameter_count=declared_residual_parameter_count,
+                context="frozen-stack source checkpoint initialization",
+            )
+            loaded_global_hash = module_collection_state_sha256(
+                {"global_scene_residual": global_scene_residual}
+            )
+            if loaded_global_hash != initialize_expected_global_scene_residual_state_sha256:
+                raise ValueError(
+                    "Loaded source global residual differs from its exact pin: "
+                    f"expected={initialize_expected_global_scene_residual_state_sha256} "
+                    f"observed={loaded_global_hash}"
+                )
+            validate_signed_x_scene_residual_state(
+                signed_x_scene_residual,
+                expected_parameter_count=declared_signed_x_parameter_count,
+                context="frozen-stack source checkpoint initialization",
+            )
+            loaded_signed_x_hash = module_collection_state_sha256(
+                {"signed_x_scene_residual": signed_x_scene_residual}
+            )
+            if loaded_signed_x_hash != initialize_expected_signed_x_scene_residual_state_sha256:
+                raise ValueError(
+                    "Loaded source signed-X residual differs from its exact pin: "
+                    f"expected={initialize_expected_signed_x_scene_residual_state_sha256} "
+                    f"observed={loaded_signed_x_hash}"
+                )
         elif initialize_source_residual_into_frozen_base:
             if global_scene_residual is None or signed_x_scene_residual is None:
                 raise RuntimeError("Source-residual transition lost a residual module")
@@ -3611,14 +3953,18 @@ def main() -> None:
             validate_lora_banks_checkpoint_state(loaded_initialization, lora_installation)
         initialization_provenance = {
             "schema_version": (
-                4
+                5
+                if train_lora_with_frozen_scene_residual_stack
+                else 4
                 if initialize_source_residual_into_frozen_base
                 else 3
                 if initialize_named_lora_freeze_transition
                 else (2 if legacy_initialization_bank is not None else 1)
             ),
             "mode": (
-                "frozen_v18_residual_base_plus_zero_output_signed_x_residual"
+                "frozen_scene_residual_stack_plus_zero_output_named_lora_extension"
+                if train_lora_with_frozen_scene_residual_stack
+                else "frozen_v18_residual_base_plus_zero_output_signed_x_residual"
                 if initialize_source_residual_into_frozen_base
                 else "named_lora_banks_frozen_plus_zero_output_scene_residual"
                 if initialize_named_lora_freeze_transition
@@ -3660,6 +4006,41 @@ def main() -> None:
                         observed_initial_residual_sha256
                     ),
                     "global_scene_residual_zero_output": True,
+                }
+            )
+        if train_lora_with_frozen_scene_residual_stack:
+            assert isinstance(lora_installation, LoRABankCollection)
+            assert global_scene_residual is not None
+            assert signed_x_scene_residual is not None
+            initialization_provenance.update(
+                {
+                    "source_lora_bank_state_sha256": {
+                        bank.settings.name: bank.installation.state_sha256()
+                        for bank in lora_installation.banks
+                        if not bank.settings.trainable
+                    },
+                    "source_scene_state_sha256": module_collection_state_sha256(
+                        scene_checkpoint_modules
+                    ),
+                    "expected_source_scene_state_sha256": (initialize_expected_scene_state_sha256),
+                    "source_global_scene_residual_state_sha256": (
+                        module_collection_state_sha256(
+                            {"global_scene_residual": global_scene_residual}
+                        )
+                    ),
+                    "expected_source_global_scene_residual_state_sha256": (
+                        initialize_expected_global_scene_residual_state_sha256
+                    ),
+                    "source_signed_x_scene_residual_state_sha256": (
+                        module_collection_state_sha256(
+                            {"signed_x_scene_residual": signed_x_scene_residual}
+                        )
+                    ),
+                    "expected_source_signed_x_scene_residual_state_sha256": (
+                        initialize_expected_signed_x_scene_residual_state_sha256
+                    ),
+                    "all_source_scene_residuals_frozen": True,
+                    "new_trainable_lora_banks_zero_output": True,
                 }
             )
         if initialize_source_residual_into_frozen_base:
@@ -3797,6 +4178,19 @@ def main() -> None:
             if value is not None
             and (initialization_provenance is None or initialization_provenance.get(key) != value)
         }
+        if initialize_expected_scene_state_sha256 is not None and (
+            initialization_provenance is None
+            or initialization_provenance.get("expected_source_scene_state_sha256")
+            != initialize_expected_scene_state_sha256
+        ):
+            initialization_hash_mismatches["expected_source_scene_state_sha256"] = {
+                "checkpoint": (
+                    None
+                    if initialization_provenance is None
+                    else initialization_provenance.get("expected_source_scene_state_sha256")
+                ),
+                "runtime": initialize_expected_scene_state_sha256,
+            }
         if initialize_expected_global_scene_residual_state_sha256 is not None and (
             initialization_provenance is None
             or initialization_provenance.get("expected_source_global_scene_residual_state_sha256")
@@ -3811,6 +4205,23 @@ def main() -> None:
                     )
                 ),
                 "runtime": initialize_expected_global_scene_residual_state_sha256,
+            }
+        if initialize_expected_signed_x_scene_residual_state_sha256 is not None and (
+            initialization_provenance is None
+            or initialization_provenance.get("expected_source_signed_x_scene_residual_state_sha256")
+            != initialize_expected_signed_x_scene_residual_state_sha256
+        ):
+            initialization_hash_mismatches[
+                "expected_source_signed_x_scene_residual_state_sha256"
+            ] = {
+                "checkpoint": (
+                    None
+                    if initialization_provenance is None
+                    else initialization_provenance.get(
+                        "expected_source_signed_x_scene_residual_state_sha256"
+                    )
+                ),
+                "runtime": initialize_expected_signed_x_scene_residual_state_sha256,
             }
         if initialization_hash_mismatches:
             raise ValueError(
@@ -3872,6 +4283,10 @@ def main() -> None:
             train_signed_x_scene_residual_only
         ):
             raise ValueError("Resume checkpoint signed-X-only training mode mismatch")
+        if resume_metadata.get("train_lora_with_frozen_scene_residual_stack", False) != (
+            train_lora_with_frozen_scene_residual_stack
+        ):
+            raise ValueError("Resume checkpoint frozen-residual-stack LoRA mode mismatch")
         expected = {
             "semantic_dim": semantic_dim,
             "language_hidden_dim": language.hidden_size,
@@ -4038,7 +4453,123 @@ def main() -> None:
             }
         if mismatches:
             raise ValueError(f"Resume checkpoint architecture mismatch: {mismatches}")
+        expected_optimizer_groups = [
+            {key: value for key, value in group.items() if key != "params"}
+            for group in optimizer.param_groups
+        ]
+        expected_optimizer_parameter_ids = [
+            id(parameter) for group in optimizer.param_groups for parameter in group["params"]
+        ]
+        if train_lora_with_frozen_scene_residual_stack:
+            raw_optimizer_state = torch.load(
+                resume_path / "optimizer.pt",
+                map_location="cpu",
+                weights_only=True,
+            )
+            if not isinstance(raw_optimizer_state, Mapping) or set(raw_optimizer_state) != {
+                "state",
+                "param_groups",
+            }:
+                raise ValueError("Resume optimizer root violates the exact AdamW contract")
+            raw_groups = raw_optimizer_state["param_groups"]
+            raw_states = raw_optimizer_state["state"]
+            if not isinstance(raw_groups, list) or len(raw_groups) != len(
+                expected_optimizer_groups
+            ):
+                raise ValueError("Resume optimizer group count violates the exact contract")
+            flat_raw_parameter_ids: list[int] = []
+            for index, (raw_group, expected_group) in enumerate(
+                zip(raw_groups, expected_optimizer_groups, strict=True)
+            ):
+                if not isinstance(raw_group, Mapping):
+                    raise TypeError(f"Resume optimizer group {index} is not a mapping")
+                raw_options = {key: value for key, value in raw_group.items() if key != "params"}
+                if raw_options != expected_group:
+                    raise ValueError(
+                        f"Resume optimizer group {index} hyperparameters violate the exact contract"
+                    )
+                raw_ids = raw_group.get("params")
+                if not isinstance(raw_ids, list) or any(
+                    isinstance(item, bool) or not isinstance(item, int) for item in raw_ids
+                ):
+                    raise ValueError(f"Resume optimizer group {index} parameter IDs are invalid")
+                flat_raw_parameter_ids.extend(raw_ids)
+            expected_serialized_ids = list(range(len(parameters)))
+            if flat_raw_parameter_ids != expected_serialized_ids:
+                raise ValueError(
+                    "Resume optimizer serialized parameter order violates the exact live order"
+                )
+            if not isinstance(raw_states, Mapping) or set(raw_states) != set(
+                expected_serialized_ids
+            ):
+                raise ValueError("Resume optimizer state IDs violate the exact live surface")
+            for index, parameter in enumerate(parameters):
+                raw_state = raw_states[index]
+                if not isinstance(raw_state, Mapping) or set(raw_state) != {
+                    "step",
+                    "exp_avg",
+                    "exp_avg_sq",
+                }:
+                    raise ValueError(f"Resume optimizer raw state {index} has unexpected keys")
+                raw_exp_avg = raw_state["exp_avg"]
+                raw_exp_avg_sq = raw_state["exp_avg_sq"]
+                if (
+                    not isinstance(raw_exp_avg, torch.Tensor)
+                    or not isinstance(raw_exp_avg_sq, torch.Tensor)
+                    or tuple(raw_exp_avg.shape) != tuple(parameter.shape)
+                    or tuple(raw_exp_avg_sq.shape) != tuple(parameter.shape)
+                ):
+                    raise ValueError(
+                        f"Resume optimizer raw state {index} is attached to the wrong parameter"
+                    )
         load_optimizer_checkpoint(resume_path, optimizer, language.device)
+        if train_lora_with_frozen_scene_residual_stack:
+            resumed_optimizer_groups = [
+                {key: value for key, value in group.items() if key != "params"}
+                for group in optimizer.param_groups
+            ]
+            resumed_optimizer_parameter_ids = [
+                id(parameter) for group in optimizer.param_groups for parameter in group["params"]
+            ]
+            if resumed_optimizer_groups != expected_optimizer_groups:
+                raise ValueError(
+                    "Frozen-residual-stack optimizer hyperparameters changed during resume: "
+                    f"checkpoint={resumed_optimizer_groups} runtime={expected_optimizer_groups}"
+                )
+            if resumed_optimizer_parameter_ids != expected_optimizer_parameter_ids:
+                raise ValueError(
+                    "Frozen-residual-stack optimizer parameter order changed during resume"
+                )
+            expected_step = int(resume_metadata.get("optimizer_step", -1))
+            if expected_step < 1 or set(optimizer.state) != set(parameters):
+                raise ValueError(
+                    "Frozen-residual-stack optimizer state does not cover the exact live surface"
+                )
+            for index, parameter in enumerate(parameters):
+                state = optimizer.state[parameter]
+                if set(state) != {"step", "exp_avg", "exp_avg_sq"}:
+                    raise ValueError(f"Resume optimizer state {index} has unexpected keys")
+                step = state["step"]
+                exp_avg = state["exp_avg"]
+                exp_avg_sq = state["exp_avg_sq"]
+                if (
+                    not isinstance(step, torch.Tensor)
+                    or not isinstance(exp_avg, torch.Tensor)
+                    or not isinstance(exp_avg_sq, torch.Tensor)
+                    or step.dtype != torch.float32
+                    or exp_avg.dtype != torch.float32
+                    or exp_avg_sq.dtype != torch.float32
+                    or tuple(step.shape) != ()
+                    or tuple(exp_avg.shape) != tuple(parameter.shape)
+                    or tuple(exp_avg_sq.shape) != tuple(parameter.shape)
+                    or float(step.detach().cpu()) != float(expected_step)
+                    or not bool(torch.isfinite(exp_avg).all())
+                    or not bool(torch.isfinite(exp_avg_sq).all())
+                    or bool(torch.lt(exp_avg_sq, 0).any())
+                ):
+                    raise ValueError(
+                        f"Resume optimizer state {index} violates the exact AdamW tensor contract"
+                    )
         start_epoch = int(resume_metadata["epoch"]) + 1
         global_step = int(resume_metadata.get("global_step", 0))
         optimizer_step = int(resume_metadata.get("optimizer_step", 0))
@@ -4076,6 +4607,11 @@ def main() -> None:
         if global_scene_residual is None
         else module_collection_state_sha256({"global_scene_residual": global_scene_residual})
     )
+    current_signed_x_scene_residual_sha256 = (
+        None
+        if signed_x_scene_residual is None
+        else module_collection_state_sha256({"signed_x_scene_residual": signed_x_scene_residual})
+    )
     current_frozen_lora_hashes = (
         {}
         if lora_installation is None
@@ -4085,10 +4621,55 @@ def main() -> None:
             if not bank.settings.trainable
         }
     )
+    if train_lora_with_frozen_scene_residual_stack:
+        assert isinstance(lora_installation, LoRABankCollection)
+        exact_frozen_lora_hashes = {
+            bank.settings.name: bank.settings.expected_initial_state_sha256
+            for bank in lora_installation.banks
+            if not bank.settings.trainable
+        }
+        direct_pin_mismatches = {
+            field: {"expected": expected, "observed": observed}
+            for field, expected, observed in (
+                (
+                    "scene_state_sha256",
+                    initialize_expected_scene_state_sha256,
+                    current_scene_state_sha256,
+                ),
+                (
+                    "global_scene_residual_state_sha256",
+                    initialize_expected_global_scene_residual_state_sha256,
+                    current_global_scene_residual_sha256,
+                ),
+                (
+                    "signed_x_scene_residual_state_sha256",
+                    initialize_expected_signed_x_scene_residual_state_sha256,
+                    current_signed_x_scene_residual_sha256,
+                ),
+                (
+                    "frozen_lora_bank_state_sha256",
+                    exact_frozen_lora_hashes,
+                    current_frozen_lora_hashes,
+                ),
+            )
+            if expected != observed
+        }
+        if direct_pin_mismatches:
+            raise ValueError(
+                "Frozen-residual-stack LoRA state differs from direct source pins: "
+                f"{direct_pin_mismatches}"
+            )
     if resume_metadata is None:
         frozen_scene_state_sha256 = current_scene_state_sha256 if freeze_scene_adapter else None
         frozen_global_scene_residual_state_sha256 = (
-            current_global_scene_residual_sha256 if train_signed_x_scene_residual_only else None
+            current_global_scene_residual_sha256
+            if (train_signed_x_scene_residual_only or train_lora_with_frozen_scene_residual_stack)
+            else None
+        )
+        frozen_signed_x_scene_residual_state_sha256 = (
+            current_signed_x_scene_residual_sha256
+            if train_lora_with_frozen_scene_residual_stack
+            else None
         )
         frozen_lora_bank_state_sha256 = current_frozen_lora_hashes
         if lora_installation is not None:
@@ -4111,6 +4692,9 @@ def main() -> None:
         frozen_global_scene_residual_state_sha256 = resume_metadata.get(
             "frozen_global_scene_residual_state_sha256"
         )
+        frozen_signed_x_scene_residual_state_sha256 = resume_metadata.get(
+            "frozen_signed_x_scene_residual_state_sha256"
+        )
         frozen_lora_bank_state_sha256 = resume_metadata.get("frozen_lora_bank_state_sha256", {})
         if freeze_scene_adapter and frozen_scene_state_sha256 != current_scene_state_sha256:
             raise ValueError(
@@ -4118,13 +4702,22 @@ def main() -> None:
                 f"checkpoint={frozen_scene_state_sha256} runtime={current_scene_state_sha256}"
             )
         if (
-            train_signed_x_scene_residual_only
-            and frozen_global_scene_residual_state_sha256 != current_global_scene_residual_sha256
-        ):
+            train_signed_x_scene_residual_only or train_lora_with_frozen_scene_residual_stack
+        ) and frozen_global_scene_residual_state_sha256 != current_global_scene_residual_sha256:
             raise ValueError(
                 "Frozen global scene residual changed across signed-X resume: "
                 f"checkpoint={frozen_global_scene_residual_state_sha256} "
                 f"runtime={current_global_scene_residual_sha256}"
+            )
+        if (
+            train_lora_with_frozen_scene_residual_stack
+            and frozen_signed_x_scene_residual_state_sha256
+            != current_signed_x_scene_residual_sha256
+        ):
+            raise ValueError(
+                "Frozen signed-X residual changed across LoRA resume: "
+                f"checkpoint={frozen_signed_x_scene_residual_state_sha256} "
+                f"runtime={current_signed_x_scene_residual_sha256}"
             )
         if frozen_lora_bank_state_sha256 != current_frozen_lora_hashes:
             raise ValueError(
@@ -4135,7 +4728,19 @@ def main() -> None:
     if signed_x_scene_residual is not None:
         assert global_scene_residual is not None
         zero_output_equivalence = None
-        if resume_metadata is None:
+        if resume_metadata is None and train_lora_with_frozen_scene_residual_stack:
+            source_equivalence = loaded_initialization.get(
+                "signed_x_scene_residual_zero_output_equivalence"
+            )
+            if (
+                not isinstance(source_equivalence, dict)
+                or source_equivalence.get("verified") is not True
+            ):
+                raise ValueError(
+                    "Frozen signed-X source lacks its verified update-0 base equivalence"
+                )
+            signed_x_zero_output_equivalence = source_equivalence
+        elif resume_metadata is None:
             signed_x_zero_output_equivalence = verify_zero_output_signed_x_residual_equivalence(
                 scene_model,
                 global_scene_residual,
@@ -4282,9 +4887,14 @@ def main() -> None:
         composer.train(not freeze_scene_adapter)
         grounding.train(not freeze_scene_adapter)
         if global_scene_residual is not None:
-            global_scene_residual.train(not train_signed_x_scene_residual_only)
+            global_scene_residual.train(
+                not (
+                    train_signed_x_scene_residual_only
+                    or train_lora_with_frozen_scene_residual_stack
+                )
+            )
         if signed_x_scene_residual is not None:
-            signed_x_scene_residual.train(True)
+            signed_x_scene_residual.train(not train_lora_with_frozen_scene_residual_stack)
         if lora_installation is not None:
             lora_installation.train()
         for curriculum_batch in curriculum:
@@ -5275,13 +5885,21 @@ def main() -> None:
                 f"expected={frozen_scene_state_sha256} observed={current_scene_hash}"
             )
         if (
-            train_signed_x_scene_residual_only
-            and current_residual_hash != frozen_global_scene_residual_state_sha256
-        ):
+            train_signed_x_scene_residual_only or train_lora_with_frozen_scene_residual_stack
+        ) and current_residual_hash != frozen_global_scene_residual_state_sha256:
             raise RuntimeError(
                 "Frozen global scene residual changed during signed-X training: "
                 f"expected={frozen_global_scene_residual_state_sha256} "
                 f"observed={current_residual_hash}"
+            )
+        if (
+            train_lora_with_frozen_scene_residual_stack
+            and current_signed_x_hash != frozen_signed_x_scene_residual_state_sha256
+        ):
+            raise RuntimeError(
+                "Frozen signed-X residual changed during language-LoRA training: "
+                f"expected={frozen_signed_x_scene_residual_state_sha256} "
+                f"observed={current_signed_x_hash}"
             )
         if current_frozen_bank_hashes != frozen_lora_bank_state_sha256:
             raise RuntimeError(
@@ -5295,9 +5913,15 @@ def main() -> None:
                     "freeze_scene_adapter": freeze_scene_adapter,
                     "train_global_scene_residual_only": train_global_scene_residual_only,
                     "train_signed_x_scene_residual_only": (train_signed_x_scene_residual_only),
+                    "train_lora_with_frozen_scene_residual_stack": (
+                        train_lora_with_frozen_scene_residual_stack
+                    ),
                     "frozen_scene_state_sha256": frozen_scene_state_sha256,
                     "frozen_global_scene_residual_state_sha256": (
                         frozen_global_scene_residual_state_sha256
+                    ),
+                    "frozen_signed_x_scene_residual_state_sha256": (
+                        frozen_signed_x_scene_residual_state_sha256
                     ),
                     "frozen_lora_bank_state_sha256": frozen_lora_bank_state_sha256,
                 }
@@ -5305,14 +5929,22 @@ def main() -> None:
         if (
             initialize_expected_adapter_sha256 is not None
             or initialize_expected_metadata_sha256 is not None
+            or initialize_expected_scene_state_sha256 is not None
             or initialize_expected_global_scene_residual_state_sha256 is not None
+            or initialize_expected_signed_x_scene_residual_state_sha256 is not None
         ):
             metadata.update(
                 {
                     "initialize_expected_adapter_sha256": (initialize_expected_adapter_sha256),
                     "initialize_expected_metadata_sha256": (initialize_expected_metadata_sha256),
+                    "initialize_expected_scene_state_sha256": (
+                        initialize_expected_scene_state_sha256
+                    ),
                     "initialize_expected_global_scene_residual_state_sha256": (
                         initialize_expected_global_scene_residual_state_sha256
+                    ),
+                    "initialize_expected_signed_x_scene_residual_state_sha256": (
+                        initialize_expected_signed_x_scene_residual_state_sha256
                     ),
                     "initialize_source_residual_into_frozen_base": (
                         initialize_source_residual_into_frozen_base
@@ -5474,8 +6106,12 @@ def main() -> None:
         "initialization_provenance": initialization_provenance,
         "initialize_expected_adapter_sha256": initialize_expected_adapter_sha256,
         "initialize_expected_metadata_sha256": initialize_expected_metadata_sha256,
+        "initialize_expected_scene_state_sha256": initialize_expected_scene_state_sha256,
         "initialize_expected_global_scene_residual_state_sha256": (
             initialize_expected_global_scene_residual_state_sha256
+        ),
+        "initialize_expected_signed_x_scene_residual_state_sha256": (
+            initialize_expected_signed_x_scene_residual_state_sha256
         ),
         "initialize_source_residual_into_frozen_base": (
             initialize_source_residual_into_frozen_base
@@ -5483,6 +6119,9 @@ def main() -> None:
         "freeze_scene_adapter": freeze_scene_adapter,
         "train_global_scene_residual_only": train_global_scene_residual_only,
         "train_signed_x_scene_residual_only": train_signed_x_scene_residual_only,
+        "train_lora_with_frozen_scene_residual_stack": (
+            train_lora_with_frozen_scene_residual_stack
+        ),
         "global_scene_residual": residual_settings.contract(),
         "global_scene_residual_parameter_count": (
             0
@@ -5512,6 +6151,9 @@ def main() -> None:
         "question_dependent_scene_processing": False,
         "frozen_scene_state_sha256": frozen_scene_state_sha256,
         "frozen_global_scene_residual_state_sha256": (frozen_global_scene_residual_state_sha256),
+        "frozen_signed_x_scene_residual_state_sha256": (
+            frozen_signed_x_scene_residual_state_sha256
+        ),
         "frozen_lora_bank_state_sha256": frozen_lora_bank_state_sha256,
         "gradient_accumulation": gradient_accumulation,
         "semantic_dim": semantic_dim,

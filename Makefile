@@ -63,13 +63,19 @@ GEMMA4_V22_EXTENSION_NAMESPACE := gemma4_v22_margin_rebalanced_local_field_exten
 GEMMA4_V22_EXTENSION_ROOT := data_gemma4/checkpoints/$(GEMMA4_V22_EXTENSION_NAMESPACE)
 GEMMA4_V22_EXTENSION_MANIFEST := reports/gemma4/metrics/v22_extension_launch.json
 GEMMA4_V22_EXTENSION_REPORT := reports/gemma4/metrics/v22_extension_final.json
+GEMMA4_V23_CONFIG := configs/experiments/gemma4_color_mirror_shared_kv_v23.yaml
+GEMMA4_V23_NAMESPACE := gemma4_v23_shared_kv
+GEMMA4_V23_CHECKPOINT_ROOT := data_gemma4/checkpoints/$(GEMMA4_V23_NAMESPACE)
+GEMMA4_V23_PREFLIGHT := reports/gemma4/metrics/v23_structural_preflight.json
+GEMMA4_V23_UPDATE1_REPORT := reports/gemma4/metrics/v23_update1_match.json
+GEMMA4_V23_SCREEN_REPORT := reports/gemma4/metrics/v23_epoch_screen.json
 BLENDER := blender
 CONFIG ?= configs/default.yaml
 BATCH_CONFIG ?= configs/experiments/multiscene.yaml
 SCENE ?= scene_000001
 CHECKPOINT ?=
 
-.PHONY: doctor setup download-models download-baselines setup-gemma4-probe download-gemma4-config download-gemma4-weights gemma4-probe gemma4-probe-test extract-gemma4-scene build-gemma4-map gemma4-semantic-sanity gemma4-extract-smoke gemma4-build-smoke-map train-gemma4 gemma4-v18-preflight gemma4-v18-stage1 gemma4-v18-verify-update1 gemma4-v18-resume-screen gemma4-v18-select gemma4-v18-screen gemma4-v19-preflight gemma4-v19-stage1 gemma4-v19-verify-update1 gemma4-v19-resume-screen gemma4-v19-select gemma4-v19-screen gemma4-v19-prepare-extension gemma4-v19-run-extension gemma4-v19-select-extension gemma4-v19-extension gemma4-v20-preflight gemma4-v20-stage1 gemma4-v20-verify-update1 gemma4-v20-resume-screen gemma4-v20-select gemma4-v20-screen gemma4-v20-prepare-extension gemma4-v20-run-extension gemma4-v20-select-extension gemma4-v20-extension gemma4-v21-preflight gemma4-v21-stage1 gemma4-v21-verify-update1 gemma4-v21-resume-screen gemma4-v21-select gemma4-v21-screen gemma4-v21-prepare-extension gemma4-v21-run-extension gemma4-v21-select-extension gemma4-v21-extension gemma4-v22-preflight gemma4-v22-stage1 gemma4-v22-verify-update1 gemma4-v22-resume-screen gemma4-v22-select gemma4-v22-screen gemma4-v22-prepare-extension gemma4-v22-run-extension gemma4-v22-select-extension gemma4-v22-extension require-gemma4-promoted chat-gemma4 gemma4-prepare-questions gemma4-predict-static gemma4-score-static gemma4-evaluate-static gemma4-predict-controls gemma4-chat-static generate-smoke-scene render-smoke-scan generate-scene-batch render-scene-batch multiscene-dry-run build-smoke-map semantic-sanity generate-dataset train evaluate evaluate-oracle-text evaluate-direct-images chat web robot robot-evaluate mcp report demo demo-check demo-leakage test
+.PHONY: doctor setup download-models download-baselines setup-gemma4-probe download-gemma4-config download-gemma4-weights gemma4-probe gemma4-probe-test extract-gemma4-scene build-gemma4-map gemma4-semantic-sanity gemma4-extract-smoke gemma4-build-smoke-map train-gemma4 gemma4-v18-preflight gemma4-v18-stage1 gemma4-v18-verify-update1 gemma4-v18-resume-screen gemma4-v18-select gemma4-v18-screen gemma4-v19-preflight gemma4-v19-stage1 gemma4-v19-verify-update1 gemma4-v19-resume-screen gemma4-v19-select gemma4-v19-screen gemma4-v19-prepare-extension gemma4-v19-run-extension gemma4-v19-select-extension gemma4-v19-extension gemma4-v20-preflight gemma4-v20-stage1 gemma4-v20-verify-update1 gemma4-v20-resume-screen gemma4-v20-select gemma4-v20-screen gemma4-v20-prepare-extension gemma4-v20-run-extension gemma4-v20-select-extension gemma4-v20-extension gemma4-v21-preflight gemma4-v21-stage1 gemma4-v21-verify-update1 gemma4-v21-resume-screen gemma4-v21-select gemma4-v21-screen gemma4-v21-prepare-extension gemma4-v21-run-extension gemma4-v21-select-extension gemma4-v21-extension gemma4-v22-preflight gemma4-v22-stage1 gemma4-v22-verify-update1 gemma4-v22-resume-screen gemma4-v22-select gemma4-v22-screen gemma4-v22-prepare-extension gemma4-v22-run-extension gemma4-v22-select-extension gemma4-v22-extension gemma4-v23-preflight gemma4-v23-stage1 gemma4-v23-verify-update1 gemma4-v23-resume-screen gemma4-v23-select gemma4-v23-screen require-gemma4-promoted chat-gemma4 gemma4-prepare-questions gemma4-predict-static gemma4-score-static gemma4-evaluate-static gemma4-predict-controls gemma4-chat-static generate-smoke-scene render-smoke-scan generate-scene-batch render-scene-batch multiscene-dry-run build-smoke-map semantic-sanity generate-dataset train evaluate evaluate-oracle-text evaluate-direct-images chat web robot robot-evaluate mcp report demo demo-check demo-leakage test
 
 doctor:
 	./scripts/doctor.sh
@@ -380,6 +386,38 @@ gemma4-v22-select-extension: gemma4-v22-run-extension
 	PYTHONPATH=src $(GEMMA4_PYTHON) -m semantic_3d_chat.evaluation.v22_extension_controller select-final --manifest $(GEMMA4_V22_EXTENSION_MANIFEST) --output $(GEMMA4_V22_EXTENSION_REPORT)
 
 gemma4-v22-extension: gemma4-v22-select-extension
+
+# V23 loads the sealed V21 epoch-8 scene/residual stack and older decoder
+# banks as frozen weights, then trains only one zero-output rank-4 shared-K/V
+# bank (30,720 FP32 parameters). A report-only verifier must authorize stage 2.
+gemma4-v23-preflight:
+	PYTHONPATH=src $(GEMMA4_PYTHON) -m semantic_3d_chat.evaluation.v23_shared_kv_controller preflight --config $(GEMMA4_V23_CONFIG) --output $(GEMMA4_V23_PREFLIGHT)
+
+gemma4-v23-stage1: gemma4-v23-preflight
+	@if [ -f "$(GEMMA4_V23_CHECKPOINT_ROOT)/epoch_001/metadata.json" ]; then \
+		echo "Reusing cached V23 epoch_001; the verifier will bind it to the fresh preflight."; \
+	elif [ -e "$(GEMMA4_V23_CHECKPOINT_ROOT)" ]; then \
+		echo "Incomplete V23 checkpoint root exists without epoch_001 metadata: $(GEMMA4_V23_CHECKPOINT_ROOT)" >&2; \
+		exit 2; \
+	else \
+		PYTHONPATH=src $(GEMMA4_PYTHON) -m semantic_3d_chat.training.train_adapter --config $(GEMMA4_V23_CONFIG) --epochs 1; \
+	fi
+
+gemma4-v23-verify-update1: gemma4-v23-stage1
+	PYTHONPATH=src $(GEMMA4_PYTHON) -m semantic_3d_chat.evaluation.v23_shared_kv_controller verify-update1 --config $(GEMMA4_V23_CONFIG) --preflight $(GEMMA4_V23_PREFLIGHT) --checkpoint $(GEMMA4_V23_CHECKPOINT_ROOT)/epoch_001 --output $(GEMMA4_V23_UPDATE1_REPORT)
+
+gemma4-v23-resume-screen: gemma4-v23-verify-update1
+	@PYTHONPATH=src $(GEMMA4_PYTHON) -c 'import json,sys; report=json.load(open(sys.argv[1], encoding="utf-8")); sys.exit(0 if report.get("stage_2_authorized") is True else 2)' "$(GEMMA4_V23_UPDATE1_REPORT)" || { echo "V23 update 1 did not retain the preregistered color/mirror stage-2 gate; refusing updates 2--4." >&2; exit 2; }
+	@if [ -f "$(GEMMA4_V23_CHECKPOINT_ROOT)/epoch_004/metadata.json" ]; then \
+		echo "Reusing cached V23 epoch_004; strict selection will validate all four updates."; \
+	else \
+		PYTHONPATH=src $(GEMMA4_PYTHON) -m semantic_3d_chat.training.train_adapter --config $(GEMMA4_V23_CONFIG) --resume $(GEMMA4_V23_CHECKPOINT_ROOT)/epoch_001 --epochs 4; \
+	fi
+
+gemma4-v23-select: gemma4-v23-resume-screen
+	PYTHONPATH=src $(GEMMA4_PYTHON) -m semantic_3d_chat.evaluation.v23_shared_kv_controller select --config $(GEMMA4_V23_CONFIG) --update1-report $(GEMMA4_V23_UPDATE1_REPORT) --epoch 1=$(GEMMA4_V23_CHECKPOINT_ROOT)/epoch_001/metadata.json --epoch 2=$(GEMMA4_V23_CHECKPOINT_ROOT)/epoch_002/metadata.json --epoch 3=$(GEMMA4_V23_CHECKPOINT_ROOT)/epoch_003/metadata.json --epoch 4=$(GEMMA4_V23_CHECKPOINT_ROOT)/epoch_004/metadata.json --output $(GEMMA4_V23_SCREEN_REPORT)
+
+gemma4-v23-screen: gemma4-v23-select
 
 # No Gemma checkpoint currently satisfies this gate. A future accepted pair must
 # be supplied explicitly and carry a hash-bound promotion.json beside the adapter.
