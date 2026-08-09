@@ -15,13 +15,14 @@
 > 7/70 all-mirror sides, and 1/8 held-out support sides. V12 preserved 12/12 color
 > sides but reached 0/12 selected mirror sides, 0/70 all-mirror sides, and 0/8
 > held-out support sides even after its ordered spatial auxiliary loss passed its
-> own margin target. V13's zero-update gradient probe passed its pre-run
-> non-cancellation gate, but V13 training and generation remain unmeasured. There is
-> no accepted
-> Gemma static-chat, Gemma leakage, semantic embodied-agent, or one-command-demo
-> result yet.
+> own margin target. V13 passed its decoder-bank integrity, training, checkpoint-
+> reload, and runtime-prefix checks and retained 12/12 trained color sides, but it
+> still reached 0/12 selected mirror sides, 0/70 all-mirror sides, and 0/8 held-out
+> support sides. All 70 mirror outputs were literal `unknown` responses. V13 is not
+> promoted. There is no accepted Gemma static-chat, Gemma leakage, semantic
+> embodied-agent, or one-command-demo result yet.
 
-Updated from local artifacts on `2026-08-09T09:58:36Z`. This report does not run models and does not infer missing measurements.
+Updated from local artifacts on `2026-08-09T10:40:47Z`. This report does not run models and does not infer missing measurements.
 
 ## 1. Research question
 
@@ -219,33 +220,114 @@ encoder collapsed”: the ordered auxiliary head can discriminate the selected
 regions, while the current shallow shared decoder adaptation fails to turn that
 discrimination into left/right tokens and retreats to `unknown`.
 
-V13 is specified as a falsification test of that shallow-decoder-capacity
-hypothesis. Its pre-run probe used the pinned V12 epoch-8 adapter SHA-256
+#### v13 frozen-scene decoder banks: execution contract passed, behavior failed
+
+V13 is the bounded decoder-capacity falsifier defined in
+[`../configs/experiments/gemma4_color_mirror_decoder_banks_v13.yaml`](../configs/experiments/gemma4_color_mirror_decoder_banks_v13.yaml).
+Its pre-run probe used the pinned V12 epoch-8 adapter SHA-256
 `a4c85c14a214e4e594992e489a784cb4bacb64d3dfda519ad3da18b1595d9f22`,
-froze the scene encoder and inherited rank-4 layer-34 q/o LoRA, and installed a
-disjoint exact-zero-output rank-8 q/o bank in layers 30-33. The probe bank contains
-229,376 parameters. All 12 complete first-answer vocabulary distributions were
-bitwise identical to the bank-free baseline. No optimizer was constructed, zero
-optimizer steps were taken, the bank's before/after state SHA was identical, and
-no protected weight changed.
+froze the complete scene adapter and inherited rank-4 layer-34 q/o LoRA, and
+installed a disjoint exact-zero-output rank-8 q/o bank in layers 30-33. The new
+bank contains 229,376 parameters. All 12 probed first-answer vocabulary
+distributions were bitwise identical to the bank-free baseline; no optimizer was
+constructed, zero updates occurred, and no protected state changed. The weighted
+candidate-hinge gradients across all six mirror units had cancellation ratio
+0.987037 and cosine 0.948397; the complete decoder objective measured 0.987413 and
+0.949781. This passed the pre-run non-cancellation falsifier but did not predict
+the eventual behavioral outcome. The exact no-update artifact is
+[`gemma4/metrics/mirrored_gradient_probe_v13_epoch008.json`](gemma4/metrics/mirrored_gradient_probe_v13_epoch008.json),
+SHA-256 `59638470edf63a8c8b4a450f3a833a7084c171a4147334366fa5016e709533e6`.
 
-The measured gradients pass the pre-run falsifier. Aggregated across all six
-mirrored units, the weighted candidate-hinge gradients have cancellation ratio
-0.987037 and cosine similarity 0.948397. The complete decoder objective has ratio
-0.987413 and cosine 0.949781. Candidate-hinge cancellation ratios are material and
-aligned in every probed layer: 0.989986 at layer 30, 0.991972 at layer 31,
-0.989481 at layer 32, and 0.976808 at layer 33. This evidence rejects the proposed
-near-opposite/vanishing-gradient stopping condition and justifies a controlled
-training run. It does not demonstrate learned mirror behavior: V13 training,
-checkpoint reload, and greedy generation remain unmeasured.
+Source commit `990589363b42b2cd3451ec24f7a912ffac8411f6` implements a
+schema-2 named-bank contract while preserving legacy schema-1 checkpoint loading.
+It rejects overlapping bank targets, binds deterministic initialization and
+per-bank compact-state hashes, places only trainable banks in the optimizer, and
+checks frozen state before checkpoint writes and after reload. V13 initializes
+from V12 epoch 8, whose metadata SHA-256 is
+`f097c6477546460440e77a3d225afb55818cb13abf9cbb4a90500f75a879b0f5`.
+The immutable scene state is
+`690bd890bfda024dbb5c7d3c68087b8113bc3b8ee81dd6143c7eb2a884e7245b`;
+the frozen inherited bank is
+`dec768bed654c8c4e16da0318857543ad54d8f5f68f4d24a9a87cd19ec706594`.
+The extension bank uses seed 13008 and begins at
+`b4ec0518e4759dda33fc93c9c1d4c76f52f1024fd5b8b1667ad1b4ef5da198af`;
+after training it is
+`caaf9b13c13b2371463a2cf9d450453f925846b0202bdb0610103b6aa85e435b`.
+The checkpoint contains 274,432 LoRA parameters in total, of which exactly
+229,376 are trainable. Gemma base weights and all scene-adapter weights remain
+outside the optimizer.
 
-The probe ran from clean source commit
-`0aac14bd1e6972933299e960276da5d9d31cb49c`. Its exact artifact is
-`gemma4/metrics/mirrored_gradient_probe_v13_epoch008.json`, file SHA-256
-`59638470edf63a8c8b4a450f3a833a7084c171a4147334366fa5016e709533e6`.
-The capacity hypothesis is still falsified unless the eventual saved-and-reloaded
-runtime preserves 12/12 strict color sides and reaches 12/12 strict selected-
-mirror sides with 6/6 changed units under actual greedy generation.
+A separate one-update smoke run completed 12 microsteps in 44.822 seconds and
+preserved both frozen hashes while changing the extension hash. This smoke is
+training-wiring evidence only; it is not included in behavioral accuracy. Its
+machine-readable training trace is
+[`gemma4/metrics/training_gemma4_color_mirror_decoder_banks_v13_smoke.json`](gemma4/metrics/training_gemma4_color_mirror_decoder_banks_v13_smoke.json).
+Its deterministic selection trace is
+[`gemma4/metrics/training_selection_gemma4_color_mirror_decoder_banks_v13_smoke.json`](gemma4/metrics/training_selection_gemma4_color_mirror_decoder_banks_v13_smoke.json).
+
+The full MPS run completed 12 epochs, 144 decoder microsteps, and 12 optimizer
+updates in 467.248 seconds. Its source provenance is clean at commit `9905893`,
+and it uses the same deterministic 24-record, 12-unit color-plus-mirror selection
+as V10-V12. The discrete teacher-gate counts were unchanged at every measured
+gate (epochs 2, 4, 6, 8, 10, and 12):
+
+| Intervention | Candidate sides | Candidate units | Full-vocabulary sides | Full-vocabulary units |
+| --- | ---: | ---: | ---: | ---: |
+| Color swap | 12/12 | 6/6 | 12/12 | 6/6 |
+| Mirror subset | 6/12 | 0/6 | 0/12 | 0/6 |
+
+The aggregate gate therefore never passed, although mirror margins improved
+measurably: candidate minimum moved from -4.625 at epoch 2 to -4.125 at epoch 12,
+and full-vocabulary mean moved from -19.880209 to -19.231771. Epoch 12 is both
+`best` and final;
+those directories contain byte-identical adapter and metadata files. Adapter
+SHA-256 is
+`9b59d15ba9e4d3be8d8a64ea6d9d3071d1e8650333ee8c21c5504e7900353c7c`,
+and metadata SHA-256 is
+`83ba42f6fc5b8ef2025588f35a3a2bba9a9d7e4074487d85c43ef5b25fc13a7b`.
+Exact selection and training evidence is
+[`gemma4/metrics/training_selection_gemma4_color_mirror_decoder_banks_v13.json`](gemma4/metrics/training_selection_gemma4_color_mirror_decoder_banks_v13.json)
+and
+[`gemma4/metrics/training_gemma4_color_mirror_decoder_banks_v13.json`](gemma4/metrics/training_gemma4_color_mirror_decoder_banks_v13.json)
+(training file SHA-256
+`f86659cbc3ab4407c82d583f2e846c9acf6713c82d89c5dfaded4d91bed6a79c`).
+
+Saved-and-reloaded, model-validated BF16 greedy generation measured:
+
+| Intervention | Training status | Exact sides | Exact complete units | Changed predictions |
+| --- | --- | ---: | ---: | ---: |
+| Color swap | selected | 12/12 | 6/6 | 6/6 |
+| Mirror subset | selected | 0/12 | 0/6 | 0/6 |
+| Mirror, all units | selected + unselected | 0/70 | 0/35 | 0/35 |
+| Cube support | held-out test | 0/8 | 0/4 | 0/4 |
+
+All 70 mirror outputs were the literal model response `unknown`. None used an
+audit answer fallback, decoded to an empty string, or exhausted the 32-token
+budget. The eight support outputs were six `unknown` responses and two copies of
+`The floor is light gray.`; none was exact. Thus neither fluency nor a changed
+wrong answer inflates the strict scores.
+
+The first audit attempt correctly stopped on a constructor defect in the audit
+harness: it created FP32 native-boundary placeholders before loading the
+checkpoint, silently casting persisted BF16 BOI/EOI buffers and causing the frozen
+scene-state hash check to fail. It did not mutate the saved checkpoint or affect
+training. Fix commit `a10579d6dadecf8082cc179a201bb1db517656aa`
+constructs native boundaries from the loaded model, or directly in configured BF16
+for skip-generation audits. The complete rerun has zero contract warnings,
+validates the model's BF16 runtime dtype and native boundaries, and confirms exact
+runtime-prefix parity. The audit is
+[`gemma4/metrics/scene_signal_audit_gemma4_color_mirror_decoder_banks_v13_best.json`](gemma4/metrics/scene_signal_audit_gemma4_color_mirror_decoder_banks_v13_best.json),
+file SHA-256 `042fd7c5b085858ac334aaf40f08533e8f2db1ab0ef258917fa901be224256dc`.
+
+After the boundary-dtype repair, the V13 tree passed the standard full suite with
+310 tests passed and 15 skipped; a broader Gemma-focused suite passed 92 tests
+with two benign SWIG warnings. Focused standard tests passed 17/17 and Gemma
+audit/boundary tests passed 26/26. These results validate the implementation and
+checkpoint contract, not scene understanding. No `promotion.json` was created.
+V13 therefore falsifies this added-decoder-bank configuration: it preserves the
+trained color overfit but learns no complete mirror unit and transfers to no
+held-out support side. Held-out static QA, interactive chat, Gemma-specific
+leakage/prefix-invariance tests, and semantic robot navigation remain gated.
 
 The earlier v7 and v8 results remain below as historical adapter lineage.
 
@@ -643,6 +725,12 @@ but both epoch 8 and epoch 12 then generated 0/12 exact selected mirror sides,
 responses were literal `unknown` outputs, not audit fallbacks. This falsifies the
 claim that satisfying the current spatial auxiliary objective is sufficient for
 the existing decoder adapter to express the relation.
+Gemma v13 kept the V12 epoch-8 scene state and inherited decoder bank immutable and
+trained only a disjoint 229,376-parameter bank across layers 30-33. It retained
+12/12 exact color sides but again produced 0/12 selected mirror sides, 0/70 across
+all mirror sides, and 0/8 held-out support sides. Every mirror response was still
+the literal `unknown`; passing decoder-gradient, checkpoint-integrity, and runtime-
+reload checks was not sufficient to produce the desired relation behavior.
 Fluent chat samples must not be treated as evidence of scene understanding; only the structured held-out and control measurements support behavioral claims.
 
 ## 25. Preserved legacy prefix-invariance evidence
@@ -669,16 +757,17 @@ PASS for checkpoint `data/checkpoints/best`. The oracle directory was atomically
   reaches 12/12 auxiliary-margin sides, but greedy generation reaches 0/12
   selected mirror sides, 0/70 all-mirror sides, and 0/8 held-out support sides.
   It is not promoted.
-- Gemma v13 currently has only a zero-update gradient probe. Its exact parity and
-  aligned gradients justify training the added decoder bank, but provide no
-  training, checkpoint-reload, or greedy-generation result.
+- Gemma v13 passes its no-update parity/gradient probe and its training,
+  checkpoint-integrity, BF16 runtime-reload, and prefix-parity checks. It preserves
+  12/12 exact color sides but reaches 0/12 selected mirror sides, 0/70 all-mirror
+  sides, and 0/8 held-out support sides. It is not promoted.
 - No Gemma held-out static-QA, interactive-chat, prefix-invariance, or
   oracle-deletion/leakage inference result exists for v9-v13.
 - The exact source hash loaded by the v7 process was not captured; current source
   hashes are post-run audited snapshots.
 - The v1 multi-scene adapter is scene-content-insensitive despite its raw held-out accuracy; wrong-scene and content-shuffle controls invalidate a scene-understanding claim for that checkpoint.
 - The v2 structural diagnostic preserves more scene signal, but no explicitly v2-tagged held-out QA artifact is available yet.
-- v8, v8-resume24, and v9-v12 wall-clock times are recorded, but peak training
+- v8, v8-resume24, and v9-v13 wall-clock times are recorded, but peak training
   memory is not.
 - Preserved legacy expected-change counterfactual consistency is zero.
 - The direct multi-view image baseline is not scored.
@@ -690,15 +779,17 @@ PASS for checkpoint `data/checkpoints/best`. The oracle directory was atomically
 
 ## 28. Recommended next experiments
 
-1. The V13 parity/gradient probe has passed. Run the controlled bank-only training
-   from its immutable V12 epoch-8 baseline while keeping the scene encoder and
-   inherited layer-34 LoRA frozen.
-2. Still falsify V13 unless saved-and-reloaded greedy generation preserves 12/12
-   strict color sides and reaches 12/12 strict selected-mirror sides with 6/6
-   changed units; only then rerun all-mirror and held-out support controls before
-   static QA, chat, leakage, or promotion work.
+1. Preserve V13 as a failed controlled ablation; do not extend its schedule blindly.
+   Localize why its non-cancelling decoder gradients fail to move the mirror
+   full-vocabulary decision before selecting another adapter architecture or loss.
+2. Require the next saved-and-reloaded candidate to preserve 12/12 strict color
+   sides and reach 12/12 strict selected-mirror sides with 6/6 changed units. Only
+   then rerun all-mirror and held-out support controls before static QA, chat,
+   leakage, robot, or promotion work.
 3. Run the direct multi-view VLM and isolated oracle-text upper-bound baselines.
-4. Train and evaluate language-conditioned target-facing and approach behavior without returning semantic labels through tools.
+4. Train and evaluate language-conditioned target-facing and approach behavior
+   only after the static semantic gate passes, without returning semantic labels
+   through tools.
 5. Preserve the v1/v2 CLIP/Qwen runs as historical anti-collapse evidence, not as
    primary-model results.
 
