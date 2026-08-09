@@ -16,11 +16,16 @@ held-out support controls. V10 subsequently initialized from the v9 epoch-36
 weights and trained a deterministic color-plus-mirror curriculum. It did not pass
 its gate: the best and final checkpoints both regressed to 9/12 exact color sides
 and 3/6 complete color units, learned 0/6 selected mirror units, and scored 0/8
-held-out cube-support sides. V9 remains a color-wiring overfit milestone; v10 is a
-failed continuation with partial color forgetting, not a promoted scene chatbot.
+held-out cube-support sides. V11 restarted from the same v9 weights and added a
+full-vocabulary first-token margin. It restored color to 12/12 exact sides and
+6/6 units, but learned only 3/12 exact selected mirror sides and 0/6 complete
+mirror units; across all mirror questions it reached 7/70 exact sides and 0/35
+units, with 1/8 held-out support sides. V9 remains a color-wiring overfit
+milestone; v10 and v11 are failed continuations, not promoted scene chatbots.
 Gemma held-out static QA, interactive chat, Gemma leakage claims, and
-language-conditioned robot navigation remain gated. V11 is now staged as a
-same-initialization retry with an explicit full-vocabulary answer-margin loss.
+language-conditioned robot navigation remain gated. V12 is staged as a
+same-initialization retry with an ordered spatial-relation training objective that
+breaks v11's measured balanced left/right gradient saddle.
 
 ## Current primary stack
 
@@ -34,9 +39,9 @@ same-initialization retry with an explicit full-vocabulary answer-margin loss.
   `signal_preserving_resampler_v3`: every occupied block contributes to 256
   question-independent 384D scene latents, which are projected into Gemma's 1536D
   decoder space.
-- Gemma decoder base weights remain frozen. V9 trains only the explicitly listed
-  45,056-parameter LoRA state; completed v10 started a new optimizer/history from
-  those v9 adapter weights and failed its color-plus-mirror gate. The decoder receives continuous
+- Gemma decoder base weights remain frozen. V9-v11 train only the explicitly listed
+  45,056-parameter LoRA state; v10 and v11 started new optimizer histories from
+  the same v9 adapter weights and failed their color-plus-mirror gates. The decoder receives continuous
   scene tokens, numeric geometry, and the user's question—never an environmental
   caption, label list, or oracle metadata.
 
@@ -325,6 +330,8 @@ The config and selection audit remain
 `reports/gemma4/metrics/training_selection_gemma4_color_mirror_wiring_v10.json`.
 No `promotion.json` was created.
 
+#### Gemma v11 full-vocabulary retry — color restored, mirror still failed
+
 V11 is the controlled retry in
 `configs/experiments/gemma4_color_mirror_full_vocab_v11.yaml`. It restarts from
 the same proven v9 epoch-36 weights and reuses the exact v10 selection and
@@ -333,7 +340,43 @@ first answer token to exceed the strongest non-target token in Gemma's complete
 vocabulary by 1.0; the weight-8 counterfactual candidate hinge remains active.
 This uses the existing correct decoder forward and answer labels, so it adds no
 environmental text, retrieval, or decoder forward pass. V10 remains the
-zero-full-vocabulary-loss ablation. V11 has no measured result yet.
+zero-full-vocabulary-loss ablation.
+
+The MPS run completed 12 epochs, 144 decoder microsteps, and 12 optimizer updates
+in 947.428 seconds. Its `best` alias and epoch 12 are byte-identical (adapter
+SHA-256 `eee7b3aa8ce2e7584cfe1fc80d8852d4d645b24c156ccd43369cb4ba7e047e22`).
+The aggregate teacher-forced gate failed. Color passed at 12/12 candidate and
+full-vocabulary sides and 6/6 complete units. Mirror remained at 6/12 candidate
+sides and 0/6 units; its full-vocabulary result was 3/12 sides and 0/6 units.
+
+Model-validated greedy generation measured:
+
+| Intervention | Exact sides | Complete units | Predictions changed |
+| --- | ---: | ---: | ---: |
+| Trained color swap | 12/12 | 6/6 | 6/6 |
+| Trained mirror subset | 3/12 | 0/6 | 2/6 |
+| Mirror, all units | 7/70 | 0/35 | 10/35 |
+| Held-out cube support | 1/8 | 0/4 | 4/4 |
+
+Strict normalized exact remains the promotion score. A secondary parser that
+accepts unambiguous verbose relation sentences raises all-mirror scoring to 28/70
+sides and 5/35 units, but all five complete units are unselected; the trained
+subset remains 0/6. V11 suppressed the `unknown`/unrelated-token mode without
+learning the intended physical flip. Its mirror prefix is not structurally
+collapsed: final-prefix relative L2 is 0.358191 and 98.55% of elements change.
+The exact evidence is
+`reports/gemma4/metrics/training_gemma4_color_mirror_full_vocab_v11.json` and
+`reports/gemma4/metrics/scene_signal_audit_gemma4_color_mirror_full_vocab_v11_epoch012.json`.
+No `promotion.json` was created.
+
+V12 is staged in
+`configs/experiments/gemma4_color_mirror_spatial_relation_v12.yaml`. It preserves
+V11's v9 initialization, 24-record deterministic selection, LoRA scope, decoder
+losses, and schedule. Its only training change is an ordered target-minus-reference
+contrastive loss over dense soft pools of all 256 global scene latents, plus a
+scene-only warmup. Exact oracle coordinates remain confined to supervised QA
+artifacts; chat still receives the same global question-independent continuous
+prefix and no labels, coordinates, or text scene description.
 
 ### Fail-closed Gemma static evaluation and chat
 
@@ -350,8 +393,8 @@ non-empty list of supporting metric artifact paths in `evidence`, and bind the
 exact approved config, checkpoint metadata, and adapter with `config_hash`,
 `checkpoint_metadata_sha256`, and `checkpoint_adapter_sha256`. No such record
 exists today: v9 free-generates its trained color pair exactly but fails both
-controls, while v10 partially forgets color and fails its selected mirror and
-held-out cube-support controls. After a future checkpoint is accepted,
+controls, v10 partially forgets color, and v11 restores color without learning a
+complete selected mirror unit or held-out support unit. After a future checkpoint is accepted,
 the invocation shape will be:
 
 ```bash
@@ -389,7 +432,7 @@ make gemma4-predict-controls \
   GEMMA4_EVAL_SPLIT=test
 ```
 
-Historical v1-v10 checkpoints remain inspectable failure or diagnostic artifacts,
+Historical v1-v11 checkpoints remain inspectable failure or diagnostic artifacts,
 but none is a default for these targets and none may be silently treated as
 promoted.
 
@@ -523,9 +566,8 @@ Legacy runtime data is under `data/rendered`, `data/features`, `data/maps`, and
 `data_gemma4`. Semantic oracle specifications and QA supervision are isolated under
 `data/oracle` and `data/qa`. The recorded chat file audit and oracle-unavailable test
 apply to the legacy `data/checkpoints/best` lineage only; they have not been run for
-Gemma v9 or v10 and do not transfer to either. V9's successful trained-color
-generation and v10's failed continuation are therefore not Gemma leakage-test
-results.
+Gemma v9-v11 and do not transfer to those checkpoints. Their wiring and failure
+results are therefore not Gemma leakage-test results.
 
 ## Preserved legacy local web interface
 

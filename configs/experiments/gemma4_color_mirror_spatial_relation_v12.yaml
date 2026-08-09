@@ -1,0 +1,20 @@
+_base_: gemma4_color_mirror_full_vocab_v11.yaml
+
+# V11 defeated the unrelated-token/"unknown" prior but remained at the exact
+# balanced left/right hinge saddle: a shared candidate preference d produces
+# paired margins [d, -d], whose active hinge gradients cancel.  V12 keeps the
+# same v9 initialization, 24-record selection, decoder objective, optimizer
+# schedule, and full-scene inference path.  Its only training change is an
+# ordered target/reference auxiliary loss over dense soft pools of all 256
+# global scene latents. Oracle coordinates stay in training/evaluation QA data;
+# no coordinate, label, or object metadata enters chat inference.
+training:
+  output_namespace: gemma4_color_mirror_spatial_relation_v12
+  spatial_relation_contrastive_weight: 16.0
+  spatial_relation_contrastive_margin: 0.1
+  spatial_relation_contrastive_temperature: 0.2
+  spatial_relation_warmup_steps: 50
+  spatial_relation_warmup_learning_rate: 0.001
+  spatial_relation_warmup_margin_target: 0.1
+  spatial_relation_warmup_temperature: 0.2
+  spatial_relation_warmup_gradient_clip_norm: 1.0

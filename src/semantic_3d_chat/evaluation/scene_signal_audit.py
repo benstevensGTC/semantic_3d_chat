@@ -30,7 +30,7 @@ from semantic_3d_chat.config import (
 )
 from semantic_3d_chat.data.dataset import SceneQADataset
 from semantic_3d_chat.device import safe_dtype, select_device
-from semantic_3d_chat.evaluation.metrics import normalize_answer
+from semantic_3d_chat.evaluation.metrics import canonical_relation, normalize_answer
 from semantic_3d_chat.language.generation import generate_from_embeddings
 from semantic_3d_chat.language.local_lm import load_local_language_model, prompt_token_ids
 from semantic_3d_chat.language.lora import (
@@ -573,6 +573,66 @@ def _eos_ids(language) -> int | list[int] | None:
     return unique[0] if len(unique) == 1 else unique
 
 
+def _generation_answer_and_provenance(
+    tokenizer: Any,
+    generated: torch.Tensor,
+    *,
+    eos_token_ids: int | list[int] | None,
+    max_new_tokens: int,
+) -> tuple[str, dict[str, Any]]:
+    """Decode a generation while retaining evidence hidden by text fallback.
+
+    Greedy generation always emits at least one token, but an immediate EOS can
+    decode to an empty string when special tokens are skipped.  The interactive
+    path historically represented that case as ``"unknown"``.  Keep that stable
+    answer behavior while recording the original token IDs, decoded text, and
+    termination reason so an EOS-only generation cannot be mistaken for a
+    literal generated ``"unknown"`` answer in audit artifacts.
+    """
+
+    if generated.ndim != 2 or generated.shape[0] != 1 or generated.shape[1] < 1:
+        raise ValueError("Generated token IDs must have shape [1, T] with T >= 1")
+    if max_new_tokens < 1:
+        raise ValueError("max_new_tokens must be positive")
+    token_ids = [int(value) for value in generated[0].detach().cpu().tolist()]
+    stop_ids = (
+        set()
+        if eos_token_ids is None
+        else (
+            {int(eos_token_ids)}
+            if isinstance(eos_token_ids, int)
+            else {int(value) for value in eos_token_ids}
+        )
+    )
+    decoded = tokenizer.decode(token_ids, skip_special_tokens=True)
+    stripped = decoded.strip()
+    terminated_by_eos = token_ids[-1] in stop_ids
+    token_budget_exhausted = not terminated_by_eos and len(token_ids) >= max_new_tokens
+    termination_reason = (
+        "eos_token"
+        if terminated_by_eos
+        else "max_new_tokens"
+        if token_budget_exhausted
+        else "decoder_returned_early_without_eos"
+    )
+    fallback_used = not bool(stripped)
+    return stripped or "unknown", {
+        "generated_token_ids": token_ids,
+        "generated_token_count": len(token_ids),
+        "max_new_tokens": int(max_new_tokens),
+        "eos_token_ids": sorted(stop_ids),
+        "termination_reason": termination_reason,
+        "terminated_by_eos": terminated_by_eos,
+        "termination_token_id": token_ids[-1] if terminated_by_eos else None,
+        "token_budget_exhausted": token_budget_exhausted,
+        "decoded_text_skip_special_tokens": decoded,
+        "decoded_text_after_stripping": stripped,
+        "decoded_text_was_empty": fallback_used,
+        "fallback_answer": "unknown" if fallback_used else None,
+        "fallback_answer_used": fallback_used,
+    }
+
+
 @torch.inference_mode()
 def _question_logits_and_answer(language, prefix: torch.Tensor, config: dict, question: str):
     prompt_ids = prompt_token_ids(
@@ -584,6 +644,8 @@ def _question_logits_and_answer(language, prefix: torch.Tensor, config: dict, qu
     runtime_prefix = prefix.to(language.device, dtype=next(language.model.parameters()).dtype)
     scene_prefix_after_bos = scene_prefix_after_bos_setting(config)
     scene_boundary_mode = scene_boundary_mode_setting(config)
+    max_new_tokens = int(config["language"]["max_answer_tokens"])
+    eos_token_ids = _eos_ids(language)
     if language.prefix_backend is not None:
         prepared = language.prefix_backend.prepare(
             runtime_prefix,
@@ -595,8 +657,8 @@ def _question_logits_and_answer(language, prefix: torch.Tensor, config: dict, qu
         logits = output.logits[:, -1].float().cpu()[0]
         generated = language.prefix_backend.generate(
             prepared,
-            max_new_tokens=int(config["language"]["max_answer_tokens"]),
-            eos_token_ids=_eos_ids(language),
+            max_new_tokens=max_new_tokens,
+            eos_token_ids=eos_token_ids,
         )
     else:
         if scene_boundary_mode != SCENE_BOUNDARY_MODE_LEARNED:
@@ -618,13 +680,16 @@ def _question_logits_and_answer(language, prefix: torch.Tensor, config: dict, qu
             language.model,
             inputs,
             attention,
-            int(config["language"]["max_answer_tokens"]),
-            _eos_ids(language),
+            max_new_tokens,
+            eos_token_ids,
         )
-    answer = language.tokenizer.decode(
-        generated[0].cpu().tolist(), skip_special_tokens=True
-    ).strip()
-    return logits, answer or "unknown"
+    answer, provenance = _generation_answer_and_provenance(
+        language.tokenizer,
+        generated,
+        eos_token_ids=eos_token_ids,
+        max_new_tokens=max_new_tokens,
+    )
+    return logits, answer, provenance
 
 
 def _first_answer_token_id(tokenizer, answer: str) -> int:
@@ -665,6 +730,14 @@ def _normalized_generation_result(
     normalized_expected_b = normalize_answer(expected_b)
     side_a_correct = normalized_prediction_a == normalized_expected_a
     side_b_correct = normalized_prediction_b == normalized_expected_b
+    canonical_prediction_a = canonical_relation(prediction_a)
+    canonical_prediction_b = canonical_relation(prediction_b)
+    canonical_expected_a = canonical_relation(expected_a)
+    canonical_expected_b = canonical_relation(expected_b)
+    canonical_eligible_a = canonical_expected_a is not None
+    canonical_eligible_b = canonical_expected_b is not None
+    canonical_correct_a = canonical_eligible_a and canonical_prediction_a == canonical_expected_a
+    canonical_correct_b = canonical_eligible_b and canonical_prediction_b == canonical_expected_b
     return {
         "normalized_prediction_a": normalized_prediction_a,
         "normalized_prediction_b": normalized_prediction_b,
@@ -673,6 +746,25 @@ def _normalized_generation_result(
         "normalized_exact_correct_a": side_a_correct,
         "normalized_exact_correct_b": side_b_correct,
         "normalized_exact_complete_unit_correct": side_a_correct and side_b_correct,
+        # Secondary diagnostic only.  These fields must never replace the
+        # normalized-exact scores used for promotion decisions.
+        "canonical_relation_prediction_a": canonical_prediction_a,
+        "canonical_relation_prediction_b": canonical_prediction_b,
+        "canonical_relation_expected_a": canonical_expected_a,
+        "canonical_relation_expected_b": canonical_expected_b,
+        "canonical_relation_secondary_eligible_a": canonical_eligible_a,
+        "canonical_relation_secondary_eligible_b": canonical_eligible_b,
+        "canonical_relation_secondary_correct_a": canonical_correct_a,
+        "canonical_relation_secondary_correct_b": canonical_correct_b,
+        "canonical_relation_secondary_complete_unit_eligible": (
+            canonical_eligible_a and canonical_eligible_b
+        ),
+        "canonical_relation_secondary_complete_unit_correct": (
+            canonical_eligible_a
+            and canonical_eligible_b
+            and canonical_correct_a
+            and canonical_correct_b
+        ),
     }
 
 
@@ -696,6 +788,43 @@ def _normalized_generation_summary(examples: list[dict[str, Any]]) -> dict[str, 
         "normalized_exact_complete_unit_correct_count": complete_unit_correct_count,
         "normalized_exact_complete_unit_accuracy": (
             complete_unit_correct_count / len(examples) if examples else None
+        ),
+    }
+
+
+def _canonical_relation_generation_summary(examples: list[dict[str, Any]]) -> dict[str, Any]:
+    """Aggregate canonical-relation extraction as a secondary diagnostic only."""
+
+    eligible_sides = [
+        (example, side)
+        for example in examples
+        for side in ("a", "b")
+        if example[f"canonical_relation_secondary_eligible_{side}"]
+    ]
+    correct_side_count = sum(
+        int(example[f"canonical_relation_secondary_correct_{side}"])
+        for example, side in eligible_sides
+    )
+    eligible_units = [
+        example
+        for example in examples
+        if example["canonical_relation_secondary_complete_unit_eligible"]
+    ]
+    correct_unit_count = sum(
+        int(example["canonical_relation_secondary_complete_unit_correct"])
+        for example in eligible_units
+    )
+    return {
+        "canonical_relation_secondary_only": True,
+        "canonical_relation_secondary_side_count": len(eligible_sides),
+        "canonical_relation_secondary_correct_side_count": correct_side_count,
+        "canonical_relation_secondary_side_accuracy": (
+            correct_side_count / len(eligible_sides) if eligible_sides else None
+        ),
+        "canonical_relation_secondary_complete_unit_count": len(eligible_units),
+        "canonical_relation_secondary_complete_unit_correct_count": correct_unit_count,
+        "canonical_relation_secondary_complete_unit_accuracy": (
+            correct_unit_count / len(eligible_units) if eligible_units else None
         ),
     }
 
@@ -763,6 +892,7 @@ def _generation_subset_summary(examples: list[dict[str, Any]]) -> dict[str, Any]
         "prediction_changed_count": changed_count,
         "prediction_changed_rate": changed_count / len(examples) if examples else None,
         **_normalized_generation_summary(examples),
+        **_canonical_relation_generation_summary(examples),
         "left_right_reference_orientation": _left_right_reference_orientation_summary(examples),
     }
 
@@ -801,10 +931,10 @@ def _generation_audit(
                 raise ValueError("Counterfactual pair questions are not identical")
             prefix_a = representations[spec["scene_a"]]["final_prefix_runtime_dtype"]
             prefix_b = representations[spec["scene_b"]]["final_prefix_runtime_dtype"]
-            logits_a, prediction_a = _question_logits_and_answer(
+            logits_a, prediction_a, generation_a = _question_logits_and_answer(
                 language, prefix_a, config, record_a["question"]
             )
-            logits_b, prediction_b = _question_logits_and_answer(
+            logits_b, prediction_b, generation_b = _question_logits_and_answer(
                 language, prefix_b, config, record_b["question"]
             )
             token_a = _first_answer_token_id(language.tokenizer, record_a["answer"])
@@ -828,6 +958,8 @@ def _generation_audit(
                     "expected_b": record_b["answer"],
                     "prediction_a": prediction_a,
                     "prediction_b": prediction_b,
+                    "generation_a": generation_a,
+                    "generation_b": generation_b,
                     "prediction_changed": prediction_a != prediction_b,
                     **normalized_result,
                     "logits": _logit_pair_metrics(logits_a, logits_b),
@@ -847,6 +979,7 @@ def _generation_audit(
             )
         changed_count = sum(int(example["prediction_changed"]) for example in examples)
         normalized_summary = _normalized_generation_summary(examples)
+        canonical_relation_summary = _canonical_relation_generation_summary(examples)
         selected_examples = [example for example in examples if example["training_selected"]]
         unselected_examples = [example for example in examples if not example["training_selected"]]
         pair_results.append(
@@ -856,6 +989,7 @@ def _generation_audit(
                 "prediction_changed_count": changed_count,
                 "prediction_changed_rate": changed_count / len(examples) if examples else None,
                 **normalized_summary,
+                **canonical_relation_summary,
                 "training_selection_breakdown": {
                     "selected": _generation_subset_summary(selected_examples),
                     "unselected": _generation_subset_summary(unselected_examples),
@@ -883,6 +1017,12 @@ def _generation_audit(
         f"{pair_id}:{question_key}" for pair_id, question_key in sorted(training_selected_pair_keys)
     )
     return {
+        "scoring_policy": {
+            "primary_promotion_metric": "normalized_exact_complete_unit_accuracy",
+            "primary_side_metric": "normalized_exact_side_accuracy",
+            "canonical_relation_metric_role": "secondary_diagnostic_only",
+            "canonical_relation_does_not_satisfy_promotion": True,
+        },
         "training_pair_selection": {
             "selected_complete_unit_count": len(training_selected_pair_keys),
             "selected_pair_question_keys_sha256": hashlib.sha256(

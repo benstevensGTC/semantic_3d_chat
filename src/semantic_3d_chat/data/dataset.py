@@ -15,6 +15,7 @@ class QARecord:
     answer: str
     answer_type: str
     target_xyz: list[float] | None
+    reference_xyz: list[float] | None = None
     counterfactual_pair_id: str | None = None
     counterfactual_question_key: str | None = None
     counterfactual_expected_change: bool | None = None
@@ -35,11 +36,10 @@ class SceneQADataset(Dataset[QARecord]):
                 answer=item["answer"],
                 answer_type=item["answer_type"],
                 target_xyz=item.get("target_xyz"),
+                reference_xyz=item.get("reference_xyz"),
                 counterfactual_pair_id=item.get("counterfactual_pair_id"),
                 counterfactual_question_key=item.get("counterfactual_question_key"),
-                counterfactual_expected_change=item.get(
-                    "counterfactual_expected_change"
-                ),
+                counterfactual_expected_change=item.get("counterfactual_expected_change"),
                 counterfactual_role=item.get("counterfactual_role"),
                 counterfactual_change_type=item.get("counterfactual_change_type"),
             )

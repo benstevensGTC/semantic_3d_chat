@@ -10,7 +10,9 @@
 > sides and 0/8 exact held-out cube-support sides. V10 completed its deterministic
 > weights-only color-plus-mirror continuation but failed: both audited checkpoints
 > regressed to 9/12 exact color sides, learned 0/6 selected mirror units, and scored
-> 0/8 on held-out support. There is no accepted
+> 0/8 on held-out support. V11 restored 12/12 color sides with a full-vocabulary
+> margin, but reached only 3/12 selected mirror sides, 0/6 complete mirror units,
+> 7/70 all-mirror sides, and 1/8 held-out support sides. There is no accepted
 > Gemma static-chat, Gemma leakage, semantic embodied-agent, or one-command-demo
 > result yet.
 
@@ -117,14 +119,50 @@ artifacts are `gemma4/metrics/training_gemma4_color_mirror_wiring_v10.json`,
 and `gemma4/metrics/scene_signal_audit_gemma4_color_mirror_wiring_v10_epoch012.json`.
 No `promotion.json` was created.
 
-The controlled v11 retry restarts from the same v9 epoch-36 checkpoint with the
+#### v11 full-vocabulary retry: color restored, mirror still failed
+
+The controlled v11 retry restarted from the same v9 epoch-36 checkpoint with the
 same six color and six mirror units. It retains the candidate-pair hinge and adds
 a differentiable first-answer objective
 `relu(1 - (target_logit - max_non_target_logit))` at weight 2. This directly
 targets v10's observed candidate-versus-full-vocabulary gap using the same decoder
-forward and existing answer supervision. The config is
-`configs/experiments/gemma4_color_mirror_full_vocab_v11.yaml`; no v11 result is
-claimed before training and real-generation audits finish.
+forward and existing answer supervision. The run completed 12 epochs, 144 decoder
+microsteps, and 12 optimizer updates in 947.428 seconds. Best and final are the
+same epoch-12 adapter, SHA-256
+`eee7b3aa8ce2e7584cfe1fc80d8852d4d645b24c156ccd43369cb4ba7e047e22`.
+
+The strict teacher gate failed: color reached 12/12 candidate sides and 12/12
+full-vocabulary top-1 sides (6/6 complete units), but mirror stayed at 6/12
+candidate sides and 0/6 units, with only 3/12 full-vocabulary sides and 0/6 units.
+Greedy generation confirmed the failure:
+
+| Intervention | Training status | Exact sides | Exact complete units | Changed predictions |
+| --- | --- | ---: | ---: | ---: |
+| Color swap | selected | 12/12 | 6/6 | 6/6 |
+| Mirror subset | selected | 3/12 | 0/6 | 2/6 |
+| Mirror, all units | selected + unselected | 7/70 | 0/35 | 10/35 |
+| Cube support | held-out test | 1/8 | 0/4 | 4/4 |
+
+Strict normalized exact is the promotion metric. Secondary canonical relation
+parsing counts unambiguous verbose answers and reaches 28/70 mirror sides and 5/35
+complete units, but all five complete units are unselected; the selected subset
+remains 0/6. Output decisiveness did improve: V11 substantially reduced the prior
+`unknown` mode. That did not route mirror-prefix differences into the correct
+left/right contrast. The mirror prefix itself remains measurably different across
+scenes (0.358191 relative L2; 98.55% changed elements), so this is not evidence of
+global scene-token collapse. Exact artifacts are
+`gemma4/metrics/training_gemma4_color_mirror_full_vocab_v11.json` and
+`gemma4/metrics/scene_signal_audit_gemma4_color_mirror_full_vocab_v11_epoch012.json`.
+No `promotion.json` was created.
+
+V12 is staged at
+`configs/experiments/gemma4_color_mirror_spatial_relation_v12.yaml`. The old
+balanced hinge has an exact shared-preference saddle: margins `[d, -d]` yield zero
+gradient while both sides violate the margin. V12 keeps the v9 initialization,
+selection, decoder objective, and schedule, and adds an ordered
+target-minus-reference objective over dense soft pools of all 256 scene latents.
+The ordered coordinates are training/evaluation-only QA fields. They never enter
+the chat runtime, which retains the same global question-independent prefix.
 
 The earlier v7 and v8 results remain below as historical adapter lineage.
 
@@ -512,6 +550,10 @@ units. Both scored 0/12 exact selected mirror sides and 0/6 selected mirror unit
 the best checkpoint scored only 1/70 across all mirror sides and the final scored
 0/70. Both scored 0/8 on held-out support. This is failed continuation with partial
 forgetting, not a scene-understanding result.
+Gemma v11 restored all trained color answers and made mirror outputs more decisive,
+but it still completed none of the six trained mirror pairs and none of the four
+held-out support pairs. Its improved 7/70 strict mirror sides and 28/70 secondary
+canonical sides do not meet promotion criteria.
 Fluent chat samples must not be treated as evidence of scene understanding; only the structured held-out and control measurements support behavioral claims.
 
 ## 25. Preserved legacy prefix-invariance evidence
@@ -531,8 +573,11 @@ PASS for checkpoint `data/checkpoints/best`. The oracle directory was atomically
   its gate. Both audited checkpoints score 9/12 color sides and 3/6 color units,
   0/12 selected mirror sides and 0/6 selected mirror units, and 0/8 held-out support
   sides. V10 partially forgets v9's trained-color behavior and is not promoted.
+- Gemma v11 restores 12/12 exact color sides but reaches only 3/12 selected mirror
+  sides, 0/6 selected mirror units, 7/70 all-mirror sides, and 1/8 held-out support
+  sides. It is not promoted.
 - No Gemma held-out static-QA, interactive-chat, prefix-invariance, or
-  oracle-deletion/leakage inference result exists for v9 or v10.
+  oracle-deletion/leakage inference result exists for v9, v10, or v11.
 - The exact source hash loaded by the v7 process was not captured; current source
   hashes are post-run audited snapshots.
 - The v1 multi-scene adapter is scene-content-insensitive despite its raw held-out accuracy; wrong-scene and content-shuffle controls invalidate a scene-understanding claim for that checkpoint.
@@ -549,8 +594,8 @@ PASS for checkpoint `data/checkpoints/best`. The oracle directory was atomically
 
 ## 28. Recommended next experiments
 
-1. Run the controlled v11 full-vocabulary-margin stage from the same v9 epoch-36
-   weights, preserving v10 as its zero-margin-loss ablation.
+1. Run the controlled v12 ordered spatial-relation stage from the same v9 epoch-36
+   weights, preserving v11 as its zero-ordered-relation-loss ablation.
 2. Require normalized-exact free generation on all trained color and mirror units,
    then rerun the held-out cube-support control before static QA, chat, leakage, or
    promotion work.

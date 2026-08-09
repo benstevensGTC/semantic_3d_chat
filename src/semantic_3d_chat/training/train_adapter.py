@@ -62,6 +62,7 @@ from semantic_3d_chat.training.losses import (
     latent_diversity_loss,
     nearest_spatial_anchor_indices,
     normalize_xyz,
+    ordered_spatial_relation_contrastive_loss,
     paired_scene_separation_loss,
     spatial_scene_answer_contrastive_loss,
 )
@@ -643,6 +644,69 @@ def spatial_answer_resume_contract_mismatch(
     return None
 
 
+def spatial_relation_contrastive_settings(config: dict) -> dict[str, float]:
+    """Resolve the opt-in ordered target/reference relation objective.
+
+    Oracle target and reference coordinates are available only to supervised
+    training.  The resulting scene tokens remain global, question-independent,
+    and metadata-free at inference.
+    """
+
+    training = config["training"]
+    settings = {
+        "weight": float(training.get("spatial_relation_contrastive_weight", 0.0)),
+        "margin": float(training.get("spatial_relation_contrastive_margin", 0.1)),
+        "temperature": float(training.get("spatial_relation_contrastive_temperature", 0.2)),
+    }
+    if settings["weight"] < 0:
+        raise ValueError("spatial_relation_contrastive_weight cannot be negative")
+    if not 0.0 <= settings["margin"] <= 1.0:
+        raise ValueError("spatial_relation_contrastive_margin must be in [0, 1]")
+    if settings["temperature"] <= 0:
+        raise ValueError("spatial_relation_contrastive_temperature must be positive")
+    return settings
+
+
+def spatial_relation_resume_contract_mismatch(
+    checkpoint_metadata: dict,
+    runtime_settings: dict[str, float],
+) -> dict[str, object] | None:
+    """Protect exact resumes while accepting legacy disabled checkpoints."""
+
+    saved = checkpoint_metadata.get("spatial_relation_contrastive")
+    if saved is None and runtime_settings["weight"] == 0:
+        return None
+    if saved != runtime_settings:
+        return {"checkpoint": saved, "runtime": runtime_settings}
+    return None
+
+
+def spatial_relation_warmup_settings(config: dict) -> dict[str, int | float]:
+    """Resolve the scene-only ordered-relation warmup."""
+
+    training = config["training"]
+    settings: dict[str, int | float] = {
+        "steps": int(training.get("spatial_relation_warmup_steps", 0)),
+        "learning_rate": float(training.get("spatial_relation_warmup_learning_rate", 0.001)),
+        "margin_target": float(training.get("spatial_relation_warmup_margin_target", 0.1)),
+        "temperature": float(training.get("spatial_relation_warmup_temperature", 0.2)),
+        "gradient_clip_norm": float(
+            training.get("spatial_relation_warmup_gradient_clip_norm", 1.0)
+        ),
+    }
+    if settings["steps"] < 0:
+        raise ValueError("spatial_relation_warmup_steps cannot be negative")
+    if settings["learning_rate"] <= 0:
+        raise ValueError("spatial_relation_warmup_learning_rate must be positive")
+    if not 0.0 <= settings["margin_target"] <= 1.0:
+        raise ValueError("spatial_relation_warmup_margin_target must be in [0, 1]")
+    if settings["temperature"] <= 0:
+        raise ValueError("spatial_relation_warmup_temperature must be positive")
+    if settings["gradient_clip_norm"] <= 0:
+        raise ValueError("spatial_relation_warmup_gradient_clip_norm must be positive")
+    return settings
+
+
 def spatial_answer_warmup_settings(config: dict) -> dict[str, int | float]:
     """Resolve the opt-in scene-only spatial-answer warmup.
 
@@ -687,6 +751,38 @@ def spatial_answer_warmup_resume_contract_mismatch(
     saved_settings = checkpoint_metadata.get("spatial_answer_warmup")
     saved_audit = checkpoint_metadata.get("spatial_answer_warmup_target_audit")
     saved_metrics = checkpoint_metadata.get("spatial_answer_warmup_metrics")
+    if saved_settings is None and int(runtime_settings["steps"]) == 0:
+        return None
+    mismatch: dict[str, object] = {}
+    if saved_settings != runtime_settings:
+        mismatch["settings"] = {
+            "checkpoint": saved_settings,
+            "runtime": runtime_settings,
+        }
+    if int(runtime_settings["steps"]) > 0:
+        if saved_audit != runtime_target_audit:
+            mismatch["target_audit"] = {
+                "checkpoint": saved_audit,
+                "runtime": runtime_target_audit,
+            }
+        if not isinstance(saved_metrics, dict) or not bool(saved_metrics.get("completed")):
+            mismatch["metrics"] = {
+                "checkpoint": saved_metrics,
+                "runtime": "completed warmup metrics required",
+            }
+    return mismatch or None
+
+
+def spatial_relation_warmup_resume_contract_mismatch(
+    checkpoint_metadata: dict,
+    runtime_settings: dict[str, int | float],
+    runtime_target_audit: dict[str, object],
+) -> dict[str, object] | None:
+    """Enforce exact ordered-relation warmup settings and supervision."""
+
+    saved_settings = checkpoint_metadata.get("spatial_relation_warmup")
+    saved_audit = checkpoint_metadata.get("spatial_relation_warmup_target_audit")
+    saved_metrics = checkpoint_metadata.get("spatial_relation_warmup_metrics")
     if saved_settings is None and int(runtime_settings["steps"]) == 0:
         return None
     mismatch: dict[str, object] = {}
@@ -758,6 +854,105 @@ def spatial_answer_target_audit(
         "eligible_side_count": side_count,
         "unique_target_count": len(keys),
         "unit_to_unique_target_ratio": (float(eligible_units / len(keys)) if keys else 0.0),
+    }
+
+
+def spatial_relation_target_audit(
+    units: Sequence[CounterfactualPairUnit],
+) -> dict[str, int | float]:
+    """Audit complete ordered target/reference supervision in pair units."""
+
+    eligible_units = 0
+    side_count = 0
+    ordered_regions: set[
+        tuple[str, str, tuple[float, float, float], tuple[float, float, float]]
+    ] = set()
+    for unit in units:
+        if any(
+            record.target_xyz is None or record.reference_xyz is None for record in unit.records
+        ):
+            continue
+        eligible_units += 1
+        for record in unit.records:
+            side_count += 1
+            ordered_regions.add(
+                (
+                    unit.pair_id,
+                    record.scene_id,
+                    tuple(round(float(value), 6) for value in record.target_xyz),
+                    tuple(round(float(value), 6) for value in record.reference_xyz),
+                )
+            )
+    return {
+        "eligible_unit_count": eligible_units,
+        "eligible_side_count": side_count,
+        "unique_ordered_region_count": len(ordered_regions),
+        "side_to_unique_ordered_region_ratio": (
+            float(side_count / len(ordered_regions)) if ordered_regions else 0.0
+        ),
+    }
+
+
+def deduplicate_spatial_relation_warmup_units(
+    units: Sequence[CounterfactualPairUnit],
+) -> list[CounterfactualPairUnit]:
+    """Keep one deterministic unit per paired ordered physical relation."""
+
+    selected: dict[tuple[object, ...], CounterfactualPairUnit] = {}
+    for unit in units:
+        if any(
+            record.target_xyz is None or record.reference_xyz is None for record in unit.records
+        ):
+            continue
+        key: tuple[object, ...] = (
+            unit.pair_id,
+            *(
+                (
+                    record.scene_id,
+                    tuple(round(float(value), 6) for value in record.target_xyz),
+                    tuple(round(float(value), 6) for value in record.reference_xyz),
+                )
+                for record in unit.records
+            ),
+        )
+        previous = selected.get(key)
+        answers = tuple(record.answer.strip() for record in unit.records)
+        if previous is not None:
+            if answers != tuple(record.answer.strip() for record in previous.records):
+                raise ValueError(
+                    "Relation warmup paraphrases for one ordered region disagree on answers"
+                )
+            continue
+        selected[key] = unit
+    return [selected[key] for key in sorted(selected)]
+
+
+def spatial_relation_warmup_target_audit(
+    units: Sequence[CounterfactualPairUnit],
+) -> dict[str, object]:
+    """Describe and fingerprint ordered relation warmup supervision."""
+
+    deduplicated = deduplicate_spatial_relation_warmup_units(units)
+    serialized = [
+        {
+            "pair_id": unit.pair_id,
+            "sides": [
+                {
+                    "scene_id": record.scene_id,
+                    "target_xyz": [round(float(value), 6) for value in record.target_xyz],
+                    "reference_xyz": [round(float(value), 6) for value in record.reference_xyz],
+                    "answer": record.answer.strip(),
+                }
+                for record in unit.records
+            ],
+        }
+        for unit in deduplicated
+    ]
+    payload = json.dumps(serialized, sort_keys=True, separators=(",", ":"))
+    return {
+        **spatial_relation_target_audit(deduplicated),
+        "deduplicated_unit_count": len(deduplicated),
+        "target_sha256": hashlib.sha256(payload.encode("utf-8")).hexdigest(),
     }
 
 
@@ -1191,6 +1386,217 @@ def run_spatial_answer_warmup(
     return base_metrics
 
 
+def pair_spatial_relation_contrastive_objective(
+    outputs_by_scene: dict[str, object],
+    units: Sequence[CounterfactualPairUnit],
+    maps: dict[str, MapTensorData],
+    language,
+    *,
+    temperature: float,
+    margin: float,
+) -> tuple[torch.Tensor, dict[str, torch.Tensor | int]]:
+    """Align ordered target/reference regions with paired answer directions.
+
+    Coordinates and answers are training-only supervision.  Dense soft pooling
+    touches all global scene latents and introduces no inference-time retrieval.
+    """
+
+    complete_units = [
+        unit
+        for unit in units
+        if all(
+            record.target_xyz is not None and record.reference_xyz is not None
+            for record in unit.records
+        )
+    ]
+    if not complete_units:
+        first_output = outputs_by_scene[next(iter(outputs_by_scene))]
+        zero = first_output.scene_tokens.sum() * 0.0
+        empty = zero.detach().reshape(1)[:0]
+        return zero, {
+            "eligible_unit_count": 0,
+            "eligible_side_count": 0,
+            "unique_ordered_region_count": 0,
+            "relation_answer_cosine": empty,
+            "achieved_margin": empty,
+            "relation_norm": empty,
+            "configured_margin": torch.tensor(
+                float(margin), device=zero.device, dtype=torch.float32
+            ),
+            "configured_temperature": torch.tensor(
+                float(temperature), device=zero.device, dtype=torch.float32
+            ),
+        }
+
+    scene_tokens: list[torch.Tensor] = []
+    target_xyz: list[torch.Tensor] = []
+    reference_xyz: list[torch.Tensor] = []
+    room_min: list[torch.Tensor] = []
+    room_max: list[torch.Tensor] = []
+    own_embeddings: list[torch.Tensor] = []
+    alternate_embeddings: list[torch.Tensor] = []
+    input_embeddings = language.model.get_input_embeddings()
+    for unit in complete_units:
+        reference, counterfactual = unit.records
+        for record, alternate_record in (
+            (reference, counterfactual),
+            (counterfactual, reference),
+        ):
+            output = outputs_by_scene[record.scene_id]
+            if output.scene_tokens.shape[0] != 1:
+                raise ValueError("Each scene tokenizer output must have batch size one")
+            scene_tokens.append(output.scene_tokens[0])
+            target_xyz.append(
+                torch.tensor(record.target_xyz, dtype=torch.float32, device=language.device)
+            )
+            reference_xyz.append(
+                torch.tensor(record.reference_xyz, dtype=torch.float32, device=language.device)
+            )
+            data = maps[record.scene_id]
+            room_min.append(data.room_min.float())
+            room_max.append(data.room_max.float())
+            own_embeddings.append(
+                frozen_answer_embedding(
+                    language.tokenizer,
+                    input_embeddings,
+                    record.answer,
+                    language.device,
+                )[0]
+            )
+            alternate_embeddings.append(
+                frozen_answer_embedding(
+                    language.tokenizer,
+                    input_embeddings,
+                    alternate_record.answer,
+                    language.device,
+                )[0]
+            )
+
+    minimums = torch.stack(room_min, dim=0).to(device=language.device)
+    maximums = torch.stack(room_max, dim=0).to(device=language.device)
+    normalized_targets = normalize_xyz(torch.stack(target_xyz, dim=0), minimums, maximums)
+    normalized_references = normalize_xyz(torch.stack(reference_xyz, dim=0), minimums, maximums)
+    loss, diagnostics = ordered_spatial_relation_contrastive_loss(
+        torch.stack(scene_tokens, dim=0),
+        normalized_targets,
+        normalized_references,
+        torch.stack(own_embeddings, dim=0),
+        torch.stack(alternate_embeddings, dim=0),
+        temperature=temperature,
+        margin=margin,
+    )
+    audit = spatial_relation_target_audit(complete_units)
+    diagnostics["eligible_unit_count"] = len(complete_units)
+    diagnostics["unique_ordered_region_count"] = int(audit["unique_ordered_region_count"])
+    diagnostics["achieved_margin"] = diagnostics["relation_answer_cosine"]
+    return loss, diagnostics
+
+
+def run_spatial_relation_warmup(
+    scene_model: SceneTokenizer,
+    maps: dict[str, MapTensorData],
+    units: Sequence[CounterfactualPairUnit],
+    language,
+    *,
+    settings: dict[str, int | float],
+) -> dict[str, object]:
+    """Warm only the scene path on ordered spatial relation supervision."""
+
+    requested_steps = int(settings["steps"])
+    target_audit = spatial_relation_warmup_target_audit(units)
+    base_metrics: dict[str, object] = {
+        "enabled": requested_steps > 0,
+        "completed": True,
+        "requested_steps": requested_steps,
+        "forward_steps": 0,
+        "optimizer_steps": 0,
+        "stopped_early": False,
+        "margin_target": float(settings["margin_target"]),
+        "temperature": float(settings["temperature"]),
+        "target_audit": target_audit,
+        "history": [],
+        "final": None,
+    }
+    if requested_steps == 0:
+        return base_metrics
+
+    deduplicated = deduplicate_spatial_relation_warmup_units(units)
+    if not deduplicated:
+        raise ValueError("Enabled spatial-relation warmup has no ordered relation targets")
+    participating_scene_ids = sorted(
+        {scene_id for unit in deduplicated for scene_id in unit.scene_ids}
+    )
+    missing = [scene_id for scene_id in participating_scene_ids if scene_id not in maps]
+    if missing:
+        raise ValueError(f"Spatial-relation warmup maps are missing scenes: {missing}")
+
+    trainable_parameters = [
+        parameter for parameter in scene_model.parameters() if parameter.requires_grad
+    ]
+    if not trainable_parameters:
+        raise ValueError("Spatial-relation warmup scene model has no trainable parameters")
+    optimizer = torch.optim.AdamW(
+        trainable_parameters,
+        lr=float(settings["learning_rate"]),
+        weight_decay=0.0,
+    )
+    was_training = scene_model.training
+    history: list[dict[str, int | float | bool]] = []
+    optimizer_steps = 0
+    try:
+        scene_model.train(True)
+        for step in range(1, requested_steps + 1):
+            optimizer.zero_grad(set_to_none=True)
+            outputs_by_scene = {
+                scene_id: map_forward(scene_model, maps[scene_id])
+                for scene_id in participating_scene_ids
+            }
+            loss, diagnostics = pair_spatial_relation_contrastive_objective(
+                outputs_by_scene,
+                deduplicated,
+                maps,
+                language,
+                temperature=float(settings["temperature"]),
+                margin=float(settings["margin_target"]),
+            )
+            step_metrics = _spatial_answer_warmup_step_metrics(
+                step,
+                loss,
+                diagnostics,
+                float(settings["margin_target"]),
+            )
+            history.append(step_metrics)
+            print(json.dumps({"phase": "spatial_relation_warmup", **step_metrics}), flush=True)
+            if bool(step_metrics["all_sides_passed"]):
+                break
+            if not loss.requires_grad:
+                raise RuntimeError("Spatial-relation warmup loss is detached")
+            loss.backward()
+            if not any(parameter.grad is not None for parameter in trainable_parameters):
+                raise RuntimeError("Spatial-relation warmup produced no scene-model gradients")
+            torch.nn.utils.clip_grad_norm_(
+                trainable_parameters,
+                float(settings["gradient_clip_norm"]),
+            )
+            optimizer.step()
+            optimizer_steps += 1
+    finally:
+        optimizer.zero_grad(set_to_none=True)
+        scene_model.train(was_training)
+
+    final = history[-1]
+    base_metrics.update(
+        {
+            "forward_steps": len(history),
+            "optimizer_steps": optimizer_steps,
+            "stopped_early": bool(final["all_sides_passed"]) and len(history) < requested_steps,
+            "history": history,
+            "final": final,
+        }
+    )
+    return base_metrics
+
+
 def pair_batch_objective(
     outputs_by_scene: dict[str, object],
     units: Sequence[CounterfactualPairUnit],
@@ -1457,6 +1863,23 @@ def pair_batch_objective(
         base_loss = base_loss + spatial_settings["weight"] * spatial_answer_loss
     diagnostics["spatial_answer_contrastive_loss"] = spatial_answer_loss
     diagnostics["spatial_answer_contrastive"] = spatial_answer_diagnostics
+    relation_settings = spatial_relation_contrastive_settings(config)
+    spatial_relation_loss = torch.zeros((), device=language.device)
+    spatial_relation_diagnostics: dict[str, torch.Tensor | int] | None = None
+    if relation_settings["weight"] > 0:
+        spatial_relation_loss, spatial_relation_diagnostics = (
+            pair_spatial_relation_contrastive_objective(
+                outputs_by_scene,
+                units,
+                maps,
+                language,
+                temperature=relation_settings["temperature"],
+                margin=relation_settings["margin"],
+            )
+        )
+        base_loss = base_loss + relation_settings["weight"] * spatial_relation_loss
+    diagnostics["spatial_relation_contrastive_loss"] = spatial_relation_loss
+    diagnostics["spatial_relation_contrastive"] = spatial_relation_diagnostics
     return base_loss, language_loss, grounding_loss, ranking_loss, diagnostics
 
 
@@ -1717,21 +2140,34 @@ def main() -> None:
     anti_collapse = anti_collapse_settings(config)
     spatial_answer_contrastive = spatial_answer_contrastive_settings(config)
     spatial_answer_warmup = spatial_answer_warmup_settings(config)
+    spatial_relation_contrastive = spatial_relation_contrastive_settings(config)
+    spatial_relation_warmup = spatial_relation_warmup_settings(config)
     if spatial_answer_contrastive["weight"] > 0 and not pair_curriculum.enabled:
         raise ValueError("spatial_answer_contrastive_weight requires an enabled pair curriculum")
     if spatial_answer_warmup["steps"] > 0 and not pair_curriculum.enabled:
         raise ValueError("spatial_answer_warmup_steps requires an enabled pair curriculum")
+    if spatial_relation_contrastive["weight"] > 0 and not pair_curriculum.enabled:
+        raise ValueError("spatial_relation_contrastive_weight requires an enabled pair curriculum")
+    if spatial_relation_warmup["steps"] > 0 and not pair_curriculum.enabled:
+        raise ValueError("spatial_relation_warmup_steps requires an enabled pair curriculum")
     token_mixing = scene_token_mixing_settings(config)
     pair_units = build_exact_question_pair_units(records)
     if pair_curriculum.enabled and not pair_units:
         raise ValueError("The pair curriculum is enabled but selection contains no pair units")
     spatial_answer_targets = spatial_answer_target_audit(pair_units)
     spatial_answer_warmup_targets = spatial_answer_warmup_target_audit(pair_units)
+    spatial_relation_targets = spatial_relation_target_audit(pair_units)
+    spatial_relation_warmup_targets = spatial_relation_warmup_target_audit(pair_units)
     if (
         spatial_answer_warmup["steps"] > 0
         and int(spatial_answer_warmup_targets["deduplicated_unit_count"]) == 0
     ):
         raise ValueError("Enabled spatial-answer warmup has no grounded pair targets")
+    if (
+        spatial_relation_warmup["steps"] > 0
+        and int(spatial_relation_warmup_targets["deduplicated_unit_count"]) == 0
+    ):
+        raise ValueError("Enabled spatial-relation warmup has no ordered relation targets")
     training_pairs = training_counterfactual_scene_pairs(records)
     pair_for_first_scene = {
         first_scene: (pair_id, second_scene)
@@ -1784,6 +2220,10 @@ def main() -> None:
         "spatial_answer_target_audit": spatial_answer_targets,
         "spatial_answer_warmup": spatial_answer_warmup,
         "spatial_answer_warmup_target_audit": spatial_answer_warmup_targets,
+        "spatial_relation_contrastive": spatial_relation_contrastive,
+        "spatial_relation_target_audit": spatial_relation_targets,
+        "spatial_relation_warmup": spatial_relation_warmup,
+        "spatial_relation_warmup_target_audit": spatial_relation_warmup_targets,
         "language_decoder_gradient_checkpointing": (language_decoder_gradient_checkpointing),
         "scene_prefix_after_bos": scene_prefix_after_bos,
         "scene_boundary_mode": scene_boundary_mode,
@@ -2158,6 +2598,18 @@ def main() -> None:
         )
         if spatial_warmup_mismatch is not None:
             mismatches["spatial_answer_warmup"] = spatial_warmup_mismatch
+        spatial_relation_mismatch = spatial_relation_resume_contract_mismatch(
+            resume_metadata, spatial_relation_contrastive
+        )
+        if spatial_relation_mismatch is not None:
+            mismatches["spatial_relation_contrastive"] = spatial_relation_mismatch
+        spatial_relation_warmup_mismatch = spatial_relation_warmup_resume_contract_mismatch(
+            resume_metadata,
+            spatial_relation_warmup,
+            spatial_relation_warmup_targets,
+        )
+        if spatial_relation_warmup_mismatch is not None:
+            mismatches["spatial_relation_warmup"] = spatial_relation_warmup_mismatch
         expected_pair_curriculum = {
             "enabled": pair_curriculum.enabled,
             "pair_only": pair_curriculum.pair_only,
@@ -2244,6 +2696,13 @@ def main() -> None:
             latent_count=int(config["scene_encoder"]["global_latents"]),
             settings=spatial_answer_warmup,
         )
+        spatial_relation_warmup_metrics = run_spatial_relation_warmup(
+            scene_model,
+            maps,
+            pair_units,
+            language,
+            settings=spatial_relation_warmup,
+        )
     else:
         saved_warmup_metrics = resume_metadata.get("spatial_answer_warmup_metrics")
         spatial_answer_warmup_metrics = (
@@ -2256,6 +2715,18 @@ def main() -> None:
                 language,
                 latent_count=int(config["scene_encoder"]["global_latents"]),
                 settings=spatial_answer_warmup,
+            )
+        )
+        saved_relation_warmup_metrics = resume_metadata.get("spatial_relation_warmup_metrics")
+        spatial_relation_warmup_metrics = (
+            saved_relation_warmup_metrics
+            if isinstance(saved_relation_warmup_metrics, dict)
+            else run_spatial_relation_warmup(
+                scene_model,
+                maps,
+                pair_units,
+                language,
+                settings=spatial_relation_warmup,
             )
         )
     optimizer.zero_grad(set_to_none=True)
@@ -2289,6 +2760,10 @@ def main() -> None:
         epoch_spatial_answer_alternate_similarities: list[float] = []
         epoch_spatial_answer_margins: list[float] = []
         epoch_spatial_answer_eligible_units: list[int] = []
+        epoch_spatial_relation_losses: list[float] = []
+        epoch_spatial_relation_margins: list[float] = []
+        epoch_spatial_relation_minimum_margins: list[float] = []
+        epoch_spatial_relation_eligible_units: list[int] = []
         epoch_diversity_losses: list[float] = []
         epoch_diversity_cosines: list[float] = []
         epoch_diversity_max_cosines: list[float] = []
@@ -2319,6 +2794,8 @@ def main() -> None:
             pair_ranking_diagnostics: dict[str, torch.Tensor | str | None] | None = None
             spatial_answer_loss = torch.zeros((), device=language.device)
             spatial_answer_diagnostics: dict[str, torch.Tensor | int] | None = None
+            spatial_relation_loss = torch.zeros((), device=language.device)
+            spatial_relation_diagnostics: dict[str, torch.Tensor | int] | None = None
             partner_output = None
             if curriculum_batch.kind == "standard":
                 scene_id = str(curriculum_batch.scene_id)
@@ -2379,6 +2856,12 @@ def main() -> None:
                 )
                 spatial_answer_loss = pair_ranking_diagnostics["spatial_answer_contrastive_loss"]
                 spatial_answer_diagnostics = pair_ranking_diagnostics["spatial_answer_contrastive"]
+                spatial_relation_loss = pair_ranking_diagnostics[
+                    "spatial_relation_contrastive_loss"
+                ]
+                spatial_relation_diagnostics = pair_ranking_diagnostics[
+                    "spatial_relation_contrastive"
+                ]
                 full_vocab_ranking_loss = pair_ranking_diagnostics[
                     "first_answer_token_full_vocab_ranking_loss"
                 ]
@@ -2527,6 +3010,18 @@ def main() -> None:
                 )
                 epoch_spatial_answer_eligible_units.append(
                     int(spatial_answer_diagnostics["eligible_unit_count"])
+                )
+            if spatial_relation_diagnostics is not None:
+                relation_margins = spatial_relation_diagnostics["achieved_margin"]
+                if not isinstance(relation_margins, torch.Tensor):
+                    raise TypeError("Spatial-relation achieved margins must be a tensor")
+                epoch_spatial_relation_losses.append(float(spatial_relation_loss.detach().cpu()))
+                epoch_spatial_relation_margins.append(float(relation_margins.detach().mean().cpu()))
+                epoch_spatial_relation_minimum_margins.append(
+                    float(relation_margins.detach().min().cpu())
+                )
+                epoch_spatial_relation_eligible_units.append(
+                    int(spatial_relation_diagnostics["eligible_unit_count"])
                 )
             if pair_diagnostics is not None:
                 epoch_pair_losses.append(float(pair_loss.detach().cpu()))
@@ -2699,6 +3194,48 @@ def main() -> None:
                             if spatial_answer_diagnostics is None
                             else int(spatial_answer_diagnostics["unique_target_count"])
                         ),
+                        "spatial_relation_contrastive_loss": (
+                            None
+                            if spatial_relation_diagnostics is None
+                            else float(spatial_relation_loss.detach().cpu())
+                        ),
+                        "spatial_relation_mean_achieved_margin": (
+                            None
+                            if spatial_relation_diagnostics is None
+                            else float(
+                                spatial_relation_diagnostics["achieved_margin"]
+                                .detach()
+                                .mean()
+                                .cpu()
+                            )
+                        ),
+                        "spatial_relation_minimum_achieved_margin": (
+                            None
+                            if spatial_relation_diagnostics is None
+                            else float(
+                                spatial_relation_diagnostics["achieved_margin"].detach().min().cpu()
+                            )
+                        ),
+                        "spatial_relation_configured_margin": (
+                            None
+                            if spatial_relation_diagnostics is None
+                            else spatial_relation_contrastive["margin"]
+                        ),
+                        "spatial_relation_temperature": (
+                            None
+                            if spatial_relation_diagnostics is None
+                            else spatial_relation_contrastive["temperature"]
+                        ),
+                        "spatial_relation_eligible_units": (
+                            None
+                            if spatial_relation_diagnostics is None
+                            else int(spatial_relation_diagnostics["eligible_unit_count"])
+                        ),
+                        "spatial_relation_unique_ordered_regions": (
+                            None
+                            if spatial_relation_diagnostics is None
+                            else int(spatial_relation_diagnostics["unique_ordered_region_count"])
+                        ),
                         "latent_diversity_loss": float(diversity_loss.detach().cpu()),
                         "latent_mean_off_diagonal_cosine": float(
                             diversity_mean_cosine.detach().cpu()
@@ -2815,6 +3352,19 @@ def main() -> None:
         )
         mean_spatial_answer_margin = (
             float(np.mean(epoch_spatial_answer_margins)) if epoch_spatial_answer_margins else None
+        )
+        mean_spatial_relation_loss = (
+            float(np.mean(epoch_spatial_relation_losses)) if epoch_spatial_relation_losses else None
+        )
+        mean_spatial_relation_margin = (
+            float(np.mean(epoch_spatial_relation_margins))
+            if epoch_spatial_relation_margins
+            else None
+        )
+        minimum_spatial_relation_margin = (
+            float(np.min(epoch_spatial_relation_minimum_margins))
+            if epoch_spatial_relation_minimum_margins
+            else None
         )
         should_evaluate_pair_gate = pair_curriculum.gate_enabled and (
             epoch % pair_curriculum.gate_every_epochs == 0 or epoch == epochs
@@ -2954,6 +3504,25 @@ def main() -> None:
                 "spatial_answer_selected_unique_targets": int(
                     spatial_answer_targets["unique_target_count"]
                 ),
+                "spatial_relation_contrastive_loss": mean_spatial_relation_loss,
+                "spatial_relation_mean_achieved_margin": mean_spatial_relation_margin,
+                "spatial_relation_minimum_achieved_margin": (minimum_spatial_relation_margin),
+                "spatial_relation_configured_margin": (
+                    spatial_relation_contrastive["margin"]
+                    if spatial_relation_contrastive["weight"] > 0
+                    else None
+                ),
+                "spatial_relation_temperature": (
+                    spatial_relation_contrastive["temperature"]
+                    if spatial_relation_contrastive["weight"] > 0
+                    else None
+                ),
+                "spatial_relation_eligible_unit_observations": int(
+                    sum(epoch_spatial_relation_eligible_units)
+                ),
+                "spatial_relation_selected_unique_ordered_regions": int(
+                    spatial_relation_targets["unique_ordered_region_count"]
+                ),
                 "pair_batch_count": pair_batch_count,
                 "pair_batch_fraction": actual_pair_batch_fraction,
                 "pair_candidate_gate": pair_gate,
@@ -3024,6 +3593,11 @@ def main() -> None:
             "spatial_answer_warmup": spatial_answer_warmup,
             "spatial_answer_warmup_target_audit": spatial_answer_warmup_targets,
             "spatial_answer_warmup_metrics": spatial_answer_warmup_metrics,
+            "spatial_relation_contrastive": spatial_relation_contrastive,
+            "spatial_relation_target_audit": spatial_relation_targets,
+            "spatial_relation_warmup": spatial_relation_warmup,
+            "spatial_relation_warmup_target_audit": spatial_relation_warmup_targets,
+            "spatial_relation_warmup_metrics": spatial_relation_warmup_metrics,
             "pair_curriculum": {
                 "enabled": pair_curriculum.enabled,
                 "pair_only": pair_curriculum.pair_only,
@@ -3127,6 +3701,22 @@ def main() -> None:
                     "spatial_answer_selected_unique_targets": int(
                         spatial_answer_targets["unique_target_count"]
                     ),
+                    "spatial_relation_contrastive_loss": mean_spatial_relation_loss,
+                    "spatial_relation_mean_achieved_margin": (mean_spatial_relation_margin),
+                    "spatial_relation_minimum_achieved_margin": (minimum_spatial_relation_margin),
+                    "spatial_relation_configured_margin": (
+                        spatial_relation_contrastive["margin"]
+                        if spatial_relation_contrastive["weight"] > 0
+                        else None
+                    ),
+                    "spatial_relation_temperature": (
+                        spatial_relation_contrastive["temperature"]
+                        if spatial_relation_contrastive["weight"] > 0
+                        else None
+                    ),
+                    "spatial_relation_selected_unique_ordered_regions": int(
+                        spatial_relation_targets["unique_ordered_region_count"]
+                    ),
                     "pair_batch_count": pair_batch_count,
                     "pair_batch_fraction": actual_pair_batch_fraction,
                     "pair_candidate_gate": pair_gate,
@@ -3206,6 +3796,11 @@ def main() -> None:
         "spatial_answer_warmup": spatial_answer_warmup,
         "spatial_answer_warmup_target_audit": spatial_answer_warmup_targets,
         "spatial_answer_warmup_metrics": spatial_answer_warmup_metrics,
+        "spatial_relation_contrastive": spatial_relation_contrastive,
+        "spatial_relation_target_audit": spatial_relation_targets,
+        "spatial_relation_warmup": spatial_relation_warmup,
+        "spatial_relation_warmup_target_audit": spatial_relation_warmup_targets,
+        "spatial_relation_warmup_metrics": spatial_relation_warmup_metrics,
         "pair_curriculum": {
             "enabled": pair_curriculum.enabled,
             "pair_only": pair_curriculum.pair_only,

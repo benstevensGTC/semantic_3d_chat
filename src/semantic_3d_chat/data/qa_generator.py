@@ -78,15 +78,21 @@ def generate_scene_questions(
         if len(members) == 1 and members[0]["color"]["name"] != "neutral":
             member = members[0]
             color = member["color"]["name"]
-            records.append(_record(scene_id, f"What color is the {category}?", color, "attribute", member))
-            records.append(_record(scene_id, f"Tell me the {category}'s color.", color, "attribute", member))
+            records.append(
+                _record(scene_id, f"What color is the {category}?", color, "attribute", member)
+            )
+            records.append(
+                _record(scene_id, f"Tell me the {category}'s color.", color, "attribute", member)
+            )
 
     absent_categories = set(DISTRACTOR_CATEGORIES)
     if category_universe is not None:
         absent_categories.update(category_universe)
     for category in sorted(absent_categories):
         if category not in by_category:
-            records.append(_record(scene_id, f"Is there a {category} in the room?", "no", "presence"))
+            records.append(
+                _record(scene_id, f"Is there a {category} in the room?", "no", "presence")
+            )
             # Pair-derived categories get matching questions on an
             # object-removal side, making the changed fact directly scoreable.
             if category_universe is not None and category in category_universe:
@@ -134,6 +140,7 @@ def generate_scene_questions(
                 "spatial_relation",
                 subject,
                 reference_instance=object_["instance_id"],
+                reference_xyz=list(object_["expected_center_xyz_m"]),
                 predicate=predicate,
             )
         )
@@ -161,6 +168,7 @@ def generate_scene_questions(
 
     camera = oracle.get("scan_origin_xyz_m", [0.0, 0.0, 1.4])
     if objects:
+
         def distance(item: dict[str, Any]) -> float:
             return math.dist(item["expected_center_xyz_m"], camera)
 
@@ -218,7 +226,10 @@ def counterfactual_scene_groups(oracles: Mapping[str, Mapping[str, Any]]) -> dic
         second_pair = _counterfactual_metadata(oracles[second])
         if first_pair is None or second_pair is None:
             raise AssertionError("pair metadata disappeared during validation")
-        if first_pair.get("paired_scene_id") != second or second_pair.get("paired_scene_id") != first:
+        if (
+            first_pair.get("paired_scene_id") != second
+            or second_pair.get("paired_scene_id") != first
+        ):
             raise ValueError(f"{pair_id} scene references must be reciprocal")
         if first_pair.get("change_type") != second_pair.get("change_type"):
             raise ValueError(f"{pair_id} members disagree on change_type")

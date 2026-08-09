@@ -9,9 +9,11 @@ from torch import nn
 
 import semantic_3d_chat.evaluation.scene_signal_audit as audit_module
 from semantic_3d_chat.evaluation.scene_signal_audit import (
+    _canonical_relation_generation_summary,
     _checkpoint_epoch_fields,
     _configured_runtime_dtype,
     _encode_scene,
+    _generation_answer_and_provenance,
     _generation_audit,
     _install_checkpoint_lora,
     _left_right_reference_orientation_summary,
@@ -260,7 +262,18 @@ def test_generation_audit_reports_exact_normalized_side_and_complete_unit_accura
 
     summary = _normalized_generation_summary([first, second])
 
-    assert first == {
+    assert {
+        key: first[key]
+        for key in (
+            "normalized_prediction_a",
+            "normalized_prediction_b",
+            "normalized_expected_a",
+            "normalized_expected_b",
+            "normalized_exact_correct_a",
+            "normalized_exact_correct_b",
+            "normalized_exact_complete_unit_correct",
+        )
+    } == {
         "normalized_prediction_a": "red",
         "normalized_prediction_b": "orange",
         "normalized_expected_a": "red",
@@ -269,6 +282,8 @@ def test_generation_audit_reports_exact_normalized_side_and_complete_unit_accura
         "normalized_exact_correct_b": False,
         "normalized_exact_complete_unit_correct": False,
     }
+    assert first["canonical_relation_secondary_eligible_a"] is False
+    assert first["canonical_relation_secondary_eligible_b"] is False
     assert second["normalized_exact_correct_a"] is True
     assert second["normalized_exact_correct_b"] is True
     assert second["normalized_exact_complete_unit_correct"] is True
@@ -280,6 +295,101 @@ def test_generation_audit_reports_exact_normalized_side_and_complete_unit_accura
         "normalized_exact_complete_unit_correct_count": 1,
         "normalized_exact_complete_unit_accuracy": 0.5,
     }
+
+
+def test_canonical_relation_score_is_secondary_and_does_not_relax_exact_match() -> None:
+    result = _normalized_generation_result(
+        "The object is to the left of the chair.",
+        "It is on the right.",
+        "left",
+        "right",
+    )
+    summary = _canonical_relation_generation_summary([result])
+
+    assert result["normalized_exact_correct_a"] is False
+    assert result["normalized_exact_correct_b"] is False
+    assert result["normalized_exact_complete_unit_correct"] is False
+    assert result["canonical_relation_prediction_a"] == "left"
+    assert result["canonical_relation_prediction_b"] == "right"
+    assert result["canonical_relation_secondary_complete_unit_correct"] is True
+    assert summary == {
+        "canonical_relation_secondary_only": True,
+        "canonical_relation_secondary_side_count": 2,
+        "canonical_relation_secondary_correct_side_count": 2,
+        "canonical_relation_secondary_side_accuracy": 1.0,
+        "canonical_relation_secondary_complete_unit_count": 1,
+        "canonical_relation_secondary_complete_unit_correct_count": 1,
+        "canonical_relation_secondary_complete_unit_accuracy": 1.0,
+    }
+
+
+def test_canonical_relation_score_excludes_non_relation_targets_and_ambiguous_output() -> None:
+    color = _normalized_generation_result("red", "blue", "red", "blue")
+    ambiguous = _normalized_generation_result("left or right", "right", "left", "right")
+
+    color_summary = _canonical_relation_generation_summary([color])
+    ambiguous_summary = _canonical_relation_generation_summary([ambiguous])
+
+    assert color_summary["canonical_relation_secondary_side_count"] == 0
+    assert color_summary["canonical_relation_secondary_side_accuracy"] is None
+    assert ambiguous["canonical_relation_prediction_a"] is None
+    assert ambiguous_summary["canonical_relation_secondary_side_accuracy"] == 0.5
+    assert ambiguous_summary["canonical_relation_secondary_complete_unit_accuracy"] == 0.0
+
+
+def test_generation_provenance_distinguishes_eos_only_fallback_from_literal_unknown() -> None:
+    class Tokenizer:
+        def decode(self, token_ids, *, skip_special_tokens):
+            assert token_ids == [99]
+            assert skip_special_tokens is True
+            return ""
+
+    answer, provenance = _generation_answer_and_provenance(
+        Tokenizer(),
+        torch.tensor([[99]]),
+        eos_token_ids=[2, 99],
+        max_new_tokens=8,
+    )
+
+    assert answer == "unknown"
+    assert provenance == {
+        "generated_token_ids": [99],
+        "generated_token_count": 1,
+        "max_new_tokens": 8,
+        "eos_token_ids": [2, 99],
+        "termination_reason": "eos_token",
+        "terminated_by_eos": True,
+        "termination_token_id": 99,
+        "token_budget_exhausted": False,
+        "decoded_text_skip_special_tokens": "",
+        "decoded_text_after_stripping": "",
+        "decoded_text_was_empty": True,
+        "fallback_answer": "unknown",
+        "fallback_answer_used": True,
+    }
+
+
+def test_generation_provenance_records_token_budget_termination() -> None:
+    class Tokenizer:
+        def decode(self, token_ids, *, skip_special_tokens):
+            assert token_ids == [4, 5]
+            assert skip_special_tokens is True
+            return " left "
+
+    answer, provenance = _generation_answer_and_provenance(
+        Tokenizer(),
+        torch.tensor([[4, 5]]),
+        eos_token_ids=2,
+        max_new_tokens=2,
+    )
+
+    assert answer == "left"
+    assert provenance["generated_token_ids"] == [4, 5]
+    assert provenance["termination_reason"] == "max_new_tokens"
+    assert provenance["terminated_by_eos"] is False
+    assert provenance["termination_token_id"] is None
+    assert provenance["token_budget_exhausted"] is True
+    assert provenance["fallback_answer_used"] is False
 
 
 def test_generation_accuracy_is_distinct_from_prediction_change() -> None:
@@ -415,8 +525,16 @@ def test_generation_audit_attaches_exact_scores_to_each_pair(monkeypatch, tmp_pa
     )
     answers = iter(
         [
-            (torch.tensor([4.0, 1.0]), "The red!"),
-            (torch.tensor([1.0, 4.0]), "orange"),
+            (
+                torch.tensor([4.0, 1.0]),
+                "The red!",
+                {"generated_token_ids": [0], "termination_reason": "eos_token"},
+            ),
+            (
+                torch.tensor([1.0, 4.0]),
+                "orange",
+                {"generated_token_ids": [1], "termination_reason": "max_new_tokens"},
+            ),
         ]
     )
     monkeypatch.setattr(
@@ -468,8 +586,16 @@ def test_generation_audit_attaches_exact_scores_to_each_pair(monkeypatch, tmp_pa
         pair["training_selection_breakdown"]["unselected"]["normalized_exact_side_accuracy"] is None
     )
     assert generation["training_pair_selection"]["selected_complete_unit_count"] == 1
+    assert generation["scoring_policy"] == {
+        "primary_promotion_metric": "normalized_exact_complete_unit_accuracy",
+        "primary_side_metric": "normalized_exact_side_accuracy",
+        "canonical_relation_metric_role": "secondary_diagnostic_only",
+        "canonical_relation_does_not_satisfy_promotion": True,
+    }
     assert pair["examples"][0]["normalized_exact_correct_a"] is True
     assert pair["examples"][0]["normalized_exact_correct_b"] is False
+    assert pair["examples"][0]["generation_a"]["generated_token_ids"] == [0]
+    assert pair["examples"][0]["generation_b"]["termination_reason"] == "max_new_tokens"
 
 
 def test_checkpoint_epoch_fields_distinguish_selected_checkpoint_from_best_epoch() -> None:

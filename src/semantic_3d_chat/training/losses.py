@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import math
+
 import torch
 import torch.nn.functional as F
 from torch import nn
@@ -189,6 +191,121 @@ def spatial_scene_answer_contrastive_loss(
             float(margin), device=scene_tokens.device, dtype=torch.float32
         ),
         "anchor_indices": anchor_indices.detach(),
+    }
+
+
+def ordered_spatial_relation_contrastive_loss(
+    scene_tokens: torch.Tensor,
+    normalized_target_xyz: torch.Tensor,
+    normalized_reference_xyz: torch.Tensor,
+    own_answer_embeddings: torch.Tensor,
+    alternate_answer_embeddings: torch.Tensor,
+    *,
+    temperature: float = 0.2,
+    margin: float = 0.2,
+    epsilon: float = 1e-6,
+) -> tuple[torch.Tensor, dict[str, torch.Tensor | int]]:
+    """Align an ordered, spatially pooled scene relation with its answer direction.
+
+    Every final LM-dimensional scene token participates in two deterministic soft
+    pools: one centered on the normalized target coordinate and one on the
+    normalized reference coordinate.  The target-minus-reference pooled scene
+    vector is aligned with the frozen own-minus-alternate answer direction using
+    a cosine hinge.  Fixed Halton anchors provide the question-independent spatial
+    identity of each final scene-token slot.
+
+    The answer embeddings are detached deliberately.  This loss therefore updates
+    the continuous scene path, not the language model's answer embedding table.
+    """
+
+    if scene_tokens.ndim != 3:
+        raise ValueError("scene_tokens must have shape [B,L,H]")
+    batch_size, latent_count, hidden_size = scene_tokens.shape
+    if batch_size < 1 or latent_count < 1 or hidden_size < 1:
+        raise ValueError("scene_tokens cannot be empty")
+    expected_xyz_shape = (batch_size, 3)
+    if normalized_target_xyz.shape != expected_xyz_shape:
+        raise ValueError("normalized_target_xyz must have shape [B,3]")
+    if normalized_reference_xyz.shape != expected_xyz_shape:
+        raise ValueError("normalized_reference_xyz must have shape [B,3]")
+    expected_embedding_shape = (batch_size, hidden_size)
+    if own_answer_embeddings.shape != expected_embedding_shape:
+        raise ValueError("own_answer_embeddings must have shape [B,H]")
+    if alternate_answer_embeddings.shape != expected_embedding_shape:
+        raise ValueError("alternate_answer_embeddings must have shape [B,H]")
+    if not math.isfinite(float(temperature)) or temperature <= 0:
+        raise ValueError("temperature must be finite and positive")
+    if not math.isfinite(float(margin)) or not 0.0 <= margin <= 1.0:
+        raise ValueError("margin must be finite and in [0, 1]")
+    if not math.isfinite(float(epsilon)) or epsilon <= 0:
+        raise ValueError("epsilon must be finite and positive")
+
+    device = scene_tokens.device
+    target_xyz = normalized_target_xyz.to(device=device, dtype=torch.float32)
+    reference_xyz = normalized_reference_xyz.to(device=device, dtype=torch.float32)
+    if not bool(torch.isfinite(target_xyz).all()):
+        raise ValueError("normalized_target_xyz must contain only finite values")
+    if not bool(torch.isfinite(reference_xyz).all()):
+        raise ValueError("normalized_reference_xyz must contain only finite values")
+
+    anchors = spatial_anchors(latent_count).to(device=device, dtype=torch.float32)
+
+    def soft_pool_weights(coordinates: torch.Tensor) -> torch.Tensor:
+        squared_distance = (anchors.unsqueeze(0) - coordinates.unsqueeze(1)).square().sum(-1)
+        weights = torch.softmax(-squared_distance / float(temperature), dim=-1)
+        # Extremely small temperatures can underflow distant softmax entries to
+        # exactly zero in float32.  A positive floor preserves the stated dense
+        # all-token contract without assigning a practically meaningful hard
+        # retrieval cutoff, then renormalization keeps each row a distribution.
+        weights = weights.clamp_min(torch.finfo(weights.dtype).tiny)
+        return weights / weights.sum(dim=-1, keepdim=True)
+
+    target_weights = soft_pool_weights(target_xyz)
+    reference_weights = soft_pool_weights(reference_xyz)
+    tokens = scene_tokens.float()
+    target_pool = torch.einsum("bl,blh->bh", target_weights, tokens)
+    reference_pool = torch.einsum("bl,blh->bh", reference_weights, tokens)
+    relation = target_pool - reference_pool
+
+    # Normalize each frozen answer first so embedding-table norm cannot dominate
+    # the semantic own-minus-alternate direction.
+    own = F.normalize(
+        own_answer_embeddings.detach().to(device=device, dtype=torch.float32),
+        dim=-1,
+        eps=epsilon,
+    )
+    alternate = F.normalize(
+        alternate_answer_embeddings.detach().to(device=device, dtype=torch.float32),
+        dim=-1,
+        eps=epsilon,
+    )
+    raw_answer_direction = own - alternate
+    raw_answer_direction_norm = raw_answer_direction.norm(dim=-1)
+    if bool((raw_answer_direction_norm <= epsilon).any()):
+        raise ValueError("own and alternate answer embeddings must define a nonzero direction")
+    answer_direction = F.normalize(raw_answer_direction, dim=-1, eps=epsilon)
+
+    relation_norm = relation.norm(dim=-1)
+    cosine = F.cosine_similarity(relation, answer_direction, dim=-1, eps=epsilon)
+    hinge_shortfall = F.relu(float(margin) - cosine)
+    loss = hinge_shortfall.mean()
+
+    return loss, {
+        "eligible_side_count": int(batch_size),
+        "latent_count": int(latent_count),
+        "target_weights": target_weights.detach(),
+        "reference_weights": reference_weights.detach(),
+        "minimum_target_weight": target_weights.min().detach(),
+        "minimum_reference_weight": reference_weights.min().detach(),
+        "achieved_margin": cosine.detach(),
+        "relation_answer_cosine": cosine.detach(),
+        "hinge_shortfall": hinge_shortfall.detach(),
+        "relation_norm": relation_norm.detach(),
+        "answer_direction_norm_before_normalization": raw_answer_direction_norm.detach(),
+        "configured_temperature": torch.tensor(
+            float(temperature), device=device, dtype=torch.float32
+        ),
+        "configured_margin": torch.tensor(float(margin), device=device, dtype=torch.float32),
     }
 
 
