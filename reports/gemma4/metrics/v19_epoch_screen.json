@@ -1,0 +1,386 @@
+{
+  "checkpoint_tensor_state_loaded": false,
+  "conditional_max_optimizer_updates": 12,
+  "config_hash": "26e2e91e5daf",
+  "config_path": "configs/experiments/gemma4_color_mirror_signed_x_moment_v19.yaml",
+  "continuation_authorized": false,
+  "continuation_gate_passed": false,
+  "cumulative_update_evidence": {
+    "cumulative_microsteps": [
+      12,
+      24,
+      36,
+      48
+    ],
+    "frozen_global_state_sha256": "ce3bf864eed6dd4a50f1b67296981e144d6a79e9cf192ad9a9230f2ae18208dc",
+    "history_prefixes_exact": true,
+    "microsteps_per_optimizer_update": 12,
+    "optimizer_steps": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "screen_optimizer_updates": 4,
+    "signed_x_states_unique": true,
+    "stage_1_optimizer_updates": 1,
+    "stage_1_stop_required": true
+  },
+  "decision": "screen_failed_no_extension_no_greedy_audit",
+  "eligible_epoch_count": 4,
+  "epoch_count": 4,
+  "epochs": [
+    {
+      "checkpoint_metadata_path": "data_gemma4/checkpoints/gemma4_color_mirror_signed_x_moment_v19/epoch_001/metadata.json",
+      "checkpoint_metadata_sha256": "c5e8920132c3c7486ed91273240e09a47802fd7aa1c609b9208935510abfaef1",
+      "color": {
+        "candidate_sides": 12,
+        "candidate_units": 6,
+        "full_vocab_sides": 12,
+        "full_vocab_units": 6,
+        "mean_candidate_margin": 3.9806721210479736,
+        "mean_full_vocab_margin": 2.1640625,
+        "minimum_candidate_margin": 0.59375,
+        "minimum_full_vocab_margin": 0.5625
+      },
+      "color_eligible": true,
+      "continuation_gate_passed": false,
+      "cumulative_microsteps": 12,
+      "epoch": 1,
+      "frozen_global_scene_residual_state_sha256": "ce3bf864eed6dd4a50f1b67296981e144d6a79e9cf192ad9a9230f2ae18208dc",
+      "full_teacher_gate_passed": false,
+      "mirror": {
+        "candidate_sides": 5,
+        "candidate_units": 0,
+        "full_vocab_sides": 5,
+        "full_vocab_units": 0,
+        "mean_candidate_margin": 0.1145833358168602,
+        "mean_full_vocab_margin": 0.1145833358168602,
+        "minimum_candidate_margin": -1.0,
+        "minimum_full_vocab_margin": -1.0
+      },
+      "optimizer_step": 1,
+      "signed_x_state_sha256": "405895c6ffb39413e80bce0f500704970c64866a2651e850d0e9e6c202fd1f5e"
+    },
+    {
+      "checkpoint_metadata_path": "data_gemma4/checkpoints/gemma4_color_mirror_signed_x_moment_v19/epoch_002/metadata.json",
+      "checkpoint_metadata_sha256": "b80ac943afd10f48016d84f5f63df2a4dc9b777eaae2568397a9ae8183db2575",
+      "color": {
+        "candidate_sides": 12,
+        "candidate_units": 6,
+        "full_vocab_sides": 12,
+        "full_vocab_units": 6,
+        "mean_candidate_margin": 3.8609211444854736,
+        "mean_full_vocab_margin": 2.1588542461395264,
+        "minimum_candidate_margin": 0.4375,
+        "minimum_full_vocab_margin": 0.4375
+      },
+      "color_eligible": true,
+      "continuation_gate_passed": false,
+      "cumulative_microsteps": 24,
+      "epoch": 2,
+      "frozen_global_scene_residual_state_sha256": "ce3bf864eed6dd4a50f1b67296981e144d6a79e9cf192ad9a9230f2ae18208dc",
+      "full_teacher_gate_passed": false,
+      "mirror": {
+        "candidate_sides": 5,
+        "candidate_units": 0,
+        "full_vocab_sides": 5,
+        "full_vocab_units": 0,
+        "mean_candidate_margin": 0.0729166641831398,
+        "mean_full_vocab_margin": 0.0729166641831398,
+        "minimum_candidate_margin": -1.125,
+        "minimum_full_vocab_margin": -1.125
+      },
+      "optimizer_step": 2,
+      "signed_x_state_sha256": "1596f7770077982c37744a9b669ce39ba754ec8c5213d90590d087c5db47b3b0"
+    },
+    {
+      "checkpoint_metadata_path": "data_gemma4/checkpoints/gemma4_color_mirror_signed_x_moment_v19/epoch_003/metadata.json",
+      "checkpoint_metadata_sha256": "c038ca8c79553dbfcaeff6c3ef2a9de4a1ee011ea49156e2c78678e830030739",
+      "color": {
+        "candidate_sides": 12,
+        "candidate_units": 6,
+        "full_vocab_sides": 12,
+        "full_vocab_units": 6,
+        "mean_candidate_margin": 3.974609375,
+        "mean_full_vocab_margin": 2.140625,
+        "minimum_candidate_margin": 0.5625,
+        "minimum_full_vocab_margin": 0.5625
+      },
+      "color_eligible": true,
+      "continuation_gate_passed": false,
+      "cumulative_microsteps": 36,
+      "epoch": 3,
+      "frozen_global_scene_residual_state_sha256": "ce3bf864eed6dd4a50f1b67296981e144d6a79e9cf192ad9a9230f2ae18208dc",
+      "full_teacher_gate_passed": false,
+      "mirror": {
+        "candidate_sides": 6,
+        "candidate_units": 0,
+        "full_vocab_sides": 6,
+        "full_vocab_units": 0,
+        "mean_candidate_margin": 0.1041666641831398,
+        "mean_full_vocab_margin": 0.1041666641831398,
+        "minimum_candidate_margin": -0.9375,
+        "minimum_full_vocab_margin": -0.9375
+      },
+      "optimizer_step": 3,
+      "signed_x_state_sha256": "a507d6ec0669a99a1aedf817f638715196d4a4077c180cdf29f4f8f50035853d"
+    },
+    {
+      "checkpoint_metadata_path": "data_gemma4/checkpoints/gemma4_color_mirror_signed_x_moment_v19/epoch_004/metadata.json",
+      "checkpoint_metadata_sha256": "948fddfc87664470bfe14d85730b531d1317793e05371d68f2e265a83c095e95",
+      "color": {
+        "candidate_sides": 12,
+        "candidate_units": 6,
+        "full_vocab_sides": 12,
+        "full_vocab_units": 6,
+        "mean_candidate_margin": 3.9590251445770264,
+        "mean_full_vocab_margin": 2.1953125,
+        "minimum_candidate_margin": 0.5,
+        "minimum_full_vocab_margin": 0.5
+      },
+      "color_eligible": true,
+      "continuation_gate_passed": false,
+      "cumulative_microsteps": 48,
+      "epoch": 4,
+      "frozen_global_scene_residual_state_sha256": "ce3bf864eed6dd4a50f1b67296981e144d6a79e9cf192ad9a9230f2ae18208dc",
+      "full_teacher_gate_passed": false,
+      "mirror": {
+        "candidate_sides": 6,
+        "candidate_units": 0,
+        "full_vocab_sides": 6,
+        "full_vocab_units": 0,
+        "mean_candidate_margin": 0.1145833358168602,
+        "mean_full_vocab_margin": 0.1145833358168602,
+        "minimum_candidate_margin": -1.0,
+        "minimum_full_vocab_margin": -1.0
+      },
+      "optimizer_step": 4,
+      "signed_x_state_sha256": "80ad01920c05431fdb94dfaea5f37476435295e2c7b98f3edc3ab9cd31c4aebb"
+    }
+  ],
+  "full_teacher_gate_passed": false,
+  "greedy_audit_authorized": false,
+  "greedy_audit_forbidden": true,
+  "initialization_provenance": {
+    "adapter_sha256": "1a7946d2e40aaf4bf66dc570bff19fa8d6ba4425e4e0d59bd52b809bd23dae7a",
+    "checkpoint": "data_gemma4/checkpoints/gemma4_color_mirror_centered_content_gate_v18/epoch_004",
+    "checkpoint_config_hash": "38b0fd8e679d",
+    "checkpoint_epoch": 4,
+    "checkpoint_output_namespace": "gemma4_color_mirror_centered_content_gate_v18",
+    "checkpoint_source_provenance": {
+      "available": true,
+      "head_commit": "251b776523d4a0d397b3c767120ae7d997fbe562",
+      "head_tree": "792efe8ed5bdd0c00fe4cb1f6a15ce9fdc93b6b7",
+      "is_clean": true,
+      "schema_version": 1,
+      "scope": "repository_excluding_generated_artifacts_v1",
+      "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "expected_adapter_sha256": "1a7946d2e40aaf4bf66dc570bff19fa8d6ba4425e4e0d59bd52b809bd23dae7a",
+    "expected_metadata_sha256": "4853355ef4810f284d9b36eca1f0f1ade71319f4f6f579a5b079ce6178eb2344",
+    "expected_source_global_scene_residual_state_sha256": "ce3bf864eed6dd4a50f1b67296981e144d6a79e9cf192ad9a9230f2ae18208dc",
+    "global_scene_residual_frozen": true,
+    "history_loaded": false,
+    "metadata_sha256": "4853355ef4810f284d9b36eca1f0f1ade71319f4f6f579a5b079ce6178eb2344",
+    "mode": "frozen_v18_residual_base_plus_zero_output_signed_x_residual",
+    "optimizer_state_loaded": false,
+    "schema_version": 4,
+    "signed_x_scene_residual_initial_state_sha256": "55b7cb21d0ecbe945cabccfacd5b6aa94693743ceee78443f37a5ca0d1ac68b1",
+    "signed_x_scene_residual_zero_output": true,
+    "source_global_scene_residual_state_sha256": "ce3bf864eed6dd4a50f1b67296981e144d6a79e9cf192ad9a9230f2ae18208dc"
+  },
+  "model_inference_executed": false,
+  "pair_membership_sha256": "99ee448c23fb71b7269a353a54b2156ac55701847af170597dcc351af15cbcbe",
+  "pair_unit_selection_sha256": "d5928cb783339ef62fff5c14a8c7f85f90d3a7a6cb8edad0a784998082740d3e",
+  "question_dependent_scene_processing": false,
+  "ranking": [
+    {
+      "checkpoint_metadata_path": "data_gemma4/checkpoints/gemma4_color_mirror_signed_x_moment_v19/epoch_004/metadata.json",
+      "checkpoint_metadata_sha256": "948fddfc87664470bfe14d85730b531d1317793e05371d68f2e265a83c095e95",
+      "color": {
+        "candidate_sides": 12,
+        "candidate_units": 6,
+        "full_vocab_sides": 12,
+        "full_vocab_units": 6,
+        "mean_candidate_margin": 3.9590251445770264,
+        "mean_full_vocab_margin": 2.1953125,
+        "minimum_candidate_margin": 0.5,
+        "minimum_full_vocab_margin": 0.5
+      },
+      "color_eligible": true,
+      "continuation_gate_passed": false,
+      "cumulative_microsteps": 48,
+      "epoch": 4,
+      "frozen_global_scene_residual_state_sha256": "ce3bf864eed6dd4a50f1b67296981e144d6a79e9cf192ad9a9230f2ae18208dc",
+      "full_teacher_gate_passed": false,
+      "mirror": {
+        "candidate_sides": 6,
+        "candidate_units": 0,
+        "full_vocab_sides": 6,
+        "full_vocab_units": 0,
+        "mean_candidate_margin": 0.1145833358168602,
+        "mean_full_vocab_margin": 0.1145833358168602,
+        "minimum_candidate_margin": -1.0,
+        "minimum_full_vocab_margin": -1.0
+      },
+      "optimizer_step": 4,
+      "rank": 1,
+      "signed_x_state_sha256": "80ad01920c05431fdb94dfaea5f37476435295e2c7b98f3edc3ab9cd31c4aebb"
+    },
+    {
+      "checkpoint_metadata_path": "data_gemma4/checkpoints/gemma4_color_mirror_signed_x_moment_v19/epoch_003/metadata.json",
+      "checkpoint_metadata_sha256": "c038ca8c79553dbfcaeff6c3ef2a9de4a1ee011ea49156e2c78678e830030739",
+      "color": {
+        "candidate_sides": 12,
+        "candidate_units": 6,
+        "full_vocab_sides": 12,
+        "full_vocab_units": 6,
+        "mean_candidate_margin": 3.974609375,
+        "mean_full_vocab_margin": 2.140625,
+        "minimum_candidate_margin": 0.5625,
+        "minimum_full_vocab_margin": 0.5625
+      },
+      "color_eligible": true,
+      "continuation_gate_passed": false,
+      "cumulative_microsteps": 36,
+      "epoch": 3,
+      "frozen_global_scene_residual_state_sha256": "ce3bf864eed6dd4a50f1b67296981e144d6a79e9cf192ad9a9230f2ae18208dc",
+      "full_teacher_gate_passed": false,
+      "mirror": {
+        "candidate_sides": 6,
+        "candidate_units": 0,
+        "full_vocab_sides": 6,
+        "full_vocab_units": 0,
+        "mean_candidate_margin": 0.1041666641831398,
+        "mean_full_vocab_margin": 0.1041666641831398,
+        "minimum_candidate_margin": -0.9375,
+        "minimum_full_vocab_margin": -0.9375
+      },
+      "optimizer_step": 3,
+      "rank": 2,
+      "signed_x_state_sha256": "a507d6ec0669a99a1aedf817f638715196d4a4077c180cdf29f4f8f50035853d"
+    },
+    {
+      "checkpoint_metadata_path": "data_gemma4/checkpoints/gemma4_color_mirror_signed_x_moment_v19/epoch_001/metadata.json",
+      "checkpoint_metadata_sha256": "c5e8920132c3c7486ed91273240e09a47802fd7aa1c609b9208935510abfaef1",
+      "color": {
+        "candidate_sides": 12,
+        "candidate_units": 6,
+        "full_vocab_sides": 12,
+        "full_vocab_units": 6,
+        "mean_candidate_margin": 3.9806721210479736,
+        "mean_full_vocab_margin": 2.1640625,
+        "minimum_candidate_margin": 0.59375,
+        "minimum_full_vocab_margin": 0.5625
+      },
+      "color_eligible": true,
+      "continuation_gate_passed": false,
+      "cumulative_microsteps": 12,
+      "epoch": 1,
+      "frozen_global_scene_residual_state_sha256": "ce3bf864eed6dd4a50f1b67296981e144d6a79e9cf192ad9a9230f2ae18208dc",
+      "full_teacher_gate_passed": false,
+      "mirror": {
+        "candidate_sides": 5,
+        "candidate_units": 0,
+        "full_vocab_sides": 5,
+        "full_vocab_units": 0,
+        "mean_candidate_margin": 0.1145833358168602,
+        "mean_full_vocab_margin": 0.1145833358168602,
+        "minimum_candidate_margin": -1.0,
+        "minimum_full_vocab_margin": -1.0
+      },
+      "optimizer_step": 1,
+      "rank": 3,
+      "signed_x_state_sha256": "405895c6ffb39413e80bce0f500704970c64866a2651e850d0e9e6c202fd1f5e"
+    },
+    {
+      "checkpoint_metadata_path": "data_gemma4/checkpoints/gemma4_color_mirror_signed_x_moment_v19/epoch_002/metadata.json",
+      "checkpoint_metadata_sha256": "b80ac943afd10f48016d84f5f63df2a4dc9b777eaae2568397a9ae8183db2575",
+      "color": {
+        "candidate_sides": 12,
+        "candidate_units": 6,
+        "full_vocab_sides": 12,
+        "full_vocab_units": 6,
+        "mean_candidate_margin": 3.8609211444854736,
+        "mean_full_vocab_margin": 2.1588542461395264,
+        "minimum_candidate_margin": 0.4375,
+        "minimum_full_vocab_margin": 0.4375
+      },
+      "color_eligible": true,
+      "continuation_gate_passed": false,
+      "cumulative_microsteps": 24,
+      "epoch": 2,
+      "frozen_global_scene_residual_state_sha256": "ce3bf864eed6dd4a50f1b67296981e144d6a79e9cf192ad9a9230f2ae18208dc",
+      "full_teacher_gate_passed": false,
+      "mirror": {
+        "candidate_sides": 5,
+        "candidate_units": 0,
+        "full_vocab_sides": 5,
+        "full_vocab_units": 0,
+        "mean_candidate_margin": 0.0729166641831398,
+        "mean_full_vocab_margin": 0.0729166641831398,
+        "minimum_candidate_margin": -1.125,
+        "minimum_full_vocab_margin": -1.125
+      },
+      "optimizer_step": 2,
+      "rank": 4,
+      "signed_x_state_sha256": "1596f7770077982c37744a9b669ce39ba754ec8c5213d90590d087c5db47b3b0"
+    }
+  ],
+  "ranking_descending": [
+    "mirror_full_vocab_units",
+    "mirror_full_vocab_sides",
+    "mirror_candidate_units",
+    "mirror_candidate_sides",
+    "mirror_mean_full_vocab_margin",
+    "mirror_minimum_full_vocab_margin"
+  ],
+  "report_only": true,
+  "schema_version": 1,
+  "selected_checkpoint_metadata_path": "data_gemma4/checkpoints/gemma4_color_mirror_signed_x_moment_v19/epoch_004/metadata.json",
+  "selected_checkpoint_metadata_sha256": "948fddfc87664470bfe14d85730b531d1317793e05371d68f2e265a83c095e95",
+  "selected_epoch": 4,
+  "selected_signed_x_state_sha256": "80ad01920c05431fdb94dfaea5f37476435295e2c7b98f3edc3ab9cd31c4aebb",
+  "selection_artifact_path": "reports/gemma4/metrics/training_selection_gemma4_color_mirror_signed_x_moment_v19.json",
+  "selection_artifact_sha256": "1ba9111f1845c1a1d8640aefd415cb6d44656ae3f66596f5f205a9bde75d4b86",
+  "selection_ids_sha256": "7f0714e3151c9ddb57c1da95a457820a833e490c070881a88a9fee4a9168f933",
+  "selection_policy": {
+    "conditional_max_optimizer_updates": 12,
+    "continuation_requires": {
+      "mirror_minimum_full_vocab_sides": 8,
+      "mirror_minimum_full_vocab_units": 2
+    },
+    "eligibility_requires": {
+      "color_full_vocab_sides": 12,
+      "color_full_vocab_units": 6,
+      "color_positive_minimum_candidate_margin": true,
+      "color_positive_minimum_full_vocab_margin": true
+    },
+    "full_teacher_gate_requires": {
+      "all_candidate_and_full_vocab_minimum_margins_positive": true,
+      "color_full_vocab_sides": 12,
+      "color_full_vocab_units": 6,
+      "mirror_full_vocab_sides": 12,
+      "mirror_full_vocab_units": 6
+    },
+    "greedy_audit_only_after_full_teacher_gate": true,
+    "role": "signed_x_moment_architecture_screen",
+    "schema_version": 1,
+    "screen_optimizer_updates": 4,
+    "source_checkpoint_epoch": 4,
+    "stage_1_optimizer_updates": 1,
+    "stage_1_stop_required": true
+  },
+  "selection_policy_sha256": "3654291e519c2fc40a2f851cbb51e6dd27061312b1c8583da08870aa74c41277",
+  "selector_type": "strict_v19_signed_x_moment_epoch_selector",
+  "source_provenance": {
+    "available": true,
+    "head_commit": "805b4bf733145b7e836554d98aadb82f472900ab",
+    "head_tree": "05850ebdcefcb9de03e70d0cd3267af4aa439eea",
+    "is_clean": true,
+    "schema_version": 1,
+    "scope": "repository_excluding_generated_artifacts_v1",
+    "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

@@ -1,0 +1,114 @@
+{
+  "audit_type": "v19_exact_update1_match_verifier",
+  "checkpoint": "data_gemma4/checkpoints/gemma4_color_mirror_signed_x_moment_v19/epoch_001",
+  "checkpoint_artifact_hashes": {
+    "adapter_sha256": "b861a2120f07211dd07839ef4a976ce91bbd87e5b25f91bb3d1c33dc5cf9a793",
+    "metadata_sha256": "c5e8920132c3c7486ed91273240e09a47802fd7aa1c609b9208935510abfaef1",
+    "optimizer_sha256": "9c2f833465ad8abf3500d54f8196a51b6c57b5d9b9c8bb819758e4c46af40313"
+  },
+  "config_hash": "26e2e91e5daffe16e49ad5cb061c465a11eb36823f8cb61c7eb8ee68f89fb142",
+  "frozen_global_scene_residual_state_sha256": "ce3bf864eed6dd4a50f1b67296981e144d6a79e9cf192ad9a9230f2ae18208dc",
+  "frozen_lora_bank_state_sha256": {
+    "extension_v13": "4eb90fb9b0bea579d14cfcb0f61ebd5b6d566fd600bd3d5e1bfe5177a39e1b34",
+    "inherited_v12": "dec768bed654c8c4e16da0318857543ad54d8f5f68f4d24a9a87cd19ec706594"
+  },
+  "frozen_scene_state_sha256": "690bd890bfda024dbb5c7d3c68087b8113bc3b8ee81dd6143c7eb2a884e7245b",
+  "match": true,
+  "model_loaded": false,
+  "optimizer_deserialization": {
+    "canonical_state_validated": true,
+    "map_location": "cpu",
+    "weights_only": true
+  },
+  "optimizer_deserialized": true,
+  "optimizer_state_manifest": {
+    "all_state_tensors_sha256": "eab08e409cdde2c177fb349e9b9a25bf7e46c310c6294478024739336607b157",
+    "optimizer": "AdamW",
+    "param_groups": [
+      {
+        "amsgrad": false,
+        "betas": [
+          0.9,
+          0.999
+        ],
+        "capturable": false,
+        "decoupled_weight_decay": true,
+        "differentiable": false,
+        "eps": 1e-08,
+        "foreach": false,
+        "fused": false,
+        "lr": 0.0001,
+        "maximize": false,
+        "name": "signed_x_output_projection",
+        "params": [
+          0
+        ],
+        "weight_decay": 0.0
+      }
+    ],
+    "parameter_order": [
+      {
+        "dtype": "float32",
+        "name": "output_projection.weight",
+        "parameter_id": 0,
+        "shape": [
+          1536,
+          128
+        ]
+      }
+    ],
+    "schema_version": 1,
+    "state_parameter_count": 1,
+    "states": [
+      {
+        "parameter_id": 0,
+        "parameter_name": "output_projection.weight",
+        "state": {
+          "exp_avg": {
+            "dtype": "float32",
+            "finite": true,
+            "sha256": "812cd25be3e6d011466bac7fe76e02b98e7a0a0e078ba057bc71688ffe97ae48",
+            "shape": [
+              1536,
+              128
+            ]
+          },
+          "exp_avg_sq": {
+            "dtype": "float32",
+            "finite": true,
+            "sha256": "819a1328709fc3926c1f6602f9729b97073c8bcf5e27e08906677b85a05e795c",
+            "shape": [
+              1536,
+              128
+            ]
+          },
+          "step": {
+            "dtype": "float32",
+            "finite": true,
+            "sha256": "27eba474bb69d6b41016220a789a78bb98f7dde8ce8341efa57c53773a12079b",
+            "shape": [],
+            "value": 1.0
+          }
+        }
+      }
+    ]
+  },
+  "optimizer_state_sha256": "2404cf197e6d497e331e7cd95e95695ed6cd70fbf665c4a5b7eb91f678007bb8",
+  "oracle_loaded": false,
+  "output_projection_sha256": "58ed6f725e87d4ab634b2076be1bbb226a54ca9e9017c1d976835c576310a393",
+  "preflight_sha256": "316512799ea0c6a696a66cbca8b877b9af8a3c580afe5e3036389653e92915d5",
+  "report_only": true,
+  "scene_map_loaded": false,
+  "schema_version": 1,
+  "signed_x_state_sha256": "405895c6ffb39413e80bce0f500704970c64866a2651e850d0e9e6c202fd1f5e",
+  "source_provenance": {
+    "available": true,
+    "head_commit": "805b4bf733145b7e836554d98aadb82f472900ab",
+    "head_tree": "05850ebdcefcb9de03e70d0cd3267af4aa439eea",
+    "is_clean": true,
+    "schema_version": 1,
+    "scope": "repository_excluding_generated_artifacts_v1",
+    "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "stage_2_authorized": true
+}
