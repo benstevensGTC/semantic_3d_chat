@@ -1,0 +1,4024 @@
+{
+  "aggregate_across_six_units": {
+    "candidate_hinge_weighted": {
+      "aggregate": {
+        "both_zero": false,
+        "cancellation_ratio": 0.9870370213002332,
+        "cosine_similarity": 0.9483970494040554,
+        "gradient_a_l2": 59.75091417618443,
+        "gradient_b_l2": 64.8712762359822,
+        "norm_sum_denominator": 124.62219041216662,
+        "summed_gradient_l2": 123.00671561233541
+      },
+      "counterfactual_gradient_sha256": "226caac17d0f5ff589624f29d1ac1f6fc868bcb0e03d342816bbdd14c610901f",
+      "per_layer": {
+        "30": {
+          "both_zero": false,
+          "cancellation_ratio": 0.9899863252765331,
+          "cosine_similarity": 0.9601129189294572,
+          "gradient_a_l2": 24.329115953013275,
+          "gradient_b_l2": 25.768558269035907,
+          "norm_sum_denominator": 50.09767422204918,
+          "summed_gradient_l2": 49.59601240798737
+        },
+        "31": {
+          "both_zero": false,
+          "cancellation_ratio": 0.9919721919618304,
+          "cosine_similarity": 0.9679743171611368,
+          "gradient_a_l2": 35.839900167657646,
+          "gradient_b_l2": 38.57756710211427,
+          "norm_sum_denominator": 74.41746726977192,
+          "summed_gradient_l2": 73.82005812784342
+        },
+        "32": {
+          "both_zero": false,
+          "cancellation_ratio": 0.989481298102602,
+          "cosine_similarity": 0.9581264828937139,
+          "gradient_a_l2": 28.874737182920047,
+          "gradient_b_l2": 30.164893015345516,
+          "norm_sum_denominator": 59.03963019826556,
+          "summed_gradient_l2": 58.41860992807739
+        },
+        "33": {
+          "both_zero": false,
+          "cancellation_ratio": 0.9768082183939082,
+          "cosine_similarity": 0.9078351509888951,
+          "gradient_a_l2": 29.32604593913268,
+          "gradient_b_l2": 33.854311853513714,
+          "norm_sum_denominator": 63.18035779264639,
+          "summed_gradient_l2": 61.715092732924596
+        }
+      },
+      "per_module": {
+        "model.language_model.layers.30.self_attn.o_proj": {
+          "both_zero": false,
+          "cancellation_ratio": 0.9903918281028374,
+          "cosine_similarity": 0.9617159347649269,
+          "gradient_a_l2": 22.930608134136136,
+          "gradient_b_l2": 24.381670002486636,
+          "norm_sum_denominator": 47.31227813662277,
+          "summed_gradient_l2": 46.85769363543974
+        },
+        "model.language_model.layers.30.self_attn.q_proj": {
+          "both_zero": false,
+          "cancellation_ratio": 0.9867758677271005,
+          "cosine_similarity": 0.9474446764922232,
+          "gradient_a_l2": 8.129765904000722,
+          "gradient_b_l2": 8.339829923597911,
+          "norm_sum_denominator": 16.46959582759863,
+          "summed_gradient_l2": 16.251799713893273
+        },
+        "model.language_model.layers.31.self_attn.o_proj": {
+          "both_zero": false,
+          "cancellation_ratio": 0.9920515020398041,
+          "cosine_similarity": 0.9682865393959232,
+          "gradient_a_l2": 35.43471374857343,
+          "gradient_b_l2": 38.23513892217456,
+          "norm_sum_denominator": 73.66985267074799,
+          "summed_gradient_l2": 73.08428799706661
+        },
+        "model.language_model.layers.31.self_attn.q_proj": {
+          "both_zero": false,
+          "cancellation_ratio": 0.9899010859283912,
+          "cosine_similarity": 0.9597863764113551,
+          "gradient_a_l2": 5.373965536205688,
+          "gradient_b_l2": 5.128628970801169,
+          "norm_sum_denominator": 10.502594507006858,
+          "summed_gradient_l2": 10.396529707551645
+        },
+        "model.language_model.layers.32.self_attn.o_proj": {
+          "both_zero": false,
+          "cancellation_ratio": 0.9897591317287702,
+          "cosine_similarity": 0.9592269409806898,
+          "gradient_a_l2": 28.570724306819166,
+          "gradient_b_l2": 29.84281494298529,
+          "norm_sum_denominator": 58.41353924980446,
+          "summed_gradient_l2": 57.815333889090894
+        },
+        "model.language_model.layers.32.self_attn.q_proj": {
+          "both_zero": false,
+          "cancellation_ratio": 0.9765087374293354,
+          "cosine_similarity": 0.9070789869475845,
+          "gradient_a_l2": 4.179014233815525,
+          "gradient_b_l2": 4.396267383357603,
+          "norm_sum_denominator": 8.575281617173129,
+          "summed_gradient_l2": 8.373837425086721
+        },
+        "model.language_model.layers.33.self_attn.o_proj": {
+          "both_zero": false,
+          "cancellation_ratio": 0.9780504668878234,
+          "cosine_similarity": 0.9127320931791542,
+          "gradient_a_l2": 28.876612136799714,
+          "gradient_b_l2": 33.254833943344565,
+          "norm_sum_denominator": 62.13144608014428,
+          "summed_gradient_l2": 60.76768984710073
+        },
+        "model.language_model.layers.33.self_attn.q_proj": {
+          "both_zero": false,
+          "cancellation_ratio": 0.9402082921017365,
+          "cosine_similarity": 0.7652858950426021,
+          "gradient_a_l2": 5.114512872693342,
+          "gradient_b_l2": 6.342747864729926,
+          "norm_sum_denominator": 11.457260737423269,
+          "summed_gradient_l2": 10.772211550097014
+        }
+      },
+      "reference_gradient_sha256": "0436e234378f33edf1d7e76e87e3e053ce78bbed6f1578a50492059b3b83f140"
+    },
+    "decoder_total": {
+      "aggregate": {
+        "both_zero": false,
+        "cancellation_ratio": 0.9874131814062462,
+        "cosine_similarity": 0.9497810789174258,
+        "gradient_a_l2": 86.92435130503209,
+        "gradient_b_l2": 98.27065446767268,
+        "norm_sum_denominator": 185.19500577270477,
+        "summed_gradient_l2": 182.86398983057455
+      },
+      "counterfactual_gradient_sha256": "618100191b85f96989311bd82fbea5c935bc4e2e48760e5c139b5c6e335ca004",
+      "per_layer": {
+        "30": {
+          "both_zero": false,
+          "cancellation_ratio": 0.9907270983957018,
+          "cosine_similarity": 0.9630345039525019,
+          "gradient_a_l2": 35.622255321293764,
+          "gradient_b_l2": 38.22336016587433,
+          "norm_sum_denominator": 73.84561548716809,
+          "summed_gradient_l2": 73.16085236084675
+        },
+        "31": {
+          "both_zero": false,
+          "cancellation_ratio": 0.9917508221978669,
+          "cosine_similarity": 0.9670601197456894,
+          "gradient_a_l2": 50.32162699826664,
+          "gradient_b_l2": 55.51338363449262,
+          "norm_sum_denominator": 105.83501063275926,
+          "summed_gradient_l2": 104.96195881235899
+        },
+        "32": {
+          "both_zero": false,
+          "cancellation_ratio": 0.9888492185355497,
+          "cosine_similarity": 0.9555834992296104,
+          "gradient_a_l2": 40.602716244055166,
+          "gradient_b_l2": 43.75586659697129,
+          "norm_sum_denominator": 84.35858284102645,
+          "summed_gradient_l2": 83.41791871911543
+        },
+        "33": {
+          "both_zero": false,
+          "cancellation_ratio": 0.9814161139887103,
+          "cosine_similarity": 0.925546983631265,
+          "gradient_a_l2": 45.89173199473999,
+          "gradient_b_l2": 56.56663895735741,
+          "norm_sum_denominator": 102.4583709520974,
+          "summed_gradient_l2": 100.55429626542119
+        }
+      },
+      "per_module": {
+        "model.language_model.layers.30.self_attn.o_proj": {
+          "both_zero": false,
+          "cancellation_ratio": 0.9905977105898975,
+          "cosine_similarity": 0.9625164056762079,
+          "gradient_a_l2": 32.845255774562474,
+          "gradient_b_l2": 35.36734421761676,
+          "norm_sum_denominator": 68.21259999217924,
+          "summed_gradient_l2": 67.57124538563721
+        },
+        "model.language_model.layers.30.self_attn.q_proj": {
+          "both_zero": false,
+          "cancellation_ratio": 0.9915393336559639,
+          "cosine_similarity": 0.9662793426902033,
+          "gradient_a_l2": 13.788917552839507,
+          "gradient_b_l2": 14.497455823790327,
+          "norm_sum_denominator": 28.286373376629832,
+          "summed_gradient_l2": 28.047051809407343
+        },
+        "model.language_model.layers.31.self_attn.o_proj": {
+          "both_zero": false,
+          "cancellation_ratio": 0.9919563995519636,
+          "cosine_similarity": 0.967875987632481,
+          "gradient_a_l2": 49.94510025789055,
+          "gradient_b_l2": 55.15750963032249,
+          "norm_sum_denominator": 105.10260988821304,
+          "summed_gradient_l2": 104.25720648822642
+        },
+        "model.language_model.layers.31.self_attn.q_proj": {
+          "both_zero": false,
+          "cancellation_ratio": 0.9776740973934861,
+          "cosine_similarity": 0.9116833988258264,
+          "gradient_a_l2": 6.144355456997621,
+          "gradient_b_l2": 6.2757385168001685,
+          "norm_sum_denominator": 12.42009397379779,
+          "summed_gradient_l2": 12.142804165375031
+        },
+        "model.language_model.layers.32.self_attn.o_proj": {
+          "both_zero": false,
+          "cancellation_ratio": 0.9890502985894385,
+          "cosine_similarity": 0.9563805901475876,
+          "gradient_a_l2": 39.76961289298009,
+          "gradient_b_l2": 42.84368926086679,
+          "norm_sum_denominator": 82.61330215384689,
+          "summed_gradient_l2": 81.70871116272177
+        },
+        "model.language_model.layers.32.self_attn.q_proj": {
+          "both_zero": false,
+          "cancellation_ratio": 0.9841360374437705,
+          "cosine_similarity": 0.9369399097729166,
+          "gradient_a_l2": 8.18281471975053,
+          "gradient_b_l2": 8.887865445101315,
+          "norm_sum_denominator": 17.070680164851844,
+          "summed_gradient_l2": 16.799871533907265
+        },
+        "model.language_model.layers.33.self_attn.o_proj": {
+          "both_zero": false,
+          "cancellation_ratio": 0.9822477285324006,
+          "cosine_similarity": 0.9288919956637116,
+          "gradient_a_l2": 44.73083019595837,
+          "gradient_b_l2": 54.81108452734477,
+          "norm_sum_denominator": 99.54191472330314,
+          "summed_gradient_l2": 97.77481963073043
+        },
+        "model.language_model.layers.33.self_attn.q_proj": {
+          "both_zero": false,
+          "cancellation_ratio": 0.9685913334290089,
+          "cosine_similarity": 0.873345335261647,
+          "gradient_a_l2": 10.256895020296694,
+          "gradient_b_l2": 13.983191905580078,
+          "norm_sum_denominator": 24.240086925876774,
+          "summed_gradient_l2": 23.47873811797007
+        }
+      },
+      "reference_gradient_sha256": "a3497145f227dfdfc33aedfcc6da9958dcaae6ee4574e26b0677a001ec75793c"
+    },
+    "full_vocab_hinge_weighted": {
+      "aggregate": {
+        "both_zero": false,
+        "cancellation_ratio": 0.9938142508163843,
+        "cosine_similarity": 0.9753172813000269,
+        "gradient_a_l2": 47.08668676478107,
+        "gradient_b_l2": 49.56657839814613,
+        "norm_sum_denominator": 96.6532651629272,
+        "summed_gradient_l2": 96.05539230685183
+      },
+      "counterfactual_gradient_sha256": "6141d87bbf4a9fe4f14a2990b91d59d06bac8c17a00849b7a3b06f5c730b57a0",
+      "per_layer": {
+        "30": {
+          "both_zero": false,
+          "cancellation_ratio": 0.9949151975159328,
+          "cosine_similarity": 0.9797101498377101,
+          "gradient_a_l2": 18.13321515323226,
+          "gradient_b_l2": 18.52781785943812,
+          "norm_sum_denominator": 36.66103301267038,
+          "summed_gradient_l2": 36.474618900939085
+        },
+        "31": {
+          "both_zero": false,
+          "cancellation_ratio": 0.9951892686784232,
+          "cosine_similarity": 0.9807906897529919,
+          "gradient_a_l2": 25.459685303660525,
+          "gradient_b_l2": 26.80194482888016,
+          "norm_sum_denominator": 52.26163013254069,
+          "summed_gradient_l2": 52.01021347154541
+        },
+        "32": {
+          "both_zero": false,
+          "cancellation_ratio": 0.9944522350869979,
+          "cosine_similarity": 0.9778702594701221,
+          "gradient_a_l2": 22.111021291875854,
+          "gradient_b_l2": 22.255990353289498,
+          "norm_sum_denominator": 44.36701164516535,
+          "summed_gradient_l2": 44.12087389466554
+        },
+        "33": {
+          "both_zero": false,
+          "cancellation_ratio": 0.9922240853656012,
+          "cosine_similarity": 0.9689541133879438,
+          "gradient_a_l2": 27.408935410919607,
+          "gradient_b_l2": 29.998205050485574,
+          "norm_sum_denominator": 57.40714046140518,
+          "summed_gradient_l2": 56.960747437772355
+        }
+      },
+      "per_module": {
+        "model.language_model.layers.30.self_attn.o_proj": {
+          "both_zero": false,
+          "cancellation_ratio": 0.994922039049898,
+          "cosine_similarity": 0.9797376912321406,
+          "gradient_a_l2": 16.86370623734541,
+          "gradient_b_l2": 17.20524475155869,
+          "norm_sum_denominator": 34.068950988904106,
+          "summed_gradient_l2": 33.89595018617151
+        },
+        "model.language_model.layers.30.self_attn.q_proj": {
+          "both_zero": false,
+          "cancellation_ratio": 0.9948844819121956,
+          "cosine_similarity": 0.9795853979265212,
+          "gradient_a_l2": 6.665501011471583,
+          "gradient_b_l2": 6.874560907539735,
+          "norm_sum_denominator": 13.540061919011318,
+          "summed_gradient_l2": 13.470797487354623
+        },
+        "model.language_model.layers.31.self_attn.o_proj": {
+          "both_zero": false,
+          "cancellation_ratio": 0.9953136761156419,
+          "cosine_similarity": 0.9812870021346991,
+          "gradient_a_l2": 25.25512402211443,
+          "gradient_b_l2": 26.54627590206676,
+          "norm_sum_denominator": 51.80139992418119,
+          "summed_gradient_l2": 51.558641786473316
+        },
+        "model.language_model.layers.31.self_attn.q_proj": {
+          "both_zero": false,
+          "cancellation_ratio": 0.9891074735809433,
+          "cosine_similarity": 0.9564640799454359,
+          "gradient_a_l2": 3.220913905872904,
+          "gradient_b_l2": 3.6931669799351172,
+          "norm_sum_denominator": 6.914080885808021,
+          "summed_gradient_l2": 6.838769077095862
+        },
+        "model.language_model.layers.32.self_attn.o_proj": {
+          "both_zero": false,
+          "cancellation_ratio": 0.9946684106595758,
+          "cosine_similarity": 0.9787301916953353,
+          "gradient_a_l2": 21.361495234191157,
+          "gradient_b_l2": 21.5232581974617,
+          "norm_sum_denominator": 42.884753431652854,
+          "summed_gradient_l2": 42.65610953738993
+        },
+        "model.language_model.layers.32.self_attn.q_proj": {
+          "both_zero": false,
+          "cancellation_ratio": 0.9914003717357536,
+          "cosine_similarity": 0.9657488712047517,
+          "gradient_a_l2": 5.70822073236609,
+          "gradient_b_l2": 5.663785233490811,
+          "norm_sum_denominator": 11.372005965856902,
+          "summed_gradient_l2": 11.27421094193174
+        },
+        "model.language_model.layers.33.self_attn.o_proj": {
+          "both_zero": false,
+          "cancellation_ratio": 0.9927151840015634,
+          "cosine_similarity": 0.970916259298813,
+          "gradient_a_l2": 26.66080538096055,
+          "gradient_b_l2": 28.982037841525983,
+          "norm_sum_denominator": 55.64284322248653,
+          "summed_gradient_l2": 55.23749534798087
+        },
+        "model.language_model.layers.33.self_attn.q_proj": {
+          "both_zero": false,
+          "cancellation_ratio": 0.9860350570886799,
+          "cosine_similarity": 0.9439926941307987,
+          "gradient_a_l2": 6.360125533234837,
+          "gradient_b_l2": 7.741691598309246,
+          "norm_sum_denominator": 14.101817131544083,
+          "summed_gradient_l2": 13.904886060356194
+        }
+      },
+      "reference_gradient_sha256": "9c5ec646c369cd4f9b40fa8058d8623f2beadb80e9c86c9884e40d637e38791e"
+    },
+    "language_nll": {
+      "aggregate": {
+        "both_zero": false,
+        "cancellation_ratio": 0.995534504168582,
+        "cosine_similarity": 0.9821734942797337,
+        "gradient_a_l2": 15.99670602114952,
+        "gradient_b_l2": 16.507583143777808,
+        "norm_sum_denominator": 32.50428916492733,
+        "summed_gradient_l2": 32.35914139715814
+      },
+      "counterfactual_gradient_sha256": "9455e76260d01b3ba127acd6e7760db50307907f8eb1b5f64e389f1a840a2d19",
+      "per_layer": {
+        "30": {
+          "both_zero": false,
+          "cancellation_ratio": 0.9958534459785787,
+          "cosine_similarity": 0.9834471563809662,
+          "gradient_a_l2": 6.690045809368949,
+          "gradient_b_l2": 6.795665835885845,
+          "norm_sum_denominator": 13.485711645254794,
+          "summed_gradient_l2": 13.429792413400435
+        },
+        "31": {
+          "both_zero": false,
+          "cancellation_ratio": 0.9964342775368339,
+          "cosine_similarity": 0.9857587976692191,
+          "gradient_a_l2": 9.578978014122658,
+          "gradient_b_l2": 9.894609210030303,
+          "norm_sum_denominator": 19.47358722415296,
+          "summed_gradient_l2": 19.404149816749374
+        },
+        "32": {
+          "both_zero": false,
+          "cancellation_ratio": 0.9961438024348235,
+          "cosine_similarity": 0.984604849290514,
+          "gradient_a_l2": 7.177379290330585,
+          "gradient_b_l2": 7.140711456976994,
+          "norm_sum_denominator": 14.31809074730758,
+          "summed_gradient_l2": 14.262877360629835
+        },
+        "33": {
+          "both_zero": false,
+          "cancellation_ratio": 0.9940116135463348,
+          "cosine_similarity": 0.9760922435546188,
+          "gradient_a_l2": 8.238100346761401,
+          "gradient_b_l2": 8.799214485662313,
+          "norm_sum_denominator": 17.037314832423714,
+          "summed_gradient_l2": 16.9352888070744
+        }
+      },
+      "per_module": {
+        "model.language_model.layers.30.self_attn.o_proj": {
+          "both_zero": false,
+          "cancellation_ratio": 0.9961797031495141,
+          "cosine_similarity": 0.9847478056430549,
+          "gradient_a_l2": 6.3881887072343435,
+          "gradient_b_l2": 6.434188155494672,
+          "norm_sum_denominator": 12.822376862729016,
+          "summed_gradient_l2": 12.773391576784588
+        },
+        "model.language_model.layers.30.self_attn.q_proj": {
+          "both_zero": false,
+          "cancellation_ratio": 0.9936556391585649,
+          "cosine_similarity": 0.9746448673934716,
+          "gradient_a_l2": 1.9868965680725763,
+          "gradient_b_l2": 2.1868463441033197,
+          "norm_sum_denominator": 4.173742912175896,
+          "summed_gradient_l2": 4.14726318108167
+        },
+        "model.language_model.layers.31.self_attn.o_proj": {
+          "both_zero": false,
+          "cancellation_ratio": 0.9965992629972108,
+          "cosine_similarity": 0.9864175730101225,
+          "gradient_a_l2": 9.3798562515598,
+          "gradient_b_l2": 9.643511244403976,
+          "norm_sum_denominator": 19.023367495963775,
+          "summed_gradient_l2": 18.958674026202594
+        },
+        "model.language_model.layers.31.self_attn.q_proj": {
+          "both_zero": false,
+          "cancellation_ratio": 0.9942420713249001,
+          "cosine_similarity": 0.9769359062880425,
+          "gradient_a_l2": 1.9429659016872778,
+          "gradient_b_l2": 2.2149452133790053,
+          "norm_sum_denominator": 4.157911115066283,
+          "summed_gradient_l2": 4.133970159428326
+        },
+        "model.language_model.layers.32.self_attn.o_proj": {
+          "both_zero": false,
+          "cancellation_ratio": 0.9964465235527,
+          "cosine_similarity": 0.9858113167941233,
+          "gradient_a_l2": 6.9383354516788,
+          "gradient_b_l2": 6.917590053521858,
+          "norm_sum_denominator": 13.855925505200657,
+          "summed_gradient_l2": 13.806688800262384
+        },
+        "model.language_model.layers.32.self_attn.q_proj": {
+          "both_zero": false,
+          "cancellation_ratio": 0.9917999650353502,
+          "cosine_similarity": 0.9673234584219471,
+          "gradient_a_l2": 1.8369198777419136,
+          "gradient_b_l2": 1.7710753691521879,
+          "norm_sum_denominator": 3.6079952468941014,
+          "summed_gradient_l2": 3.5784095597172794
+        },
+        "model.language_model.layers.33.self_attn.o_proj": {
+          "both_zero": false,
+          "cancellation_ratio": 0.9945041295898696,
+          "cosine_similarity": 0.9780521356793389,
+          "gradient_a_l2": 7.902095542074457,
+          "gradient_b_l2": 8.451735054001656,
+          "norm_sum_denominator": 16.353830596076115,
+          "summed_gradient_l2": 16.263952062410855
+        },
+        "model.language_model.layers.33.self_attn.q_proj": {
+          "both_zero": false,
+          "cancellation_ratio": 0.9882552341542457,
+          "cosine_similarity": 0.9532675415464318,
+          "gradient_a_l2": 2.3287729316610775,
+          "gradient_b_l2": 2.4483361986558867,
+          "norm_sum_denominator": 4.777109130316964,
+          "summed_gradient_l2": 4.7210031021617755
+        }
+      },
+      "reference_gradient_sha256": "73f9f7b538c46628cc1935c94b1b2ed9c749f472bef5c19f2b30b19c322386bc"
+    }
+  },
+  "checkpoint": {
+    "adapter_sha256": "a4c85c14a214e4e594992e489a784cb4bacb64d3dfda519ad3da18b1595d9f22",
+    "best_epoch": 8,
+    "epoch": 8,
+    "metadata_sha256": "f097c6477546460440e77a3d225afb55818cb13abf9cbb4a90500f75a879b0f5",
+    "path": "data_gemma4/checkpoints/gemma4_color_mirror_spatial_relation_v12/epoch_008",
+    "persisted_lora": {
+      "adapter_parameter_count": 45056,
+      "alpha": 8.0,
+      "dropout": 0.0,
+      "enabled": true,
+      "learning_rate": 0.0001,
+      "rank": 4,
+      "schema_version": 1,
+      "target_modules": [
+        "model.language_model.layers.34.self_attn.q_proj",
+        "model.language_model.layers.34.self_attn.o_proj"
+      ],
+      "weight_decay": 0.0
+    },
+    "persisted_lora_state_sha256": "dec768bed654c8c4e16da0318857543ad54d8f5f68f4d24a9a87cd19ec706594"
+  },
+  "config": {
+    "path": "configs/experiments/gemma4_color_mirror_spatial_relation_v12.yaml",
+    "sha256": "dd0a96d947dd7683d8cff7fadc5a52003b38c5b7b221fefc820f8220ae2cb87e"
+  },
+  "device": "mps",
+  "map_sha256": {
+    "scene_000007": "477af89865db2bf34c84b7ca62b5a600ffde6d8ed1ba746f151546c4eb553911",
+    "scene_000008": "0e140531cf9342dbf78a5349ff5799b22d2ec465d29cacc8cf270e546b9b3de4"
+  },
+  "no_optimizer_constructed": true,
+  "no_weight_change": true,
+  "objective_contract": {
+    "candidate_margin": 1.0,
+    "candidate_weight": 8.0,
+    "formula_per_side": "0.5 * (language_nll + candidate_weight * relu(candidate_margin - candidate_logit_margin) + full_vocab_weight * relu(full_vocab_margin - target_vs_best_other_margin))",
+    "full_vocab_margin": 1.0,
+    "full_vocab_weight": 2.0,
+    "same_correct_teacher_forced_distribution": true
+  },
+  "optimizer_steps": 0,
+  "pair_side_reduction_scale": 0.5,
+  "probe_bank": {
+    "all_b_exactly_zero_after": true,
+    "alpha": 16.0,
+    "dropout": 0.0,
+    "enabled": true,
+    "initialization": "cpu_kaiming_uniform_a_exact_zero_b",
+    "merge": false,
+    "parameter_count": 229376,
+    "parameter_counts": {
+      "model.language_model.layers.30.self_attn.o_proj": 28672,
+      "model.language_model.layers.30.self_attn.q_proj": 28672,
+      "model.language_model.layers.31.self_attn.o_proj": 28672,
+      "model.language_model.layers.31.self_attn.q_proj": 28672,
+      "model.language_model.layers.32.self_attn.o_proj": 28672,
+      "model.language_model.layers.32.self_attn.q_proj": 28672,
+      "model.language_model.layers.33.self_attn.o_proj": 28672,
+      "model.language_model.layers.33.self_attn.q_proj": 28672
+    },
+    "rank": 8,
+    "schema_version": 1,
+    "seed": 13008,
+    "state_sha256_after": "b4ec0518e4759dda33fc93c9c1d4c76f52f1024fd5b8b1667ad1b4ef5da198af",
+    "state_sha256_before": "b4ec0518e4759dda33fc93c9c1d4c76f52f1024fd5b8b1667ad1b4ef5da198af",
+    "target_modules": [
+      "model.language_model.layers.30.self_attn.q_proj",
+      "model.language_model.layers.30.self_attn.o_proj",
+      "model.language_model.layers.31.self_attn.q_proj",
+      "model.language_model.layers.31.self_attn.o_proj",
+      "model.language_model.layers.32.self_attn.q_proj",
+      "model.language_model.layers.32.self_attn.o_proj",
+      "model.language_model.layers.33.self_attn.q_proj",
+      "model.language_model.layers.33.self_attn.o_proj"
+    ]
+  },
+  "protected_persisted_state_sha256_after": "53730db26094f158e54a5ed221382316d3d6647d95dce05801a8cd38cdf83c98",
+  "protected_persisted_state_sha256_before": "53730db26094f158e54a5ed221382316d3d6647d95dce05801a8cd38cdf83c98",
+  "purpose": "V13 extra-LoRA mirrored-gradient cancellation falsification probe",
+  "qa_train_sha256": "ffa721d57849ade8fdd0811e3e1e62fe807200f710aec780dc4d3dcecd4fb0e0",
+  "scene_prefix_sha256": {
+    "scene_000007": "ca22948ab94d16ff46ab23f0ef86f47e7dd555aa152be083625391ba07bcedd8",
+    "scene_000008": "ec4d180ca93ac5bcd3344373152ec699020b698d88e48f193affdd2a136875a8"
+  },
+  "schema_version": 1,
+  "selection": {
+    "all_selected_pair_unit_count": 12,
+    "all_selected_record_ids_sha256": "7f0714e3151c9ddb57c1da95a457820a833e490c070881a88a9fee4a9168f933",
+    "pair_id": "pair_000003",
+    "scene_ids": [
+      "scene_000007",
+      "scene_000008"
+    ],
+    "side_count": 12,
+    "training_counterfactual_pair_count": 2,
+    "training_counterfactual_pair_membership_sha256": "99ee448c23fb71b7269a353a54b2156ac55701847af170597dcc351af15cbcbe",
+    "unit_content_sha256": "3237522a2845f408cfe0b2333171c2a7dc5fc373f07cf2fdf3d8d40054d53150",
+    "unit_count": 6,
+    "unit_keys_sha256": "73571e68965916e6cf9f9d37bac0b569727acd5eea7d6addd167c5625d5bad92"
+  },
+  "source_provenance": {
+    "checkpoint": {
+      "available": true,
+      "head_commit": "6837426d2f8c943ae08646f17ff521d7df3d29c4",
+      "head_tree": "00e9ba8ed7e4f7ea59f7a1c3a19234f9935b44b0",
+      "is_clean": true,
+      "schema_version": 1,
+      "scope": "repository_excluding_generated_artifacts_v1",
+      "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "probe_source": {
+      "available": true,
+      "head_commit": "0aac14bd1e6972933299e960276da5d9d31cb49c",
+      "head_tree": "99df5e506b5db0e1b62939222c01a3aa519cb67e",
+      "is_clean": true,
+      "schema_version": 1,
+      "scope": "repository_excluding_generated_artifacts_v1",
+      "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "step_zero_logit_parity": {
+    "all_bitwise_equal": true,
+    "records": [
+      {
+        "baseline_sha256": "81317d0e0380e5a29e41a6cf210e1f77ad098bf9cdd5986e1a1f1e545ad39780",
+        "bitwise_equal": true,
+        "question_key": "cfq_22e9cc563b37b2fc",
+        "side": "reference",
+        "vocabulary_size": 262144,
+        "zero_output_probe_sha256": "81317d0e0380e5a29e41a6cf210e1f77ad098bf9cdd5986e1a1f1e545ad39780"
+      },
+      {
+        "baseline_sha256": "6fbc4278901d5d4a52f60546c80d118797c36fa5fc58828325cbc9a1d329019b",
+        "bitwise_equal": true,
+        "question_key": "cfq_22e9cc563b37b2fc",
+        "side": "counterfactual",
+        "vocabulary_size": 262144,
+        "zero_output_probe_sha256": "6fbc4278901d5d4a52f60546c80d118797c36fa5fc58828325cbc9a1d329019b"
+      },
+      {
+        "baseline_sha256": "273a2a5d5aa4e3f79b5f55269cfcf6ee316f52ac6346ec42601d1916dd8f558c",
+        "bitwise_equal": true,
+        "question_key": "cfq_2bd6ff5367fe7096",
+        "side": "reference",
+        "vocabulary_size": 262144,
+        "zero_output_probe_sha256": "273a2a5d5aa4e3f79b5f55269cfcf6ee316f52ac6346ec42601d1916dd8f558c"
+      },
+      {
+        "baseline_sha256": "af86becdb85f8efbc0ca71ed40cd62840e92ccb62470f90b2db7ab8482d568c0",
+        "bitwise_equal": true,
+        "question_key": "cfq_2bd6ff5367fe7096",
+        "side": "counterfactual",
+        "vocabulary_size": 262144,
+        "zero_output_probe_sha256": "af86becdb85f8efbc0ca71ed40cd62840e92ccb62470f90b2db7ab8482d568c0"
+      },
+      {
+        "baseline_sha256": "650aca89d4db38543429ecab49f80c29620a97392be2bea633724fd1fd81d767",
+        "bitwise_equal": true,
+        "question_key": "cfq_32d36dc249d33c35",
+        "side": "reference",
+        "vocabulary_size": 262144,
+        "zero_output_probe_sha256": "650aca89d4db38543429ecab49f80c29620a97392be2bea633724fd1fd81d767"
+      },
+      {
+        "baseline_sha256": "a3ebb56f146342c1be33ab644def0a6fe11aaf2cf1813a65625c58edbb2998af",
+        "bitwise_equal": true,
+        "question_key": "cfq_32d36dc249d33c35",
+        "side": "counterfactual",
+        "vocabulary_size": 262144,
+        "zero_output_probe_sha256": "a3ebb56f146342c1be33ab644def0a6fe11aaf2cf1813a65625c58edbb2998af"
+      },
+      {
+        "baseline_sha256": "47ee1e6e2a2907b45634e2f2356e0d37e47c2327e4f2926ce0fe6f8db8ec72d5",
+        "bitwise_equal": true,
+        "question_key": "cfq_4a835ad15d901079",
+        "side": "reference",
+        "vocabulary_size": 262144,
+        "zero_output_probe_sha256": "47ee1e6e2a2907b45634e2f2356e0d37e47c2327e4f2926ce0fe6f8db8ec72d5"
+      },
+      {
+        "baseline_sha256": "e69538af64963ae2a30eeec80a7a5288c472e78c25ae125a9a65a4384a2ef73f",
+        "bitwise_equal": true,
+        "question_key": "cfq_4a835ad15d901079",
+        "side": "counterfactual",
+        "vocabulary_size": 262144,
+        "zero_output_probe_sha256": "e69538af64963ae2a30eeec80a7a5288c472e78c25ae125a9a65a4384a2ef73f"
+      },
+      {
+        "baseline_sha256": "54aa35781094b1c521cd76eac262c1fc954c266ede42257499f3657945065f74",
+        "bitwise_equal": true,
+        "question_key": "cfq_c3ee105cd26e0caf",
+        "side": "reference",
+        "vocabulary_size": 262144,
+        "zero_output_probe_sha256": "54aa35781094b1c521cd76eac262c1fc954c266ede42257499f3657945065f74"
+      },
+      {
+        "baseline_sha256": "c29132d6847338af53608836ac3035a37fdda9137f7a57080036575fc74d8643",
+        "bitwise_equal": true,
+        "question_key": "cfq_c3ee105cd26e0caf",
+        "side": "counterfactual",
+        "vocabulary_size": 262144,
+        "zero_output_probe_sha256": "c29132d6847338af53608836ac3035a37fdda9137f7a57080036575fc74d8643"
+      },
+      {
+        "baseline_sha256": "f7052319645caba19e544807ea9cff9049f738c6c92971d0d31903fbc2c9da33",
+        "bitwise_equal": true,
+        "question_key": "cfq_fdafc0e247e0856d",
+        "side": "reference",
+        "vocabulary_size": 262144,
+        "zero_output_probe_sha256": "f7052319645caba19e544807ea9cff9049f738c6c92971d0d31903fbc2c9da33"
+      },
+      {
+        "baseline_sha256": "f0f4d941fdff5852090a113fc9aaaf7a4b31a4d50f0522eeff2dc6db36870fde",
+        "bitwise_equal": true,
+        "question_key": "cfq_fdafc0e247e0856d",
+        "side": "counterfactual",
+        "vocabulary_size": 262144,
+        "zero_output_probe_sha256": "f0f4d941fdff5852090a113fc9aaaf7a4b31a4d50f0522eeff2dc6db36870fde"
+      }
+    ],
+    "scope": "complete first-answer vocabulary distribution for every selected side",
+    "side_count": 12
+  },
+  "unit_results": [
+    {
+      "cancellation": {
+        "candidate_hinge_weighted": {
+          "aggregate": {
+            "both_zero": false,
+            "cancellation_ratio": 1.0,
+            "cosine_similarity": null,
+            "gradient_a_l2": 0.0,
+            "gradient_b_l2": 22.1381231851211,
+            "norm_sum_denominator": 22.1381231851211,
+            "summed_gradient_l2": 22.1381231851211
+          },
+          "per_layer": {
+            "30": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 0.0,
+              "gradient_b_l2": 8.589682208202213,
+              "norm_sum_denominator": 8.589682208202213,
+              "summed_gradient_l2": 8.589682208202213
+            },
+            "31": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 0.0,
+              "gradient_b_l2": 13.023870333743833,
+              "norm_sum_denominator": 13.023870333743833,
+              "summed_gradient_l2": 13.023870333743833
+            },
+            "32": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 0.0,
+              "gradient_b_l2": 10.280694574984192,
+              "norm_sum_denominator": 10.280694574984192,
+              "summed_gradient_l2": 10.280694574984192
+            },
+            "33": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 0.0,
+              "gradient_b_l2": 11.87434117361494,
+              "norm_sum_denominator": 11.87434117361494,
+              "summed_gradient_l2": 11.87434117361494
+            }
+          },
+          "per_module": {
+            "model.language_model.layers.30.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 0.0,
+              "gradient_b_l2": 8.113428341767479,
+              "norm_sum_denominator": 8.113428341767479,
+              "summed_gradient_l2": 8.113428341767479
+            },
+            "model.language_model.layers.30.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 0.0,
+              "gradient_b_l2": 2.820446947012116,
+              "norm_sum_denominator": 2.820446947012116,
+              "summed_gradient_l2": 2.820446947012116
+            },
+            "model.language_model.layers.31.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 0.0,
+              "gradient_b_l2": 12.889367338882872,
+              "norm_sum_denominator": 12.889367338882872,
+              "summed_gradient_l2": 12.889367338882872
+            },
+            "model.language_model.layers.31.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 0.0,
+              "gradient_b_l2": 1.866924763752371,
+              "norm_sum_denominator": 1.866924763752371,
+              "summed_gradient_l2": 1.866924763752371
+            },
+            "model.language_model.layers.32.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 0.0,
+              "gradient_b_l2": 10.144842123914417,
+              "norm_sum_denominator": 10.144842123914417,
+              "summed_gradient_l2": 10.144842123914417
+            },
+            "model.language_model.layers.32.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 0.0,
+              "gradient_b_l2": 1.6657908707159537,
+              "norm_sum_denominator": 1.6657908707159537,
+              "summed_gradient_l2": 1.6657908707159537
+            },
+            "model.language_model.layers.33.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 0.0,
+              "gradient_b_l2": 11.668389827470095,
+              "norm_sum_denominator": 11.668389827470095,
+              "summed_gradient_l2": 11.668389827470095
+            },
+            "model.language_model.layers.33.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 0.0,
+              "gradient_b_l2": 2.201966653153342,
+              "norm_sum_denominator": 2.201966653153342,
+              "summed_gradient_l2": 2.201966653153342
+            }
+          }
+        },
+        "decoder_total": {
+          "aggregate": {
+            "both_zero": false,
+            "cancellation_ratio": 0.8440151501480166,
+            "cosine_similarity": 0.2351529414868307,
+            "gradient_a_l2": 9.924408137603054,
+            "gradient_b_l2": 29.603185887292607,
+            "norm_sum_denominator": 39.52759402489566,
+            "summed_gradient_l2": 33.36188820591216
+          },
+          "per_layer": {
+            "30": {
+              "both_zero": false,
+              "cancellation_ratio": 0.8430294336822253,
+              "cosine_similarity": 0.21305313344957022,
+              "gradient_a_l2": 3.6493796400733998,
+              "gradient_b_l2": 11.385303884598015,
+              "norm_sum_denominator": 15.034683524671415,
+              "summed_gradient_l2": 12.674680737395226
+            },
+            "31": {
+              "both_zero": false,
+              "cancellation_ratio": 0.8293798718709373,
+              "cosine_similarity": 0.14683858683404785,
+              "gradient_a_l2": 5.373752391552567,
+              "gradient_b_l2": 16.92291155887622,
+              "norm_sum_denominator": 22.296663950428787,
+              "summed_gradient_l2": 18.492404290355974
+            },
+            "32": {
+              "both_zero": false,
+              "cancellation_ratio": 0.8263800954617335,
+              "cosine_similarity": 0.17407821338309915,
+              "gradient_a_l2": 4.698188379846216,
+              "gradient_b_l2": 13.43487094561408,
+              "norm_sum_denominator": 18.133059325460295,
+              "summed_gradient_l2": 14.984799296387155
+            },
+            "33": {
+              "both_zero": false,
+              "cancellation_ratio": 0.8699845848212826,
+              "cosine_similarity": 0.3667570318478712,
+              "gradient_a_l2": 5.850274891498653,
+              "gradient_b_l2": 16.728501940642918,
+              "norm_sum_denominator": 22.57877683214157,
+              "summed_gradient_l2": 19.64318778808308
+            }
+          },
+          "per_module": {
+            "model.language_model.layers.30.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.8329902691952082,
+              "cosine_similarity": 0.17390617610494638,
+              "gradient_a_l2": 3.45054461310042,
+              "gradient_b_l2": 10.598303502596067,
+              "norm_sum_denominator": 14.048848115696487,
+              "summed_gradient_l2": 11.70255377377661
+            },
+            "model.language_model.layers.30.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9103188481583687,
+              "cosine_similarity": 0.5043362683949039,
+              "gradient_a_l2": 1.1881555581597216,
+              "gradient_b_l2": 4.159459990371586,
+              "norm_sum_denominator": 5.347615548531307,
+              "summed_gradient_l2": 4.868035226532802
+            },
+            "model.language_model.layers.31.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.8309182164565204,
+              "cosine_similarity": 0.15180779503944727,
+              "gradient_a_l2": 5.305549667607704,
+              "gradient_b_l2": 16.78479116180392,
+              "norm_sum_denominator": 22.090340829411623,
+              "summed_gradient_l2": 18.35526660289136
+            },
+            "model.language_model.layers.31.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.7465363240030648,
+              "cosine_similarity": -0.08983951292092031,
+              "gradient_a_l2": 0.8534386271223566,
+              "gradient_b_l2": 2.157712048484326,
+              "norm_sum_denominator": 3.0111506756066824,
+              "summed_gradient_l2": 2.2479333563867576
+            },
+            "model.language_model.layers.32.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.8240462968638107,
+              "cosine_similarity": 0.15009853433588638,
+              "gradient_a_l2": 4.452612415284768,
+              "gradient_b_l2": 13.171495450443112,
+              "norm_sum_denominator": 17.62410786572788,
+              "summed_gradient_l2": 14.523080822281417
+            },
+            "model.language_model.layers.32.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.8902333527734891,
+              "cosine_similarity": 0.5505716969650004,
+              "gradient_a_l2": 1.4990719568365583,
+              "gradient_b_l2": 2.6471616732382905,
+              "norm_sum_denominator": 4.146233630074849,
+              "summed_gradient_l2": 3.6911154658837275
+            },
+            "model.language_model.layers.33.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.8668273015510318,
+              "cosine_similarity": 0.34932667148429764,
+              "gradient_a_l2": 5.649697849279514,
+              "gradient_b_l2": 16.317745845758278,
+              "norm_sum_denominator": 21.967443695037794,
+              "summed_gradient_l2": 19.04197994014384
+            },
+            "model.language_model.layers.33.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9268876877663792,
+              "cosine_similarity": 0.6592077410225784,
+              "gradient_a_l2": 1.518759532627188,
+              "gradient_b_l2": 3.6842838776797957,
+              "norm_sum_denominator": 5.203043410306984,
+              "summed_gradient_l2": 4.822636875927537
+            }
+          }
+        },
+        "full_vocab_hinge_weighted": {
+          "aggregate": {
+            "both_zero": false,
+            "cancellation_ratio": 0.947272993831264,
+            "cosine_similarity": 0.7933905968286092,
+            "gradient_a_l2": 7.697550618117268,
+            "gradient_b_l2": 9.002561987863023,
+            "norm_sum_denominator": 16.70011260598029,
+            "summed_gradient_l2": 15.81956566558618
+          },
+          "per_layer": {
+            "30": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9426841750512882,
+              "cosine_similarity": 0.7759124223571072,
+              "gradient_a_l2": 2.8291580588247833,
+              "gradient_b_l2": 3.3137450659013554,
+              "norm_sum_denominator": 6.142903124726139,
+              "summed_gradient_l2": 5.790817564552441
+            },
+            "31": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9365029713967536,
+              "cosine_similarity": 0.7526231264130149,
+              "gradient_a_l2": 4.12133319386085,
+              "gradient_b_l2": 4.805354329510616,
+              "norm_sum_denominator": 8.926687523371466,
+              "summed_gradient_l2": 8.359869390367706
+            },
+            "32": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9437685015474129,
+              "cosine_similarity": 0.7808527968406317,
+              "gradient_a_l2": 3.649046937739733,
+              "gradient_b_l2": 4.0321612857757945,
+              "norm_sum_denominator": 7.681208223515528,
+              "summed_gradient_l2": 7.249282375180915
+            },
+            "33": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9595917022612449,
+              "cosine_similarity": 0.8401779325416336,
+              "gradient_a_l2": 4.576813230624224,
+              "gradient_b_l2": 5.542153112002025,
+              "norm_sum_denominator": 10.11896634262625,
+              "summed_gradient_l2": 9.710076137844966
+            }
+          },
+          "per_module": {
+            "model.language_model.layers.30.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.939793146234806,
+              "cosine_similarity": 0.7653814852601352,
+              "gradient_a_l2": 2.668490722037386,
+              "gradient_b_l2": 3.04932774019053,
+              "norm_sum_denominator": 5.717818462227916,
+              "summed_gradient_l2": 5.373566602216633
+            },
+            "model.language_model.layers.30.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9648494298024194,
+              "cosine_similarity": 0.8582529626936483,
+              "gradient_a_l2": 0.93983646886762,
+              "gradient_b_l2": 1.2971147577180868,
+              "norm_sum_denominator": 2.236951226585707,
+              "summed_gradient_l2": 2.158321115467042
+            },
+            "model.language_model.layers.31.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9364025288342501,
+              "cosine_similarity": 0.7521422084670628,
+              "gradient_a_l2": 4.066966899732348,
+              "gradient_b_l2": 4.767185253940996,
+              "norm_sum_denominator": 8.834152153673344,
+              "summed_gradient_l2": 8.272322416806256
+            },
+            "model.language_model.layers.31.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9488999718761852,
+              "cosine_similarity": 0.8003362145967341,
+              "gradient_a_l2": 0.6672087614087824,
+              "gradient_b_l2": 0.6044625602583605,
+              "norm_sum_denominator": 1.271671321667143,
+              "summed_gradient_l2": 1.2066888813657033
+            },
+            "model.language_model.layers.32.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9404153630402474,
+              "cosine_similarity": 0.7680347671619384,
+              "gradient_a_l2": 3.4511455806295137,
+              "gradient_b_l2": 3.860573702510334,
+              "norm_sum_denominator": 7.311719283139848,
+              "summed_gradient_l2": 6.876053144102338
+            },
+            "model.language_model.layers.32.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9774188573742478,
+              "cosine_similarity": 0.9106876643048203,
+              "gradient_a_l2": 1.1853850577466258,
+              "gradient_b_l2": 1.16374194819757,
+              "norm_sum_denominator": 2.3491270059441955,
+              "summed_gradient_l2": 2.2960810339769635
+            },
+            "model.language_model.layers.33.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9581626932049895,
+              "cosine_similarity": 0.8346757375937088,
+              "gradient_a_l2": 4.4261487457112745,
+              "gradient_b_l2": 5.349776114738157,
+              "norm_sum_denominator": 9.775924860449432,
+              "summed_gradient_l2": 9.36692649285784
+            },
+            "model.language_model.layers.33.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9794713911840016,
+              "cosine_similarity": 0.9177640326173667,
+              "gradient_a_l2": 1.164657301035604,
+              "gradient_b_l2": 1.4475346762861858,
+              "norm_sum_denominator": 2.61219197732179,
+              "summed_gradient_l2": 2.5585673100670614
+            }
+          }
+        },
+        "language_nll": {
+          "aggregate": {
+            "both_zero": false,
+            "cancellation_ratio": 0.9623553592784834,
+            "cosine_similarity": 0.8507209570616753,
+            "gradient_a_l2": 2.594895078593939,
+            "gradient_b_l2": 3.1804877755412737,
+            "norm_sum_denominator": 5.775382854135213,
+            "summed_gradient_l2": 5.557970641562085
+          },
+          "per_layer": {
+            "30": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9588278668823854,
+              "cosine_similarity": 0.8358444434770953,
+              "gradient_a_l2": 1.0243627234256654,
+              "gradient_b_l2": 1.3357359659413262,
+              "norm_sum_denominator": 2.3600986893669917,
+              "summed_gradient_l2": 2.2629283919576664
+            },
+            "31": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9602658539221158,
+              "cosine_similarity": 0.8419335303902771,
+              "gradient_a_l2": 1.539875424898174,
+              "gradient_b_l2": 1.961028438756709,
+              "norm_sum_denominator": 3.500903863654883,
+              "summed_gradient_l2": 3.3617984381317907
+            },
+            "32": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9625538514665849,
+              "cosine_similarity": 0.8523795152089123,
+              "gradient_a_l2": 1.1746061895600528,
+              "gradient_b_l2": 1.3402347851804857,
+              "norm_sum_denominator": 2.5148409747405385,
+              "summed_gradient_l2": 2.420669866062486
+            },
+            "33": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9682282155109582,
+              "cosine_similarity": 0.8740778679050822,
+              "gradient_a_l2": 1.390411973124792,
+              "gradient_b_l2": 1.6399542989479226,
+              "norm_sum_denominator": 3.0303662720727145,
+              "summed_gradient_l2": 2.934086127953559
+            }
+          },
+          "per_module": {
+            "model.language_model.layers.30.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9601614755244164,
+              "cosine_similarity": 0.8416147954002295,
+              "gradient_a_l2": 0.9834295589589821,
+              "gradient_b_l2": 1.2465672205185527,
+              "norm_sum_denominator": 2.229996779477535,
+              "summed_gradient_l2": 2.1411569981978467
+            },
+            "model.language_model.layers.30.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9553636080228649,
+              "cosine_similarity": 0.8136011448223093,
+              "gradient_a_l2": 0.2866797720624524,
+              "gradient_b_l2": 0.4798549108197696,
+              "norm_sum_denominator": 0.7665346828822219,
+              "summed_gradient_l2": 0.7323193403130221
+            },
+            "model.language_model.layers.31.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9617322053570384,
+              "cosine_similarity": 0.848087445201546,
+              "gradient_a_l2": 1.5144459618616668,
+              "gradient_b_l2": 1.8809774321733548,
+              "norm_sum_denominator": 3.3954233940350216,
+              "summed_gradient_l2": 3.265488028866182
+            },
+            "model.language_model.layers.31.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9587787553142885,
+              "cosine_similarity": 0.8186321579427308,
+              "gradient_a_l2": 0.2786929364125234,
+              "gradient_b_l2": 0.55457771075575,
+              "norm_sum_denominator": 0.8332706471682734,
+              "summed_gradient_l2": 0.7989221939319288
+            },
+            "model.language_model.layers.32.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9618593096863164,
+              "cosine_similarity": 0.8496251353283261,
+              "gradient_a_l2": 1.1207344252936067,
+              "gradient_b_l2": 1.2875541808244189,
+              "norm_sum_denominator": 2.4082886061180258,
+              "summed_gradient_l2": 2.3164348162061055
+            },
+            "model.language_model.layers.32.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9709525716768646,
+              "cosine_similarity": 0.8854065465163254,
+              "gradient_a_l2": 0.35164477603768596,
+              "gradient_b_l2": 0.37206654088931423,
+              "norm_sum_denominator": 0.7237113169270002,
+              "summed_gradient_l2": 0.7026893643219212
+            },
+            "model.language_model.layers.33.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9678230970914923,
+              "cosine_similarity": 0.8723703053300508,
+              "gradient_a_l2": 1.3218109550054242,
+              "gradient_b_l2": 1.5775228144605045,
+              "norm_sum_denominator": 2.8993337694659287,
+              "summed_gradient_l2": 2.8060421882664657
+            },
+            "model.language_model.layers.33.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9747358535152647,
+              "cosine_similarity": 0.9001833805031803,
+              "gradient_a_l2": 0.43134818214109627,
+              "gradient_b_l2": 0.4481873185336373,
+              "norm_sum_denominator": 0.8795355006747336,
+              "summed_gradient_l2": 0.8573147869471621
+            }
+          }
+        }
+      },
+      "pair_id": "pair_000003",
+      "question_key": "cfq_22e9cc563b37b2fc",
+      "question_sha256": "c0a6414d279489dd48d1141dfddfe5dafac0f4a95e3c31aa7895b22b95a628c0",
+      "sides": {
+        "counterfactual": {
+          "alternate_token_id": 989,
+          "answer_token_id": 898,
+          "diagnostics": {
+            "candidate_hinge_active": true,
+            "candidate_logit_margin": -2.90625,
+            "full_vocab_first_token_margin": -19.125,
+            "full_vocab_hinge_active": true
+          },
+          "gradient_sha256": {
+            "candidate_hinge_weighted": "2444ee03587207cf174c1f041aa27cf582c5f98aea8d641e0fecff95d61b07eb",
+            "decoder_total": "fae45d4ab914be3c92380fe2ced5db6e40a6005bf642d5627f912690adecf375",
+            "full_vocab_hinge_weighted": "6fad0918f27efbd174fbd5df607ba86e03ddc04218a779518249bb505ce159de",
+            "language_nll": "0a0f06d4d4260bb7390a23c5b1f2ab26b394369df263931ae7ba0f1b2d1a7abe"
+          },
+          "objective_values": {
+            "candidate_hinge_weighted": 15.625,
+            "decoder_total": 45.21882247924805,
+            "full_vocab_hinge_weighted": 20.125,
+            "language_nll": 9.468822479248047
+          },
+          "question_id": "q_000054",
+          "scene_id": "scene_000008"
+        },
+        "reference": {
+          "alternate_token_id": 898,
+          "answer_token_id": 989,
+          "diagnostics": {
+            "candidate_hinge_active": false,
+            "candidate_logit_margin": 3.0,
+            "full_vocab_first_token_margin": -16.875,
+            "full_vocab_hinge_active": true
+          },
+          "gradient_sha256": {
+            "candidate_hinge_weighted": "1d80f85c13bd43011bc1453af16d7b0d72cd1b95514c8121bfa21c48c33ee099",
+            "decoder_total": "2fc2194d6475f7f5e59b3e179d46a0e94d9a42559176eb0372c9141cc79964dc",
+            "full_vocab_hinge_weighted": "8eb8210bcd78b97b0478bd187e79c7f2f25942d2d0dbc6f335f929c5e264ef1d",
+            "language_nll": "7718dc76d743b44801e625eaf2c84c24fefe9ee57230e963f9a67c82060a4e35"
+          },
+          "objective_values": {
+            "candidate_hinge_weighted": 0.0,
+            "decoder_total": 26.304786682128906,
+            "full_vocab_hinge_weighted": 17.875,
+            "language_nll": 8.429786682128906
+          },
+          "question_id": "q_000000",
+          "scene_id": "scene_000007"
+        }
+      }
+    },
+    {
+      "cancellation": {
+        "candidate_hinge_weighted": {
+          "aggregate": {
+            "both_zero": false,
+            "cancellation_ratio": 1.0,
+            "cosine_similarity": null,
+            "gradient_a_l2": 20.748340119725277,
+            "gradient_b_l2": 0.0,
+            "norm_sum_denominator": 20.748340119725277,
+            "summed_gradient_l2": 20.748340119725277
+          },
+          "per_layer": {
+            "30": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 8.555250961960795,
+              "gradient_b_l2": 0.0,
+              "norm_sum_denominator": 8.555250961960795,
+              "summed_gradient_l2": 8.555250961960795
+            },
+            "31": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 12.384628452364286,
+              "gradient_b_l2": 0.0,
+              "norm_sum_denominator": 12.384628452364286,
+              "summed_gradient_l2": 12.384628452364286
+            },
+            "32": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 9.934654933930135,
+              "gradient_b_l2": 0.0,
+              "norm_sum_denominator": 9.934654933930135,
+              "summed_gradient_l2": 9.934654933930135
+            },
+            "33": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 10.257919289129243,
+              "gradient_b_l2": 0.0,
+              "norm_sum_denominator": 10.257919289129243,
+              "summed_gradient_l2": 10.257919289129243
+            }
+          },
+          "per_module": {
+            "model.language_model.layers.30.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 8.032032102841855,
+              "gradient_b_l2": 0.0,
+              "norm_sum_denominator": 8.032032102841855,
+              "summed_gradient_l2": 8.032032102841855
+            },
+            "model.language_model.layers.30.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 2.9459768025306308,
+              "gradient_b_l2": 0.0,
+              "norm_sum_denominator": 2.9459768025306308,
+              "summed_gradient_l2": 2.9459768025306308
+            },
+            "model.language_model.layers.31.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 12.261672012281911,
+              "gradient_b_l2": 0.0,
+              "norm_sum_denominator": 12.261672012281911,
+              "summed_gradient_l2": 12.261672012281911
+            },
+            "model.language_model.layers.31.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 1.7408105486620034,
+              "gradient_b_l2": 0.0,
+              "norm_sum_denominator": 1.7408105486620034,
+              "summed_gradient_l2": 1.7408105486620034
+            },
+            "model.language_model.layers.32.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 9.836291118923763,
+              "gradient_b_l2": 0.0,
+              "norm_sum_denominator": 9.836291118923763,
+              "summed_gradient_l2": 9.836291118923763
+            },
+            "model.language_model.layers.32.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 1.394541386995405,
+              "gradient_b_l2": 0.0,
+              "norm_sum_denominator": 1.394541386995405,
+              "summed_gradient_l2": 1.394541386995405
+            },
+            "model.language_model.layers.33.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 10.106756437460739,
+              "gradient_b_l2": 0.0,
+              "norm_sum_denominator": 10.106756437460739,
+              "summed_gradient_l2": 10.106756437460739
+            },
+            "model.language_model.layers.33.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 1.7545319763785145,
+              "gradient_b_l2": 0.0,
+              "norm_sum_denominator": 1.7545319763785145,
+              "summed_gradient_l2": 1.7545319763785145
+            }
+          }
+        },
+        "decoder_total": {
+          "aggregate": {
+            "both_zero": false,
+            "cancellation_ratio": 0.8100485207097389,
+            "cosine_similarity": 0.16121038239598698,
+            "gradient_a_l2": 27.0398296809934,
+            "gradient_b_l2": 10.924251508786016,
+            "norm_sum_denominator": 37.964081189779414,
+            "summed_gradient_l2": 30.752747807885235
+          },
+          "per_layer": {
+            "30": {
+              "both_zero": false,
+              "cancellation_ratio": 0.8202739650791447,
+              "cosine_similarity": 0.16850029932787092,
+              "gradient_a_l2": 11.288326426913306,
+              "gradient_b_l2": 4.157834711994122,
+              "norm_sum_denominator": 15.446161138907428,
+              "summed_gradient_l2": 12.670083842662994
+            },
+            "31": {
+              "both_zero": false,
+              "cancellation_ratio": 0.8030901074704313,
+              "cosine_similarity": 0.1119411667669477,
+              "gradient_a_l2": 15.940561711076517,
+              "gradient_b_l2": 6.081964532317806,
+              "norm_sum_denominator": 22.022526243394324,
+              "summed_gradient_l2": 17.686072967577942
+            },
+            "32": {
+              "both_zero": false,
+              "cancellation_ratio": 0.7975543651775746,
+              "cosine_similarity": 0.10515487751745085,
+              "gradient_a_l2": 12.65530431633912,
+              "gradient_b_l2": 5.019199233164765,
+              "norm_sum_denominator": 17.674503549503886,
+              "summed_gradient_l2": 14.096377458253361
+            },
+            "33": {
+              "both_zero": false,
+              "cancellation_ratio": 0.8239357296419971,
+              "cosine_similarity": 0.2551890087916031,
+              "gradient_a_l2": 13.764731768283077,
+              "gradient_b_l2": 6.314192586576288,
+              "norm_sum_denominator": 20.078924354859367,
+              "summed_gradient_l2": 16.54374318874752
+            }
+          },
+          "per_module": {
+            "model.language_model.layers.30.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.8089043410362884,
+              "cosine_similarity": 0.12716996753223989,
+              "gradient_a_l2": 10.432647629394719,
+              "gradient_b_l2": 3.8980395011654014,
+              "norm_sum_denominator": 14.33068713056012,
+              "summed_gradient_l2": 11.592155029942953
+            },
+            "model.language_model.layers.30.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.8881787114315477,
+              "cosine_similarity": 0.4388345981787515,
+              "gradient_a_l2": 4.31116886255139,
+              "gradient_b_l2": 1.4466781050452577,
+              "norm_sum_denominator": 5.757846967596647,
+              "summed_gradient_l2": 5.113997100300034
+            },
+            "model.language_model.layers.31.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.8050457035891204,
+              "cosine_similarity": 0.11845849855756907,
+              "gradient_a_l2": 15.810173178962266,
+              "gradient_b_l2": 6.011650138949692,
+              "norm_sum_denominator": 21.821823317911957,
+              "summed_gradient_l2": 17.567565106565905
+            },
+            "model.language_model.layers.31.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.691272535858544,
+              "cosine_similarity": -0.216506944531478,
+              "gradient_a_l2": 2.0346822149563724,
+              "gradient_b_l2": 0.9221470485978919,
+              "norm_sum_denominator": 2.956829263554264,
+              "summed_gradient_l2": 2.0439748631179073
+            },
+            "model.language_model.layers.32.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.7957536030302071,
+              "cosine_similarity": 0.09317677459354645,
+              "gradient_a_l2": 12.49514710234301,
+              "gradient_b_l2": 4.893993415976403,
+              "norm_sum_denominator": 17.38914051831941,
+              "summed_gradient_l2": 13.837471221051235
+            },
+            "model.language_model.layers.32.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.8616513796192966,
+              "cosine_similarity": 0.438967350824859,
+              "gradient_a_l2": 2.0069943273361135,
+              "gradient_b_l2": 1.114086794904817,
+              "norm_sum_denominator": 3.1210811222409305,
+              "summed_gradient_l2": 2.6892838548826403
+            },
+            "model.language_model.layers.33.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.8205238169178382,
+              "cosine_similarity": 0.2405540351900143,
+              "gradient_a_l2": 13.466426903571842,
+              "gradient_b_l2": 6.141986073188055,
+              "norm_sum_denominator": 19.608412976759897,
+              "summed_gradient_l2": 16.0891698593923
+            },
+            "model.language_model.layers.33.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.8926430867581213,
+              "cosine_similarity": 0.546901716502976,
+              "gradient_a_l2": 2.8501205419310534,
+              "gradient_b_l2": 1.4645938335043454,
+              "norm_sum_denominator": 4.314714375435399,
+              "summed_gradient_l2": 3.851499958568294
+            }
+          }
+        },
+        "full_vocab_hinge_weighted": {
+          "aggregate": {
+            "both_zero": false,
+            "cancellation_ratio": 0.9479078933923473,
+            "cosine_similarity": 0.7970300402592324,
+            "gradient_a_l2": 8.757373480788157,
+            "gradient_b_l2": 8.551519956057476,
+            "norm_sum_denominator": 17.308893436845633,
+            "summed_gradient_l2": 16.40723671467297
+          },
+          "per_layer": {
+            "30": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9414874520899317,
+              "cosine_similarity": 0.7725209961975323,
+              "gradient_a_l2": 3.4910796523060825,
+              "gradient_b_l2": 3.255958019906452,
+              "norm_sum_denominator": 6.747037672212535,
+              "summed_gradient_l2": 6.3522513071661635
+            },
+            "31": {
+              "both_zero": false,
+              "cancellation_ratio": 0.939091779927035,
+              "cosine_similarity": 0.7637668492080287,
+              "gradient_a_l2": 4.820952739887592,
+              "gradient_b_l2": 4.7332777097434375,
+              "norm_sum_denominator": 9.55423044963103,
+              "summed_gradient_l2": 8.97229927877708
+            },
+            "32": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9449251636359038,
+              "cosine_similarity": 0.7857480382120424,
+              "gradient_a_l2": 4.003068704312761,
+              "gradient_b_l2": 3.9281999419434515,
+              "norm_sum_denominator": 7.931268646256212,
+              "summed_gradient_l2": 7.494455323403965
+            },
+            "33": {
+              "both_zero": false,
+              "cancellation_ratio": 0.960773686436203,
+              "cosine_similarity": 0.846167566648735,
+              "gradient_a_l2": 5.02372459153438,
+              "gradient_b_l2": 4.969160720888147,
+              "norm_sum_denominator": 9.992885312422526,
+              "summed_gradient_l2": 9.600901259750378
+            }
+          },
+          "per_module": {
+            "model.language_model.layers.30.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9393187708565098,
+              "cosine_similarity": 0.7644938622882245,
+              "gradient_a_l2": 3.1973697586764995,
+              "gradient_b_l2": 3.042202384893803,
+              "norm_sum_denominator": 6.239572143570303,
+              "summed_gradient_l2": 5.860947236568975
+            },
+            "model.language_model.layers.30.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9561608501059753,
+              "cosine_similarity": 0.8269518744092721,
+              "gradient_a_l2": 1.4015932951632257,
+              "gradient_b_l2": 1.1602875836358733,
+              "norm_sum_denominator": 2.5618808787990988,
+              "summed_gradient_l2": 2.4495701989427894
+            },
+            "model.language_model.layers.31.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9396419951182814,
+              "cosine_similarity": 0.7658204785483262,
+              "gradient_a_l2": 4.790206788297714,
+              "gradient_b_l2": 4.676675673227705,
+              "norm_sum_denominator": 9.466882461525419,
+              "summed_gradient_l2": 8.895480323698012
+            },
+            "model.language_model.layers.31.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9200262747594834,
+              "cosine_similarity": 0.6861866630807709,
+              "gradient_a_l2": 0.5436030220445152,
+              "gradient_b_l2": 0.7298099238803986,
+              "norm_sum_denominator": 1.2734129459249137,
+              "summed_gradient_l2": 1.1715733688697978
+            },
+            "model.language_model.layers.32.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9431237193464774,
+              "cosine_similarity": 0.7789467376345707,
+              "gradient_a_l2": 3.896324526064163,
+              "gradient_b_l2": 3.82670662280374,
+              "norm_sum_denominator": 7.723031148867903,
+              "summed_gradient_l2": 7.283773861748995
+            },
+            "model.language_model.layers.32.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9773316119310373,
+              "cosine_similarity": 0.91032755694376,
+              "gradient_a_l2": 0.9182669759057303,
+              "gradient_b_l2": 0.887170337012289,
+              "norm_sum_denominator": 1.8054373129180192,
+              "summed_gradient_l2": 1.7645109592746084
+            },
+            "model.language_model.layers.33.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9601558744265682,
+              "cosine_similarity": 0.8437963271277994,
+              "gradient_a_l2": 4.8729188527165626,
+              "gradient_b_l2": 4.835832420068648,
+              "norm_sum_denominator": 9.70875127278521,
+              "summed_gradient_l2": 9.321914567911142
+            },
+            "model.language_model.layers.33.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9715107529635796,
+              "cosine_similarity": 0.8875430149514503,
+              "gradient_a_l2": 1.2216671504245855,
+              "gradient_b_l2": 1.1433648040019382,
+              "norm_sum_denominator": 2.3650319544265237,
+              "summed_gradient_l2": 2.2976539748278384
+            }
+          }
+        },
+        "language_nll": {
+          "aggregate": {
+            "both_zero": false,
+            "cancellation_ratio": 0.9641877993258705,
+            "cosine_similarity": 0.8591384225323155,
+            "gradient_a_l2": 2.8578204295741116,
+            "gradient_b_l2": 2.661721451257241,
+            "norm_sum_denominator": 5.519541880831353,
+            "summed_gradient_l2": 5.321874939365759
+          },
+          "per_layer": {
+            "30": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9634892914477073,
+              "cosine_similarity": 0.8560612326367032,
+              "gradient_a_l2": 1.2287249306993469,
+              "gradient_b_l2": 1.08420099860492,
+              "norm_sum_denominator": 2.3129259293042668,
+              "summed_gradient_l2": 2.228479364796398
+            },
+            "31": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9623687882450513,
+              "cosine_similarity": 0.8520185440918076,
+              "gradient_a_l2": 1.7106116874513964,
+              "gradient_b_l2": 1.5658610881421748,
+              "norm_sum_denominator": 3.276472775593571,
+              "summed_gradient_l2": 3.153175134765885
+            },
+            "32": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9617794956677368,
+              "cosine_similarity": 0.8498910407131364,
+              "gradient_a_l2": 1.2657514677969441,
+              "gradient_b_l2": 1.1885424273691558,
+              "norm_sum_denominator": 2.4542938951661,
+              "summed_gradient_l2": 2.360489544713257
+            },
+            "33": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9692841016476519,
+              "cosine_similarity": 0.8790109865534713,
+              "gradient_a_l2": 1.4591276602455037,
+              "gradient_b_l2": 1.4299353935379628,
+              "norm_sum_denominator": 2.8890630537834667,
+              "summed_gradient_l2": 2.8003228866899295
+            }
+          },
+          "per_module": {
+            "model.language_model.layers.30.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9638858188062396,
+              "cosine_similarity": 0.8576965209464373,
+              "gradient_a_l2": 1.1611390496931364,
+              "gradient_b_l2": 1.0368237957580242,
+              "norm_sum_denominator": 2.1979628454511606,
+              "summed_gradient_l2": 2.118585216993384
+            },
+            "model.language_model.layers.30.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.961434055061961,
+              "cosine_similarity": 0.8465710950116152,
+              "gradient_a_l2": 0.4018968307909764,
+              "gradient_b_l2": 0.31699877275128546,
+              "norm_sum_denominator": 0.7188956035422618,
+              "summed_gradient_l2": 0.6911707152798526
+            },
+            "model.language_model.layers.31.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9633171616793739,
+              "cosine_similarity": 0.8557151588094853,
+              "gradient_a_l2": 1.6753009890007102,
+              "gradient_b_l2": 1.5427616654536356,
+              "norm_sum_denominator": 3.2180626544543456,
+              "summed_gradient_l2": 3.100014982395352
+            },
+            "model.language_model.layers.31.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9394163172824795,
+              "cosine_similarity": 0.7611678624704017,
+              "gradient_a_l2": 0.3457729623590424,
+              "gradient_b_l2": 0.267969011201891,
+              "norm_sum_denominator": 0.6137419735609334,
+              "summed_gradient_l2": 0.576559224564293
+            },
+            "model.language_model.layers.32.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9614853035709777,
+              "cosine_similarity": 0.848790736553508,
+              "gradient_a_l2": 1.2260323735283134,
+              "gradient_b_l2": 1.1596037097043526,
+              "norm_sum_denominator": 2.385636083232666,
+              "summed_gradient_l2": 2.293754033696838
+            },
+            "model.language_model.layers.32.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9687871848464201,
+              "cosine_similarity": 0.8760079063110868,
+              "gradient_a_l2": 0.3145971984787098,
+              "gradient_b_l2": 0.26067669266059024,
+              "norm_sum_denominator": 0.5752738911393,
+              "summed_gradient_l2": 0.5573179735124885
+            },
+            "model.language_model.layers.33.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9686803345591094,
+              "cosine_similarity": 0.87667529365755,
+              "gradient_a_l2": 1.400906154560359,
+              "gradient_b_l2": 1.3786769787704722,
+              "norm_sum_denominator": 2.7795831333308314,
+              "summed_gradient_l2": 2.6925275195297673
+            },
+            "model.language_model.layers.33.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9771330894171272,
+              "cosine_similarity": 0.9094584257861172,
+              "gradient_a_l2": 0.40806307724225244,
+              "gradient_b_l2": 0.3794272234577844,
+              "norm_sum_denominator": 0.7874903007000369,
+              "summed_gradient_l2": 0.7694828304090495
+            }
+          }
+        }
+      },
+      "pair_id": "pair_000003",
+      "question_key": "cfq_2bd6ff5367fe7096",
+      "question_sha256": "44bbcb673a2eb3edd47976593d8d7ba83ab9fcb8aa2090bc7a05cb630bd07fec",
+      "sides": {
+        "counterfactual": {
+          "alternate_token_id": 898,
+          "answer_token_id": 989,
+          "diagnostics": {
+            "candidate_hinge_active": false,
+            "candidate_logit_margin": 4.375,
+            "full_vocab_first_token_margin": -17.875,
+            "full_vocab_hinge_active": true
+          },
+          "gradient_sha256": {
+            "candidate_hinge_weighted": "1d80f85c13bd43011bc1453af16d7b0d72cd1b95514c8121bfa21c48c33ee099",
+            "decoder_total": "168a6785f82b87295a6248599ccaa5c1221db08e2b2228f8cee4963fade4265f",
+            "full_vocab_hinge_weighted": "6a2964e79b1aed3edea8143454f6c07185a6dbde0dc9fb1dc50f58218cb94f93",
+            "language_nll": "5e7f247c7ce6e4bc231991e4e42abbbcdde2af5095e244b359984d5c2c78be59"
+          },
+          "objective_values": {
+            "candidate_hinge_weighted": 0.0,
+            "decoder_total": 27.148502349853516,
+            "full_vocab_hinge_weighted": 18.875,
+            "language_nll": 8.273503303527832
+          },
+          "question_id": "q_000028",
+          "scene_id": "scene_000008"
+        },
+        "reference": {
+          "alternate_token_id": 989,
+          "answer_token_id": 898,
+          "diagnostics": {
+            "candidate_hinge_active": true,
+            "candidate_logit_margin": -3.9375,
+            "full_vocab_first_token_margin": -22.5,
+            "full_vocab_hinge_active": true
+          },
+          "gradient_sha256": {
+            "candidate_hinge_weighted": "eac6efa594032b333c060486c0d8274af911cdbbf1688f9f1fdfb6cce2a41b16",
+            "decoder_total": "6affce85b22e29aea065a4cd5e9f9ebf5578fed53d8734df0f5a7a0634c6fd23",
+            "full_vocab_hinge_weighted": "6c30eba41c089cd030172411ef0f8d9312244f16171f98eedf0e4b0b00e60cbe",
+            "language_nll": "e41c822b589645ec10715d6937c3802cd1ef3d77c60eab4c41a82e1129314028"
+          },
+          "objective_values": {
+            "candidate_hinge_weighted": 19.75,
+            "decoder_total": 53.210968017578125,
+            "full_vocab_hinge_weighted": 23.5,
+            "language_nll": 9.960966110229492
+          },
+          "question_id": "q_000034",
+          "scene_id": "scene_000007"
+        }
+      }
+    },
+    {
+      "cancellation": {
+        "candidate_hinge_weighted": {
+          "aggregate": {
+            "both_zero": false,
+            "cancellation_ratio": 1.0,
+            "cosine_similarity": null,
+            "gradient_a_l2": 0.0,
+            "gradient_b_l2": 20.552667023235678,
+            "norm_sum_denominator": 20.552667023235678,
+            "summed_gradient_l2": 20.552667023235678
+          },
+          "per_layer": {
+            "30": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 0.0,
+              "gradient_b_l2": 8.369061613953372,
+              "norm_sum_denominator": 8.369061613953372,
+              "summed_gradient_l2": 8.369061613953372
+            },
+            "31": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 0.0,
+              "gradient_b_l2": 12.642014862276136,
+              "norm_sum_denominator": 12.642014862276136,
+              "summed_gradient_l2": 12.642014862276136
+            },
+            "32": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 0.0,
+              "gradient_b_l2": 9.976456089067431,
+              "norm_sum_denominator": 9.976456089067431,
+              "summed_gradient_l2": 9.976456089067431
+            },
+            "33": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 0.0,
+              "gradient_b_l2": 9.64472465105921,
+              "norm_sum_denominator": 9.64472465105921,
+              "summed_gradient_l2": 9.64472465105921
+            }
+          },
+          "per_module": {
+            "model.language_model.layers.30.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 0.0,
+              "gradient_b_l2": 8.03941861032984,
+              "norm_sum_denominator": 8.03941861032984,
+              "summed_gradient_l2": 8.03941861032984
+            },
+            "model.language_model.layers.30.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 0.0,
+              "gradient_b_l2": 2.325712945750091,
+              "norm_sum_denominator": 2.325712945750091,
+              "summed_gradient_l2": 2.325712945750091
+            },
+            "model.language_model.layers.31.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 0.0,
+              "gradient_b_l2": 12.46808264823532,
+              "norm_sum_denominator": 12.46808264823532,
+              "summed_gradient_l2": 12.46808264823532
+            },
+            "model.language_model.layers.31.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 0.0,
+              "gradient_b_l2": 2.089845653339951,
+              "norm_sum_denominator": 2.089845653339951,
+              "summed_gradient_l2": 2.089845653339951
+            },
+            "model.language_model.layers.32.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 0.0,
+              "gradient_b_l2": 9.8595380894295,
+              "norm_sum_denominator": 9.8595380894295,
+              "summed_gradient_l2": 9.8595380894295
+            },
+            "model.language_model.layers.32.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 0.0,
+              "gradient_b_l2": 1.5228869820771203,
+              "norm_sum_denominator": 1.5228869820771203,
+              "summed_gradient_l2": 1.5228869820771203
+            },
+            "model.language_model.layers.33.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 0.0,
+              "gradient_b_l2": 9.503388054154962,
+              "norm_sum_denominator": 9.503388054154962,
+              "summed_gradient_l2": 9.503388054154962
+            },
+            "model.language_model.layers.33.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 0.0,
+              "gradient_b_l2": 1.6450924250311274,
+              "norm_sum_denominator": 1.6450924250311274,
+              "summed_gradient_l2": 1.6450924250311274
+            }
+          }
+        },
+        "decoder_total": {
+          "aggregate": {
+            "both_zero": false,
+            "cancellation_ratio": 0.8081245817322851,
+            "cosine_similarity": 0.1563981920795362,
+            "gradient_a_l2": 10.679750424359401,
+            "gradient_b_l2": 26.229567715438545,
+            "norm_sum_denominator": 36.909318139797946,
+            "summed_gradient_l2": 29.82732728374806
+          },
+          "per_layer": {
+            "30": {
+              "both_zero": false,
+              "cancellation_ratio": 0.8171801279364885,
+              "cosine_similarity": 0.16884518563832793,
+              "gradient_a_l2": 4.1077124601076385,
+              "gradient_b_l2": 10.771880563146137,
+              "norm_sum_denominator": 14.879593023253776,
+              "summed_gradient_l2": 12.159307730385402
+            },
+            "31": {
+              "both_zero": false,
+              "cancellation_ratio": 0.8077433836883797,
+              "cosine_similarity": 0.11429990840588908,
+              "gradient_a_l2": 5.868113097320255,
+              "gradient_b_l2": 16.023415869276608,
+              "norm_sum_denominator": 21.891528966596862,
+              "summed_gradient_l2": 17.682737681591128
+            },
+            "32": {
+              "both_zero": false,
+              "cancellation_ratio": 0.792488796299603,
+              "cosine_similarity": 0.10734016246996728,
+              "gradient_a_l2": 5.243545432805024,
+              "gradient_b_l2": 12.476931848221303,
+              "norm_sum_denominator": 17.720477281026326,
+              "summed_gradient_l2": 14.043279710295016
+            },
+            "33": {
+              "both_zero": false,
+              "cancellation_ratio": 0.8201763603313781,
+              "cosine_similarity": 0.24761980685654292,
+              "gradient_a_l2": 5.9375287319598495,
+              "gradient_b_l2": 12.630642390913243,
+              "norm_sum_denominator": 18.568171122873093,
+              "summed_gradient_l2": 15.22917500956825
+            }
+          },
+          "per_module": {
+            "model.language_model.layers.30.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.8107655345720398,
+              "cosine_similarity": 0.14046832933213643,
+              "gradient_a_l2": 3.884019361664691,
+              "gradient_b_l2": 10.244933464229721,
+              "norm_sum_denominator": 14.128952825894412,
+              "summed_gradient_l2": 11.455267990829416
+            },
+            "model.language_model.layers.30.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.8740661337751549,
+              "cosine_similarity": 0.4228715362579718,
+              "gradient_a_l2": 1.337047214251348,
+              "gradient_b_l2": 3.3278745739872924,
+              "norm_sum_denominator": 4.66492178823864,
+              "summed_gradient_l2": 4.07745015180923
+            },
+            "model.language_model.layers.31.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.8095791446945559,
+              "cosine_similarity": 0.12166803636718716,
+              "gradient_a_l2": 5.806347280458318,
+              "gradient_b_l2": 15.8624696675926,
+              "norm_sum_denominator": 21.668816948050917,
+              "summed_gradient_l2": 17.54262229134596
+            },
+            "model.language_model.layers.31.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.7133078026511391,
+              "cosine_similarity": -0.23844433791124015,
+              "gradient_a_l2": 0.8491658151713409,
+              "gradient_b_l2": 2.2653724118761946,
+              "norm_sum_denominator": 3.1145382270475355,
+              "summed_gradient_l2": 2.2216244190082524
+            },
+            "model.language_model.layers.32.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.7918252215673915,
+              "cosine_similarity": 0.0978905559784934,
+              "gradient_a_l2": 5.076881211358015,
+              "gradient_b_l2": 12.308443078913674,
+              "norm_sum_denominator": 17.38532429027169,
+              "summed_gradient_l2": 13.766138258165336
+            },
+            "model.language_model.layers.32.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.8274624009659229,
+              "cosine_similarity": 0.33786611362956614,
+              "gradient_a_l2": 1.3115051931465571,
+              "gradient_b_l2": 2.0435403882236622,
+              "norm_sum_denominator": 3.355045581370219,
+              "summed_gradient_l2": 2.776174072110712
+            },
+            "model.language_model.layers.33.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.8171187474179443,
+              "cosine_similarity": 0.23524344113971893,
+              "gradient_a_l2": 5.7998779530543745,
+              "gradient_b_l2": 12.376714305782572,
+              "norm_sum_denominator": 18.176592258836948,
+              "summed_gradient_l2": 14.85243429886755
+            },
+            "model.language_model.layers.33.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.8880052009610598,
+              "cosine_similarity": 0.5256280840846822,
+              "gradient_a_l2": 1.2710873976727763,
+              "gradient_b_l2": 2.5199345626763745,
+              "norm_sum_denominator": 3.791021960349151,
+              "summed_gradient_l2": 3.366447217747639
+            }
+          }
+        },
+        "full_vocab_hinge_weighted": {
+          "aggregate": {
+            "both_zero": false,
+            "cancellation_ratio": 0.9539391891672281,
+            "cosine_similarity": 0.8199384656894353,
+            "gradient_a_l2": 8.286070525837822,
+            "gradient_b_l2": 8.598076062599443,
+            "norm_sum_denominator": 16.884146588437265,
+            "summed_gradient_l2": 16.106449106354464
+          },
+          "per_layer": {
+            "30": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9513643769870586,
+              "cosine_similarity": 0.8099718730868539,
+              "gradient_a_l2": 3.189773390585363,
+              "gradient_b_l2": 3.4126188493691947,
+              "norm_sum_denominator": 6.602392239954558,
+              "summed_gradient_l2": 6.281280779988558
+            },
+            "31": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9456730023525162,
+              "cosine_similarity": 0.7882486972076594,
+              "gradient_a_l2": 4.515578450445581,
+              "gradient_b_l2": 4.896110667626919,
+              "norm_sum_denominator": 9.4116891180725,
+              "summed_gradient_l2": 8.900380305496126
+            },
+            "32": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9521981386641246,
+              "cosine_similarity": 0.8133598788873222,
+              "gradient_a_l2": 4.076398158793834,
+              "gradient_b_l2": 4.045440383205468,
+              "norm_sum_denominator": 8.121838541999303,
+              "summed_gradient_l2": 7.733599542222284
+            },
+            "33": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9654300194816077,
+              "cosine_similarity": 0.8641063212919076,
+              "gradient_a_l2": 4.634311144574259,
+              "gradient_b_l2": 4.684384378277843,
+              "norm_sum_denominator": 9.318695522852103,
+              "summed_gradient_l2": 8.996548400170276
+            }
+          },
+          "per_module": {
+            "model.language_model.layers.30.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9487991093836002,
+              "cosine_similarity": 0.8002818616440278,
+              "gradient_a_l2": 3.0116835239079403,
+              "gradient_b_l2": 3.1857990162311958,
+              "norm_sum_denominator": 6.197482540139136,
+              "summed_gradient_l2": 5.880165914504425
+            },
+            "model.language_model.layers.30.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9711386402048251,
+              "cosine_similarity": 0.885562436337108,
+              "gradient_a_l2": 1.0509122870667162,
+              "gradient_b_l2": 1.2233773086215978,
+              "norm_sum_denominator": 2.2742895956883142,
+              "summed_gradient_l2": 2.208650505388731
+            },
+            "model.language_model.layers.31.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9458403639967738,
+              "cosine_similarity": 0.7888425847502396,
+              "gradient_a_l2": 4.467303840733763,
+              "gradient_b_l2": 4.866046088740338,
+              "norm_sum_denominator": 9.3333499294741,
+              "summed_gradient_l2": 8.827859094603046
+            },
+            "model.language_model.layers.31.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9446841609123154,
+              "cosine_similarity": 0.7828007697283079,
+              "gradient_a_l2": 0.6585173776703797,
+              "gradient_b_l2": 0.5417519099227237,
+              "norm_sum_denominator": 1.2002692875931034,
+              "summed_gradient_l2": 1.1338753848187135
+            },
+            "model.language_model.layers.32.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9505463116218216,
+              "cosine_similarity": 0.8070748372409354,
+              "gradient_a_l2": 3.9430966544849735,
+              "gradient_b_l2": 3.919458046019972,
+              "norm_sum_denominator": 7.862554700504946,
+              "summed_gradient_l2": 7.473722370489792
+            },
+            "model.language_model.layers.32.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9765805388980595,
+              "cosine_similarity": 0.9073959086571541,
+              "gradient_a_l2": 1.0339297473266158,
+              "gradient_b_l2": 1.0017167861021985,
+              "norm_sum_denominator": 2.0356465334288143,
+              "summed_gradient_l2": 1.987972788621878
+            },
+            "model.language_model.layers.33.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9649085990791458,
+              "cosine_similarity": 0.8620961453384292,
+              "gradient_a_l2": 4.530902273111327,
+              "gradient_b_l2": 4.55614100420427,
+              "norm_sum_denominator": 9.087043277315598,
+              "summed_gradient_l2": 8.768166198486163
+            },
+            "model.language_model.layers.33.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.976776355584459,
+              "cosine_similarity": 0.9078973473601725,
+              "gradient_a_l2": 0.9735319081774896,
+              "gradient_b_l2": 1.0885936584705238,
+              "norm_sum_denominator": 2.0621255666480134,
+              "summed_gradient_l2": 2.0142354957479838
+            }
+          }
+        },
+        "language_nll": {
+          "aggregate": {
+            "both_zero": false,
+            "cancellation_ratio": 0.9681677021972444,
+            "cosine_similarity": 0.874580060417982,
+            "gradient_a_l2": 2.7162257346236975,
+            "gradient_b_l2": 2.8876311129750993,
+            "norm_sum_denominator": 5.603856847598797,
+            "summed_gradient_l2": 5.42547320758202
+          },
+          "per_layer": {
+            "30": {
+              "both_zero": false,
+              "cancellation_ratio": 0.967798499516353,
+              "cosine_similarity": 0.8729830237938678,
+              "gradient_a_l2": 1.1279130978101115,
+              "gradient_b_l2": 1.2400504678553514,
+              "norm_sum_denominator": 2.367963565665463,
+              "summed_gradient_l2": 2.291711585760428
+            },
+            "31": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9660967701459494,
+              "cosine_similarity": 0.8663457161506566,
+              "gradient_a_l2": 1.5991752069527156,
+              "gradient_b_l2": 1.7691168305612563,
+              "norm_sum_denominator": 3.3682920375139718,
+              "summed_gradient_l2": 3.254096058350567
+            },
+            "32": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9669829649970395,
+              "cosine_similarity": 0.8701068193253161,
+              "gradient_a_l2": 1.2646006404018744,
+              "gradient_b_l2": 1.2808446346270053,
+              "norm_sum_denominator": 2.5454452750288796,
+              "summed_gradient_l2": 2.4614022192851306
+            },
+            "33": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9731293230617629,
+              "cosine_similarity": 0.8939503090597566,
+              "gradient_a_l2": 1.396108220369483,
+              "gradient_b_l2": 1.4249038366028426,
+              "norm_sum_denominator": 2.8210120569723256,
+              "summed_gradient_l2": 2.7452095533505507
+            }
+          },
+          "per_module": {
+            "model.language_model.layers.30.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.967992376641947,
+              "cosine_similarity": 0.8738068197887249,
+              "gradient_a_l2": 1.0812255851122148,
+              "gradient_b_l2": 1.1735701662694928,
+              "norm_sum_denominator": 2.2547957513817076,
+              "summed_gradient_l2": 2.182625098222144
+            },
+            "model.language_model.layers.30.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9680056449685416,
+              "cosine_similarity": 0.8725262715393307,
+              "gradient_a_l2": 0.321152907989868,
+              "gradient_b_l2": 0.40057237507155524,
+              "norm_sum_denominator": 0.7217252830614233,
+              "summed_gradient_l2": 0.6986341481199763
+            },
+            "model.language_model.layers.31.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9665108992658932,
+              "cosine_similarity": 0.8680069114465547,
+              "gradient_a_l2": 1.57315233140731,
+              "gradient_b_l2": 1.7249827387640486,
+              "norm_sum_denominator": 3.2981350701713588,
+              "summed_gradient_l2": 3.1876834925716997
+            },
+            "model.language_model.layers.31.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9618549793100957,
+              "cosine_similarity": 0.8466476999036061,
+              "gradient_a_l2": 0.2873205261028206,
+              "gradient_b_l2": 0.39269442463724297,
+              "norm_sum_denominator": 0.6800149507400636,
+              "summed_gradient_l2": 0.6540757663746396
+            },
+            "model.language_model.layers.32.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9664669169706532,
+              "cosine_similarity": 0.86811250026472,
+              "gradient_a_l2": 1.2232629289647188,
+              "gradient_b_l2": 1.236985146030326,
+              "norm_sum_denominator": 2.460248074995045,
+              "summed_gradient_l2": 2.3777483720234454
+            },
+            "model.language_model.layers.32.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.974345596751128,
+              "cosine_similarity": 0.8986665941407619,
+              "gradient_a_l2": 0.3206907955110064,
+              "gradient_b_l2": 0.3323111893287892,
+              "norm_sum_denominator": 0.6530019848397957,
+              "summed_gradient_l2": 0.6362496085984017
+            },
+            "model.language_model.layers.33.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9725772704971932,
+              "cosine_similarity": 0.891800894354166,
+              "gradient_a_l2": 1.3464445110571532,
+              "gradient_b_l2": 1.375345958214806,
+              "norm_sum_denominator": 2.7217904692719594,
+              "summed_gradient_l2": 2.647151545469797
+            },
+            "model.language_model.layers.33.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9805514292295745,
+              "cosine_similarity": 0.9229605294802894,
+              "gradient_a_l2": 0.36906007861498435,
+              "gradient_b_l2": 0.3725244136800754,
+              "norm_sum_denominator": 0.7415844922950597,
+              "summed_gradient_l2": 0.7271617338144092
+            }
+          }
+        }
+      },
+      "pair_id": "pair_000003",
+      "question_key": "cfq_32d36dc249d33c35",
+      "question_sha256": "1dee2c3fbe2a5df1a4af79ed0d29453d6097c8a09c2874debffa76407e8d1a05",
+      "sides": {
+        "counterfactual": {
+          "alternate_token_id": 989,
+          "answer_token_id": 898,
+          "diagnostics": {
+            "candidate_hinge_active": true,
+            "candidate_logit_margin": -3.9375,
+            "full_vocab_first_token_margin": -23.75,
+            "full_vocab_hinge_active": true
+          },
+          "gradient_sha256": {
+            "candidate_hinge_weighted": "e28a5c0ad9a2818b5724a50954067f432ab3cb59cf85d5604d43532f1149331d",
+            "decoder_total": "d40bdee123568afb5f457212dbd929fb035d628503ecbf942a69a1b15c1fc36c",
+            "full_vocab_hinge_weighted": "4135b684100e9e9f261f4bfee6ce2b6dd0783e02f908c17a1796de52fadb8c12",
+            "language_nll": "1f6075c33e0dbfa5fb85732def3231fef532c2c135df1385df3d22320465e285"
+          },
+          "objective_values": {
+            "candidate_hinge_weighted": 19.75,
+            "decoder_total": 54.76173400878906,
+            "full_vocab_hinge_weighted": 24.75,
+            "language_nll": 10.261734962463379
+          },
+          "question_id": "q_000031",
+          "scene_id": "scene_000008"
+        },
+        "reference": {
+          "alternate_token_id": 898,
+          "answer_token_id": 989,
+          "diagnostics": {
+            "candidate_hinge_active": false,
+            "candidate_logit_margin": 4.0,
+            "full_vocab_first_token_margin": -20.6875,
+            "full_vocab_hinge_active": true
+          },
+          "gradient_sha256": {
+            "candidate_hinge_weighted": "1d80f85c13bd43011bc1453af16d7b0d72cd1b95514c8121bfa21c48c33ee099",
+            "decoder_total": "c39646b1e2d3b789bf43b85697ee4b82dad92eefff5450af2f06b9cad3b10869",
+            "full_vocab_hinge_weighted": "40d31b654d69191ce214254baab12c2cd0906f3578cd74750203e6511aecf9c1",
+            "language_nll": "6e7bc4aa183892df141d80780c991d492f56417f3ca4637ec97fd885fe3333f3"
+          },
+          "objective_values": {
+            "candidate_hinge_weighted": 0.0,
+            "decoder_total": 31.046886444091797,
+            "full_vocab_hinge_weighted": 21.6875,
+            "language_nll": 9.359386444091797
+          },
+          "question_id": "q_000126",
+          "scene_id": "scene_000007"
+        }
+      }
+    },
+    {
+      "cancellation": {
+        "candidate_hinge_weighted": {
+          "aggregate": {
+            "both_zero": false,
+            "cancellation_ratio": 1.0,
+            "cosine_similarity": null,
+            "gradient_a_l2": 0.0,
+            "gradient_b_l2": 23.74603956050278,
+            "norm_sum_denominator": 23.74603956050278,
+            "summed_gradient_l2": 23.74603956050278
+          },
+          "per_layer": {
+            "30": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 0.0,
+              "gradient_b_l2": 9.43316041712168,
+              "norm_sum_denominator": 9.43316041712168,
+              "summed_gradient_l2": 9.43316041712168
+            },
+            "31": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 0.0,
+              "gradient_b_l2": 13.659452605104569,
+              "norm_sum_denominator": 13.659452605104569,
+              "summed_gradient_l2": 13.659452605104569
+            },
+            "32": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 0.0,
+              "gradient_b_l2": 10.525462458722345,
+              "norm_sum_denominator": 10.525462458722345,
+              "summed_gradient_l2": 10.525462458722345
+            },
+            "33": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 0.0,
+              "gradient_b_l2": 13.323808536328366,
+              "norm_sum_denominator": 13.323808536328366,
+              "summed_gradient_l2": 13.323808536328366
+            }
+          },
+          "per_module": {
+            "model.language_model.layers.30.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 0.0,
+              "gradient_b_l2": 8.795825236641257,
+              "norm_sum_denominator": 8.795825236641257,
+              "summed_gradient_l2": 8.795825236641257
+            },
+            "model.language_model.layers.30.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 0.0,
+              "gradient_b_l2": 3.4085149055880066,
+              "norm_sum_denominator": 3.4085149055880066,
+              "summed_gradient_l2": 3.4085149055880066
+            },
+            "model.language_model.layers.31.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 0.0,
+              "gradient_b_l2": 13.588268094573841,
+              "norm_sum_denominator": 13.588268094573841,
+              "summed_gradient_l2": 13.588268094573841
+            },
+            "model.language_model.layers.31.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 0.0,
+              "gradient_b_l2": 1.3927008512536845,
+              "norm_sum_denominator": 1.3927008512536845,
+              "summed_gradient_l2": 1.3927008512536845
+            },
+            "model.language_model.layers.32.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 0.0,
+              "gradient_b_l2": 10.421391550895294,
+              "norm_sum_denominator": 10.421391550895294,
+              "summed_gradient_l2": 10.421391550895294
+            },
+            "model.language_model.layers.32.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 0.0,
+              "gradient_b_l2": 1.476468121193845,
+              "norm_sum_denominator": 1.476468121193845,
+              "summed_gradient_l2": 1.476468121193845
+            },
+            "model.language_model.layers.33.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 0.0,
+              "gradient_b_l2": 12.993730722771422,
+              "norm_sum_denominator": 12.993730722771422,
+              "summed_gradient_l2": 12.993730722771422
+            },
+            "model.language_model.layers.33.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 0.0,
+              "gradient_b_l2": 2.947343857923865,
+              "norm_sum_denominator": 2.947343857923865,
+              "summed_gradient_l2": 2.947343857923865
+            }
+          }
+        },
+        "decoder_total": {
+          "aggregate": {
+            "both_zero": false,
+            "cancellation_ratio": 0.8468687976990543,
+            "cosine_similarity": 0.23903438491493365,
+            "gradient_a_l2": 10.531088343778828,
+            "gradient_b_l2": 32.161481403734136,
+            "norm_sum_denominator": 42.69256974751296,
+            "summed_gradient_l2": 36.15500521275932
+          },
+          "per_layer": {
+            "30": {
+              "both_zero": false,
+              "cancellation_ratio": 0.8429491056760449,
+              "cosine_similarity": 0.20886216236622765,
+              "gradient_a_l2": 3.9992100505415475,
+              "gradient_b_l2": 12.594306696543702,
+              "norm_sum_denominator": 16.59351674708525,
+              "summed_gradient_l2": 13.987490101975984
+            },
+            "31": {
+              "both_zero": false,
+              "cancellation_ratio": 0.8328804026907226,
+              "cosine_similarity": 0.16474867347554067,
+              "gradient_a_l2": 5.715429199613998,
+              "gradient_b_l2": 17.915647503856373,
+              "norm_sum_denominator": 23.63107670347037,
+              "summed_gradient_l2": 19.681860680801755
+            },
+            "32": {
+              "both_zero": false,
+              "cancellation_ratio": 0.8232274419932103,
+              "cosine_similarity": 0.1682889849063343,
+              "gradient_a_l2": 4.943245021073051,
+              "gradient_b_l2": 13.863803186425573,
+              "norm_sum_denominator": 18.807048207498624,
+              "summed_gradient_l2": 15.482478187302084
+            },
+            "33": {
+              "both_zero": false,
+              "cancellation_ratio": 0.873766828613314,
+              "cosine_similarity": 0.35904222282036635,
+              "gradient_a_l2": 6.14884854277253,
+              "gradient_b_l2": 19.04124104783416,
+              "norm_sum_denominator": 25.19008959060669,
+              "summed_gradient_l2": 22.01026469406966
+            }
+          },
+          "per_module": {
+            "model.language_model.layers.30.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.8339079065974445,
+              "cosine_similarity": 0.1797978332038749,
+              "gradient_a_l2": 3.7870148993585535,
+              "gradient_b_l2": 11.582680260358327,
+              "norm_sum_denominator": 15.36969515971688,
+              "summed_gradient_l2": 12.81691031568038
+            },
+            "model.language_model.layers.30.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.8989871282257963,
+              "cosine_similarity": 0.4142307904409815,
+              "gradient_a_l2": 1.2853790026248157,
+              "gradient_b_l2": 4.945511010291125,
+              "norm_sum_denominator": 6.230890012915941,
+              "summed_gradient_l2": 5.601489919002097
+            },
+            "model.language_model.layers.31.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.8335642206910299,
+              "cosine_similarity": 0.16563974404430234,
+              "gradient_a_l2": 5.6551410047342205,
+              "gradient_b_l2": 17.818060345286472,
+              "norm_sum_denominator": 23.473201350020695,
+              "summed_gradient_l2": 19.56642079045363
+            },
+            "model.language_model.layers.31.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.7897206770490343,
+              "cosine_similarity": 0.11582399915018093,
+              "gradient_a_l2": 0.8279560087189859,
+              "gradient_b_l2": 1.8673914999711274,
+              "norm_sum_denominator": 2.695347508690113,
+              "summed_gradient_l2": 2.128571659445184
+            },
+            "model.language_model.layers.32.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.8228227555929407,
+              "cosine_similarity": 0.15650299145337881,
+              "gradient_a_l2": 4.757177264988342,
+              "gradient_b_l2": 13.680502958884464,
+              "norm_sum_denominator": 18.437680223872807,
+              "summed_gradient_l2": 15.17094284854849
+            },
+            "model.language_model.layers.32.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.8606850926449816,
+              "cosine_similarity": 0.4465098731136425,
+              "gradient_a_l2": 1.343478994194358,
+              "gradient_b_l2": 2.246970757241157,
+              "norm_sum_denominator": 3.590449751435515,
+              "summed_gradient_l2": 3.0902465769514276
+            },
+            "model.language_model.layers.33.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.8694824237732848,
+              "cosine_similarity": 0.3408292527318581,
+              "gradient_a_l2": 5.976162310183429,
+              "gradient_b_l2": 18.39560074629214,
+              "norm_sum_denominator": 24.37176305647557,
+              "summed_gradient_l2": 21.190819613972575
+            },
+            "model.language_model.layers.33.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9350169415914353,
+              "cosine_similarity": 0.6421379711593354,
+              "gradient_a_l2": 1.447004645569219,
+              "gradient_b_l2": 4.916374052565482,
+              "norm_sum_denominator": 6.363378698134701,
+              "summed_gradient_l2": 5.949866888517998
+            }
+          }
+        },
+        "full_vocab_hinge_weighted": {
+          "aggregate": {
+            "both_zero": false,
+            "cancellation_ratio": 0.9365914500612871,
+            "cosine_similarity": 0.7526676654258322,
+            "gradient_a_l2": 8.133696818242782,
+            "gradient_b_l2": 9.622780092077742,
+            "norm_sum_denominator": 17.756476910320522,
+            "summed_gradient_l2": 16.63056445741686
+          },
+          "per_layer": {
+            "30": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9290899099929261,
+              "cosine_similarity": 0.7252134483675793,
+              "gradient_a_l2": 3.090789535069751,
+              "gradient_b_l2": 3.528716498919456,
+              "norm_sum_denominator": 6.619506033989207,
+              "summed_gradient_l2": 6.1501162653166634
+            },
+            "31": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9274455911705651,
+              "cosine_similarity": 0.7191824297410689,
+              "gradient_a_l2": 4.350927683699654,
+              "gradient_b_l2": 4.939819167846833,
+              "norm_sum_denominator": 9.290746851546487,
+              "summed_gradient_l2": 8.616662206148598
+            },
+            "32": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9309885368470459,
+              "cosine_similarity": 0.7333397849120983,
+              "gradient_a_l2": 3.8184782345313053,
+              "gradient_b_l2": 3.997258369161467,
+              "norm_sum_denominator": 7.8157366036927725,
+              "summed_gradient_l2": 7.276361185053834
+            },
+            "33": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9505596495701338,
+              "cosine_similarity": 0.8035445068456625,
+              "gradient_a_l2": 4.805486057062415,
+              "gradient_b_l2": 6.306042236607859,
+              "norm_sum_denominator": 11.111528293670276,
+              "summed_gradient_l2": 10.562170441019845
+            }
+          },
+          "per_module": {
+            "model.language_model.layers.30.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9289572830244714,
+              "cosine_similarity": 0.7252458989121225,
+              "gradient_a_l2": 2.919663272690758,
+              "gradient_b_l2": 3.22474814971047,
+              "norm_sum_denominator": 6.1444114224012285,
+              "summed_gradient_l2": 5.7078957407383735
+            },
+            "model.language_model.layers.30.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9358386758102094,
+              "cosine_similarity": 0.7440990717781604,
+              "gradient_a_l2": 1.014172728975381,
+              "gradient_b_l2": 1.4327733598463173,
+              "norm_sum_denominator": 2.446946088821698,
+              "summed_gradient_l2": 2.289946787541869
+            },
+            "model.language_model.layers.31.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9275819239010149,
+              "cosine_similarity": 0.719650565157114,
+              "gradient_a_l2": 4.306233064709885,
+              "gradient_b_l2": 4.899918376842429,
+              "norm_sum_denominator": 9.206151441552315,
+              "summed_gradient_l2": 8.539459665879198
+            },
+            "model.language_model.layers.31.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.921708385448749,
+              "cosine_similarity": 0.6990886948469937,
+              "gradient_a_l2": 0.6220357716268348,
+              "gradient_b_l2": 0.6265886300506076,
+              "norm_sum_denominator": 1.2486244016774424,
+              "summed_gradient_l2": 1.1508675813020257
+            },
+            "model.language_model.layers.32.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9291190345849288,
+              "cosine_similarity": 0.7263060884564614,
+              "gradient_a_l2": 3.6686411543196584,
+              "gradient_b_l2": 3.8818686059700145,
+              "norm_sum_denominator": 7.550509760289673,
+              "summed_gradient_l2": 7.015322339104423
+            },
+            "model.language_model.layers.32.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9596658334369244,
+              "cosine_similarity": 0.8414800754149715,
+              "gradient_a_l2": 1.0591733136845327,
+              "gradient_b_l2": 0.9535043764009431,
+              "norm_sum_denominator": 2.012677690085476,
+              "summed_gradient_l2": 1.931498012895782
+            },
+            "model.language_model.layers.33.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9496414216349287,
+              "cosine_similarity": 0.8006460200501531,
+              "gradient_a_l2": 4.674081269070816,
+              "gradient_b_l2": 5.9791162069281025,
+              "norm_sum_denominator": 10.653197475998919,
+              "summed_gradient_l2": 10.116717596065248
+            },
+            "model.language_model.layers.33.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9727156998996415,
+              "cosine_similarity": 0.8828642650430428,
+              "gradient_a_l2": 1.1160916336675593,
+              "gradient_b_l2": 2.004080356156294,
+              "norm_sum_denominator": 3.120171989823853,
+              "summed_gradient_l2": 3.0350402808887664
+            }
+          }
+        },
+        "language_nll": {
+          "aggregate": {
+            "both_zero": false,
+            "cancellation_ratio": 0.9596481520893493,
+            "cosine_similarity": 0.8408462997682482,
+            "gradient_a_l2": 2.809512005358153,
+            "gradient_b_l2": 3.2940082435365334,
+            "norm_sum_denominator": 6.103520248894686,
+            "summed_gradient_l2": 5.857231928091711
+          },
+          "per_layer": {
+            "30": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9575497184843504,
+              "cosine_similarity": 0.8323611555120498,
+              "gradient_a_l2": 1.1397691385612565,
+              "gradient_b_l2": 1.372779554352386,
+              "norm_sum_denominator": 2.5125486929136427,
+              "summed_gradient_l2": 2.405890293577681
+            },
+            "31": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9618775221732726,
+              "cosine_similarity": 0.8494198847663581,
+              "gradient_a_l2": 1.7031583230068668,
+              "gradient_b_l2": 2.004856493353195,
+              "norm_sum_denominator": 3.7080148163600617,
+              "summed_gradient_l2": 3.5666561037421984
+            },
+            "32": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9574840104083293,
+              "cosine_similarity": 0.8334638835469509,
+              "gradient_a_l2": 1.2612109757263419,
+              "gradient_b_l2": 1.3203433323304126,
+              "norm_sum_denominator": 2.5815543080567545,
+              "summed_gradient_l2": 2.4717969719650807
+            },
+            "33": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9607018158387102,
+              "cosine_similarity": 0.8441838179601217,
+              "gradient_a_l2": 1.4501319321064008,
+              "gradient_b_l2": 1.7897515272988724,
+              "norm_sum_denominator": 3.2398834594052732,
+              "summed_gradient_l2": 3.112561922556448
+            }
+          },
+          "per_module": {
+            "model.language_model.layers.30.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9603745771333912,
+              "cosine_similarity": 0.8436964143715208,
+              "gradient_a_l2": 1.094432087998905,
+              "gradient_b_l2": 1.2786857662251734,
+              "norm_sum_denominator": 2.3731178542240783,
+              "summed_gradient_l2": 2.27908205573815
+            },
+            "model.language_model.layers.30.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9425545969347561,
+              "cosine_similarity": 0.7652915312100961,
+              "gradient_a_l2": 0.31826418896103276,
+              "gradient_b_l2": 0.4994861520613593,
+              "norm_sum_denominator": 0.8177503410223921,
+              "summed_gradient_l2": 0.7707743430756201
+            },
+            "model.language_model.layers.31.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9618651792587107,
+              "cosine_similarity": 0.8496214449156038,
+              "gradient_a_l2": 1.6688658209053318,
+              "gradient_b_l2": 1.9220931507074444,
+              "norm_sum_denominator": 3.590958971612776,
+              "summed_gradient_l2": 3.4540183949409986
+            },
+            "model.language_model.layers.31.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9770578563474765,
+              "cosine_similarity": 0.903093287826577,
+              "gradient_a_l2": 0.34005167995693464,
+              "gradient_b_l2": 0.5700942719796122,
+              "norm_sum_denominator": 0.9101459519365468,
+              "summed_gradient_l2": 0.8892652527624558
+            },
+            "model.language_model.layers.32.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9571671596940282,
+              "cosine_similarity": 0.8322439391164176,
+              "gradient_a_l2": 1.2186834246753377,
+              "gradient_b_l2": 1.2777795998004988,
+              "norm_sum_denominator": 2.496463024475837,
+              "summed_gradient_l2": 2.3895324224187
+            },
+            "model.language_model.layers.32.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9621053456936506,
+              "cosine_similarity": 0.8512724888292964,
+              "gradient_a_l2": 0.32475196029305375,
+              "gradient_b_l2": 0.33254444749993894,
+              "norm_sum_denominator": 0.6572964077929927,
+              "summed_gradient_l2": 0.632388387642872
+            },
+            "model.language_model.layers.33.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9603406244898616,
+              "cosine_similarity": 0.8429708315408292,
+              "gradient_a_l2": 1.3902418210767233,
+              "gradient_b_l2": 1.695574384318016,
+              "norm_sum_denominator": 3.0858162053947393,
+              "summed_gradient_l2": 2.963434661749719
+            },
+            "model.language_model.layers.33.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9660290458734501,
+              "cosine_similarity": 0.8627848345153959,
+              "gradient_a_l2": 0.4124442985954742,
+              "gradient_b_l2": 0.5729206199057892,
+              "norm_sum_denominator": 0.9853649185012634,
+              "summed_gradient_l2": 0.9518911320569453
+            }
+          }
+        }
+      },
+      "pair_id": "pair_000003",
+      "question_key": "cfq_4a835ad15d901079",
+      "question_sha256": "aea500b81f441e92fe059fe6f292bbe7f3abae0093bfeaba29373624c05e741a",
+      "sides": {
+        "counterfactual": {
+          "alternate_token_id": 989,
+          "answer_token_id": 898,
+          "diagnostics": {
+            "candidate_hinge_active": true,
+            "candidate_logit_margin": -2.375,
+            "full_vocab_first_token_margin": -16.1875,
+            "full_vocab_hinge_active": true
+          },
+          "gradient_sha256": {
+            "candidate_hinge_weighted": "505b8e532528043b907fe90889d4d5069db3cbc4053f41a1a79d8da360098fa9",
+            "decoder_total": "36c30dc5f6893a7bd490c6a9df8bf79034c984d4ad710b738e166a5d1651221c",
+            "full_vocab_hinge_weighted": "83af608a472f0b5b3958a6fa74ee1f229a4c0d8e20b4a4ed856ca984725e7a75",
+            "language_nll": "bad758034d1b4a2d0845c72413a800e0ffcc69e518a0f7be8c0fd937c6bc641c"
+          },
+          "objective_values": {
+            "candidate_hinge_weighted": 13.5,
+            "decoder_total": 39.40046310424805,
+            "full_vocab_hinge_weighted": 17.1875,
+            "language_nll": 8.712963104248047
+          },
+          "question_id": "q_000016",
+          "scene_id": "scene_000008"
+        },
+        "reference": {
+          "alternate_token_id": 898,
+          "answer_token_id": 989,
+          "diagnostics": {
+            "candidate_hinge_active": false,
+            "candidate_logit_margin": 3.40625,
+            "full_vocab_first_token_margin": -17.90625,
+            "full_vocab_hinge_active": true
+          },
+          "gradient_sha256": {
+            "candidate_hinge_weighted": "1d80f85c13bd43011bc1453af16d7b0d72cd1b95514c8121bfa21c48c33ee099",
+            "decoder_total": "e7472a057cdb8cc59311d75a193484c9b541b93561855f1b6fae311d46b4ee4e",
+            "full_vocab_hinge_weighted": "f03adea91ef0316728fe6a0527379decfd947da20c5d9d951490efba35d4925b",
+            "language_nll": "4f4bb2c4f3c7fbeaee68b8d9ad16ecb802deab1f36d7fc4e30b69d46d4c83462"
+          },
+          "objective_values": {
+            "candidate_hinge_weighted": 0.0,
+            "decoder_total": 27.679725646972656,
+            "full_vocab_hinge_weighted": 18.90625,
+            "language_nll": 8.773475646972656
+          },
+          "question_id": "q_000114",
+          "scene_id": "scene_000007"
+        }
+      }
+    },
+    {
+      "cancellation": {
+        "candidate_hinge_weighted": {
+          "aggregate": {
+            "both_zero": false,
+            "cancellation_ratio": 1.0,
+            "cosine_similarity": null,
+            "gradient_a_l2": 18.553990549551095,
+            "gradient_b_l2": 0.0,
+            "norm_sum_denominator": 18.553990549551095,
+            "summed_gradient_l2": 18.553990549551095
+          },
+          "per_layer": {
+            "30": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 7.459148117033803,
+              "gradient_b_l2": 0.0,
+              "norm_sum_denominator": 7.459148117033803,
+              "summed_gradient_l2": 7.459148117033803
+            },
+            "31": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 11.052094210356572,
+              "gradient_b_l2": 0.0,
+              "norm_sum_denominator": 11.052094210356572,
+              "summed_gradient_l2": 11.052094210356572
+            },
+            "32": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 9.195764779676542,
+              "gradient_b_l2": 0.0,
+              "norm_sum_denominator": 9.195764779676542,
+              "summed_gradient_l2": 9.195764779676542
+            },
+            "33": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 9.049905986430758,
+              "gradient_b_l2": 0.0,
+              "norm_sum_denominator": 9.049905986430758,
+              "summed_gradient_l2": 9.049905986430758
+            }
+          },
+          "per_module": {
+            "model.language_model.layers.30.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 7.081277112925164,
+              "gradient_b_l2": 0.0,
+              "norm_sum_denominator": 7.081277112925164,
+              "summed_gradient_l2": 7.081277112925164
+            },
+            "model.language_model.layers.30.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 2.3440147358348686,
+              "gradient_b_l2": 0.0,
+              "norm_sum_denominator": 2.3440147358348686,
+              "summed_gradient_l2": 2.3440147358348686
+            },
+            "model.language_model.layers.31.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 10.883980571744331,
+              "gradient_b_l2": 0.0,
+              "norm_sum_denominator": 10.883980571744331,
+              "summed_gradient_l2": 10.883980571744331
+            },
+            "model.language_model.layers.31.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 1.9203524021616536,
+              "gradient_b_l2": 0.0,
+              "norm_sum_denominator": 1.9203524021616536,
+              "summed_gradient_l2": 1.9203524021616536
+            },
+            "model.language_model.layers.32.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 9.067639240524734,
+              "gradient_b_l2": 0.0,
+              "norm_sum_denominator": 9.067639240524734,
+              "summed_gradient_l2": 9.067639240524734
+            },
+            "model.language_model.layers.32.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 1.5297086280845498,
+              "gradient_b_l2": 0.0,
+              "norm_sum_denominator": 1.5297086280845498,
+              "summed_gradient_l2": 1.5297086280845498
+            },
+            "model.language_model.layers.33.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 8.8836440790386,
+              "gradient_b_l2": 0.0,
+              "norm_sum_denominator": 8.8836440790386,
+              "summed_gradient_l2": 8.8836440790386
+            },
+            "model.language_model.layers.33.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 1.7267501962350693,
+              "gradient_b_l2": 0.0,
+              "norm_sum_denominator": 1.7267501962350693,
+              "summed_gradient_l2": 1.7267501962350693
+            }
+          }
+        },
+        "decoder_total": {
+          "aggregate": {
+            "both_zero": false,
+            "cancellation_ratio": 0.7750494065952264,
+            "cosine_similarity": 0.0765616769704262,
+            "gradient_a_l2": 23.477253726685408,
+            "gradient_b_l2": 10.85413019425343,
+            "norm_sum_denominator": 34.33138392093884,
+            "summed_gradient_l2": 26.608518735516544
+          },
+          "per_layer": {
+            "30": {
+              "both_zero": false,
+              "cancellation_ratio": 0.7925825489729743,
+              "cosine_similarity": 0.12109490534660472,
+              "gradient_a_l2": 9.613885894131512,
+              "gradient_b_l2": 4.19595609289259,
+              "norm_sum_denominator": 13.809841987024102,
+              "summed_gradient_l2": 10.945439762989567
+            },
+            "31": {
+              "both_zero": false,
+              "cancellation_ratio": 0.7774275414327508,
+              "cosine_similarity": 0.06360226511800457,
+              "gradient_a_l2": 13.959622122367751,
+              "gradient_b_l2": 6.071992583188926,
+              "norm_sum_denominator": 20.031614705556677,
+              "summed_gradient_l2": 15.573128971469064
+            },
+            "32": {
+              "both_zero": false,
+              "cancellation_ratio": 0.7679332917625047,
+              "cosine_similarity": 0.034729134095851676,
+              "gradient_a_l2": 11.415461722647223,
+              "gradient_b_l2": 5.042866703172056,
+              "norm_sum_denominator": 16.45832842581928,
+              "summed_gradient_l2": 12.6388983249478
+            },
+            "33": {
+              "both_zero": false,
+              "cancellation_ratio": 0.7697943157388393,
+              "cosine_similarity": 0.10167212614773843,
+              "gradient_a_l2": 11.557284474358662,
+              "gradient_b_l2": 6.156825174069707,
+              "norm_sum_denominator": 17.71410964842837,
+              "summed_gradient_l2": 13.636220915734688
+            }
+          },
+          "per_module": {
+            "model.language_model.layers.30.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.784012465039554,
+              "cosine_similarity": 0.08810873988262401,
+              "gradient_a_l2": 9.033085177030966,
+              "gradient_b_l2": 3.9309568957048735,
+              "norm_sum_denominator": 12.96404207273584,
+              "summed_gradient_l2": 10.163970582322115
+            },
+            "model.language_model.layers.30.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.8535496372274307,
+              "cosine_similarity": 0.36365554303303427,
+              "gradient_a_l2": 3.2909229966506235,
+              "gradient_b_l2": 1.4675235662818626,
+              "norm_sum_denominator": 4.758446562932486,
+              "summed_gradient_l2": 4.0615703375571375
+            },
+            "model.language_model.layers.31.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.7794547976438164,
+              "cosine_similarity": 0.07164103914221674,
+              "gradient_a_l2": 13.774113274513319,
+              "gradient_b_l2": 6.000624889662303,
+              "norm_sum_denominator": 19.774738164175623,
+              "summed_gradient_l2": 15.413514534216965
+            },
+            "model.language_model.layers.31.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.6957539419458235,
+              "cosine_similarity": -0.2518581083405746,
+              "gradient_a_l2": 2.268226906677616,
+              "gradient_b_l2": 0.928221344220355,
+              "norm_sum_denominator": 3.196448250897971,
+              "summed_gradient_l2": 2.223941470788096
+            },
+            "model.language_model.layers.32.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.768902548887744,
+              "cosine_similarity": 0.03212871266284958,
+              "gradient_a_l2": 11.265878985732432,
+              "gradient_b_l2": 4.8968202405633425,
+              "norm_sum_denominator": 16.162699226295775,
+              "summed_gradient_l2": 12.427540632004789
+            },
+            "model.language_model.layers.32.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.755463517999276,
+              "cosine_similarity": 0.10219461370635138,
+              "gradient_a_l2": 1.8419383866067682,
+              "gradient_b_l2": 1.2048469270287194,
+              "norm_sum_denominator": 3.0467853136354877,
+              "summed_gradient_l2": 2.301735151627593
+            },
+            "model.language_model.layers.33.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.7695788651781567,
+              "cosine_similarity": 0.09916992638215938,
+              "gradient_a_l2": 11.3150601641537,
+              "gradient_b_l2": 5.9891888130434205,
+              "norm_sum_denominator": 17.30424897719712,
+              "summed_gradient_l2": 13.316984290631638
+            },
+            "model.language_model.layers.33.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.7758716122452657,
+              "cosine_similarity": 0.15305222199547233,
+              "gradient_a_l2": 2.353770996259755,
+              "gradient_b_l2": 1.4269245199988032,
+              "norm_sum_denominator": 3.7806955162585583,
+              "summed_gradient_l2": 2.9333343256079747
+            }
+          }
+        },
+        "full_vocab_hinge_weighted": {
+          "aggregate": {
+            "both_zero": false,
+            "cancellation_ratio": 0.9438433374642625,
+            "cosine_similarity": 0.7816145175637587,
+            "gradient_a_l2": 8.225260220179074,
+            "gradient_b_l2": 8.51624367431695,
+            "norm_sum_denominator": 16.741503894496024,
+            "summed_gradient_l2": 15.801356909952077
+          },
+          "per_layer": {
+            "30": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9445629990301128,
+              "cosine_similarity": 0.7843984382007514,
+              "gradient_a_l2": 3.2957610500215346,
+              "gradient_b_l2": 3.2917464933750997,
+              "norm_sum_denominator": 6.587507543396635,
+              "summed_gradient_l2": 6.222315881324216
+            },
+            "31": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9394008423758884,
+              "cosine_similarity": 0.7648654702971728,
+              "gradient_a_l2": 4.568507175417513,
+              "gradient_b_l2": 4.74283113192996,
+              "norm_sum_denominator": 9.311338307347473,
+              "summed_gradient_l2": 8.747079049569095
+            },
+            "32": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9424239827607586,
+              "cosine_similarity": 0.7763236031301856,
+              "gradient_a_l2": 3.9290168380611834,
+              "gradient_b_l2": 3.9544248716671735,
+              "norm_sum_denominator": 7.883441709728357,
+              "summed_gradient_l2": 7.429544533944482
+            },
+            "33": {
+              "both_zero": false,
+              "cancellation_ratio": 0.949131622487113,
+              "cosine_similarity": 0.8014592216082183,
+              "gradient_a_l2": 4.5259732285123855,
+              "gradient_b_l2": 4.853749904149469,
+              "norm_sum_denominator": 9.379723132661855,
+              "summed_gradient_l2": 8.902591835383253
+            }
+          },
+          "per_module": {
+            "model.language_model.layers.30.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9413905102924195,
+              "cosine_similarity": 0.7724247000634942,
+              "gradient_a_l2": 3.042570082743516,
+              "gradient_b_l2": 3.0776712397794577,
+              "norm_sum_denominator": 6.120241322522974,
+              "summed_gradient_l2": 5.761537101722655
+            },
+            "model.language_model.layers.30.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9652326244824432,
+              "cosine_similarity": 0.8631212061628402,
+              "gradient_a_l2": 1.2668102424724184,
+              "gradient_b_l2": 1.1677048927197202,
+              "norm_sum_denominator": 2.4345151351921386,
+              "summed_gradient_l2": 2.349873433283738
+            },
+            "model.language_model.layers.31.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9403097532910293,
+              "cosine_similarity": 0.7682999493716989,
+              "gradient_a_l2": 4.531900813825942,
+              "gradient_b_l2": 4.6861952807007565,
+              "norm_sum_denominator": 9.218096094526699,
+              "summed_gradient_l2": 8.6678656644574
+            },
+            "model.language_model.layers.31.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.8979893784503021,
+              "cosine_similarity": 0.6073554328854567,
+              "gradient_a_l2": 0.5771765981787198,
+              "gradient_b_l2": 0.730767361847771,
+              "norm_sum_denominator": 1.3079439600264908,
+              "summed_gradient_l2": 1.1745197837120154
+            },
+            "model.language_model.layers.32.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9417832894309272,
+              "cosine_similarity": 0.7739107984989767,
+              "gradient_a_l2": 3.8503726209547757,
+              "gradient_b_l2": 3.8365600126662263,
+              "norm_sum_denominator": 7.6869326336210015,
+              "summed_gradient_l2": 7.239424701325527
+            },
+            "model.language_model.layers.32.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9595154122888366,
+              "cosine_similarity": 0.8396987109418091,
+              "gradient_a_l2": 0.7821790035345073,
+              "gradient_b_l2": 0.95827101326847,
+              "norm_sum_denominator": 1.7404500168029773,
+              "summed_gradient_l2": 1.6699886154408214
+            },
+            "model.language_model.layers.33.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9496577655567056,
+              "cosine_similarity": 0.8034776744618152,
+              "gradient_a_l2": 4.417248424539358,
+              "gradient_b_l2": 4.724553499862115,
+              "norm_sum_denominator": 9.141801924401474,
+              "summed_gradient_l2": 8.681583188689094
+            },
+            "model.language_model.layers.33.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9394132240262195,
+              "cosine_similarity": 0.764139452802285,
+              "gradient_a_l2": 0.9860781009205348,
+              "gradient_b_l2": 1.112421843983395,
+              "norm_sum_denominator": 2.0984999449039297,
+              "summed_gradient_l2": 1.9713585988610447
+            }
+          }
+        },
+        "language_nll": {
+          "aggregate": {
+            "both_zero": false,
+            "cancellation_ratio": 0.9588664863573113,
+            "cosine_similarity": 0.8387963156396282,
+            "gradient_a_l2": 2.6746719437408486,
+            "gradient_b_l2": 2.578909530811171,
+            "norm_sum_denominator": 5.2535814745520195,
+            "summed_gradient_l2": 5.037483209295558
+          },
+          "per_layer": {
+            "30": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9617346672615081,
+              "cosine_similarity": 0.8494717754486675,
+              "gradient_a_l2": 1.1698192265748732,
+              "gradient_b_l2": 1.0557593093888817,
+              "norm_sum_denominator": 2.2255785359637548,
+              "summed_gradient_l2": 2.140416032749456
+            },
+            "31": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9587229839843497,
+              "cosine_similarity": 0.8381764819523678,
+              "gradient_a_l2": 1.5960432961256377,
+              "gradient_b_l2": 1.510386752702672,
+              "norm_sum_denominator": 3.10643004882831,
+              "summed_gradient_l2": 2.9782058859513265
+            },
+            "32": {
+              "both_zero": false,
+              "cancellation_ratio": 0.957392405516078,
+              "cosine_similarity": 0.8331338325956487,
+              "gradient_a_l2": 1.2160393473695428,
+              "gradient_b_l2": 1.168401563999314,
+              "norm_sum_denominator": 2.3844409113688565,
+              "summed_gradient_l2": 2.2828456199463787
+            },
+            "33": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9592906843991905,
+              "cosine_similarity": 0.8404262331691127,
+              "gradient_a_l2": 1.326381199471538,
+              "gradient_b_l2": 1.3746695207399995,
+              "norm_sum_denominator": 2.7010507202115375,
+              "summed_gradient_l2": 2.5910927939886523
+            }
+          },
+          "per_module": {
+            "model.language_model.layers.30.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9609972910203824,
+              "cosine_similarity": 0.8466573732069995,
+              "gradient_a_l2": 1.1092500711918425,
+              "gradient_b_l2": 1.0048149417762662,
+              "norm_sum_denominator": 2.1140650129681084,
+              "summed_gradient_l2": 2.031610750503322
+            },
+            "model.language_model.layers.30.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9686754293485053,
+              "cosine_similarity": 0.8760852497051311,
+              "gradient_a_l2": 0.37153909945673064,
+              "gradient_b_l2": 0.32399791996932004,
+              "norm_sum_denominator": 0.6955370194260506,
+              "summed_gradient_l2": 0.6737496209203092
+            },
+            "model.language_model.layers.31.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9598171347571485,
+              "cosine_similarity": 0.8424087404525914,
+              "gradient_a_l2": 1.5561249858530197,
+              "gradient_b_l2": 1.4838316276321288,
+              "norm_sum_denominator": 3.0399566134851486,
+              "summed_gradient_l2": 2.9178024465413595
+            },
+            "model.language_model.layers.31.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9372884164959806,
+              "cosine_similarity": 0.7538053411495421,
+              "gradient_a_l2": 0.3547241625707526,
+              "gradient_b_l2": 0.2819784452370614,
+              "norm_sum_denominator": 0.636702607807814,
+              "summed_gradient_l2": 0.5967739790510473
+            },
+            "model.language_model.layers.32.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9577468421627484,
+              "cosine_similarity": 0.8344919886954765,
+              "gradient_a_l2": 1.1815467918943727,
+              "gradient_b_l2": 1.13526811627192,
+              "norm_sum_denominator": 2.3168149081662928,
+              "summed_gradient_l2": 2.218922162171845
+            },
+            "model.language_model.layers.32.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9513884446184685,
+              "cosine_similarity": 0.8102037443010839,
+              "gradient_a_l2": 0.2875741172551174,
+              "gradient_b_l2": 0.27627616424954965,
+              "norm_sum_denominator": 0.5638502815046671,
+              "summed_gradient_l2": 0.5364406423184108
+            },
+            "model.language_model.layers.33.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9595538889434295,
+              "cosine_similarity": 0.8414351951209524,
+              "gradient_a_l2": 1.2769880147005477,
+              "gradient_b_l2": 1.3241542754663855,
+              "norm_sum_denominator": 2.6011422901669334,
+              "summed_gradient_l2": 2.4959362002248997
+            },
+            "model.language_model.layers.33.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9559280528321771,
+              "cosine_similarity": 0.8275600412465326,
+              "gradient_a_l2": 0.35859266113892946,
+              "gradient_b_l2": 0.3692312906778527,
+              "norm_sum_denominator": 0.7278239518167822,
+              "summed_gradient_l2": 0.6957473330648368
+            }
+          }
+        }
+      },
+      "pair_id": "pair_000003",
+      "question_key": "cfq_c3ee105cd26e0caf",
+      "question_sha256": "97da6b9d5b7f9ce5caa3dc43aee55cd216b62d4ee00fdc5c347595e6c1c27c5c",
+      "sides": {
+        "counterfactual": {
+          "alternate_token_id": 898,
+          "answer_token_id": 989,
+          "diagnostics": {
+            "candidate_hinge_active": false,
+            "candidate_logit_margin": 4.625,
+            "full_vocab_first_token_margin": -19.0625,
+            "full_vocab_hinge_active": true
+          },
+          "gradient_sha256": {
+            "candidate_hinge_weighted": "1d80f85c13bd43011bc1453af16d7b0d72cd1b95514c8121bfa21c48c33ee099",
+            "decoder_total": "4ab4d4ce068a80ea3bd710891f21643d6fe24a01efd90f5fc8826fe0d468fa64",
+            "full_vocab_hinge_weighted": "ec73bcc0717efb60412cb8b9321f8190256b0d3112eaaf2789c11f162e5da5ab",
+            "language_nll": "7736a77e1ded24991492850cd0e2d783945cc57a3cbddaa99565335a8ce31ca3"
+          },
+          "objective_values": {
+            "candidate_hinge_weighted": 0.0,
+            "decoder_total": 28.476634979248047,
+            "full_vocab_hinge_weighted": 20.0625,
+            "language_nll": 8.414135932922363
+          },
+          "question_id": "q_000025",
+          "scene_id": "scene_000008"
+        },
+        "reference": {
+          "alternate_token_id": 989,
+          "answer_token_id": 898,
+          "diagnostics": {
+            "candidate_hinge_active": true,
+            "candidate_logit_margin": -4.8125,
+            "full_vocab_first_token_margin": -25.75,
+            "full_vocab_hinge_active": true
+          },
+          "gradient_sha256": {
+            "candidate_hinge_weighted": "5ad33453aa884f3001fba7c60b372eb8632eb28d2e0ffe1e60ac26fcec80483c",
+            "decoder_total": "ef2a9a29eae626607b23d2f855ceff44e73d065dd9f37bc5c4c9ecd9c3ecdb55",
+            "full_vocab_hinge_weighted": "a9b94c98eb14dc2c532f3f2310f7f10faa0500c11c5a9bf236b1dba86e011c43",
+            "language_nll": "1b7f7e4bbe9f25efa1c204a236e4406ac042738c4ce020ea2297a9f5c7d7d73f"
+          },
+          "objective_values": {
+            "candidate_hinge_weighted": 23.25,
+            "decoder_total": 60.72267150878906,
+            "full_vocab_hinge_weighted": 26.75,
+            "language_nll": 10.72266960144043
+          },
+          "question_id": "q_000041",
+          "scene_id": "scene_000007"
+        }
+      }
+    },
+    {
+      "cancellation": {
+        "candidate_hinge_weighted": {
+          "aggregate": {
+            "both_zero": false,
+            "cancellation_ratio": 1.0,
+            "cosine_similarity": null,
+            "gradient_a_l2": 21.327924826730175,
+            "gradient_b_l2": 0.0,
+            "norm_sum_denominator": 21.327924826730175,
+            "summed_gradient_l2": 21.327924826730175
+          },
+          "per_layer": {
+            "30": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 8.676700839461446,
+              "gradient_b_l2": 0.0,
+              "norm_sum_denominator": 8.676700839461446,
+              "summed_gradient_l2": 8.676700839461446
+            },
+            "31": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 12.8496271070704,
+              "gradient_b_l2": 0.0,
+              "norm_sum_denominator": 12.8496271070704,
+              "summed_gradient_l2": 12.8496271070704
+            },
+            "32": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 10.116696162883798,
+              "gradient_b_l2": 0.0,
+              "norm_sum_denominator": 10.116696162883798,
+              "summed_gradient_l2": 10.116696162883798
+            },
+            "33": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 10.58937117652746,
+              "gradient_b_l2": 0.0,
+              "norm_sum_denominator": 10.58937117652746,
+              "summed_gradient_l2": 10.58937117652746
+            }
+          },
+          "per_module": {
+            "model.language_model.layers.30.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 8.148877491422473,
+              "gradient_b_l2": 0.0,
+              "norm_sum_denominator": 8.148877491422473,
+              "summed_gradient_l2": 8.148877491422473
+            },
+            "model.language_model.layers.30.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 2.9800894428354128,
+              "gradient_b_l2": 0.0,
+              "norm_sum_denominator": 2.9800894428354128,
+              "summed_gradient_l2": 2.9800894428354128
+            },
+            "model.language_model.layers.31.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 12.72127783617787,
+              "gradient_b_l2": 0.0,
+              "norm_sum_denominator": 12.72127783617787,
+              "summed_gradient_l2": 12.72127783617787
+            },
+            "model.language_model.layers.31.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 1.8116310346006954,
+              "gradient_b_l2": 0.0,
+              "norm_sum_denominator": 1.8116310346006954,
+              "summed_gradient_l2": 1.8116310346006954
+            },
+            "model.language_model.layers.32.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 10.005047551721557,
+              "gradient_b_l2": 0.0,
+              "norm_sum_denominator": 10.005047551721557,
+              "summed_gradient_l2": 10.005047551721557
+            },
+            "model.language_model.layers.32.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 1.4988544758908708,
+              "gradient_b_l2": 0.0,
+              "norm_sum_denominator": 1.4988544758908708,
+              "summed_gradient_l2": 1.4988544758908708
+            },
+            "model.language_model.layers.33.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 10.420889494181095,
+              "gradient_b_l2": 0.0,
+              "norm_sum_denominator": 10.420889494181095,
+              "summed_gradient_l2": 10.420889494181095
+            },
+            "model.language_model.layers.33.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 1.0,
+              "cosine_similarity": null,
+              "gradient_a_l2": 1.881447332331229,
+              "gradient_b_l2": 0.0,
+              "norm_sum_denominator": 1.881447332331229,
+              "summed_gradient_l2": 1.881447332331229
+            }
+          }
+        },
+        "decoder_total": {
+          "aggregate": {
+            "both_zero": false,
+            "cancellation_ratio": 0.8050208439596916,
+            "cosine_similarity": 0.14443835560099258,
+            "gradient_a_l2": 27.596063293258617,
+            "gradient_b_l2": 11.242831339397798,
+            "norm_sum_denominator": 38.83889463265641,
+            "summed_gradient_l2": 31.266119735642604
+          },
+          "per_layer": {
+            "30": {
+              "both_zero": false,
+              "cancellation_ratio": 0.8179311996398672,
+              "cosine_similarity": 0.15163760264680218,
+              "gradient_a_l2": 11.352321311700477,
+              "gradient_b_l2": 4.106456022558088,
+              "norm_sum_denominator": 15.458777334258565,
+              "summed_gradient_l2": 12.644216289975695
+            },
+            "31": {
+              "both_zero": false,
+              "cancellation_ratio": 0.8019265283061751,
+              "cosine_similarity": 0.09936363737970719,
+              "gradient_a_l2": 16.4820957413892,
+              "gradient_b_l2": 6.166977363812345,
+              "norm_sum_denominator": 22.649073105201545,
+              "summed_gradient_l2": 18.162892564607034
+            },
+            "32": {
+              "both_zero": false,
+              "cancellation_ratio": 0.797443448865691,
+              "cosine_similarity": 0.09813786625910124,
+              "gradient_a_l2": 12.857174507826338,
+              "gradient_b_l2": 5.014202673355271,
+              "norm_sum_denominator": 17.871377181181607,
+              "summed_gradient_l2": 14.251412655341072
+            },
+            "33": {
+              "both_zero": false,
+              "cancellation_ratio": 0.8112653510173697,
+              "cosine_similarity": 0.2237937436107954,
+              "gradient_a_l2": 13.989320704323367,
+              "gradient_b_l2": 6.809143647014938,
+              "norm_sum_denominator": 20.798464351338303,
+              "summed_gradient_l2": 16.87307348261072
+            }
+          },
+          "per_module": {
+            "model.language_model.layers.30.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.8061321400925832,
+              "cosine_similarity": 0.1106935982710955,
+              "gradient_a_l2": 10.507981853447662,
+              "gradient_b_l2": 3.8765632320781584,
+              "norm_sum_denominator": 14.38454508552582,
+              "summed_gradient_l2": 11.595844114053179
+            },
+            "model.language_model.layers.30.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.8920816171041499,
+              "cosine_similarity": 0.43983959684537965,
+              "gradient_a_l2": 4.296221192129539,
+              "gradient_b_l2": 1.3547097744178562,
+              "norm_sum_denominator": 5.650930966547396,
+              "summed_gradient_l2": 5.041091634781518
+            },
+            "model.language_model.layers.31.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.8038385312626202,
+              "cosine_similarity": 0.10569792398924674,
+              "gradient_a_l2": 16.348187135392877,
+              "gradient_b_l2": 6.095702957975424,
+              "norm_sum_denominator": 22.4438900933683,
+              "summed_gradient_l2": 18.041263648472846
+            },
+            "model.language_model.layers.31.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.6921876388950502,
+              "cosine_similarity": -0.22109964163729443,
+              "gradient_a_l2": 2.0967254027397435,
+              "gradient_b_l2": 0.934887829583471,
+              "norm_sum_denominator": 3.0316132323232146,
+              "summed_gradient_l2": 2.098445205324797
+            },
+            "model.language_model.layers.32.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.7944131863331277,
+              "cosine_similarity": 0.0810793834486246,
+              "gradient_a_l2": 12.659530044953268,
+              "gradient_b_l2": 4.875145992753894,
+              "norm_sum_denominator": 17.53467603770716,
+              "summed_gradient_l2": 13.929777862434088
+            },
+            "model.language_model.layers.32.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.8807220328252224,
+              "cosine_similarity": 0.5023029233341675,
+              "gradient_a_l2": 2.245714889656433,
+              "gradient_b_l2": 1.1726806891983328,
+              "norm_sum_denominator": 3.4183955788547657,
+              "summed_gradient_l2": 3.010656303209722
+            },
+            "model.language_model.layers.33.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.8088719581777253,
+              "cosine_similarity": 0.21284965479714163,
+              "gradient_a_l2": 13.689345500538009,
+              "gradient_b_l2": 6.611068441039252,
+              "norm_sum_denominator": 20.30041394157726,
+              "summed_gradient_l2": 16.420435576741994
+            },
+            "model.language_model.layers.33.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.8603946878286138,
+              "cosine_similarity": 0.43729330137951133,
+              "gradient_a_l2": 2.881477665245758,
+              "gradient_b_l2": 1.630402181542559,
+              "norm_sum_denominator": 4.511879846788316,
+              "summed_gradient_l2": 3.8819974522976475
+            }
+          }
+        },
+        "full_vocab_hinge_weighted": {
+          "aggregate": {
+            "both_zero": false,
+            "cancellation_ratio": 0.9473027135220591,
+            "cosine_similarity": 0.794736633436819,
+            "gradient_a_l2": 8.986147366066918,
+            "gradient_b_l2": 8.777828051437785,
+            "norm_sum_denominator": 17.763975417504703,
+            "summed_gradient_l2": 16.827862115941358
+          },
+          "per_layer": {
+            "30": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9406132052460472,
+              "cosine_similarity": 0.7690619108796324,
+              "gradient_a_l2": 3.4922615517232685,
+              "gradient_b_l2": 3.1987168463422635,
+              "norm_sum_denominator": 6.690978398065532,
+              "summed_gradient_l2": 6.293622637236482
+            },
+            "31": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9373882087811259,
+              "cosine_similarity": 0.7573096940537357,
+              "gradient_a_l2": 4.959825323553918,
+              "gradient_b_l2": 4.779057107978479,
+              "norm_sum_denominator": 9.738882431532398,
+              "summed_gradient_l2": 9.12911355802413
+            },
+            "32": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9443807548579165,
+              "cosine_similarity": 0.7836036293680037,
+              "gradient_a_l2": 4.094459162051769,
+              "gradient_b_l2": 3.9168238199669827,
+              "norm_sum_denominator": 8.011282982018752,
+              "summed_gradient_l2": 7.565701469939249
+            },
+            "33": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9604743141965515,
+              "cosine_similarity": 0.844995772022785,
+              "gradient_a_l2": 5.2144501789880735,
+              "gradient_b_l2": 5.351409175119505,
+              "norm_sum_denominator": 10.565859354107578,
+              "summed_gradient_l2": 10.148236517033695
+            }
+          },
+          "per_module": {
+            "model.language_model.layers.30.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.938558448110123,
+              "cosine_similarity": 0.7615271417726783,
+              "gradient_a_l2": 3.2171491410329516,
+              "gradient_b_l2": 3.0127215414617052,
+              "norm_sum_denominator": 6.229870682494656,
+              "summed_gradient_l2": 5.847097759688937
+            },
+            "model.language_model.layers.30.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9567970122651837,
+              "cosine_similarity": 0.8285901802956761,
+              "gradient_a_l2": 1.3586177350511572,
+              "gradient_b_l2": 1.074848071443793,
+              "norm_sum_denominator": 2.43346580649495,
+              "summed_gradient_l2": 2.3283328131038536
+            },
+            "model.language_model.layers.31.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9378395604810845,
+              "cosine_similarity": 0.7589756708234892,
+              "gradient_a_l2": 4.9289952913419715,
+              "gradient_b_l2": 4.722424886584533,
+              "norm_sum_denominator": 9.651420177926504,
+              "summed_gradient_l2": 9.051483657684862
+            },
+            "model.language_model.layers.31.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9240155866008419,
+              "cosine_similarity": 0.7016713430118845,
+              "gradient_a_l2": 0.5521527488797198,
+              "gradient_b_l2": 0.7335462029666598,
+              "norm_sum_denominator": 1.2856989518463795,
+              "summed_gradient_l2": 1.18800587118242
+            },
+            "model.language_model.layers.32.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9422760860647739,
+              "cosine_similarity": 0.7756702290531029,
+              "gradient_a_l2": 3.9660089867487938,
+              "gradient_b_l2": 3.80344018650129,
+              "norm_sum_denominator": 7.769449173250084,
+              "summed_gradient_l2": 7.320966157849282
+            },
+            "model.language_model.layers.32.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9772715941231991,
+              "cosine_similarity": 0.909961108233267,
+              "gradient_a_l2": 1.0175306121868917,
+              "gradient_b_l2": 0.9356022575687353,
+              "norm_sum_denominator": 1.953132869755627,
+              "summed_gradient_l2": 1.9087412731605
+            },
+            "model.language_model.layers.33.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9601521810044871,
+              "cosine_similarity": 0.8437573191274199,
+              "gradient_a_l2": 5.063150710046722,
+              "gradient_b_l2": 5.1982993096601,
+              "norm_sum_denominator": 10.261450019706821,
+              "summed_gradient_l2": 9.852553616690042
+            },
+            "model.language_model.layers.33.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.965814819351951,
+              "cosine_similarity": 0.8655843836765795,
+              "gradient_a_l2": 1.2469946096523818,
+              "gradient_b_l2": 1.2709305436334701,
+              "norm_sum_denominator": 2.517925153285852,
+              "summed_gradient_l2": 2.4318494270625086
+            }
+          }
+        },
+        "language_nll": {
+          "aggregate": {
+            "both_zero": false,
+            "cancellation_ratio": 0.964063069977696,
+            "cosine_similarity": 0.858647898654745,
+            "gradient_a_l2": 2.998499292333218,
+            "gradient_b_l2": 2.7878637271319655,
+            "norm_sum_denominator": 5.786363019465183,
+            "summed_gradient_l2": 5.578418896551015
+          },
+          "per_layer": {
+            "30": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9643395353351633,
+              "cosine_similarity": 0.8592017656990194,
+              "gradient_a_l2": 1.2790117137224348,
+              "gradient_b_l2": 1.1105578114729426,
+              "norm_sum_denominator": 2.3895695251953777,
+              "summed_gradient_l2": 2.304356365577977
+            },
+            "31": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9624331811822978,
+              "cosine_similarity": 0.8521403544330824,
+              "gradient_a_l2": 1.82179905187219,
+              "gradient_b_l2": 1.6384994491764033,
+              "norm_sum_denominator": 3.4602985010485936,
+              "summed_gradient_l2": 3.3303060942045346
+            },
+            "32": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9618236820478376,
+              "cosine_similarity": 0.8499837821421813,
+              "gradient_a_l2": 1.3048138358568662,
+              "gradient_b_l2": 1.2073488013401756,
+              "norm_sum_denominator": 2.512162637197042,
+              "summed_gradient_l2": 2.416257517611865
+            },
+            "33": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9688403992471891,
+              "cosine_similarity": 0.8772980242843534,
+              "gradient_a_l2": 1.527624335573925,
+              "gradient_b_l2": 1.5480548877173526,
+              "norm_sum_denominator": 3.0756792232912775,
+              "summed_gradient_l2": 2.9798422866498058
+            }
+          },
+          "per_module": {
+            "model.language_model.layers.30.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9642898713565781,
+              "cosine_similarity": 0.8590994771244249,
+              "gradient_a_l2": 1.2141120744960803,
+              "gradient_b_l2": 1.0641546624981608,
+              "norm_sum_denominator": 2.278266736994241,
+              "summed_gradient_l2": 2.1969095387321476
+            },
+            "model.language_model.layers.30.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9660113943448431,
+              "cosine_similarity": 0.8644856031694804,
+              "gradient_a_l2": 0.40224723044668004,
+              "gradient_b_l2": 0.31766886360956786,
+              "norm_sum_denominator": 0.7199160940562479,
+              "summed_gradient_l2": 0.6954471498305692
+            },
+            "model.language_model.layers.31.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9635696905328132,
+              "cosine_similarity": 0.8566320697818726,
+              "gradient_a_l2": 1.7687365424770576,
+              "gradient_b_l2": 1.6137435226156294,
+              "norm_sum_denominator": 3.382480065092687,
+              "summed_gradient_l2": 3.25925526955477
+            },
+            "model.language_model.layers.31.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9500313581258785,
+              "cosine_similarity": 0.7959416838602913,
+              "gradient_a_l2": 0.4364892080094436,
+              "gradient_b_l2": 0.2837468734056181,
+              "norm_sum_denominator": 0.7202360814150617,
+              "summed_gradient_l2": 0.6842468625980118
+            },
+            "model.language_model.layers.32.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9613403128223834,
+              "cosine_similarity": 0.8481585819034302,
+              "gradient_a_l2": 1.2615359400444839,
+              "gradient_b_l2": 1.1749385372357828,
+              "norm_sum_denominator": 2.4364744772802664,
+              "summed_gradient_l2": 2.3422811361723643
+            },
+            "model.language_model.layers.32.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.970838492203723,
+              "cosine_similarity": 0.8841024171894161,
+              "gradient_a_l2": 0.3332659871927897,
+              "gradient_b_l2": 0.2778678855423765,
+              "norm_sum_denominator": 0.6111338727351663,
+              "summed_gradient_l2": 0.5933122875408308
+            },
+            "model.language_model.layers.33.self_attn.o_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9683509768417701,
+              "cosine_similarity": 0.8753985877317356,
+              "gradient_a_l2": 1.4641170688512457,
+              "gradient_b_l2": 1.4887070001481453,
+              "norm_sum_denominator": 2.9528240689993908,
+              "summed_gradient_l2": 2.8593700716574504
+            },
+            "model.language_model.layers.33.self_attn.q_proj": {
+              "both_zero": false,
+              "cancellation_ratio": 0.9747918289294631,
+              "cosine_similarity": 0.9004208697545171,
+              "gradient_a_l2": 0.4358868194108374,
+              "gradient_b_l2": 0.42452962569824565,
+              "norm_sum_denominator": 0.860416445109083,
+              "summed_gradient_l2": 0.8387269201688701
+            }
+          }
+        }
+      },
+      "pair_id": "pair_000003",
+      "question_key": "cfq_fdafc0e247e0856d",
+      "question_sha256": "e7c0a0fa7625745c127955117403ad9a772f0d5607865b2da2162d20ec70b2da",
+      "sides": {
+        "counterfactual": {
+          "alternate_token_id": 898,
+          "answer_token_id": 989,
+          "diagnostics": {
+            "candidate_hinge_active": false,
+            "candidate_logit_margin": 3.90625,
+            "full_vocab_first_token_margin": -16.59375,
+            "full_vocab_hinge_active": true
+          },
+          "gradient_sha256": {
+            "candidate_hinge_weighted": "1d80f85c13bd43011bc1453af16d7b0d72cd1b95514c8121bfa21c48c33ee099",
+            "decoder_total": "d737647a9f27e1a81820244e3c8e0fa304860f36086ea90d82e5f46aecd45bc2",
+            "full_vocab_hinge_weighted": "48f5f9782835dfc2259aa2848197a18e93ba2b1271eefd3efc0883eb13cff711",
+            "language_nll": "c6dd40556fa5867a38e6369ac2a2e2954c43a426a0c134d326aed352952ddecb"
+          },
+          "objective_values": {
+            "candidate_hinge_weighted": 0.0,
+            "decoder_total": 25.757877349853516,
+            "full_vocab_hinge_weighted": 17.59375,
+            "language_nll": 8.164127349853516
+          },
+          "question_id": "q_000038",
+          "scene_id": "scene_000008"
+        },
+        "reference": {
+          "alternate_token_id": 989,
+          "answer_token_id": 898,
+          "diagnostics": {
+            "candidate_hinge_active": true,
+            "candidate_logit_margin": -3.9375,
+            "full_vocab_first_token_margin": -22.3125,
+            "full_vocab_hinge_active": true
+          },
+          "gradient_sha256": {
+            "candidate_hinge_weighted": "4a04c7873f0a021dd0a6acf7fbcbe6ed210f9266dff4d81b9f9c009ed498822c",
+            "decoder_total": "f6861b09c3048c2dc36073c93a342a512de03d07eb721ab05137f833adefbee7",
+            "full_vocab_hinge_weighted": "22fa40ff295569ea099482805b4059e248996dde72e5fbaf1f997a9d309925b3",
+            "language_nll": "3c7cb7a224d0052a1b7218b1a0d1cb2c06212c6c1a48383cfd30562b40a2b0d3"
+          },
+          "objective_values": {
+            "candidate_hinge_weighted": 19.75,
+            "decoder_total": 53.246131896972656,
+            "full_vocab_hinge_weighted": 23.3125,
+            "language_nll": 10.183629989624023
+          },
+          "question_id": "q_000097",
+          "scene_id": "scene_000007"
+        }
+      }
+    }
+  ]
+}
