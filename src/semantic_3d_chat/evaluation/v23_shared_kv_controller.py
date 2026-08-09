@@ -487,7 +487,7 @@ def _adapter_payload(adapter_path: Path) -> dict[str, Any]:
     bank_states: dict[str, dict[str, torch.Tensor]] = {name: {} for name in bank_prefixes}
     unknown: list[str] = []
     with safe_open(safe_adapter, framework="pt", device="cpu") as handle:
-        for key in handle:
+        for key in handle.keys():  # noqa: SIM118 - safe_open itself is not iterable
             tensor = handle.get_tensor(key)
             if key.startswith(scene_prefixes):
                 scene_state[key] = tensor

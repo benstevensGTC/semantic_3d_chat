@@ -7,6 +7,7 @@ from pathlib import Path
 
 import pytest
 import torch
+from safetensors.torch import save_file
 
 from semantic_3d_chat.config import config_hash, load_config
 from semantic_3d_chat.evaluation import v23_shared_kv_controller as controller
@@ -233,6 +234,28 @@ def test_v23_optimizer_manifest_accepts_exact_eight_parameter_state(tmp_path: Pa
         for record in manifest["parameter_states"]
         if record["role"] == "B"
     )
+
+
+def test_v23_adapter_payload_reads_real_safetensors_keys(tmp_path: Path) -> None:
+    tensors = {
+        "scene_model.weight": torch.ones(1),
+        "global_scene_residual.weight": torch.ones(1),
+        "signed_x_scene_residual.weight": torch.ones(1),
+        "lora_banks.inherited_v12.adapters.0.lora_a": torch.ones(1),
+        "lora_banks.extension_v13.adapters.0.lora_a": torch.ones(1),
+    }
+    for index in range(4):
+        tensors[f"lora_banks.{controller.NEW_BANK}.adapters.{index}.lora_a"] = torch.ones(1)
+        tensors[f"lora_banks.{controller.NEW_BANK}.adapters.{index}.lora_b"] = torch.zeros(1)
+    adapter = tmp_path / "adapter.safetensors"
+    save_file(tensors, adapter)
+
+    payload = controller._adapter_payload(adapter)
+
+    assert payload["tensor_count"] == 13
+    assert set(payload["new_bank_state"]) == {
+        f"adapters.{index}.{suffix}" for index in range(4) for suffix in ("lora_a", "lora_b")
+    }
 
 
 def test_v23_optimizer_manifest_rejects_parameter_reordering(tmp_path: Path) -> None:
