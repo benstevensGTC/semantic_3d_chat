@@ -1,0 +1,526 @@
+{
+  "schema_version": 1,
+  "archive_type": "immutable_v24_final_summary",
+  "sealed_from_source": {
+    "training": {
+      "available": true,
+      "head_commit": "622dd3687756c0d6cebd332de860a7d01899bb8b",
+      "head_tree": "45c2126beedd0dc34c34fb1b876cb56a0ae50af3",
+      "is_clean": true,
+      "schema_version": 1,
+      "scope": "repository_excluding_generated_artifacts_v1",
+      "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "extension_controller": {
+      "available": true,
+      "head_commit": "b52cd8750a3f3bcecfd0e9c9073e2e214da65d06",
+      "head_tree": "0c1a21c9a5ff3374badc6c75889f85dbae191b7a",
+      "is_clean": true,
+      "schema_version": 1,
+      "scope": "repository_excluding_generated_artifacts_v1",
+      "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "integrity_policy": {
+    "validator_is_source_head_independent": true,
+    "current_source_head_required": false,
+    "optimizer_replay_identity": "exact adapter tensors, decoded optimizer state, history prefix, and initialization provenance; raw torch.save container bytes are recorded but not required to match",
+    "question_dependent_scene_processing": false
+  },
+  "base_lineage": {
+    "experiment": "V23 shared-KV selected epoch 2",
+    "archive_path": "reports/gemma4/metrics/v23_final_summary.json",
+    "archive_sha256": "cdb7cabc2b6a9a8420e682a20067dd501cc58a69addb2fb828d2b99fc94df208",
+    "checkpoint_path": "data_gemma4/checkpoints/gemma4_v23_shared_kv/epoch_002",
+    "checkpoint_artifact_hashes": {
+      "adapter_sha256": "dba2511db49fa46af905b293fc999642286f8533fa1d4cca2c872ffda2980ea8",
+      "metadata_sha256": "1c0436549e832c2ac9723e2556ad8bf09862020c6cda47db8358b2232b391ba0",
+      "optimizer_sha256": "08c3618d765346a018e78e4a608361d29f1d0c88cf01d5c2af26e0b20c9a3daa"
+    }
+  },
+  "config": {
+    "path": "configs/experiments/gemma4_color_mirror_shared_query_v24.yaml",
+    "file_sha256": "fd2c83007da11e0352f37310c18123821758cd55382b31a7d1befc118a7d81e2",
+    "resolved_config_sha256": "82d5fee205842fb86133498eb4ac7765e61c22e7e7bc2745cfa6a2e36b9447f1",
+    "preflight_contract_sha256": "3922eaed356dffa9a46ee601135cceb3e5a68e81e459805c8ddb8664a4c8a996"
+  },
+  "architecture": {
+    "source_checkpoint": "data_gemma4/checkpoints/gemma4_v23_shared_kv/epoch_002",
+    "frozen_scene_state_sha256": "690bd890bfda024dbb5c7d3c68087b8113bc3b8ee81dd6143c7eb2a884e7245b",
+    "frozen_global_scene_residual_state_sha256": "ce3bf864eed6dd4a50f1b67296981e144d6a79e9cf192ad9a9230f2ae18208dc",
+    "frozen_signed_x_scene_residual_state_sha256": "e8dabc69627f60723b89520b02dfee985e49b7b7e35fdd1213cc79f7b8164f58",
+    "frozen_lora_bank_state_sha256": {
+      "extension_v13": "4eb90fb9b0bea579d14cfcb0f61ebd5b6d566fd600bd3d5e1bfe5177a39e1b34",
+      "extension_v23_shared_kv": "91a9eea577cab5a37e840cdf4007722a398415846af91280713bcb2cda0f045c",
+      "inherited_v12": "dec768bed654c8c4e16da0318857543ad54d8f5f68f4d24a9a87cd19ec706594"
+    },
+    "trainable_bank": "extension_v24_shared_query",
+    "trainable_parameter_count": 36864,
+    "rank": 4,
+    "alpha": 8.0,
+    "learning_rate": 0.0003,
+    "target_modules": [
+      "model.language_model.layers.28.self_attn.q_proj",
+      "model.language_model.layers.29.self_attn.q_proj"
+    ],
+    "target_layer_attention_types": {
+      "28": "sliding_attention",
+      "29": "full_attention"
+    },
+    "scene_latent_count": 256,
+    "language_hidden_size": 1536,
+    "full_scene_prefix_tokens": 258,
+    "sliding_window_tokens": 512,
+    "maximum_final_query_to_boi_inclusive_span": 319,
+    "all_final_prompt_queries_reach_entire_scene_prefix": true
+  },
+  "preflight": {
+    "authorized": true,
+    "stage_1_authorized": true,
+    "model_loaded": false,
+    "oracle_loaded": false,
+    "question_dependent_scene_processing": false,
+    "new_bank_exact_zero_output": true,
+    "new_bank_initial_state_sha256": "e8734db171db6bd47a9a4f8c9d4a540903cc214a88abaab74820d566ee245f6b",
+    "all_final_prompt_queries_reach_entire_scene_prefix": true,
+    "record_count": 24,
+    "pair_unit_count": 12,
+    "pair_unit_selection_sha256": "d5928cb783339ef62fff5c14a8c7f85f90d3a7a6cb8edad0a784998082740d3e",
+    "prompt_token_range_inclusive": [
+      57,
+      62
+    ],
+    "prefix_plus_prompt_token_range_inclusive": [
+      315,
+      320
+    ],
+    "total_sequence_token_range_inclusive": [
+      317,
+      322
+    ]
+  },
+  "update_1_verification": {
+    "match": true,
+    "stage_2_authorized": true,
+    "model_loaded": false,
+    "oracle_loaded": false,
+    "report_only": true,
+    "all_prior_tensors_frozen": true,
+    "a_tensors_unchanged": true,
+    "b_tensors_all_changed": true,
+    "artifact_hashes": {
+      "adapter_sha256": "45e0c5affa9cf556e29bab5de418dffb867817b703c848bc6828255347748d31",
+      "metadata_sha256": "216c501f5b248aa8f44e86198be3902d5f45d87774ad932056bafc95c4637e7b",
+      "optimizer_sha256": "f1121353fc2c6b9239b8163390a0593832825abd9ff9f8dce4cce7f1cff99669"
+    },
+    "new_bank_state_sha256": "6db2807476506b947bbaf01837490e97c12e57b1906bab671ef7c82ed36d6399",
+    "decoded_optimizer_state_sha256": "6ff36bb2913d186fdecc1193bdc9834716092c9a40c312996e3cafcdad8be099"
+  },
+  "extension_replay": {
+    "match": true,
+    "stage_b_authorized": true,
+    "replayed_epochs": [
+      2,
+      3,
+      4
+    ],
+    "history_prefix_exact": true,
+    "initialization_provenance_exact": true,
+    "adapter_and_decoded_optimizer_exact_replay": true,
+    "optimizer_container_byte_identity_required": false,
+    "normalized_metadata_difference_allowlist": [
+      "output_namespace"
+    ],
+    "manifest_sha256": "e18d06b85f8ac953a355d885d6b7d85a823fad18da9dcfeedc43436f8ee12968",
+    "replay_report_sha256": "2994bf326dfeda945b2f443bb14adad4170e63f082cde6eb779cac757bdf5caa"
+  },
+  "outcome": {
+    "decision": "conditional_limit_reached_no_greedy_audit",
+    "selected_epoch": 1,
+    "screen_optimizer_updates": 4,
+    "conditional_max_optimizer_updates": 8,
+    "extension_executed": true,
+    "conditional_limit_reached": true,
+    "full_teacher_gate_passed": false,
+    "greedy_audit_authorized": false,
+    "promotion_authorized": false,
+    "static_chat_authorized": false,
+    "embodied_phase_authorized": false,
+    "question_dependent_scene_processing": false,
+    "report_only_final_selection": true,
+    "selected_color_full_vocab_sides": 12,
+    "selected_color_full_vocab_units": 6,
+    "selected_mirror_full_vocab_sides": 10,
+    "selected_mirror_full_vocab_units": 4,
+    "selected_mirror_mean_candidate_margin": 0.59375,
+    "selected_mirror_minimum_candidate_margin": -0.875,
+    "selected_mirror_mean_full_vocab_margin": 0.578125,
+    "selected_mirror_minimum_full_vocab_margin": -0.875,
+    "primary_training_elapsed_seconds": 135.49728537513874,
+    "novel_extension_training_elapsed_seconds": 182.7273331671022,
+    "measured_training_elapsed_seconds_total": 318.22461854224093,
+    "training_question_count": 24,
+    "validation_question_count": 0,
+    "failure_reason": "No epoch reached 12/12 mirror sides, 6/6 complete mirror units, and positive candidate/full-vocabulary minimum margins before the preregistered update-8 limit."
+  },
+  "trajectory": [
+    {
+      "epoch": 1,
+      "optimizer_step": 1,
+      "cumulative_microsteps": 12,
+      "full_teacher_gate_passed": false,
+      "checkpoint_path": "data_gemma4/checkpoints/gemma4_v24_shared_query/epoch_001",
+      "train_loss": 2.9427083333333335,
+      "color": {
+        "full_vocab_sides": 12,
+        "full_vocab_units": 6,
+        "mean_candidate_margin": 4.254557132720947,
+        "minimum_candidate_margin": 0.875,
+        "mean_full_vocab_margin": 2.0859375,
+        "minimum_full_vocab_margin": 0.8125
+      },
+      "mirror": {
+        "full_vocab_sides": 10,
+        "full_vocab_units": 4,
+        "mean_candidate_margin": 0.59375,
+        "minimum_candidate_margin": -0.875,
+        "mean_full_vocab_margin": 0.578125,
+        "minimum_full_vocab_margin": -0.875
+      },
+      "checkpoint_artifact_hashes": {
+        "adapter_sha256": "45e0c5affa9cf556e29bab5de418dffb867817b703c848bc6828255347748d31",
+        "metadata_sha256": "216c501f5b248aa8f44e86198be3902d5f45d87774ad932056bafc95c4637e7b",
+        "optimizer_sha256": "f1121353fc2c6b9239b8163390a0593832825abd9ff9f8dce4cce7f1cff99669"
+      },
+      "new_bank_state_sha256": "6db2807476506b947bbaf01837490e97c12e57b1906bab671ef7c82ed36d6399",
+      "decoded_optimizer_state_sha256": "6ff36bb2913d186fdecc1193bdc9834716092c9a40c312996e3cafcdad8be099",
+      "opaque_margin_detail_sha256": "3125490a6027bbee90eadac4f75222e21085be6a06462f2c2b079715e5728012"
+    },
+    {
+      "epoch": 2,
+      "optimizer_step": 2,
+      "cumulative_microsteps": 24,
+      "full_teacher_gate_passed": false,
+      "checkpoint_path": "data_gemma4/checkpoints/gemma4_v24_shared_query_extension_u8/epoch_002",
+      "train_loss": 2.8645833333333335,
+      "color": {
+        "full_vocab_sides": 12,
+        "full_vocab_units": 6,
+        "mean_candidate_margin": 4.252604007720947,
+        "minimum_candidate_margin": 0.96875,
+        "mean_full_vocab_margin": 2.1067707538604736,
+        "minimum_full_vocab_margin": 0.75
+      },
+      "mirror": {
+        "full_vocab_sides": 9,
+        "full_vocab_units": 3,
+        "mean_candidate_margin": 0.5833333134651184,
+        "minimum_candidate_margin": -0.9375,
+        "mean_full_vocab_margin": 0.5572916865348816,
+        "minimum_full_vocab_margin": -0.9375
+      },
+      "checkpoint_artifact_hashes": {
+        "adapter_sha256": "d1bf2e5ebe7d88c1858270b76da636f68aedfa3cefa89dd2a02edcea9579ee4c",
+        "metadata_sha256": "c43aa115479279cfacb4e59d8eeba1180f08e88ee37b92df52ff7e94a95cfa2c",
+        "optimizer_sha256": "2b12818ee411d836c931785316a2c29cff18297896ce89b2dc6febe4cd4dc156"
+      },
+      "new_bank_state_sha256": "74370006d8e7ebea9f67cd96ea1dcdfc646cb3adf068e746241c9fce79c9e783",
+      "decoded_optimizer_state_sha256": "5c32bfa542d568dc88aa4fa2fc31a7ff3a4a0619c31151c845745fc65b11847b",
+      "opaque_margin_detail_sha256": "f4814d4fe5266bf82b31bddcb749081f6aa10fc4a08f9bdac2094dbb44c201fb"
+    },
+    {
+      "epoch": 3,
+      "optimizer_step": 3,
+      "cumulative_microsteps": 36,
+      "full_teacher_gate_passed": false,
+      "checkpoint_path": "data_gemma4/checkpoints/gemma4_v24_shared_query_extension_u8/epoch_003",
+      "train_loss": 2.9166666666666665,
+      "color": {
+        "full_vocab_sides": 12,
+        "full_vocab_units": 6,
+        "mean_candidate_margin": 4.223795413970947,
+        "minimum_candidate_margin": 0.90625,
+        "mean_full_vocab_margin": 2.0729167461395264,
+        "minimum_full_vocab_margin": 0.75
+      },
+      "mirror": {
+        "full_vocab_sides": 9,
+        "full_vocab_units": 3,
+        "mean_candidate_margin": 0.5885416865348816,
+        "minimum_candidate_margin": -0.8125,
+        "mean_full_vocab_margin": 0.5677083134651184,
+        "minimum_full_vocab_margin": -0.8125
+      },
+      "checkpoint_artifact_hashes": {
+        "adapter_sha256": "ddfbecfc88298380857c0af5e45a3fb12b3bbb46365c906048d90cdbbb826f6d",
+        "metadata_sha256": "780f034ea6459c4558670580742ab786ef723ab1b4890d9feef9260f64653dce",
+        "optimizer_sha256": "be9ab95ce374a91731001521a0e330602f02e6ec3690ebda94fbae94578a3c2a"
+      },
+      "new_bank_state_sha256": "4eee1cc9b72bc4d16a8263a6d9ce5eb6f56f58980eb60a5fedad77c574e428d6",
+      "decoded_optimizer_state_sha256": "5c5eed45edc98e73efe97b787e9888882c739cf6c4e2ea7d3b53fdefa2b8d23e",
+      "opaque_margin_detail_sha256": "747beaf0e2fc5f284fe557910cbe36f2d0f9969ff190cf96b30b2e1f80d66432"
+    },
+    {
+      "epoch": 4,
+      "optimizer_step": 4,
+      "cumulative_microsteps": 48,
+      "full_teacher_gate_passed": false,
+      "checkpoint_path": "data_gemma4/checkpoints/gemma4_v24_shared_query_extension_u8/epoch_004",
+      "train_loss": 2.7864583333333335,
+      "color": {
+        "full_vocab_sides": 12,
+        "full_vocab_units": 6,
+        "mean_candidate_margin": 4.260091304779053,
+        "minimum_candidate_margin": 0.9375,
+        "mean_full_vocab_margin": 2.1067707538604736,
+        "minimum_full_vocab_margin": 0.75
+      },
+      "mirror": {
+        "full_vocab_sides": 9,
+        "full_vocab_units": 3,
+        "mean_candidate_margin": 0.5833333134651184,
+        "minimum_candidate_margin": -0.8125,
+        "mean_full_vocab_margin": 0.5520833134651184,
+        "minimum_full_vocab_margin": -0.8125
+      },
+      "checkpoint_artifact_hashes": {
+        "adapter_sha256": "95d74359d9c8ab165ebbc706f5650a0ebc1e9b1f6e422db84c1a3db73a2be1d0",
+        "metadata_sha256": "3866b4fac29c3f0afc328281f43efcbb68b602d7f785c754a7b1b17876c9e041",
+        "optimizer_sha256": "b5c97c2bddf44dae523adf9076afb71375003c59e8cf66d937786526c9df0638"
+      },
+      "new_bank_state_sha256": "a4a08a1097c1aadefb4c1b048c65da50ce7d413b58ee13d0ecfc03087a7d9009",
+      "decoded_optimizer_state_sha256": "f875d22ab53350527afb1f0ea6ffcb766ac5ff7b820f15874e8d57a216c454bd",
+      "opaque_margin_detail_sha256": "63779491ad101c708dd084a0e523ac2a1216f124813dc02afa75b2fa00136437"
+    },
+    {
+      "epoch": 5,
+      "optimizer_step": 5,
+      "cumulative_microsteps": 60,
+      "full_teacher_gate_passed": false,
+      "checkpoint_path": "data_gemma4/checkpoints/gemma4_v24_shared_query_extension_u8/epoch_005",
+      "train_loss": 2.7604166666666665,
+      "color": {
+        "full_vocab_sides": 12,
+        "full_vocab_units": 6,
+        "mean_candidate_margin": 4.249674320220947,
+        "minimum_candidate_margin": 0.9375,
+        "mean_full_vocab_margin": 2.1067707538604736,
+        "minimum_full_vocab_margin": 0.8125
+      },
+      "mirror": {
+        "full_vocab_sides": 9,
+        "full_vocab_units": 3,
+        "mean_candidate_margin": 0.5885416865348816,
+        "minimum_candidate_margin": -0.8125,
+        "mean_full_vocab_margin": 0.546875,
+        "minimum_full_vocab_margin": -0.8125
+      },
+      "checkpoint_artifact_hashes": {
+        "adapter_sha256": "596f9ff0b9e0bbd923e4495a3cfbdc6f1db1ebde467561a808af039e55efec57",
+        "metadata_sha256": "02819cb821f7a77a7310b037a71660ac14f1bace5c15651e777e7819d79357c6",
+        "optimizer_sha256": "362c12c36c0dd8ed1d5d483acc248843de42762d235490cc99f5fcee7c9a63d8"
+      },
+      "new_bank_state_sha256": "e3a7db11e6e14b5c444859945e9bb6ee550d0255afd01356084199d65910637e",
+      "decoded_optimizer_state_sha256": "9d8fe1d67e9ae66bc3f1938cad479186ab428ce8522f45fc9360a70067d38e87",
+      "opaque_margin_detail_sha256": "759f96aebeaf36e4f6deac0977b1618f522e11ba51dc0748c538c58dbc78c092"
+    },
+    {
+      "epoch": 6,
+      "optimizer_step": 6,
+      "cumulative_microsteps": 72,
+      "full_teacher_gate_passed": false,
+      "checkpoint_path": "data_gemma4/checkpoints/gemma4_v24_shared_query_extension_u8/epoch_006",
+      "train_loss": 2.7604166666666665,
+      "color": {
+        "full_vocab_sides": 12,
+        "full_vocab_units": 6,
+        "mean_candidate_margin": 4.255208492279053,
+        "minimum_candidate_margin": 0.9375,
+        "mean_full_vocab_margin": 2.1223957538604736,
+        "minimum_full_vocab_margin": 0.8125
+      },
+      "mirror": {
+        "full_vocab_sides": 9,
+        "full_vocab_units": 3,
+        "mean_candidate_margin": 0.59375,
+        "minimum_candidate_margin": -0.75,
+        "mean_full_vocab_margin": 0.5625,
+        "minimum_full_vocab_margin": -0.75
+      },
+      "checkpoint_artifact_hashes": {
+        "adapter_sha256": "292070cda2867a0e9c73a023b5c1b0d93ead82ace1ed8b8af4d9efb19054a9e7",
+        "metadata_sha256": "cd46a7b7efbe8824d4203fe76edfca03ba624382bcc9acda0fd59384ccdd1b9d",
+        "optimizer_sha256": "eac4e831eefed55cf94396167a27345bf9931f3642217879e6ef889b73accfa1"
+      },
+      "new_bank_state_sha256": "ee9169fd6d14617f5535b5e933f15494c9347864d89e2f5a24a34d4352be1506",
+      "decoded_optimizer_state_sha256": "c196e69ab724e669741ba722a6fa27bfa3351f481985af0234fc46b3a9b65806",
+      "opaque_margin_detail_sha256": "16ee410876cdf8c9b87cb1fd86f6beb20692467a20e685486a47887fd9371190"
+    },
+    {
+      "epoch": 7,
+      "optimizer_step": 7,
+      "cumulative_microsteps": 84,
+      "full_teacher_gate_passed": false,
+      "checkpoint_path": "data_gemma4/checkpoints/gemma4_v24_shared_query_extension_u8/epoch_007",
+      "train_loss": 2.8125,
+      "color": {
+        "full_vocab_sides": 12,
+        "full_vocab_units": 6,
+        "mean_candidate_margin": 4.244791507720947,
+        "minimum_candidate_margin": 0.96875,
+        "mean_full_vocab_margin": 2.0989582538604736,
+        "minimum_full_vocab_margin": 0.875
+      },
+      "mirror": {
+        "full_vocab_sides": 9,
+        "full_vocab_units": 3,
+        "mean_candidate_margin": 0.5729166865348816,
+        "minimum_candidate_margin": -0.75,
+        "mean_full_vocab_margin": 0.53125,
+        "minimum_full_vocab_margin": -0.75
+      },
+      "checkpoint_artifact_hashes": {
+        "adapter_sha256": "a5064df7f80003e2505dc6aea030f359a77e54606f4dbae9dac521712ad84cd8",
+        "metadata_sha256": "d1d5e0a844c80fde8f9b26a619af7ddc09cbcdcedabe1efc6b8d2c6b6659e0b2",
+        "optimizer_sha256": "3556a78015b5760a9563410cac68eb1d65079e7f7c1943ea0a0d38fe1a05e4a3"
+      },
+      "new_bank_state_sha256": "c05e870fb2562ce4552aedc0f7c01065b9be4dafc11c1d87f01b0ca83a751515",
+      "decoded_optimizer_state_sha256": "f566dda5a767bed0a5e58f1ea8a0a9b259a22cde6c7e36d1418bd6591f0a166e",
+      "opaque_margin_detail_sha256": "11dd09053fbbd8316c9c87513dd176a6599812cf84cb5cdf3b344705a09e20ba"
+    },
+    {
+      "epoch": 8,
+      "optimizer_step": 8,
+      "cumulative_microsteps": 96,
+      "full_teacher_gate_passed": false,
+      "checkpoint_path": "data_gemma4/checkpoints/gemma4_v24_shared_query_extension_u8/epoch_008",
+      "train_loss": 2.8385416666666665,
+      "color": {
+        "full_vocab_sides": 12,
+        "full_vocab_units": 6,
+        "mean_candidate_margin": 4.26708984375,
+        "minimum_candidate_margin": 0.96875,
+        "mean_full_vocab_margin": 2.1067707538604736,
+        "minimum_full_vocab_margin": 0.875
+      },
+      "mirror": {
+        "full_vocab_sides": 9,
+        "full_vocab_units": 3,
+        "mean_candidate_margin": 0.609375,
+        "minimum_candidate_margin": -0.8125,
+        "mean_full_vocab_margin": 0.5416666865348816,
+        "minimum_full_vocab_margin": -0.8125
+      },
+      "checkpoint_artifact_hashes": {
+        "adapter_sha256": "e6a2b7f7bc170cb7a2c2b7a97bad6ac6d2122cb8ca42943ff3c657e5c9ecd625",
+        "metadata_sha256": "6953e684d4a13574f20d0514b63256e84ea5e9f53b507109b7ceb6526f8042fc",
+        "optimizer_sha256": "385649cbfab48623c2f47d5db115ed693ca2e3c4c803963c4259186b70e93e31"
+      },
+      "new_bank_state_sha256": "ec8bde50a218712264975c4e4090d7b8e285a53c96319fc64877766528942d9e",
+      "decoded_optimizer_state_sha256": "59734b12c3c3041cc4224d1edbb8965ce517a9f7a6695519a80ce02dd7dc01f9",
+      "opaque_margin_detail_sha256": "5debf956b46e6c242924f8bab3ba4870c290e0283ab4c1a32b8e18cd6e86ceaa"
+    }
+  ],
+  "ranking": [
+    1,
+    3,
+    6,
+    2,
+    4,
+    5,
+    8,
+    7
+  ],
+  "selected_checkpoint": {
+    "epoch": 1,
+    "checkpoint_path": "data_gemma4/checkpoints/gemma4_v24_shared_query/epoch_001",
+    "artifact_hashes": {
+      "adapter_sha256": "45e0c5affa9cf556e29bab5de418dffb867817b703c848bc6828255347748d31",
+      "metadata_sha256": "216c501f5b248aa8f44e86198be3902d5f45d87774ad932056bafc95c4637e7b",
+      "optimizer_sha256": "f1121353fc2c6b9239b8163390a0593832825abd9ff9f8dce4cce7f1cff99669"
+    },
+    "new_bank_state_sha256": "6db2807476506b947bbaf01837490e97c12e57b1906bab671ef7c82ed36d6399",
+    "decoded_optimizer_state_sha256": "6ff36bb2913d186fdecc1193bdc9834716092c9a40c312996e3cafcdad8be099"
+  },
+  "authoritative_artifacts": [
+    {
+      "role": "config",
+      "path": "configs/experiments/gemma4_color_mirror_shared_query_v24.yaml",
+      "sha256": "fd2c83007da11e0352f37310c18123821758cd55382b31a7d1befc118a7d81e2"
+    },
+    {
+      "role": "structural_preflight",
+      "path": "reports/gemma4/metrics/v24_structural_preflight.json",
+      "sha256": "7e0ba5a2b14d10948e29dc6a345ed0262c7d32ac15a8cf958d1a46d27343e8dc"
+    },
+    {
+      "role": "update_1_exact_match",
+      "path": "reports/gemma4/metrics/v24_update1_match.json",
+      "sha256": "4906d7f2b27b5a770a944c75c97ed0e8adf9b7de615ac77dce8f3816939a277c"
+    },
+    {
+      "role": "primary_training",
+      "path": "reports/gemma4/metrics/training_gemma4_v24_shared_query.json",
+      "sha256": "510de4e6a01bc9b4d6ea874080b384bb76a9c9301a35ee81b27686c65b593e8b"
+    },
+    {
+      "role": "training_selection",
+      "path": "reports/gemma4/metrics/training_selection_gemma4_v24_shared_query.json",
+      "sha256": "5fe61c24d6d23a059ea903df904e4ad62458c7e4389812deda0db33d92297126"
+    },
+    {
+      "role": "epoch_screen",
+      "path": "reports/gemma4/metrics/v24_epoch_screen.json",
+      "sha256": "146890f2106d473ee0f6ea72facf43c00243000900a5eef1fd4b68270113b002"
+    },
+    {
+      "role": "extension_launch",
+      "path": "reports/gemma4/metrics/v24_extension_launch.json",
+      "sha256": "e18d06b85f8ac953a355d885d6b7d85a823fad18da9dcfeedc43436f8ee12968"
+    },
+    {
+      "role": "exact_replay",
+      "path": "reports/gemma4/metrics/v24_extension_replay.json",
+      "sha256": "2994bf326dfeda945b2f443bb14adad4170e63f082cde6eb779cac757bdf5caa"
+    },
+    {
+      "role": "extension_training",
+      "path": "reports/gemma4/metrics/training_gemma4_v24_shared_query_extension_u8.json",
+      "sha256": "24fc1568b173a1c60f420658e217ce618175a199284ad3429dcd404dffd94f24"
+    },
+    {
+      "role": "extension_selection",
+      "path": "reports/gemma4/metrics/training_selection_gemma4_v24_shared_query_extension_u8.json",
+      "sha256": "5fe61c24d6d23a059ea903df904e4ad62458c7e4389812deda0db33d92297126"
+    },
+    {
+      "role": "final_selector",
+      "path": "reports/gemma4/metrics/v24_extension_final.json",
+      "sha256": "1f986fed0259b57681d22c930b202c7312c5a1c87e047f7c6f841d983614768a"
+    }
+  ],
+  "forbidden_outputs": {
+    "checkpoint_roots": [
+      "data_gemma4/checkpoints/gemma4_v24_shared_query",
+      "data_gemma4/checkpoints/gemma4_v24_shared_query_extension_u8"
+    ],
+    "forbidden_checkpoint_filename": "promotion.json",
+    "forbidden_metric_globs": [
+      "*v24*greedy*.json",
+      "*v24*promotion*.json",
+      "*v24*static*qa*.json",
+      "*v24*leakage*.json",
+      "*v24*robot*.json"
+    ]
+  },
+  "limitations": {
+    "teacher_forced_training_distribution_only": true,
+    "held_out_scene_qa_evaluated": false,
+    "greedy_generation_evaluated": false,
+    "static_chat_validated": false,
+    "leakage_suite_run_for_v24": false,
+    "robot_or_mcp_validated": false,
+    "research_goal_completed": false,
+    "statement": "V24 is a bounded training-distribution teacher-forced screen, not a held-out QA, chat, leakage, grounding, or embodied-agent result. The shared-query bank retained the color control but did not make every mirror side correct, so no downstream audit or promotion was authorized."
+  }
+}
