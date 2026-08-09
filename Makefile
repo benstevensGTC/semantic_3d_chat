@@ -274,7 +274,7 @@ gemma4-v21-stage1: gemma4-v21-preflight
 	fi
 
 gemma4-v21-verify-update1: gemma4-v21-stage1
-	PYTHONPATH=src $(GEMMA4_PYTHON) -m semantic_3d_chat.evaluation.v21_update1_verifier --config $(GEMMA4_V21_CONFIG) --preflight $(GEMMA4_V21_PREFLIGHT) --checkpoint $(GEMMA4_V21_CHECKPOINT_ROOT)/epoch_001 --report $(GEMMA4_V21_UPDATE1_REPORT)
+	PYTHONPATH=src $(GEMMA4_PYTHON) -m semantic_3d_chat.evaluation.v21_update1_verifier --config $(GEMMA4_V21_CONFIG) --preflight $(GEMMA4_V21_PREFLIGHT) --checkpoint $(GEMMA4_V21_CHECKPOINT_ROOT)/epoch_001 --output $(GEMMA4_V21_UPDATE1_REPORT)
 
 gemma4-v21-resume-screen: gemma4-v21-verify-update1
 	@if [ -f "$(GEMMA4_V21_CHECKPOINT_ROOT)/epoch_004/metadata.json" ]; then \
