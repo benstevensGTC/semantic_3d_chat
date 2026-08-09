@@ -14,6 +14,7 @@ from semantic_3d_chat.training.pair_curriculum import (
     build_exact_question_pair_units,
     candidate_logit_margins,
     differing_answer_token_masks,
+    first_answer_token_full_vocab_margins,
     pair_curriculum_settings,
     pair_gate_metrics,
     pair_ranking_hinge,
@@ -22,7 +23,12 @@ from semantic_3d_chat.training.pair_curriculum import (
     single_differing_answer_token,
     token_normalized_nll,
 )
-from semantic_3d_chat.training.train_adapter import pair_batch_objective
+from semantic_3d_chat.training.train_adapter import (
+    best_pair_gate_passed_from_history,
+    pair_batch_objective,
+    pair_gate_checkpoint_improved,
+    should_stop_after_pair_gate,
+)
 
 
 def _paired_record(
@@ -194,16 +200,16 @@ def test_pair_ranking_masks_shared_eos_but_keeps_full_language_labels() -> None:
 
 
 def test_candidate_logit_contract_requires_one_aligned_token_change() -> None:
-    assert single_differing_answer_token(
-        torch.tensor([[11, 99]]), torch.tensor([[22, 99]])
-    ) == (0, 11, 22)
+    assert single_differing_answer_token(torch.tensor([[11, 99]]), torch.tensor([[22, 99]])) == (
+        0,
+        11,
+        22,
+    )
 
     with pytest.raises(ValueError, match="equal-length"):
         single_differing_answer_token(torch.tensor([[11, 99]]), torch.tensor([[22]]))
     with pytest.raises(ValueError, match="exactly one differing"):
-        single_differing_answer_token(
-            torch.tensor([[11, 98, 99]]), torch.tensor([[22, 97, 99]])
-        )
+        single_differing_answer_token(torch.tensor([[11, 98, 99]]), torch.tensor([[22, 97, 99]]))
 
 
 def test_candidate_logit_margin_equals_single_token_nll_difference_and_has_gradients() -> None:
@@ -232,6 +238,74 @@ def test_candidate_logit_margin_equals_single_token_nll_difference_and_has_gradi
     assert logits.grad is not None
     assert float(logits.grad[:, 1, :].abs().sum()) > 0.0
     assert float(logits.grad[:, 0, :].abs().sum()) == 0.0
+
+
+def test_full_vocab_first_answer_token_margin_detects_non_candidate_winner() -> None:
+    logits = torch.zeros(2, 3, 5)
+    labels = torch.tensor([[-100, -100, 1], [-100, -100, 2]])
+    # Both target tokens beat their paired alternative, but token 4 beats the
+    # first target over the complete vocabulary.
+    logits[0, 1] = torch.tensor([0.0, 3.0, 2.0, -1.0, 4.0])
+    logits[1, 1] = torch.tensor([0.0, 1.0, 5.0, -1.0, 0.5])
+
+    margins = first_answer_token_full_vocab_margins(logits, labels)
+
+    assert margins.tolist() == pytest.approx([-1.0, 4.0])
+
+
+def test_full_vocab_top1_gate_is_opt_in_and_composes_with_pairwise_gate() -> None:
+    pairwise_margins = [[1.0, 1.0]]
+    full_vocab_margins = [[-1.0, 4.0]]
+
+    diagnostic_only = pair_gate_metrics(
+        pairwise_margins,
+        ranking_mode="candidate_logit",
+        first_answer_token_full_vocab_margins=full_vocab_margins,
+    )
+    strict = pair_gate_metrics(
+        pairwise_margins,
+        ranking_mode="candidate_logit",
+        first_answer_token_full_vocab_margins=full_vocab_margins,
+        first_answer_token_top1_accuracy_threshold=1.0,
+    )
+    passed = pair_gate_metrics(
+        pairwise_margins,
+        ranking_mode="candidate_logit",
+        first_answer_token_full_vocab_margins=[[0.25, 0.5]],
+        first_answer_token_top1_accuracy_threshold=1.0,
+    )
+
+    assert diagnostic_only["pairwise_passed"] is True
+    assert diagnostic_only["passed"] is True
+    assert strict["pairwise_passed"] is True
+    assert strict["first_answer_token_top1_accuracy"] == 0.5
+    assert strict["first_answer_token_top1_unit_accuracy"] == 0.0
+    assert strict["mean_first_answer_token_target_vs_best_other_logit_margin"] == 1.5
+    assert strict["minimum_first_answer_token_target_vs_best_other_logit_margin"] == -1.0
+    assert strict["first_answer_token_target_vs_best_other_hinge"] == 0.5
+    assert strict["first_answer_token_top1_gate_passed"] is False
+    assert strict["passed"] is False
+    assert passed["first_answer_token_top1_gate_passed"] is True
+    assert passed["passed"] is True
+
+
+def test_full_vocab_gate_rejects_missing_or_misaligned_diagnostics() -> None:
+    with pytest.raises(ValueError, match="requires full-vocabulary margins"):
+        pair_gate_metrics(
+            [[1.0, 1.0]],
+            first_answer_token_top1_accuracy_threshold=1.0,
+        )
+    with pytest.raises(ValueError, match="must match pair gate shape"):
+        pair_gate_metrics(
+            [[1.0, 1.0]],
+            first_answer_token_full_vocab_margins=[[1.0]],
+        )
+    with pytest.raises(ValueError, match=r"must be in \[0, 1\]"):
+        pair_gate_metrics(
+            [[1.0, 1.0]],
+            first_answer_token_full_vocab_margins=[[1.0, 1.0]],
+            first_answer_token_top1_accuracy_threshold=1.1,
+        )
 
 
 def test_pair_hinge_and_candidate_gate_report_flips_without_calling_generation() -> None:
@@ -293,6 +367,8 @@ def test_pair_gate_config_is_explicit_and_defaults_remain_disabled() -> None:
     assert gate.changed_unit_accuracy_threshold == 0.95
     assert gate.prediction_flip_threshold == 1.0
     assert gate.wrong_prefix_flip_threshold == 1.0
+    assert gate.stop_when_gate_passes is True
+    assert gate.first_answer_token_top1_accuracy_threshold is None
     discriminative_config = load_config("configs/experiments/pair_gate_discriminative.yaml")
     discriminative = pair_curriculum_settings(discriminative_config)
     assert discriminative.ranking_weight == 8.0
@@ -301,11 +377,45 @@ def test_pair_gate_config_is_explicit_and_defaults_remain_disabled() -> None:
     assert discriminative_config["training"]["paired_scene_separation_weight"] == 20.0
     gemma_v1 = load_config("configs/experiments/gemma4_color_wiring.yaml")
     gemma_v2 = load_config("configs/experiments/gemma4_color_wiring_v2.yaml")
+    gemma_v8 = load_config("configs/experiments/gemma4_color_wiring_v8.yaml")
+    gemma_v9 = load_config("configs/experiments/gemma4_color_wiring_v9.yaml")
     assert pair_curriculum_settings(gemma_v1).ranking_mode == "nll"
     assert pair_curriculum_settings(gemma_v2).ranking_mode == "candidate_logit"
     assert gemma_v1["training"]["output_namespace"] == "gemma4_color_wiring"
     assert gemma_v2["training"]["output_namespace"] == "gemma4_color_wiring_v2"
     assert gemma_v2["scene_encoder"]["learned_scene_token_scale"] == 0.25
+    assert pair_curriculum_settings(gemma_v8).first_answer_token_top1_accuracy_threshold is None
+    assert pair_curriculum_settings(gemma_v8).stop_when_gate_passes is True
+    assert pair_curriculum_settings(gemma_v9).first_answer_token_top1_accuracy_threshold == 1.0
+    assert pair_curriculum_settings(gemma_v9).stop_when_gate_passes is False
+    assert gemma_v9["training"]["output_namespace"] == "gemma4_color_wiring_v9"
+    assert gemma_v9["training"]["epochs"] == 36
+
+
+def test_pair_gate_best_checkpoint_selection_is_gate_pass_first() -> None:
+    assert pair_gate_checkpoint_improved(
+        monitor_value=0.8,
+        best_monitor_value=0.1,
+        min_delta=0.0,
+        gate_passed=True,
+        best_gate_passed=False,
+    )
+    assert not pair_gate_checkpoint_improved(
+        monitor_value=0.01,
+        best_monitor_value=0.8,
+        min_delta=0.0,
+        gate_passed=False,
+        best_gate_passed=True,
+    )
+    assert best_pair_gate_passed_from_history(
+        [{"epoch": 3, "pair_candidate_gate": {"passed": True}}], 3
+    )
+    assert not best_pair_gate_passed_from_history(
+        [{"epoch": 3, "pair_candidate_gate": {"passed": True}}], 2
+    )
+    assert should_stop_after_pair_gate(True, {"pairwise_passed": True, "passed": True})
+    assert not should_stop_after_pair_gate(True, {"pairwise_passed": True, "passed": False})
+    assert not should_stop_after_pair_gate(False, {"pairwise_passed": True, "passed": True})
 
 
 class _TinyTokenizer:
@@ -427,6 +537,7 @@ def test_candidate_logit_pair_objective_uses_only_correct_forward_and_backpropag
         {"language": {"system_prompt": "stable"}, "training": {"grounding_weight": 0.0}},
         ranking_margin=0.5,
         ranking_mode="candidate_logit",
+        collect_full_vocab_first_answer_token=True,
     )
 
     assert model.forward_calls == 1
@@ -441,6 +552,7 @@ def test_candidate_logit_pair_objective_uses_only_correct_forward_and_backpropag
     assert diagnostics["swapped_nll"] is None
     assert diagnostics["own_candidate_logits"] is not None
     assert diagnostics["alternate_candidate_logits"] is not None
+    assert torch.all(diagnostics["first_answer_token_full_vocab_margins"] > 0.0)
     assert diagnostics["ranking_tokens_per_side"].tolist() == [[1, 1]]
     assert torch.all(diagnostics["margins"] > 0.0)
     assert float(ranking_loss.detach()) > 0.0

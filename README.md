@@ -10,11 +10,13 @@ The current primary experiment uses `google/gemma-4-E2B-it`. Real-weight
 full-image feature extraction, 3D map fusion, and zero-shot semantic localization
 run locally on this Mac. Adapter wiring experiments v1 through v7, plus the longer
 v6 resumes through epochs 18 and 24, did **not** pass the six-unit teacher-forced
-counterfactual gate. No Gemma checkpoint is promoted for chat, held-out QA,
-free-generation, or leakage claims. The project therefore has a working continuous
-3D representation and a measured adapter failure, not yet a successful embodied
-scene chatbot. The narrowly scoped v8 LoRA fallback is implemented but has not yet
-produced a real MPS training result.
+counterfactual gate. A fresh v8 LoRA run also failed, but its controlled resume
+reached 6/6 changed units and 12/12 correct sides at epoch 22. That is a
+teacher-forced overfit milestone, not a promoted scene chatbot: free generation
+remained mostly `orange`/`unknown`, did not react to the 35-question mirror control
+or the four held-out cube-support changes, and therefore blocked promotion. Gemma
+held-out static QA, interactive chat, leakage claims for this checkpoint, and
+language-conditioned robot navigation remain gated.
 
 ## Current primary stack
 
@@ -28,7 +30,7 @@ produced a real MPS training result.
   `signal_preserving_resampler_v3`: every occupied block contributes to 256
   question-independent 384D scene latents, which are projected into Gemma's 1536D
   decoder space.
-- Gemma decoder base weights remain frozen. The v8 fallback may train only the
+- Gemma decoder base weights remain frozen. The v8 fallback trains only the
   explicitly listed 45,056-parameter LoRA state. The decoder receives continuous
   scene tokens, numeric geometry, and the user's question—never an environmental
   caption, label list, or oracle metadata.
@@ -89,9 +91,10 @@ question-independent full-scene resampler → continuous Gemma decoder prefix. I
 not direct-image chat. The metadata/probe targets above do not download or load
 checkpoint weights. The production path is selected separately with
 `configs/gemma4_e2b.yaml`; it shares existing sanitized renders and QA supervision
-but isolates derived features, maps, and checkpoints under `data_gemma4`. A full
-trained-adapter gate pass and held-out evaluation remain required before any Gemma
-checkpoint can be promoted. The generated capability record is
+but isolates derived features, maps, and checkpoints under `data_gemma4`. Passing
+the teacher-forced adapter gate is necessary but not sufficient: free generation
+and held-out scene controls must also succeed before any Gemma checkpoint can be
+promoted. The generated capability record is
 `reports/metrics/gemma4_e2b_capability_probe.json`.
 
 The real-weight path is an explicit, pinned download followed by offline
@@ -179,7 +182,7 @@ hash loaded by the already-running v7 process was not captured; hashes in the v7
 failure report identify post-run audited source snapshots and must not be used to
 attribute later padding or audit fixes to that execution.
 
-#### Gemma v8 controlled fallback — implemented, not yet run
+#### Gemma v8 controlled fallback — teacher-forced gate passed, promotion failed
 
 Because v7 failed with a fully frozen decoder, v8 keeps the native
 `[BOS][BOI][256 continuous scene latents][EOI][prompt]` layout and complete,
@@ -195,9 +198,27 @@ question-independent scene prefix unchanged, while adding LoRA only to layer 34
 
 The implementation has strict target/optimizer/checkpoint contracts, compact-state
 SHA validation and tensor-tamper rejection, resume validation, chat restoration,
-and scene-signal-audit restoration coverage. Those are implementation tests, not a
-behavioral result. No real v8 MPS training outcome exists yet. The exact selection
-and training commands are:
+and scene-signal-audit restoration coverage. The fresh MPS run completed epoch 12
+in 574.56 seconds but failed the teacher-forced gate at 4/6 changed units, 10/12
+correct sides, and hinge 0.272786. Its exact metrics are in
+`reports/gemma4/metrics/training_gemma4_color_wiring_v8.json`.
+
+A resume from epoch 12 stopped early at epoch 22 after 22 total optimizer updates.
+It passed the same teacher-forced gate with 6/6 changed units, 12/12 correct sides,
+prediction-flip rate 1.0, wrong-prefix-flip rate 1.0, and minimum candidate margin
+0.0390625; the resumed portion took 388.31 seconds. The exact metrics are in
+`reports/gemma4/metrics/training_gemma4_color_wiring_v8_resume24.json`.
+
+The passed gate did not survive free decoding well enough for promotion. On the
+training color-swap pair, outputs changed for 5/6 questions, but the canonical
+answers were still mostly wrong (`orange` or `unknown`; only isolated answers were
+correct). Outputs changed for 0/35 mirrored-room questions and 0/4 held-out
+cube-support questions. The model-validated BF16 generation audit is
+`reports/gemma4/metrics/scene_signal_audit_gemma4_color_wiring_v8_resume24.json`.
+Consequently this checkpoint establishes only a small teacher-forced wiring/overfit
+milestone. It is not promoted for held-out static QA, chat, or embodied-agent use.
+
+The exact selection, fresh-training, and resume command shapes are:
 
 ```bash
 PYTHONPATH=src .venv-gemma4/bin/python -m semantic_3d_chat.training.train_adapter \
@@ -205,6 +226,11 @@ PYTHONPATH=src .venv-gemma4/bin/python -m semantic_3d_chat.training.train_adapte
 
 PYTHONPATH=src .venv-gemma4/bin/python -m semantic_3d_chat.training.train_adapter \
   --config configs/experiments/gemma4_color_wiring_v8.yaml
+
+PYTHONPATH=src .venv-gemma4/bin/python -m semantic_3d_chat.training.train_adapter \
+  --config configs/experiments/gemma4_color_wiring_v8.yaml \
+  --resume data_gemma4/checkpoints/gemma4_color_wiring_v8/epoch_012 \
+  --epochs 24 --output-namespace gemma4_color_wiring_v8_resume24
 ```
 
 ### Fail-closed Gemma static evaluation and chat
@@ -221,8 +247,9 @@ training writes automatically. It must have `status: "accepted"`, contain a
 non-empty list of supporting metric artifact paths in `evidence`, and bind the
 exact approved config, checkpoint metadata, and adapter with `config_hash`,
 `checkpoint_metadata_sha256`, and `checkpoint_adapter_sha256`. No such record
-exists today because no Gemma run has passed its gate. After a future checkpoint is
-accepted, the invocation shape will be:
+exists today: v8-resume24 passed the teacher-forced gate, but its free-generation
+and unseen counterfactual controls failed. After a future checkpoint is accepted,
+the invocation shape will be:
 
 ```bash
 make gemma4-evaluate-static \
@@ -259,8 +286,9 @@ make gemma4-predict-controls \
   GEMMA4_EVAL_SPLIT=test
 ```
 
-Historical v1-v7 checkpoints remain inspectable failure artifacts, but none is a
-default for these targets and none may be silently treated as promoted.
+Historical v1-v8 checkpoints remain inspectable failure or diagnostic artifacts,
+but none is a default for these targets and none may be silently treated as
+promoted.
 
 ## Preserved legacy CLIP/Qwen entry points
 

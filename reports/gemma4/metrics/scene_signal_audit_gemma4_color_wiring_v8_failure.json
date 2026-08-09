@@ -1,0 +1,4679 @@
+{
+  "checkpoint": "data_gemma4/checkpoints/gemma4_color_wiring_v8/best",
+  "checkpoint_best_epoch": 12,
+  "checkpoint_contract_warnings": [],
+  "checkpoint_sha256": "9ed35a5eee508cfb2114e25a9c5f930db1e32b17031d885af25fafc4f0a9fe70",
+  "comparison_note": "Map semantic/RGB metrics compare only shared spatial cells; topology metrics separately measure cells added or removed. Downstream token metrics compare corresponding block queries or fixed global latent indices.",
+  "config": "configs/experiments/gemma4_color_wiring_v8.yaml",
+  "device": "mps",
+  "figure": "reports/gemma4/figures/scene_signal_audit_gemma4_color_wiring_v8_failure.png",
+  "gemma4_native_image_contract": {
+    "boi_token_id": 255999,
+    "bos_token_id": 2,
+    "eoi_token_id": 258882,
+    "image_token_id": 258880,
+    "model_revision": "3e22461f65e89153144f8adb70e3b8c2cc9845a7",
+    "pad_token_id": 0,
+    "schema_version": 1,
+    "use_bidirectional_attention": null
+  },
+  "generation": {
+    "pairs": [
+      {
+        "change_type": "color_swap",
+        "changed_fact_question_count": 6,
+        "examples": [
+          {
+            "expected_a": "red",
+            "expected_b": "blue",
+            "expected_first_token": {
+              "decoded_a": "red",
+              "decoded_b": "blue",
+              "desired_margin_shift": 0.4765625,
+              "scene_a_preference_margin": 0.8046875,
+              "scene_b_preference_margin": -0.328125,
+              "token_a": 1192,
+              "token_b": 9503
+            },
+            "logits": {
+              "cosine": 0.9990319013595581,
+              "max_absolute_delta": 6.375,
+              "rms_delta": 2.5415878295898438,
+              "symmetric_kl_nats": 0.22926272451877594
+            },
+            "prediction_a": "The cube is orange.",
+            "prediction_b": "The cube is orange.",
+            "prediction_changed": false,
+            "question": "Tell me the cube's color.",
+            "question_key": "cfq_49752706535581bd"
+          },
+          {
+            "expected_a": "blue",
+            "expected_b": "red",
+            "expected_first_token": {
+              "decoded_a": "blue",
+              "decoded_b": "red",
+              "desired_margin_shift": 2.1640625,
+              "scene_a_preference_margin": 1.7578125,
+              "scene_b_preference_margin": 0.40625,
+              "token_a": 9503,
+              "token_b": 1192
+            },
+            "logits": {
+              "cosine": 0.9989526271820068,
+              "max_absolute_delta": 9.328125,
+              "rms_delta": 3.61226487159729,
+              "symmetric_kl_nats": 0.7673942446708679
+            },
+            "prediction_a": "brown",
+            "prediction_b": "The chair is orange.",
+            "prediction_changed": true,
+            "question": "What color is the chair?",
+            "question_key": "cfq_7fd85d7a17fa49d3"
+          },
+          {
+            "expected_a": "red",
+            "expected_b": "blue",
+            "expected_first_token": {
+              "decoded_a": "red",
+              "decoded_b": "blue",
+              "desired_margin_shift": 1.1953125,
+              "scene_a_preference_margin": 0.64453125,
+              "scene_b_preference_margin": 0.55078125,
+              "token_a": 1192,
+              "token_b": 9503
+            },
+            "logits": {
+              "cosine": 0.9975258111953735,
+              "max_absolute_delta": 7.40625,
+              "rms_delta": 2.4632468223571777,
+              "symmetric_kl_nats": 0.481250524520874
+            },
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Tell me the bowl's color.",
+            "question_key": "cfq_9394f27a17f2d844"
+          },
+          {
+            "expected_a": "red",
+            "expected_b": "blue",
+            "expected_first_token": {
+              "decoded_a": "red",
+              "decoded_b": "blue",
+              "desired_margin_shift": -0.078125,
+              "scene_a_preference_margin": 1.09375,
+              "scene_b_preference_margin": -1.171875,
+              "token_a": 1192,
+              "token_b": 9503
+            },
+            "logits": {
+              "cosine": 0.9995914697647095,
+              "max_absolute_delta": 6.4921875,
+              "rms_delta": 1.6125667095184326,
+              "symmetric_kl_nats": 0.1583113670349121
+            },
+            "prediction_a": "The cube is reddish-orange.",
+            "prediction_b": "The cube is orange.",
+            "prediction_changed": true,
+            "question": "What color is the cube?",
+            "question_key": "cfq_b6a1fb41fbd38ac8"
+          },
+          {
+            "expected_a": "red",
+            "expected_b": "blue",
+            "expected_first_token": {
+              "decoded_a": "red",
+              "decoded_b": "blue",
+              "desired_margin_shift": 1.3125,
+              "scene_a_preference_margin": 1.2265625,
+              "scene_b_preference_margin": 0.0859375,
+              "token_a": 1192,
+              "token_b": 9503
+            },
+            "logits": {
+              "cosine": 0.9946461915969849,
+              "max_absolute_delta": 12.0,
+              "rms_delta": 4.9336371421813965,
+              "symmetric_kl_nats": 1.1286464929580688
+            },
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "What color is the bowl?",
+            "question_key": "cfq_be95c05c7f1b55a8"
+          },
+          {
+            "expected_a": "blue",
+            "expected_b": "red",
+            "expected_first_token": {
+              "decoded_a": "blue",
+              "decoded_b": "red",
+              "desired_margin_shift": 1.21484375,
+              "scene_a_preference_margin": 0.98046875,
+              "scene_b_preference_margin": 0.234375,
+              "token_a": 9503,
+              "token_b": 1192
+            },
+            "logits": {
+              "cosine": 0.999008297920227,
+              "max_absolute_delta": 8.078125,
+              "rms_delta": 3.336236000061035,
+              "symmetric_kl_nats": 0.4474709928035736
+            },
+            "prediction_a": "The chair is orange.",
+            "prediction_b": "The chair is orange.",
+            "prediction_changed": false,
+            "question": "Tell me the chair's color.",
+            "question_key": "cfq_ff677fbc4af0e63a"
+          }
+        ],
+        "mean_logit_rms_delta": 3.083256562550863,
+        "mean_symmetric_kl_nats": 0.5353893910845121,
+        "pair_id": "pair_000001",
+        "prediction_changed_count": 2,
+        "prediction_changed_rate": 0.3333333333333333,
+        "scene_a": "scene_000003",
+        "scene_b": "scene_000004",
+        "split": "train"
+      },
+      {
+        "change_type": "mirror_lr",
+        "changed_fact_question_count": 35,
+        "examples": [
+          {
+            "expected_a": "left",
+            "expected_b": "right",
+            "expected_first_token": {
+              "decoded_a": "left",
+              "decoded_b": "right",
+              "desired_margin_shift": 0.125,
+              "scene_a_preference_margin": 6.375,
+              "scene_b_preference_margin": -6.25,
+              "token_a": 989,
+              "token_b": 898
+            },
+            "logits": {
+              "cosine": 0.9998228549957275,
+              "max_absolute_delta": 1.8125,
+              "rms_delta": 0.7120783925056458,
+              "symmetric_kl_nats": 6.773509539925726e-07
+            },
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the chair left or right of the picture frame?",
+            "question_key": "cfq_01977caf6dba1226"
+          },
+          {
+            "expected_a": "left",
+            "expected_b": "right",
+            "expected_first_token": {
+              "decoded_a": "left",
+              "decoded_b": "right",
+              "desired_margin_shift": -0.25,
+              "scene_a_preference_margin": 6.25,
+              "scene_b_preference_margin": -6.5,
+              "token_a": 989,
+              "token_b": 898
+            },
+            "logits": {
+              "cosine": 0.9998584985733032,
+              "max_absolute_delta": 1.25,
+              "rms_delta": 0.4124108552932739,
+              "symmetric_kl_nats": 7.303539177883067e-07
+            },
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the chair left or right of the cube?",
+            "question_key": "cfq_135c18742d0e985f"
+          },
+          {
+            "expected_a": "left",
+            "expected_b": "right",
+            "expected_first_token": {
+              "decoded_a": "left",
+              "decoded_b": "right",
+              "desired_margin_shift": 0.0,
+              "scene_a_preference_margin": 5.5625,
+              "scene_b_preference_margin": -5.5625,
+              "token_a": 989,
+              "token_b": 898
+            },
+            "logits": {
+              "cosine": 0.9998466372489929,
+              "max_absolute_delta": 1.3125,
+              "rms_delta": 0.3338812589645386,
+              "symmetric_kl_nats": 1.7803679952521634e-07
+            },
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the picture frame left or right of the plant pot?",
+            "question_key": "cfq_184db780f7c0e4ec"
+          },
+          {
+            "expected_a": "right",
+            "expected_b": "left",
+            "expected_first_token": {
+              "decoded_a": "right",
+              "decoded_b": "left",
+              "desired_margin_shift": 0.0234375,
+              "scene_a_preference_margin": -6.109375,
+              "scene_b_preference_margin": 6.1328125,
+              "token_a": 898,
+              "token_b": 989
+            },
+            "logits": {
+              "cosine": 0.9998371601104736,
+              "max_absolute_delta": 1.0,
+              "rms_delta": 0.243669793009758,
+              "symmetric_kl_nats": 0.00010535957699175924
+            },
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the chair left or right of the floor lamp?",
+            "question_key": "cfq_2205fd183b8b1294"
+          },
+          {
+            "expected_a": "left",
+            "expected_b": "right",
+            "expected_first_token": {
+              "decoded_a": "left",
+              "decoded_b": "right",
+              "desired_margin_shift": 0.0625,
+              "scene_a_preference_margin": 5.375,
+              "scene_b_preference_margin": -5.3125,
+              "token_a": 989,
+              "token_b": 898
+            },
+            "logits": {
+              "cosine": 0.9998292922973633,
+              "max_absolute_delta": 1.625,
+              "rms_delta": 0.5599974989891052,
+              "symmetric_kl_nats": 6.99623114996939e-07
+            },
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the picture frame left or right of the cube?",
+            "question_key": "cfq_22e9cc563b37b2fc"
+          },
+          {
+            "expected_a": "right",
+            "expected_b": "left",
+            "expected_first_token": {
+              "decoded_a": "right",
+              "decoded_b": "left",
+              "desired_margin_shift": 0.0625,
+              "scene_a_preference_margin": -6.125,
+              "scene_b_preference_margin": 6.1875,
+              "token_a": 898,
+              "token_b": 989
+            },
+            "logits": {
+              "cosine": 0.9999369382858276,
+              "max_absolute_delta": 1.5,
+              "rms_delta": 0.5093889832496643,
+              "symmetric_kl_nats": 1.007215786330562e-07
+            },
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the table left or right of the chair?",
+            "question_key": "cfq_2bd6ff5367fe7096"
+          },
+          {
+            "expected_a": "right",
+            "expected_b": "left",
+            "expected_first_token": {
+              "decoded_a": "right",
+              "decoded_b": "left",
+              "desired_margin_shift": 0.125,
+              "scene_a_preference_margin": -6.28125,
+              "scene_b_preference_margin": 6.40625,
+              "token_a": 898,
+              "token_b": 989
+            },
+            "logits": {
+              "cosine": 0.999835193157196,
+              "max_absolute_delta": 1.25,
+              "rms_delta": 0.45481956005096436,
+              "symmetric_kl_nats": 1.8985803762916476e-05
+            },
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the table left or right of the floor lamp?",
+            "question_key": "cfq_2e216ecb8a66abb4"
+          },
+          {
+            "expected_a": "left",
+            "expected_b": "right",
+            "expected_first_token": {
+              "decoded_a": "left",
+              "decoded_b": "right",
+              "desired_margin_shift": -0.25,
+              "scene_a_preference_margin": 5.5,
+              "scene_b_preference_margin": -5.75,
+              "token_a": 989,
+              "token_b": 898
+            },
+            "logits": {
+              "cosine": 0.9999606609344482,
+              "max_absolute_delta": 1.0,
+              "rms_delta": 0.24686595797538757,
+              "symmetric_kl_nats": 5.632825406109987e-08
+            },
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the bowl left or right of the cabinet?",
+            "question_key": "cfq_32d36dc249d33c35"
+          },
+          {
+            "expected_a": "left",
+            "expected_b": "right",
+            "expected_first_token": {
+              "decoded_a": "left",
+              "decoded_b": "right",
+              "desired_margin_shift": 0.0,
+              "scene_a_preference_margin": 5.75,
+              "scene_b_preference_margin": -5.75,
+              "token_a": 989,
+              "token_b": 898
+            },
+            "logits": {
+              "cosine": 0.9998837113380432,
+              "max_absolute_delta": 1.625,
+              "rms_delta": 0.6271257400512695,
+              "symmetric_kl_nats": 3.5035793644055957e-07
+            },
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the cube left or right of the cabinet?",
+            "question_key": "cfq_43e076a47d06f1ef"
+          },
+          {
+            "expected_a": "left",
+            "expected_b": "right",
+            "expected_first_token": {
+              "decoded_a": "left",
+              "decoded_b": "right",
+              "desired_margin_shift": -0.0625,
+              "scene_a_preference_margin": 5.5625,
+              "scene_b_preference_margin": -5.625,
+              "token_a": 989,
+              "token_b": 898
+            },
+            "logits": {
+              "cosine": 0.9998797178268433,
+              "max_absolute_delta": 1.0,
+              "rms_delta": 0.23067405819892883,
+              "symmetric_kl_nats": 1.7353286807519908e-08
+            },
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the book left or right of the plant pot?",
+            "question_key": "cfq_4a835ad15d901079"
+          },
+          {
+            "expected_a": "left",
+            "expected_b": "right",
+            "expected_first_token": {
+              "decoded_a": "left",
+              "decoded_b": "right",
+              "desired_margin_shift": -0.125,
+              "scene_a_preference_margin": 5.625,
+              "scene_b_preference_margin": -5.75,
+              "token_a": 989,
+              "token_b": 898
+            },
+            "logits": {
+              "cosine": 0.99996018409729,
+              "max_absolute_delta": 1.125,
+              "rms_delta": 0.3095213770866394,
+              "symmetric_kl_nats": 2.6979030565144058e-08
+            },
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the bowl left or right of the book?",
+            "question_key": "cfq_4ce2d22bc5a467f0"
+          },
+          {
+            "expected_a": "left",
+            "expected_b": "right",
+            "expected_first_token": {
+              "decoded_a": "left",
+              "decoded_b": "right",
+              "desired_margin_shift": -0.125,
+              "scene_a_preference_margin": 5.6875,
+              "scene_b_preference_margin": -5.8125,
+              "token_a": 989,
+              "token_b": 898
+            },
+            "logits": {
+              "cosine": 0.9999303221702576,
+              "max_absolute_delta": 1.3125,
+              "rms_delta": 0.4723690450191498,
+              "symmetric_kl_nats": 2.4254660502265324e-07
+            },
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the table left or right of the cabinet?",
+            "question_key": "cfq_4f9267a181b75f9e"
+          },
+          {
+            "expected_a": "left",
+            "expected_b": "right",
+            "expected_first_token": {
+              "decoded_a": "left",
+              "decoded_b": "right",
+              "desired_margin_shift": -0.0625,
+              "scene_a_preference_margin": 5.625,
+              "scene_b_preference_margin": -5.6875,
+              "token_a": 989,
+              "token_b": 898
+            },
+            "logits": {
+              "cosine": 0.9999185800552368,
+              "max_absolute_delta": 1.25,
+              "rms_delta": 0.2919183671474457,
+              "symmetric_kl_nats": 1.062559817910369e-07
+            },
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the picture frame left or right of the book?",
+            "question_key": "cfq_5cfd197523939c45"
+          },
+          {
+            "expected_a": "left",
+            "expected_b": "right",
+            "expected_first_token": {
+              "decoded_a": "left",
+              "decoded_b": "right",
+              "desired_margin_shift": -0.25,
+              "scene_a_preference_margin": 5.25,
+              "scene_b_preference_margin": -5.5,
+              "token_a": 989,
+              "token_b": 898
+            },
+            "logits": {
+              "cosine": 0.9999392628669739,
+              "max_absolute_delta": 1.25,
+              "rms_delta": 0.3677981495857239,
+              "symmetric_kl_nats": 5.8654343604302994e-08
+            },
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the book left or right of the cabinet?",
+            "question_key": "cfq_659404854fcbf4ed"
+          },
+          {
+            "expected_a": "right",
+            "expected_b": "left",
+            "expected_first_token": {
+              "decoded_a": "right",
+              "decoded_b": "left",
+              "desired_margin_shift": 0.15625,
+              "scene_a_preference_margin": -5.375,
+              "scene_b_preference_margin": 5.53125,
+              "token_a": 898,
+              "token_b": 989
+            },
+            "logits": {
+              "cosine": 0.9998009204864502,
+              "max_absolute_delta": 1.625,
+              "rms_delta": 0.5986202955245972,
+              "symmetric_kl_nats": 4.936149707646109e-06
+            },
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the picture frame left or right of the floor lamp?",
+            "question_key": "cfq_67534806b29daf8a"
+          },
+          {
+            "expected_a": "left",
+            "expected_b": "right",
+            "expected_first_token": {
+              "decoded_a": "left",
+              "decoded_b": "right",
+              "desired_margin_shift": -0.125,
+              "scene_a_preference_margin": 5.75,
+              "scene_b_preference_margin": -5.875,
+              "token_a": 989,
+              "token_b": 898
+            },
+            "logits": {
+              "cosine": 0.9999765157699585,
+              "max_absolute_delta": 1.375,
+              "rms_delta": 0.41135600209236145,
+              "symmetric_kl_nats": 5.3561002744118014e-08
+            },
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the chair left or right of the book?",
+            "question_key": "cfq_6e1fb3d8ac35c444"
+          },
+          {
+            "expected_a": "left",
+            "expected_b": "right",
+            "expected_first_token": {
+              "decoded_a": "left",
+              "decoded_b": "right",
+              "desired_margin_shift": -0.1875,
+              "scene_a_preference_margin": 5.6875,
+              "scene_b_preference_margin": -5.875,
+              "token_a": 989,
+              "token_b": 898
+            },
+            "logits": {
+              "cosine": 0.9998811483383179,
+              "max_absolute_delta": 1.375,
+              "rms_delta": 0.39301982522010803,
+              "symmetric_kl_nats": 1.7483614556113025e-07
+            },
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the floor lamp left or right of the book?",
+            "question_key": "cfq_8381368f8fab1a6e"
+          },
+          {
+            "expected_a": "left",
+            "expected_b": "right",
+            "expected_first_token": {
+              "decoded_a": "left",
+              "decoded_b": "right",
+              "desired_margin_shift": -0.125,
+              "scene_a_preference_margin": 5.9375,
+              "scene_b_preference_margin": -6.0625,
+              "token_a": 989,
+              "token_b": 898
+            },
+            "logits": {
+              "cosine": 0.9999042749404907,
+              "max_absolute_delta": 1.4375,
+              "rms_delta": 0.4464671313762665,
+              "symmetric_kl_nats": 4.8711740419093985e-08
+            },
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the chair left or right of the cabinet?",
+            "question_key": "cfq_875234fc958dbe32"
+          },
+          {
+            "expected_a": "left",
+            "expected_b": "right",
+            "expected_first_token": {
+              "decoded_a": "left",
+              "decoded_b": "right",
+              "desired_margin_shift": -0.25,
+              "scene_a_preference_margin": 5.625,
+              "scene_b_preference_margin": -5.875,
+              "token_a": 989,
+              "token_b": 898
+            },
+            "logits": {
+              "cosine": 0.9999170899391174,
+              "max_absolute_delta": 1.625,
+              "rms_delta": 0.7015696167945862,
+              "symmetric_kl_nats": 2.4342759274986747e-07
+            },
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the cube left or right of the book?",
+            "question_key": "cfq_915b33668198f6a4"
+          },
+          {
+            "expected_a": "left",
+            "expected_b": "right",
+            "expected_first_token": {
+              "decoded_a": "left",
+              "decoded_b": "right",
+              "desired_margin_shift": 0.03125,
+              "scene_a_preference_margin": 5.5625,
+              "scene_b_preference_margin": -5.53125,
+              "token_a": 989,
+              "token_b": 898
+            },
+            "logits": {
+              "cosine": 0.9997568130493164,
+              "max_absolute_delta": 2.1875,
+              "rms_delta": 0.4361487925052643,
+              "symmetric_kl_nats": 5.778888862550957e-06
+            },
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the floor lamp left or right of the plant pot?",
+            "question_key": "cfq_93d540d91eb6c145"
+          },
+          {
+            "expected_a": "left",
+            "expected_b": "right",
+            "expected_first_token": {
+              "decoded_a": "left",
+              "decoded_b": "right",
+              "desired_margin_shift": -0.25,
+              "scene_a_preference_margin": 5.6875,
+              "scene_b_preference_margin": -5.9375,
+              "token_a": 989,
+              "token_b": 898
+            },
+            "logits": {
+              "cosine": 0.9998586773872375,
+              "max_absolute_delta": 1.125,
+              "rms_delta": 0.21804173290729523,
+              "symmetric_kl_nats": 2.034670103512326e-07
+            },
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the cube left or right of the plant pot?",
+            "question_key": "cfq_9412442cbde9812f"
+          },
+          {
+            "expected_a": "left",
+            "expected_b": "right",
+            "expected_first_token": {
+              "decoded_a": "left",
+              "decoded_b": "right",
+              "desired_margin_shift": -0.0625,
+              "scene_a_preference_margin": 5.5625,
+              "scene_b_preference_margin": -5.625,
+              "token_a": 989,
+              "token_b": 898
+            },
+            "logits": {
+              "cosine": 0.9999922513961792,
+              "max_absolute_delta": 1.125,
+              "rms_delta": 0.22014646232128143,
+              "symmetric_kl_nats": 4.627167982107494e-08
+            },
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the table left or right of the book?",
+            "question_key": "cfq_97111562c770aee1"
+          },
+          {
+            "expected_a": "left",
+            "expected_b": "right",
+            "expected_first_token": {
+              "decoded_a": "left",
+              "decoded_b": "right",
+              "desired_margin_shift": 0.0,
+              "scene_a_preference_margin": 5.375,
+              "scene_b_preference_margin": -5.375,
+              "token_a": 989,
+              "token_b": 898
+            },
+            "logits": {
+              "cosine": 0.9998652935028076,
+              "max_absolute_delta": 1.5,
+              "rms_delta": 0.46499723196029663,
+              "symmetric_kl_nats": 2.2144760691844567e-07
+            },
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the picture frame left or right of the cabinet?",
+            "question_key": "cfq_99e53cf3bc282ea0"
+          },
+          {
+            "expected_a": "right",
+            "expected_b": "left",
+            "expected_first_token": {
+              "decoded_a": "right",
+              "decoded_b": "left",
+              "desired_margin_shift": 0.09375,
+              "scene_a_preference_margin": -5.65625,
+              "scene_b_preference_margin": 5.75,
+              "token_a": 898,
+              "token_b": 989
+            },
+            "logits": {
+              "cosine": 0.9998419880867004,
+              "max_absolute_delta": 1.0625,
+              "rms_delta": 0.21021488308906555,
+              "symmetric_kl_nats": 1.6532162590010557e-06
+            },
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the bowl left or right of the floor lamp?",
+            "question_key": "cfq_9efeb9f6f3ebdcd2"
+          },
+          {
+            "expected_a": "left",
+            "expected_b": "right",
+            "expected_first_token": {
+              "decoded_a": "left",
+              "decoded_b": "right",
+              "desired_margin_shift": -0.0625,
+              "scene_a_preference_margin": 6.1875,
+              "scene_b_preference_margin": -6.25,
+              "token_a": 989,
+              "token_b": 898
+            },
+            "logits": {
+              "cosine": 0.9998660087585449,
+              "max_absolute_delta": 1.3125,
+              "rms_delta": 0.22683140635490417,
+              "symmetric_kl_nats": 7.042620353558959e-08
+            },
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the chair left or right of the plant pot?",
+            "question_key": "cfq_af381149c4b95493"
+          },
+          {
+            "expected_a": "left",
+            "expected_b": "right",
+            "expected_first_token": {
+              "decoded_a": "left",
+              "decoded_b": "right",
+              "desired_margin_shift": -0.3125,
+              "scene_a_preference_margin": 5.625,
+              "scene_b_preference_margin": -5.9375,
+              "token_a": 989,
+              "token_b": 898
+            },
+            "logits": {
+              "cosine": 0.9998852014541626,
+              "max_absolute_delta": 1.125,
+              "rms_delta": 0.2212415486574173,
+              "symmetric_kl_nats": 2.386528308306879e-07
+            },
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the floor lamp left or right of the cabinet?",
+            "question_key": "cfq_b46ef9691c5a634e"
+          },
+          {
+            "expected_a": "right",
+            "expected_b": "left",
+            "expected_first_token": {
+              "decoded_a": "right",
+              "decoded_b": "left",
+              "desired_margin_shift": 0.125,
+              "scene_a_preference_margin": -6.125,
+              "scene_b_preference_margin": 6.25,
+              "token_a": 898,
+              "token_b": 989
+            },
+            "logits": {
+              "cosine": 0.9998646974563599,
+              "max_absolute_delta": 1.5,
+              "rms_delta": 0.43215686082839966,
+              "symmetric_kl_nats": 5.052064580013393e-07
+            },
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the table left or right of the picture frame?",
+            "question_key": "cfq_b900601986242f13"
+          },
+          {
+            "expected_a": "right",
+            "expected_b": "left",
+            "expected_first_token": {
+              "decoded_a": "right",
+              "decoded_b": "left",
+              "desired_margin_shift": 0.1875,
+              "scene_a_preference_margin": -5.6875,
+              "scene_b_preference_margin": 5.875,
+              "token_a": 898,
+              "token_b": 989
+            },
+            "logits": {
+              "cosine": 0.9999414086341858,
+              "max_absolute_delta": 1.375,
+              "rms_delta": 0.43822377920150757,
+              "symmetric_kl_nats": 5.3079851625170704e-08
+            },
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the chair left or right of the bowl?",
+            "question_key": "cfq_c3ee105cd26e0caf"
+          },
+          {
+            "expected_a": "left",
+            "expected_b": "right",
+            "expected_first_token": {
+              "decoded_a": "left",
+              "decoded_b": "right",
+              "desired_margin_shift": 0.0,
+              "scene_a_preference_margin": 6.0,
+              "scene_b_preference_margin": -6.0,
+              "token_a": 989,
+              "token_b": 898
+            },
+            "logits": {
+              "cosine": 0.9998251795768738,
+              "max_absolute_delta": 1.1875,
+              "rms_delta": 0.22556956112384796,
+              "symmetric_kl_nats": 1.4142312920739641e-07
+            },
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the table left or right of the plant pot?",
+            "question_key": "cfq_cc99d18414163382"
+          },
+          {
+            "expected_a": "left",
+            "expected_b": "right",
+            "expected_first_token": {
+              "decoded_a": "left",
+              "decoded_b": "right",
+              "desired_margin_shift": -0.1875,
+              "scene_a_preference_margin": 5.8125,
+              "scene_b_preference_margin": -6.0,
+              "token_a": 989,
+              "token_b": 898
+            },
+            "logits": {
+              "cosine": 0.9998855590820312,
+              "max_absolute_delta": 1.25,
+              "rms_delta": 0.29002702236175537,
+              "symmetric_kl_nats": 3.430969996998101e-08
+            },
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the bowl left or right of the plant pot?",
+            "question_key": "cfq_d7634489597fde72"
+          },
+          {
+            "expected_a": "right",
+            "expected_b": "left",
+            "expected_first_token": {
+              "decoded_a": "right",
+              "decoded_b": "left",
+              "desired_margin_shift": 0.125,
+              "scene_a_preference_margin": -5.75,
+              "scene_b_preference_margin": 5.875,
+              "token_a": 898,
+              "token_b": 989
+            },
+            "logits": {
+              "cosine": 0.9999778270721436,
+              "max_absolute_delta": 1.0,
+              "rms_delta": 0.21187984943389893,
+              "symmetric_kl_nats": 3.8021006787403167e-08
+            },
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the table left or right of the bowl?",
+            "question_key": "cfq_d93ed29ad49bf208"
+          },
+          {
+            "expected_a": "left",
+            "expected_b": "right",
+            "expected_first_token": {
+              "decoded_a": "left",
+              "decoded_b": "right",
+              "desired_margin_shift": 0.0625,
+              "scene_a_preference_margin": 5.5,
+              "scene_b_preference_margin": -5.4375,
+              "token_a": 989,
+              "token_b": 898
+            },
+            "logits": {
+              "cosine": 0.9998486042022705,
+              "max_absolute_delta": 1.25,
+              "rms_delta": 0.30154162645339966,
+              "symmetric_kl_nats": 2.1839568944415078e-06
+            },
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the floor lamp left or right of the cube?",
+            "question_key": "cfq_e893b7c488b0087b"
+          },
+          {
+            "expected_a": "right",
+            "expected_b": "left",
+            "expected_first_token": {
+              "decoded_a": "right",
+              "decoded_b": "left",
+              "desired_margin_shift": 0.0,
+              "scene_a_preference_margin": -5.6875,
+              "scene_b_preference_margin": 5.6875,
+              "token_a": 898,
+              "token_b": 989
+            },
+            "logits": {
+              "cosine": 0.999904990196228,
+              "max_absolute_delta": 1.125,
+              "rms_delta": 0.28650251030921936,
+              "symmetric_kl_nats": 6.134261809620511e-08
+            },
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the picture frame left or right of the bowl?",
+            "question_key": "cfq_e965d37e99b34683"
+          },
+          {
+            "expected_a": "left",
+            "expected_b": "right",
+            "expected_first_token": {
+              "decoded_a": "left",
+              "decoded_b": "right",
+              "desired_margin_shift": -0.125,
+              "scene_a_preference_margin": 5.8125,
+              "scene_b_preference_margin": -5.9375,
+              "token_a": 989,
+              "token_b": 898
+            },
+            "logits": {
+              "cosine": 0.9998940825462341,
+              "max_absolute_delta": 1.5,
+              "rms_delta": 0.4608091115951538,
+              "symmetric_kl_nats": 2.2305115976450907e-07
+            },
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the bowl left or right of the cube?",
+            "question_key": "cfq_f1e3b385ca400a61"
+          },
+          {
+            "expected_a": "right",
+            "expected_b": "left",
+            "expected_first_token": {
+              "decoded_a": "right",
+              "decoded_b": "left",
+              "desired_margin_shift": 0.0,
+              "scene_a_preference_margin": -6.125,
+              "scene_b_preference_margin": 6.125,
+              "token_a": 898,
+              "token_b": 989
+            },
+            "logits": {
+              "cosine": 0.9998663067817688,
+              "max_absolute_delta": 1.375,
+              "rms_delta": 0.3608221709728241,
+              "symmetric_kl_nats": 2.3479536537251988e-07
+            },
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the table left or right of the cube?",
+            "question_key": "cfq_fdafc0e247e0856d"
+          }
+        ],
+        "mean_logit_rms_delta": 0.38082018452031274,
+        "mean_symmetric_kl_nats": 4.135262439522844e-06,
+        "pair_id": "pair_000003",
+        "prediction_changed_count": 0,
+        "prediction_changed_rate": 0.0,
+        "scene_a": "scene_000007",
+        "scene_b": "scene_000008",
+        "split": "train"
+      },
+      {
+        "change_type": "cube_support",
+        "changed_fact_question_count": 4,
+        "examples": [
+          {
+            "expected_a": "book, cube",
+            "expected_b": "book",
+            "expected_first_token": {
+              "decoded_a": "book",
+              "decoded_b": "book",
+              "desired_margin_shift": 0.0,
+              "scene_a_preference_margin": 0.0,
+              "scene_b_preference_margin": 0.0,
+              "token_a": 3070,
+              "token_b": 3070
+            },
+            "logits": {
+              "cosine": 0.9990425109863281,
+              "max_absolute_delta": 4.6171875,
+              "rms_delta": 1.4369441270828247,
+              "symmetric_kl_nats": 0.00015310614253394306
+            },
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "What is on the table?",
+            "question_key": "cfq_449e76a6b42904ac"
+          },
+          {
+            "expected_a": "cube",
+            "expected_b": "book",
+            "expected_first_token": {
+              "decoded_a": "cube",
+              "decoded_b": "book",
+              "desired_margin_shift": 0.1875,
+              "scene_a_preference_margin": 1.125,
+              "scene_b_preference_margin": -0.9375,
+              "token_a": 45601,
+              "token_b": 3070
+            },
+            "logits": {
+              "cosine": 0.9998385906219482,
+              "max_absolute_delta": 1.40625,
+              "rms_delta": 0.4747451841831207,
+              "symmetric_kl_nats": 0.0029415255412459373
+            },
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Which object is closest to the camera?",
+            "question_key": "cfq_8da2afee4268c6e1"
+          },
+          {
+            "expected_a": "bowl, cabinet, chair, floor lamp, plant pot, table",
+            "expected_b": "bowl, cabinet, chair, cube, floor lamp, plant pot, table",
+            "expected_first_token": {
+              "decoded_a": "bowl",
+              "decoded_b": "bowl",
+              "desired_margin_shift": 0.0,
+              "scene_a_preference_margin": 0.0,
+              "scene_b_preference_margin": 0.0,
+              "token_a": 115256,
+              "token_b": 115256
+            },
+            "logits": {
+              "cosine": 0.9997830390930176,
+              "max_absolute_delta": 2.0859375,
+              "rms_delta": 0.7623310089111328,
+              "symmetric_kl_nats": 0.005055112764239311
+            },
+            "prediction_a": "The floor is a light gray color.",
+            "prediction_b": "The floor is a light color, and there is a dark, rectangular object on it.",
+            "prediction_changed": true,
+            "question": "What is on the floor?",
+            "question_key": "cfq_9f4c9002322e39c3"
+          },
+          {
+            "expected_a": "below",
+            "expected_b": "above",
+            "expected_first_token": {
+              "decoded_a": "below",
+              "decoded_b": "above",
+              "desired_margin_shift": -0.3125,
+              "scene_a_preference_margin": 1.28125,
+              "scene_b_preference_margin": -1.59375,
+              "token_a": 60096,
+              "token_b": 46779
+            },
+            "logits": {
+              "cosine": 0.9999292492866516,
+              "max_absolute_delta": 0.625,
+              "rms_delta": 0.10420044511556625,
+              "symmetric_kl_nats": 6.32258547739184e-08
+            },
+            "prediction_a": "unknown",
+            "prediction_b": "unknown",
+            "prediction_changed": false,
+            "question": "Is the table above or below the cube?",
+            "question_key": "cfq_9ff79cf28297a75a"
+          }
+        ],
+        "mean_logit_rms_delta": 0.6945551913231611,
+        "mean_symmetric_kl_nats": 0.0020374519184684914,
+        "pair_id": "pair_000002",
+        "prediction_changed_count": 1,
+        "prediction_changed_rate": 0.25,
+        "scene_a": "scene_000005",
+        "scene_b": "scene_000006",
+        "split": "test"
+      }
+    ]
+  },
+  "learned_query_diversity": {
+    "global_resampler_queries": {
+      "mean_feature_std_across_tokens": 0.019956158474087715,
+      "mean_off_diagonal_cosine": 0.002969068009406328,
+      "minimum_off_diagonal_cosine": -0.18834833800792694,
+      "std_off_diagonal_cosine": 0.05081890523433685,
+      "token_count": 256
+    },
+    "spatial_block_queries": {
+      "mean_feature_std_across_tokens": 0.01455418299883604,
+      "mean_off_diagonal_cosine": 0.1664719432592392,
+      "minimum_off_diagonal_cosine": 0.1664719432592392,
+      "std_off_diagonal_cosine": 0.0,
+      "token_count": 2
+    }
+  },
+  "lora": {
+    "adapter_parameter_count": 45056,
+    "alpha": 8.0,
+    "dropout": 0.0,
+    "enabled": true,
+    "learning_rate": 0.0001,
+    "rank": 4,
+    "schema_version": 1,
+    "target_modules": [
+      "model.language_model.layers.34.self_attn.q_proj",
+      "model.language_model.layers.34.self_attn.o_proj"
+    ],
+    "weight_decay": 0.0
+  },
+  "pairs": [
+    {
+      "aggregated_map": {
+        "rgb": {
+          "changed_element_fraction_at_1e-6": 0.028721248957216065,
+          "cosine_flat": 0.998249791359034,
+          "max_row_l2": 264.8715617443782,
+          "mean_absolute_difference": 1.0049040436020142,
+          "mean_row_cosine": 0.9980393811396538,
+          "mean_row_l2": 1.8642465782141906,
+          "minimum_row_cosine": 0.26880946223412394,
+          "relative_l2": 0.05916435375928576,
+          "rms_difference": 10.010004919167141,
+          "row_difference_concentration": {
+            "effective_changed_rows": 68.9556325677927,
+            "top_10_fraction": 0.22829050250199323,
+            "top_1_fraction": 0.027814234182250017,
+            "top_1_percent_fraction": 0.9718724485064095
+          },
+          "shape_common": [
+            8391,
+            3
+          ],
+          "top_changed_rows": [
+            {
+              "aligned_row": 4867,
+              "coordinate": [
+                0.5127906799316406,
+                0.5249999761581421,
+                0.9725290536880493
+              ],
+              "cosine": 0.29410705519395175,
+              "l2": 264.8715617443782,
+              "rank": 1
+            },
+            {
+              "aligned_row": 5002,
+              "coordinate": [
+                0.6634314060211182,
+                0.5249999761581421,
+                0.9728431105613708
+              ],
+              "cosine": 0.26880946223412394,
+              "l2": 262.9671556109895,
+              "rank": 2
+            },
+            {
+              "aligned_row": 4719,
+              "coordinate": [
+                0.42500001192092896,
+                0.6733572483062744,
+                0.9799280762672424
+              ],
+              "cosine": 0.44666720193809545,
+              "l2": 251.34899342639898,
+              "rank": 3
+            },
+            {
+              "aligned_row": 4715,
+              "coordinate": [
+                0.42500001192092896,
+                0.5619767308235168,
+                0.9766279458999634
+              ],
+              "cosine": 0.4569519238201907,
+              "l2": 250.5696185428938,
+              "rank": 4
+            },
+            {
+              "aligned_row": 3213,
+              "coordinate": [
+                -1.125,
+                0.32500001788139343,
+                0.42500001192092896
+              ],
+              "cosine": 0.4476289184672999,
+              "l2": 231.85510049282894,
+              "rank": 5
+            },
+            {
+              "aligned_row": 4724,
+              "coordinate": [
+                0.42500004172325134,
+                0.7930473685264587,
+                0.9767751097679138
+              ],
+              "cosine": 0.5351148126307814,
+              "l2": 230.13199095506457,
+              "rank": 6
+            },
+            {
+              "aligned_row": 4716,
+              "coordinate": [
+                0.42500001192092896,
+                0.5612385272979736,
+                1.0869266986846924
+              ],
+              "cosine": 0.6030063653802407,
+              "l2": 228.53050513278453,
+              "rank": 7
+            },
+            {
+              "aligned_row": 4720,
+              "coordinate": [
+                0.42500004172325134,
+                0.6729080080986023,
+                1.0877615213394165
+              ],
+              "cosine": 0.603592082357004,
+              "l2": 227.82415903417083,
+              "rank": 8
+            },
+            {
+              "aligned_row": 3600,
+              "coordinate": [
+                -0.8445945978164673,
+                0.7868243455886841,
+                0.6733108758926392
+              ],
+              "cosine": 0.6342597749126193,
+              "l2": 223.6400182510772,
+              "rank": 9
+            },
+            {
+              "aligned_row": 3599,
+              "coordinate": [
+                -0.8391509652137756,
+                0.7886792421340942,
+                0.5334905385971069
+              ],
+              "cosine": 0.6274866709893979,
+              "l2": 222.9206959651443,
+              "rank": 10
+            }
+          ]
+        },
+        "semantic": {
+          "changed_element_fraction_at_1e-6": 0.7935280049557065,
+          "cosine_flat": 0.9992652899185088,
+          "max_row_l2": 390.3408255424457,
+          "mean_absolute_difference": 0.25147807499452896,
+          "mean_row_cosine": 0.9992963578178394,
+          "mean_row_l2": 32.5808528982874,
+          "minimum_row_cosine": 0.9610919900158823,
+          "relative_l2": 0.038333212022677275,
+          "rms_difference": 0.9154183600622071,
+          "row_difference_concentration": {
+            "effective_changed_rows": 762.617328490506,
+            "top_10_fraction": 0.052527494949806235,
+            "top_1_fraction": 0.0070536479963767985,
+            "top_1_percent_fraction": 0.2643787675562217
+          },
+          "shape_common": [
+            8391,
+            3072
+          ],
+          "top_changed_rows": [
+            {
+              "aligned_row": 3167,
+              "coordinate": [
+                -1.1749999523162842,
+                -1.2549998760223389,
+                0.17499999701976776
+              ],
+              "cosine": 0.9610919900158823,
+              "l2": 390.3408255424457,
+              "rank": 1
+            },
+            {
+              "aligned_row": 3172,
+              "coordinate": [
+                -1.1750000715255737,
+                -1.1500000953674316,
+                0.17499999701976776
+              ],
+              "cosine": 0.9649586487605597,
+              "l2": 380.04936394447185,
+              "rank": 2
+            },
+            {
+              "aligned_row": 2996,
+              "coordinate": [
+                -1.2330000400543213,
+                -1.1130000352859497,
+                0.17499999701976776
+              ],
+              "cosine": 0.9653790609388121,
+              "l2": 365.9827171152058,
+              "rank": 3
+            },
+            {
+              "aligned_row": 4869,
+              "coordinate": [
+                0.5099009871482849,
+                0.678960382938385,
+                1.125
+              ],
+              "cosine": 0.9688992033333153,
+              "l2": 342.18309366496356,
+              "rank": 4
+            },
+            {
+              "aligned_row": 3402,
+              "coordinate": [
+                -0.9726414680480957,
+                0.5235849022865295,
+                0.5250000357627869
+              ],
+              "cosine": 0.9692186698057057,
+              "l2": 329.4997830563759,
+              "rank": 5
+            },
+            {
+              "aligned_row": 3061,
+              "coordinate": [
+                -1.2450001239776611,
+                1.315000057220459,
+                -0.02500000037252903
+              ],
+              "cosine": 0.9730970091641759,
+              "l2": 312.69755622144845,
+              "rank": 6
+            },
+            {
+              "aligned_row": 1920,
+              "coordinate": [
+                -2.2750000953674316,
+                2.325000047683716,
+                0.02500000037252903
+              ],
+              "cosine": 0.9767403064717401,
+              "l2": 310.60644861274403,
+              "rank": 7
+            },
+            {
+              "aligned_row": 3062,
+              "coordinate": [
+                -1.2374999523162842,
+                1.2999999523162842,
+                0.02500000037252903
+              ],
+              "cosine": 0.9741170125751247,
+              "l2": 309.88814468017927,
+              "rank": 8
+            },
+            {
+              "aligned_row": 2816,
+              "coordinate": [
+                -1.4250000715255737,
+                -1.384374976158142,
+                0.17499999701976776
+              ],
+              "cosine": 0.9774111439438496,
+              "l2": 307.7426412642298,
+              "rank": 9
+            },
+            {
+              "aligned_row": 1919,
+              "coordinate": [
+                -2.2750000953674316,
+                2.375,
+                -0.02500000037252903
+              ],
+              "cosine": 0.9754583333384964,
+              "l2": 305.3665132627072,
+              "rank": 10
+            }
+          ]
+        },
+        "voxel_topology": {
+          "common_count": 8391,
+          "common_fraction_of_smaller": 1.0,
+          "count_a": 8391,
+          "count_b": 8391,
+          "jaccard": 1.0,
+          "only_a_count": 0,
+          "only_b_count": 0,
+          "union_count": 8391
+        }
+      },
+      "block_tokens": {
+        "block_topology": {
+          "common_count": 2998,
+          "common_fraction_of_smaller": 1.0,
+          "count_a": 2998,
+          "count_b": 2998,
+          "jaccard": 1.0,
+          "only_a_count": 0,
+          "only_b_count": 0,
+          "union_count": 2998
+        },
+        "common_block_tokens": {
+          "changed_element_fraction_at_1e-6": 0.8165087488881476,
+          "cosine_flat": 0.9364413611054745,
+          "max_row_l2": 38.089841488052386,
+          "mean_absolute_difference": 0.10585624855809274,
+          "mean_row_cosine": 0.9358346308505358,
+          "mean_row_l2": 2.3908155702465024,
+          "minimum_row_cosine": -0.8905656453425852,
+          "relative_l2": 0.3565351004754504,
+          "rms_difference": 0.35847405515177627,
+          "row_difference_concentration": {
+            "effective_changed_rows": 287.1390890172875,
+            "top_10_fraction": 0.04870142539751167,
+            "top_1_fraction": 0.0049035434134282185,
+            "top_1_percent_fraction": 0.2833578370515255
+          },
+          "shape_common": [
+            5996,
+            384
+          ],
+          "top_changed_rows": [
+            {
+              "block_index": [
+                13,
+                12,
+                4
+              ],
+              "coordinate": [
+                0.375,
+                0.625,
+                1.125
+              ],
+              "cosine": -0.8905656453425852,
+              "l2": 38.089841488052386,
+              "rank": 1,
+              "token_within_block": 0
+            },
+            {
+              "block_index": [
+                14,
+                12,
+                4
+              ],
+              "coordinate": [
+                0.625,
+                0.625,
+                1.125
+              ],
+              "cosine": -0.8898128301602929,
+              "l2": 38.08207383998111,
+              "rank": 2,
+              "token_within_block": 0
+            },
+            {
+              "block_index": [
+                13,
+                12,
+                4
+              ],
+              "coordinate": [
+                0.375,
+                0.625,
+                1.125
+              ],
+              "cosine": -0.889356534250939,
+              "l2": 38.07770704863282,
+              "rank": 3,
+              "token_within_block": 1
+            },
+            {
+              "block_index": [
+                14,
+                12,
+                4
+              ],
+              "coordinate": [
+                0.625,
+                0.625,
+                1.125
+              ],
+              "cosine": -0.8888373091106927,
+              "l2": 38.07223961329864,
+              "rank": 4,
+              "token_within_block": 1
+            },
+            {
+              "block_index": [
+                7,
+                12,
+                2
+              ],
+              "coordinate": [
+                -1.125,
+                0.625,
+                0.625
+              ],
+              "cosine": -0.8724873497843072,
+              "l2": 37.93347517640036,
+              "rank": 5,
+              "token_within_block": 0
+            },
+            {
+              "block_index": [
+                7,
+                13,
+                4
+              ],
+              "coordinate": [
+                -1.125,
+                0.875,
+                1.125
+              ],
+              "cosine": -0.8751573745639553,
+              "l2": 37.92988058400166,
+              "rank": 6,
+              "token_within_block": 0
+            },
+            {
+              "block_index": [
+                7,
+                13,
+                4
+              ],
+              "coordinate": [
+                -1.125,
+                0.875,
+                1.125
+              ],
+              "cosine": -0.8749748082572745,
+              "l2": 37.92829031649761,
+              "rank": 7,
+              "token_within_block": 1
+            },
+            {
+              "block_index": [
+                7,
+                12,
+                2
+              ],
+              "coordinate": [
+                -1.125,
+                0.625,
+                0.625
+              ],
+              "cosine": -0.8716399510418928,
+              "l2": 37.92500062447481,
+              "rank": 8,
+              "token_within_block": 1
+            },
+            {
+              "block_index": [
+                6,
+                12,
+                2
+              ],
+              "coordinate": [
+                -1.375,
+                0.625,
+                0.625
+              ],
+              "cosine": -0.8586966213347608,
+              "l2": 37.78187891900213,
+              "rank": 9,
+              "token_within_block": 0
+            },
+            {
+              "block_index": [
+                6,
+                12,
+                2
+              ],
+              "coordinate": [
+                -1.375,
+                0.625,
+                0.625
+              ],
+              "cosine": -0.8581847494844461,
+              "l2": 37.77687379418493,
+              "rank": 10,
+              "token_within_block": 1
+            }
+          ]
+        },
+        "tokens_per_block": 2
+      },
+      "change_type": "color_swap",
+      "final_prefix_runtime_dtype": {
+        "changed_element_fraction_at_1e-6": 0.8975416868540051,
+        "cosine_flat": 0.990495857298622,
+        "max_row_l2": 7.203954575041532,
+        "mean_absolute_difference": 0.031139769546043257,
+        "mean_row_cosine": 0.9861189993499048,
+        "mean_row_l2": 1.5514640744465178,
+        "minimum_row_cosine": 0.8613945918676629,
+        "relative_l2": 0.13787600965341706,
+        "rms_difference": 0.05924228176769238,
+        "row_difference_concentration": {
+          "effective_changed_rows": 55.984834084932615,
+          "top_10_fraction": 0.2962559990853462,
+          "top_1_fraction": 0.03731362605983166,
+          "top_1_percent_fraction": 0.10718331907273015
+        },
+        "shape": [
+          1,
+          258,
+          1536
+        ],
+        "shape_common": [
+          258,
+          1536
+        ],
+        "top_changed_rows": [
+          {
+            "cosine": 0.8640013257351357,
+            "l2": 7.203954575041532,
+            "rank": 1,
+            "token_index": 106
+          },
+          {
+            "cosine": 0.8613945918676629,
+            "l2": 7.111427790000248,
+            "rank": 2,
+            "token_index": 146
+          },
+          {
+            "cosine": 0.8736880733436284,
+            "l2": 6.826752917222181,
+            "rank": 3,
+            "token_index": 2
+          },
+          {
+            "cosine": 0.9026586917708148,
+            "l2": 6.411601513320326,
+            "rank": 4,
+            "token_index": 215
+          },
+          {
+            "cosine": 0.8894899318864983,
+            "l2": 6.400516585055566,
+            "rank": 5,
+            "token_index": 236
+          },
+          {
+            "cosine": 0.8847344437489446,
+            "l2": 6.370258109019304,
+            "rank": 6,
+            "token_index": 137
+          },
+          {
+            "cosine": 0.912175965696755,
+            "l2": 5.996388704452025,
+            "rank": 7,
+            "token_index": 176
+          },
+          {
+            "cosine": 0.9128028998912404,
+            "l2": 5.912810186026177,
+            "rank": 8,
+            "token_index": 20
+          },
+          {
+            "cosine": 0.908131671946369,
+            "l2": 5.909144833951744,
+            "rank": 9,
+            "token_index": 241
+          },
+          {
+            "cosine": 0.9079747843960528,
+            "l2": 5.871693498505146,
+            "rank": 10,
+            "token_index": 202
+          }
+        ]
+      },
+      "latent_diversity": {
+        "scene_a_native": {
+          "mean_feature_std_across_tokens": 3.175652265548706,
+          "mean_off_diagonal_cosine": 0.9468091726303101,
+          "minimum_off_diagonal_cosine": 0.3484528064727783,
+          "std_off_diagonal_cosine": 0.07852526009082794,
+          "token_count": 256
+        },
+        "scene_a_projected": {
+          "mean_feature_std_across_tokens": 0.18785834312438965,
+          "mean_off_diagonal_cosine": 0.7852662205696106,
+          "minimum_off_diagonal_cosine": 0.23959487676620483,
+          "std_off_diagonal_cosine": 0.1286260336637497,
+          "token_count": 256
+        },
+        "scene_b_native": {
+          "mean_feature_std_across_tokens": 3.052136182785034,
+          "mean_off_diagonal_cosine": 0.9543061852455139,
+          "minimum_off_diagonal_cosine": 0.42792603373527527,
+          "std_off_diagonal_cosine": 0.05712209641933441,
+          "token_count": 256
+        },
+        "scene_b_projected": {
+          "mean_feature_std_across_tokens": 0.18711189925670624,
+          "mean_off_diagonal_cosine": 0.7869805097579956,
+          "minimum_off_diagonal_cosine": 0.2596399784088135,
+          "std_off_diagonal_cosine": 0.12652777135372162,
+          "token_count": 256
+        }
+      },
+      "native_latents": {
+        "changed_element_fraction_at_1e-6": 1.0,
+        "cosine_flat": 0.9673276561405371,
+        "max_row_l2": 205.26461991125154,
+        "mean_absolute_difference": 1.8834911517911526,
+        "mean_row_cosine": 0.9565333487594389,
+        "mean_row_l2": 41.94076184734827,
+        "minimum_row_cosine": 0.5749447067471589,
+        "relative_l2": 0.2556288642376425,
+        "rms_difference": 3.4815009547438835,
+        "row_difference_concentration": {
+          "effective_changed_rows": 52.71892871146511,
+          "top_10_fraction": 0.3034788436555003,
+          "top_1_fraction": 0.035360953884882175,
+          "top_1_percent_fraction": 0.10243420383295568
+        },
+        "shape": [
+          1,
+          256,
+          384
+        ],
+        "shape_common": [
+          256,
+          384
+        ],
+        "top_changed_rows": [
+          {
+            "cosine": 0.7196406220887815,
+            "l2": 205.26461991125154,
+            "rank": 1,
+            "token_index": 79
+          },
+          {
+            "cosine": 0.7011181551184007,
+            "l2": 203.8567435004157,
+            "rank": 2,
+            "token_index": 175
+          },
+          {
+            "cosine": 0.6770164301758017,
+            "l2": 195.86239762205412,
+            "rank": 3,
+            "token_index": 235
+          },
+          {
+            "cosine": 0.7183871216006851,
+            "l2": 193.25326411185003,
+            "rank": 4,
+            "token_index": 19
+          },
+          {
+            "cosine": 0.6169623068641756,
+            "l2": 191.10408218431616,
+            "rank": 5,
+            "token_index": 145
+          },
+          {
+            "cosine": 0.6610448160329386,
+            "l2": 186.98510233906353,
+            "rank": 6,
+            "token_index": 1
+          },
+          {
+            "cosine": 0.765601529837927,
+            "l2": 182.32007063527868,
+            "rank": 7,
+            "token_index": 199
+          },
+          {
+            "cosine": 0.7613370481086443,
+            "l2": 181.6660418278663,
+            "rank": 8,
+            "token_index": 139
+          },
+          {
+            "cosine": 0.5749447067471589,
+            "l2": 181.19941043526998,
+            "rank": 9,
+            "token_index": 214
+          },
+          {
+            "cosine": 0.6294125609881878,
+            "l2": 177.88450036698285,
+            "rank": 10,
+            "token_index": 105
+          }
+        ]
+      },
+      "pair_id": "pair_000001",
+      "prefix_exactly_equal": false,
+      "prefix_hash_a": "b18c938138341fce478ba67ee083af938687424f72f6237e97a2f5b30886b52f",
+      "prefix_hash_b": "ca25242fc4c90ac5b3d99a059830098b5ef55c8acf2c9300c150d3906118ce57",
+      "projected_scene_tokens_float32": {
+        "changed_element_fraction_at_1e-6": 0.9998397827148438,
+        "cosine_flat": 0.9898304236957461,
+        "max_row_l2": 7.205167645160772,
+        "mean_absolute_difference": 0.031381702465388926,
+        "mean_row_cosine": 0.9860129217766187,
+        "mean_row_l2": 1.5608722718634709,
+        "minimum_row_cosine": 0.8614250718992614,
+        "relative_l2": 0.14262138350220588,
+        "rms_difference": 0.05946552429511386,
+        "row_difference_concentration": {
+          "effective_changed_rows": 55.95975974530365,
+          "top_10_fraction": 0.2963204483461553,
+          "top_1_fraction": 0.03733588882245692,
+          "top_1_percent_fraction": 0.10721354555041519
+        },
+        "shape": [
+          1,
+          256,
+          1536
+        ],
+        "shape_common": [
+          256,
+          1536
+        ],
+        "top_changed_rows": [
+          {
+            "cosine": 0.8639647105622134,
+            "l2": 7.205167645160772,
+            "rank": 1,
+            "token_index": 105
+          },
+          {
+            "cosine": 0.8614250718992614,
+            "l2": 7.110979959484071,
+            "rank": 2,
+            "token_index": 145
+          },
+          {
+            "cosine": 0.8737112791176505,
+            "l2": 6.826182193272852,
+            "rank": 3,
+            "token_index": 1
+          },
+          {
+            "cosine": 0.9026705880655912,
+            "l2": 6.410532227096773,
+            "rank": 4,
+            "token_index": 214
+          },
+          {
+            "cosine": 0.8894802257330513,
+            "l2": 6.400718376537429,
+            "rank": 5,
+            "token_index": 235
+          },
+          {
+            "cosine": 0.8847408114481167,
+            "l2": 6.3706428998847455,
+            "rank": 6,
+            "token_index": 136
+          },
+          {
+            "cosine": 0.9122288838762562,
+            "l2": 5.99484266983199,
+            "rank": 7,
+            "token_index": 175
+          },
+          {
+            "cosine": 0.9127867382492456,
+            "l2": 5.913469513902291,
+            "rank": 8,
+            "token_index": 19
+          },
+          {
+            "cosine": 0.9081099061331162,
+            "l2": 5.9094830329090255,
+            "rank": 9,
+            "token_index": 240
+          },
+          {
+            "cosine": 0.9080041772767921,
+            "l2": 5.8710350674178216,
+            "rank": 10,
+            "token_index": 201
+          }
+        ]
+      },
+      "projected_scene_tokens_runtime_dtype": {
+        "changed_element_fraction_at_1e-6": 0.9045537312825521,
+        "cosine_flat": 0.9898279025657024,
+        "max_row_l2": 7.203954575041532,
+        "mean_absolute_difference": 0.03138304899562172,
+        "mean_row_cosine": 0.9860105540323258,
+        "mean_row_l2": 1.5635848875281315,
+        "minimum_row_cosine": 0.8613945918676629,
+        "relative_l2": 0.14263913365412315,
+        "rms_difference": 0.05947324670509046,
+        "row_difference_concentration": {
+          "effective_changed_rows": 55.984834084932615,
+          "top_10_fraction": 0.2962559990853462,
+          "top_1_fraction": 0.03731362605983166,
+          "top_1_percent_fraction": 0.10718331907273015
+        },
+        "shape": [
+          1,
+          256,
+          1536
+        ],
+        "shape_common": [
+          256,
+          1536
+        ],
+        "top_changed_rows": [
+          {
+            "cosine": 0.8640013257351357,
+            "l2": 7.203954575041532,
+            "rank": 1,
+            "token_index": 105
+          },
+          {
+            "cosine": 0.8613945918676629,
+            "l2": 7.111427790000248,
+            "rank": 2,
+            "token_index": 145
+          },
+          {
+            "cosine": 0.8736880733436284,
+            "l2": 6.826752917222181,
+            "rank": 3,
+            "token_index": 1
+          },
+          {
+            "cosine": 0.9026586917708148,
+            "l2": 6.411601513320326,
+            "rank": 4,
+            "token_index": 214
+          },
+          {
+            "cosine": 0.8894899318864983,
+            "l2": 6.400516585055566,
+            "rank": 5,
+            "token_index": 235
+          },
+          {
+            "cosine": 0.8847344437489446,
+            "l2": 6.370258109019304,
+            "rank": 6,
+            "token_index": 136
+          },
+          {
+            "cosine": 0.912175965696755,
+            "l2": 5.996388704452025,
+            "rank": 7,
+            "token_index": 175
+          },
+          {
+            "cosine": 0.9128028998912404,
+            "l2": 5.912810186026177,
+            "rank": 8,
+            "token_index": 19
+          },
+          {
+            "cosine": 0.908131671946369,
+            "l2": 5.909144833951744,
+            "rank": 9,
+            "token_index": 240
+          },
+          {
+            "cosine": 0.9079747843960528,
+            "l2": 5.871693498505146,
+            "rank": 10,
+            "token_index": 201
+          }
+        ]
+      },
+      "raw_map": {
+        "rgb": {
+          "changed_element_fraction_at_1e-6": 0.01294559015742587,
+          "cosine_flat": 0.9985389601214153,
+          "max_row_l2": 270.4733278792984,
+          "mean_absolute_difference": 0.8059189114033878,
+          "mean_row_cosine": 0.9980995936055753,
+          "mean_row_l2": 1.4927129392782954,
+          "minimum_row_cosine": 0.023226003422147586,
+          "relative_l2": 0.05405632024972603,
+          "rms_difference": 9.477740283528055,
+          "row_difference_concentration": {
+            "effective_changed_rows": 482.18695881119544,
+            "top_10_fraction": 0.03612708538021095,
+            "top_1_fraction": 0.0036329860260334826,
+            "top_1_percent_fraction": 0.9995451691284112
+          },
+          "shape_common": [
+            74723,
+            3
+          ],
+          "top_changed_rows": [
+            {
+              "aligned_row": 43597,
+              "coordinate": [
+                0.625,
+                0.5250000357627869,
+                0.875
+              ],
+              "cosine": 0.19999881465851804,
+              "l2": 270.4733278792984,
+              "rank": 1
+            },
+            {
+              "aligned_row": 44060,
+              "coordinate": [
+                0.675000011920929,
+                0.5250000357627869,
+                0.925000011920929
+              ],
+              "cosine": 0.1994281876473242,
+              "l2": 270.4091908775298,
+              "rank": 2
+            },
+            {
+              "aligned_row": 44059,
+              "coordinate": [
+                0.675000011920929,
+                0.5250000357627869,
+                0.875
+              ],
+              "cosine": 0.1876117561714012,
+              "l2": 270.18890872555335,
+              "rank": 3
+            },
+            {
+              "aligned_row": 44061,
+              "coordinate": [
+                0.675000011920929,
+                0.5250000357627869,
+                0.9750000238418579
+              ],
+              "cosine": 0.21412394429383313,
+              "l2": 269.88884967852863,
+              "rank": 4
+            },
+            {
+              "aligned_row": 43598,
+              "coordinate": [
+                0.625,
+                0.5250000357627869,
+                0.925000011920929
+              ],
+              "cosine": 0.21603948806876458,
+              "l2": 269.8725806889158,
+              "rank": 5
+            },
+            {
+              "aligned_row": 43137,
+              "coordinate": [
+                0.574999988079071,
+                0.5250000357627869,
+                0.875
+              ],
+              "cosine": 0.21839454944911887,
+              "l2": 269.85931368091576,
+              "rank": 6
+            },
+            {
+              "aligned_row": 43599,
+              "coordinate": [
+                0.625,
+                0.5250000357627869,
+                0.9750000238418579
+              ],
+              "cosine": 0.22691224697580892,
+              "l2": 269.55447051330407,
+              "rank": 7
+            },
+            {
+              "aligned_row": 43138,
+              "coordinate": [
+                0.574999988079071,
+                0.5250000357627869,
+                0.925000011920929
+              ],
+              "cosine": 0.2361895873417636,
+              "l2": 269.16154111773494,
+              "rank": 8
+            },
+            {
+              "aligned_row": 44062,
+              "coordinate": [
+                0.675000011920929,
+                0.5250000357627869,
+                1.024999976158142
+              ],
+              "cosine": 0.2333504616409546,
+              "l2": 269.15305203169817,
+              "rank": 9
+            },
+            {
+              "aligned_row": 42676,
+              "coordinate": [
+                0.5250000357627869,
+                0.5250000357627869,
+                0.875
+              ],
+              "cosine": 0.24621243131296278,
+              "l2": 268.6072637444537,
+              "rank": 10
+            }
+          ]
+        },
+        "semantic": {
+          "changed_element_fraction_at_1e-6": 0.7107723544722397,
+          "cosine_flat": 0.9989162297748646,
+          "max_row_l2": 731.6371090612852,
+          "mean_absolute_difference": 0.30384522128519037,
+          "mean_row_cosine": 0.9989480117922354,
+          "mean_row_l2": 39.663613602312076,
+          "minimum_row_cosine": 0.8106050469783808,
+          "relative_l2": 0.046556856719475806,
+          "rms_difference": 1.1220128262345566,
+          "row_difference_concentration": {
+            "effective_changed_rows": 7426.215959254638,
+            "top_10_fraction": 0.012766694290101705,
+            "top_1_fraction": 0.0018523382543140607,
+            "top_1_percent_fraction": 0.23473885754272067
+          },
+          "shape_common": [
+            74723,
+            3072
+          ],
+          "top_changed_rows": [
+            {
+              "aligned_row": 29210,
+              "coordinate": [
+                -0.875,
+                1.3250000476837158,
+                0.02500000037252903
+              ],
+              "cosine": 0.8106050469783808,
+              "l2": 731.6371090612852,
+              "rank": 1
+            },
+            {
+              "aligned_row": 28607,
+              "coordinate": [
+                -0.925000011920929,
+                1.3250000476837158,
+                0.02500000037252903
+              ],
+              "cosine": 0.8270603266813243,
+              "l2": 705.5712642909776,
+              "rank": 2
+            },
+            {
+              "aligned_row": 16830,
+              "coordinate": [
+                -2.0250000953674316,
+                -1.125,
+                0.02500000037252903
+              ],
+              "cosine": 0.868488149322391,
+              "l2": 704.5432022983042,
+              "rank": 3
+            },
+            {
+              "aligned_row": 24369,
+              "coordinate": [
+                -1.274999976158142,
+                1.3250000476837158,
+                0.02500000037252903
+              ],
+              "cosine": 0.9180315946771855,
+              "l2": 625.5408744136939,
+              "rank": 4
+            },
+            {
+              "aligned_row": 28602,
+              "coordinate": [
+                -0.925000011920929,
+                1.274999976158142,
+                -0.02500000037252903
+              ],
+              "cosine": 0.8770753383592392,
+              "l2": 588.7788015128748,
+              "rank": 5
+            },
+            {
+              "aligned_row": 24958,
+              "coordinate": [
+                -1.225000023841858,
+                1.274999976158142,
+                -0.02500000037252903
+              ],
+              "cosine": 0.9248596690245786,
+              "l2": 579.8155109431646,
+              "rank": 6
+            },
+            {
+              "aligned_row": 20137,
+              "coordinate": [
+                -1.6750000715255737,
+                -0.875,
+                0.02500000037252903
+              ],
+              "cosine": 0.9178058554770998,
+              "l2": 550.4390179425872,
+              "rank": 7
+            },
+            {
+              "aligned_row": 12705,
+              "coordinate": [
+                -2.4750001430511475,
+                -1.475000023841858,
+                -0.02500000037252903
+              ],
+              "cosine": 0.9378653147836299,
+              "l2": 529.1522056101536,
+              "rank": 8
+            },
+            {
+              "aligned_row": 24963,
+              "coordinate": [
+                -1.225000023841858,
+                1.3250000476837158,
+                0.02500000037252903
+              ],
+              "cosine": 0.9387969779015048,
+              "l2": 506.1726533080931,
+              "rank": 9
+            },
+            {
+              "aligned_row": 29214,
+              "coordinate": [
+                -0.875,
+                1.375,
+                0.02500000037252903
+              ],
+              "cosine": 0.9172719979660348,
+              "l2": 496.48697577389163,
+              "rank": 10
+            }
+          ]
+        },
+        "voxel_topology": {
+          "common_count": 74723,
+          "common_fraction_of_smaller": 1.0,
+          "count_a": 74723,
+          "count_b": 74723,
+          "jaccard": 1.0,
+          "only_a_count": 0,
+          "only_b_count": 0,
+          "union_count": 74723
+        }
+      },
+      "scene_a": "scene_000003",
+      "scene_b": "scene_000004",
+      "signal_retention": {
+        "aggregation_over_raw": 0.8233634038837851,
+        "block_over_aggregated": 9.300945098587885,
+        "native_latents_over_blocks": 0.7169809196815506,
+        "projected_over_native_latents": 0.5579236285680929,
+        "projected_over_raw": 3.063380854114751,
+        "raw_to_projected_attenuation_factor": 0.3264367206110837
+      },
+      "split": "train"
+    },
+    {
+      "aggregated_map": {
+        "rgb": {
+          "changed_element_fraction_at_1e-6": 0.6489146555211002,
+          "cosine_flat": 0.9775956737187554,
+          "max_row_l2": 257.86142668493113,
+          "mean_absolute_difference": 20.632202965688943,
+          "mean_row_cosine": 0.9985106668317867,
+          "mean_row_l2": 36.83251872703734,
+          "minimum_row_cosine": 0.8306200965160526,
+          "relative_l2": 0.21168054377827486,
+          "rms_difference": 35.08556447676872,
+          "row_difference_concentration": {
+            "effective_changed_rows": 1404.175024362887,
+            "top_10_fraction": 0.019668823752903086,
+            "top_1_fraction": 0.0024275394279872184,
+            "top_1_percent_fraction": 0.12238408005923582
+          },
+          "shape_common": [
+            7417,
+            3
+          ],
+          "top_changed_rows": [
+            {
+              "aligned_row": 3900,
+              "coordinate": [
+                0.1772727221250534,
+                0.875,
+                0.08181818574666977
+              ],
+              "cosine": 0.8970422732877247,
+              "l2": 257.86142668493113,
+              "rank": 1
+            },
+            {
+              "aligned_row": 2454,
+              "coordinate": [
+                -1.3874999284744263,
+                0.2571428716182709,
+                0.5196428894996643
+              ],
+              "cosine": 0.8306200965160526,
+              "l2": 252.36319662831593,
+              "rank": 2
+            },
+            {
+              "aligned_row": 4458,
+              "coordinate": [
+                0.824431836605072,
+                2.514772891998291,
+                2.0244319438934326
+              ],
+              "cosine": 0.9382810149233661,
+              "l2": 231.85027481064506,
+              "rank": 3
+            },
+            {
+              "aligned_row": 3076,
+              "coordinate": [
+                -0.8267698884010315,
+                2.424999952316284,
+                2.023672580718994
+              ],
+              "cosine": 0.9394702716261882,
+              "l2": 229.48443779969898,
+              "rank": 4
+            },
+            {
+              "aligned_row": 3504,
+              "coordinate": [
+                -0.2361111044883728,
+                0.8361110687255859,
+                0.02500000037252903
+              ],
+              "cosine": 0.9381449541787164,
+              "l2": 229.2786938938358,
+              "rank": 5
+            },
+            {
+              "aligned_row": 4605,
+              "coordinate": [
+                0.9725309014320374,
+                2.510802745819092,
+                2.0243828296661377
+              ],
+              "cosine": 0.963956378889477,
+              "l2": 227.18613749144038,
+              "rank": 6
+            },
+            {
+              "aligned_row": 2932,
+              "coordinate": [
+                -0.9585937261581421,
+                2.4320311546325684,
+                2.0210938453674316
+              ],
+              "cosine": 0.9647936077023932,
+              "l2": 226.34580093886515,
+              "rank": 7
+            },
+            {
+              "aligned_row": 119,
+              "coordinate": [
+                -3.0250000953674316,
+                -1.3950001001358032,
+                2.755000114440918
+              ],
+              "cosine": 0.999942855028849,
+              "l2": 222.01666603644424,
+              "rank": 8
+            },
+            {
+              "aligned_row": 5344,
+              "coordinate": [
+                1.8678570985794067,
+                -2.4869048595428467,
+                2.6202380657196045
+              ],
+              "cosine": 0.9999905119591581,
+              "l2": 220.75282524032278,
+              "rank": 9
+            },
+            {
+              "aligned_row": 2100,
+              "coordinate": [
+                -1.7220587730407715,
+                -2.482353448867798,
+                2.621323585510254
+              ],
+              "cosine": 0.999984606488923,
+              "l2": 220.70737389238883,
+              "rank": 10
+            }
+          ]
+        },
+        "semantic": {
+          "changed_element_fraction_at_1e-6": 0.9999540487646623,
+          "cosine_flat": 0.9685660607885319,
+          "max_row_l2": 938.4512267905523,
+          "mean_absolute_difference": 2.2437528294176494,
+          "mean_row_cosine": 0.9691492274236972,
+          "mean_row_l2": 290.4820920437963,
+          "minimum_row_cosine": 0.7823505966989462,
+          "relative_l2": 0.25074306731060175,
+          "rms_difference": 5.974068146984254,
+          "row_difference_concentration": {
+            "effective_changed_rows": 3429.6294181532594,
+            "top_10_fraction": 0.009710386160400647,
+            "top_1_fraction": 0.001083012770468758,
+            "top_1_percent_fraction": 0.056331191306904664
+          },
+          "shape_common": [
+            7417,
+            3072
+          ],
+          "top_changed_rows": [
+            {
+              "aligned_row": 553,
+              "coordinate": [
+                -3.0250000953674316,
+                2.424999952316284,
+                2.5250000953674316
+              ],
+              "cosine": 0.7823505966989462,
+              "l2": 938.4512267905523,
+              "rank": 1
+            },
+            {
+              "aligned_row": 1161,
+              "coordinate": [
+                -2.924999952316284,
+                2.5250000953674316,
+                2.200000047683716
+              ],
+              "cosine": 0.7979742353651562,
+              "l2": 923.0665314879566,
+              "rank": 2
+            },
+            {
+              "aligned_row": 7413,
+              "coordinate": [
+                3.0249998569488525,
+                2.450000047683716,
+                2.4750001430511475
+              ],
+              "cosine": 0.7989600660065562,
+              "l2": 906.8936183298317,
+              "rank": 3
+            },
+            {
+              "aligned_row": 1162,
+              "coordinate": [
+                -2.941666603088379,
+                2.497222423553467,
+                2.336111068725586
+              ],
+              "cosine": 0.7921230300115271,
+              "l2": 905.7401975675489,
+              "rank": 4
+            },
+            {
+              "aligned_row": 1163,
+              "coordinate": [
+                -2.9549996852874756,
+                2.495000123977661,
+                2.4749999046325684
+              ],
+              "cosine": 0.7985909400775568,
+              "l2": 877.5397783828624,
+              "rank": 5
+            },
+            {
+              "aligned_row": 524,
+              "coordinate": [
+                -3.0250000953674316,
+                2.075000047683716,
+                1.225000023841858
+              ],
+              "cosine": 0.8219371272120484,
+              "l2": 874.8650323987104,
+              "rank": 6
+            },
+            {
+              "aligned_row": 6850,
+              "coordinate": [
+                2.924999475479126,
+                2.494443893432617,
+                2.325000047683716
+              ],
+              "cosine": 0.7996304984941394,
+              "l2": 874.2357398561585,
+              "rank": 7
+            },
+            {
+              "aligned_row": 536,
+              "coordinate": [
+                -3.0250000953674316,
+                2.2250001430511475,
+                2.674999952316284
+              ],
+              "cosine": 0.8219575210525962,
+              "l2": 862.5892726577786,
+              "rank": 8
+            },
+            {
+              "aligned_row": 1683,
+              "coordinate": [
+                -2.1777777671813965,
+                -2.4749999046325684,
+                0.22777777910232544
+              ],
+              "cosine": 0.817703107502946,
+              "l2": 859.5841692609021,
+              "rank": 9
+            },
+            {
+              "aligned_row": 6849,
+              "coordinate": [
+                2.929166555404663,
+                2.500000238418579,
+                2.1541666984558105
+              ],
+              "cosine": 0.8136143628797261,
+              "l2": 859.1198659584796,
+              "rank": 10
+            }
+          ]
+        },
+        "voxel_topology": {
+          "common_count": 7417,
+          "common_fraction_of_smaller": 0.885294819766054,
+          "count_a": 8386,
+          "count_b": 8378,
+          "jaccard": 0.7935166363539103,
+          "only_a_count": 969,
+          "only_b_count": 961,
+          "union_count": 9347
+        }
+      },
+      "block_tokens": {
+        "block_topology": {
+          "common_count": 2642,
+          "common_fraction_of_smaller": 0.8827263615101905,
+          "count_a": 2999,
+          "count_b": 2993,
+          "jaccard": 0.7886567164179105,
+          "only_a_count": 357,
+          "only_b_count": 351,
+          "union_count": 3350
+        },
+        "common_block_tokens": {
+          "changed_element_fraction_at_1e-6": 0.9999916217196568,
+          "cosine_flat": 0.8503212967660883,
+          "max_row_l2": 36.37402800557634,
+          "mean_absolute_difference": 0.2724577256629731,
+          "mean_row_cosine": 0.8495437721938233,
+          "mean_row_l2": 6.484023091833007,
+          "minimum_row_cosine": -0.7181398079186532,
+          "relative_l2": 0.5471356381895005,
+          "rms_difference": 0.550227464990082,
+          "row_difference_concentration": {
+            "effective_changed_rows": 812.6693847903939,
+            "top_10_fraction": 0.02114478050043325,
+            "top_1_fraction": 0.0021537943381075846,
+            "top_1_percent_fraction": 0.10854898087131606
+          },
+          "shape_common": [
+            5284,
+            384
+          ],
+          "top_changed_rows": [
+            {
+              "block_index": [
+                18,
+                4,
+                -1
+              ],
+              "coordinate": [
+                1.625,
+                -1.375,
+                -0.125
+              ],
+              "cosine": -0.7181398079186532,
+              "l2": 36.37402800557634,
+              "rank": 1,
+              "token_within_block": 1
+            },
+            {
+              "block_index": [
+                18,
+                4,
+                -1
+              ],
+              "coordinate": [
+                1.625,
+                -1.375,
+                -0.125
+              ],
+              "cosine": -0.7172421516005935,
+              "l2": 36.36492285169183,
+              "rank": 2,
+              "token_within_block": 0
+            },
+            {
+              "block_index": [
+                5,
+                4,
+                -1
+              ],
+              "coordinate": [
+                -1.625,
+                -1.375,
+                -0.125
+              ],
+              "cosine": -0.7143203979272937,
+              "l2": 36.286552518185864,
+              "rank": 3,
+              "token_within_block": 0
+            },
+            {
+              "block_index": [
+                5,
+                4,
+                -1
+              ],
+              "coordinate": [
+                -1.625,
+                -1.375,
+                -0.125
+              ],
+              "cosine": -0.7129777109682373,
+              "l2": 36.27260128274973,
+              "rank": 4,
+              "token_within_block": 1
+            },
+            {
+              "block_index": [
+                -1,
+                14,
+                1
+              ],
+              "coordinate": [
+                -3.125,
+                1.125,
+                0.375
+              ],
+              "cosine": -0.6901596411496032,
+              "l2": 36.09983791073217,
+              "rank": 5,
+              "token_within_block": 1
+            },
+            {
+              "block_index": [
+                -1,
+                14,
+                1
+              ],
+              "coordinate": [
+                -3.125,
+                1.125,
+                0.375
+              ],
+              "cosine": -0.6897751751607711,
+              "l2": 36.0957385114532,
+              "rank": 6,
+              "token_within_block": 0
+            },
+            {
+              "block_index": [
+                3,
+                20,
+                1
+              ],
+              "coordinate": [
+                -2.125,
+                2.625,
+                0.375
+              ],
+              "cosine": -0.6565458869152604,
+              "l2": 35.75096650589518,
+              "rank": 7,
+              "token_within_block": 0
+            },
+            {
+              "block_index": [
+                3,
+                20,
+                1
+              ],
+              "coordinate": [
+                -2.125,
+                2.625,
+                0.375
+              ],
+              "cosine": -0.6559289128910225,
+              "l2": 35.74423521698168,
+              "rank": 8,
+              "token_within_block": 1
+            },
+            {
+              "block_index": [
+                21,
+                0,
+                7
+              ],
+              "coordinate": [
+                2.375,
+                -2.375,
+                1.875
+              ],
+              "cosine": -0.6530192611263763,
+              "l2": 35.70377230458695,
+              "rank": 9,
+              "token_within_block": 1
+            },
+            {
+              "block_index": [
+                21,
+                0,
+                7
+              ],
+              "coordinate": [
+                2.375,
+                -2.375,
+                1.875
+              ],
+              "cosine": -0.6528655672875399,
+              "l2": 35.70217482126918,
+              "rank": 10,
+              "token_within_block": 0
+            }
+          ]
+        },
+        "tokens_per_block": 2
+      },
+      "change_type": "mirror_lr",
+      "final_prefix_runtime_dtype": {
+        "changed_element_fraction_at_1e-6": 0.9855054909560723,
+        "cosine_flat": 0.9283324294944987,
+        "max_row_l2": 14.988204863926464,
+        "mean_absolute_difference": 0.11761298472053029,
+        "mean_row_cosine": 0.9137308390802963,
+        "mean_row_l2": 5.808279725432905,
+        "minimum_row_cosine": 0.5717220256175704,
+        "relative_l2": 0.3786043534245809,
+        "rms_difference": 0.1633153808571406,
+        "row_difference_concentration": {
+          "effective_changed_rows": 147.53729117650553,
+          "top_10_fraction": 0.13796837729958691,
+          "top_1_fraction": 0.02125368029017911,
+          "top_1_percent_fraction": 0.05275778821028721
+        },
+        "shape": [
+          1,
+          258,
+          1536
+        ],
+        "shape_common": [
+          258,
+          1536
+        ],
+        "top_changed_rows": [
+          {
+            "cosine": 0.5717220256175704,
+            "l2": 14.988204863926464,
+            "rank": 1,
+            "token_index": 80
+          },
+          {
+            "cosine": 0.6307323643442049,
+            "l2": 13.324194085058926,
+            "rank": 2,
+            "token_index": 215
+          },
+          {
+            "cosine": 0.6765230963639065,
+            "l2": 12.468227214125061,
+            "rank": 3,
+            "token_index": 8
+          },
+          {
+            "cosine": 0.6503049862806304,
+            "l2": 12.311693743433226,
+            "rank": 4,
+            "token_index": 152
+          },
+          {
+            "cosine": 0.6795687635022198,
+            "l2": 11.661875209344107,
+            "rank": 5,
+            "token_index": 251
+          },
+          {
+            "cosine": 0.6933903490977249,
+            "l2": 11.308017315338596,
+            "rank": 6,
+            "token_index": 212
+          },
+          {
+            "cosine": 0.7452340314442273,
+            "l2": 11.051948408230412,
+            "rank": 7,
+            "token_index": 128
+          },
+          {
+            "cosine": 0.7054660719703195,
+            "l2": 11.038851966562014,
+            "rank": 8,
+            "token_index": 71
+          },
+          {
+            "cosine": 0.7224181246249588,
+            "l2": 10.991644872153877,
+            "rank": 9,
+            "token_index": 203
+          },
+          {
+            "cosine": 0.7548353594362249,
+            "l2": 10.972189929329584,
+            "rank": 10,
+            "token_index": 143
+          }
+        ]
+      },
+      "latent_diversity": {
+        "scene_a_native": {
+          "mean_feature_std_across_tokens": 3.1320745944976807,
+          "mean_off_diagonal_cosine": 0.9487336874008179,
+          "minimum_off_diagonal_cosine": 0.38684672117233276,
+          "std_off_diagonal_cosine": 0.0745345801115036,
+          "token_count": 256
+        },
+        "scene_a_projected": {
+          "mean_feature_std_across_tokens": 0.188603475689888,
+          "mean_off_diagonal_cosine": 0.7843190431594849,
+          "minimum_off_diagonal_cosine": 0.18901042640209198,
+          "std_off_diagonal_cosine": 0.1297241449356079,
+          "token_count": 256
+        },
+        "scene_b_native": {
+          "mean_feature_std_across_tokens": 3.287853956222534,
+          "mean_off_diagonal_cosine": 0.9425934553146362,
+          "minimum_off_diagonal_cosine": 0.3415333330631256,
+          "std_off_diagonal_cosine": 0.07948022335767746,
+          "token_count": 256
+        },
+        "scene_b_projected": {
+          "mean_feature_std_across_tokens": 0.1876927614212036,
+          "mean_off_diagonal_cosine": 0.7893578410148621,
+          "minimum_off_diagonal_cosine": 0.11462578177452087,
+          "std_off_diagonal_cosine": 0.125132754445076,
+          "token_count": 256
+        }
+      },
+      "native_latents": {
+        "changed_element_fraction_at_1e-6": 1.0,
+        "cosine_flat": 0.9445465492226216,
+        "max_row_l2": 295.32413676138316,
+        "mean_absolute_difference": 2.9005253399292314,
+        "mean_row_cosine": 0.9408228300872576,
+        "mean_row_l2": 67.29957421688155,
+        "minimum_row_cosine": 0.3468162978956436,
+        "relative_l2": 0.3330268980561738,
+        "rms_difference": 4.507496779885111,
+        "row_difference_concentration": {
+          "effective_changed_rows": 70.27230438547224,
+          "top_10_fraction": 0.2713672801473807,
+          "top_1_fraction": 0.04366725038947166,
+          "top_1_percent_fraction": 0.11005431807650748
+        },
+        "shape": [
+          1,
+          256,
+          384
+        ],
+        "shape_common": [
+          256,
+          384
+        ],
+        "top_changed_rows": [
+          {
+            "cosine": 0.3468162978956436,
+            "l2": 295.32413676138316,
+            "rank": 1,
+            "token_index": 79
+          },
+          {
+            "cosine": 0.41010288398036804,
+            "l2": 271.81284132380154,
+            "rank": 2,
+            "token_index": 214
+          },
+          {
+            "cosine": 0.5462652139356761,
+            "l2": 242.30617876087817,
+            "rank": 3,
+            "token_index": 250
+          },
+          {
+            "cosine": 0.6178129467718816,
+            "l2": 233.10399089915836,
+            "rank": 4,
+            "token_index": 34
+          },
+          {
+            "cosine": 0.6266557035298159,
+            "l2": 221.06679952182054,
+            "rank": 5,
+            "token_index": 130
+          },
+          {
+            "cosine": 0.6421550408341843,
+            "l2": 214.48193430041758,
+            "rank": 6,
+            "token_index": 175
+          },
+          {
+            "cosine": 0.7054883280064934,
+            "l2": 213.18572288230115,
+            "rank": 7,
+            "token_index": 124
+          },
+          {
+            "cosine": 0.6474647328451363,
+            "l2": 212.57072107664126,
+            "rank": 8,
+            "token_index": 139
+          },
+          {
+            "cosine": 0.6955573300481567,
+            "l2": 207.38060952203602,
+            "rank": 9,
+            "token_index": 94
+          },
+          {
+            "cosine": 0.6422662649057915,
+            "l2": 198.33749317004455,
+            "rank": 10,
+            "token_index": 235
+          }
+        ]
+      },
+      "pair_id": "pair_000003",
+      "prefix_exactly_equal": false,
+      "prefix_hash_a": "0a278cb90a65496034c366a986706f61c963dd2b0eeefd8aefa657083bf1ac4e",
+      "prefix_hash_b": "29ca8632a82be4b55c3b2d22628ecbdd0950598334e34cd35299750c24e1dcd0",
+      "projected_scene_tokens_float32": {
+        "changed_element_fraction_at_1e-6": 0.9999898274739584,
+        "cosine_flat": 0.9233401794189525,
+        "max_row_l2": 14.988362470938457,
+        "mean_absolute_difference": 0.1185311878277598,
+        "mean_row_cosine": 0.9130607564579674,
+        "mean_row_l2": 5.853474792136176,
+        "minimum_row_cosine": 0.5717424981078242,
+        "relative_l2": 0.3915694825827914,
+        "rms_difference": 0.16395013684563736,
+        "row_difference_concentration": {
+          "effective_changed_rows": 147.53190516462215,
+          "top_10_fraction": 0.13797305145327116,
+          "top_1_fraction": 0.02125463378887145,
+          "top_1_percent_fraction": 0.05275902481131846
+        },
+        "shape": [
+          1,
+          256,
+          1536
+        ],
+        "shape_common": [
+          256,
+          1536
+        ],
+        "top_changed_rows": [
+          {
+            "cosine": 0.5717424981078242,
+            "l2": 14.988362470938457,
+            "rank": 1,
+            "token_index": 79
+          },
+          {
+            "cosine": 0.630762701861459,
+            "l2": 13.323816399270708,
+            "rank": 2,
+            "token_index": 214
+          },
+          {
+            "cosine": 0.6765934132951092,
+            "l2": 12.468432590409316,
+            "rank": 3,
+            "token_index": 7
+          },
+          {
+            "cosine": 0.6502998346193711,
+            "l2": 12.312317134937908,
+            "rank": 4,
+            "token_index": 151
+          },
+          {
+            "cosine": 0.679531114215223,
+            "l2": 11.662187383137692,
+            "rank": 5,
+            "token_index": 250
+          },
+          {
+            "cosine": 0.6934183639485815,
+            "l2": 11.307459281463167,
+            "rank": 6,
+            "token_index": 211
+          },
+          {
+            "cosine": 0.7452293928618158,
+            "l2": 11.05197984601294,
+            "rank": 7,
+            "token_index": 127
+          },
+          {
+            "cosine": 0.7054496598466283,
+            "l2": 11.039560787794448,
+            "rank": 8,
+            "token_index": 70
+          },
+          {
+            "cosine": 0.7224550624650237,
+            "l2": 10.990055194632568,
+            "rank": 9,
+            "token_index": 202
+          },
+          {
+            "cosine": 0.754808982917292,
+            "l2": 10.97325884503222,
+            "rank": 10,
+            "token_index": 142
+          }
+        ]
+      },
+      "projected_scene_tokens_runtime_dtype": {
+        "changed_element_fraction_at_1e-6": 0.9932047526041666,
+        "cosine_flat": 0.9233373724044377,
+        "max_row_l2": 14.988204863926464,
+        "mean_absolute_difference": 0.11853183616365943,
+        "mean_row_cosine": 0.9130568612606111,
+        "mean_row_l2": 5.8536569107878496,
+        "minimum_row_cosine": 0.5717220256175704,
+        "relative_l2": 0.39157660130972566,
+        "rms_difference": 0.16395209040968153,
+        "row_difference_concentration": {
+          "effective_changed_rows": 147.53729117650553,
+          "top_10_fraction": 0.13796837729958691,
+          "top_1_fraction": 0.02125368029017911,
+          "top_1_percent_fraction": 0.05275778821028721
+        },
+        "shape": [
+          1,
+          256,
+          1536
+        ],
+        "shape_common": [
+          256,
+          1536
+        ],
+        "top_changed_rows": [
+          {
+            "cosine": 0.5717220256175704,
+            "l2": 14.988204863926464,
+            "rank": 1,
+            "token_index": 79
+          },
+          {
+            "cosine": 0.6307323643442049,
+            "l2": 13.324194085058926,
+            "rank": 2,
+            "token_index": 214
+          },
+          {
+            "cosine": 0.6765230963639065,
+            "l2": 12.468227214125061,
+            "rank": 3,
+            "token_index": 7
+          },
+          {
+            "cosine": 0.6503049862806304,
+            "l2": 12.311693743433226,
+            "rank": 4,
+            "token_index": 151
+          },
+          {
+            "cosine": 0.6795687635022198,
+            "l2": 11.661875209344107,
+            "rank": 5,
+            "token_index": 250
+          },
+          {
+            "cosine": 0.6933903490977249,
+            "l2": 11.308017315338596,
+            "rank": 6,
+            "token_index": 211
+          },
+          {
+            "cosine": 0.7452340314442273,
+            "l2": 11.051948408230412,
+            "rank": 7,
+            "token_index": 127
+          },
+          {
+            "cosine": 0.7054660719703195,
+            "l2": 11.038851966562014,
+            "rank": 8,
+            "token_index": 70
+          },
+          {
+            "cosine": 0.7224181246249588,
+            "l2": 10.991644872153877,
+            "rank": 9,
+            "token_index": 202
+          },
+          {
+            "cosine": 0.7548353594362249,
+            "l2": 10.972189929329584,
+            "rank": 10,
+            "token_index": 142
+          }
+        ]
+      },
+      "raw_map": {
+        "rgb": {
+          "changed_element_fraction_at_1e-6": 0.6944777849588116,
+          "cosine_flat": 0.9780061148996686,
+          "max_row_l2": 267.95148814664196,
+          "mean_absolute_difference": 21.849000026919015,
+          "mean_row_cosine": 0.9990310842704402,
+          "mean_row_l2": 38.73948119717011,
+          "minimum_row_cosine": 0.8340417920865233,
+          "relative_l2": 0.20973958388587116,
+          "rms_difference": 36.11392854176658,
+          "row_difference_concentration": {
+            "effective_changed_rows": 11705.850789864926,
+            "top_10_fraction": 0.0027133750392121735,
+            "top_1_fraction": 0.0002823721216889458,
+            "top_1_percent_fraction": 0.13605331268005266
+          },
+          "shape_common": [
+            64986,
+            3
+          ],
+          "top_changed_rows": [
+            {
+              "aligned_row": 1010,
+              "coordinate": [
+                -3.0250000953674316,
+                -0.875,
+                2.7250001430511475
+              ],
+              "cosine": 0.9996256843394188,
+              "l2": 267.95148814664196,
+              "rank": 1
+            },
+            {
+              "aligned_row": 966,
+              "coordinate": [
+                -3.0250000953674316,
+                -0.925000011920929,
+                2.7750000953674316
+              ],
+              "cosine": 0.9993529542828765,
+              "l2": 267.93655965545275,
+              "rank": 2
+            },
+            {
+              "aligned_row": 1157,
+              "coordinate": [
+                -3.0250000953674316,
+                -0.7250000238418579,
+                2.7750000953674316
+              ],
+              "cosine": 0.9995993350938681,
+              "l2": 265.0641431804762,
+              "rank": 3
+            },
+            {
+              "aligned_row": 57208,
+              "coordinate": [
+                2.9750001430511475,
+                -0.9750000238418579,
+                2.7250001430511475
+              ],
+              "cosine": 0.9996998022113615,
+              "l2": 264.21609185366214,
+              "rank": 4
+            },
+            {
+              "aligned_row": 57517,
+              "coordinate": [
+                2.9750001430511475,
+                -0.7250000238418579,
+                2.7750000953674316
+              ],
+              "cosine": 0.9995368337567809,
+              "l2": 263.92050953421216,
+              "rank": 5
+            },
+            {
+              "aligned_row": 819,
+              "coordinate": [
+                -3.0250000953674316,
+                -1.0750000476837158,
+                2.7250001430511475
+              ],
+              "cosine": 0.9997258260212089,
+              "l2": 262.74131764912806,
+              "rank": 6
+            },
+            {
+              "aligned_row": 1257,
+              "coordinate": [
+                -3.0250000953674316,
+                -0.625,
+                2.7750000953674316
+              ],
+              "cosine": 0.9996722009605981,
+              "l2": 261.0402267850685,
+              "rank": 7
+            },
+            {
+              "aligned_row": 57025,
+              "coordinate": [
+                2.9750001430511475,
+                -1.125,
+                2.7250001430511475
+              ],
+              "cosine": 0.9997821102839992,
+              "l2": 257.9850167724519,
+              "rank": 8
+            },
+            {
+              "aligned_row": 61540,
+              "coordinate": [
+                3.0250000953674316,
+                -1.225000023841858,
+                2.7250001430511475
+              ],
+              "cosine": 0.9996936883086105,
+              "l2": 257.79306856909716,
+              "rank": 9
+            },
+            {
+              "aligned_row": 61896,
+              "coordinate": [
+                3.0250000953674316,
+                -0.925000011920929,
+                2.7250001430511475
+              ],
+              "cosine": 0.9999002563977039,
+              "l2": 257.7263287419671,
+              "rank": 10
+            }
+          ]
+        },
+        "semantic": {
+          "changed_element_fraction_at_1e-6": 0.9993155627189574,
+          "cosine_flat": 0.9564688784807892,
+          "max_row_l2": 992.5782577845041,
+          "mean_absolute_difference": 2.7211694526500043,
+          "mean_row_cosine": 0.9570723870543698,
+          "mean_row_l2": 354.21924571805135,
+          "minimum_row_cosine": 0.7613786864254898,
+          "relative_l2": 0.29506713517660205,
+          "rms_difference": 7.092573752796962,
+          "row_difference_concentration": {
+            "effective_changed_rows": 35163.05737928542,
+            "top_10_fraction": 0.000957875699499462,
+            "top_1_fraction": 9.810265860245923e-05,
+            "top_1_percent_fraction": 0.04586231153480737
+          },
+          "shape_common": [
+            64986,
+            3072
+          ],
+          "top_changed_rows": [
+            {
+              "aligned_row": 8289,
+              "coordinate": [
+                -2.924999952316284,
+                2.4750001430511475,
+                2.2750000953674316
+              ],
+              "cosine": 0.763686130105591,
+              "l2": 992.5782577845041,
+              "rank": 1
+            },
+            {
+              "aligned_row": 64955,
+              "coordinate": [
+                3.0250000953674316,
+                2.424999952316284,
+                2.5250000953674316
+              ],
+              "cosine": 0.7747057616036047,
+              "l2": 992.2928623297885,
+              "rank": 2
+            },
+            {
+              "aligned_row": 60412,
+              "coordinate": [
+                2.9750001430511475,
+                2.424999952316284,
+                2.5250000953674316
+              ],
+              "cosine": 0.7774487928659847,
+              "l2": 990.5370812360035,
+              "rank": 3
+            },
+            {
+              "aligned_row": 8023,
+              "coordinate": [
+                -2.9750001430511475,
+                2.4750001430511475,
+                2.4750001430511475
+              ],
+              "cosine": 0.7624696176124597,
+              "l2": 990.0791295823755,
+              "rank": 4
+            },
+            {
+              "aligned_row": 3114,
+              "coordinate": [
+                -3.0250000953674316,
+                2.2250001430511475,
+                2.674999952316284
+              ],
+              "cosine": 0.7625214131395409,
+              "l2": 989.1845615123782,
+              "rank": 5
+            },
+            {
+              "aligned_row": 60413,
+              "coordinate": [
+                2.9750001430511475,
+                2.424999952316284,
+                2.575000047683716
+              ],
+              "cosine": 0.7763604496689802,
+              "l2": 977.6846549662024,
+              "rank": 6
+            },
+            {
+              "aligned_row": 8292,
+              "coordinate": [
+                -2.924999952316284,
+                2.4750001430511475,
+                2.4750001430511475
+              ],
+              "cosine": 0.7649703141462179,
+              "l2": 973.2356731459253,
+              "rank": 7
+            },
+            {
+              "aligned_row": 3148,
+              "coordinate": [
+                -3.0250000953674316,
+                2.375,
+                2.625
+              ],
+              "cosine": 0.7636521212879828,
+              "l2": 972.5738074146877,
+              "rank": 8
+            },
+            {
+              "aligned_row": 60393,
+              "coordinate": [
+                2.9750001430511475,
+                2.375,
+                2.575000047683716
+              ],
+              "cosine": 0.7839208428467455,
+              "l2": 967.5111102647364,
+              "rank": 9
+            },
+            {
+              "aligned_row": 8320,
+              "coordinate": [
+                -2.924999952316284,
+                2.5250000953674316,
+                2.2250001430511475
+              ],
+              "cosine": 0.780437219185387,
+              "l2": 961.6775845917841,
+              "rank": 10
+            }
+          ]
+        },
+        "voxel_topology": {
+          "common_count": 64986,
+          "common_fraction_of_smaller": 0.8722367626333803,
+          "count_a": 74505,
+          "count_b": 74533,
+          "jaccard": 0.7731642316661115,
+          "only_a_count": 9519,
+          "only_b_count": 9547,
+          "union_count": 84052
+        }
+      },
+      "scene_a": "scene_000007",
+      "scene_b": "scene_000008",
+      "signal_retention": {
+        "aggregation_over_raw": 0.8497831083781267,
+        "block_over_aggregated": 2.1820568921722163,
+        "native_latents_over_blocks": 0.6086733797092374,
+        "projected_over_native_latents": 1.1757893577615548,
+        "projected_over_raw": 1.327052171867366,
+        "raw_to_projected_attenuation_factor": 0.7535498763344373
+      },
+      "split": "train"
+    },
+    {
+      "aggregated_map": {
+        "rgb": {
+          "changed_element_fraction_at_1e-6": 0.021125089010206502,
+          "cosine_flat": 0.9999467925445756,
+          "max_row_l2": 159.04979834967233,
+          "mean_absolute_difference": 0.05369935909850432,
+          "mean_row_cosine": 0.9999745103734115,
+          "mean_row_l2": 0.10663402056851597,
+          "minimum_row_cosine": 0.9254823560460473,
+          "relative_l2": 0.010317686388652771,
+          "rms_difference": 1.7483477001026713,
+          "row_difference_concentration": {
+            "effective_changed_rows": 4.644851012715431,
+            "top_10_fraction": 0.9860209572936229,
+            "top_1_fraction": 0.32739189447259526,
+            "top_1_percent_fraction": 0.9999808306112083
+          },
+          "shape_common": [
+            8426,
+            3
+          ],
+          "top_changed_rows": [
+            {
+              "aligned_row": 4891,
+              "coordinate": [
+                0.4750000238418579,
+                0.6768450140953064,
+                0.8456642031669617
+              ],
+              "cosine": 0.9254823560460473,
+              "l2": 159.04979834967233,
+              "rank": 1
+            },
+            {
+              "aligned_row": 5041,
+              "coordinate": [
+                0.67315274477005,
+                0.5392857193946838,
+                0.8376847505569458
+              ],
+              "cosine": 0.9647743842786815,
+              "l2": 128.3924657682605,
+              "rank": 2
+            },
+            {
+              "aligned_row": 4896,
+              "coordinate": [
+                0.4772421419620514,
+                0.8169282674789429,
+                0.8409192562103271
+              ],
+              "cosine": 0.9654847489360366,
+              "l2": 119.50819375118981,
+              "rank": 3
+            },
+            {
+              "aligned_row": 4888,
+              "coordinate": [
+                0.5160550475120544,
+                0.5340595841407776,
+                0.8371560573577881
+              ],
+              "cosine": 0.975565032226896,
+              "l2": 109.17608255898864,
+              "rank": 4
+            },
+            {
+              "aligned_row": 6305,
+              "coordinate": [
+                1.8899999856948853,
+                1.5249998569488525,
+                0.7150000333786011
+              ],
+              "cosine": 0.9640883314757799,
+              "l2": 70.76233236086955,
+              "rank": 5
+            },
+            {
+              "aligned_row": 4740,
+              "coordinate": [
+                0.37520578503608704,
+                0.6710905432701111,
+                0.8250000476837158
+              ],
+              "cosine": 0.9991519529229014,
+              "l2": 33.539349538607574,
+              "rank": 6
+            },
+            {
+              "aligned_row": 6459,
+              "coordinate": [
+                2.058333396911621,
+                1.524999976158142,
+                0.6791666150093079
+              ],
+              "cosine": 0.993312923119484,
+              "l2": 27.50689778177792,
+              "rank": 7
+            },
+            {
+              "aligned_row": 4737,
+              "coordinate": [
+                0.3741689622402191,
+                0.5164127349853516,
+                0.8249999284744263
+              ],
+              "cosine": 0.9996477524137464,
+              "l2": 22.546016267981916,
+              "rank": 8
+            },
+            {
+              "aligned_row": 5048,
+              "coordinate": [
+                0.625,
+                1.024999976158142,
+                0.824999988079071
+              ],
+              "cosine": 0.9994721656301113,
+              "l2": 21.457342088222603,
+              "rank": 9
+            },
+            {
+              "aligned_row": 5193,
+              "coordinate": [
+                0.8299180269241333,
+                0.5248361229896545,
+                0.8276229500770569
+              ],
+              "cosine": 0.9995880172214071,
+              "l2": 18.627300221243285,
+              "rank": 10
+            }
+          ]
+        },
+        "semantic": {
+          "changed_element_fraction_at_1e-6": 0.6486646228316124,
+          "cosine_flat": 0.999348106324195,
+          "max_row_l2": 730.5349342420965,
+          "mean_absolute_difference": 0.13185040874643258,
+          "mean_row_cosine": 0.9993705866564494,
+          "mean_row_l2": 17.247994868268623,
+          "minimum_row_cosine": 0.8712367172669717,
+          "relative_l2": 0.03610805543655825,
+          "rms_difference": 0.862541786419551,
+          "row_difference_concentration": {
+            "effective_changed_rows": 126.94301991847868,
+            "top_10_fraction": 0.19608573716643868,
+            "top_1_fraction": 0.02771271168343393,
+            "top_1_percent_fraction": 0.6348801679326339
+          },
+          "shape_common": [
+            8426,
+            3072
+          ],
+          "top_changed_rows": [
+            {
+              "aligned_row": 6475,
+              "coordinate": [
+                2.0250000953674316,
+                2.515000104904175,
+                0.5649999380111694
+              ],
+              "cosine": 0.8712367172669717,
+              "l2": 730.5349342420965,
+              "rank": 1
+            },
+            {
+              "aligned_row": 6771,
+              "coordinate": [
+                2.329545497894287,
+                2.5113637447357178,
+                0.5522727370262146
+              ],
+              "cosine": 0.872211823837957,
+              "l2": 708.0161281143836,
+              "rank": 2
+            },
+            {
+              "aligned_row": 6625,
+              "coordinate": [
+                2.1875,
+                2.5250000953674316,
+                0.574999988079071
+              ],
+              "cosine": 0.8798897496128094,
+              "l2": 705.1745070850028,
+              "rank": 3
+            },
+            {
+              "aligned_row": 5048,
+              "coordinate": [
+                0.625,
+                1.024999976158142,
+                0.824999988079071
+              ],
+              "cosine": 0.9109208844929243,
+              "l2": 588.7402933673475,
+              "rank": 4
+            },
+            {
+              "aligned_row": 7170,
+              "coordinate": [
+                2.7535717487335205,
+                2.5249998569488525,
+                0.4035714268684387
+              ],
+              "cosine": 0.9078202413587501,
+              "l2": 587.1442750462721,
+              "rank": 5
+            },
+            {
+              "aligned_row": 6910,
+              "coordinate": [
+                2.505000352859497,
+                2.515000104904175,
+                0.5449999570846558
+              ],
+              "cosine": 0.9077468338350081,
+              "l2": 567.1286242029586,
+              "rank": 6
+            },
+            {
+              "aligned_row": 5837,
+              "coordinate": [
+                1.4089999198913574,
+                2.505999803543091,
+                0.37000003457069397
+              ],
+              "cosine": 0.9144488253315395,
+              "l2": 559.9010197298683,
+              "rank": 7
+            },
+            {
+              "aligned_row": 5838,
+              "coordinate": [
+                1.4175373315811157,
+                2.508582353591919,
+                0.5264924764633179
+              ],
+              "cosine": 0.9142182044038173,
+              "l2": 556.7382260469775,
+              "rank": 8
+            },
+            {
+              "aligned_row": 7039,
+              "coordinate": [
+                2.6416666507720947,
+                2.508333444595337,
+                0.42500004172325134
+              ],
+              "cosine": 0.9164874458182286,
+              "l2": 551.6514409201928,
+              "rank": 9
+            },
+            {
+              "aligned_row": 6299,
+              "coordinate": [
+                1.9250000715255737,
+                1.475000023841858,
+                0.7250000238418579
+              ],
+              "cosine": 0.9340384676993883,
+              "l2": 550.5942628138805,
+              "rank": 10
+            }
+          ]
+        },
+        "voxel_topology": {
+          "common_count": 8426,
+          "common_fraction_of_smaller": 0.9983412322274882,
+          "count_a": 8440,
+          "count_b": 8469,
+          "jaccard": 0.993280679005069,
+          "only_a_count": 14,
+          "only_b_count": 43,
+          "union_count": 8483
+        }
+      },
+      "block_tokens": {
+        "block_topology": {
+          "common_count": 3015,
+          "common_fraction_of_smaller": 0.9983443708609272,
+          "count_a": 3020,
+          "count_b": 3031,
+          "jaccard": 0.9930830039525692,
+          "only_a_count": 5,
+          "only_b_count": 16,
+          "union_count": 3036
+        },
+        "common_block_tokens": {
+          "changed_element_fraction_at_1e-6": 0.6920164800995025,
+          "cosine_flat": 0.9918518191273564,
+          "max_row_l2": 35.72134384218286,
+          "mean_absolute_difference": 0.0207088323236073,
+          "mean_row_cosine": 0.9917919180544336,
+          "mean_row_l2": 0.4864994996523578,
+          "minimum_row_cosine": -0.6568109767829378,
+          "relative_l2": 0.1276572043814277,
+          "rms_difference": 0.1283509686341996,
+          "row_difference_concentration": {
+            "effective_changed_rows": 51.24098740348776,
+            "top_10_fraction": 0.3074975333498074,
+            "top_1_fraction": 0.03345097185612665,
+            "top_1_percent_fraction": 0.8842384818858052
+          },
+          "shape_common": [
+            6030,
+            384
+          ],
+          "top_changed_rows": [
+            {
+              "block_index": [
+                14,
+                13,
+                3
+              ],
+              "coordinate": [
+                0.625,
+                0.875,
+                0.875
+              ],
+              "cosine": -0.6568109767829378,
+              "l2": 35.72134384218286,
+              "rank": 1,
+              "token_within_block": 1
+            },
+            {
+              "block_index": [
+                14,
+                13,
+                3
+              ],
+              "coordinate": [
+                0.625,
+                0.875,
+                0.875
+              ],
+              "cosine": -0.656291926157438,
+              "l2": 35.71601325309461,
+              "rank": 2,
+              "token_within_block": 0
+            },
+            {
+              "block_index": [
+                14,
+                14,
+                3
+              ],
+              "coordinate": [
+                0.625,
+                1.125,
+                0.875
+              ],
+              "cosine": -0.5979815200422891,
+              "l2": 35.02303905022975,
+              "rank": 3,
+              "token_within_block": 0
+            },
+            {
+              "block_index": [
+                14,
+                14,
+                3
+              ],
+              "coordinate": [
+                0.625,
+                1.125,
+                0.875
+              ],
+              "cosine": -0.597121588291599,
+              "l2": 35.01362238050775,
+              "rank": 4,
+              "token_within_block": 1
+            },
+            {
+              "block_index": [
+                20,
+                20,
+                2
+              ],
+              "coordinate": [
+                2.125,
+                2.625,
+                0.625
+              ],
+              "cosine": -0.5003916387359661,
+              "l2": 34.03317925458556,
+              "rank": 5,
+              "token_within_block": 1
+            },
+            {
+              "block_index": [
+                20,
+                20,
+                2
+              ],
+              "coordinate": [
+                2.125,
+                2.625,
+                0.625
+              ],
+              "cosine": -0.4994994257285735,
+              "l2": 34.02305742947783,
+              "rank": 6,
+              "token_within_block": 0
+            },
+            {
+              "block_index": [
+                22,
+                20,
+                1
+              ],
+              "coordinate": [
+                2.625,
+                2.625,
+                0.375
+              ],
+              "cosine": -0.4847150552450252,
+              "l2": 33.84014519858751,
+              "rank": 7,
+              "token_within_block": 0
+            },
+            {
+              "block_index": [
+                22,
+                20,
+                1
+              ],
+              "coordinate": [
+                2.625,
+                2.625,
+                0.375
+              ],
+              "cosine": -0.48407103018272424,
+              "l2": 33.832756106417605,
+              "rank": 8,
+              "token_within_block": 1
+            },
+            {
+              "block_index": [
+                19,
+                20,
+                2
+              ],
+              "coordinate": [
+                1.875,
+                2.625,
+                0.625
+              ],
+              "cosine": -0.37275992469993363,
+              "l2": 32.56079500639672,
+              "rank": 9,
+              "token_within_block": 1
+            },
+            {
+              "block_index": [
+                19,
+                20,
+                2
+              ],
+              "coordinate": [
+                1.875,
+                2.625,
+                0.625
+              ],
+              "cosine": -0.37208558213509996,
+              "l2": 32.55281011705445,
+              "rank": 10,
+              "token_within_block": 0
+            }
+          ]
+        },
+        "tokens_per_block": 2
+      },
+      "change_type": "cube_support",
+      "final_prefix_runtime_dtype": {
+        "changed_element_fraction_at_1e-6": 0.8587012475775194,
+        "cosine_flat": 0.9959948097878388,
+        "max_row_l2": 6.721151120129628,
+        "mean_absolute_difference": 0.016345950854103758,
+        "mean_row_cosine": 0.9939332372340298,
+        "mean_row_l2": 0.8081907444550988,
+        "minimum_row_cosine": 0.8718396263723863,
+        "relative_l2": 0.08957049801498497,
+        "rms_difference": 0.03849531319543345,
+        "row_difference_concentration": {
+          "effective_changed_rows": 26.635089104688348,
+          "top_10_fraction": 0.5155850656025288,
+          "top_1_fraction": 0.07692379188056185,
+          "top_1_percent_fraction": 0.22596866853363168
+        },
+        "shape": [
+          1,
+          258,
+          1536
+        ],
+        "shape_common": [
+          258,
+          1536
+        ],
+        "top_changed_rows": [
+          {
+            "cosine": 0.8718396263723863,
+            "l2": 6.721151120129628,
+            "rank": 1,
+            "token_index": 137
+          },
+          {
+            "cosine": 0.8845303779148838,
+            "l2": 6.707780387276961,
+            "rank": 2,
+            "token_index": 241
+          },
+          {
+            "cosine": 0.9037800987174778,
+            "l2": 6.521733959293108,
+            "rank": 3,
+            "token_index": 215
+          },
+          {
+            "cosine": 0.9183952988030277,
+            "l2": 5.666940752329796,
+            "rank": 4,
+            "token_index": 121
+          },
+          {
+            "cosine": 0.9260202338741201,
+            "l2": 5.132215679114957,
+            "rank": 5,
+            "token_index": 35
+          },
+          {
+            "cosine": 0.9338896073889523,
+            "l2": 4.963135612096864,
+            "rank": 6,
+            "token_index": 125
+          },
+          {
+            "cosine": 0.9329274310787148,
+            "l2": 4.781182567505162,
+            "rank": 7,
+            "token_index": 101
+          },
+          {
+            "cosine": 0.9361791321478712,
+            "l2": 4.732038627994268,
+            "rank": 8,
+            "token_index": 131
+          },
+          {
+            "cosine": 0.9433912331066346,
+            "l2": 4.646154680591239,
+            "rank": 9,
+            "token_index": 97
+          },
+          {
+            "cosine": 0.9487957102385123,
+            "l2": 4.489256429300618,
+            "rank": 10,
+            "token_index": 251
+          }
+        ]
+      },
+      "latent_diversity": {
+        "scene_a_native": {
+          "mean_feature_std_across_tokens": 3.390131711959839,
+          "mean_off_diagonal_cosine": 0.9341360926628113,
+          "minimum_off_diagonal_cosine": 0.2286207228899002,
+          "std_off_diagonal_cosine": 0.10181891173124313,
+          "token_count": 256
+        },
+        "scene_a_projected": {
+          "mean_feature_std_across_tokens": 0.18957479298114777,
+          "mean_off_diagonal_cosine": 0.7799466252326965,
+          "minimum_off_diagonal_cosine": 0.22355860471725464,
+          "std_off_diagonal_cosine": 0.1318381428718567,
+          "token_count": 256
+        },
+        "scene_b_native": {
+          "mean_feature_std_across_tokens": 2.9248170852661133,
+          "mean_off_diagonal_cosine": 0.958521842956543,
+          "minimum_off_diagonal_cosine": 0.6730250120162964,
+          "std_off_diagonal_cosine": 0.042273275554180145,
+          "token_count": 256
+        },
+        "scene_b_projected": {
+          "mean_feature_std_across_tokens": 0.188116192817688,
+          "mean_off_diagonal_cosine": 0.7855900526046753,
+          "minimum_off_diagonal_cosine": 0.2349630445241928,
+          "std_off_diagonal_cosine": 0.12739640474319458,
+          "token_count": 256
+        }
+      },
+      "native_latents": {
+        "changed_element_fraction_at_1e-6": 1.0,
+        "cosine_flat": 0.9904769754178824,
+        "max_row_l2": 160.5458755866992,
+        "mean_absolute_difference": 0.8511066017613681,
+        "mean_row_cosine": 0.9834336733571293,
+        "mean_row_l2": 19.453675883669938,
+        "minimum_row_cosine": 0.6006439324022194,
+        "relative_l2": 0.13813371311820602,
+        "rms_difference": 1.86740366398221,
+        "row_difference_concentration": {
+          "effective_changed_rows": 26.920610381361673,
+          "top_10_fraction": 0.5117037902189288,
+          "top_1_fraction": 0.07518837577056209,
+          "top_1_percent_fraction": 0.20622237564960366
+        },
+        "shape": [
+          1,
+          256,
+          384
+        ],
+        "shape_common": [
+          256,
+          384
+        ],
+        "top_changed_rows": [
+          {
+            "cosine": 0.6006439324022194,
+            "l2": 160.5458755866992,
+            "rank": 1,
+            "token_index": 136
+          },
+          {
+            "cosine": 0.6129724532961228,
+            "l2": 157.98793719479465,
+            "rank": 2,
+            "token_index": 240
+          },
+          {
+            "cosine": 0.7101337975817733,
+            "l2": 141.27621563523817,
+            "rank": 3,
+            "token_index": 214
+          },
+          {
+            "cosine": 0.7275165868384426,
+            "l2": 134.70217207174707,
+            "rank": 4,
+            "token_index": 120
+          },
+          {
+            "cosine": 0.8380302699581976,
+            "l2": 126.84856121249466,
+            "rank": 5,
+            "token_index": 124
+          },
+          {
+            "cosine": 0.8427662515233546,
+            "l2": 126.30391370860858,
+            "rank": 6,
+            "token_index": 96
+          },
+          {
+            "cosine": 0.8119782041802134,
+            "l2": 124.65307139784812,
+            "rank": 7,
+            "token_index": 34
+          },
+          {
+            "cosine": 0.8059911076734172,
+            "l2": 118.20050334307737,
+            "rank": 8,
+            "token_index": 100
+          },
+          {
+            "cosine": 0.8471435338717154,
+            "l2": 112.63110410929302,
+            "rank": 9,
+            "token_index": 40
+          },
+          {
+            "cosine": 0.8227374005342251,
+            "l2": 111.07313804186339,
+            "rank": 10,
+            "token_index": 130
+          }
+        ]
+      },
+      "pair_id": "pair_000002",
+      "prefix_exactly_equal": false,
+      "prefix_hash_a": "c92f0cf8e9693f2eb1ac331efd069ad3cbc786195db9f0dec326de6ca1c98642",
+      "prefix_hash_b": "81ec7f42c44150f951a8cb4130db772c86767eccb6abebbdba435ed4cc2e2a59",
+      "projected_scene_tokens_float32": {
+        "changed_element_fraction_at_1e-6": 0.9998499552408854,
+        "cosine_flat": 0.995716633400892,
+        "max_row_l2": 6.721531972835672,
+        "mean_absolute_difference": 0.01647243972241519,
+        "mean_row_cosine": 0.9938884299076493,
+        "mean_row_l2": 0.8104090603359195,
+        "minimum_row_cosine": 0.8718305959581063,
+        "relative_l2": 0.09263390811075947,
+        "rms_difference": 0.038633004792656134,
+        "row_difference_concentration": {
+          "effective_changed_rows": 26.59940907274265,
+          "top_10_fraction": 0.5159346656528372,
+          "top_1_fraction": 0.07698185656208016,
+          "top_1_percent_fraction": 0.2261616673089752
+        },
+        "shape": [
+          1,
+          256,
+          1536
+        ],
+        "shape_common": [
+          256,
+          1536
+        ],
+        "top_changed_rows": [
+          {
+            "cosine": 0.8718305959581063,
+            "l2": 6.721531972835672,
+            "rank": 1,
+            "token_index": 136
+          },
+          {
+            "cosine": 0.8844612335700472,
+            "l2": 6.709426920326359,
+            "rank": 2,
+            "token_index": 240
+          },
+          {
+            "cosine": 0.9037634873463325,
+            "l2": 6.521809974952135,
+            "rank": 3,
+            "token_index": 214
+          },
+          {
+            "cosine": 0.9183594483148393,
+            "l2": 5.667497667032359,
+            "rank": 4,
+            "token_index": 120
+          },
+          {
+            "cosine": 0.9260165620841737,
+            "l2": 5.132520604294677,
+            "rank": 5,
+            "token_index": 34
+          },
+          {
+            "cosine": 0.9339245327008531,
+            "l2": 4.961450322426687,
+            "rank": 6,
+            "token_index": 124
+          },
+          {
+            "cosine": 0.932905110837636,
+            "l2": 4.781329665800299,
+            "rank": 7,
+            "token_index": 100
+          },
+          {
+            "cosine": 0.936228800496864,
+            "l2": 4.730657506947202,
+            "rank": 8,
+            "token_index": 130
+          },
+          {
+            "cosine": 0.943384613788629,
+            "l2": 4.646245061729303,
+            "rank": 9,
+            "token_index": 96
+          },
+          {
+            "cosine": 0.9487919877303513,
+            "l2": 4.489366550265658,
+            "rank": 10,
+            "token_index": 250
+          }
+        ]
+      },
+      "projected_scene_tokens_runtime_dtype": {
+        "changed_element_fraction_at_1e-6": 0.8654098510742188,
+        "cosine_flat": 0.995713905942435,
+        "max_row_l2": 6.721151120129628,
+        "mean_absolute_difference": 0.016473653595151443,
+        "mean_row_cosine": 0.9938858406499207,
+        "mean_row_l2": 0.8145047346461542,
+        "minimum_row_cosine": 0.8718396263723863,
+        "relative_l2": 0.09266335232926601,
+        "rms_difference": 0.038645392958349525,
+        "row_difference_concentration": {
+          "effective_changed_rows": 26.635089104688348,
+          "top_10_fraction": 0.5155850656025288,
+          "top_1_fraction": 0.07692379188056185,
+          "top_1_percent_fraction": 0.22596866853363168
+        },
+        "shape": [
+          1,
+          256,
+          1536
+        ],
+        "shape_common": [
+          256,
+          1536
+        ],
+        "top_changed_rows": [
+          {
+            "cosine": 0.8718396263723863,
+            "l2": 6.721151120129628,
+            "rank": 1,
+            "token_index": 136
+          },
+          {
+            "cosine": 0.8845303779148838,
+            "l2": 6.707780387276961,
+            "rank": 2,
+            "token_index": 240
+          },
+          {
+            "cosine": 0.9037800987174778,
+            "l2": 6.521733959293108,
+            "rank": 3,
+            "token_index": 214
+          },
+          {
+            "cosine": 0.9183952988030277,
+            "l2": 5.666940752329796,
+            "rank": 4,
+            "token_index": 120
+          },
+          {
+            "cosine": 0.9260202338741201,
+            "l2": 5.132215679114957,
+            "rank": 5,
+            "token_index": 34
+          },
+          {
+            "cosine": 0.9338896073889523,
+            "l2": 4.963135612096864,
+            "rank": 6,
+            "token_index": 124
+          },
+          {
+            "cosine": 0.9329274310787148,
+            "l2": 4.781182567505162,
+            "rank": 7,
+            "token_index": 100
+          },
+          {
+            "cosine": 0.9361791321478712,
+            "l2": 4.732038627994268,
+            "rank": 8,
+            "token_index": 130
+          },
+          {
+            "cosine": 0.9433912331066346,
+            "l2": 4.646154680591239,
+            "rank": 9,
+            "token_index": 96
+          },
+          {
+            "cosine": 0.9487957102385123,
+            "l2": 4.489256429300618,
+            "rank": 10,
+            "token_index": 250
+          }
+        ]
+      },
+      "raw_map": {
+        "rgb": {
+          "changed_element_fraction_at_1e-6": 0.007563428754368647,
+          "cosine_flat": 0.9999676782025418,
+          "max_row_l2": 211.78953723846195,
+          "mean_absolute_difference": 0.03254805597413294,
+          "mean_row_cosine": 0.9999813616860899,
+          "mean_row_l2": 0.0641700788161211,
+          "minimum_row_cosine": 0.8333721898978351,
+          "relative_l2": 0.00804089233615915,
+          "rms_difference": 1.4113056450877366,
+          "row_difference_concentration": {
+            "effective_changed_rows": 14.854932938184476,
+            "top_10_fraction": 0.7465164274735598,
+            "top_1_fraction": 0.10013392786511831,
+            "top_1_percent_fraction": 0.9999998599558731
+          },
+          "shape_common": [
+            74966,
+            3
+          ],
+          "top_changed_rows": [
+            {
+              "aligned_row": 43415,
+              "coordinate": [
+                0.574999988079071,
+                0.574999988079071,
+                0.824999988079071
+              ],
+              "cosine": 0.8422095451439745,
+              "l2": 211.78953723846195,
+              "rank": 1
+            },
+            {
+              "aligned_row": 56742,
+              "coordinate": [
+                1.875,
+                1.524999976158142,
+                0.675000011920929
+              ],
+              "cosine": 0.8333721898978351,
+              "l2": 208.7547933314931,
+              "rank": 2
+            },
+            {
+              "aligned_row": 44317,
+              "coordinate": [
+                0.675000011920929,
+                0.574999988079071,
+                0.824999988079071
+              ],
+              "cosine": 0.855000525994039,
+              "l2": 208.52749643417377,
+              "rank": 3
+            },
+            {
+              "aligned_row": 42955,
+              "coordinate": [
+                0.5250000357627869,
+                0.574999988079071,
+                0.824999988079071
+              ],
+              "cosine": 0.8597231177593238,
+              "l2": 202.2039616511177,
+              "rank": 4
+            },
+            {
+              "aligned_row": 43866,
+              "coordinate": [
+                0.625,
+                0.574999988079071,
+                0.824999988079071
+              ],
+              "cosine": 0.8718475894729819,
+              "l2": 199.0426669631062,
+              "rank": 5
+            },
+            {
+              "aligned_row": 58129,
+              "coordinate": [
+                2.0250000953674316,
+                1.524999976158142,
+                0.625
+              ],
+              "cosine": 0.8530209851550066,
+              "l2": 196.8780412789975,
+              "rank": 6
+            },
+            {
+              "aligned_row": 44783,
+              "coordinate": [
+                0.7250000238418579,
+                0.574999988079071,
+                0.824999988079071
+              ],
+              "cosine": 0.891551577599397,
+              "l2": 190.81031705650824,
+              "rank": 7
+            },
+            {
+              "aligned_row": 42460,
+              "coordinate": [
+                0.4749999940395355,
+                0.675000011920929,
+                0.824999988079071
+              ],
+              "cosine": 0.9606835308749401,
+              "l2": 127.37185184814174,
+              "rank": 8
+            },
+            {
+              "aligned_row": 45264,
+              "coordinate": [
+                0.7750000357627869,
+                0.574999988079071,
+                0.824999988079071
+              ],
+              "cosine": 0.9689002746212286,
+              "l2": 123.7947295619557,
+              "rank": 9
+            },
+            {
+              "aligned_row": 57220,
+              "coordinate": [
+                1.9250000715255737,
+                1.524999976158142,
+                0.675000011920929
+              ],
+              "cosine": 0.8777642261904547,
+              "l2": 123.53492333554561,
+              "rank": 10
+            }
+          ]
+        },
+        "semantic": {
+          "changed_element_fraction_at_1e-6": 0.538369625132838,
+          "cosine_flat": 0.9988831124486592,
+          "max_row_l2": 853.6326403665528,
+          "mean_absolute_difference": 0.18082918475631024,
+          "mean_row_cosine": 0.9989065134899006,
+          "mean_row_l2": 23.953697359382442,
+          "minimum_row_cosine": 0.8125631759696242,
+          "relative_l2": 0.0472628408040663,
+          "rms_difference": 1.1390973131575317,
+          "row_difference_concentration": {
+            "effective_changed_rows": 1752.4237025325137,
+            "top_10_fraction": 0.021658293797548057,
+            "top_1_fraction": 0.002438567721163374,
+            "top_1_percent_fraction": 0.5406887389022659
+          },
+          "shape_common": [
+            74966,
+            3072
+          ],
+          "top_changed_rows": [
+            {
+              "aligned_row": 45753,
+              "coordinate": [
+                0.824999988079071,
+                0.625,
+                0.824999988079071
+              ],
+              "cosine": 0.8125631759696242,
+              "l2": 853.6326403665528,
+              "rank": 1
+            },
+            {
+              "aligned_row": 61111,
+              "coordinate": [
+                2.375,
+                2.5250000953674316,
+                0.5250000357627869
+              ],
+              "cosine": 0.8296187013645484,
+              "l2": 820.8958889626183,
+              "rank": 2
+            },
+            {
+              "aligned_row": 58190,
+              "coordinate": [
+                2.0250000953674316,
+                2.5250000953674316,
+                0.5250000357627869
+              ],
+              "cosine": 0.840822065825579,
+              "l2": 820.7171196101074,
+              "rank": 3
+            },
+            {
+              "aligned_row": 60686,
+              "coordinate": [
+                2.325000047683716,
+                2.4750001430511475,
+                0.5250000357627869
+              ],
+              "cosine": 0.8371953123252022,
+              "l2": 812.2088662575636,
+              "rank": 4
+            },
+            {
+              "aligned_row": 61083,
+              "coordinate": [
+                2.375,
+                2.4750001430511475,
+                0.5250000357627869
+              ],
+              "cosine": 0.8385968545766852,
+              "l2": 808.2541325000614,
+              "rank": 5
+            },
+            {
+              "aligned_row": 60714,
+              "coordinate": [
+                2.325000047683716,
+                2.5250000953674316,
+                0.5250000357627869
+              ],
+              "cosine": 0.8440009207904079,
+              "l2": 795.5666714368591,
+              "rank": 6
+            },
+            {
+              "aligned_row": 59062,
+              "coordinate": [
+                2.125,
+                2.5250000953674316,
+                0.574999988079071
+              ],
+              "cosine": 0.8514347165738977,
+              "l2": 789.0386066263713,
+              "rank": 7
+            },
+            {
+              "aligned_row": 57750,
+              "coordinate": [
+                1.975000023841858,
+                2.5250000953674316,
+                0.574999988079071
+              ],
+              "cosine": 0.8525002284941401,
+              "l2": 783.2550618391417,
+              "rank": 8
+            },
+            {
+              "aligned_row": 60331,
+              "coordinate": [
+                2.2750000953674316,
+                2.5250000953674316,
+                0.574999988079071
+              ],
+              "cosine": 0.8502573822047182,
+              "l2": 781.0015807673109,
+              "rank": 9
+            },
+            {
+              "aligned_row": 57711,
+              "coordinate": [
+                1.975000023841858,
+                2.4750001430511475,
+                0.574999988079071
+              ],
+              "cosine": 0.856855527976195,
+              "l2": 777.0722050271555,
+              "rank": 10
+            }
+          ]
+        },
+        "voxel_topology": {
+          "common_count": 74966,
+          "common_fraction_of_smaller": 0.9986412319496989,
+          "count_a": 75068,
+          "count_b": 75469,
+          "jaccard": 0.9919942835214567,
+          "only_a_count": 102,
+          "only_b_count": 503,
+          "union_count": 75571
+        }
+      },
+      "scene_a": "scene_000005",
+      "scene_b": "scene_000006",
+      "signal_retention": {
+        "aggregation_over_raw": 0.7639840268224347,
+        "block_over_aggregated": 3.535421745591397,
+        "native_latents_over_blocks": 1.082067508743772,
+        "projected_over_native_latents": 0.6706104253600226,
+        "projected_over_raw": 1.9599733434302924,
+        "raw_to_projected_attenuation_factor": 0.5102110206508355
+      },
+      "split": "test"
+    }
+  ],
+  "prefix_hash_semantics": "SHA-256 over the final checkpoint-projected scene prefix after casting scene tokens and persisted boundaries to bfloat16; consult runtime_validation.runtime_prefix_parity_validated before treating it as a model-validated chat-runtime prefix",
+  "purpose": "Counterfactual signal audit from numeric maps through frozen-LM behavior",
+  "runtime_dtype": "bfloat16",
+  "runtime_validation": {
+    "base_model_loaded": true,
+    "configured_runtime_dtype": "bfloat16",
+    "loaded_model_runtime_dtype": "bfloat16",
+    "native_boundary_embeddings_validated": true,
+    "native_boundary_validation_required": true,
+    "reason": null,
+    "runtime_dtype_validated_against_loaded_model": true,
+    "runtime_prefix_parity_validated": true,
+    "status": "model_validated_runtime_prefix"
+  },
+  "scene_boundary_mode": "gemma4_native_image",
+  "scene_prefix_after_bos": true,
+  "schema_version": 2,
+  "summary_findings": {
+    "block_token_relative_l2_range": [
+      0.1276572043814277,
+      0.5471356381895005
+    ],
+    "diagnosis": "The counterfactual signal is present in raw and aggregated maps and remains visible in spatial block tokens. The dominant loss occurs in the global Perceiver resampler: its 256 native latents are almost duplicate vectors, and scene-pair relative L2 falls by roughly two to three further orders of magnitude before LM projection. Distinct SHA-256 hashes therefore certify only bitwise inequality, not a behaviorally useful separation.",
+    "native_latent_mean_off_diagonal_cosine_range": [
+      0.9341360926628113,
+      0.958521842956543
+    ],
+    "native_latent_relative_l2_range": [
+      0.13813371311820602,
+      0.3330268980561738
+    ],
+    "projected_token_relative_l2_range": [
+      0.09263390811075947,
+      0.3915694825827914
+    ],
+    "raw_semantic_relative_l2_range": [
+      0.046556856719475806,
+      0.29506713517660205
+    ],
+    "recommended_fix": "Preserve spatially anchored latent diversity (for example, regional latent banks followed by global mixing), add an explicit counterfactual scene-token separation/diversity objective, and keep the projected scene signal in float32 until a learned gain produces differences safely above the bfloat16 quantization floor. Re-evaluate changed-question generation after each intervention.",
+    "runtime_prefix_changed_element_fraction_range": [
+      0.8587012475775194,
+      0.9855054909560723
+    ]
+  }
+}

@@ -1,0 +1,16 @@
+_base_: gemma4_color_wiring_v8.yaml
+
+# The two configured color candidates can beat each other while an unrelated
+# vocabulary token still wins free generation. Reuse the same teacher-forced
+# decoder distribution to require every target's first answer token to be the
+# unique full-vocabulary top-1 choice. Continue the fixed schedule after the
+# composite gate passes so later checkpoints remain available for stability
+# checks; lexicographic best-checkpoint selection preserves the best pass.
+training:
+  output_namespace: gemma4_color_wiring_v9
+  # One optimizer update is produced per epoch in this micro-curriculum. The
+  # weaker candidate-only gate first passed at update 22, so 12 inherited
+  # updates would be an invalid test of the stricter full-vocabulary gate.
+  epochs: 36
+  pair_gate_first_answer_token_top1_accuracy: 1.0
+  pair_gate_stop_when_passed: false

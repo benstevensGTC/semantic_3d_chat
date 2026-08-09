@@ -4,12 +4,12 @@
 > evidence preserved below are superseded as the project's primary model path. They
 > remain useful failure/control evidence, but they are not Gemma 4 results and do
 > not establish scene-conditioned understanding. The current primary Gemma 4 E2B
-> path has a working dense 3D map and semantic-localization result, but no adapter
-> checkpoint has passed its wiring gate. There is no accepted Gemma static-chat or
-> one-command-demo result yet. The controlled v8 LoRA fallback is implemented but
-> has not yet produced a real MPS result.
+> path has a working dense 3D map and semantic-localization result. Its resumed v8
+> LoRA checkpoint passed the narrow teacher-forced wiring gate, but failed the
+> decisive free-generation and unseen counterfactual controls. There is no accepted
+> Gemma static-chat, embodied-agent, or one-command-demo result yet.
 
-Generated from local artifacts on `2026-08-09T03:34:21+00:00`. This report does not run models and does not infer missing measurements.
+Updated from local artifacts on `2026-08-09T07:04:42+00:00`. This report does not run models and does not infer missing measurements.
 
 ## 1. Research question
 
@@ -34,14 +34,12 @@ The required teacher-forced counterfactual gate therefore failed. The higher
 minimum margin was -3.59375. Runs v1-v6 and the v6 resumes through epochs 18 and 24
 also failed; none is promoted.
 
-Gemma held-out QA, free generation, interactive chat, prefix invariance,
-oracle-deletion inference, and language-conditioned robot navigation remain
-unmeasured. The exact source hash loaded by the already-running v7 process was not
-captured. The implementation hashes in
+The exact source hash loaded by the already-running v7 process was not captured.
+The implementation hashes in
 `gemma4/metrics/gemma4_color_wiring_v7_failure.json` are post-run audited snapshots
 and do not prove that later padding or audit/resume fixes executed in v7.
 
-#### v8 controlled fallback (implemented; real MPS run unmeasured)
+#### v8 controlled fallback: teacher-forced overfit passed, free generation failed
 
 The controlled v8 fallback leaves the native boundaries and complete continuous
 scene prefix unchanged. It adapts only layer 34
@@ -49,14 +47,39 @@ scene prefix unchanged. It adapts only layer 34
 alpha 8, dropout 0, LoRA learning rate `1e-4`, and weight decay 0. This is 45,056
 FP32 A/B-only parameters (180,224 bytes, approximately 176 KiB). Strict config,
 optimizer, checkpoint, SHA/tamper, resume, chat-load, and scene-signal-audit paths
-have test coverage. No behavioral or performance result is claimed until the real
-MPS run finishes. Reproduce selection and training with:
+have test coverage.
+
+The fresh MPS run completed epoch 12 in 574.56 seconds and failed the gate: 4/6
+changed units, 10/12 correct sides, and candidate-ranking hinge 0.272786. Its exact
+result is `gemma4/metrics/training_gemma4_color_wiring_v8.json`. A controlled resume
+from that checkpoint stopped early at epoch 22 after 22 total optimizer updates.
+The resumed portion took 388.31 seconds and passed the teacher-forced gate with 6/6
+changed units, 12/12 correct sides, prediction-flip rate 1.0, wrong-prefix-flip
+rate 1.0, and minimum candidate margin 0.0390625. Its exact result is
+`gemma4/metrics/training_gemma4_color_wiring_v8_resume24.json`.
+
+This pass is a same-distribution teacher-forced wiring/overfit result only. The
+model-validated free-generation audit changed outputs for 5/6 training color-swap
+questions, but canonical correctness remained poor: responses were mostly
+`orange` or `unknown`, with only isolated correct colors. It changed 0/35 answers
+for the mirrored-room pair and 0/4 for the held-out cube-support pair. The exact
+decoded outputs and expected answers are in
+`gemma4/metrics/scene_signal_audit_gemma4_color_wiring_v8_resume24.json`. Because
+the learned behavior did not transfer to those controls, no `promotion.json` was
+created and static held-out QA, interactive chat, prefix/oracle-deletion inference,
+and language-conditioned robot navigation remain gated.
+
+Reproduce selection, fresh training, and the bounded resume with:
 
 ```bash
 PYTHONPATH=src .venv-gemma4/bin/python -m semantic_3d_chat.training.train_adapter \
   --config configs/experiments/gemma4_color_wiring_v8.yaml --selection-only
 PYTHONPATH=src .venv-gemma4/bin/python -m semantic_3d_chat.training.train_adapter \
   --config configs/experiments/gemma4_color_wiring_v8.yaml
+PYTHONPATH=src .venv-gemma4/bin/python -m semantic_3d_chat.training.train_adapter \
+  --config configs/experiments/gemma4_color_wiring_v8.yaml \
+  --resume data_gemma4/checkpoints/gemma4_color_wiring_v8/epoch_012 \
+  --epochs 24 --output-namespace gemma4_color_wiring_v8_resume24
 ```
 
 The current Gemma semantic prerequisite did pass on `scene_000001`: 61.54% top-1,
@@ -369,6 +392,10 @@ These examples demonstrate runnable local inference only. Their correctness is n
 Semantic localization missed hit@k for: `book`.
 The initial tokenwise CLIP patch projection failed the semantic sanity gate and was replaced by MaskCLIP-style final-block value features. The obsolete numeric run is not promoted as a current result.
 The v1 adapter reached a high raw held-out score but failed scene-content controls; it learned a near-constant nonzero soft-prompt/prior solution.
+Gemma v8-resume24 passed its teacher-forced color-ranking gate but generated mostly
+`orange`/`unknown`, stayed unchanged across all 35 mirror questions, and stayed
+unchanged across all four held-out cube-support questions. It is an overfit/wiring
+milestone, not a scene-understanding result.
 Fluent chat samples must not be treated as evidence of scene understanding; only the structured held-out and control measurements support behavioral claims.
 
 ## 25. Preserved legacy prefix-invariance evidence
@@ -381,17 +408,17 @@ PASS for checkpoint `data/checkpoints/best`. The oracle directory was atomically
 
 ## 27. Exact remaining limitations
 
-- Gemma v7 failed its six-unit teacher-forced counterfactual gate; no Gemma
-  checkpoint is behaviorally promoted.
-- No Gemma held-out QA, free-generation, interactive-chat, prefix-invariance, or
-  oracle-deletion inference result exists.
+- Gemma v8-resume24 passed its six-unit teacher-forced counterfactual gate, but its
+  free generation was canonically poor and did not react to the mirror or held-out
+  cube-support changes; no Gemma checkpoint is behaviorally promoted.
+- No Gemma held-out static-QA, interactive-chat, prefix-invariance, or
+  oracle-deletion inference result exists for the passed-gate checkpoint.
 - The exact source hash loaded by the v7 process was not captured; current source
   hashes are post-run audited snapshots.
 - The v1 multi-scene adapter is scene-content-insensitive despite its raw held-out accuracy; wrong-scene and content-shuffle controls invalidate a scene-understanding claim for that checkpoint.
 - The v2 structural diagnostic preserves more scene signal, but no explicitly v2-tagged held-out QA artifact is available yet.
-- Selected-run wall-clock training time is not recorded.
-- Peak training memory is not recorded.
-- Expected-change counterfactual consistency is zero.
+- v8 and v8-resume24 wall-clock times are recorded, but peak training memory is not.
+- Preserved legacy expected-change counterfactual consistency is zero.
 - The direct multi-view image baseline is not scored.
 - The prohibited oracle-text upper bound is not scored.
 - The robot benchmark covers numeric mechanics and MCP wiring only; language-conditioned semantic target navigation is unmeasured.
@@ -401,11 +428,11 @@ PASS for checkpoint `data/checkpoints/best`. The oracle directory was atomically
 
 ## 28. Recommended next experiments
 
-1. Require the next Gemma adapter to pass every teacher-forced changed-unit,
-   prediction-flip, wrong-prefix-flip, margin, and hinge threshold before creating a
-   hash-bound promotion record.
-2. Only after promotion, run Gemma held-out prediction, continuous-scene controls,
-   free generation, prefix invariance, oracle deletion, and interactive chat.
+1. Keep the teacher-forced gate as a necessary wiring check, but require canonical
+   free-generation accuracy on both trained and unseen counterfactual pairs before
+   creating a hash-bound promotion record.
+2. Improve transfer beyond the six color-swap units, then rerun mirrored-room and
+   held-out cube-support generation before static held-out QA or interactive chat.
 3. Run the direct multi-view VLM and isolated oracle-text upper-bound baselines.
 4. Train and evaluate language-conditioned target-facing and approach behavior without returning semantic labels through tools.
 5. Preserve the v1/v2 CLIP/Qwen runs as historical anti-collapse evidence, not as

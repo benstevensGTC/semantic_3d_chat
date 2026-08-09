@@ -71,6 +71,7 @@ from semantic_3d_chat.training.pair_curriculum import (
     build_exact_question_pair_units,
     candidate_logit_margins,
     differing_answer_token_masks,
+    first_answer_token_full_vocab_margins,
     pair_curriculum_settings,
     pair_gate_metrics,
     pair_ranking_hinge,
@@ -91,6 +92,50 @@ def set_seed(seed: int) -> None:
     random.seed(seed)
     np.random.seed(seed)
     torch.manual_seed(seed)
+
+
+def pair_gate_checkpoint_improved(
+    *,
+    monitor_value: float,
+    best_monitor_value: float,
+    min_delta: float,
+    gate_passed: bool,
+    best_gate_passed: bool,
+) -> bool:
+    """Prefer a configured gate pass before comparing its scalar monitor.
+
+    This prevents fixed-length training from replacing a passing ``best``
+    checkpoint with a later failed checkpoint that happens to have a smaller
+    pairwise or full-vocabulary hinge.
+    """
+
+    if gate_passed != best_gate_passed:
+        return gate_passed
+    return monitor_value < best_monitor_value - min_delta
+
+
+def should_stop_after_pair_gate(
+    stop_when_gate_passes: bool,
+    pair_gate: dict[str, object] | None,
+) -> bool:
+    """Apply the existing stop policy to the configured composite gate."""
+
+    return bool(
+        stop_when_gate_passes and pair_gate is not None and bool(pair_gate.get("passed", False))
+    )
+
+
+def best_pair_gate_passed_from_history(history: Sequence[dict], best_epoch: int | None) -> bool:
+    """Recover gate-pass priority from checkpoints written before it was stored."""
+
+    if best_epoch is None:
+        return False
+    for item in history:
+        if int(item.get("epoch", -1)) != best_epoch:
+            continue
+        gate = item.get("pair_candidate_gate")
+        return isinstance(gate, dict) and bool(gate.get("passed", False))
+    return False
 
 
 def construct_scene_tokenizer(
@@ -1076,6 +1121,7 @@ def pair_batch_objective(
     *,
     ranking_margin: float,
     ranking_mode: str = "nll",
+    collect_full_vocab_first_answer_token: bool = False,
 ) -> tuple[
     torch.Tensor,
     torch.Tensor,
@@ -1197,6 +1243,13 @@ def pair_batch_objective(
     correct_answer_nll = token_normalized_nll(correct_output.logits, correct_labels).reshape(
         len(units), 2
     )
+    full_vocab_first_token_margins = (
+        first_answer_token_full_vocab_margins(correct_output.logits, correct_labels).reshape(
+            len(units), 2
+        )
+        if collect_full_vocab_first_answer_token
+        else None
+    )
     correct_nll: torch.Tensor | None
     swapped_nll: torch.Tensor | None
     own_candidate_logits: torch.Tensor | None = None
@@ -1286,6 +1339,7 @@ def pair_batch_objective(
         "swapped_nll": swapped_nll,
         "own_candidate_logits": own_candidate_logits,
         "alternate_candidate_logits": alternate_candidate_logits,
+        "first_answer_token_full_vocab_margins": full_vocab_first_token_margins,
         "margins": margins,
         "ranking_tokens_per_side": torch.tensor(
             (
@@ -1332,8 +1386,9 @@ def evaluate_pair_candidate_gate(
     changed_unit_accuracy_threshold: float,
     prediction_flip_threshold: float,
     wrong_prefix_flip_threshold: float,
+    first_answer_token_top1_accuracy_threshold: float | None = None,
     lora_installation: LoRAInstallation | None = None,
-) -> dict[str, float | int | bool | str]:
+) -> dict[str, float | int | bool | str | None]:
     """Evaluate all training pair units with the configured deterministic ranking."""
 
     if not units:
@@ -1349,6 +1404,7 @@ def evaluate_pair_candidate_gate(
     for unit in units:
         by_pair[unit.pair_id].append(unit)
     all_margins: list[torch.Tensor] = []
+    all_full_vocab_first_token_margins: list[torch.Tensor] = []
     try:
         with torch.inference_mode():
             for pair_id in sorted(by_pair):
@@ -1368,8 +1424,14 @@ def evaluate_pair_candidate_gate(
                         config,
                         ranking_margin=ranking_margin,
                         ranking_mode=ranking_mode,
+                        collect_full_vocab_first_answer_token=True,
                     )
                     all_margins.append(diagnostics["margins"].detach().float().cpu())
+                    full_vocab_margins = diagnostics["first_answer_token_full_vocab_margins"]
+                    assert isinstance(full_vocab_margins, torch.Tensor)
+                    all_full_vocab_first_token_margins.append(
+                        full_vocab_margins.detach().float().cpu()
+                    )
                 del outputs
     finally:
         for module, was_training in zip(modules, previous_modes, strict=True):
@@ -1384,6 +1446,8 @@ def evaluate_pair_candidate_gate(
         wrong_prefix_flip_threshold=wrong_prefix_flip_threshold,
         ranking_margin=ranking_margin,
         ranking_mode=ranking_mode,
+        first_answer_token_full_vocab_margins=torch.cat(all_full_vocab_first_token_margins, dim=0),
+        first_answer_token_top1_accuracy_threshold=(first_answer_token_top1_accuracy_threshold),
     )
     metrics["pair_count"] = len(by_pair)
     return metrics
@@ -1499,6 +1563,11 @@ def main() -> None:
     if gradient_accumulation < 1:
         raise ValueError("gradient_accumulation must be positive")
     pair_curriculum = pair_curriculum_settings(config)
+    pair_gate_monitor_name = (
+        "pair_first_answer_token_full_vocab_hinge"
+        if pair_curriculum.first_answer_token_top1_accuracy_threshold is not None
+        else "pair_candidate_gate_hinge"
+    )
     qa_root = artifact_root(config, "qa")
     qa_path = qa_root / "train.jsonl"
     dataset = SceneQADataset(qa_path)
@@ -1610,6 +1679,12 @@ def main() -> None:
             "ranking_mode": pair_curriculum.ranking_mode,
             "ranking_margin": pair_curriculum.ranking_margin,
             "ranking_weight": pair_curriculum.ranking_weight,
+            "gate_enabled": pair_curriculum.gate_enabled,
+            "gate_every_epochs": pair_curriculum.gate_every_epochs,
+            "gate_stop_when_passed": pair_curriculum.stop_when_gate_passes,
+            "gate_first_answer_token_top1_accuracy": (
+                pair_curriculum.first_answer_token_top1_accuracy_threshold
+            ),
         },
     }
     if configured_lora.enabled:
@@ -1732,6 +1807,7 @@ def main() -> None:
     history: list[dict] = []
     best_monitor_loss = math.inf
     best_epoch: int | None = None
+    best_pair_gate_passed = False
     epochs_without_improvement = 0
     started = time.perf_counter()
     global_step = 0
@@ -1914,7 +1990,24 @@ def main() -> None:
         best_monitor_loss = float(resume_metadata.get("best_monitor_loss", math.inf))
         best_epoch_value = resume_metadata.get("best_epoch")
         best_epoch = None if best_epoch_value is None else int(best_epoch_value)
+        saved_best_pair_gate_passed = resume_metadata.get("best_pair_gate_passed")
+        best_pair_gate_passed = (
+            bool(saved_best_pair_gate_passed)
+            if isinstance(saved_best_pair_gate_passed, bool)
+            else best_pair_gate_passed_from_history(history, best_epoch)
+        )
         epochs_without_improvement = int(resume_metadata.get("epochs_without_improvement", 0))
+        if (
+            pair_curriculum.pair_only
+            and pair_curriculum.gate_enabled
+            and resume_metadata.get("monitor_name") != pair_gate_monitor_name
+        ):
+            # Eval-only gate policy may change on an otherwise compatible
+            # resume. Its scalar monitor is not comparable with the old one.
+            best_monitor_loss = math.inf
+            best_epoch = None
+            best_pair_gate_passed = False
+            epochs_without_improvement = 0
         if start_epoch > epochs:
             raise SystemExit(
                 f"Resume checkpoint already completed epoch {start_epoch - 1}; "
@@ -2387,6 +2480,9 @@ def main() -> None:
                 changed_unit_accuracy_threshold=(pair_curriculum.changed_unit_accuracy_threshold),
                 prediction_flip_threshold=pair_curriculum.prediction_flip_threshold,
                 wrong_prefix_flip_threshold=pair_curriculum.wrong_prefix_flip_threshold,
+                first_answer_token_top1_accuracy_threshold=(
+                    pair_curriculum.first_answer_token_top1_accuracy_threshold
+                ),
                 lora_installation=lora_installation,
             )
             if should_evaluate_pair_gate
@@ -2412,21 +2508,32 @@ def main() -> None:
         )
         validation_value = None if validation_metrics is None else validation_metrics["loss"]
         if pair_curriculum.pair_only and pair_gate is not None:
-            monitor_name = "pair_candidate_gate_hinge"
-            monitor_value = float(pair_gate["ranking_hinge_at_configured_margin"])
+            if pair_curriculum.first_answer_token_top1_accuracy_threshold is not None:
+                monitor_name = pair_gate_monitor_name
+                monitor_value = float(pair_gate["first_answer_token_target_vs_best_other_hinge"])
+            else:
+                monitor_name = pair_gate_monitor_name
+                monitor_value = float(pair_gate["ranking_hinge_at_configured_margin"])
         else:
             monitor_name = "validation_loss" if validation_by_scene else "train_loss"
             monitor_value = validation_value if validation_by_scene else mean_loss
         improved = False
         if monitor_value is not None:
-            improved = monitor_value < best_monitor_loss - min_delta
-            if pair_curriculum.pair_only and pair_gate is not None and pair_gate["passed"]:
-                # Always promote the checkpoint that actually satisfies the
-                # configured gate, even if its scalar hinge ties an earlier epoch.
-                improved = True
+            if pair_curriculum.pair_only and pair_gate is not None:
+                improved = pair_gate_checkpoint_improved(
+                    monitor_value=monitor_value,
+                    best_monitor_value=best_monitor_loss,
+                    min_delta=min_delta,
+                    gate_passed=bool(pair_gate["passed"]),
+                    best_gate_passed=best_pair_gate_passed,
+                )
+            else:
+                improved = monitor_value < best_monitor_loss - min_delta
             if improved:
                 best_monitor_loss = monitor_value
                 best_epoch = epoch
+                if pair_curriculum.pair_only and pair_gate is not None:
+                    best_pair_gate_passed = bool(pair_gate["passed"])
                 epochs_without_improvement = 0
             else:
                 epochs_without_improvement += 1
@@ -2509,6 +2616,7 @@ def main() -> None:
             "monitor_name": monitor_name,
             "best_monitor_loss": best_monitor_loss,
             "best_epoch": best_epoch,
+            "best_pair_gate_passed": best_pair_gate_passed,
             "epochs_without_improvement": epochs_without_improvement,
             "global_step": global_step,
             "optimizer_step": optimizer_step,
@@ -2524,6 +2632,12 @@ def main() -> None:
             "gemma4_native_image_contract": loaded_native_boundary_contract,
             "source_provenance": source_provenance,
             "gradient_accumulation": gradient_accumulation,
+            "pair_gate_policy": {
+                "stop_when_passed": pair_curriculum.stop_when_gate_passes,
+                "first_answer_token_top1_accuracy_threshold": (
+                    pair_curriculum.first_answer_token_top1_accuracy_threshold
+                ),
+            },
             "config_hash": config_hash(config),
             "scene_ids": sorted(by_scene),
             "scene_latents": int(config["scene_encoder"]["global_latents"]),
@@ -2644,11 +2758,7 @@ def main() -> None:
             ),
             flush=True,
         )
-        if (
-            pair_curriculum.stop_when_gate_passes
-            and pair_gate is not None
-            and bool(pair_gate["passed"])
-        ):
+        if should_stop_after_pair_gate(pair_curriculum.stop_when_gate_passes, pair_gate):
             stopped_early = True
             break
         if (
@@ -2677,12 +2787,13 @@ def main() -> None:
             else None
         ),
         "monitor_name": (
-            "pair_candidate_gate_hinge"
+            pair_gate_monitor_name
             if pair_curriculum.pair_only and pair_curriculum.gate_enabled
             else ("validation_loss" if validation_by_scene else "train_loss")
         ),
         "best_monitor_loss": best_monitor_loss,
         "best_epoch": best_epoch,
+        "best_pair_gate_passed": best_pair_gate_passed,
         "stopped_early": stopped_early,
         "elapsed_seconds": time.perf_counter() - started,
         "history": history,
@@ -2725,10 +2836,15 @@ def main() -> None:
             "units_per_batch": pair_curriculum.units_per_batch,
             "steps_per_epoch": pair_curriculum.steps_per_epoch,
             "gate_enabled": pair_curriculum.gate_enabled,
+            "gate_every_epochs": pair_curriculum.gate_every_epochs,
+            "gate_stop_when_passed": pair_curriculum.stop_when_gate_passes,
             "gate_thresholds": {
                 "changed_unit_accuracy": (pair_curriculum.changed_unit_accuracy_threshold),
                 "prediction_flip_rate": pair_curriculum.prediction_flip_threshold,
                 "wrong_prefix_flip_rate": pair_curriculum.wrong_prefix_flip_threshold,
+                "first_answer_token_top1_accuracy": (
+                    pair_curriculum.first_answer_token_top1_accuracy_threshold
+                ),
             },
         },
         "counterfactual_pair_unit_count": len(pair_units),

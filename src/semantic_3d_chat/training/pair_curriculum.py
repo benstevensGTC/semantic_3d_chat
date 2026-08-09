@@ -80,6 +80,7 @@ class PairCurriculumSettings:
     gate_enabled: bool
     gate_every_epochs: int
     stop_when_gate_passes: bool
+    first_answer_token_top1_accuracy_threshold: float | None
     changed_unit_accuracy_threshold: float
     prediction_flip_threshold: float
     wrong_prefix_flip_threshold: float
@@ -104,6 +105,7 @@ def pair_curriculum_settings(config: Mapping[str, object]) -> PairCurriculumSett
     if isinstance(scene_ids_value, str) or not isinstance(scene_ids_value, Sequence):
         raise TypeError("pair_only_scene_ids must be a sequence of opaque scene IDs")
     steps_value = raw_training.get("pair_steps_per_epoch")
+    first_token_threshold_value = raw_training.get("pair_gate_first_answer_token_top1_accuracy")
     ranking_mode = str(raw_training.get("pair_ranking_mode", "nll"))
     if ranking_mode not in {"nll", "candidate_logit"}:
         raise ValueError("pair_ranking_mode must be 'nll' or 'candidate_logit'")
@@ -119,6 +121,9 @@ def pair_curriculum_settings(config: Mapping[str, object]) -> PairCurriculumSett
         gate_enabled=bool(raw_training.get("pair_gate_enabled", pair_only)),
         gate_every_epochs=int(raw_training.get("pair_gate_every_epochs", 1)),
         stop_when_gate_passes=bool(raw_training.get("pair_gate_stop_when_passed", pair_only)),
+        first_answer_token_top1_accuracy_threshold=(
+            None if first_token_threshold_value is None else float(first_token_threshold_value)
+        ),
         changed_unit_accuracy_threshold=float(
             raw_training.get("pair_gate_changed_unit_accuracy", 0.95)
         ),
@@ -154,6 +159,16 @@ def pair_curriculum_settings(config: Mapping[str, object]) -> PairCurriculumSett
     ):
         if not 0.0 <= value <= 1.0:
             raise ValueError(f"{name} must be in [0, 1]")
+    if (
+        settings.first_answer_token_top1_accuracy_threshold is not None
+        and not 0.0 <= settings.first_answer_token_top1_accuracy_threshold <= 1.0
+    ):
+        raise ValueError("pair_gate_first_answer_token_top1_accuracy must be in [0, 1]")
+    if (
+        settings.first_answer_token_top1_accuracy_threshold is not None
+        and not settings.gate_enabled
+    ):
+        raise ValueError("pair_gate_first_answer_token_top1_accuracy requires pair_gate_enabled")
     return settings
 
 
@@ -525,6 +540,45 @@ def candidate_logit_margins(
     return margins, own, alternate
 
 
+def first_answer_token_full_vocab_margins(
+    logits: torch.Tensor,
+    labels: torch.Tensor,
+) -> torch.Tensor:
+    """Compare each target's first answer token with the full vocabulary.
+
+    The target and strongest non-target scores come from the same causal
+    next-token distribution already used by teacher forcing. A strictly
+    positive margin means the target is the unique top-1 token; ties fail the
+    deterministic gate. No additional model forward is required.
+    """
+
+    if logits.ndim != 3 or labels.ndim != 2 or logits.shape[:2] != labels.shape:
+        raise ValueError("Expected logits [B,L,V] and aligned labels [B,L]")
+    if logits.shape[0] == 0:
+        raise ValueError("Full-vocabulary diagnostics require at least one row")
+    if logits.shape[-1] < 2:
+        raise ValueError("Full-vocabulary diagnostics require at least two tokens")
+    margins: list[torch.Tensor] = []
+    for row in range(logits.shape[0]):
+        supervised = labels[row].ne(-100).nonzero(as_tuple=False).flatten()
+        if supervised.numel() == 0:
+            raise ValueError(f"Row {row} has no supervised answer token")
+        target_position = int(supervised[0].item())
+        if target_position == 0:
+            raise ValueError("A first answer token requires a preceding causal position")
+        target_token_id = int(labels[row, target_position].item())
+        vocabulary_size = logits.shape[-1]
+        if not 0 <= target_token_id < vocabulary_size:
+            raise ValueError(f"Target token ID {target_token_id} is outside the vocabulary")
+        distribution = logits[row, target_position - 1].float()
+        if not torch.isfinite(distribution).all():
+            raise ValueError("Full-vocabulary answer logits contain NaN or infinity")
+        non_target = distribution.clone()
+        non_target[target_token_id] = -torch.inf
+        margins.append(distribution[target_token_id] - non_target.max())
+    return torch.stack(margins)
+
+
 def pair_gate_metrics(
     margins: torch.Tensor | Sequence[Sequence[float]],
     *,
@@ -533,7 +587,9 @@ def pair_gate_metrics(
     wrong_prefix_flip_threshold: float = 1.0,
     ranking_margin: float = 0.5,
     ranking_mode: Literal["nll", "candidate_logit"] = "nll",
-) -> dict[str, float | int | bool | str]:
+    first_answer_token_full_vocab_margins: (torch.Tensor | Sequence[Sequence[float]] | None) = None,
+    first_answer_token_top1_accuracy_threshold: float | None = None,
+) -> dict[str, float | int | bool | str | None]:
     """Score a two-answer candidate gate from per-unit, per-prefix margins.
 
     A positive margin means that a scene prefix prefers its own answer.  In NLL
@@ -556,6 +612,11 @@ def pair_gate_metrics(
         raise ValueError("prediction_flip_threshold must be in [0, 1]")
     if not 0.0 <= wrong_prefix_flip_threshold <= 1.0:
         raise ValueError("wrong_prefix_flip_threshold must be in [0, 1]")
+    if (
+        first_answer_token_top1_accuracy_threshold is not None
+        and not 0.0 <= first_answer_token_top1_accuracy_threshold <= 1.0
+    ):
+        raise ValueError("first_answer_token_top1_accuracy_threshold must be in [0, 1]")
 
     own_answer_selected = values > 0
     unit_correct = own_answer_selected.all(dim=1)
@@ -570,12 +631,38 @@ def pair_gate_metrics(
     prediction_flip_rate = float(prediction_flips.float().mean())
     wrong_prefix_flip_rate = float(wrong_prefix_follows.float().mean())
     ranking_hinge = float(F.relu(float(ranking_margin) - values).mean())
-    passed = (
+    pairwise_passed = (
         changed_unit_accuracy >= changed_unit_accuracy_threshold
         and prediction_flip_rate >= prediction_flip_threshold
         and wrong_prefix_flip_rate >= wrong_prefix_flip_threshold
     )
-    result: dict[str, float | int | bool | str] = {
+    full_vocab_values: torch.Tensor | None = None
+    if first_answer_token_full_vocab_margins is not None:
+        full_vocab_values = torch.as_tensor(
+            first_answer_token_full_vocab_margins, dtype=torch.float32
+        )
+        if full_vocab_values.shape != values.shape:
+            raise ValueError(
+                "First-answer-token full-vocabulary margins must match pair gate "
+                f"shape {tuple(values.shape)}"
+            )
+        if not torch.isfinite(full_vocab_values).all():
+            raise ValueError("First-answer-token full-vocabulary margins contain NaN or infinity")
+    if first_answer_token_top1_accuracy_threshold is not None and full_vocab_values is None:
+        raise ValueError("A first-answer-token top-1 threshold requires full-vocabulary margins")
+    full_vocab_accuracy = (
+        None if full_vocab_values is None else float(full_vocab_values.gt(0).float().mean())
+    )
+    full_vocab_gate_passed = (
+        None
+        if first_answer_token_top1_accuracy_threshold is None
+        else bool(full_vocab_accuracy >= first_answer_token_top1_accuracy_threshold)
+    )
+    full_vocab_requirement_satisfied = first_answer_token_top1_accuracy_threshold is None or bool(
+        full_vocab_gate_passed
+    )
+    passed = pairwise_passed and full_vocab_requirement_satisfied
+    result: dict[str, float | int | bool | str | None] = {
         "evaluation_type": (
             "teacher_forced_same_distribution_candidate_logit_ranking"
             if ranking_mode == "candidate_logit"
@@ -591,6 +678,13 @@ def pair_gate_metrics(
         "side_accuracy": float(own_answer_selected.float().mean()),
         "prediction_flip_rate": prediction_flip_rate,
         "wrong_prefix_flip_rate": wrong_prefix_flip_rate,
+        "pairwise_passed": pairwise_passed,
+        "first_answer_token_full_vocab_evaluated": full_vocab_values is not None,
+        "first_answer_token_top1_gate_enabled": (
+            first_answer_token_top1_accuracy_threshold is not None
+        ),
+        "first_answer_token_top1_accuracy_threshold": (first_answer_token_top1_accuracy_threshold),
+        "first_answer_token_top1_gate_passed": full_vocab_gate_passed,
         "mean_ranking_margin": float(values.mean()),
         "minimum_ranking_margin": float(values.min()),
         "ranking_hinge_at_configured_margin": ranking_hinge,
@@ -599,6 +693,25 @@ def pair_gate_metrics(
         "wrong_prefix_flip_threshold": wrong_prefix_flip_threshold,
         "passed": passed,
     }
+    if full_vocab_values is not None:
+        full_vocab_top1 = full_vocab_values.gt(0)
+        result.update(
+            {
+                "first_answer_token_top1_accuracy": float(full_vocab_top1.float().mean()),
+                "first_answer_token_top1_unit_accuracy": float(
+                    full_vocab_top1.all(dim=1).float().mean()
+                ),
+                "mean_first_answer_token_target_vs_best_other_logit_margin": float(
+                    full_vocab_values.mean()
+                ),
+                "minimum_first_answer_token_target_vs_best_other_logit_margin": float(
+                    full_vocab_values.min()
+                ),
+                "first_answer_token_target_vs_best_other_hinge": float(
+                    F.relu(-full_vocab_values).mean()
+                ),
+            }
+        )
     if ranking_mode == "candidate_logit":
         result["mean_own_vs_alternate_candidate_logit_margin"] = float(values.mean())
         result["minimum_own_vs_alternate_candidate_logit_margin"] = float(values.min())
