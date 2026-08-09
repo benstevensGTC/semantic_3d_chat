@@ -15,11 +15,13 @@
 > 7/70 all-mirror sides, and 1/8 held-out support sides. V12 preserved 12/12 color
 > sides but reached 0/12 selected mirror sides, 0/70 all-mirror sides, and 0/8
 > held-out support sides even after its ordered spatial auxiliary loss passed its
-> own margin target. There is no accepted
+> own margin target. V13's zero-update gradient probe passed its pre-run
+> non-cancellation gate, but V13 training and generation remain unmeasured. There is
+> no accepted
 > Gemma static-chat, Gemma leakage, semantic embodied-agent, or one-command-demo
 > result yet.
 
-Updated from local artifacts on `2026-08-09T09:41:26Z`. This report does not run models and does not infer missing measurements.
+Updated from local artifacts on `2026-08-09T09:58:36Z`. This report does not run models and does not infer missing measurements.
 
 ## 1. Research question
 
@@ -218,17 +220,32 @@ regions, while the current shallow shared decoder adaptation fails to turn that
 discrimination into left/right tokens and retreats to `unknown`.
 
 V13 is specified as a falsification test of that shallow-decoder-capacity
-hypothesis. It freezes V12 epoch 8's scene encoder and inherited rank-4 layer-34
-q/o LoRA, then adds a disjoint zero-output rank-8 q/o bank in layers 30-33. A
-step-zero logit-parity test must first prove the added bank is an exact V12
-baseline. Before an optimizer step, a paired-side probe must show that the new
-bank's gradients under the unchanged language NLL plus candidate/full-vocabulary
-objectives are material and non-cancelling. Cosine near -1, negligible norms, or a
-low `||gA+gB||/(||gA||+||gB||)` ratio falsifies the hypothesis without spending a
-training run. Only a passing probe justifies training; the hypothesis is still
-falsified unless the saved-and-reloaded runtime preserves 12/12 strict color sides
-and reaches 12/12 strict selected-mirror sides with 6/6 changed units under actual
-greedy generation.
+hypothesis. Its pre-run probe used the pinned V12 epoch-8 adapter SHA-256
+`a4c85c14a214e4e594992e489a784cb4bacb64d3dfda519ad3da18b1595d9f22`,
+froze the scene encoder and inherited rank-4 layer-34 q/o LoRA, and installed a
+disjoint exact-zero-output rank-8 q/o bank in layers 30-33. The probe bank contains
+229,376 parameters. All 12 complete first-answer vocabulary distributions were
+bitwise identical to the bank-free baseline. No optimizer was constructed, zero
+optimizer steps were taken, the bank's before/after state SHA was identical, and
+no protected weight changed.
+
+The measured gradients pass the pre-run falsifier. Aggregated across all six
+mirrored units, the weighted candidate-hinge gradients have cancellation ratio
+0.987037 and cosine similarity 0.948397. The complete decoder objective has ratio
+0.987413 and cosine 0.949781. Candidate-hinge cancellation ratios are material and
+aligned in every probed layer: 0.989986 at layer 30, 0.991972 at layer 31,
+0.989481 at layer 32, and 0.976808 at layer 33. This evidence rejects the proposed
+near-opposite/vanishing-gradient stopping condition and justifies a controlled
+training run. It does not demonstrate learned mirror behavior: V13 training,
+checkpoint reload, and greedy generation remain unmeasured.
+
+The probe ran from clean source commit
+`0aac14bd1e6972933299e960276da5d9d31cb49c`. Its exact artifact is
+`gemma4/metrics/mirrored_gradient_probe_v13_epoch008.json`, file SHA-256
+`59638470edf63a8c8b4a450f3a833a7084c171a4147334366fa5016e709533e6`.
+The capacity hypothesis is still falsified unless the eventual saved-and-reloaded
+runtime preserves 12/12 strict color sides and reaches 12/12 strict selected-
+mirror sides with 6/6 changed units under actual greedy generation.
 
 The earlier v7 and v8 results remain below as historical adapter lineage.
 
@@ -652,8 +669,11 @@ PASS for checkpoint `data/checkpoints/best`. The oracle directory was atomically
   reaches 12/12 auxiliary-margin sides, but greedy generation reaches 0/12
   selected mirror sides, 0/70 all-mirror sides, and 0/8 held-out support sides.
   It is not promoted.
+- Gemma v13 currently has only a zero-update gradient probe. Its exact parity and
+  aligned gradients justify training the added decoder bank, but provide no
+  training, checkpoint-reload, or greedy-generation result.
 - No Gemma held-out static-QA, interactive-chat, prefix-invariance, or
-  oracle-deletion/leakage inference result exists for v9, v10, v11, or v12.
+  oracle-deletion/leakage inference result exists for v9-v13.
 - The exact source hash loaded by the v7 process was not captured; current source
   hashes are post-run audited snapshots.
 - The v1 multi-scene adapter is scene-content-insensitive despite its raw held-out accuracy; wrong-scene and content-shuffle controls invalidate a scene-understanding claim for that checkpoint.
@@ -670,14 +690,13 @@ PASS for checkpoint `data/checkpoints/best`. The oracle directory was atomically
 
 ## 28. Recommended next experiments
 
-1. Run the bounded v13 decoder-capacity falsification from V12 epoch 8: freeze its
-   scene encoder and inherited rank-4 layer-34 q/o LoRA, add a disjoint zero-output
-   rank-8 q/o bank in layers 30-33, require exact step-zero logit parity, and reject
-   the training run if paired mirror gradients are negligible or cancelling.
-2. If the gradient probe passes, still falsify V13 unless saved-and-reloaded greedy
-   generation preserves 12/12 strict color sides and reaches 12/12 strict selected-
-   mirror sides with 6/6 changed units; only then rerun all-mirror and held-out
-   support controls before static QA, chat, leakage, or promotion work.
+1. The V13 parity/gradient probe has passed. Run the controlled bank-only training
+   from its immutable V12 epoch-8 baseline while keeping the scene encoder and
+   inherited layer-34 LoRA frozen.
+2. Still falsify V13 unless saved-and-reloaded greedy generation preserves 12/12
+   strict color sides and reaches 12/12 strict selected-mirror sides with 6/6
+   changed units; only then rerun all-mirror and held-out support controls before
+   static QA, chat, leakage, or promotion work.
 3. Run the direct multi-view VLM and isolated oracle-text upper-bound baselines.
 4. Train and evaluate language-conditioned target-facing and approach behavior without returning semantic labels through tools.
 5. Preserve the v1/v2 CLIP/Qwen runs as historical anti-collapse evidence, not as

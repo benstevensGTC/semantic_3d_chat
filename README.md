@@ -29,7 +29,9 @@ units, yet scored 0/12 on the selected mirror subset, 0/70 over all mirror sides
 and 0/8 on held-out support. V9 remains a color-wiring overfit milestone; v10-v12
 are failed continuations, not promoted scene chatbots. Gemma held-out static QA,
 interactive chat, Gemma leakage claims, and language-conditioned robot navigation
-remain gated.
+remain gated. V13's zero-update decoder-bank probe preserved the V12 baseline
+bit-for-bit and found material, aligned mirrored-side gradients, so its bounded
+training run is justified; V13 training and generation have not yet been measured.
 
 ## Current primary stack
 
@@ -421,16 +423,28 @@ and
 No `promotion.json` was created.
 
 V13 is a bounded falsification test for decoder capacity rather than another
-uncontrolled continuation. It freezes V12 epoch 8's scene encoder and inherited
-rank-4 layer-34 q/o LoRA, then adds a disjoint, zero-output rank-8 q/o bank in
-layers 30-33. A step-zero logit-parity check must first reproduce V12 exactly. Before
-any optimizer step, a paired-side probe will measure whether the new bank's
-language-objective gradients are material and non-cancelling; negligible gradients
-or cosine near -1 with a low `||gA+gB||/(||gA||+||gB||)` ratio falsify the
-hypothesis and stop the run. Only a passing probe justifies training, after which
-the hypothesis is still falsified unless saved-and-reloaded greedy generation both
-preserves 12/12 strict color sides and reaches 12/12 strict selected-mirror sides
-with 6/6 changed units.
+uncontrolled continuation. Its pre-run gradient probe is complete. Starting from
+the pinned V12 epoch-8 adapter
+`a4c85c14a214e4e594992e489a784cb4bacb64d3dfda519ad3da18b1595d9f22`,
+it froze the scene encoder and inherited rank-4 layer-34 q/o LoRA, then added a
+disjoint, exact-zero-output rank-8 q/o bank in layers 30-33 (229,376 parameters).
+All 12 complete first-answer vocabulary distributions were bitwise identical
+before and after adding the bank. No optimizer was constructed, optimizer steps
+were zero, the bank state hash was unchanged, and no protected weight changed.
+
+The probe rejected the predicted gradient-cancellation failure. Aggregated across
+all six mirrored units, the weighted candidate hinge had cancellation ratio
+0.987037 and cosine 0.948397; the complete decoder objective had ratio 0.987413
+and cosine 0.949781. Candidate-hinge ratios remained 0.976808-0.991972 in every
+probed layer 30-33. These material, aligned gradients pass the pre-run falsifier
+and justify a controlled training run; they do not establish that the added bank
+will learn the relation. V13 training, checkpoint reload, and greedy generation
+remain unmeasured. The hypothesis will still be falsified unless saved-and-reloaded
+generation preserves 12/12 strict color sides and reaches 12/12 strict selected-
+mirror sides with 6/6 changed units. The probe ran from clean source commit
+`0aac14bd1e6972933299e960276da5d9d31cb49c`; its exact artifact is
+`reports/gemma4/metrics/mirrored_gradient_probe_v13_epoch008.json` (SHA-256
+`59638470edf63a8c8b4a450f3a833a7084c171a4147334366fa5016e709533e6`).
 
 ### Fail-closed Gemma static evaluation and chat
 
@@ -448,8 +462,10 @@ exact approved config, checkpoint metadata, and adapter with `config_hash`,
 `checkpoint_metadata_sha256`, and `checkpoint_adapter_sha256`. No such record
 exists today: v9 free-generates its trained color pair exactly but fails both
 controls, v10 partially forgets color, and v11 restores color without learning a
-complete selected mirror unit or held-out support unit. After a future checkpoint is accepted,
-the invocation shape will be:
+complete selected mirror unit or held-out support unit. V12's auxiliary relation
+margin did not transfer to generation, and V13 currently has only a zero-update
+gradient probe. After a future checkpoint is accepted, the invocation shape will
+be:
 
 ```bash
 make gemma4-evaluate-static \
@@ -620,7 +636,7 @@ Legacy runtime data is under `data/rendered`, `data/features`, `data/maps`, and
 `data_gemma4`. Semantic oracle specifications and QA supervision are isolated under
 `data/oracle` and `data/qa`. The recorded chat file audit and oracle-unavailable test
 apply to the legacy `data/checkpoints/best` lineage only; they have not been run for
-Gemma v9-v12 and do not transfer to those checkpoints. Their wiring and failure
+Gemma v9-v13 and do not transfer to those checkpoints. Their wiring and failure
 results are therefore not Gemma leakage-test results.
 
 ## Preserved legacy local web interface
