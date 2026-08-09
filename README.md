@@ -1034,6 +1034,26 @@ namespaces, nested policy hashes, and extension manifests, so their evidence
 cannot authorize one another. Greedy evaluation remains blocked until V22's
 complete teacher-forced gate passes.
 
+The completed V22 run was produced from clean source commit `cffeb36`.
+Preflight and exact update-1 verification passed, and color remained at 12/12
+full-vocabulary sides and 6/6 complete units throughout the four-update screen.
+Mirror remained at 7/12 sides and 1/6 complete units at every update, below the
+preregistered continuation floor of 8/12 and 2/6. The selector chose update 3
+on margin ranking (`0.322917` mean and `-0.625` minimum full-vocabulary mirror
+margin) and emitted `screen_failed_no_extension_no_greedy_audit`. Training took
+`176.03 s`. No update-8 extension, greedy audit, promotion, static chat, or
+embodied-phase authorization was created.
+
+The source-HEAD-independent seal is
+`reports/gemma4/metrics/v22_final_summary.json`. Validate its exact preflight,
+update-1, four checkpoint epochs, selector decision, and denial state with:
+
+```bash
+PYTHONPATH=src python -m semantic_3d_chat.evaluation.v22_archive_validator
+```
+
+Use `--summary-only` when generated evidence and checkpoints are unavailable.
+
 ### Fail-closed Gemma static evaluation and chat
 
 Gemma evaluation must use the isolated Transformers 5 environment and the exact

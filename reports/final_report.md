@@ -38,6 +38,11 @@
 > and eight real updates retained color at 12/12 and 6/6 while improving mirror to
 > 8/12 and 2/6. That result plateaued below the unchanged complete 12/12, 6/6
 > teacher gate, so V21 was also denied greedy decoding and promotion. There is no
+> improvement from V22's margin-rebalanced restart: all four updates retained
+> 12/12 color sides and 6/6 units but stayed at 7/12 mirror sides and 1/6 unit.
+> Its selector denied the extension and greedy audit, and no promotion was
+> created. The exact closed result is sealed in `v22_final_summary.json`. There
+> is no
 > accepted Gemma static-chat, Gemma leakage, semantic embodied-agent, or
 > one-command-demo result yet.
 

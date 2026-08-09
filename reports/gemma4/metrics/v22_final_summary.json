@@ -1,0 +1,279 @@
+{
+  "schema_version": 1,
+  "archive_type": "immutable_v22_final_summary",
+  "experiment": "gemma4_v22_margin_rebalanced_signed_x_local_field",
+  "sealed_from_source": {
+    "available": true,
+    "head_commit": "cffeb3686996cfbac5406ebc107c895ea06cceac",
+    "head_tree": "b90e68a82b5276a7560d42442a27606067de888f",
+    "is_clean": true,
+    "schema_version": 1,
+    "scope": "repository_excluding_generated_artifacts_v1",
+    "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "integrity_policy": {
+    "current_source_head_required": false,
+    "summary_sha256_pinned_in": "src/semantic_3d_chat/evaluation/v22_archive_validator.py",
+    "validator_is_source_head_independent": true,
+    "validation_scope": [
+      "exact_archive_summary_bytes",
+      "bound_config_and_evidence_files",
+      "preflight_and_update_1_authorization",
+      "four_update_epoch_trajectory",
+      "selected_epoch_3_checkpoint",
+      "extension_greedy_and_promotion_absence"
+    ]
+  },
+  "config": {
+    "path": "configs/experiments/gemma4_color_mirror_signed_x_local_field_margin_rebalanced_v22.yaml",
+    "file_sha256": "1422bea0a40ebf9303e9d5dfa1e0890f0e29cbe3832e92c3963735d19a47d9ea",
+    "resolved_config_sha256": "b336be25fd68127191e86c2337d9b66baf0f5972cc6dade27bfcecfd5368c999",
+    "preflight_contract_sha256": "a8994abafc02720a96f47fbdab222f487e2ea6310c690dedd4c8b2f5232c3c4b"
+  },
+  "authoritative_artifacts": [
+    {
+      "role": "config",
+      "path": "configs/experiments/gemma4_color_mirror_signed_x_local_field_margin_rebalanced_v22.yaml",
+      "sha256": "1422bea0a40ebf9303e9d5dfa1e0890f0e29cbe3832e92c3963735d19a47d9ea"
+    },
+    {
+      "role": "structural_preflight",
+      "path": "reports/gemma4/metrics/v22_structural_preflight.json",
+      "sha256": "983ad2b3df80698ec8e0bf96c3aa063f4d3271d3db523f9d35b37f4b201d0c81"
+    },
+    {
+      "role": "update_1_exact_match",
+      "path": "reports/gemma4/metrics/v22_update1_match.json",
+      "sha256": "3697888fff4ba5046fd4d2e41cf724d89c74b9f611a95e963f869c364e83433c"
+    },
+    {
+      "role": "training_report",
+      "path": "reports/gemma4/metrics/training_gemma4_v22_margin_rebalanced_local_field.json",
+      "sha256": "4a4eaba7931da2313b5eda5fbff33dfed7ac4c071866176e71706491c2b47b68"
+    },
+    {
+      "role": "training_selection",
+      "path": "reports/gemma4/metrics/training_selection_gemma4_v22_margin_rebalanced_local_field.json",
+      "sha256": "d7938b94b3e7413c9085d9eb01ebca314ffcafc6e3b5a54fd5a00ea4107961f8"
+    },
+    {
+      "role": "epoch_screen",
+      "path": "reports/gemma4/metrics/v22_epoch_screen.json",
+      "sha256": "162f9ff5705b703e7f229333aa1286150572f7a55ee78a227b3558812bf57fa8"
+    }
+  ],
+  "preflight": {
+    "audit_type": "v22_exact_ordered_signed_x_local_field_phase_aware_margin_rebalanced_structural_preflight",
+    "authorized": true,
+    "structural_authorization": true,
+    "structural_gate_passed": true,
+    "predicted_update_functional_audit_passed": true,
+    "raw_mirror_to_color_normalized_selectivity": 1.8144661299681846,
+    "mirror_signal_to_orthogonal_noise_ratio": 1.437571492245602,
+    "predicted_mirror_objective_before": 5.208333333333334,
+    "predicted_mirror_objective_after": 4.322916666666667,
+    "predicted_mirror_objective_absolute_improvement": 0.885416666666667,
+    "live_optimizer_constructed": false,
+    "live_optimizer_step_executed": false,
+    "live_optimizer_steps": 0,
+    "isolated_clone_optimizer_constructed": true,
+    "isolated_clone_optimizer_steps": 1,
+    "model_dtype": "bfloat16",
+    "question_dependent_scene_processing": false,
+    "uses_supervised_qa_metadata": true,
+    "runtime_eligible": false
+  },
+  "update_1_verification": {
+    "audit_type": "v22_exact_update1_match_verifier",
+    "match": true,
+    "stage_2_authorized": true,
+    "model_loaded": false,
+    "report_only": true,
+    "optimizer_deserialized": true,
+    "optimizer_deserialization_weights_only": true,
+    "scene_map_loaded": false,
+    "oracle_loaded": false,
+    "preflight_sha256": "983ad2b3df80698ec8e0bf96c3aa063f4d3271d3db523f9d35b37f4b201d0c81",
+    "checkpoint_artifact_hashes": {
+      "adapter_sha256": "2ee3025c5aa094b644524d284f2e9477951bdffffaf5b7dd5cf16dcc57017ae1",
+      "metadata_sha256": "89ed4f193d5271dabba73ee38bbde4eee61676ad4a387ec44fc69acfeab00e3d",
+      "optimizer_sha256": "8f5fbce43bc57de071dd461c2eee178c8990ef02d4584f330bced6f635f2e179"
+    },
+    "optimizer_state_sha256": "89cb8d2b26b8a6bebae0982182e0d5b8386086c81bf437179de00fdd308ae346",
+    "signed_x_state_sha256": "6bbb3b3310aeaef68e013128b60befdad12321a8594fd4c5b50d9b2afb87e3c0"
+  },
+  "outcome": {
+    "decision": "screen_failed_no_extension_no_greedy_audit",
+    "selected_epoch": 3,
+    "screen_optimizer_updates": 4,
+    "selected_optimizer_step": 3,
+    "selected_cumulative_microsteps": 36,
+    "continuation_gate_passed": false,
+    "continuation_authorized": false,
+    "extension_authorized": false,
+    "extension_executed": false,
+    "full_teacher_gate_passed": false,
+    "greedy_audit_authorized": false,
+    "greedy_audit_forbidden": true,
+    "promotion_authorized": false,
+    "static_chat_authorized": false,
+    "embodied_phase_authorized": false,
+    "question_dependent_scene_processing": false,
+    "report_only_final_selection": true,
+    "selected_color_full_vocab_sides": 12,
+    "selected_color_full_vocab_units": 6,
+    "selected_mirror_full_vocab_sides": 7,
+    "selected_mirror_full_vocab_units": 1,
+    "failure_reason": "No screened epoch reached the preregistered continuation floor of 8/12 mirror sides and 2/6 complete mirror units; the update-8 extension was therefore forbidden."
+  },
+  "timing": {
+    "updates_1_to_4_training_elapsed_seconds": 176.02575645782053,
+    "scope_note": "Trainer-process elapsed_seconds only; preflight, verifier, and selector wall time are not included."
+  },
+  "trajectory": [
+    {
+      "epoch": 1,
+      "optimizer_step": 1,
+      "cumulative_microsteps": 12,
+      "train_loss": 2.5520833333333335,
+      "continuation_gate_passed": false,
+      "full_teacher_gate_passed": false,
+      "color": {
+        "full_vocab_sides": 12,
+        "full_vocab_units": 6,
+        "mean_full_vocab_margin": 2.1171875,
+        "minimum_full_vocab_margin": 0.4375
+      },
+      "mirror": {
+        "full_vocab_sides": 7,
+        "full_vocab_units": 1,
+        "mean_full_vocab_margin": 0.0989583358168602,
+        "minimum_full_vocab_margin": -0.9375
+      },
+      "checkpoint_artifact_hashes": {
+        "adapter_sha256": "2ee3025c5aa094b644524d284f2e9477951bdffffaf5b7dd5cf16dcc57017ae1",
+        "metadata_sha256": "89ed4f193d5271dabba73ee38bbde4eee61676ad4a387ec44fc69acfeab00e3d",
+        "optimizer_sha256": "8f5fbce43bc57de071dd461c2eee178c8990ef02d4584f330bced6f635f2e179"
+      },
+      "optimizer_state_sha256": "89cb8d2b26b8a6bebae0982182e0d5b8386086c81bf437179de00fdd308ae346",
+      "signed_x_state_sha256": "6bbb3b3310aeaef68e013128b60befdad12321a8594fd4c5b50d9b2afb87e3c0"
+    },
+    {
+      "epoch": 2,
+      "optimizer_step": 2,
+      "cumulative_microsteps": 24,
+      "train_loss": 2.03125,
+      "continuation_gate_passed": false,
+      "full_teacher_gate_passed": false,
+      "color": {
+        "full_vocab_sides": 12,
+        "full_vocab_units": 6,
+        "mean_full_vocab_margin": 2.1666667461395264,
+        "minimum_full_vocab_margin": 0.34375
+      },
+      "mirror": {
+        "full_vocab_sides": 7,
+        "full_vocab_units": 1,
+        "mean_full_vocab_margin": 0.265625,
+        "minimum_full_vocab_margin": -0.6875
+      },
+      "checkpoint_artifact_hashes": {
+        "adapter_sha256": "4efb15a513059252a9c57d79db693b4edd36b289ff786bc5ee799e4841ad73d8",
+        "metadata_sha256": "89c6be24e374f0584d56a7305a6a90a6834001e3beb8bc06ba53b1b1902ffc62",
+        "optimizer_sha256": "09bdebbb3f3c31c6973d4c68d9926719275181c6b6f18edcf4c83a6381155dc3"
+      },
+      "optimizer_state_sha256": "50fd4e9deec5e64a3358dd623ea17689470cb50a966ddf9116636be12d9be10a",
+      "signed_x_state_sha256": "9e17d0d2f664034e222f665e5148942cbb40b55cd52f03b330230c2fe073bebc"
+    },
+    {
+      "epoch": 3,
+      "optimizer_step": 3,
+      "cumulative_microsteps": 36,
+      "train_loss": 1.7447916666666667,
+      "continuation_gate_passed": false,
+      "full_teacher_gate_passed": false,
+      "color": {
+        "full_vocab_sides": 12,
+        "full_vocab_units": 6,
+        "mean_full_vocab_margin": 2.2213542461395264,
+        "minimum_full_vocab_margin": 0.96875
+      },
+      "mirror": {
+        "full_vocab_sides": 7,
+        "full_vocab_units": 1,
+        "mean_full_vocab_margin": 0.3229166567325592,
+        "minimum_full_vocab_margin": -0.625
+      },
+      "checkpoint_artifact_hashes": {
+        "adapter_sha256": "b19d5e95a348e7963a0909b708e0455495bd06635515080689aa0aae10ac5345",
+        "metadata_sha256": "8027dfe50222446121af002246a78fc620e06f887691da5d689394c982a0ee15",
+        "optimizer_sha256": "13b459bc7b0ba09e129a769064d296b0793785d08b3f3bf98941a52c9070e420"
+      },
+      "optimizer_state_sha256": "103b234a52797cea004c6f215b5a05ac63c5ff1824edf53581675e0ea8fb2cd3",
+      "signed_x_state_sha256": "0f6c61c23c8ed5f894c67326afa1e71b08290ca7b2e7190a72eb168d4113dcc7"
+    },
+    {
+      "epoch": 4,
+      "optimizer_step": 4,
+      "cumulative_microsteps": 48,
+      "train_loss": 1.7447916666666667,
+      "continuation_gate_passed": false,
+      "full_teacher_gate_passed": false,
+      "color": {
+        "full_vocab_sides": 12,
+        "full_vocab_units": 6,
+        "mean_full_vocab_margin": 2.0989582538604736,
+        "minimum_full_vocab_margin": 0.5625
+      },
+      "mirror": {
+        "full_vocab_sides": 7,
+        "full_vocab_units": 1,
+        "mean_full_vocab_margin": 0.3177083432674408,
+        "minimum_full_vocab_margin": -0.625
+      },
+      "checkpoint_artifact_hashes": {
+        "adapter_sha256": "ee963f1e490ede739dae6b116686d7244f0d473257f19e614e7b9e0949f7abeb",
+        "metadata_sha256": "d521858a1f868fab99388e6ab4c296c3a8862bc15e8686ff71adcf04193789aa",
+        "optimizer_sha256": "392f28427f92031b47d18cb6f84ee0f221dc66a546e35cf9617cf94f502204bf"
+      },
+      "optimizer_state_sha256": "2783450e036956aaa9308f4e949e7ad2361276c62847a4cc728917ceb9582a4c",
+      "signed_x_state_sha256": "df280b26508c2da8f458d6a137b64945eed1cda8cb97024e121b780d6d5f55dd"
+    }
+  ],
+  "selected_checkpoint": {
+    "epoch": 3,
+    "checkpoint_path": "data_gemma4/checkpoints/gemma4_v22_margin_rebalanced_local_field/epoch_003",
+    "metadata_path": "data_gemma4/checkpoints/gemma4_v22_margin_rebalanced_local_field/epoch_003/metadata.json",
+    "adapter_path": "data_gemma4/checkpoints/gemma4_v22_margin_rebalanced_local_field/epoch_003/adapter.safetensors",
+    "optimizer_path": "data_gemma4/checkpoints/gemma4_v22_margin_rebalanced_local_field/epoch_003/optimizer.pt",
+    "artifact_hashes": {
+      "adapter_sha256": "b19d5e95a348e7963a0909b708e0455495bd06635515080689aa0aae10ac5345",
+      "metadata_sha256": "8027dfe50222446121af002246a78fc620e06f887691da5d689394c982a0ee15",
+      "optimizer_sha256": "13b459bc7b0ba09e129a769064d296b0793785d08b3f3bf98941a52c9070e420"
+    },
+    "internal_state_hashes": {
+      "optimizer_state_sha256": "103b234a52797cea004c6f215b5a05ac63c5ff1824edf53581675e0ea8fb2cd3",
+      "signed_x_state_sha256": "0f6c61c23c8ed5f894c67326afa1e71b08290ca7b2e7190a72eb168d4113dcc7",
+      "frozen_global_scene_residual_state_sha256": "ce3bf864eed6dd4a50f1b67296981e144d6a79e9cf192ad9a9230f2ae18208dc",
+      "frozen_scene_state_sha256": "690bd890bfda024dbb5c7d3c68087b8113bc3b8ee81dd6143c7eb2a884e7245b"
+    }
+  },
+  "forbidden_outputs": {
+    "primary_checkpoint_root": "data_gemma4/checkpoints/gemma4_v22_margin_rebalanced_local_field",
+    "extension_checkpoint_root": "data_gemma4/checkpoints/gemma4_v22_margin_rebalanced_local_field_extension_u8",
+    "exact_report_paths": [
+      "reports/gemma4/metrics/v22_extension_launch.json",
+      "reports/gemma4/metrics/v22_extension_final.json"
+    ],
+    "report_globs": [
+      "*v22*greedy*.json",
+      "*greedy*v22*.json",
+      "*v22*promotion*.json",
+      "*promotion*v22*.json",
+      "scene_signal_audit*gemma4*v22*.json",
+      "predictions*gemma4*v22*.json"
+    ],
+    "promotion_filename": "promotion.json"
+  },
+  "superseded_lineage": []
+}
