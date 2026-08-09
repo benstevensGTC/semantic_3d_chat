@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+from copy import deepcopy
 from dataclasses import replace
 from pathlib import Path
 from types import SimpleNamespace
@@ -722,6 +723,59 @@ def test_v13_config_pins_probe_banks_source_and_frozen_objectives() -> None:
         "spatial_relation_warmup_steps",
     ):
         assert training[key] == 0
+
+
+def test_v14_lr_sweep_changes_only_screen_schedule_namespace_and_learning_rate() -> None:
+    v13 = load_config("configs/experiments/gemma4_color_mirror_decoder_banks_v13.yaml")
+    arms = {
+        "lr1e4": 1e-4,
+        "lr3e4": 3e-4,
+        "lr1e3": 1e-3,
+    }
+    for suffix, learning_rate in arms.items():
+        config = load_config(
+            f"configs/experiments/gemma4_color_mirror_decoder_banks_v14_{suffix}.yaml"
+        )
+        normalized_v13 = deepcopy(v13)
+        normalized_arm = deepcopy(config)
+        normalized_v13.pop("_config_path", None)
+        normalized_arm.pop("_config_path", None)
+        sweep = normalized_arm.pop("sweep")
+        for key in (
+            "output_namespace",
+            "lora_learning_rate",
+            "epochs",
+            "pair_gate_every_epochs",
+            "early_stopping_patience",
+        ):
+            normalized_arm["training"][key] = normalized_v13["training"][key]
+        assert normalized_arm == normalized_v13
+        assert config["language"] == v13["language"]
+        training = config["training"]
+        assert training["output_namespace"] == (f"gemma4_color_mirror_decoder_banks_v14_{suffix}")
+        assert training["lora_learning_rate"] == learning_rate
+        assert training["epochs"] == 4
+        assert training["pair_steps_per_epoch"] == 12
+        assert training["gradient_accumulation"] == 12
+        assert training["pair_gate_every_epochs"] == 1
+        assert training["pair_gate_stop_when_passed"] is False
+        assert training["early_stopping_patience"] == 0
+        for key in (
+            "initialize_from",
+            "initialize_expected_adapter_sha256",
+            "initialize_expected_metadata_sha256",
+            "initialize_legacy_lora_into_bank",
+            "freeze_scene_adapter",
+        ):
+            assert training[key] == v13["training"][key]
+        assert sweep["arm_learning_rate"] == learning_rate
+        assert sweep["updates_per_arm"] == 4
+        assert sweep["expected_selection_sha256"] == (
+            "7f0714e3151c9ddb57c1da95a457820a833e490c070881a88a9fee4a9168f933"
+        )
+        assert sweep["expected_frozen_scene_state_sha256"] == (
+            "690bd890bfda024dbb5c7d3c68087b8113bc3b8ee81dd6143c7eb2a884e7245b"
+        )
 
 
 def test_initialization_artifact_hash_pins_fail_before_tensor_load(tmp_path: Path) -> None:

@@ -1,0 +1,60 @@
+_base_: gemma4_color_mirror_decoder_banks_v13.yaml
+
+# V13 produced aligned, non-vanishing decoder gradients, preserved color, and
+# improved mirror margins too slowly at 5e-5. Screen learning-rate response
+# without changing architecture, examples, order, losses, initialization, or
+# frozen state. Each epoch is exactly one optimizer update: 12 complete paired
+# microsteps accumulated once. Every arm restarts weights-only from the pinned
+# V12 epoch-8 checkpoint through the inherited V13 contract.
+training:
+  output_namespace: gemma4_color_mirror_decoder_banks_v14_lr_sweep_template
+  epochs: 4
+  pair_steps_per_epoch: 12
+  gradient_accumulation: 12
+  pair_gate_every_epochs: 1
+  pair_gate_stop_when_passed: false
+  early_stopping_patience: 0
+
+# This metadata is deliberately carried into every resolved arm config. The
+# summarizer enforces the same predeclared eligibility and ranking policy against
+# post-update teacher gates; no greedy generation is run during screening.
+sweep:
+  schema_version: 1
+  role: exact_restart_learning_rate_response
+  updates_per_arm: 4
+  color_pair_id: pair_000001
+  mirror_pair_id: pair_000003
+  expected_selection_sha256: 7f0714e3151c9ddb57c1da95a457820a833e490c070881a88a9fee4a9168f933
+  expected_pair_membership_sha256: 99ee448c23fb71b7269a353a54b2156ac55701847af170597dcc351af15cbcbe
+  expected_frozen_scene_state_sha256: 690bd890bfda024dbb5c7d3c68087b8113bc3b8ee81dd6143c7eb2a884e7245b
+  expected_frozen_inherited_bank_sha256: dec768bed654c8c4e16da0318857543ad54d8f5f68f4d24a9a87cd19ec706594
+  color_requires:
+    candidate_side_accuracy: 1.0
+    candidate_changed_unit_accuracy: 1.0
+    full_vocab_side_accuracy: 1.0
+    full_vocab_unit_accuracy: 1.0
+    positive_minimum_candidate_margin: true
+    positive_minimum_full_vocab_margin: true
+  mirror_ranking_descending:
+    - full_vocab_unit_accuracy
+    - full_vocab_side_accuracy
+    - candidate_changed_unit_accuracy
+    - candidate_side_accuracy
+    - mean_full_vocab_margin
+    - minimum_full_vocab_margin
+    - mean_candidate_margin
+    - minimum_candidate_margin
+  final_tiebreaker: lower_learning_rate
+  v13_update_12_reference:
+    candidate_hinge: 2.0455729961395264
+    full_vocab_hinge: 19.23177146911621
+    minimum_candidate_margin: -4.125
+    minimum_full_vocab_margin: -24.78125
+  v12_epoch_8_start_reference:
+    candidate_hinge: 2.3059895038604736
+    full_vocab_hinge: 19.89322853088379
+    minimum_candidate_margin: -4.6875
+    minimum_full_vocab_margin: -25.75
+  require_both_hinges_better_than_v13_for_extension: true
+  require_minimum_margins_no_worse_than_v12_start: true
+  conditional_upper_boundary_learning_rate: 0.002
