@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import os
 import tempfile
+from collections.abc import Mapping, Sequence
 from pathlib import Path
 from typing import Any
 
@@ -59,15 +60,48 @@ def load_adapter_checkpoint(
     directory: str | Path,
     modules: dict[str, nn.Module],
     device: str = "cpu",
+    *,
+    allowed_missing_key_prefixes: Mapping[str, Sequence[str]] | None = None,
 ) -> dict[str, Any]:
+    """Load a checkpoint without silently dropping or inventing module state.
+
+    ``allowed_missing_key_prefixes`` exists only for explicit architecture
+    migrations such as adding an exact-zero residual to an older checkpoint.
+    Normal resume and runtime loads remain fully strict.
+    """
+
     source = Path(directory)
     tensors = load_file(source / "adapter.safetensors", device=device)
+    consumed: set[str] = set()
+    allowed_by_module = dict(allowed_missing_key_prefixes or {})
+    unknown_modules = sorted(set(allowed_by_module) - set(modules))
+    if unknown_modules:
+        raise ValueError(f"Missing-key allowances reference unknown modules: {unknown_modules}")
     for module_name, module in modules.items():
         prefix = f"{module_name}."
         state = {
             key[len(prefix) :]: value for key, value in tensors.items() if key.startswith(prefix)
         }
-        module.load_state_dict(state, strict=True)
+        consumed.update(key for key in tensors if key.startswith(prefix))
+        allowed_prefixes = tuple(allowed_by_module.get(module_name, ()))
+        if not allowed_prefixes:
+            module.load_state_dict(state, strict=True)
+            continue
+        result = module.load_state_dict(state, strict=False)
+        unexpected = sorted(result.unexpected_keys)
+        forbidden_missing = sorted(
+            key
+            for key in result.missing_keys
+            if not any(key.startswith(allowed) for allowed in allowed_prefixes)
+        )
+        if unexpected or forbidden_missing:
+            raise RuntimeError(
+                f"Checkpoint migration mismatch for {module_name!r}: "
+                f"unexpected={unexpected} forbidden_missing={forbidden_missing}"
+            )
+    unconsumed = sorted(set(tensors) - consumed)
+    if unconsumed:
+        raise RuntimeError(f"Checkpoint contains unconsumed tensor keys: {unconsumed}")
     return json.loads((source / "metadata.json").read_text(encoding="utf-8"))
 
 

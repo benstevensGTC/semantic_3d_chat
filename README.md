@@ -38,8 +38,13 @@ exact optimizer/history resume to 12 updates peaked discretely at epoch 7 with
 7/12 mirror sides and 1/6 complete mirror units while retaining 12/12 color, but
 the scalar-selected epoch 10 checkpoint had only 5/12 mirror sides and final
 epoch 12 had 6/12 and 0/6 units. The complete gate never passed, so no greedy
-audit was run. V9 remains a color-wiring overfit milestone; v10-v14 are failed
-continuations, not promoted scene chatbots. Gemma held-out static QA, interactive chat, Gemma
+audit was run. V15's fixed-prefix shared-K/V screen preserved color through epoch
+3 but peaked at only 6/12 mirror sides and 0/6 units, below its continuation gate;
+epoch 4 also regressed color, so it was stopped. V16 is the next predeclared
+screen: a zero-output, question-independent global residual over all 256 scene
+tokens, initialized from the exact V14 epoch-7 checkpoint. V9 remains a
+color-wiring overfit milestone; v10-v15 are failed continuations, not promoted
+scene chatbots. Gemma held-out static QA, interactive chat, Gemma
 leakage claims, and language-conditioned robot navigation remain gated.
 
 ## Current primary stack
@@ -605,6 +610,39 @@ policy, V14 therefore received no greedy audit, no `promotion.json`, no held-out
 control evaluation, and no downstream static chat, leakage, or semantic robot
 run. Its transient 7/12 and 1/6 epoch-7 result is evidence of learning response,
 not accepted scene understanding.
+
+#### Gemma V15 shared-K/V screen — failed, no extension
+
+V15 kept the complete 256-token scene prefix fixed and question-independent and
+added a zero-output 290,816-parameter LoRA bank to Gemma's two physical shared
+K/V source layers plus late Q/O projections. Across four optimizer updates,
+color remained 12/12 full-vocabulary sides and 6/6 units through epoch 3, while
+mirror peaked at 6/12 sides and 0/6 complete units. That missed the predeclared
+8/12-side and 2/6-unit continuation gate. Epoch 4 also regressed color to 4/12
+sides and 1/6 units. The run was therefore stopped without extra epochs, greedy
+generation, promotion, held-out audit, chat, leakage claims, or robot work.
+
+The exact decision and checkpoint hashes are recorded in
+[`screen_decision_gemma4_color_mirror_decoder_qkvo_v15.json`](reports/gemma4/metrics/screen_decision_gemma4_color_mirror_decoder_qkvo_v15.json).
+
+#### Gemma V16 global scene residual — next fixed-prefix screen
+
+V16 starts from the exact V14 epoch-7 checkpoint and freezes the core scene
+encoder, prefix composer, grounding head, and both persisted Gemma LoRA banks.
+Its only trainable surface is a 400,000-parameter residual over all 256 scene
+tokens. Every output keeps its original token, includes a shared mean influenced
+by every scene slot, and receives a persistent spatial-anchor/Fourier feature.
+The output projection is exact zero at initialization, so update 0 must reproduce
+the V14 prefix bit-for-bit. The module API accepts only scene tokens; it has no
+question, answer, retrieval, label, or oracle input. The final adapted prefix is
+still computed and hashed before any user question.
+
+The pinned experiment is
+[`gemma4_color_mirror_global_scene_residual_v16.yaml`](configs/experiments/gemma4_color_mirror_global_scene_residual_v16.yaml).
+It receives a four-update screen and may be extended only if color remains
+12/12 sides and 6/6 units with positive margins while mirror reaches at least
+8/12 sides and 2/6 units. No generation audit is allowed before the complete
+teacher gate.
 
 ### Fail-closed Gemma static evaluation and chat
 

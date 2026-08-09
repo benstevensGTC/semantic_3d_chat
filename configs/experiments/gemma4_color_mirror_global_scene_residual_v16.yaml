@@ -1,0 +1,88 @@
+_base_: gemma4_color_mirror_decoder_banks_v14_lr2e3.yaml
+
+# V15 showed that adapting more decoder attention projections did not make the
+# fixed scene prefix reliably bind mirrored geometry to left/right language.
+# V16 instead changes how the already-complete 256-token map is expressed.  A
+# question-independent residual consumes every scene slot, preserves each slot
+# through an identity path, globally couples all slots through a shared mean,
+# and adds persistent spatial-anchor features.  The output projection starts at
+# exact zero, making update 0 bit-identical to the pinned V14 epoch-7 prefix.
+scene_encoder:
+  global_scene_residual:
+    enabled: true
+    width: 128
+    fourier_bands: 4
+    initialization_seed: 16015
+    # google/gemma-4-E2B-it hidden size 1536, 256 slots: exactly 400,000
+    # trainable parameters plus a persistent 256x27 positional buffer.
+    expected_initial_state_sha256: fb4ebaac06dccbc04a461b10546d00f48cdf8cfbb372cbe5f6fe925f71461bd3
+
+language:
+  lora_banks:
+    inherited_v12:
+      trainable: false
+      initialization_algorithm: checkpoint_overwrite
+      initialization_seed: null
+      expected_initial_state_sha256: dec768bed654c8c4e16da0318857543ad54d8f5f68f4d24a9a87cd19ec706594
+    extension_v13:
+      trainable: false
+      initialization_algorithm: checkpoint_overwrite
+      initialization_seed: null
+      # Exact persisted V14 epoch-7 state, not V13's zero-output initializer.
+      expected_initial_state_sha256: 4eb90fb9b0bea579d14cfcb0f61ebd5b6d566fd600bd3d5e1bfe5177a39e1b34
+
+training:
+  output_namespace: gemma4_color_mirror_global_scene_residual_v16
+  initialize_from: data_gemma4/checkpoints/gemma4_color_mirror_decoder_banks_v14_lr2e3/epoch_007
+  initialize_expected_adapter_sha256: 9e15e8c93da083bd23c009bf67cdf4d532d6beb01b12f17f8bf664e2374294c7
+  initialize_expected_metadata_sha256: e4cf9134f5ef931df821820c80f96f1839fd2ae9a89b4c06ce4998db330e930e
+  initialize_legacy_lora_into_bank: null
+  initialize_named_lora_freeze_transition: true
+  freeze_scene_adapter: true
+  train_global_scene_residual_only: true
+
+  # One residual optimizer update per epoch after 12 complete paired
+  # microsteps. No core scene, composer, grounding, or Gemma parameter moves.
+  epochs: 4
+  pair_steps_per_epoch: 12
+  gradient_accumulation: 12
+  pair_gate_every_epochs: 1
+  pair_gate_stop_when_passed: false
+  early_stopping_patience: 0
+  learning_rate: 0.001
+  weight_decay: 0.0
+
+  latent_diversity_weight: 0.0
+  paired_scene_separation_weight: 0.0
+  grounding_weight: 0.0
+  grounding_anchor_weight: 0.0
+  spatial_answer_contrastive_weight: 0.0
+  spatial_answer_warmup_steps: 0
+  spatial_relation_contrastive_weight: 0.0
+  spatial_relation_warmup_steps: 0
+
+experiment:
+  schema_version: 1
+  role: fixed_prefix_global_scene_residual_falsifier
+  question_dependent_scene_processing: false
+  residual_parameter_count: 400000
+  screen_optimizer_updates: 4
+  conditional_max_optimizer_updates: 12
+  source_checkpoint_epoch: 7
+  source_scene_state_sha256: 690bd890bfda024dbb5c7d3c68087b8113bc3b8ee81dd6143c7eb2a884e7245b
+  source_inherited_bank_sha256: dec768bed654c8c4e16da0318857543ad54d8f5f68f4d24a9a87cd19ec706594
+  source_extension_bank_sha256: 4eb90fb9b0bea579d14cfcb0f61ebd5b6d566fd600bd3d5e1bfe5177a39e1b34
+  screen_extension_requires:
+    color_full_vocab_sides: 12
+    color_full_vocab_units: 6
+    color_positive_minimum_candidate_margin: true
+    color_positive_minimum_full_vocab_margin: true
+    mirror_minimum_full_vocab_sides: 8
+    mirror_minimum_full_vocab_units: 2
+  full_teacher_gate_requires:
+    color_full_vocab_sides: 12
+    color_full_vocab_units: 6
+    mirror_full_vocab_sides: 12
+    mirror_full_vocab_units: 6
+    all_candidate_and_full_vocab_minimum_margins_positive: true
+  greedy_audit_only_after_full_teacher_gate: true

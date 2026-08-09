@@ -40,6 +40,12 @@ from semantic_3d_chat.language.prefix_injection import (
     scene_prefix_after_bos_setting,
 )
 from semantic_3d_chat.scene_encoder.map_io import MapTensorData, load_map_tensors
+from semantic_3d_chat.scene_encoder.global_residual import (
+    GlobalSceneResidual,
+    apply_global_scene_residual,
+    construct_global_scene_residual,
+    global_scene_residual_settings,
+)
 from semantic_3d_chat.scene_encoder.projector import SceneTokenizer, SceneTokenizerOutput
 from semantic_3d_chat.training.checkpointing import (
     load_adapter_checkpoint,
@@ -143,6 +149,7 @@ def validate_checkpoint_contract(
         "config_hash",
     }
     scene_tokenizer_contract = _scene_tokenizer_contract(config)
+    residual_contract = global_scene_residual_settings(config).contract()
     uses_aligned_bypass = any(
         not _equal_number(value, _SCENE_TOKENIZER_CONTRACT_DEFAULTS[key])
         for key, value in scene_tokenizer_contract.items()
@@ -150,6 +157,17 @@ def validate_checkpoint_contract(
     metadata_has_scene_tokenizer_contract = any(key in metadata for key in scene_tokenizer_contract)
     if uses_aligned_bypass or metadata_has_scene_tokenizer_contract:
         required.update(scene_tokenizer_contract)
+    if residual_contract["enabled"] or "global_scene_residual" in metadata:
+        required.update(
+            {
+                "global_scene_residual",
+                "global_scene_residual_parameter_count",
+                "global_scene_residual_initial_state_sha256",
+                "global_scene_residual_state_sha256",
+                "global_scene_residual_zero_output_equivalence",
+                "question_dependent_scene_processing",
+            }
+        )
     missing = sorted(required - metadata.keys())
     if missing:
         raise ValueError(f"Checkpoint metadata is missing required fields: {missing}")
@@ -184,6 +202,32 @@ def validate_checkpoint_contract(
     for key, value in scene_tokenizer_contract.items():
         if key in metadata and not _equal_number(metadata[key], value):
             mismatches[key] = {"checkpoint": metadata[key], "runtime": value}
+    if "global_scene_residual" in metadata and metadata.get(
+        "global_scene_residual"
+    ) != residual_contract:
+        mismatches["global_scene_residual"] = {
+            "checkpoint": metadata.get("global_scene_residual"),
+            "runtime": residual_contract,
+        }
+    if residual_contract["enabled"]:
+        if metadata.get("global_scene_residual_initial_state_sha256") != residual_contract.get(
+            "expected_initial_state_sha256"
+        ):
+            mismatches["global_scene_residual_initial_state_sha256"] = {
+                "checkpoint": metadata.get("global_scene_residual_initial_state_sha256"),
+                "runtime": residual_contract.get("expected_initial_state_sha256"),
+            }
+        equivalence = metadata.get("global_scene_residual_zero_output_equivalence")
+        if not isinstance(equivalence, dict) or equivalence.get("verified") is not True:
+            mismatches["global_scene_residual_zero_output_equivalence"] = {
+                "checkpoint": equivalence,
+                "runtime": "verified update-0 equivalence required",
+            }
+        if metadata.get("question_dependent_scene_processing") is not False:
+            mismatches["question_dependent_scene_processing"] = {
+                "checkpoint": metadata.get("question_dependent_scene_processing"),
+                "runtime": False,
+            }
     prefix_layout_mismatch = scene_prefix_after_bos_contract_mismatch(
         metadata,
         scene_prefix_after_bos_setting(config),
@@ -295,6 +339,7 @@ class StaticChatRuntime:
         language: LocalLanguageModel,
         map_data: MapTensorData,
         scene_model: SceneTokenizer,
+        global_scene_residual: GlobalSceneResidual | None = None,
         composer: ContinuousPrefixComposer,
         grounding: QuestionGroundingHead,
         warnings: list[str] | None = None,
@@ -309,6 +354,9 @@ class StaticChatRuntime:
         self.language = language
         self.map_data = map_data
         self.scene_model = scene_model.eval()
+        self.global_scene_residual = (
+            None if global_scene_residual is None else global_scene_residual.eval()
+        )
         self.composer = composer.eval()
         configured_layout = scene_prefix_after_bos_setting(config)
         if self.composer.scene_prefix_after_bos != configured_layout:
@@ -332,7 +380,10 @@ class StaticChatRuntime:
 
         started = time.perf_counter()
         with torch.inference_mode():
-            self.scene_output = self._encode_complete_scene()
+            self.core_scene_output = self._encode_complete_scene()
+            self.scene_output = apply_global_scene_residual(
+                self.core_scene_output, self.global_scene_residual
+            )
             model_dtype = next(self.language.model.parameters()).dtype
             lm_scene_tokens = self.scene_output.scene_tokens.to(dtype=model_dtype)
             self.scene_prefix = self.composer.scene_prefix(lm_scene_tokens).detach()
@@ -421,6 +472,11 @@ class StaticChatRuntime:
             ),
         )
         scene_model = construct_scene_tokenizer(config, map_data.feature_dim, language.hidden_size)
+        global_scene_residual = construct_global_scene_residual(
+            config,
+            scene_dim=language.hidden_size,
+            latent_count=int(config["scene_encoder"]["global_latents"]),
+        )
         composer = ContinuousPrefixComposer(
             language.hidden_size,
             scene_prefix_after_bos=scene_prefix_after_bos_setting(config),
@@ -440,6 +496,8 @@ class StaticChatRuntime:
             "grounding": grounding,
         }
         checkpoint_modules = dict(scene_checkpoint_modules)
+        if global_scene_residual is not None:
+            checkpoint_modules["global_scene_residual"] = global_scene_residual
         if lora_installation is not None:
             checkpoint_modules.update(lora_installation.state_modules())
         loaded_metadata = load_adapter_checkpoint(
@@ -461,8 +519,31 @@ class StaticChatRuntime:
         if lora_installation is not None:
             validate_lora_banks_checkpoint_state(metadata, lora_installation)
             language.model.requires_grad_(False)
+        if global_scene_residual is not None:
+            observed_residual_parameters = sum(
+                parameter.numel() for parameter in global_scene_residual.parameters()
+            )
+            if observed_residual_parameters != metadata.get(
+                "global_scene_residual_parameter_count"
+            ):
+                raise ValueError(
+                    "Global scene residual parameter-count mismatch: "
+                    f"checkpoint={metadata.get('global_scene_residual_parameter_count')} "
+                    f"runtime={observed_residual_parameters}"
+                )
+            observed_residual_hash = module_collection_state_sha256(
+                {"global_scene_residual": global_scene_residual}
+            )
+            if observed_residual_hash != metadata.get("global_scene_residual_state_sha256"):
+                raise ValueError(
+                    "Global scene residual state mismatch or tamper detected: "
+                    f"checkpoint={metadata.get('global_scene_residual_state_sha256')} "
+                    f"runtime={observed_residual_hash}"
+                )
         device = language.device
         scene_model = scene_model.to(device)
+        if global_scene_residual is not None:
+            global_scene_residual = global_scene_residual.to(device)
         composer = composer.to(device)
         grounding = grounding.to(device)
         map_data = map_data.to(device)
@@ -474,6 +555,7 @@ class StaticChatRuntime:
             language=language,
             map_data=map_data,
             scene_model=scene_model,
+            global_scene_residual=global_scene_residual,
             composer=composer,
             grounding=grounding,
             warnings=warnings,
@@ -531,6 +613,13 @@ class StaticChatRuntime:
             "occupied_blocks": int(self.scene_output.audit["voxel_counts"].numel()),
             "device": str(self.language.device),
             "prefix_build_seconds": self.prefix_build_seconds,
+            "question_dependent_scene_processing": False,
+            "global_scene_residual": self.checkpoint_metadata.get(
+                "global_scene_residual", {"schema_version": 1, "enabled": False}
+            ),
+            "global_scene_residual_state_sha256": self.checkpoint_metadata.get(
+                "global_scene_residual_state_sha256"
+            ),
             "checkpoint": str(self.checkpoint_path),
             "warnings": self.warnings,
         }
