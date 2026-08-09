@@ -820,6 +820,42 @@ def _normalized_replay_metadata(metadata: Mapping[str, Any]) -> dict[str, Any]:
     return normalized
 
 
+def _require_replay_semantic_equivalence(
+    replay: Mapping[str, Any],
+    primary: Mapping[str, Any],
+    *,
+    epoch: int,
+) -> dict[str, Any]:
+    """Bind optimizer tensors, not non-canonical ``torch.save`` container bytes."""
+
+    for key in (
+        "adapter_sha256",
+        "new_bank_state_sha256",
+        "recomputed_payload_hashes",
+        "optimizer_manifest",
+        "color",
+        "mirror",
+    ):
+        _equal(replay[key], primary[key], f"replay epoch {epoch} primary {key}")
+    replay_raw = str(replay["optimizer_sha256"])
+    primary_raw = str(primary["optimizer_sha256"])
+    bytes_equal = replay_raw == primary_raw
+    optimizer_manifest = _mapping(replay["optimizer_manifest"], "replay optimizer manifest")
+    return {
+        "replay_optimizer_sha256": replay_raw,
+        "primary_optimizer_sha256": primary_raw,
+        "container_bytes_equal": bytes_equal,
+        "container_byte_difference_present": not bytes_equal,
+        "container_byte_difference_classification": (
+            "none"
+            if bytes_equal
+            else "expected_non_semantic_torch_save_reserialization"
+        ),
+        "decoded_optimizer_manifest_exact": True,
+        "decoded_all_state_tensors_sha256": optimizer_manifest["all_state_tensors_sha256"],
+    }
+
+
 def _build_replay_report(
     manifest_path: str | Path,
     *,
@@ -864,16 +900,11 @@ def _build_replay_report(
             f"replay epoch {epoch} initialization provenance",
         )
         primary_row = evidence["epochs"][epoch - 1]
-        for key in (
-            "adapter_sha256",
-            "optimizer_sha256",
-            "new_bank_state_sha256",
-            "recomputed_payload_hashes",
-            "optimizer_manifest",
-            "color",
-            "mirror",
-        ):
-            _equal(row[key], primary_row[key], f"replay epoch {epoch} primary {key}")
+        optimizer_container_audit = _require_replay_semantic_equivalence(
+            row,
+            primary_row,
+            epoch=epoch,
+        )
         primary_metadata = _load_json(
             Path(primary_row["metadata_path"]),
             f"primary epoch {epoch} metadata",
@@ -887,6 +918,7 @@ def _build_replay_report(
         row.pop("raw_metadata")
         row.pop("history")
         row.pop("initialization_provenance")
+        row["optimizer_container_audit"] = optimizer_container_audit
         rows.append(row)
     return {
         "schema_version": 1,
@@ -905,7 +937,8 @@ def _build_replay_report(
         "selected_epoch": SELECTED_EPOCH,
         "replay_epochs": list(REPLAY_EPOCHS),
         "normalized_metadata_difference_allowlist": ["output_namespace"],
-        "adapter_optimizer_exact_replay": True,
+        "adapter_and_decoded_optimizer_exact_replay": True,
+        "optimizer_container_byte_identity_required": False,
         "history_prefix_exact": True,
         "initialization_provenance_exact": True,
         "epochs": rows,
@@ -1035,9 +1068,22 @@ def select_final_extension(
         previous_history = row["history"]
         if epoch in REPLAY_EPOCHS:
             replay_row = replay["epochs"][epoch - REPLAY_EPOCHS[0]]
-            for key in replay_row:
-                if key not in {"checkpoint", "metadata_path", "metadata_sha256"}:
-                    _equal(row[key], replay_row[key], f"final/replay epoch {epoch} {key}")
+            for key in (
+                "epoch",
+                "optimizer_step",
+                "cumulative_microsteps",
+                "checkpoint",
+                "metadata_path",
+                "metadata_sha256",
+                "adapter_sha256",
+                "optimizer_sha256",
+                "new_bank_state_sha256",
+                "recomputed_payload_hashes",
+                "optimizer_manifest",
+                "color",
+                "mirror",
+            ):
+                _equal(row[key], replay_row[key], f"final/replay epoch {epoch} {key}")
         row.pop("raw_metadata")
         row.pop("history")
         row.pop("initialization_provenance")

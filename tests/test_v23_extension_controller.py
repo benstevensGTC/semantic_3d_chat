@@ -93,6 +93,37 @@ def test_replay_normalization_allows_only_namespace() -> None:
     )
 
 
+def test_replay_accepts_noncanonical_optimizer_container_but_not_state_drift() -> None:
+    semantic = {
+        "adapter_sha256": "a" * 64,
+        "new_bank_state_sha256": "b" * 64,
+        "recomputed_payload_hashes": {"scene_state_sha256": "c" * 64},
+        "optimizer_manifest": {"all_state_tensors_sha256": "d" * 64},
+        "color": {"full_vocab_sides": 12},
+        "mirror": {"full_vocab_sides": 10},
+    }
+    primary = {**copy.deepcopy(semantic), "optimizer_sha256": "e" * 64}
+    replay = {**copy.deepcopy(semantic), "optimizer_sha256": "f" * 64}
+
+    audit = controller._require_replay_semantic_equivalence(replay, primary, epoch=3)
+
+    assert audit == {
+        "replay_optimizer_sha256": "f" * 64,
+        "primary_optimizer_sha256": "e" * 64,
+        "container_bytes_equal": False,
+        "container_byte_difference_present": True,
+        "container_byte_difference_classification": (
+            "expected_non_semantic_torch_save_reserialization"
+        ),
+        "decoded_optimizer_manifest_exact": True,
+        "decoded_all_state_tensors_sha256": "d" * 64,
+    }
+
+    replay["optimizer_manifest"]["all_state_tensors_sha256"] = "0" * 64
+    with pytest.raises(controller.V23ExtensionViolation, match="optimizer_manifest"):
+        controller._require_replay_semantic_equivalence(replay, primary, epoch=3)
+
+
 def test_extension_layout_rejects_extra_epoch_and_parent_symlink(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
