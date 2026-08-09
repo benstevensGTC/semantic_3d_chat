@@ -23,6 +23,10 @@ from typing import Any
 
 from semantic_3d_chat.config import PROJECT_ROOT, config_hash, load_config
 from semantic_3d_chat.evaluation import v20_update1_verifier as v20
+from semantic_3d_chat.evaluation.phase_aware_local_field_profile import (
+    V21_LOCAL_FIELD_PROFILE,
+    PhaseAwareLocalFieldProfile,
+)
 from semantic_3d_chat.evaluation.v19_optimizer_state import (
     V19AdamWStateViolation,
     validate_v19_adamw_state_manifest,
@@ -39,7 +43,6 @@ from semantic_3d_chat.evaluation.v21_structural_preflight import (
     COLOR_PAIR_ID,
     EXPECTED_SCENE_IDS,
     MIRROR_PAIR_ID,
-    V21_PREFLIGHT_ROLE,
     V21StructuralPreflightViolation,
     canonical_sha256,
     evaluate_v21_structural_gate,
@@ -817,6 +820,74 @@ def _validate_phase_evidence(value: Any) -> dict[str, Any]:
     return evidence
 
 
+def _contract_pair_policies(contract: Mapping[str, Any]) -> dict[str, dict[str, Any]]:
+    policy = _mapping(contract.get("pair_objective_policy"), "contract pair policy")
+    by_pair = dict(_mapping(policy.get("by_pair"), "contract pair policy.by_pair"))
+    if set(by_pair) != _EXPECTED_PAIRS:
+        _fail("Contract pair policy must contain exactly the color and mirror pairs")
+    return {
+        pair_id: dict(_mapping(by_pair[pair_id], f"contract pair policy.{pair_id}"))
+        for pair_id in sorted(_EXPECTED_PAIRS)
+    }
+
+
+def _expected_pair_policy_coverage(contract: Mapping[str, Any]) -> dict[str, Any]:
+    policies = _contract_pair_policies(contract)
+    body = {
+        "schema_version": 1,
+        "selected_pair_ids": sorted(_EXPECTED_PAIRS),
+        "configured_pair_ids": sorted(_EXPECTED_PAIRS),
+        "unlisted_pair_ids": [],
+        "allow_unlisted_pair_ids": False,
+        "resolved_by_pair": policies,
+        "complete": True,
+    }
+    return {**body, "coverage_sha256": canonical_sha256(body)}
+
+
+def _expected_functional_policies(contract: Mapping[str, Any]) -> dict[str, dict[str, float]]:
+    policies = _contract_pair_policies(contract)
+    return {
+        pair_id: {
+            "candidate_target_margin": float(policy["candidate_margin"]),
+            "candidate_hinge_weight": float(policy["candidate_hinge_weight"]),
+            "full_vocab_target_margin": float(policy["full_vocab_margin"]),
+            "full_vocab_hinge_weight": float(policy["full_vocab_hinge_weight"]),
+        }
+        for pair_id, policy in policies.items()
+    }
+
+
+def _validate_executed_pair_policy_evidence(
+    preflight: Mapping[str, Any],
+    contract: Mapping[str, Any],
+    microsteps: Sequence[Any],
+) -> None:
+    """Bind top-level, coverage, and every executed microstep policy exactly."""
+
+    policies = _contract_pair_policies(contract)
+    _canonical_equal(
+        preflight.get("pair_objective_policy"),
+        contract["pair_objective_policy"],
+        "pair objective policy",
+    )
+    _canonical_equal(
+        preflight.get("pair_objective_policy_coverage"),
+        _expected_pair_policy_coverage(contract),
+        "pair objective policy coverage",
+    )
+    for index, raw in enumerate(microsteps, start=1):
+        row = _mapping(raw, f"microstep {index}")
+        pair_id = row.get("pair_id")
+        if pair_id not in policies:
+            _fail(f"microstep {index}.pair_id is not covered by the exact contract")
+        _canonical_equal(
+            row.get("pair_objective_policy"),
+            policies[str(pair_id)],
+            f"microstep {index}.pair_objective_policy",
+        )
+
+
 def _validate_functional_audit(value: Any, contract: Mapping[str, Any]) -> dict[str, Any]:
     audit = dict(_mapping(value, "predicted functional audit"))
     if audit.get("audit_type") != V21_FUNCTIONAL_AUDIT_TYPE:
@@ -834,12 +905,18 @@ def _validate_functional_audit(value: Any, contract: Mapping[str, Any]) -> dict[
         int(requirements["expected_sides_per_pair"]),
         "functional expected sides",
     )
+    expected_policies = _expected_functional_policies(contract)
+    _canonical_equal(
+        audit.get("policies"),
+        expected_policies,
+        "predicted functional policies",
+    )
     measurements = _mapping(audit.get("measurements"), "functional measurements")
     try:
         recomputed = evaluate_v21_predicted_update(
             _sequence(measurements.get("before"), "functional before measurements"),
             _sequence(measurements.get("after"), "functional after measurements"),
-            policies=_mapping(audit.get("policies"), "functional policies"),
+            policies=expected_policies,
             color_pair_id=COLOR_PAIR_ID,
             mirror_pair_id=MIRROR_PAIR_ID,
             expected_units_per_pair=int(requirements["expected_units_per_pair"]),
@@ -852,8 +929,59 @@ def _validate_functional_audit(value: Any, contract: Mapping[str, Any]) -> dict[
     return recomputed
 
 
+def _build_rich_preflight_reduction(
+    *,
+    sources: Mapping[str, Any],
+    structural: Mapping[str, Any],
+    dependence: Mapping[str, Any],
+    ranks: Mapping[str, Any],
+    centered: Mapping[str, Any],
+    raw_scene: Mapping[str, Any],
+    effective_scene: Mapping[str, Any],
+    precision: Mapping[str, Any],
+    raw_pair: Mapping[str, Any],
+    effective_pair: Mapping[str, Any],
+    phase: Mapping[str, Any],
+    functional: Mapping[str, Any],
+    structural_gate: Mapping[str, Any],
+    profile: PhaseAwareLocalFieldProfile = V21_LOCAL_FIELD_PROFILE,
+) -> dict[str, Any]:
+    """Create the small transitive reduction bound to one immutable profile."""
+
+    reduction = {
+        "schema_version": 1,
+        "verified": True,
+        "model_dtype": MODEL_DTYPE,
+        "precision_algorithm": PRECISION_ALGORITHM,
+        "phase_algorithm_family": PHASE_AWARE_PRECISION_PAIR_V1,
+        "phase_algorithm": PHASE_ALGORITHM,
+        "legacy_effective_total_norm_selectivity_diagnostic_only": True,
+        "preflight_contract_sha256": profile.normalized_contract_sha256,
+        "scene_ids": list(EXPECTED_SCENE_IDS),
+        "pair_ids": sorted(_EXPECTED_PAIRS),
+        "implementation_sources_sha256": canonical_sha256(dict(sources)),
+        "local_field_structural_state_sha256": canonical_sha256(structural),
+        "local_dependence_sha256": canonical_sha256(dependence),
+        "local_hidden_spatial_rank_sha256": canonical_sha256(ranks),
+        "centered_content_sha256": canonical_sha256(centered),
+        "raw_fp32_centered_scene_delta_sha256": canonical_sha256(raw_scene),
+        "model_effective_scene_delta_sha256": canonical_sha256(effective_scene),
+        "precision_cast_audit_sha256": canonical_sha256(precision),
+        "raw_fp32_centered_pair_delta_sha256": canonical_sha256(raw_pair),
+        "model_effective_pair_delta_sha256": canonical_sha256(effective_pair),
+        "phase_aware_pair_diagnostics_sha256": canonical_sha256(phase),
+        "predicted_update_functional_audit_sha256": canonical_sha256(functional),
+        "structural_gate_sha256": canonical_sha256(structural_gate),
+    }
+    return {**reduction, "canonical_sha256": canonical_sha256(reduction)}
+
+
 def _validate_rich_evidence(
-    preflight: Mapping[str, Any], contract: Mapping[str, Any], sources: Mapping[str, Any]
+    preflight: Mapping[str, Any],
+    contract: Mapping[str, Any],
+    sources: Mapping[str, Any],
+    *,
+    profile: PhaseAwareLocalFieldProfile = V21_LOCAL_FIELD_PROFILE,
 ) -> dict[str, Any]:
     requirements = _mapping(contract.get("structural_preflight_requires"), "requirements")
     try:
@@ -997,47 +1125,39 @@ def _validate_rich_evidence(
     functional = _validate_functional_audit(
         preflight.get("predicted_update_functional_audit"), contract
     )
-    reduction = {
-        "schema_version": 1,
-        "verified": True,
-        "model_dtype": MODEL_DTYPE,
-        "precision_algorithm": PRECISION_ALGORITHM,
-        "phase_algorithm_family": PHASE_AWARE_PRECISION_PAIR_V1,
-        "phase_algorithm": PHASE_ALGORITHM,
-        "legacy_effective_total_norm_selectivity_diagnostic_only": True,
-        "preflight_contract_sha256": EXPECTED_V21_CONTRACT_SHA256,
-        "scene_ids": list(EXPECTED_SCENE_IDS),
-        "pair_ids": sorted(_EXPECTED_PAIRS),
-        "implementation_sources_sha256": canonical_sha256(dict(sources)),
-        "local_field_structural_state_sha256": canonical_sha256(structural),
-        "local_dependence_sha256": canonical_sha256(dependence),
-        "local_hidden_spatial_rank_sha256": canonical_sha256(ranks),
-        "centered_content_sha256": canonical_sha256(centered),
-        "raw_fp32_centered_scene_delta_sha256": canonical_sha256(raw_scene),
-        "model_effective_scene_delta_sha256": canonical_sha256(effective_scene),
-        "precision_cast_audit_sha256": canonical_sha256(precision),
-        "raw_fp32_centered_pair_delta_sha256": canonical_sha256(raw_pair),
-        "model_effective_pair_delta_sha256": canonical_sha256(effective_pair),
-        "phase_aware_pair_diagnostics_sha256": canonical_sha256(phase),
-        "predicted_update_functional_audit_sha256": canonical_sha256(functional),
-        "structural_gate_sha256": canonical_sha256(recomputed_gate),
-    }
-    return {**reduction, "canonical_sha256": canonical_sha256(reduction)}
+    return _build_rich_preflight_reduction(
+        sources=sources,
+        structural=structural,
+        dependence=dependence,
+        ranks=ranks,
+        centered=centered,
+        raw_scene=raw_scene,
+        effective_scene=effective_scene,
+        precision=precision,
+        raw_pair=raw_pair,
+        effective_pair=effective_pair,
+        phase=phase,
+        functional=functional,
+        structural_gate=recomputed_gate,
+        profile=profile,
+    )
 
 
 def _validate_preflight(
     config: dict[str, Any],
     preflight: Mapping[str, Any],
     current_provenance: Mapping[str, Any],
+    *,
+    profile: PhaseAwareLocalFieldProfile = V21_LOCAL_FIELD_PROFILE,
 ) -> dict[str, Any]:
     try:
-        contract = validate_v21_config_contract(config)
+        contract = validate_v21_config_contract(config, profile=profile)
     except (TypeError, ValueError, RuntimeError, V21StructuralPreflightViolation) as error:
         _fail(f"V21 config contract is invalid: {error}")
     _equal(
         contract.get("contract_sha256"),
-        EXPECTED_V21_CONTRACT_SHA256,
-        "V21 normalized contract hash",
+        profile.normalized_contract_sha256,
+        f"{profile.version} normalized contract hash",
     )
     if set(preflight) != _PREFLIGHT_ROOT_KEYS:
         _fail(
@@ -1047,7 +1167,7 @@ def _validate_preflight(
         )
     for key, expected in {
         "schema_version": 1,
-        "audit_type": V21_PREFLIGHT_ROLE,
+        "audit_type": profile.preflight_role,
         "runtime_eligible": False,
         "uses_supervised_qa_metadata": True,
         "question_dependent_scene_processing": False,
@@ -1153,14 +1273,6 @@ def _validate_preflight(
     for key in ("live_source_state_sha256_before", "live_source_state_sha256_after"):
         _equal(preflight.get(key), combined_source, f"preflight.{key}")
     selection = _validate_selection_and_order(preflight, expected_hashes)
-    _canonical_equal(
-        preflight.get("pair_objective_policy"),
-        contract["pair_objective_policy"],
-        "pair objective policy",
-    )
-    coverage = _mapping(preflight.get("pair_objective_policy_coverage"), "policy coverage")
-    if coverage.get("complete") is not True or coverage.get("unlisted_pair_ids") != []:
-        _fail("V21 pair-objective policy coverage is incomplete")
     try:
         zero_equivalence = v20._validate_zero_equivalence(
             preflight.get("zero_output_prefix_equivalence")
@@ -1170,6 +1282,7 @@ def _validate_preflight(
     microsteps = list(_sequence(preflight.get("microsteps"), "preflight microsteps"))
     _equal(preflight.get("microstep_losses"), microsteps, "microstep loss alias")
     _exact_int(len(microsteps), 12, "microstep count")
+    _validate_executed_pair_policy_evidence(preflight, contract, microsteps)
     ordered_units = list(_sequence(preflight.get("ordered_units"), "ordered units"))
     for index, (raw, ordered) in enumerate(zip(microsteps, ordered_units, strict=True), start=1):
         row = _mapping(raw, f"microstep {index}")
@@ -1178,7 +1291,10 @@ def _validate_preflight(
         _equal(row.get("question_key"), ordered["question_key"], f"microstep {index}.question_key")
         _finite(row.get("total_loss"), f"microstep {index}.total_loss")
 
-    rich = _validate_rich_evidence(preflight, contract, sources)
+    if profile is V21_LOCAL_FIELD_PROFILE:
+        rich = _validate_rich_evidence(preflight, contract, sources)
+    else:
+        rich = _validate_rich_evidence(preflight, contract, sources, profile=profile)
     pair_gradient = _mapping(preflight.get("pair_gradient_audit"), "pair gradient audit")
     for key in (
         "color_total_loss_exact_zero",
@@ -1298,7 +1414,11 @@ def _load_optimizer_evidence(
 
 
 def verify_update1(
-    config: dict[str, Any], preflight_path: str | Path, checkpoint_path: str | Path
+    config: dict[str, Any],
+    preflight_path: str | Path,
+    checkpoint_path: str | Path,
+    *,
+    profile: PhaseAwareLocalFieldProfile = V21_LOCAL_FIELD_PROFILE,
 ) -> dict[str, Any]:
     """Verify V21 epoch one without loading Gemma, a map, QA, or oracle data."""
 
@@ -1309,7 +1429,7 @@ def verify_update1(
     adapter_file = _safe(checkpoint / "adapter.safetensors", "V21 epoch-one adapter")
     optimizer_file = _safe(checkpoint / "optimizer.pt", "V21 epoch-one optimizer")
     preflight = _read_json(preflight_file, "V21 preflight")
-    evidence = _validate_preflight(config, preflight, current)
+    evidence = _validate_preflight(config, preflight, current, profile=profile)
     metadata = _read_json(metadata_file, "V21 epoch-one metadata")
     for key, expected in {
         "schema_version": 3,
@@ -1459,7 +1579,7 @@ def verify_update1(
     )
     return {
         "schema_version": 1,
-        "audit_type": UPDATE1_VERIFIER_TYPE,
+        "audit_type": profile.update1_verifier_type,
         "match": True,
         "stage_2_authorized": True,
         "report_only": True,
@@ -1475,7 +1595,7 @@ def verify_update1(
         },
         "source_provenance": dict(current),
         "config_hash": config_hash(config, length=64),
-        "preflight_contract_sha256": EXPECTED_V21_CONTRACT_SHA256,
+        "preflight_contract_sha256": profile.normalized_contract_sha256,
         "preflight_sha256": file_sha256(preflight_file),
         "preflight_implementation_sources": copy.deepcopy(evidence["implementation_sources"]),
         "rich_preflight_reduction": evidence["rich_preflight_reduction"],

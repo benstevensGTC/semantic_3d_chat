@@ -349,12 +349,7 @@ def _functional_audit() -> dict[str, Any]:
 
 def test_predicted_functional_audit_is_recomputed_from_measurements() -> None:
     audit = _functional_audit()
-    contract = {
-        "predicted_update_requires": {
-            "expected_units_per_pair": 6,
-            "expected_sides_per_pair": 12,
-        }
-    }
+    contract = verifier.validate_v21_config_contract(load_config(CONFIG_PATH))
     assert verifier._validate_functional_audit(audit, contract) == audit
     tampered = copy.deepcopy(audit)
     tampered["summaries"]["after"]["pair_000003"]["weighted_margin_hinge_objective"] = 0.0

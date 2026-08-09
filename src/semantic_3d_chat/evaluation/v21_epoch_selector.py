@@ -22,6 +22,10 @@ import torch
 
 from semantic_3d_chat.config import PROJECT_ROOT, config_hash, load_config
 from semantic_3d_chat.evaluation import v20_epoch_selector as v20_selector
+from semantic_3d_chat.evaluation.phase_aware_local_field_profile import (
+    V21_LOCAL_FIELD_PROFILE,
+    PhaseAwareLocalFieldProfile,
+)
 from semantic_3d_chat.evaluation.residual_lr_response import EXPECTED_RANKING_FIELDS
 from semantic_3d_chat.evaluation.v19_epoch_selector import (
     EXPECTED_FROZEN_BANKS,
@@ -38,8 +42,6 @@ from semantic_3d_chat.evaluation.v19_epoch_selector import (
     _assert_finite_tree,
     _canonical_sha256,
     _expected_global_residual_contract,
-    _expected_objective_coverage,
-    _expected_objective_policy,
     _extract_epoch_metrics,
     _load_json_strict,
     _mapping,
@@ -55,19 +57,19 @@ from semantic_3d_chat.evaluation.v19_optimizer_state import (
     validate_v19_adamw_state_manifest,
 )
 from semantic_3d_chat.evaluation.v21_structural_preflight import (
+    COLOR_PAIR_ID,
     EXPECTED_RESOLVED_CONFIG_HASH,
     EXPECTED_SIGNED_X_INITIAL_STATE_SHA256,
     EXPECTED_SOURCE_SCENE_STATE_SHA256,
+    MIRROR_PAIR_ID,
     V21StructuralPreflightViolation,
     validate_v21_config_contract,
 )
 from semantic_3d_chat.evaluation.v21_update1_verifier import (
     _IMPLEMENTATION_SOURCES,
-    EXPECTED_V21_CONTRACT_SHA256,
     MODEL_DTYPE,
     PHASE_ALGORITHM,
     PRECISION_ALGORITHM,
-    UPDATE1_VERIFIER_TYPE,
     V21Update1Violation,
     _load_tensor_evidence,
 )
@@ -80,6 +82,8 @@ from semantic_3d_chat.training.train_adapter import file_sha256
 PINNED_CONFIG_PATH = Path(
     "configs/experiments/gemma4_color_mirror_signed_x_local_field_phase_aware_v21.yaml"
 )
+# Historical public pin retained for audit tests and downstream evidence tools.
+EXPECTED_V21_CONTRACT_SHA256 = V21_LOCAL_FIELD_PROFILE.normalized_contract_sha256
 PINNED_CONFIG_HASH = EXPECTED_RESOLVED_CONFIG_HASH
 OUTPUT_NAMESPACE = "gemma4_color_mirror_signed_x_local_field_phase_aware_v21"
 EXPECTED_EPOCHS = (1, 2, 3, 4)
@@ -202,7 +206,10 @@ def _validate_implementation_sources(value: Any) -> dict[str, Any]:
 
 
 def _validate_rich_preflight_reduction(
-    value: Any, *, implementation_sources: Mapping[str, Any]
+    value: Any,
+    *,
+    implementation_sources: Mapping[str, Any],
+    profile: PhaseAwareLocalFieldProfile = V21_LOCAL_FIELD_PROFILE,
 ) -> dict[str, Any]:
     reduction = dict(_mapping(value, "update1.rich_preflight_reduction"))
     expected_keys = {
@@ -229,7 +236,7 @@ def _validate_rich_preflight_reduction(
         "phase_algorithm_family": "phase_aware_precision_pair_v1",
         "phase_algorithm": PHASE_ALGORITHM,
         "legacy_effective_total_norm_selectivity_diagnostic_only": True,
-        "preflight_contract_sha256": EXPECTED_V21_CONTRACT_SHA256,
+        "preflight_contract_sha256": profile.normalized_contract_sha256,
         "scene_ids": list(EXPECTED_TRAIN_SCENES),
         "pair_ids": ["pair_000001", "pair_000003"],
     }.items():
@@ -251,7 +258,12 @@ def _validate_rich_preflight_reduction(
     return reduction
 
 
-def _load_update1_authorization(path: str | Path, *, config: Mapping[str, Any]) -> dict[str, Any]:
+def _load_update1_authorization(
+    path: str | Path,
+    *,
+    config: Mapping[str, Any],
+    profile: PhaseAwareLocalFieldProfile = V21_LOCAL_FIELD_PROFILE,
+) -> dict[str, Any]:
     """Load and validate the exact V21 stage-two authorization report."""
 
     safe_report = _safe_checkpoint_file(_lexical_absolute(path), "V21 update-one report")
@@ -265,7 +277,7 @@ def _load_update1_authorization(path: str | Path, *, config: Mapping[str, Any]) 
         _fail("update1 report root keys mismatch")
     for key, expected in {
         "schema_version": 1,
-        "audit_type": UPDATE1_VERIFIER_TYPE,
+        "audit_type": profile.update1_verifier_type,
         "match": True,
         "stage_2_authorized": True,
         "report_only": True,
@@ -286,17 +298,24 @@ def _load_update1_authorization(path: str | Path, *, config: Mapping[str, Any]) 
     full_config_hash = config_hash(dict(config), length=64)
     if report.get("config_hash") != full_config_hash:
         _fail("update1 report config provenance mismatch")
-    if report.get("preflight_contract_sha256") != EXPECTED_V21_CONTRACT_SHA256:
+    if report.get("preflight_contract_sha256") != profile.normalized_contract_sha256:
         _fail("update1 normalized preflight-contract hash mismatch")
     source = _validate_source_provenance(report.get("source_provenance"), "update1.source")
     _sha256(report.get("preflight_sha256"), "update1.preflight_sha256")
     implementation_sources = _validate_implementation_sources(
         report.get("preflight_implementation_sources")
     )
-    reduction = _validate_rich_preflight_reduction(
-        report.get("rich_preflight_reduction"),
-        implementation_sources=implementation_sources,
-    )
+    if profile is V21_LOCAL_FIELD_PROFILE:
+        reduction = _validate_rich_preflight_reduction(
+            report.get("rich_preflight_reduction"),
+            implementation_sources=implementation_sources,
+        )
+    else:
+        reduction = _validate_rich_preflight_reduction(
+            report.get("rich_preflight_reduction"),
+            implementation_sources=implementation_sources,
+            profile=profile,
+        )
     checkpoint = report.get("checkpoint")
     if not isinstance(checkpoint, str) or not checkpoint:
         _fail("update1.checkpoint must be a nonempty path")
@@ -337,13 +356,13 @@ def _load_update1_authorization(path: str | Path, *, config: Mapping[str, Any]) 
         "report_path": _display(safe_report),
         "report_sha256": report_sha256,
         "report_canonical_sha256": _canonical_sha256(report),
-        "audit_type": UPDATE1_VERIFIER_TYPE,
+        "audit_type": profile.update1_verifier_type,
         "match": True,
         "stage_2_authorized": True,
         "model_dtype": MODEL_DTYPE,
         "source_provenance": source,
         "config_hash": full_config_hash,
-        "preflight_contract_sha256": EXPECTED_V21_CONTRACT_SHA256,
+        "preflight_contract_sha256": profile.normalized_contract_sha256,
         "preflight_sha256": report["preflight_sha256"],
         "preflight_implementation_sources": implementation_sources,
         "rich_preflight_reduction": reduction,
@@ -447,16 +466,23 @@ def _expected_signed_x_contract(config: Mapping[str, Any]) -> dict[str, Any]:
     return expected
 
 
-def _validate_config(config: Mapping[str, Any]) -> dict[str, Any]:
+def _validate_config(
+    config: Mapping[str, Any],
+    *,
+    profile: PhaseAwareLocalFieldProfile = V21_LOCAL_FIELD_PROFILE,
+) -> dict[str, Any]:
     try:
-        preflight_contract = validate_v21_config_contract(config)
+        preflight_contract = validate_v21_config_contract(config, profile=profile)
     except (TypeError, ValueError, RuntimeError, V21StructuralPreflightViolation) as error:
         _fail(f"Resolved V21 config is invalid: {error}")
     observed_hash = config_hash(dict(config))
-    if observed_hash != PINNED_CONFIG_HASH:
-        _fail(f"V21 config hash mismatch: expected={PINNED_CONFIG_HASH} observed={observed_hash}")
-    if preflight_contract.get("contract_sha256") != EXPECTED_V21_CONTRACT_SHA256:
-        _fail("V21 normalized preflight contract SHA-256 mismatch")
+    if observed_hash != profile.resolved_config_hash:
+        _fail(
+            f"{profile.version} config hash mismatch: "
+            f"expected={profile.resolved_config_hash} observed={observed_hash}"
+        )
+    if preflight_contract.get("contract_sha256") != profile.normalized_contract_sha256:
+        _fail(f"{profile.version} normalized preflight contract SHA-256 mismatch")
     language = {
         "model_id": "google/gemma-4-E2B-it",
         "revision": "3e22461f65e89153144f8adb70e3b8c2cc9845a7",
@@ -468,15 +494,30 @@ def _validate_config(config: Mapping[str, Any]) -> dict[str, Any]:
     for key, expected in language.items():
         if config["language"].get(key) != expected:
             _fail(f"config.language.{key} mismatch")
+    objective_policy = copy.deepcopy(preflight_contract["pair_objective_policy"])
+    resolved = copy.deepcopy(objective_policy["by_pair"])
+    coverage_body = {
+        "schema_version": 1,
+        "selected_pair_ids": [COLOR_PAIR_ID, MIRROR_PAIR_ID],
+        "configured_pair_ids": [COLOR_PAIR_ID, MIRROR_PAIR_ID],
+        "unlisted_pair_ids": [],
+        "allow_unlisted_pair_ids": False,
+        "resolved_by_pair": resolved,
+        "complete": True,
+    }
+    objective_coverage = {
+        **coverage_body,
+        "coverage_sha256": _canonical_sha256(coverage_body),
+    }
     return {
         "config_hash": observed_hash,
         "config_hash_full": config_hash(dict(config), length=64),
         "model_dtype": MODEL_DTYPE,
-        "screen": copy.deepcopy(preflight_contract["v21_screen"]),
+        "screen": copy.deepcopy(preflight_contract[profile.screen_key]),
         "global_residual": _expected_global_residual_contract(config),
         "signed_x_residual": _expected_signed_x_contract(config),
-        "objective_policy": _expected_objective_policy(),
-        "objective_coverage": _expected_objective_coverage(),
+        "objective_policy": objective_policy,
+        "objective_coverage": objective_coverage,
         "language": language,
         "scene_encoder_architecture_version": "signal_preserving_resampler_v3",
         "preflight_contract_sha256": preflight_contract["contract_sha256"],
@@ -528,6 +569,7 @@ def _validate_epoch_artifact(
     *,
     path: str,
     artifact_sha256: str,
+    profile: PhaseAwareLocalFieldProfile = V21_LOCAL_FIELD_PROFILE,
 ) -> dict[str, Any]:
     field = f"epoch_{epoch}"
     _assert_finite_tree(artifact, field)
@@ -537,7 +579,7 @@ def _validate_epoch_artifact(
         "global_step": epoch * 12,
         "optimizer_step": epoch,
         "config_hash": contract["config_hash"],
-        "output_namespace": OUTPUT_NAMESPACE,
+        "output_namespace": profile.output_namespace,
         "freeze_scene_adapter": True,
         "train_global_scene_residual_only": False,
         "train_signed_x_scene_residual_only": True,
@@ -718,6 +760,7 @@ def summarize_v21_epochs(
     epoch_paths: Mapping[int, str | Path],
     epoch_sha256: Mapping[int, str],
     current_provenance: Mapping[str, Any] | None = None,
+    profile: PhaseAwareLocalFieldProfile = V21_LOCAL_FIELD_PROFILE,
 ) -> dict[str, Any]:
     """Validate, artifact-bind, rank, and gate four cumulative V21 updates."""
 
@@ -734,8 +777,19 @@ def summarize_v21_epochs(
     _require_bound_json(selection_path, selection, selection_sha256, "V21 selection artifact")
 
     current_source = _require_current_source(current_provenance)
-    contract = _validate_config(config)
-    update1 = _load_update1_authorization(update1_report_path, config=config)
+    # Keep the historical V21 call shape stable for existing audit tests and
+    # downstream users that monkeypatch these narrow seams.  Only a dedicated
+    # revision wrapper supplies the immutable non-default profile.
+    if profile is V21_LOCAL_FIELD_PROFILE:
+        contract = _validate_config(config)
+        update1 = _load_update1_authorization(update1_report_path, config=config)
+    else:
+        contract = _validate_config(config, profile=profile)
+        update1 = _load_update1_authorization(
+            update1_report_path,
+            config=config,
+            profile=profile,
+        )
     selection_evidence = _validate_selection(selection, contract)
     validated: list[dict[str, Any]] = []
     for epoch in EXPECTED_EPOCHS:
@@ -753,13 +807,25 @@ def summarize_v21_epochs(
         )
         if inspection["checkpoint_artifact_hashes"]["metadata_sha256"] != hashes[epoch]:
             _fail(f"epoch_{epoch} loaded metadata hash differs from its actual file")
-        row = _validate_epoch_artifact(
-            epoch,
-            epoch_artifacts[epoch],
-            contract,
-            path=str(paths[epoch]),
-            artifact_sha256=hashes[epoch],
-        )
+        row_arguments = {
+            "path": str(paths[epoch]),
+            "artifact_sha256": hashes[epoch],
+        }
+        if profile is V21_LOCAL_FIELD_PROFILE:
+            row = _validate_epoch_artifact(
+                epoch,
+                epoch_artifacts[epoch],
+                contract,
+                **row_arguments,
+            )
+        else:
+            row = _validate_epoch_artifact(
+                epoch,
+                epoch_artifacts[epoch],
+                contract,
+                profile=profile,
+                **row_arguments,
+            )
         if inspection["tensor_evidence"]["signed_x_state_sha256"] != row["signed_x_state_sha256"]:
             _fail(f"epoch_{epoch} actual signed-X tensor state differs from metadata")
         row["checkpoint_inspection"] = inspection
@@ -847,7 +913,7 @@ def summarize_v21_epochs(
     greedy = bool(full_teacher and contract["screen"]["greedy_audit_only_after_full_teacher_gate"])
     return {
         "schema_version": 1,
-        "selector_type": "strict_v21_signed_x_local_field_phase_aware_epoch_selector",
+        "selector_type": profile.selector_type,
         "report_only": True,
         "model_inference_executed": False,
         "gemma_model_loaded": False,
@@ -857,7 +923,7 @@ def summarize_v21_epochs(
         "optimizer_deserialization_weights_only": True,
         "question_dependent_scene_processing": False,
         "model_dtype": MODEL_DTYPE,
-        "config_path": str(PINNED_CONFIG_PATH),
+        "config_path": str(profile.config_path),
         "config_hash": contract["config_hash"],
         "config_hash_full": contract["config_hash_full"],
         "preflight_contract_sha256": contract["preflight_contract_sha256"],

@@ -1,0 +1,235 @@
+{
+  "authorized": true,
+  "checkpoint_tensor_state_loaded": true,
+  "checkpoint_tensor_state_safely_inspected": true,
+  "config_hash": "ae17da8b9a71",
+  "config_hash_full": "ae17da8b9a712e9be89cc7d0f04d6db54bce0c239adf69c3236d848b64d9b04b",
+  "config_path": "configs/experiments/gemma4_color_mirror_signed_x_local_field_phase_aware_v21.yaml",
+  "continuation_authorized": true,
+  "controller_type": "strict_v21_conditional_extension_controller",
+  "expected_extension_epochs": [
+    5,
+    6,
+    7,
+    8
+  ],
+  "expected_final_global_step": 96,
+  "extension_checkpoint_root": "data_gemma4/checkpoints/gemma4_v21_phase_aware_local_field_extension_u8",
+  "extension_namespace_absent_at_authorization": true,
+  "extension_output_namespace": "gemma4_v21_phase_aware_local_field_extension_u8",
+  "frozen_global_scene_residual_state_sha256": "ce3bf864eed6dd4a50f1b67296981e144d6a79e9cf192ad9a9230f2ae18208dc",
+  "frozen_scene_state_sha256": "690bd890bfda024dbb5c7d3c68087b8113bc3b8ee81dd6143c7eb2a884e7245b",
+  "gemma_model_loaded": false,
+  "greedy_audit_authorized": false,
+  "greedy_audit_forbidden_during_extension": true,
+  "microsteps_per_optimizer_update": 12,
+  "model_dtype": "bfloat16",
+  "model_inference_executed": false,
+  "optimizer_deserialization_weights_only": true,
+  "optimizer_deserialized": true,
+  "original_output_namespace": "gemma4_color_mirror_signed_x_local_field_phase_aware_v21",
+  "overwrite_original_namespace": false,
+  "preflight_contract_sha256": "50e5522a19d4f6a3eb88884cdccfa71ab1301ebe94bf1a512d42505322799b2c",
+  "question_dependent_scene_processing": false,
+  "report_only": true,
+  "schema_version": 1,
+  "screen_decision": "continue_selected_epoch_no_greedy_audit",
+  "screen_report_canonical_sha256": "172766542e58f8b85e344c311de58964c80cc6c295c95a1a38250f79f31045b3",
+  "screen_report_path": "reports/gemma4/metrics/v21_epoch_screen.json",
+  "screen_report_sha256": "27f2c789ff50c80df1dbd65c20fca63a715ac7257ce844495170648aac9ace59",
+  "selected_checkpoint": "data_gemma4/checkpoints/gemma4_color_mirror_signed_x_local_field_phase_aware_v21/epoch_004",
+  "selected_checkpoint_artifact_hashes": {
+    "adapter_sha256": "642a27c36a5877e3a9882d2096a5468267caee1c98b53d47e21d966cd0efa10b",
+    "metadata_sha256": "ce66ac73c354a2f0392fd9fc9b6a2f55e4b44af14716a1feb15baa484419087e",
+    "optimizer_sha256": "0226ec9b23a9d224fd6308e78bcb764ab3eedc1a0cb85886528c249ea69fc965"
+  },
+  "selected_epoch": 4,
+  "selected_optimizer_state_sha256": "43ba1b00686caaf093d2e9779f6b3cb8495324fc9e42ca0343d28f198d626f2f",
+  "selected_signed_x_state_sha256": "0c14de4ab10e047284802bea759dc4da2cf04618ff5135d4b34dc3d0de7fcdc5",
+  "source_provenance": {
+    "available": true,
+    "head_commit": "806309b71127d4efa7f2e3a5ded7f3dafd853c2e",
+    "head_tree": "dd4c60fdfa386f7a34d2c22c9e33db6bee68fdd3",
+    "is_clean": true,
+    "schema_version": 1,
+    "scope": "repository_excluding_generated_artifacts_v1",
+    "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "start_optimizer_update": 5,
+  "target_optimizer_update": 8,
+  "trainer": {
+    "argv": [
+      ".venv-gemma4/bin/python",
+      "-m",
+      "semantic_3d_chat.training.train_adapter",
+      "--config",
+      "configs/experiments/gemma4_color_mirror_signed_x_local_field_phase_aware_v21.yaml",
+      "--resume",
+      "data_gemma4/checkpoints/gemma4_color_mirror_signed_x_local_field_phase_aware_v21/epoch_004",
+      "--output-namespace",
+      "gemma4_v21_phase_aware_local_field_extension_u8",
+      "--epochs",
+      "8"
+    ],
+    "environment": {
+      "PYTHONPATH": "src"
+    },
+    "executes_on_prepare": false,
+    "shell_command": "PYTHONPATH=src .venv-gemma4/bin/python -m semantic_3d_chat.training.train_adapter --config configs/experiments/gemma4_color_mirror_signed_x_local_field_phase_aware_v21.yaml --resume data_gemma4/checkpoints/gemma4_color_mirror_signed_x_local_field_phase_aware_v21/epoch_004 --output-namespace gemma4_v21_phase_aware_local_field_extension_u8 --epochs 8",
+    "working_directory": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat"
+  },
+  "update1_authorization": {
+    "audit_type": "v21_exact_update1_match_verifier",
+    "checkpoint": "data_gemma4/checkpoints/gemma4_color_mirror_signed_x_local_field_phase_aware_v21/epoch_001",
+    "checkpoint_artifact_hashes": {
+      "adapter_sha256": "efa4c45f9b6a092a90a11b821bd70cd4857ccd1a704eca7c7c4004635421d427",
+      "metadata_sha256": "6155403b7ef2aae09cf6dc45d8556a11589fec28ccda9286d18d4bd6588b2348",
+      "optimizer_sha256": "3f73196065ac8b5bc6f73c347ca6a0bd141e9f6242d9d0860032e9a5ae0bae8c"
+    },
+    "config_hash": "ae17da8b9a712e9be89cc7d0f04d6db54bce0c239adf69c3236d848b64d9b04b",
+    "frozen_global_scene_residual_state_sha256": "ce3bf864eed6dd4a50f1b67296981e144d6a79e9cf192ad9a9230f2ae18208dc",
+    "frozen_lora_bank_state_sha256": {
+      "extension_v13": "4eb90fb9b0bea579d14cfcb0f61ebd5b6d566fd600bd3d5e1bfe5177a39e1b34",
+      "inherited_v12": "dec768bed654c8c4e16da0318857543ad54d8f5f68f4d24a9a87cd19ec706594"
+    },
+    "frozen_scene_state_sha256": "690bd890bfda024dbb5c7d3c68087b8113bc3b8ee81dd6143c7eb2a884e7245b",
+    "match": true,
+    "model_dtype": "bfloat16",
+    "optimizer_state_manifest": {
+      "all_state_tensors_sha256": "8d8d13b8bade823db424e55b1cfbb31a261b28b724057efdbeb6bfa6f20e04c4",
+      "optimizer": "AdamW",
+      "param_groups": [
+        {
+          "amsgrad": false,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "capturable": false,
+          "decoupled_weight_decay": true,
+          "differentiable": false,
+          "eps": 1e-08,
+          "foreach": false,
+          "fused": false,
+          "lr": 0.0001,
+          "maximize": false,
+          "name": "signed_x_output_projection",
+          "params": [
+            0
+          ],
+          "weight_decay": 0.0
+        }
+      ],
+      "parameter_order": [
+        {
+          "dtype": "float32",
+          "name": "output_projection.weight",
+          "parameter_id": 0,
+          "shape": [
+            1536,
+            128
+          ]
+        }
+      ],
+      "schema_version": 1,
+      "state_parameter_count": 1,
+      "states": [
+        {
+          "parameter_id": 0,
+          "parameter_name": "output_projection.weight",
+          "state": {
+            "exp_avg": {
+              "dtype": "float32",
+              "finite": true,
+              "sha256": "c6bd5b6a2098d6a156359ef8cc7ee3a432d3fd4981207550c78bd4faf7a434a2",
+              "shape": [
+                1536,
+                128
+              ]
+            },
+            "exp_avg_sq": {
+              "dtype": "float32",
+              "finite": true,
+              "sha256": "ebca9f2e0a4b79402299b1d238f7ed4c28fb4bd31ebfaeaec4c82ac60702a87c",
+              "shape": [
+                1536,
+                128
+              ]
+            },
+            "step": {
+              "dtype": "float32",
+              "finite": true,
+              "sha256": "27eba474bb69d6b41016220a789a78bb98f7dde8ce8341efa57c53773a12079b",
+              "shape": [],
+              "value": 1.0
+            }
+          }
+        }
+      ]
+    },
+    "optimizer_state_sha256": "b56a9cd33f3d6e700a56f4e27ee1fdb839735def471bb0955bc3ce5dd6cedb42",
+    "output_projection_sha256": "19138f13431267a7f3b99b1a3e5326660f5c433e0ceff5fc91dac52895e1b656",
+    "preflight_contract_sha256": "50e5522a19d4f6a3eb88884cdccfa71ab1301ebe94bf1a512d42505322799b2c",
+    "preflight_implementation_sources": {
+      "functional_audit_implementation_source": "src/semantic_3d_chat/evaluation/v21_predicted_update_audit.py",
+      "functional_audit_implementation_source_sha256": "034c1e2fc72827240455e5a7100b43dd6ddac3f04c2152c59d9ff878ab8f17a5",
+      "implementation_source": "src/semantic_3d_chat/evaluation/v21_structural_preflight.py",
+      "implementation_source_sha256": "19fa654fabe73db310af47dfc575aab9256b62930356ee592202b44f10b57f25",
+      "phase_audit_implementation_source": "src/semantic_3d_chat/evaluation/v21_phase_aware_precision.py",
+      "phase_audit_implementation_source_sha256": "c70872c8996237362029c6debeb1b74d583349e29733b24f274a1ad4b4c10413",
+      "signed_x_dispatch_implementation_source": "src/semantic_3d_chat/scene_encoder/signed_x_dispatch.py",
+      "signed_x_dispatch_implementation_source_sha256": "b521ef27966c462b9c278f0d0df8769fbecc01562ad35e036a82ab6bd197fee1",
+      "signed_x_implementation_source": "src/semantic_3d_chat/scene_encoder/signed_x_local_field.py",
+      "signed_x_implementation_source_sha256": "58644793c49599e6af29b0e836f38fc0ab28aa9b645736e586510d6da846797f"
+    },
+    "preflight_sha256": "06360212d24f35baa7545f6d92a1126944824f1da3a45a3c1954b12321b1f9be",
+    "report_canonical_sha256": "fc7293308f1c62312692cc494b9d14166df9897ad879103674b9454325b55ff2",
+    "report_path": "reports/gemma4/metrics/v21_update1_match.json",
+    "report_sha256": "8ba25c13771dca37b64851f971f66acf879ca0ffe577f72b4f8bcc3ee9526e7a",
+    "rich_preflight_reduction": {
+      "canonical_sha256": "ec04dff39571bce0f181ada797be035d1c672a51637a9ef414166c81364c200c",
+      "centered_content_sha256": "24f76bded5fb94b15b32af635f1fb4829ac24348b7d03ebf4e1b1adaa44e43bb",
+      "implementation_sources_sha256": "da0b5c6956f9da3e0183fc3f3c888fadbdc8ebb6a43b2a309972fcedda74bd5f",
+      "legacy_effective_total_norm_selectivity_diagnostic_only": true,
+      "local_dependence_sha256": "0e512ae96b34c37b4eef5e0b0b226153a4a06fb04f9ba3cfd67bb0a8e066ecdc",
+      "local_field_structural_state_sha256": "4bc882d8072aecd5ccc3018c7bc7c7c1a56a30056669295f8c39b7e1375e0ef3",
+      "local_hidden_spatial_rank_sha256": "856f8466054e0006ef631e8910f932a75a7f441f5ecf443fa20ad40e68a55cce",
+      "model_dtype": "bfloat16",
+      "model_effective_pair_delta_sha256": "9a53dd8b76740aec56941b26427a6a1b9b1b485587bc37852b474747ba88cb07",
+      "model_effective_scene_delta_sha256": "146737e1f9b234f20fb4557f7b51604de47ce30d4bc4694caf1cf8fdea266293",
+      "pair_ids": [
+        "pair_000001",
+        "pair_000003"
+      ],
+      "phase_algorithm": "phase_aware_bfloat16_pair_v1",
+      "phase_algorithm_family": "phase_aware_precision_pair_v1",
+      "phase_aware_pair_diagnostics_sha256": "7ae725de0ae379c4ea89b365b43a188abbe24b6152c1d9f6bd6e376690aae550",
+      "precision_algorithm": "bfloat16_cast_of_fp32_base_plus_fp32_delta",
+      "precision_cast_audit_sha256": "a546deb386f199282e18f3269c06b4084994c1739743b38e8510217837e1f459",
+      "predicted_update_functional_audit_sha256": "48c6fe693102d32cdf26cb533b109ddc8f29606d267502953336b06d07ffe99d",
+      "preflight_contract_sha256": "50e5522a19d4f6a3eb88884cdccfa71ab1301ebe94bf1a512d42505322799b2c",
+      "raw_fp32_centered_pair_delta_sha256": "541cc08ede0d168d278fbc67d18fd02b9baf256090c9982ed3f9a092d3b58176",
+      "raw_fp32_centered_scene_delta_sha256": "8524918b88be79e029181a5e0ee91344e4cdf3cbfc8606ce52a7f1d8c07817c6",
+      "scene_ids": [
+        "scene_000003",
+        "scene_000004",
+        "scene_000007",
+        "scene_000008"
+      ],
+      "schema_version": 1,
+      "structural_gate_sha256": "90b0a0c824d22cb8d7cabdde0eb66d770df0c4006b4621d36275b22cd647f522",
+      "verified": true
+    },
+    "signed_x_state_sha256": "553e3a81d9631c1a194fcac052dcae3c543358ffc9b9729909271a8b2115bca8",
+    "source_provenance": {
+      "available": true,
+      "head_commit": "806309b71127d4efa7f2e3a5ded7f3dafd853c2e",
+      "head_tree": "dd4c60fdfa386f7a34d2c22c9e33db6bee68fdd3",
+      "is_clean": true,
+      "schema_version": 1,
+      "scope": "repository_excluding_generated_artifacts_v1",
+      "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stage_2_authorized": true
+  }
+}

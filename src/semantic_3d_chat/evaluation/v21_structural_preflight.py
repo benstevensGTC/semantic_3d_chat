@@ -27,6 +27,10 @@ from torch import nn
 from torch.nn import functional as F
 
 from semantic_3d_chat.config import config_hash
+from semantic_3d_chat.evaluation.phase_aware_local_field_profile import (
+    V21_LOCAL_FIELD_PROFILE,
+    PhaseAwareLocalFieldProfile,
+)
 from semantic_3d_chat.evaluation.v18_structural_preflight import (
     capture_rng_states,
     fp64_delta_metrics,
@@ -223,8 +227,17 @@ def _validate_optimizer_contract(raw: Mapping[str, Any]) -> dict[str, Any]:
     return normalized
 
 
-def validate_v21_config_contract(config: Mapping[str, Any]) -> dict[str, Any]:
-    """Validate the complete gradient-defining V21 launch surface."""
+def validate_v21_config_contract(
+    config: Mapping[str, Any],
+    *,
+    profile: PhaseAwareLocalFieldProfile = V21_LOCAL_FIELD_PROFILE,
+) -> dict[str, Any]:
+    """Validate the complete gradient-defining local-field launch surface.
+
+    The default remains the exact historical V21 profile.  V22 passes its
+    immutable profile from a dedicated wrapper; callers cannot select looser
+    gates or architecture settings through configuration.
+    """
 
     from semantic_3d_chat.scene_encoder.global_residual import (
         global_scene_residual_settings,
@@ -239,10 +252,10 @@ def validate_v21_config_contract(config: Mapping[str, Any]) -> dict[str, Any]:
     )
 
     observed_config_hash = config_hash(dict(config))
-    if observed_config_hash != EXPECTED_RESOLVED_CONFIG_HASH:
+    if observed_config_hash != profile.resolved_config_hash:
         _fail(
-            "V21 resolved config hash mismatch: "
-            f"expected={EXPECTED_RESOLVED_CONFIG_HASH} observed={observed_config_hash}"
+            f"{profile.version} resolved config hash mismatch: "
+            f"expected={profile.resolved_config_hash} observed={observed_config_hash}"
         )
     if config.get("structural_preflight") is not None or config.get("v18_screen") is not None:
         _fail("V21 must not inherit a completed V18 controller or preflight contract")
@@ -267,8 +280,7 @@ def validate_v21_config_contract(config: Mapping[str, Any]) -> dict[str, Any]:
     training = _mapping(config.get("training"), "training")
     optimizer = _validate_optimizer_contract(_mapping(training.get("optimizer"), "optimizer"))
     training_checks = {
-        "output_namespace": training.get("output_namespace")
-        == "gemma4_color_mirror_signed_x_local_field_phase_aware_v21",
+        "output_namespace": training.get("output_namespace") == profile.output_namespace,
         "initialize_from": training.get("initialize_from")
         == "data_gemma4/checkpoints/gemma4_color_mirror_centered_content_gate_v18/epoch_004",
         "initialize_expected_adapter_sha256": training.get("initialize_expected_adapter_sha256")
@@ -350,9 +362,9 @@ def validate_v21_config_contract(config: Mapping[str, Any]) -> dict[str, Any]:
             "role": "signed_target",
             "language_nll_weight": 0.0,
             "candidate_hinge_weight": 8.0,
-            "candidate_margin": 1.0,
+            "candidate_margin": profile.mirror_candidate_margin,
             "full_vocab_hinge_weight": 2.0,
-            "full_vocab_margin": 1.0,
+            "full_vocab_margin": profile.mirror_full_vocab_margin,
         },
     }
     observed_policy_contracts = {
@@ -368,7 +380,7 @@ def validate_v21_config_contract(config: Mapping[str, Any]) -> dict[str, Any]:
     experiment = _mapping(config.get("experiment"), "experiment")
     experiment_checks = {
         "schema_version": experiment.get("schema_version") == 1,
-        "role": experiment.get("role") == V21_EXPERIMENT_ROLE,
+        "role": experiment.get("role") == profile.experiment_role,
         "question_dependent_scene_processing": experiment.get("question_dependent_scene_processing")
         is False,
         "source_checkpoint_epoch": experiment.get("source_checkpoint_epoch") == 4,
@@ -395,10 +407,13 @@ def validate_v21_config_contract(config: Mapping[str, Any]) -> dict[str, Any]:
     if failed_experiment:
         _fail(f"V21 experiment contract mismatch: {failed_experiment}")
 
-    screen = _mapping(config.get("v21_screen"), "v21_screen")
+    for stale_screen_key in {"v21_screen", "v22_screen"} - {profile.screen_key}:
+        if config.get(stale_screen_key) is not None:
+            _fail(f"{profile.version} must not inherit stale {stale_screen_key}")
+    screen = _mapping(config.get(profile.screen_key), profile.screen_key)
     expected_screen = {
         "schema_version": 1,
-        "role": V21_SCREEN_ROLE,
+        "role": profile.screen_role,
         "source_checkpoint_epoch": 4,
         "screen_optimizer_updates": 4,
         "conditional_max_optimizer_updates": 8,
@@ -442,6 +457,14 @@ def validate_v21_config_contract(config: Mapping[str, Any]) -> dict[str, Any]:
         },
         "greedy_audit_only_after_full_teacher_gate": True,
     }
+    if profile.bind_namespaces_in_screen:
+        expected_screen.update(
+            {
+                "primary_output_namespace": profile.output_namespace,
+                "extension_output_namespace": profile.extension_namespace,
+                "target_optimizer_update": 8,
+            }
+        )
     if dict(screen) != expected_screen:
         _fail("V21 staged screen contract mismatch")
 
@@ -460,7 +483,7 @@ def validate_v21_config_contract(config: Mapping[str, Any]) -> dict[str, Any]:
 
     normalized = {
         "schema_version": 1,
-        "role": V21_PREFLIGHT_ROLE,
+        "role": profile.preflight_role,
         "source_checkpoint_epoch": 4,
         "latent_count": 256,
         "scene_dim": 1536,
@@ -486,9 +509,15 @@ def validate_v21_config_contract(config: Mapping[str, Any]) -> dict[str, Any]:
             "ordered_unit_sha256": EXPECTED_ORDERED_UNIT_SHA256,
             "pair_membership_sha256": EXPECTED_PAIR_MEMBERSHIP_SHA256,
         },
-        "v21_screen": expected_screen,
+        profile.screen_key: expected_screen,
     }
     normalized["contract_sha256"] = canonical_sha256(normalized)
+    if normalized["contract_sha256"] != profile.normalized_contract_sha256:
+        _fail(
+            f"{profile.version} normalized contract hash mismatch: "
+            f"expected={profile.normalized_contract_sha256} "
+            f"observed={normalized['contract_sha256']}"
+        )
     return normalized
 
 
@@ -1128,8 +1157,13 @@ def _zero_output_equivalence(
     }
 
 
-def run_preflight(config_path: str | Path, report_path: str | Path) -> dict[str, Any]:
-    """Execute the real V21 epoch-one diagnostic without a live optimizer step."""
+def run_preflight(
+    config_path: str | Path,
+    report_path: str | Path,
+    *,
+    profile: PhaseAwareLocalFieldProfile = V21_LOCAL_FIELD_PROFILE,
+) -> dict[str, Any]:
+    """Execute the real epoch-one diagnostic without a live optimizer step."""
 
     # Heavy model and supervised-data dependencies stay out of unit-test imports.
     from semantic_3d_chat.config import (
@@ -1192,7 +1226,7 @@ def run_preflight(config_path: str | Path, report_path: str | Path) -> dict[str,
     )
 
     config = load_config(config_path)
-    contract = validate_v21_config_contract(config)
+    contract = validate_v21_config_contract(config, profile=profile)
     source_provenance = capture_git_source_provenance(PROJECT_ROOT)
     try:
         require_clean_committed_source(source_provenance)
@@ -1900,7 +1934,7 @@ def run_preflight(config_path: str | Path, report_path: str | Path) -> dict[str,
     }
     report = {
         "schema_version": 1,
-        "audit_type": V21_PREFLIGHT_ROLE,
+        "audit_type": profile.preflight_role,
         "runtime_eligible": False,
         "uses_supervised_qa_metadata": True,
         "question_dependent_scene_processing": False,
@@ -2015,7 +2049,14 @@ def run_preflight(config_path: str | Path, report_path: str | Path) -> dict[str,
         raise V21StructuralPreflightViolation(
             f"V21 structural preflight failed; evidence written to {destination}"
         )
-    print(json.dumps({"phase": "v21_structural_preflight_passed", "report": str(destination)}))
+    print(
+        json.dumps(
+            {
+                "phase": f"{profile.version.lower()}_structural_preflight_passed",
+                "report": str(destination),
+            }
+        )
+    )
     return report
 
 

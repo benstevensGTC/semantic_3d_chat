@@ -20,12 +20,15 @@ from pathlib import Path
 from typing import Any
 
 from semantic_3d_chat.config import PROJECT_ROOT, artifact_root, load_config
+from semantic_3d_chat.evaluation.phase_aware_local_field_profile import (
+    V21_LOCAL_FIELD_PROFILE,
+    PhaseAwareLocalFieldProfile,
+)
 from semantic_3d_chat.evaluation.v21_epoch_selector import (
     EXPECTED_EPOCHS,
     EXPECTED_FROZEN_GLOBAL_RESIDUAL_SHA256,
     EXPECTED_FROZEN_SCENE_SHA256,
     MODEL_DTYPE,
-    OUTPUT_NAMESPACE,
     PINNED_CONFIG_PATH,
     V21EpochSelectorViolation,
     _color_eligible,
@@ -54,6 +57,7 @@ from semantic_3d_chat.training.source_provenance import (
 # Keep this component within the trainer's fail-closed 64-character namespace
 # contract. The longer descriptive primary namespace is recorded separately in
 # every launch/final report as ``original_output_namespace``.
+OUTPUT_NAMESPACE = V21_LOCAL_FIELD_PROFILE.output_namespace
 EXTENSION_NAMESPACE = "gemma4_v21_phase_aware_local_field_extension_u8"
 CONTROLLER_TYPE = "strict_v21_conditional_extension_controller"
 FINAL_SELECTOR_TYPE = "strict_v21_conditional_extension_final_selector"
@@ -136,7 +140,10 @@ def _checkpoint_hashes(directory: Path, field: str) -> dict[str, str]:
 
 
 def _load_exact_screen_report(
-    config_path: str | Path, screen_path: str | Path
+    config_path: str | Path,
+    screen_path: str | Path,
+    *,
+    profile: PhaseAwareLocalFieldProfile = V21_LOCAL_FIELD_PROFILE,
 ) -> tuple[dict[str, Any], str, dict[str, Any], dict[str, Any]]:
     resolved_config = _safe_input_file(config_path, "V21 config")
     resolved_screen = _safe_input_file(screen_path, "V21 screen report")
@@ -183,16 +190,30 @@ def _load_exact_screen_report(
         if not isinstance(update1_path, str) or not update1_path:
             _fail("screen.update1_authorization.report_path is missing")
         _safe_input_file(update1_path, "V21 update-one authorization")
-        recomputed = summarize_v21_epochs(
-            config,
-            selection,
-            {epoch: value for epoch, (value, _digest) in loaded.items()},
-            update1_report_path=update1_path,
-            selection_path=str(selection_path),
-            selection_sha256=selection_sha256,
-            epoch_paths={epoch: str(path) for epoch, path in epoch_paths.items()},
-            epoch_sha256={epoch: digest for epoch, (_value, digest) in loaded.items()},
-        )
+        selector_arguments = {
+            "update1_report_path": update1_path,
+            "selection_path": str(selection_path),
+            "selection_sha256": selection_sha256,
+            "epoch_paths": {epoch: str(path) for epoch, path in epoch_paths.items()},
+            "epoch_sha256": {
+                epoch: digest for epoch, (_value, digest) in loaded.items()
+            },
+        }
+        if profile is V21_LOCAL_FIELD_PROFILE:
+            recomputed = summarize_v21_epochs(
+                config,
+                selection,
+                {epoch: value for epoch, (value, _digest) in loaded.items()},
+                **selector_arguments,
+            )
+        else:
+            recomputed = summarize_v21_epochs(
+                config,
+                selection,
+                {epoch: value for epoch, (value, _digest) in loaded.items()},
+                profile=profile,
+                **selector_arguments,
+            )
     except V21ExtensionViolation:
         raise
     except (
@@ -209,9 +230,13 @@ def _load_exact_screen_report(
     return screen, screen_sha256, config, dict(selection)
 
 
-def _require_extension_decision(screen: Mapping[str, Any]) -> int:
+def _require_extension_decision(
+    screen: Mapping[str, Any],
+    *,
+    profile: PhaseAwareLocalFieldProfile = V21_LOCAL_FIELD_PROFILE,
+) -> int:
     for key, expected in {
-        "selector_type": "strict_v21_signed_x_local_field_phase_aware_epoch_selector",
+        "selector_type": profile.selector_type,
         "report_only": True,
         "model_inference_executed": False,
         "gemma_model_loaded": False,
@@ -303,15 +328,20 @@ def _build_launch_manifest(
     config: Mapping[str, Any],
     source_provenance: Mapping[str, Any],
     require_namespace_absent: bool,
+    profile: PhaseAwareLocalFieldProfile = V21_LOCAL_FIELD_PROFILE,
 ) -> dict[str, Any]:
-    selected_epoch = _require_extension_decision(screen)
-    contract = _validate_config(config)
+    if profile is V21_LOCAL_FIELD_PROFILE:
+        selected_epoch = _require_extension_decision(screen)
+        contract = _validate_config(config)
+    else:
+        selected_epoch = _require_extension_decision(screen, profile=profile)
+        contract = _validate_config(config, profile=profile)
     selected_metadata = screen.get("selected_checkpoint_metadata_path")
     if not isinstance(selected_metadata, str) or not selected_metadata:
         _fail("screen.selected_checkpoint_metadata_path is missing")
     checkpoint_root = artifact_root(dict(config), "checkpoints").resolve()
-    original_root = (checkpoint_root / OUTPUT_NAMESPACE).resolve()
-    extension_root = (checkpoint_root / EXTENSION_NAMESPACE).resolve()
+    original_root = (checkpoint_root / profile.output_namespace).resolve()
+    extension_root = (checkpoint_root / profile.extension_namespace).resolve()
     selected_checkpoint = (original_root / f"epoch_{selected_epoch:03d}").resolve()
     _same_path(selected_metadata, selected_checkpoint / "metadata.json", "selected checkpoint")
     selected_checkpoint_from_screen = screen.get("selected_checkpoint")
@@ -346,14 +376,14 @@ def _build_launch_manifest(
         "--resume",
         _display(selected_checkpoint),
         "--output-namespace",
-        EXTENSION_NAMESPACE,
+        profile.extension_namespace,
         "--epochs",
         str(TARGET_OPTIMIZER_UPDATE),
     ]
     expected_epochs = list(range(selected_epoch + 1, TARGET_OPTIMIZER_UPDATE + 1))
     return {
         "schema_version": 1,
-        "controller_type": CONTROLLER_TYPE,
+        "controller_type": profile.extension_controller_type,
         "authorized": True,
         "report_only": True,
         "model_inference_executed": False,
@@ -384,8 +414,8 @@ def _build_launch_manifest(
         "selected_checkpoint_artifact_hashes": selected_hashes,
         "selected_signed_x_state_sha256": screen["selected_signed_x_state_sha256"],
         "selected_optimizer_state_sha256": screen["selected_optimizer_state_sha256"],
-        "original_output_namespace": OUTPUT_NAMESPACE,
-        "extension_output_namespace": EXTENSION_NAMESPACE,
+        "original_output_namespace": profile.output_namespace,
+        "extension_output_namespace": profile.extension_namespace,
         "extension_checkpoint_root": _display(extension_root),
         "extension_namespace_absent_at_authorization": True,
         "start_optimizer_update": selected_epoch + 1,
@@ -409,26 +439,40 @@ def prepare_extension_launch(
     screen_path: str | Path,
     *,
     current_provenance: Mapping[str, Any] | None = None,
+    profile: PhaseAwareLocalFieldProfile = V21_LOCAL_FIELD_PROFILE,
 ) -> dict[str, Any]:
     """Authorize, but never execute, the isolated V21 update-8 continuation."""
 
-    screen, screen_sha256, config, _selection = _load_exact_screen_report(config_path, screen_path)
+    if profile is V21_LOCAL_FIELD_PROFILE:
+        screen, screen_sha256, config, _selection = _load_exact_screen_report(
+            config_path, screen_path
+        )
+    else:
+        screen, screen_sha256, config, _selection = _load_exact_screen_report(
+            config_path,
+            screen_path,
+            profile=profile,
+        )
     source = _require_current_source(screen, current_provenance)
-    return _build_launch_manifest(
-        config_path=_resolve(config_path),
-        screen_path=_resolve(screen_path),
-        screen=screen,
-        screen_sha256=screen_sha256,
-        config=config,
-        source_provenance=source,
-        require_namespace_absent=True,
-    )
+    arguments = {
+        "config_path": _resolve(config_path),
+        "screen_path": _resolve(screen_path),
+        "screen": screen,
+        "screen_sha256": screen_sha256,
+        "config": config,
+        "source_provenance": source,
+        "require_namespace_absent": True,
+    }
+    if profile is V21_LOCAL_FIELD_PROFILE:
+        return _build_launch_manifest(**arguments)
+    return _build_launch_manifest(**arguments, profile=profile)
 
 
 def _validate_launch_manifest(
     manifest_path: str | Path,
     *,
     current_provenance: Mapping[str, Any] | None = None,
+    profile: PhaseAwareLocalFieldProfile = V21_LOCAL_FIELD_PROFILE,
 ) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any]]:
     resolved = _safe_input_file(manifest_path, "V21 extension launch manifest")
     try:
@@ -436,23 +480,39 @@ def _validate_launch_manifest(
     except (ValueError, FileNotFoundError, OSError, UnicodeError) as error:
         _fail(f"Cannot load V21 extension launch manifest: {error}")
     manifest = dict(raw_manifest)
-    if manifest.get("controller_type") != CONTROLLER_TYPE or manifest.get("authorized") is not True:
+    if (
+        manifest.get("controller_type") != profile.extension_controller_type
+        or manifest.get("authorized") is not True
+    ):
         _fail("V21 launch manifest is not an authorization from this controller")
     config_path = manifest.get("config_path")
     screen_path = manifest.get("screen_report_path")
     if not isinstance(config_path, str) or not isinstance(screen_path, str):
         _fail("V21 launch config/screen path is invalid")
-    screen, screen_sha256, config, _selection = _load_exact_screen_report(config_path, screen_path)
+    if profile is V21_LOCAL_FIELD_PROFILE:
+        screen, screen_sha256, config, _selection = _load_exact_screen_report(
+            config_path, screen_path
+        )
+    else:
+        screen, screen_sha256, config, _selection = _load_exact_screen_report(
+            config_path,
+            screen_path,
+            profile=profile,
+        )
     source = _require_current_source(screen, current_provenance)
-    expected = _build_launch_manifest(
-        config_path=_resolve(config_path),
-        screen_path=_resolve(screen_path),
-        screen=screen,
-        screen_sha256=screen_sha256,
-        config=config,
-        source_provenance=source,
-        require_namespace_absent=False,
-    )
+    arguments = {
+        "config_path": _resolve(config_path),
+        "screen_path": _resolve(screen_path),
+        "screen": screen,
+        "screen_sha256": screen_sha256,
+        "config": config,
+        "source_provenance": source,
+        "require_namespace_absent": False,
+    }
+    if profile is V21_LOCAL_FIELD_PROFILE:
+        expected = _build_launch_manifest(**arguments)
+    else:
+        expected = _build_launch_manifest(**arguments, profile=profile)
     if manifest != expected:
         _fail("V21 launch manifest differs from exact current authorization")
     return manifest, screen, config
@@ -464,6 +524,8 @@ def _validate_extension_epoch(
     config: Mapping[str, Any],
     contract: Mapping[str, Any],
     expected_source: Mapping[str, Any],
+    *,
+    profile: PhaseAwareLocalFieldProfile = V21_LOCAL_FIELD_PROFILE,
 ) -> dict[str, Any]:
     metadata_path = _safe_input_file(metadata_path, f"V21 extension update {epoch} metadata")
     try:
@@ -471,20 +533,32 @@ def _validate_extension_epoch(
     except (ValueError, FileNotFoundError, OSError, UnicodeError) as error:
         _fail(f"Cannot load V21 extension update {epoch}: {error}")
     artifact = dict(raw)
-    if artifact.get("output_namespace") != EXTENSION_NAMESPACE:
+    if artifact.get("output_namespace") != profile.extension_namespace:
         _fail(f"Extension update {epoch} is not in the isolated namespace")
     if artifact.get("source_provenance") != expected_source:
         _fail(f"Extension update {epoch} source provenance differs from authorization")
     normalized = deepcopy(artifact)
-    normalized["output_namespace"] = OUTPUT_NAMESPACE
+    normalized["output_namespace"] = profile.output_namespace
     try:
-        validated = _validate_epoch_artifact(
-            epoch,
-            normalized,
-            contract,
-            path=_display(metadata_path),
-            artifact_sha256=metadata_sha256,
-        )
+        arguments = {
+            "path": _display(metadata_path),
+            "artifact_sha256": metadata_sha256,
+        }
+        if profile is V21_LOCAL_FIELD_PROFILE:
+            validated = _validate_epoch_artifact(
+                epoch,
+                normalized,
+                contract,
+                **arguments,
+            )
+        else:
+            validated = _validate_epoch_artifact(
+                epoch,
+                normalized,
+                contract,
+                profile=profile,
+                **arguments,
+            )
     except ValueError as error:
         _fail(f"Extension update {epoch} violates the strict V21 contract: {error}")
     try:
@@ -544,19 +618,29 @@ def select_final_extension(
     manifest_path: str | Path,
     *,
     current_provenance: Mapping[str, Any] | None = None,
+    profile: PhaseAwareLocalFieldProfile = V21_LOCAL_FIELD_PROFILE,
 ) -> dict[str, Any]:
     """Validate and rank the exact selected-prefix plus update-8 trajectory."""
 
-    manifest, screen, config = _validate_launch_manifest(
-        manifest_path, current_provenance=current_provenance
-    )
-    contract = _validate_config(config)
+    if profile is V21_LOCAL_FIELD_PROFILE:
+        manifest, screen, config = _validate_launch_manifest(
+            manifest_path,
+            current_provenance=current_provenance,
+        )
+        contract = _validate_config(config)
+    else:
+        manifest, screen, config = _validate_launch_manifest(
+            manifest_path,
+            current_provenance=current_provenance,
+            profile=profile,
+        )
+        contract = _validate_config(config, profile=profile)
     selected_epoch = int(manifest["selected_epoch"])
     extension_root = _lexical_absolute(str(manifest["extension_checkpoint_root"]))
-    original_root = artifact_root(config, "checkpoints").resolve() / OUTPUT_NAMESPACE
+    original_root = artifact_root(config, "checkpoints").resolve() / profile.output_namespace
     if (
         extension_root.resolve() == original_root.resolve()
-        or extension_root.name != EXTENSION_NAMESPACE
+        or extension_root.name != profile.extension_namespace
     ):
         _fail("Launch extension root is not the exact isolated V21 namespace")
     expected_epochs = list(range(selected_epoch + 1, TARGET_OPTIMIZER_UPDATE + 1))
@@ -576,16 +660,19 @@ def select_final_extension(
     if selected_metadata_sha256 != selected_hashes["metadata_sha256"]:
         raise AssertionError("Selected metadata changed while validating")
 
-    extension_rows = [
-        _validate_extension_epoch(
+    extension_rows = []
+    for epoch in expected_epochs:
+        arguments = (
             epoch,
             extension_root / f"epoch_{epoch:03d}" / "metadata.json",
             config,
             contract,
             _mapping(manifest.get("source_provenance"), "launch.source_provenance"),
         )
-        for epoch in expected_epochs
-    ]
+        if profile is V21_LOCAL_FIELD_PROFILE:
+            extension_rows.append(_validate_extension_epoch(*arguments))
+        else:
+            extension_rows.append(_validate_extension_epoch(*arguments, profile=profile))
     selected_history = list(_sequence(selected_metadata.get("history"), "selected history"))
     if len(selected_history) != selected_epoch:
         _fail("Selected checkpoint history length differs from selected epoch")
@@ -681,7 +768,7 @@ def select_final_extension(
     full_teacher = bool(selected["full_teacher_gate_passed"])
     return {
         "schema_version": 1,
-        "selector_type": FINAL_SELECTOR_TYPE,
+        "selector_type": profile.extension_final_selector_type,
         "report_only": True,
         "model_inference_executed": False,
         "gemma_model_loaded": False,
@@ -704,7 +791,7 @@ def select_final_extension(
         "source_provenance": deepcopy(manifest["source_provenance"]),
         "original_selected_epoch": selected_epoch,
         "original_selected_checkpoint_artifact_hashes": selected_hashes,
-        "extension_output_namespace": EXTENSION_NAMESPACE,
+        "extension_output_namespace": profile.extension_namespace,
         "target_optimizer_update": TARGET_OPTIMIZER_UPDATE,
         "conditional_limit_reached": True,
         "cumulative_update_evidence": {

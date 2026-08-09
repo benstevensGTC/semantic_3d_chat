@@ -1,0 +1,344 @@
+{
+  "schema_version": 1,
+  "archive_type": "immutable_v21_final_summary",
+  "experiment": "gemma4_v21_bf16_signed_x_local_field_phase_aware",
+  "sealed_from_source": {
+    "available": true,
+    "head_commit": "806309b71127d4efa7f2e3a5ded7f3dafd853c2e",
+    "head_tree": "dd4c60fdfa386f7a34d2c22c9e33db6bee68fdd3",
+    "is_clean": true,
+    "schema_version": 1,
+    "scope": "repository_excluding_generated_artifacts_v1",
+    "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "integrity_policy": {
+    "current_source_head_required": false,
+    "summary_sha256_pinned_in": "src/semantic_3d_chat/evaluation/v21_archive_validator.py",
+    "validator_is_source_head_independent": true,
+    "validation_scope": [
+      "exact_archive_summary_bytes",
+      "bound_config_and_evidence_files",
+      "final_selector_outcome",
+      "epoch_trajectory",
+      "selected_epoch_8_checkpoint",
+      "superseded_lineage"
+    ]
+  },
+  "config": {
+    "path": "configs/experiments/gemma4_color_mirror_signed_x_local_field_phase_aware_v21.yaml",
+    "file_sha256": "62e35c53d73d434d69301c55d95c80074073c85a89048396e80a6e79c0e6e42f",
+    "resolved_config_sha256": "ae17da8b9a712e9be89cc7d0f04d6db54bce0c239adf69c3236d848b64d9b04b",
+    "preflight_contract_sha256": "50e5522a19d4f6a3eb88884cdccfa71ab1301ebe94bf1a512d42505322799b2c"
+  },
+  "authoritative_artifacts": [
+    {
+      "role": "config",
+      "path": "configs/experiments/gemma4_color_mirror_signed_x_local_field_phase_aware_v21.yaml",
+      "sha256": "62e35c53d73d434d69301c55d95c80074073c85a89048396e80a6e79c0e6e42f"
+    },
+    {
+      "role": "structural_preflight",
+      "path": "reports/gemma4/metrics/v21_structural_preflight.json",
+      "sha256": "06360212d24f35baa7545f6d92a1126944824f1da3a45a3c1954b12321b1f9be"
+    },
+    {
+      "role": "update_1_exact_match",
+      "path": "reports/gemma4/metrics/v21_update1_match.json",
+      "sha256": "8ba25c13771dca37b64851f971f66acf879ca0ffe577f72b4f8bcc3ee9526e7a"
+    },
+    {
+      "role": "base_training_report",
+      "path": "reports/gemma4/metrics/training_gemma4_color_mirror_signed_x_local_field_phase_aware_v21.json",
+      "sha256": "bcc4f7a9397bdd90fab9a90b7e9f358c3f5a231f3c61f09f0e89768839bb9f37"
+    },
+    {
+      "role": "base_selection_report",
+      "path": "reports/gemma4/metrics/training_selection_gemma4_color_mirror_signed_x_local_field_phase_aware_v21.json",
+      "sha256": "5605d99c8020e377d3ed1d8a944d9255c6a43a72a5a61336edf26604836b4701"
+    },
+    {
+      "role": "epoch_4_screen",
+      "path": "reports/gemma4/metrics/v21_epoch_screen.json",
+      "sha256": "27f2c789ff50c80df1dbd65c20fca63a715ac7257ce844495170648aac9ace59"
+    },
+    {
+      "role": "extension_launch",
+      "path": "reports/gemma4/metrics/v21_extension_launch.json",
+      "sha256": "32f5750439fbc6832ec02bd3116c2c3642a7e225197d809f9e153680d87999c4"
+    },
+    {
+      "role": "extension_training_report",
+      "path": "reports/gemma4/metrics/training_gemma4_v21_phase_aware_local_field_extension_u8.json",
+      "sha256": "a1714edc283a331197753eb7a540d69e350b71af6f0b7f563fd36a460cf07071"
+    },
+    {
+      "role": "extension_selection_report",
+      "path": "reports/gemma4/metrics/training_selection_gemma4_v21_phase_aware_local_field_extension_u8.json",
+      "sha256": "5605d99c8020e377d3ed1d8a944d9255c6a43a72a5a61336edf26604836b4701"
+    },
+    {
+      "role": "final_selector_report",
+      "path": "reports/gemma4/metrics/v21_extension_final.json",
+      "sha256": "5585b94c948350b6aacca10b3d0418cd95e9787a8065618a9cdd4ac9b6ed6d9b"
+    }
+  ],
+  "selected_checkpoint": {
+    "epoch": 8,
+    "checkpoint_path": "data_gemma4/checkpoints/gemma4_v21_phase_aware_local_field_extension_u8/epoch_008",
+    "metadata_path": "data_gemma4/checkpoints/gemma4_v21_phase_aware_local_field_extension_u8/epoch_008/metadata.json",
+    "adapter_path": "data_gemma4/checkpoints/gemma4_v21_phase_aware_local_field_extension_u8/epoch_008/adapter.safetensors",
+    "optimizer_path": "data_gemma4/checkpoints/gemma4_v21_phase_aware_local_field_extension_u8/epoch_008/optimizer.pt",
+    "artifact_hashes": {
+      "adapter_sha256": "ce9e97061389a7eae5703593d0a8869f87bd12544f56f5976570965056b65f44",
+      "metadata_sha256": "bbc8309d25db86e40fa01ec744e19b3c0fc1c61953ebfc5072f11c84bbd2e997",
+      "optimizer_sha256": "465a9075c7d890bc87caa94ecf2fe316750e714716fa39bb48cda72d80c9bf93"
+    },
+    "internal_state_hashes": {
+      "optimizer_state_sha256": "9ea493544972ee2a578560bd76768c9082d535dfb7ace173aa8c0f531d8ea0a6",
+      "signed_x_state_sha256": "e8dabc69627f60723b89520b02dfee985e49b7b7e35fdd1213cc79f7b8164f58",
+      "frozen_global_scene_residual_state_sha256": "ce3bf864eed6dd4a50f1b67296981e144d6a79e9cf192ad9a9230f2ae18208dc",
+      "frozen_scene_state_sha256": "690bd890bfda024dbb5c7d3c68087b8113bc3b8ee81dd6143c7eb2a884e7245b"
+    }
+  },
+  "outcome": {
+    "decision": "conditional_limit_reached_no_greedy_audit",
+    "selected_epoch": 8,
+    "optimizer_updates": 8,
+    "cumulative_microsteps": 96,
+    "conditional_limit_reached": true,
+    "full_teacher_gate_passed": false,
+    "continuation_authorized": false,
+    "greedy_audit_authorized": false,
+    "greedy_audit_forbidden": true,
+    "promotion_authorized": false,
+    "static_chat_authorized": false,
+    "embodied_phase_authorized": false,
+    "question_dependent_scene_processing": false,
+    "report_only_final_selection": true,
+    "final_color_full_vocab_sides": 12,
+    "final_color_full_vocab_units": 6,
+    "final_mirror_full_vocab_sides": 8,
+    "final_mirror_full_vocab_units": 2,
+    "failure_reason": "The mirror pair did not reach the preregistered 12/12-side, 6/6-unit full-vocabulary teacher-forced gate by the update-8 conditional limit."
+  },
+  "timings": {
+    "base_updates_1_to_4_elapsed_seconds": 177.00838720891625,
+    "extension_updates_5_to_8_elapsed_seconds": 237.23780129104853,
+    "combined_training_process_elapsed_seconds": 414.2461884999648,
+    "scope_note": "Sum of the independently recorded trainer-process elapsed_seconds values; preflight and selector wall time are not included."
+  },
+  "trajectory": [
+    {
+      "epoch": 1,
+      "optimizer_step": 1,
+      "cumulative_microsteps": 12,
+      "train_loss": 5.3125,
+      "full_teacher_gate_passed": false,
+      "color": {
+        "full_vocab_sides": 12,
+        "full_vocab_units": 6,
+        "mean_full_vocab_margin": 1.9869791269302368,
+        "minimum_full_vocab_margin": 0.1875
+      },
+      "mirror": {
+        "full_vocab_sides": 7,
+        "full_vocab_units": 1,
+        "mean_full_vocab_margin": 0.140625,
+        "minimum_full_vocab_margin": -1.1875
+      }
+    },
+    {
+      "epoch": 2,
+      "optimizer_step": 2,
+      "cumulative_microsteps": 24,
+      "train_loss": 4.401041666666667,
+      "full_teacher_gate_passed": false,
+      "color": {
+        "full_vocab_sides": 12,
+        "full_vocab_units": 6,
+        "mean_full_vocab_margin": 2.234375,
+        "minimum_full_vocab_margin": 0.6875
+      },
+      "mirror": {
+        "full_vocab_sides": 7,
+        "full_vocab_units": 1,
+        "mean_full_vocab_margin": 0.25,
+        "minimum_full_vocab_margin": -0.9375
+      }
+    },
+    {
+      "epoch": 3,
+      "optimizer_step": 3,
+      "cumulative_microsteps": 36,
+      "train_loss": 4.140625,
+      "full_teacher_gate_passed": false,
+      "color": {
+        "full_vocab_sides": 12,
+        "full_vocab_units": 6,
+        "mean_full_vocab_margin": 2.2057292461395264,
+        "minimum_full_vocab_margin": 0.59375
+      },
+      "mirror": {
+        "full_vocab_sides": 8,
+        "full_vocab_units": 2,
+        "mean_full_vocab_margin": 0.3020833432674408,
+        "minimum_full_vocab_margin": -1.125
+      }
+    },
+    {
+      "epoch": 4,
+      "optimizer_step": 4,
+      "cumulative_microsteps": 48,
+      "train_loss": 3.671875,
+      "full_teacher_gate_passed": false,
+      "color": {
+        "full_vocab_sides": 12,
+        "full_vocab_units": 6,
+        "mean_full_vocab_margin": 2.25,
+        "minimum_full_vocab_margin": 0.96875
+      },
+      "mirror": {
+        "full_vocab_sides": 8,
+        "full_vocab_units": 2,
+        "mean_full_vocab_margin": 0.421875,
+        "minimum_full_vocab_margin": -1.0625
+      }
+    },
+    {
+      "epoch": 5,
+      "optimizer_step": 5,
+      "cumulative_microsteps": 60,
+      "train_loss": 3.6197916666666665,
+      "full_teacher_gate_passed": false,
+      "color": {
+        "full_vocab_sides": 12,
+        "full_vocab_units": 6,
+        "mean_full_vocab_margin": 2.1848957538604736,
+        "minimum_full_vocab_margin": 0.84375
+      },
+      "mirror": {
+        "full_vocab_sides": 8,
+        "full_vocab_units": 2,
+        "mean_full_vocab_margin": 0.421875,
+        "minimum_full_vocab_margin": -0.9375
+      }
+    },
+    {
+      "epoch": 6,
+      "optimizer_step": 6,
+      "cumulative_microsteps": 72,
+      "train_loss": 3.3854166666666665,
+      "full_teacher_gate_passed": false,
+      "color": {
+        "full_vocab_sides": 12,
+        "full_vocab_units": 6,
+        "mean_full_vocab_margin": 2.1927082538604736,
+        "minimum_full_vocab_margin": 0.9375
+      },
+      "mirror": {
+        "full_vocab_sides": 8,
+        "full_vocab_units": 2,
+        "mean_full_vocab_margin": 0.5,
+        "minimum_full_vocab_margin": -0.6875
+      }
+    },
+    {
+      "epoch": 7,
+      "optimizer_step": 7,
+      "cumulative_microsteps": 84,
+      "train_loss": 3.1510416666666665,
+      "full_teacher_gate_passed": false,
+      "color": {
+        "full_vocab_sides": 12,
+        "full_vocab_units": 6,
+        "mean_full_vocab_margin": 2.1380207538604736,
+        "minimum_full_vocab_margin": 0.96875
+      },
+      "mirror": {
+        "full_vocab_sides": 8,
+        "full_vocab_units": 2,
+        "mean_full_vocab_margin": 0.5416666865348816,
+        "minimum_full_vocab_margin": -0.75
+      }
+    },
+    {
+      "epoch": 8,
+      "optimizer_step": 8,
+      "cumulative_microsteps": 96,
+      "train_loss": 2.9427083333333335,
+      "full_teacher_gate_passed": false,
+      "color": {
+        "full_vocab_sides": 12,
+        "full_vocab_units": 6,
+        "mean_full_vocab_margin": 2.1145832538604736,
+        "minimum_full_vocab_margin": 0.90625
+      },
+      "mirror": {
+        "full_vocab_sides": 8,
+        "full_vocab_units": 2,
+        "mean_full_vocab_margin": 0.5520833134651184,
+        "minimum_full_vocab_margin": -0.75
+      }
+    }
+  ],
+  "superseded_lineage": [
+    {
+      "source_commit": "16bc57fe744c87fd4e2cddf5980efb97ee423766",
+      "artifact_suffix": "superseded_16bc57f",
+      "disposition": "not_authoritative",
+      "reason": "The guarded Make verifier used the unsupported --report option instead of --output. Fixing that invocation changed source provenance, so all evidence from this source commit was retained only as superseded lineage.",
+      "checkpoint_namespace": "data_gemma4/checkpoints/gemma4_color_mirror_signed_x_local_field_phase_aware_v21_superseded_16bc57f",
+      "artifacts": [
+        {
+          "path": "reports/gemma4/metrics/v21_structural_preflight_superseded_16bc57f.json",
+          "sha256": "e2cd8745104c373a8edda300406e1b911c9e4e2cde16d74692459d6a4d2beb8a"
+        },
+        {
+          "path": "reports/gemma4/metrics/v21_update1_match_superseded_16bc57f.json",
+          "sha256": "4b46f5fe8b2f40551067d261d573bfee5d3863c577a5563fe047b9a8fb40e52c"
+        },
+        {
+          "path": "reports/gemma4/metrics/training_gemma4_color_mirror_signed_x_local_field_phase_aware_v21_superseded_16bc57f.json",
+          "sha256": "a3a16b6680c973b0279f56df247e4dbfb53636e533deb8e79b92b00c231e363d"
+        },
+        {
+          "path": "reports/gemma4/metrics/training_selection_gemma4_color_mirror_signed_x_local_field_phase_aware_v21_superseded_16bc57f.json",
+          "sha256": "7e3922dfeaa7828cde259cfa4b11970076fd914213239f7e6181245387b12c9d"
+        }
+      ]
+    },
+    {
+      "source_commit": "0a21a78213258459f43d6e0660d5bda368a546c9",
+      "artifact_suffix": "superseded_0a21a78_namespace",
+      "disposition": "not_authoritative",
+      "reason": "The four-update screen completed, but its conditional extension namespace was 69 characters and violated the trainer's 64-character limit before any extension optimizer step. The namespace contract was corrected at 806309b and the entire chain was rerun from V18 for exact source provenance.",
+      "checkpoint_namespace": "data_gemma4/checkpoints/gemma4_color_mirror_signed_x_local_field_phase_aware_v21_superseded_0a21a78_namespace",
+      "artifacts": [
+        {
+          "path": "reports/gemma4/metrics/v21_structural_preflight_superseded_0a21a78_namespace.json",
+          "sha256": "4bcbc30c628385aababc5de11019a33396c86a67046ef71e60a847dded8f1c33"
+        },
+        {
+          "path": "reports/gemma4/metrics/v21_update1_match_superseded_0a21a78_namespace.json",
+          "sha256": "45688b0b011e2c065a8fc19ad044196cc0b1cc1280d1a67404bf1114d41da7f7"
+        },
+        {
+          "path": "reports/gemma4/metrics/training_gemma4_color_mirror_signed_x_local_field_phase_aware_v21_superseded_0a21a78_namespace.json",
+          "sha256": "49b85ecb47e5c33407a25985bd8ab176e201727548a1bede7744e4ba2c70221f"
+        },
+        {
+          "path": "reports/gemma4/metrics/training_selection_gemma4_color_mirror_signed_x_local_field_phase_aware_v21_superseded_0a21a78_namespace.json",
+          "sha256": "a395cc2fd652a63ff9b3a63b7404700b76b8ba2fc715b689165cf1aea31cc93f"
+        },
+        {
+          "path": "reports/gemma4/metrics/v21_epoch_screen_superseded_0a21a78_namespace.json",
+          "sha256": "0b442f877eb2ee4b35ba5139deb5daa48b8f469d5decb3e87563f8f8c05d9207"
+        },
+        {
+          "path": "reports/gemma4/metrics/v21_extension_launch_superseded_0a21a78_namespace.json",
+          "sha256": "c67924cbf9a4f604897e37c5c0be8f4799579df5f6b6cbfbe13766a32b3d3600"
+        }
+      ]
+    }
+  ]
+}

@@ -975,6 +975,65 @@ Run the stages with `make gemma4-v21-preflight`, `make gemma4-v21-stage1`,
 No real optimizer step can run unless the BF16 structural, phase, functional,
 source-provenance, and zero-output-identity checks all pass.
 
+The completed V21 chain was produced from clean source commit `806309b`. Its
+preflight and exact update-1 verifier passed, and the update-4 selector
+authorized only the preregistered isolated continuation through update 8. The
+color retention control stayed at 12/12 full-vocabulary sides and 6/6 units at
+every update. Mirror performance improved from 7/12 sides and 1/6 units at
+update 1 to 8/12 sides and 2/6 units at update 3, then remained at 8/12 and 2/6
+through update 8. The mirror mean full-vocabulary margin increased from
+`0.140625` to `0.552083`, but its minimum margin remained negative (`-0.75` at
+update 8). The base and extension trainer processes recorded `177.01 s` and
+`237.24 s`, respectively.
+
+The final strict decision is
+`conditional_limit_reached_no_greedy_audit`: the full teacher-forced gate did
+not pass, so no greedy audit, promotion record, static chat authorization, or
+embodied-phase authorization was created. The immutable evidence seal is
+`reports/gemma4/metrics/v21_final_summary.json`. It binds the original source,
+config, reports, exact selected update-8 checkpoint hashes, trajectory, timing,
+and both superseded setup attempts. Validate the complete local archive with:
+
+```bash
+PYTHONPATH=src python -m semantic_3d_chat.evaluation.v21_archive_validator
+```
+
+The archive validator intentionally does not compare the current Git HEAD with
+the historical V21 source commit; it validates the recorded clean provenance
+and byte hashes instead, so later versioned experiments cannot invalidate the
+sealed result. Use `--summary-only` in a checkout that does not contain the
+generated evidence and checkpoint files.
+
+#### Gemma V22 local-field screen — margin-rebalanced controlled restart
+
+V21's optimizer did not stall: its projection changed on every update, its
+weight RMS grew smoothly, its training loss fell, and its mirror mean margin
+continued rising after the discrete 8/12-side plateau. The remaining shared
+gradient nevertheless kept optimizing every mirror side toward margin `1.0`,
+including already-correct sides, while the acceptance rule only requires every
+side to be strictly positive. V22 tests that objective-allocation hypothesis
+before adding more trainable capacity.
+
+V22 is a clean restart from the same exact V18 epoch-4 checkpoint with fresh
+signed-X state and optimizer history. It is identical to V21 in model, BF16
+path, 256-token full-scene prefix, architecture, source weights, opaque unit
+order, loss weights, learning rate, four-update screen, conditional update-8
+cap, and strict behavioral gates. Its only gradient-defining change is that
+`pair_000003` uses candidate and full-vocabulary target margins of `0.25`
+instead of `1.0`. This does not relax selection: promotion still requires both
+pairs at 12/12 full-vocabulary sides and 6/6 complete units, with every minimum
+candidate and full-vocabulary margin strictly positive. No question-dependent
+scene processing, retrieval, or runtime oracle access is permitted.
+
+The immutable overlay is
+[`gemma4_color_mirror_signed_x_local_field_margin_rebalanced_v22.yaml`](configs/experiments/gemma4_color_mirror_signed_x_local_field_margin_rebalanced_v22.yaml).
+Run `make gemma4-v22-screen`; run `make gemma4-v22-extension` only if the
+four-update selector emits its continuation-only decision. V21 and V22 use
+different config hashes, controller identities, report paths, checkpoint
+namespaces, nested policy hashes, and extension manifests, so their evidence
+cannot authorize one another. Greedy evaluation remains blocked until V22's
+complete teacher-forced gate passes.
+
 ### Fail-closed Gemma static evaluation and chat
 
 Gemma evaluation must use the isolated Transformers 5 environment and the exact

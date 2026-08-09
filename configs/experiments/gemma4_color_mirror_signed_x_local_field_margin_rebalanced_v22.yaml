@@ -1,0 +1,72 @@
+_base_: gemma4_color_mirror_signed_x_local_field_phase_aware_v21.yaml
+
+# V21 preserved color perfectly and improved the mirror pair smoothly through
+# update eight, but its 1.0 mirror hinge targets left four of twelve sides
+# below the strict full-vocabulary gate. V22 is a clean restart from the exact
+# V18 epoch-four source. It retains V21's BF16 model path, local-field
+# architecture, optimizer, curriculum order, weights, gates, and eight-update
+# cap. The only gradient-defining change is rebalancing the two pair_000003
+# margin targets from 1.0 to 0.25, matching the retention control.
+training:
+  output_namespace: gemma4_v22_margin_rebalanced_local_field
+  extension_output_namespace: gemma4_v22_margin_rebalanced_local_field_extension_u8
+  pair_objectives:
+    by_pair:
+      pair_000003:
+        candidate_margin: 0.25
+        full_vocab_margin: 0.25
+
+# V21 evidence is immutable and cannot authorize a V22 launch. V22 receives a
+# separate preflight, exact update-one verifier, selector, and extension
+# controller while retaining the same preregistered gates.
+v21_screen: null
+
+v22_screen:
+  schema_version: 1
+  role: signed_x_local_field_phase_aware_margin_rebalanced_screen
+  primary_output_namespace: gemma4_v22_margin_rebalanced_local_field
+  extension_output_namespace: gemma4_v22_margin_rebalanced_local_field_extension_u8
+  source_checkpoint_epoch: 4
+  screen_optimizer_updates: 4
+  conditional_max_optimizer_updates: 8
+  target_optimizer_update: 8
+  stage_1_optimizer_updates: 1
+  stage_1_stop_required: true
+  structural_preflight_requires:
+    maximum_per_scene_raw_and_effective_delta_to_core_rms_ratio: 0.01
+    minimum_raw_mirror_residual_to_core_rms_ratio: 0.01
+    minimum_raw_mirror_to_color_normalized_selectivity: 1.5
+    minimum_mirror_effective_residual_to_core_rms_ratio: 0.01
+    legacy_effective_total_norm_selectivity_diagnostic_only: true
+    minimum_mirror_effective_raw_pair_cosine: 0.80
+    minimum_mirror_effective_raw_aligned_gain: 0.75
+    maximum_mirror_effective_raw_aligned_gain: 1.25
+    minimum_mirror_signal_to_orthogonal_noise_ratio: 1.0
+    minimum_local_hidden_spatial_rank: 2
+  predicted_update_requires:
+    expected_units_per_pair: 6
+    expected_sides_per_pair: 12
+    color_strict_positive_before_and_after: true
+    mirror_weighted_margin_hinge_objective_strictly_improves: true
+    mirror_immediate_full_pass_required: false
+  eligibility_requires:
+    color_full_vocab_sides: 12
+    color_full_vocab_units: 6
+    color_positive_minimum_candidate_margin: true
+    color_positive_minimum_full_vocab_margin: true
+  continuation_requires:
+    mirror_minimum_full_vocab_sides: 8
+    mirror_minimum_full_vocab_units: 2
+  full_teacher_gate_requires:
+    color_full_vocab_sides: 12
+    color_full_vocab_units: 6
+    mirror_full_vocab_sides: 12
+    mirror_full_vocab_units: 6
+    all_candidate_and_full_vocab_minimum_margins_positive: true
+  greedy_audit_only_after_full_teacher_gate: true
+
+experiment:
+  role: exploratory_phase_aware_margin_rebalanced_reflection_odd_local_field_screen_v22
+  question_dependent_scene_processing: false
+  question_dependent_retrieval: false
+  runtime_oracle_access: false

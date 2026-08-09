@@ -28,12 +28,20 @@
 > scene residual peaked at 11/12 color sides and 5/12 mirror sides. V17 then
 > screened exact `1e-4` and `3e-4` residual restarts; its strict winner was
 > `1e-4` epoch 3 with 12/12 color sides and 6/6 color units, but only 6/12 mirror
-> sides and 0/6 mirror units. None passed its continuation gate, so no run was
-> extended or greedily decoded. There is no accepted Gemma static-chat,
-> Gemma leakage, semantic
-> embodied-agent, or one-command-demo result yet.
+> sides and 0/6 mirror units. V18's centered local-content bridge retained 12/12
+> color sides but reached 5/12 mirror sides and 0/6 units. V19's reflection-odd
+> global moment improved that to 6/12 and 0/6. V20's local-field successor passed
+> its FP32 structural checks but was rejected before any optimizer step because
+> the preregistered BF16 total-norm statistic was confounded by independent
+> quantization phase. V21 replaced only that invalid estimator with phase-aware
+> and exact predicted-update controls; its preflight and first-update match passed,
+> and eight real updates retained color at 12/12 and 6/6 while improving mirror to
+> 8/12 and 2/6. That result plateaued below the unchanged complete 12/12, 6/6
+> teacher gate, so V21 was also denied greedy decoding and promotion. There is no
+> accepted Gemma static-chat, Gemma leakage, semantic embodied-agent, or
+> one-command-demo result yet.
 
-Updated from local artifacts on `2026-08-09T11:33:10Z`. This report does not run models and does not infer missing measurements.
+Updated from local artifacts on `2026-08-09T13:29:00Z`. This report does not run models and does not infer missing measurements.
 
 ## 1. Research question
 
