@@ -33,11 +33,19 @@ from semantic_3d_chat.language.prefix_injection import ContinuousPrefixComposer
 from semantic_3d_chat.scene_encoder.global_residual import (
     ZERO_SPATIAL_MEAN_CONTENT_GATE_V1,
     GlobalSceneResidual,
+    apply_global_scene_residual,
     construct_global_scene_residual,
     global_scene_residual_settings,
 )
 from semantic_3d_chat.scene_encoder.map_io import MapTensorData
 from semantic_3d_chat.scene_encoder.projector import SceneTokenizerOutput
+from semantic_3d_chat.scene_encoder.signed_x_residual import (
+    SignedXSceneResidual,
+    apply_signed_x_scene_residual,
+    construct_signed_x_scene_residual,
+    frozen_v18_centered_content_values,
+    signed_x_scene_residual_settings,
+)
 from semantic_3d_chat.training.checkpointing import (
     module_collection_state_sha256,
     save_adapter_checkpoint,
@@ -599,6 +607,150 @@ def _tiny_global_residual_runtime_checkpoint(
     return config, checkpoint, source_residual, trained_hash
 
 
+def _tiny_signed_x_runtime_checkpoint(
+    tmp_path: Path,
+) -> tuple[
+    dict,
+    Path,
+    GlobalSceneResidual,
+    SignedXSceneResidual,
+    str,
+    str,
+]:
+    """Build a strict V19-style checkpoint over a frozen trained V18 base."""
+
+    torch.manual_seed(19191)
+    config = tiny_config()
+    config["scene_encoder"]["architecture_version"] = "signal_preserving_resampler_v3"
+    config["language"].update({"backend": "causal_lm", "dtype": "float32"})
+
+    initial_global = GlobalSceneResidual(
+        scene_dim=8,
+        latent_count=4,
+        width=4,
+        fourier_bands=2,
+        initialization_seed=19192,
+        architecture_version=ZERO_SPATIAL_MEAN_CONTENT_GATE_V1,
+        gate_temperature=0.75,
+    )
+    initial_global_hash = module_collection_state_sha256({"global_scene_residual": initial_global})
+    config["scene_encoder"]["global_scene_residual"] = {
+        "enabled": True,
+        "width": 4,
+        "fourier_bands": 2,
+        "initialization_seed": 19192,
+        "expected_initial_state_sha256": initial_global_hash,
+        "architecture_version": ZERO_SPATIAL_MEAN_CONTENT_GATE_V1,
+        "gate_temperature": 0.75,
+    }
+    source_global = construct_global_scene_residual(
+        config,
+        scene_dim=8,
+        latent_count=4,
+    )
+    assert source_global is not None
+    with torch.no_grad():
+        source_global.output_projection.weight.fill_(0.03125)
+    global_state_hash = module_collection_state_sha256({"global_scene_residual": source_global})
+
+    initial_signed_x = SignedXSceneResidual(scene_dim=8, latent_count=4, content_dim=4)
+    initial_signed_x_hash = module_collection_state_sha256(
+        {"signed_x_scene_residual": initial_signed_x}
+    )
+    config["scene_encoder"]["signed_x_scene_residual"] = {
+        "enabled": True,
+        "architecture_version": "signed_x_moment_v1",
+        "expected_initial_state_sha256": initial_signed_x_hash,
+    }
+    config["training"] = {
+        "freeze_scene_adapter": True,
+        "train_signed_x_scene_residual_only": True,
+    }
+    source_signed_x = construct_signed_x_scene_residual(
+        config,
+        scene_dim=8,
+        latent_count=4,
+        content_dim=source_global.width,
+    )
+    assert source_signed_x is not None
+    with torch.no_grad():
+        source_signed_x.output_projection.weight.fill_(0.0625)
+    signed_x_state_hash = module_collection_state_sha256(
+        {"signed_x_scene_residual": source_signed_x}
+    )
+
+    scene_model = construct_scene_tokenizer(config, semantic_dim=7, language_hidden_dim=8)
+    composer = ContinuousPrefixComposer(8)
+    grounding = QuestionGroundingHead(6, 8, 4, 6)
+    scene_modules = {
+        "scene_model": scene_model,
+        "composer": composer,
+        "grounding": grounding,
+    }
+    update_zero_prefix_hash = "a" * 64
+    metadata = {
+        **tiny_checkpoint_metadata(),
+        "config_hash": config_hash(config),
+        "language_backend": "causal_lm",
+        "scene_encoder_architecture_version": "signal_preserving_resampler_v3",
+        "global_scene_residual": global_scene_residual_settings(config).contract(),
+        "global_scene_residual_parameter_count": source_global.parameter_count,
+        "global_scene_residual_initial_state_sha256": initial_global_hash,
+        "global_scene_residual_state_sha256": global_state_hash,
+        "global_scene_residual_zero_output_equivalence": None,
+        "signed_x_scene_residual": signed_x_scene_residual_settings(config).contract(),
+        "signed_x_scene_residual_parameter_count": source_signed_x.parameter_count,
+        "signed_x_scene_residual_initial_state_sha256": initial_signed_x_hash,
+        "signed_x_scene_residual_state_sha256": signed_x_state_hash,
+        "signed_x_scene_residual_zero_output_equivalence": {
+            "verified": True,
+            "base": "loaded_frozen_global_scene_residual",
+            "question_dependent_scene_processing": False,
+            "all_scene_slots_accounted": True,
+            "scene_count": 1,
+            "scene_prefixes": {
+                "scene_000001": {
+                    "v18_base_prefix_sha256": update_zero_prefix_hash,
+                    "signed_x_adapted_prefix_sha256": update_zero_prefix_hash,
+                }
+            },
+        },
+        "question_dependent_scene_processing": False,
+        "freeze_scene_adapter": True,
+        "frozen_scene_state_sha256": module_collection_state_sha256(scene_modules),
+        "frozen_global_scene_residual_state_sha256": global_state_hash,
+        "train_signed_x_scene_residual_only": True,
+        "initialization_provenance": {
+            "schema_version": 4,
+            "mode": "frozen_v18_residual_base_plus_zero_output_signed_x_residual",
+            "source_global_scene_residual_state_sha256": global_state_hash,
+            "expected_source_global_scene_residual_state_sha256": global_state_hash,
+            "global_scene_residual_frozen": True,
+            "signed_x_scene_residual_initial_state_sha256": initial_signed_x_hash,
+            "signed_x_scene_residual_zero_output": True,
+            "optimizer_state_loaded": False,
+            "history_loaded": False,
+        },
+    }
+    checkpoint = save_adapter_checkpoint(
+        tmp_path / "runtime_signed_x_residual",
+        {
+            **scene_modules,
+            "global_scene_residual": source_global,
+            "signed_x_scene_residual": source_signed_x,
+        },
+        metadata,
+    )
+    return (
+        config,
+        checkpoint,
+        source_global,
+        source_signed_x,
+        global_state_hash,
+        signed_x_state_hash,
+    )
+
+
 def _mock_tiny_global_residual_runtime(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
@@ -673,6 +825,219 @@ def test_static_chat_roundtrips_content_gated_residual_contract_and_state(
     assert runtime.checkpoint_metadata["global_scene_residual"]["schema_version"] == 2
     assert runtime.startup_summary()["global_scene_residual_state_sha256"] == trained_hash
     assert runtime.current_prefix_hash() == runtime.scene_prefix_hash
+
+
+def test_static_chat_roundtrips_signed_x_and_applies_core_then_global_then_signed(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    (
+        config,
+        checkpoint,
+        source_global,
+        source_signed_x,
+        global_hash,
+        signed_x_hash,
+    ) = _tiny_signed_x_runtime_checkpoint(tmp_path)
+    _mock_tiny_global_residual_runtime(monkeypatch)
+
+    def fake_generation(_model, _embeddings, _mask, _maximum, _eos):
+        return torch.tensor([[7, 2]])
+
+    runtime = StaticChatRuntime.load(
+        config,
+        "scene_000001",
+        checkpoint,
+        generation_function=fake_generation,
+    )
+
+    assert runtime.questions_answered == 0
+    assert runtime.global_scene_residual is not None
+    assert runtime.signed_x_scene_residual is not None
+    assert (
+        module_collection_state_sha256({"global_scene_residual": runtime.global_scene_residual})
+        == global_hash
+    )
+    assert (
+        module_collection_state_sha256({"signed_x_scene_residual": runtime.signed_x_scene_residual})
+        == signed_x_hash
+    )
+    for name, expected in source_global.state_dict().items():
+        assert torch.equal(runtime.global_scene_residual.state_dict()[name], expected)
+    for name, expected in source_signed_x.state_dict().items():
+        assert torch.equal(runtime.signed_x_scene_residual.state_dict()[name], expected)
+
+    with torch.inference_mode():
+        centered_content = frozen_v18_centered_content_values(
+            runtime.global_scene_residual,
+            runtime.core_scene_output.scene_tokens,
+        )
+        expected_global = apply_global_scene_residual(
+            runtime.core_scene_output,
+            runtime.global_scene_residual,
+        )
+        expected_signed = apply_signed_x_scene_residual(
+            expected_global,
+            runtime.signed_x_scene_residual,
+            centered_content,
+        )
+    assert torch.equal(runtime.global_scene_output.scene_tokens, expected_global.scene_tokens)
+    assert torch.equal(runtime.scene_output.scene_tokens, expected_signed.scene_tokens)
+    assert runtime.scene_output.audit["signed_x_scene_residual_delta_rms"].item() > 0.0
+    assert (
+        runtime.scene_output.audit["signed_x_scene_residual_accounted_slots"].item()
+        == config["scene_encoder"]["global_latents"]
+    )
+
+    initial_prefix_hash = runtime.scene_prefix_hash
+    answer = runtime.answer("Which side is occupied?")
+    assert answer.prefix_hash == initial_prefix_hash
+    assert runtime.current_prefix_hash() == initial_prefix_hash
+    summary = runtime.startup_summary()
+    assert summary["signed_x_scene_residual"] == signed_x_scene_residual_settings(config).contract()
+    assert summary["signed_x_scene_residual_state_sha256"] == signed_x_hash
+    assert summary["frozen_global_scene_residual_state_sha256"] == global_hash
+
+
+@pytest.mark.parametrize(
+    ("metadata_path", "bad_value"),
+    [
+        (("initialization_provenance", "global_scene_residual_frozen"), False),
+        (
+            ("signed_x_scene_residual_zero_output_equivalence", "all_scene_slots_accounted"),
+            False,
+        ),
+        (("initialization_provenance", "optimizer_state_loaded"), True),
+    ],
+)
+def test_checkpoint_contract_rejects_signed_x_without_explicit_frozen_base_evidence(
+    tmp_path: Path,
+    metadata_path: tuple[str, str],
+    bad_value: object,
+) -> None:
+    config, checkpoint, *_rest = _tiny_signed_x_runtime_checkpoint(tmp_path)
+    metadata = json.loads((checkpoint / "metadata.json").read_text(encoding="utf-8"))
+    section, field = metadata_path
+    metadata[section][field] = bad_value
+
+    with pytest.raises(ValueError, match="signed_x_frozen_v18_base_provenance"):
+        validate_checkpoint_contract(
+            metadata,
+            config,
+            semantic_dim=7,
+            language_hidden_dim=8,
+        )
+
+
+def test_checkpoint_contract_does_not_allow_null_global_equivalence_without_signed_x(
+    tmp_path: Path,
+) -> None:
+    config, checkpoint, *_rest = _tiny_global_residual_runtime_checkpoint(
+        tmp_path,
+        content_gated=True,
+    )
+    metadata = json.loads((checkpoint / "metadata.json").read_text(encoding="utf-8"))
+    metadata["global_scene_residual_zero_output_equivalence"] = None
+
+    with pytest.raises(ValueError, match="global_scene_residual_zero_output_equivalence"):
+        validate_checkpoint_contract(
+            metadata,
+            config,
+            semantic_dim=7,
+            language_hidden_dim=8,
+        )
+
+
+def test_checkpoint_contract_accepts_explicitly_disabled_signed_x_metadata() -> None:
+    config = tiny_config()
+    metadata = {
+        **tiny_checkpoint_metadata(),
+        "signed_x_scene_residual": {"schema_version": 1, "enabled": False},
+    }
+
+    warnings = validate_checkpoint_contract(
+        metadata,
+        config,
+        semantic_dim=7,
+        language_hidden_dim=8,
+    )
+
+    assert warnings and "config hash differs" in warnings[0].lower()
+
+
+def test_static_chat_rejects_signed_x_deterministic_initial_hash_mismatch(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    config, checkpoint, *_rest = _tiny_signed_x_runtime_checkpoint(tmp_path)
+    _mock_tiny_global_residual_runtime(monkeypatch)
+    wrong_initial_hash = "b" * 64
+    config["scene_encoder"]["signed_x_scene_residual"]["expected_initial_state_sha256"] = (
+        wrong_initial_hash
+    )
+    metadata_path = checkpoint / "metadata.json"
+    metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
+    metadata["signed_x_scene_residual"]["expected_initial_state_sha256"] = wrong_initial_hash
+    metadata["signed_x_scene_residual_initial_state_sha256"] = wrong_initial_hash
+    metadata["initialization_provenance"]["signed_x_scene_residual_initial_state_sha256"] = (
+        wrong_initial_hash
+    )
+    metadata_path.write_text(json.dumps(metadata, indent=2) + "\n", encoding="utf-8")
+
+    with pytest.raises(ValueError, match="deterministic initial-state mismatch"):
+        StaticChatRuntime.load(config, "scene_000001", checkpoint)
+
+
+def test_static_chat_rejects_signed_x_parameter_count_metadata_mismatch(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    config, checkpoint, _global, signed_x, *_hashes = _tiny_signed_x_runtime_checkpoint(tmp_path)
+    _mock_tiny_global_residual_runtime(monkeypatch)
+    metadata_path = checkpoint / "metadata.json"
+    metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
+    metadata["signed_x_scene_residual_parameter_count"] = signed_x.parameter_count - 1
+    metadata_path.write_text(json.dumps(metadata, indent=2) + "\n", encoding="utf-8")
+
+    with pytest.raises(ValueError, match="Signed-X.*parameter-count mismatch"):
+        StaticChatRuntime.load(config, "scene_000001", checkpoint)
+
+
+def test_static_chat_rejects_signed_x_state_hash_tamper(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    config, checkpoint, *_rest = _tiny_signed_x_runtime_checkpoint(tmp_path)
+    _mock_tiny_global_residual_runtime(monkeypatch)
+    tensors = load_file(checkpoint / "adapter.safetensors")
+    tensors["signed_x_scene_residual.output_projection.weight"].view(-1)[0].add_(0.125)
+    save_file(tensors, checkpoint / "adapter.safetensors")
+
+    with pytest.raises(ValueError, match="Signed-X scene residual state mismatch"):
+        StaticChatRuntime.load(config, "scene_000001", checkpoint)
+
+
+def test_static_chat_rejects_rehashed_signed_x_anchor_tamper(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    config, checkpoint, *_rest = _tiny_signed_x_runtime_checkpoint(tmp_path)
+    _mock_tiny_global_residual_runtime(monkeypatch)
+    tensors = load_file(checkpoint / "adapter.safetensors")
+    tensors["signed_x_scene_residual.signed_x_anchors"].view(-1)[0].add_(0.125)
+    save_file(tensors, checkpoint / "adapter.safetensors")
+    metadata_path = checkpoint / "metadata.json"
+    metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
+    signed_x_state = {
+        name: value
+        for name, value in tensors.items()
+        if name.startswith("signed_x_scene_residual.")
+    }
+    metadata["signed_x_scene_residual_state_sha256"] = tensor_state_sha256(signed_x_state)
+    metadata_path.write_text(json.dumps(metadata, indent=2) + "\n", encoding="utf-8")
+
+    with pytest.raises(ValueError, match="signed-X anchors"):
+        StaticChatRuntime.load(config, "scene_000001", checkpoint)
 
 
 @pytest.mark.parametrize(

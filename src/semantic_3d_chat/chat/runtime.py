@@ -40,6 +40,7 @@ from semantic_3d_chat.language.prefix_injection import (
     scene_prefix_after_bos_setting,
 )
 from semantic_3d_chat.scene_encoder.global_residual import (
+    ZERO_SPATIAL_MEAN_CONTENT_GATE_V1,
     GlobalSceneResidual,
     apply_global_scene_residual,
     construct_global_scene_residual,
@@ -47,6 +48,13 @@ from semantic_3d_chat.scene_encoder.global_residual import (
 )
 from semantic_3d_chat.scene_encoder.map_io import MapTensorData, load_map_tensors
 from semantic_3d_chat.scene_encoder.projector import SceneTokenizer, SceneTokenizerOutput
+from semantic_3d_chat.scene_encoder.signed_x_residual import (
+    SignedXSceneResidual,
+    apply_signed_x_scene_residual,
+    construct_signed_x_scene_residual,
+    frozen_v18_centered_content_values,
+    signed_x_scene_residual_settings,
+)
 from semantic_3d_chat.training.checkpointing import (
     load_adapter_checkpoint,
     module_collection_state_sha256,
@@ -150,6 +158,103 @@ def _validate_global_scene_residual_state(
     return audit
 
 
+def _validate_signed_x_scene_residual_state(
+    module: SignedXSceneResidual,
+    *,
+    expected_parameter_count: object,
+    context: str,
+) -> dict[str, Any]:
+    """Fail before inference on signed-X state or parameter-surface drift."""
+
+    audit = module.validate_structural_state()
+    observed = module.parameter_count
+    if (
+        isinstance(expected_parameter_count, bool)
+        or not isinstance(expected_parameter_count, int)
+        or expected_parameter_count != observed
+    ):
+        raise ValueError(
+            f"Signed-X scene residual parameter-count mismatch during {context}: "
+            f"checkpoint={expected_parameter_count} runtime={observed}"
+        )
+    if audit.get("parameter_count") != observed:
+        raise RuntimeError("Signed-X scene residual structural audit reported a stale count")
+    return audit
+
+
+def _signed_x_frozen_base_provenance_mismatch(
+    metadata: dict[str, Any],
+) -> dict[str, Any] | None:
+    """Require explicit evidence that V19 loaded and froze its trained V18 base."""
+
+    mismatch: dict[str, Any] = {}
+    base_hash = metadata.get("global_scene_residual_state_sha256")
+    frozen_hash = metadata.get("frozen_global_scene_residual_state_sha256")
+    if (
+        not isinstance(base_hash, str)
+        or re.fullmatch(r"[0-9a-f]{64}", base_hash) is None
+        or frozen_hash != base_hash
+    ):
+        mismatch["frozen_global_scene_residual_state_sha256"] = {
+            "checkpoint": frozen_hash,
+            "required": base_hash,
+        }
+
+    signed_equivalence = metadata.get("signed_x_scene_residual_zero_output_equivalence")
+    required_equivalence = {
+        "verified": True,
+        "base": "loaded_frozen_global_scene_residual",
+        "question_dependent_scene_processing": False,
+        "all_scene_slots_accounted": True,
+    }
+    if not isinstance(signed_equivalence, dict):
+        mismatch["signed_x_scene_residual_zero_output_equivalence"] = {
+            "checkpoint": signed_equivalence,
+            "required": required_equivalence,
+        }
+    else:
+        equivalence_mismatch = {
+            key: {"checkpoint": signed_equivalence.get(key), "required": value}
+            for key, value in required_equivalence.items()
+            if signed_equivalence.get(key) != value
+        }
+        if equivalence_mismatch:
+            mismatch["signed_x_scene_residual_zero_output_equivalence"] = equivalence_mismatch
+
+    provenance = metadata.get("initialization_provenance")
+    signed_initial_hash = metadata.get("signed_x_scene_residual_initial_state_sha256")
+    required_provenance = {
+        "schema_version": 4,
+        "mode": "frozen_v18_residual_base_plus_zero_output_signed_x_residual",
+        "source_global_scene_residual_state_sha256": base_hash,
+        "expected_source_global_scene_residual_state_sha256": base_hash,
+        "global_scene_residual_frozen": True,
+        "signed_x_scene_residual_initial_state_sha256": signed_initial_hash,
+        "signed_x_scene_residual_zero_output": True,
+        "optimizer_state_loaded": False,
+        "history_loaded": False,
+    }
+    if not isinstance(provenance, dict):
+        mismatch["initialization_provenance"] = {
+            "checkpoint": provenance,
+            "required": required_provenance,
+        }
+    else:
+        provenance_mismatch = {
+            key: {"checkpoint": provenance.get(key), "required": value}
+            for key, value in required_provenance.items()
+            if provenance.get(key) != value
+        }
+        if provenance_mismatch:
+            mismatch["initialization_provenance"] = provenance_mismatch
+    if metadata.get("train_signed_x_scene_residual_only") is not True:
+        mismatch["train_signed_x_scene_residual_only"] = {
+            "checkpoint": metadata.get("train_signed_x_scene_residual_only"),
+            "required": True,
+        }
+    return mismatch or None
+
+
 def validate_checkpoint_contract(
     metadata: dict[str, Any],
     config: dict[str, Any],
@@ -173,7 +278,15 @@ def validate_checkpoint_contract(
         "config_hash",
     }
     scene_tokenizer_contract = _scene_tokenizer_contract(config)
-    residual_contract = global_scene_residual_settings(config).contract()
+    residual_settings = global_scene_residual_settings(config)
+    residual_contract = residual_settings.contract()
+    signed_x_settings = signed_x_scene_residual_settings(config)
+    signed_x_contract = signed_x_settings.contract()
+    checkpoint_signed_x_contract = metadata.get("signed_x_scene_residual")
+    checkpoint_signed_x_enabled = bool(
+        isinstance(checkpoint_signed_x_contract, dict)
+        and checkpoint_signed_x_contract.get("enabled") is True
+    )
     uses_aligned_bypass = any(
         not _equal_number(value, _SCENE_TOKENIZER_CONTRACT_DEFAULTS[key])
         for key, value in scene_tokenizer_contract.items()
@@ -189,6 +302,20 @@ def validate_checkpoint_contract(
                 "global_scene_residual_initial_state_sha256",
                 "global_scene_residual_state_sha256",
                 "global_scene_residual_zero_output_equivalence",
+                "question_dependent_scene_processing",
+            }
+        )
+    if signed_x_contract["enabled"] or checkpoint_signed_x_enabled:
+        required.update(
+            {
+                "signed_x_scene_residual",
+                "signed_x_scene_residual_parameter_count",
+                "signed_x_scene_residual_initial_state_sha256",
+                "signed_x_scene_residual_state_sha256",
+                "signed_x_scene_residual_zero_output_equivalence",
+                "frozen_global_scene_residual_state_sha256",
+                "initialization_provenance",
+                "train_signed_x_scene_residual_only",
                 "question_dependent_scene_processing",
             }
         )
@@ -234,6 +361,36 @@ def validate_checkpoint_contract(
             "checkpoint": metadata.get("global_scene_residual"),
             "runtime": residual_contract,
         }
+    if (
+        "signed_x_scene_residual" in metadata
+        and metadata.get("signed_x_scene_residual") != signed_x_contract
+    ):
+        mismatches["signed_x_scene_residual"] = {
+            "checkpoint": metadata.get("signed_x_scene_residual"),
+            "runtime": signed_x_contract,
+        }
+    signed_x_base_provenance_mismatch = None
+    if signed_x_contract["enabled"]:
+        if not residual_contract["enabled"]:
+            mismatches["signed_x_global_scene_residual_base"] = {
+                "checkpoint": metadata.get("global_scene_residual"),
+                "runtime": "enabled centered V18 global residual required",
+            }
+        elif residual_settings.architecture_version != ZERO_SPATIAL_MEAN_CONTENT_GATE_V1:
+            mismatches["signed_x_global_scene_residual_base"] = {
+                "checkpoint": metadata.get("global_scene_residual"),
+                "runtime": ZERO_SPATIAL_MEAN_CONTENT_GATE_V1,
+            }
+        if metadata.get("signed_x_scene_residual_initial_state_sha256") != (
+            signed_x_settings.expected_initial_state_sha256
+        ):
+            mismatches["signed_x_scene_residual_initial_state_sha256"] = {
+                "checkpoint": metadata.get("signed_x_scene_residual_initial_state_sha256"),
+                "runtime": signed_x_settings.expected_initial_state_sha256,
+            }
+        signed_x_base_provenance_mismatch = _signed_x_frozen_base_provenance_mismatch(metadata)
+        if signed_x_base_provenance_mismatch is not None:
+            mismatches["signed_x_frozen_v18_base_provenance"] = signed_x_base_provenance_mismatch
     if residual_contract["enabled"]:
         if metadata.get("global_scene_residual_initial_state_sha256") != residual_contract.get(
             "expected_initial_state_sha256"
@@ -243,10 +400,20 @@ def validate_checkpoint_contract(
                 "runtime": residual_contract.get("expected_initial_state_sha256"),
             }
         equivalence = metadata.get("global_scene_residual_zero_output_equivalence")
-        if not isinstance(equivalence, dict) or equivalence.get("verified") is not True:
+        allow_loaded_signed_x_base = bool(
+            signed_x_contract["enabled"]
+            and equivalence is None
+            and signed_x_base_provenance_mismatch is None
+        )
+        if not allow_loaded_signed_x_base and (
+            not isinstance(equivalence, dict) or equivalence.get("verified") is not True
+        ):
             mismatches["global_scene_residual_zero_output_equivalence"] = {
                 "checkpoint": equivalence,
-                "runtime": "verified update-0 equivalence required",
+                "runtime": (
+                    "verified update-0 equivalence, or explicit frozen loaded V18 base "
+                    "provenance for signed-X"
+                ),
             }
         if metadata.get("question_dependent_scene_processing") is not False:
             mismatches["question_dependent_scene_processing"] = {
@@ -365,6 +532,7 @@ class StaticChatRuntime:
         map_data: MapTensorData,
         scene_model: SceneTokenizer,
         global_scene_residual: GlobalSceneResidual | None = None,
+        signed_x_scene_residual: SignedXSceneResidual | None = None,
         composer: ContinuousPrefixComposer,
         grounding: QuestionGroundingHead,
         warnings: list[str] | None = None,
@@ -387,6 +555,23 @@ class StaticChatRuntime:
                 self.global_scene_residual,
                 expected_parameter_count=self.checkpoint_metadata.get(
                     "global_scene_residual_parameter_count"
+                ),
+                context="runtime device initialization",
+            )
+        self.signed_x_scene_residual = (
+            None if signed_x_scene_residual is None else signed_x_scene_residual.eval()
+        )
+        if self.signed_x_scene_residual is not None:
+            if self.global_scene_residual is None:
+                raise ValueError("Signed-X scene residual requires a loaded global residual base")
+            if self.global_scene_residual.architecture_version != ZERO_SPATIAL_MEAN_CONTENT_GATE_V1:
+                raise ValueError(
+                    "Signed-X scene residual requires the centered-content V18 global base"
+                )
+            _validate_signed_x_scene_residual_state(
+                self.signed_x_scene_residual,
+                expected_parameter_count=self.checkpoint_metadata.get(
+                    "signed_x_scene_residual_parameter_count"
                 ),
                 context="runtime device initialization",
             )
@@ -414,8 +599,25 @@ class StaticChatRuntime:
         started = time.perf_counter()
         with torch.inference_mode():
             self.core_scene_output = self._encode_complete_scene()
-            self.scene_output = apply_global_scene_residual(
+            centered_content = (
+                None
+                if self.signed_x_scene_residual is None
+                else frozen_v18_centered_content_values(
+                    self.global_scene_residual,
+                    self.core_scene_output.scene_tokens,
+                )
+            )
+            self.global_scene_output = apply_global_scene_residual(
                 self.core_scene_output, self.global_scene_residual
+            )
+            self.scene_output = (
+                self.global_scene_output
+                if self.signed_x_scene_residual is None
+                else apply_signed_x_scene_residual(
+                    self.global_scene_output,
+                    self.signed_x_scene_residual,
+                    centered_content,
+                )
             )
             model_dtype = next(self.language.model.parameters()).dtype
             lm_scene_tokens = self.scene_output.scene_tokens.to(dtype=model_dtype)
@@ -516,6 +718,40 @@ class StaticChatRuntime:
                 expected_parameter_count=metadata.get("global_scene_residual_parameter_count"),
                 context="runtime deterministic construction",
             )
+        signed_x_scene_residual = construct_signed_x_scene_residual(
+            config,
+            scene_dim=language.hidden_size,
+            latent_count=int(config["scene_encoder"]["global_latents"]),
+            content_dim=(0 if global_scene_residual is None else global_scene_residual.width),
+        )
+        if signed_x_scene_residual is not None:
+            if global_scene_residual is None:
+                raise ValueError("Signed-X scene residual requires a global residual base")
+            if global_scene_residual.architecture_version != ZERO_SPATIAL_MEAN_CONTENT_GATE_V1:
+                raise ValueError(
+                    "Signed-X scene residual requires the centered-content V18 global base"
+                )
+            _validate_signed_x_scene_residual_state(
+                signed_x_scene_residual,
+                expected_parameter_count=metadata.get("signed_x_scene_residual_parameter_count"),
+                context="runtime deterministic construction",
+            )
+            observed_initial_signed_x_hash = module_collection_state_sha256(
+                {"signed_x_scene_residual": signed_x_scene_residual}
+            )
+            expected_initial_signed_x_hash = signed_x_scene_residual_settings(
+                config
+            ).expected_initial_state_sha256
+            if observed_initial_signed_x_hash != expected_initial_signed_x_hash:
+                raise ValueError(
+                    "Signed-X scene residual deterministic initial-state mismatch: "
+                    f"configured={expected_initial_signed_x_hash} "
+                    f"runtime={observed_initial_signed_x_hash}"
+                )
+            if torch.count_nonzero(signed_x_scene_residual.output_projection.weight).item() != 0:
+                raise RuntimeError(
+                    "Fresh signed-X scene residual does not preserve its loaded V18 base"
+                )
         composer = ContinuousPrefixComposer(
             language.hidden_size,
             scene_prefix_after_bos=scene_prefix_after_bos_setting(config),
@@ -537,6 +773,8 @@ class StaticChatRuntime:
         checkpoint_modules = dict(scene_checkpoint_modules)
         if global_scene_residual is not None:
             checkpoint_modules["global_scene_residual"] = global_scene_residual
+        if signed_x_scene_residual is not None:
+            checkpoint_modules["signed_x_scene_residual"] = signed_x_scene_residual
         if lora_installation is not None:
             checkpoint_modules.update(lora_installation.state_modules())
         loaded_metadata = load_adapter_checkpoint(
@@ -558,6 +796,7 @@ class StaticChatRuntime:
         if lora_installation is not None:
             validate_lora_banks_checkpoint_state(metadata, lora_installation)
             language.model.requires_grad_(False)
+        observed_residual_hash = None
         if global_scene_residual is not None:
             _validate_global_scene_residual_state(
                 global_scene_residual,
@@ -573,10 +812,33 @@ class StaticChatRuntime:
                     f"checkpoint={metadata.get('global_scene_residual_state_sha256')} "
                     f"runtime={observed_residual_hash}"
                 )
+        if signed_x_scene_residual is not None:
+            if observed_residual_hash != metadata.get("frozen_global_scene_residual_state_sha256"):
+                raise ValueError(
+                    "Signed-X frozen global residual base mismatch or tamper detected: "
+                    f"checkpoint={metadata.get('frozen_global_scene_residual_state_sha256')} "
+                    f"runtime={observed_residual_hash}"
+                )
+            _validate_signed_x_scene_residual_state(
+                signed_x_scene_residual,
+                expected_parameter_count=metadata.get("signed_x_scene_residual_parameter_count"),
+                context="runtime checkpoint load",
+            )
+            observed_signed_x_hash = module_collection_state_sha256(
+                {"signed_x_scene_residual": signed_x_scene_residual}
+            )
+            if observed_signed_x_hash != metadata.get("signed_x_scene_residual_state_sha256"):
+                raise ValueError(
+                    "Signed-X scene residual state mismatch or tamper detected: "
+                    f"checkpoint={metadata.get('signed_x_scene_residual_state_sha256')} "
+                    f"runtime={observed_signed_x_hash}"
+                )
         device = language.device
         scene_model = scene_model.to(device)
         if global_scene_residual is not None:
             global_scene_residual = global_scene_residual.to(device)
+        if signed_x_scene_residual is not None:
+            signed_x_scene_residual = signed_x_scene_residual.to(device)
         composer = composer.to(device)
         grounding = grounding.to(device)
         map_data = map_data.to(device)
@@ -589,6 +851,7 @@ class StaticChatRuntime:
             map_data=map_data,
             scene_model=scene_model,
             global_scene_residual=global_scene_residual,
+            signed_x_scene_residual=signed_x_scene_residual,
             composer=composer,
             grounding=grounding,
             warnings=warnings,
@@ -652,6 +915,18 @@ class StaticChatRuntime:
             ),
             "global_scene_residual_state_sha256": self.checkpoint_metadata.get(
                 "global_scene_residual_state_sha256"
+            ),
+            "signed_x_scene_residual": self.checkpoint_metadata.get(
+                "signed_x_scene_residual", {"schema_version": 1, "enabled": False}
+            ),
+            "signed_x_scene_residual_initial_state_sha256": self.checkpoint_metadata.get(
+                "signed_x_scene_residual_initial_state_sha256"
+            ),
+            "signed_x_scene_residual_state_sha256": self.checkpoint_metadata.get(
+                "signed_x_scene_residual_state_sha256"
+            ),
+            "frozen_global_scene_residual_state_sha256": self.checkpoint_metadata.get(
+                "frozen_global_scene_residual_state_sha256"
             ),
             "checkpoint": str(self.checkpoint_path),
             "warnings": self.warnings,

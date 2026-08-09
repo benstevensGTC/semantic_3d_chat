@@ -9,13 +9,17 @@ from semantic_3d_chat.scene_encoder.global_residual import (
     ZERO_SPATIAL_MEAN_CONTENT_GATE_V1,
     GlobalSceneResidual,
 )
+from semantic_3d_chat.scene_encoder.signed_x_residual import SignedXSceneResidual
 from semantic_3d_chat.training.train_adapter import (
     build_adapter_optimizer,
     declared_global_scene_residual_parameter_count,
+    declared_signed_x_scene_residual_parameter_count,
     explicit_adamw_options,
     global_scene_residual_resume_metadata_mismatch,
+    signed_x_scene_residual_resume_metadata_mismatch,
     v18_stage_execution_metadata,
     validate_global_scene_residual_state,
+    validate_signed_x_scene_residual_state,
 )
 
 
@@ -47,6 +51,21 @@ def test_declared_residual_parameter_count_is_optional_and_strict() -> None:
             )
     with pytest.raises(TypeError, match="mapping"):
         declared_global_scene_residual_parameter_count({"experiment": []})
+
+
+def test_declared_signed_x_parameter_count_is_optional_and_strict() -> None:
+    assert declared_signed_x_scene_residual_parameter_count({}) is None
+    assert (
+        declared_signed_x_scene_residual_parameter_count(
+            {"experiment": {"signed_x_residual_parameter_count": 196_608}}
+        )
+        == 196_608
+    )
+    for value in (True, 0, -1, 3.5, "196608"):
+        with pytest.raises(ValueError, match="positive integer"):
+            declared_signed_x_scene_residual_parameter_count(
+                {"experiment": {"signed_x_residual_parameter_count": value}}
+            )
 
 
 def test_explicit_adamw_options_are_complete_and_fail_closed() -> None:
@@ -137,9 +156,7 @@ def test_v18_stage_execution_metadata_is_exact_and_optional() -> None:
         "stage_2_target_total_optimizer_updates": 4,
     }
 
-    observed = v18_stage_execution_metadata(
-        {"v18_screen": {"execution_stages": stages}}
-    )
+    observed = v18_stage_execution_metadata({"v18_screen": {"execution_stages": stages}})
 
     assert observed == {
         key: value
@@ -148,9 +165,7 @@ def test_v18_stage_execution_metadata_is_exact_and_optional() -> None:
     }
     changed = {**stages, "stage_2_load_history": False}
     with pytest.raises(ValueError, match="staged-resume contract"):
-        v18_stage_execution_metadata(
-            {"v18_screen": {"execution_stages": changed}}
-        )
+        v18_stage_execution_metadata({"v18_screen": {"execution_stages": changed}})
 
 
 def test_training_state_validation_enforces_declared_count_and_all_state() -> None:
@@ -209,3 +224,73 @@ def test_resume_metadata_requires_exact_initial_hash_and_parameter_count() -> No
         "global_scene_residual_initial_state_sha256",
         "global_scene_residual_parameter_count",
     }
+
+
+def test_signed_x_training_state_and_resume_metadata_are_strict() -> None:
+    module = SignedXSceneResidual(scene_dim=8, latent_count=4, content_dim=3)
+    initial_hash = "c" * 64
+
+    audit = validate_signed_x_scene_residual_state(
+        module,
+        expected_parameter_count=24,
+        context="test",
+    )
+    assert audit["parameter_count"] == 24
+    assert (
+        signed_x_scene_residual_resume_metadata_mismatch(
+            {
+                "signed_x_scene_residual_initial_state_sha256": initial_hash,
+                "signed_x_scene_residual_parameter_count": 24,
+            },
+            module,
+            expected_initial_state_sha256=initial_hash,
+        )
+        is None
+    )
+    with pytest.raises(ValueError, match="parameter-count mismatch"):
+        validate_signed_x_scene_residual_state(
+            module,
+            expected_parameter_count=1,
+            context="test",
+        )
+    mismatch = signed_x_scene_residual_resume_metadata_mismatch(
+        {
+            "signed_x_scene_residual_initial_state_sha256": "d" * 64,
+            "signed_x_scene_residual_parameter_count": 1,
+        },
+        module,
+        expected_initial_state_sha256=initial_hash,
+    )
+    assert mismatch is not None
+    assert set(mismatch) == {
+        "signed_x_scene_residual_initial_state_sha256",
+        "signed_x_scene_residual_parameter_count",
+    }
+
+
+def test_signed_x_optimizer_surface_has_one_named_output_group() -> None:
+    class _FrozenLoRA:
+        @staticmethod
+        def parameters() -> list[torch.nn.Parameter]:
+            return []
+
+    module = SignedXSceneResidual(scene_dim=8, latent_count=4, content_dim=3)
+    frozen = torch.nn.Parameter(torch.ones(2), requires_grad=False)
+    config = {
+        "training": {
+            "train_signed_x_scene_residual_only": True,
+            "learning_rate": 1.0e-4,
+            "weight_decay": 0.0,
+        }
+    }
+
+    optimizer, selected = build_adapter_optimizer(
+        config,
+        [frozen, *module.parameters()],
+        _FrozenLoRA(),  # type: ignore[arg-type]
+        None,
+    )
+
+    assert selected == [module.output_projection.weight]
+    assert [group["name"] for group in optimizer.param_groups] == ["signed_x_output_projection"]
+    assert optimizer.param_groups[0]["lr"] == 1.0e-4

@@ -15,6 +15,7 @@ from semantic_3d_chat.evaluation.v19_optimizer_state import (
 )
 from semantic_3d_chat.evaluation.v19_structural_preflight import (
     EXPECTED_ORDERED_UNIT_SHA256,
+    EXPECTED_PAIR_UNIT_SELECTION_SHA256,
     EXPECTED_SELECTION_SHA256,
     SIGNED_X_OPTIMIZER_GROUP_NAME,
     V19StructuralPreflightViolation,
@@ -56,23 +57,28 @@ def _record(scene_id: str, question_id: str) -> SimpleNamespace:
 
 
 def _unit(index: int, pair_id: str = "pair_000001") -> SimpleNamespace:
+    reference = _record("scene_000003", f"q_{index:04d}")
+    counterfactual = _record("scene_000004", f"q_{index + 20:04d}")
     return SimpleNamespace(
         pair_id=pair_id,
         question_key=f"cfq_{index:04d}",
-        reference=_record("scene_000003", f"q_{index:04d}"),
-        counterfactual=_record("scene_000004", f"q_{index + 20:04d}"),
+        reference=reference,
+        counterfactual=counterfactual,
+        scene_ids=(reference.scene_id, counterfactual.scene_id),
+        records=(reference, counterfactual),
     )
 
 
 def test_current_v19_config_satisfies_strict_no_step_contract() -> None:
     contract = validate_v19_config_contract(load_config(CONFIG_PATH))
 
-    assert contract["role"] == "v19_exact_ordered_epoch1_signed_x_structural_preflight"
+    assert contract["role"] == "v19_exact_ordered_signed_x_structural_preflight"
     assert contract["optimizer"] == _optimizer_contract()
     assert contract["expected_hashes"]["selection_sha256"] == EXPECTED_SELECTION_SHA256
+    assert contract["expected_hashes"]["ordered_unit_sha256"] == EXPECTED_ORDERED_UNIT_SHA256
     assert (
-        contract["expected_hashes"]["ordered_unit_sha256"]
-        == EXPECTED_ORDERED_UNIT_SHA256
+        contract["expected_hashes"]["pair_unit_selection_sha256"]
+        == EXPECTED_PAIR_UNIT_SELECTION_SHA256
     )
     assert contract["maximum_delta_to_core_rms_ratio"] == 0.01
     assert len(contract["contract_sha256"]) == 64
@@ -82,9 +88,9 @@ def test_current_v19_config_satisfies_strict_no_step_contract() -> None:
     "mutate",
     [
         lambda config: config["training"]["optimizer"].update(learning_rate=2.0e-4),
-        lambda config: config["training"]["pair_objectives"]["by_pair"][
-            "pair_000001"
-        ].update(candidate_margin=1.0),
+        lambda config: config["training"]["pair_objectives"]["by_pair"]["pair_000001"].update(
+            candidate_margin=1.0
+        ),
         lambda config: config.update(structural_preflight={"required": True}),
         lambda config: config["experiment"].update(source_checkpoint_epoch=3),
     ],
@@ -110,6 +116,7 @@ def test_pair_unit_and_order_hashes_are_canonical_and_distinct() -> None:
 
     assert selection == repeated_selection
     assert selection_hash == repeated_hash
+    assert set(selection[0]) == {"pair_id", "question_key", "scene_ids", "question_ids"}
     assert order[0]["microstep"] == 1
     assert order_hash != reversed_hash
 

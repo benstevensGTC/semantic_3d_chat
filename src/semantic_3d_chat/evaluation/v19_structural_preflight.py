@@ -43,7 +43,7 @@ from semantic_3d_chat.scene_encoder.global_residual import (
 )
 from semantic_3d_chat.scene_encoder.signed_x_residual import SIGNED_X_MOMENT_V1
 
-V19_PREFLIGHT_ROLE = "v19_exact_ordered_epoch1_signed_x_structural_preflight"
+V19_PREFLIGHT_ROLE = "v19_exact_ordered_signed_x_structural_preflight"
 V19_SCREEN_ROLE = "signed_x_moment_architecture_screen"
 V19_EXPERIMENT_ROLE = "exploratory_reflection_odd_scene_residual_screen_v19"
 SIGNED_X_OPTIMIZER_GROUP_NAME = V19_SIGNED_X_OPTIMIZER_GROUP_NAME
@@ -56,6 +56,9 @@ MIRROR_PAIR_ID = "pair_000003"
 EXPECTED_SELECTION_SHA256 = "7f0714e3151c9ddb57c1da95a457820a833e490c070881a88a9fee4a9168f933"
 EXPECTED_ORDERED_UNIT_SHA256 = "1d77157b18636abc6a5dd4a2d63bc62861d7c8147832105d40b87f1470fa3359"
 EXPECTED_PAIR_MEMBERSHIP_SHA256 = "99ee448c23fb71b7269a353a54b2156ac55701847af170597dcc351af15cbcbe"
+EXPECTED_PAIR_UNIT_SELECTION_SHA256 = (
+    "d5928cb783339ef62fff5c14a8c7f85f90d3a7a6cb8edad0a784998082740d3e"
+)
 EXPECTED_SCENE_IDS = (
     "scene_000003",
     "scene_000004",
@@ -75,12 +78,8 @@ EXPECTED_SOURCE_LORA_SHA256 = {
     "extension_v13": "4eb90fb9b0bea579d14cfcb0f61ebd5b6d566fd600bd3d5e1bfe5177a39e1b34",
     "inherited_v12": "dec768bed654c8c4e16da0318857543ad54d8f5f68f4d24a9a87cd19ec706594",
 }
-EXPECTED_SOURCE_ADAPTER_SHA256 = (
-    "1a7946d2e40aaf4bf66dc570bff19fa8d6ba4425e4e0d59bd52b809bd23dae7a"
-)
-EXPECTED_SOURCE_METADATA_SHA256 = (
-    "4853355ef4810f284d9b36eca1f0f1ade71319f4f6f579a5b079ce6178eb2344"
-)
+EXPECTED_SOURCE_ADAPTER_SHA256 = "1a7946d2e40aaf4bf66dc570bff19fa8d6ba4425e4e0d59bd52b809bd23dae7a"
+EXPECTED_SOURCE_METADATA_SHA256 = "4853355ef4810f284d9b36eca1f0f1ade71319f4f6f579a5b079ce6178eb2344"
 
 
 class V19StructuralPreflightViolation(ValueError):
@@ -245,8 +244,7 @@ def validate_v19_config_contract(config: Mapping[str, Any]) -> dict[str, Any]:
     if (
         not signed_settings.enabled
         or signed_settings.architecture_version != SIGNED_X_MOMENT_V1
-        or signed_settings.expected_initial_state_sha256
-        != EXPECTED_SIGNED_X_INITIAL_STATE_SHA256
+        or signed_settings.expected_initial_state_sha256 != EXPECTED_SIGNED_X_INITIAL_STATE_SHA256
     ):
         _fail("V19 signed-X architecture or initial-state pin mismatch")
 
@@ -257,13 +255,9 @@ def validate_v19_config_contract(config: Mapping[str, Any]) -> dict[str, Any]:
         == "gemma4_color_mirror_signed_x_moment_v19",
         "initialize_from": training.get("initialize_from")
         == "data_gemma4/checkpoints/gemma4_color_mirror_centered_content_gate_v18/epoch_004",
-        "initialize_expected_adapter_sha256": training.get(
-            "initialize_expected_adapter_sha256"
-        )
+        "initialize_expected_adapter_sha256": training.get("initialize_expected_adapter_sha256")
         == EXPECTED_SOURCE_ADAPTER_SHA256,
-        "initialize_expected_metadata_sha256": training.get(
-            "initialize_expected_metadata_sha256"
-        )
+        "initialize_expected_metadata_sha256": training.get("initialize_expected_metadata_sha256")
         == EXPECTED_SOURCE_METADATA_SHA256,
         "initialize_expected_global_scene_residual_state_sha256": training.get(
             "initialize_expected_global_scene_residual_state_sha256"
@@ -280,9 +274,7 @@ def validate_v19_config_contract(config: Mapping[str, Any]) -> dict[str, Any]:
         "freeze_scene_adapter": training.get("freeze_scene_adapter") is True,
         "train_global_scene_residual_only": training.get("train_global_scene_residual_only")
         is False,
-        "train_signed_x_scene_residual_only": training.get(
-            "train_signed_x_scene_residual_only"
-        )
+        "train_signed_x_scene_residual_only": training.get("train_signed_x_scene_residual_only")
         is True,
         "epochs": training.get("epochs") == 4,
         "batch_size": training.get("batch_size") == 2,
@@ -299,14 +291,8 @@ def validate_v19_config_contract(config: Mapping[str, Any]) -> dict[str, Any]:
         "pair_max_units_per_pair": training.get("pair_max_units_per_pair") == 6,
         "pair_ranking_mode": training.get("pair_ranking_mode") == "candidate_logit",
         "grounding_weight": float(training.get("grounding_weight", math.nan)) == 0.0,
-        "grounding_anchor_weight": float(
-            training.get("grounding_anchor_weight", math.nan)
-        )
-        == 0.0,
-        "latent_diversity_weight": float(
-            training.get("latent_diversity_weight", math.nan)
-        )
-        == 0.0,
+        "grounding_anchor_weight": float(training.get("grounding_anchor_weight", math.nan)) == 0.0,
+        "latent_diversity_weight": float(training.get("latent_diversity_weight", math.nan)) == 0.0,
         "paired_scene_separation_weight": float(
             training.get("paired_scene_separation_weight", math.nan)
         )
@@ -367,15 +353,11 @@ def validate_v19_config_contract(config: Mapping[str, Any]) -> dict[str, Any]:
     experiment_checks = {
         "schema_version": experiment.get("schema_version") == 1,
         "role": experiment.get("role") == V19_EXPERIMENT_ROLE,
-        "question_dependent_scene_processing": experiment.get(
-            "question_dependent_scene_processing"
-        )
+        "question_dependent_scene_processing": experiment.get("question_dependent_scene_processing")
         is False,
         "source_checkpoint_epoch": experiment.get("source_checkpoint_epoch") == 4,
         "residual_parameter_count": experiment.get("residual_parameter_count") == 400_128,
-        "signed_x_residual_parameter_count": experiment.get(
-            "signed_x_residual_parameter_count"
-        )
+        "signed_x_residual_parameter_count": experiment.get("signed_x_residual_parameter_count")
         == 196_608,
         "source_scene_state_sha256": experiment.get("source_scene_state_sha256")
         == EXPECTED_SOURCE_SCENE_STATE_SHA256,
@@ -426,8 +408,7 @@ def validate_v19_config_contract(config: Mapping[str, Any]) -> dict[str, Any]:
     language = _mapping(config.get("language"), "language")
     language_checks = {
         "model_id": language.get("model_id") == "google/gemma-4-E2B-it",
-        "revision": language.get("revision")
-        == "3e22461f65e89153144f8adb70e3b8c2cc9845a7",
+        "revision": language.get("revision") == "3e22461f65e89153144f8adb70e3b8c2cc9845a7",
         "backend": language.get("backend") == "gemma4",
         "dtype": language.get("dtype") == "bfloat16",
         "scene_prefix_after_bos": language.get("scene_prefix_after_bos") is True,
@@ -454,12 +435,11 @@ def validate_v19_config_contract(config: Mapping[str, Any]) -> dict[str, Any]:
             "source_adapter_sha256": EXPECTED_SOURCE_ADAPTER_SHA256,
             "source_metadata_sha256": EXPECTED_SOURCE_METADATA_SHA256,
             "source_scene_state_sha256": EXPECTED_SOURCE_SCENE_STATE_SHA256,
-            "source_global_scene_residual_state_sha256": (
-                EXPECTED_SOURCE_GLOBAL_RESIDUAL_SHA256
-            ),
+            "source_global_scene_residual_state_sha256": (EXPECTED_SOURCE_GLOBAL_RESIDUAL_SHA256),
             "source_lora_bank_state_sha256": dict(EXPECTED_SOURCE_LORA_SHA256),
             "initial_signed_x_state_sha256": EXPECTED_SIGNED_X_INITIAL_STATE_SHA256,
             "selection_sha256": EXPECTED_SELECTION_SHA256,
+            "pair_unit_selection_sha256": EXPECTED_PAIR_UNIT_SELECTION_SHA256,
             "ordered_unit_sha256": EXPECTED_ORDERED_UNIT_SHA256,
             "pair_membership_sha256": EXPECTED_PAIR_MEMBERSHIP_SHA256,
         },
@@ -495,25 +475,23 @@ def ordered_curriculum_evidence(curriculum: Sequence[Any]) -> tuple[list[dict[st
 
 
 def pair_unit_selection_evidence(units: Sequence[Any]) -> tuple[list[dict[str, Any]], str]:
-    """Hash the selected pair units independently of their epoch schedule."""
+    """Hash pair units using the trainer's persisted selection-report schema."""
 
     entries = sorted(
         (
             {
                 "pair_id": str(unit.pair_id),
                 "question_key": str(unit.question_key),
-                "reference_scene_id": str(unit.reference.scene_id),
-                "reference_question_id": str(unit.reference.question_id),
-                "counterfactual_scene_id": str(unit.counterfactual.scene_id),
-                "counterfactual_question_id": str(unit.counterfactual.question_id),
+                "scene_ids": [str(scene_id) for scene_id in unit.scene_ids],
+                "question_ids": [str(record.question_id) for record in unit.records],
             }
             for unit in units
         ),
         key=lambda value: (
             value["pair_id"],
             value["question_key"],
-            value["reference_scene_id"],
-            value["counterfactual_scene_id"],
+            value["question_ids"][0],
+            value["question_ids"][1],
         ),
     )
     return entries, canonical_sha256(entries)
@@ -594,9 +572,7 @@ def exact_clone_adamw_evidence(
         "pre_clip_gradient_l2_norm": pre_clip_norm,
         "clip_returned_pre_clip_gradient_l2_norm": float(returned_norm.detach().cpu()),
         "post_clip_gradient_l2_norm": float(clone_parameter.grad.detach().float().norm().cpu()),
-        "gradient_sha256": tensor_state_sha256(
-            {"output_projection.weight": unclipped_gradient}
-        ),
+        "gradient_sha256": tensor_state_sha256({"output_projection.weight": unclipped_gradient}),
         "clipped_gradient_sha256": tensor_state_sha256(
             {"output_projection.weight": clipped_gradient}
         ),
@@ -676,8 +652,7 @@ def evaluate_v19_structural_gate(
             float(value["delta_to_core_rms_ratio"]) for value in raw_scene_metrics.values()
         ),
         "maximum_observed_effective_delta_to_core_rms_ratio": max(
-            float(value["delta_to_core_rms_ratio"])
-            for value in effective_scene_metrics.values()
+            float(value["delta_to_core_rms_ratio"]) for value in effective_scene_metrics.values()
         ),
         "passed": passed,
     }
@@ -749,7 +724,8 @@ def _zero_output_equivalence(
     return {
         "verified": verified,
         "question_dependent_scene_processing": False,
-        "base": "loaded_frozen_v18_epoch4_global_scene_residual",
+        "base": "loaded_frozen_global_scene_residual",
+        "all_scene_slots_accounted": True,
         "scene_count": len(scenes),
         "scene_prefixes": scenes,
     }
@@ -801,7 +777,10 @@ def run_preflight(config_path: str | Path, report_path: str | Path) -> dict[str,
         select_pair_only_records,
         validate_pair_objective_policy_coverage,
     )
-    from semantic_3d_chat.training.source_provenance import capture_git_source_provenance
+    from semantic_3d_chat.training.source_provenance import (
+        capture_git_source_provenance,
+        require_clean_committed_source,
+    )
     from semantic_3d_chat.training.train_adapter import (
         combine_pair_training_losses,
         construct_scene_tokenizer,
@@ -818,6 +797,10 @@ def run_preflight(config_path: str | Path, report_path: str | Path) -> dict[str,
     config = load_config(config_path)
     contract = validate_v19_config_contract(config)
     source_provenance = capture_git_source_provenance(PROJECT_ROOT)
+    try:
+        require_clean_committed_source(source_provenance)
+    except RuntimeError as error:
+        _fail(f"V19 preflight requires clean committed source: {error}")
     set_seed(int(config["seed"]))
     training = config["training"]
     pair_settings = pair_curriculum_settings(config)
@@ -841,6 +824,12 @@ def run_preflight(config_path: str | Path, report_path: str | Path) -> dict[str,
         _fail("V19 selected training-record hash mismatch")
     pair_units = build_exact_question_pair_units(records)
     selected_pair_units, pair_unit_selection_hash = pair_unit_selection_evidence(pair_units)
+    if pair_unit_selection_hash != EXPECTED_PAIR_UNIT_SELECTION_SHA256:
+        _fail(
+            "V19 selected pair-unit hash mismatch: "
+            f"expected={EXPECTED_PAIR_UNIT_SELECTION_SHA256} "
+            f"observed={pair_unit_selection_hash}"
+        )
     policy_coverage = validate_pair_objective_policy_coverage(
         pair_policies, sorted({unit.pair_id for unit in pair_units})
     )
@@ -903,9 +892,9 @@ def run_preflight(config_path: str | Path, report_path: str | Path) -> dict[str,
     feature_dims = {data.feature_dim for data in maps.values()}
     if len(feature_dims) != 1:
         _fail(f"V19 semantic feature dimensions differ: {sorted(feature_dims)}")
-    scene_model = construct_scene_tokenizer(
-        config, feature_dims.pop(), language.hidden_size
-    ).to(language.device)
+    scene_model = construct_scene_tokenizer(config, feature_dims.pop(), language.hidden_size).to(
+        language.device
+    )
     global_residual = construct_global_scene_residual(
         config,
         scene_dim=language.hidden_size,
@@ -939,9 +928,7 @@ def run_preflight(config_path: str | Path, report_path: str | Path) -> dict[str,
         int(config["scene_encoder"]["model_dim"]),
     ).to(language.device)
 
-    initial_global_hash = module_collection_state_sha256(
-        {"global_scene_residual": global_residual}
-    )
+    initial_global_hash = module_collection_state_sha256({"global_scene_residual": global_residual})
     if initial_global_hash != global_scene_residual_settings(config).expected_initial_state_sha256:
         _fail("V19 deterministic global residual initial-state mismatch before source load")
     initial_signed_hash = module_collection_state_sha256(
@@ -975,14 +962,13 @@ def run_preflight(config_path: str | Path, report_path: str | Path) -> dict[str,
         "global_scene_residual": global_residual,
         **lora.state_modules(),
     }
-    source_metadata = load_adapter_checkpoint(
-        source, source_modules, device=str(language.device)
-    )
+    source_metadata = load_adapter_checkpoint(source, source_modules, device=str(language.device))
     if source_metadata.get("epoch") != 4:
         _fail("V19 must initialize from exact V18 epoch four")
-    if source_metadata.get("global_scene_residual") != global_scene_residual_settings(
-        config
-    ).contract():
+    if (
+        source_metadata.get("global_scene_residual")
+        != global_scene_residual_settings(config).contract()
+    ):
         _fail("V19 source global residual metadata contract mismatch")
     validate_lora_banks_checkpoint_state(source_metadata, lora)
     composer.validate_native_boundary_embeddings(
@@ -1022,9 +1008,9 @@ def run_preflight(config_path: str | Path, report_path: str | Path) -> dict[str,
     for module in source_modules.values():
         module.requires_grad_(False).eval()
     signed_residual.requires_grad_(True).train()
-    if [name for name, parameter in signed_residual.named_parameters() if parameter.requires_grad] != [
-        "output_projection.weight"
-    ]:
+    if [
+        name for name, parameter in signed_residual.named_parameters() if parameter.requires_grad
+    ] != ["output_projection.weight"]:
         _fail("V19 fresh branch trainable surface is not exactly its output projection")
     structural_state = signed_residual.validate_structural_state()
     if structural_state.get("parameter_count") != 196_608:
@@ -1049,9 +1035,7 @@ def run_preflight(config_path: str | Path, report_path: str | Path) -> dict[str,
             for scene_id, data in maps.items()
         }
         centered_content = {
-            scene_id: frozen_v18_centered_content_values(
-                global_residual, output.scene_tokens
-            )
+            scene_id: frozen_v18_centered_content_values(global_residual, output.scene_tokens)
             for scene_id, output in core_outputs.items()
         }
         base_outputs = {
@@ -1075,9 +1059,7 @@ def run_preflight(config_path: str | Path, report_path: str | Path) -> dict[str,
         centered_content_evidence[scene_id] = {
             "shape": list(values.shape),
             "finite": bool(torch.isfinite(values32).all()),
-            "across_slot_mean_absolute_maximum": float(
-                values32.mean(dim=1).abs().max().cpu()
-            ),
+            "across_slot_mean_absolute_maximum": float(values32.mean(dim=1).abs().max().cpu()),
             "moment_rms": float(
                 signed_residual.moment_values(values).detach().square().mean().sqrt().cpu()
             ),
@@ -1248,9 +1230,7 @@ def run_preflight(config_path: str | Path, report_path: str | Path) -> dict[str,
             }
             effective_scene_metrics[scene_id] = {
                 **fp64_delta_metrics(base_tokens, effective_delta),
-                "delta_sha256": tensor_state_sha256(
-                    {"effective_cast_delta": effective_delta}
-                ),
+                "delta_sha256": tensor_state_sha256({"effective_cast_delta": effective_delta}),
                 "dtype": str(effective_delta.dtype).removeprefix("torch."),
             }
     scene_pair_by_id = {
@@ -1372,14 +1352,10 @@ def run_preflight(config_path: str | Path, report_path: str | Path) -> dict[str,
         "predicted_signed_x_state_sha256": clone_evidence[
             "predicted_signed_x_scene_residual_state_sha256"
         ],
-        "predicted_output_projection_sha256": clone_evidence[
-            "predicted_output_weight_sha256"
-        ],
+        "predicted_output_projection_sha256": clone_evidence["predicted_output_weight_sha256"],
         "optimizer_state_manifest": clone_evidence["canonical_adamw_state_manifest"],
         "optimizer_state_sha256": clone_evidence["canonical_adamw_state_sha256"],
-        "optimizer_state_tensor_sha256": clone_evidence[
-            "optimizer_state_tensor_sha256"
-        ],
+        "optimizer_state_tensor_sha256": clone_evidence["optimizer_state_tensor_sha256"],
         "changed_parameter_keys": clone_evidence["changed_parameter_keys"],
     }
     report = {
@@ -1403,9 +1379,7 @@ def run_preflight(config_path: str | Path, report_path: str | Path) -> dict[str,
         "source_provenance": source_provenance,
         "implementation_source": str(implementation_path.relative_to(PROJECT_ROOT)),
         "implementation_source_sha256": file_sha256(implementation_path),
-        "signed_x_implementation_source": str(
-            signed_implementation_path.relative_to(PROJECT_ROOT)
-        ),
+        "signed_x_implementation_source": str(signed_implementation_path.relative_to(PROJECT_ROOT)),
         "signed_x_implementation_source_sha256": file_sha256(signed_implementation_path),
         "source_checkpoint": str(source.relative_to(PROJECT_ROOT)),
         "source_checkpoint_epoch": source_metadata.get("epoch"),
@@ -1415,9 +1389,7 @@ def run_preflight(config_path: str | Path, report_path: str | Path) -> dict[str,
         "source_metadata_global_residual_state_sha256": source_metadata.get(
             "global_scene_residual_state_sha256"
         ),
-        "source_metadata_lora_bank_state_sha256": source_metadata.get(
-            "lora_bank_state_sha256"
-        ),
+        "source_metadata_lora_bank_state_sha256": source_metadata.get("lora_bank_state_sha256"),
         "initial_signed_x_state_sha256": initial_signed_hash,
         "live_source_state_sha256_before": live_source_state_before,
         "live_source_state_sha256_after": live_source_state_after,
@@ -1425,6 +1397,9 @@ def run_preflight(config_path: str | Path, report_path: str | Path) -> dict[str,
         "live_signed_x_state_sha256_before": live_signed_state_before,
         "live_signed_x_state_sha256_after": live_signed_state_after,
         "live_signed_x_state_unchanged": live_signed_state_unchanged,
+        "live_parameter_state_unchanged": (
+            live_source_state_unchanged and live_signed_state_unchanged
+        ),
         "selection_sha256": selection["selected_ids_sha256"],
         "pair_membership_sha256": pair_membership_hash,
         "pair_unit_selection_sha256": pair_unit_selection_hash,
@@ -1443,15 +1418,11 @@ def run_preflight(config_path: str | Path, report_path: str | Path) -> dict[str,
         "predicted_first_update": clone_evidence,
         # Repeated at top level to make a later exact stage-one verifier simple
         # and independent of report-layout traversal.
-        "predicted_output_weight_sha256": clone_evidence[
-            "predicted_output_weight_sha256"
-        ],
+        "predicted_output_weight_sha256": clone_evidence["predicted_output_weight_sha256"],
         "predicted_signed_x_scene_residual_state_sha256": clone_evidence[
             "predicted_signed_x_scene_residual_state_sha256"
         ],
-        "predicted_canonical_adamw_state_sha256": clone_evidence[
-            "canonical_adamw_state_sha256"
-        ],
+        "predicted_canonical_adamw_state_sha256": clone_evidence["canonical_adamw_state_sha256"],
         "predicted_canonical_adamw_state_manifest": clone_evidence[
             "canonical_adamw_state_manifest"
         ],
@@ -1492,6 +1463,7 @@ if __name__ == "__main__":  # pragma: no cover - local model command
 
 __all__ = [
     "COLOR_PAIR_ID",
+    "EXPECTED_PAIR_UNIT_SELECTION_SHA256",
     "MIRROR_PAIR_ID",
     "SIGNED_X_OPTIMIZER_GROUP_NAME",
     "V19_PREFLIGHT_ROLE",

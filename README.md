@@ -50,7 +50,9 @@ epoch 3, which preserved color at 12/12 sides and 6/6 units but reached only
 6/12 mirror sides and 0/6 complete mirror units. Neither arm met the declared
 continuation gate, so learning-rate tuning stopped without an extension or
 generation audit. V9 remains a color-wiring overfit milestone; v10-v17 are
-failed continuations, not promoted scene chatbots. Gemma held-out static QA,
+failed continuations, not promoted scene chatbots. V18's centered-content bridge
+also failed: it retained color at 12/12 sides and 6/6 units but reached only 5/12
+mirror sides and 0/6 units. Gemma held-out static QA,
 interactive chat, Gemma
 leakage claims, and language-conditioned robot navigation remain gated.
 
@@ -73,6 +75,12 @@ leakage claims, and language-conditioned robot navigation remain gated.
   is also frozen. The decoder receives continuous scene tokens, numeric geometry,
   and the user's question—never an environmental caption, label list, or oracle
   metadata.
+
+Gemma 4 is therefore used on both sides of the bridge: its native multimodal
+vision tower supplies the full-image patch field, and its causal language decoder
+receives the learned continuous 3D prefix. Directly chatting over rendered images
+is a useful baseline, but it bypasses the persistent fused 3D memory and does not
+satisfy the primary experiment.
 
 Gemma choices are configurable in `configs/gemma4_e2b.yaml` and its experiment
 overlays. They target the detected 24 GB Apple Silicon machine. `configs/default.yaml`,
@@ -804,6 +812,52 @@ The machine-readable evidence is
 [`v18_epoch_screen.json`](reports/gemma4/metrics/v18_epoch_screen.json). The
 final screen file SHA-256 is
 `f1d406dd9ba9b93488c07c905235f1045d2d904241f4e8a7c62f9e43d4854aa5`.
+
+#### Gemma V19 signed-X moment screen — staged, not yet behaviorally accepted
+
+V18's frozen scene prefixes already separate the mirror pair more strongly than
+the color pair, but its learned residual update aligns about 5.8 times less with
+that mirror signal. V19 tests a narrower architectural hypothesis: an explicit
+reflection-odd continuous branch may make the existing geometric signal readable
+without changing the full-scene tokenizer or language model. It initializes from
+the exact V18 epoch-4 checkpoint and freezes the scene encoder, trained V18
+residual, both named LoRA banks, and Gemma decoder.
+
+For the frozen V18 centered content `q_i` and the deterministic X coordinate
+`s_i` of each of all 256 scene slots, V19 computes
+`m = mean_i(s_i q_i)`, broadcasts `s_i tanh(m)` back to every slot, projects it
+through one bias-free FP32 `128 -> 1536` matrix, and centers the resulting delta
+over all slots before adding it to the V18 token. The only trainable state is that
+196,608-parameter matrix. Its exact-zero initial state has SHA-256
+`55b7cb21d0ecbe945cabccfacd5b6aa94693743ceee78443f37a5ca0d1ac68b1`.
+The branch is constructed before user text, accounts for every scene slot, and
+accepts no question, label, caption, object ID, oracle coordinate, or retrieval
+query.
+
+The supervised training controller is also pair-specific but remains confined to
+the offline trainer. Both opaque pairs use weight-8 candidate and weight-2
+full-vocabulary hinges with language NLL disabled. The already-passing retention
+pair uses a `0.25` margin, below its frozen V18 minima, so it supplies exactly zero
+gradient at update 0; the failing pair keeps the strict `1.0` margins and drives
+the signed branch. These policy roles and QA annotations are not runtime inputs.
+The trainer records a canonical policy hash, exact selected-unit hash, frozen-base
+hashes, and the same question-independent prefix for every question.
+
+V19 is staged like V18: a clean-source, no-live-step preflight must predict the
+exact first AdamW state; a separately executed one-update checkpoint must match
+that prediction before updates 2--4 may resume. Color must remain 12/12 sides and
+6/6 units with positive minima for any epoch to be eligible. No greedy audit,
+promotion, static chat, leakage claim, or embodied navigation is allowed unless
+the same checkpoint also reaches mirror 12/12 and 6/6 with positive candidate and
+full-vocabulary minima. The immutable experiment overlay is
+[`gemma4_color_mirror_signed_x_moment_v19.yaml`](configs/experiments/gemma4_color_mirror_signed_x_moment_v19.yaml).
+The guarded stages are `make gemma4-v19-preflight`, `make gemma4-v19-stage1`,
+`make gemma4-v19-verify-update1`, `make gemma4-v19-resume-screen`, and
+`make gemma4-v19-select`; `make gemma4-v19-screen` executes the complete chain.
+If—and only if—the four-update selector returns its predeclared continuation-only
+decision, `make gemma4-v19-extension` hash-binds the selected checkpoint, resumes
+it in a separate namespace through update 12, and runs the strict final selector.
+It refuses both unauthorized continuation and overwrite of a partial run.
 
 ### Fail-closed Gemma static evaluation and chat
 
