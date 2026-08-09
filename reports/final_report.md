@@ -23,7 +23,13 @@
 > selected 2e-3 after it reached 5/12 mirror sides at update 4. Its exact resume
 > peaked discretely at epoch 7 with 7/12 mirror sides and 1/6 complete units, but
 > final epoch 12 had 6/12 and 0/6. V14 never passed the complete teacher gate and
-> received no greedy audit or promotion. There is no accepted Gemma static-chat,
+> received no greedy audit or promotion. V15's fixed-prefix shared-K/V screen
+> peaked at 6/12 mirror sides and 0/6 units before color regressed. V16's global
+> scene residual peaked at 11/12 color sides and 5/12 mirror sides. V17 then
+> screened exact `1e-4` and `3e-4` residual restarts; its strict winner was
+> `1e-4` epoch 3 with 12/12 color sides and 6/6 color units, but only 6/12 mirror
+> sides and 0/6 mirror units. None passed its continuation gate, so no run was
+> extended or greedily decoded. There is no accepted Gemma static-chat,
 > Gemma leakage, semantic
 > embodied-agent, or one-command-demo result yet.
 

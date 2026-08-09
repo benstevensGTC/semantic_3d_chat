@@ -44,8 +44,14 @@ epoch 4 also regressed color, so it was stopped. V16 then trained a zero-output,
 question-independent global residual over all 256 scene tokens from the exact V14
 epoch-7 checkpoint. Its best screen epoch reached 11/12 color sides and 5/6 color
 units but only 5/12 mirror sides and 0/6 mirror units, so it also failed without
-extension or generation. V9 remains a color-wiring overfit milestone; v10-v16 are failed continuations, not promoted
-scene chatbots. Gemma held-out static QA, interactive chat, Gemma
+extension or generation. V17 then repeated the residual experiment as exact
+four-update restarts at `1e-4` and `3e-4`. The strict selector chose `1e-4`
+epoch 3, which preserved color at 12/12 sides and 6/6 units but reached only
+6/12 mirror sides and 0/6 complete mirror units. Neither arm met the declared
+continuation gate, so learning-rate tuning stopped without an extension or
+generation audit. V9 remains a color-wiring overfit milestone; v10-v17 are
+failed continuations, not promoted scene chatbots. Gemma held-out static QA,
+interactive chat, Gemma
 leakage claims, and language-conditioned robot navigation remain gated.
 
 ## Current primary stack
@@ -657,7 +663,7 @@ integrity only; it is not an answer-correctness or full oracle-deletion result.
 The exact decision, per-epoch counts, hashes, and claim limits are recorded in
 [`screen_decision_gemma4_color_mirror_global_scene_residual_v16.json`](reports/gemma4/metrics/screen_decision_gemma4_color_mirror_global_scene_residual_v16.json).
 
-#### Gemma V17 residual learning-rate response — predeclared exact restarts
+#### Gemma V17 residual learning-rate response — failed, no extension
 
 V16's first AdamW update could change only the initially zero 196,608-weight
 output projection. At 1e-3, that dense sign-like step produced a residual about
@@ -673,7 +679,7 @@ SHA-256 `5e453933df459f7122ff8781bd2881838fb06a47c1a25e0193368edeedcede31`.
 It uses supervised QA metadata only as an offline loss probe, executes no
 optimizer step, and is not imported by chat runtime.
 
-V17 predeclares two independent four-update exact restarts at 1e-4 and 3e-4.
+V17 ran two independent four-update exact restarts at 1e-4 and 3e-4.
 Both start from the pinned V14 epoch-7 weights and the same zero-output residual,
 use the same 24 records and 12 complete paired units, and retain the same frozen
 core, frozen LoRA banks, loss, order, accumulation, and gates. An arm is eligible
@@ -683,6 +689,30 @@ least 8/12 mirror sides and 2/6 complete mirror units before any extension; no
 greedy audit is allowed before the full teacher gate. If neither arm qualifies,
 learning-rate tuning stops and the next change must remove the common-shift
 failure mode rather than adding epochs or decoder capacity.
+
+The `1e-4` arm had color-eligible epochs 1, 3, and 4. Its strict within-arm
+representative was epoch 3: color was 12/12 full-vocabulary sides and 6/6
+complete units with minimum margin `+0.5`, while mirror was 6/12 sides and 0/6
+units with minimum margin `-2.1875`. At epoch 2, mirror briefly reached the
+continuation minimum of 8/12 sides and 2/6 units, but color simultaneously fell
+to 11/12 and 5/6 with a negative minimum margin, making that epoch ineligible.
+
+The `3e-4` arm's representative was epoch 4: color was 12/12 and 6/6 with
+minimum margin `+2.0625`, while mirror was 5/12 and 0/6 with minimum margin
+`-1.25`. Its epoch 2 showed the same tradeoff—mirror reached 8/12 and 2/6 while
+color fell to 11/12 and 5/6. The two-stage predeclared ranker therefore selected
+`1e-4` epoch 3 across arms, but did not authorize continuation, the full teacher
+gate, or greedy generation. Independent inspection verified both input reports,
+the clean source commit, identical update-zero prefixes, selection membership,
+and frozen scene/LoRA hashes.
+
+The machine-readable decision is
+[`residual_lr_response_v17.json`](reports/gemma4/metrics/residual_lr_response_v17.json),
+SHA-256 `3f63fd5654fb7120ed7aa9d28414490552eec32b3f170c3b80f992947d4161d9`.
+The selected epoch-3 adapter SHA-256 is
+`9c09d6b030082d5de771901ca51b4a554ff131ea53ce6ed477272a407d33487c`;
+its metadata SHA-256 is
+`7f059b17502dcd51917503daf256dc17ec64a4a55e7d9a82dc31c5ab81d80432`.
 
 The immutable arm configs are
 [`gemma4_color_mirror_global_scene_residual_v17_lr1e4.yaml`](configs/experiments/gemma4_color_mirror_global_scene_residual_v17_lr1e4.yaml)
