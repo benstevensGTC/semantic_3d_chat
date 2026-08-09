@@ -1878,6 +1878,11 @@ def pair_batch_objective(
             )
         )
         base_loss = base_loss + relation_settings["weight"] * spatial_relation_loss
+        if int(spatial_relation_diagnostics["eligible_side_count"]) == 0:
+            # A color/support pair has no ordered reference coordinate.  Keep
+            # its differentiable zero loss but do not reduce empty diagnostics
+            # into NaN logging or epoch aggregates.
+            spatial_relation_diagnostics = None
     diagnostics["spatial_relation_contrastive_loss"] = spatial_relation_loss
     diagnostics["spatial_relation_contrastive"] = spatial_relation_diagnostics
     return base_loss, language_loss, grounding_loss, ranking_loss, diagnostics

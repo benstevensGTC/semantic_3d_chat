@@ -696,3 +696,52 @@ def test_candidate_logit_pair_objective_uses_only_correct_forward_and_backpropag
     (ranking_loss + full_vocab_loss).backward()
     assert reference_tokens.grad is not None and reference_tokens.grad.abs().sum() > 0
     assert counterfactual_tokens.grad is not None and counterfactual_tokens.grad.abs().sum() > 0
+
+
+def test_ineligible_relation_pair_keeps_finite_zero_auxiliary_diagnostics() -> None:
+    records = _unit_records()
+    unit = build_exact_question_pair_units(records)[0]
+    model = _TinyCausalModel()
+    composer = ContinuousPrefixComposer(2)
+    with torch.no_grad():
+        composer.scene_start.zero_()
+        composer.scene_end.zero_()
+    outputs = {
+        "scene_a": SimpleNamespace(
+            scene_tokens=torch.tensor([[[0.2, 0.0]]], requires_grad=True),
+            native_latents=torch.tensor([[[0.2, 0.0]]]),
+        ),
+        "scene_b": SimpleNamespace(
+            scene_tokens=torch.tensor([[[-0.2, 0.0]]], requires_grad=True),
+            native_latents=torch.tensor([[[-0.2, 0.0]]]),
+        ),
+    }
+    language = SimpleNamespace(
+        model=model,
+        tokenizer=_TinyTokenizer(),
+        device=torch.device("cpu"),
+    )
+
+    base, *_rest, diagnostics = pair_batch_objective(
+        outputs,
+        [unit],
+        {},
+        language,
+        composer,
+        torch.nn.Identity(),
+        {
+            "language": {"system_prompt": "stable"},
+            "training": {
+                "grounding_weight": 0.0,
+                "spatial_relation_contrastive_weight": 16.0,
+                "spatial_relation_contrastive_margin": 0.1,
+                "spatial_relation_contrastive_temperature": 0.2,
+            },
+        },
+        ranking_margin=0.5,
+        ranking_mode="candidate_logit",
+    )
+
+    assert torch.isfinite(base)
+    assert float(diagnostics["spatial_relation_contrastive_loss"].detach()) == 0.0
+    assert diagnostics["spatial_relation_contrastive"] is None
