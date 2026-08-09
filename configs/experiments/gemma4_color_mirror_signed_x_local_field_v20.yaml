@@ -1,0 +1,114 @@
+_base_: gemma4_color_mirror_centered_content_gate_v18.yaml
+
+# V19's signed-X first moment retained the color control but reduced all 256
+# local content slots to one 128D vector and did not pass its mirror
+# continuation gate. V20 restarts from the exact V18 epoch-4 state and changes
+# only that reduction: each centered content slot is multiplied by its fixed
+# signed-X factor before the same shared zero-initialized output projection.
+# No question, answer, object label, oracle coordinate, or V19 trained state is
+# available to the branch.
+scene_encoder:
+  signed_x_scene_residual:
+    enabled: true
+    architecture_version: signed_x_local_field_v2
+    expected_initial_state_sha256: 3f249307901df75ba07a758a7dc5b02c7c6ff9bbb969987741a106b8d8977ce1
+
+training:
+  output_namespace: gemma4_color_mirror_signed_x_local_field_v20
+  initialize_from: data_gemma4/checkpoints/gemma4_color_mirror_centered_content_gate_v18/epoch_004
+  initialize_expected_adapter_sha256: 1a7946d2e40aaf4bf66dc570bff19fa8d6ba4425e4e0d59bd52b809bd23dae7a
+  initialize_expected_metadata_sha256: 4853355ef4810f284d9b36eca1f0f1ade71319f4f6f579a5b079ce6178eb2344
+  initialize_expected_global_scene_residual_state_sha256: ce3bf864eed6dd4a50f1b67296981e144d6a79e9cf192ad9a9230f2ae18208dc
+  initialize_named_lora_freeze_transition: false
+  initialize_source_residual_into_frozen_base: true
+  freeze_scene_adapter: true
+  train_global_scene_residual_only: false
+  train_signed_x_scene_residual_only: true
+
+  epochs: 4
+  learning_rate: 0.0001
+  weight_decay: 0.0
+  optimizer:
+    name: AdamW
+    learning_rate: 0.0001
+    betas: [0.9, 0.999]
+    epsilon: 1.0e-8
+    weight_decay: 0.0
+    foreach: false
+    fused: false
+    capturable: false
+    maximize: false
+    amsgrad: false
+    gradient_clip_norm: 1.0
+    accumulation_divisor: 12
+    step_index: 1
+
+  # These are byte-for-byte the V19 pair objectives. Keeping their losses,
+  # margins, weights, IDs, and roles fixed makes the local-field architecture
+  # the only intended causal change in the four-update screen.
+  pair_objectives:
+    schema_version: 1
+    allow_unlisted_pair_ids: false
+    by_pair:
+      pair_000001:
+        role: retention_control
+        language_nll_weight: 0.0
+        candidate_hinge_weight: 8.0
+        candidate_margin: 0.25
+        full_vocab_hinge_weight: 2.0
+        full_vocab_margin: 0.25
+      pair_000003:
+        role: signed_target
+        language_nll_weight: 0.0
+        candidate_hinge_weight: 8.0
+        candidate_margin: 1.0
+        full_vocab_hinge_weight: 2.0
+        full_vocab_margin: 1.0
+
+# Historical V18/V19 evidence remains immutable. V20 receives its own
+# source-hash-pinned structural preflight, update-1 verifier, and selector.
+structural_preflight: null
+v18_screen: null
+
+v20_screen:
+  schema_version: 1
+  role: signed_x_local_field_architecture_screen
+  source_checkpoint_epoch: 4
+  screen_optimizer_updates: 4
+  conditional_max_optimizer_updates: 8
+  stage_1_optimizer_updates: 1
+  stage_1_stop_required: true
+  structural_preflight_requires:
+    maximum_per_scene_raw_and_effective_delta_to_core_rms_ratio: 0.01
+    minimum_mirror_effective_residual_to_core_rms_ratio: 0.01
+    minimum_mirror_to_color_normalized_effective_selectivity: 1.5
+    minimum_local_hidden_spatial_rank: 2
+  eligibility_requires:
+    color_full_vocab_sides: 12
+    color_full_vocab_units: 6
+    color_positive_minimum_candidate_margin: true
+    color_positive_minimum_full_vocab_margin: true
+  continuation_requires:
+    mirror_minimum_full_vocab_sides: 8
+    mirror_minimum_full_vocab_units: 2
+  full_teacher_gate_requires:
+    color_full_vocab_sides: 12
+    color_full_vocab_units: 6
+    mirror_full_vocab_sides: 12
+    mirror_full_vocab_units: 6
+    all_candidate_and_full_vocab_minimum_margins_positive: true
+  greedy_audit_only_after_full_teacher_gate: true
+
+experiment:
+  schema_version: 1
+  role: exploratory_reflection_odd_local_field_screen_v20
+  question_dependent_scene_processing: false
+  residual_parameter_count: 400128
+  signed_x_residual_parameter_count: 196608
+  screen_optimizer_updates: 4
+  conditional_max_optimizer_updates: 8
+  source_checkpoint_epoch: 4
+  source_scene_state_sha256: 690bd890bfda024dbb5c7d3c68087b8113bc3b8ee81dd6143c7eb2a884e7245b
+  source_global_scene_residual_state_sha256: ce3bf864eed6dd4a50f1b67296981e144d6a79e9cf192ad9a9230f2ae18208dc
+  source_inherited_bank_sha256: dec768bed654c8c4e16da0318857543ad54d8f5f68f4d24a9a87cd19ec706594
+  source_extension_bank_sha256: 4eb90fb9b0bea579d14cfcb0f61ebd5b6d566fd600bd3d5e1bfe5177a39e1b34

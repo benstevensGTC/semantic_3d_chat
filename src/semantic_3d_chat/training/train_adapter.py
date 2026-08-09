@@ -62,7 +62,7 @@ from semantic_3d_chat.scene_encoder.global_residual import (
 )
 from semantic_3d_chat.scene_encoder.map_io import MapTensorData, load_map_tensors
 from semantic_3d_chat.scene_encoder.projector import SceneTokenizer
-from semantic_3d_chat.scene_encoder.signed_x_residual import (
+from semantic_3d_chat.scene_encoder.signed_x_dispatch import (
     SignedXSceneResidual,
     apply_signed_x_scene_residual,
     construct_signed_x_scene_residual,

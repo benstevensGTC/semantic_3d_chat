@@ -30,13 +30,24 @@ GEMMA4_V19_EXTENSION_NAMESPACE := gemma4_color_mirror_signed_x_moment_v19_extens
 GEMMA4_V19_EXTENSION_ROOT := data_gemma4/checkpoints/$(GEMMA4_V19_EXTENSION_NAMESPACE)
 GEMMA4_V19_EXTENSION_MANIFEST := reports/gemma4/metrics/v19_extension_launch.json
 GEMMA4_V19_EXTENSION_REPORT := reports/gemma4/metrics/v19_extension_final.json
+GEMMA4_V20_CONFIG := configs/experiments/gemma4_color_mirror_signed_x_local_field_v20.yaml
+GEMMA4_V20_NAMESPACE := gemma4_color_mirror_signed_x_local_field_v20
+GEMMA4_V20_CHECKPOINT_ROOT := data_gemma4/checkpoints/$(GEMMA4_V20_NAMESPACE)
+GEMMA4_V20_PREFLIGHT := reports/gemma4/metrics/v20_structural_preflight.json
+GEMMA4_V20_UPDATE1_REPORT := reports/gemma4/metrics/v20_update1_match.json
+GEMMA4_V20_SELECTION := reports/gemma4/metrics/training_selection_$(GEMMA4_V20_NAMESPACE).json
+GEMMA4_V20_SCREEN_REPORT := reports/gemma4/metrics/v20_epoch_screen.json
+GEMMA4_V20_EXTENSION_NAMESPACE := gemma4_color_mirror_signed_x_local_field_v20_extension_u8
+GEMMA4_V20_EXTENSION_ROOT := data_gemma4/checkpoints/$(GEMMA4_V20_EXTENSION_NAMESPACE)
+GEMMA4_V20_EXTENSION_MANIFEST := reports/gemma4/metrics/v20_extension_launch.json
+GEMMA4_V20_EXTENSION_REPORT := reports/gemma4/metrics/v20_extension_final.json
 BLENDER := blender
 CONFIG ?= configs/default.yaml
 BATCH_CONFIG ?= configs/experiments/multiscene.yaml
 SCENE ?= scene_000001
 CHECKPOINT ?=
 
-.PHONY: doctor setup download-models download-baselines setup-gemma4-probe download-gemma4-config download-gemma4-weights gemma4-probe gemma4-probe-test extract-gemma4-scene build-gemma4-map gemma4-semantic-sanity gemma4-extract-smoke gemma4-build-smoke-map train-gemma4 gemma4-v18-preflight gemma4-v18-stage1 gemma4-v18-verify-update1 gemma4-v18-resume-screen gemma4-v18-select gemma4-v18-screen gemma4-v19-preflight gemma4-v19-stage1 gemma4-v19-verify-update1 gemma4-v19-resume-screen gemma4-v19-select gemma4-v19-screen gemma4-v19-prepare-extension gemma4-v19-run-extension gemma4-v19-select-extension gemma4-v19-extension require-gemma4-promoted chat-gemma4 gemma4-prepare-questions gemma4-predict-static gemma4-score-static gemma4-evaluate-static gemma4-predict-controls gemma4-chat-static generate-smoke-scene render-smoke-scan generate-scene-batch render-scene-batch multiscene-dry-run build-smoke-map semantic-sanity generate-dataset train evaluate evaluate-oracle-text evaluate-direct-images chat web robot robot-evaluate mcp report demo demo-check demo-leakage test
+.PHONY: doctor setup download-models download-baselines setup-gemma4-probe download-gemma4-config download-gemma4-weights gemma4-probe gemma4-probe-test extract-gemma4-scene build-gemma4-map gemma4-semantic-sanity gemma4-extract-smoke gemma4-build-smoke-map train-gemma4 gemma4-v18-preflight gemma4-v18-stage1 gemma4-v18-verify-update1 gemma4-v18-resume-screen gemma4-v18-select gemma4-v18-screen gemma4-v19-preflight gemma4-v19-stage1 gemma4-v19-verify-update1 gemma4-v19-resume-screen gemma4-v19-select gemma4-v19-screen gemma4-v19-prepare-extension gemma4-v19-run-extension gemma4-v19-select-extension gemma4-v19-extension gemma4-v20-preflight gemma4-v20-stage1 gemma4-v20-verify-update1 gemma4-v20-resume-screen gemma4-v20-select gemma4-v20-screen gemma4-v20-prepare-extension gemma4-v20-run-extension gemma4-v20-select-extension gemma4-v20-extension require-gemma4-promoted chat-gemma4 gemma4-prepare-questions gemma4-predict-static gemma4-score-static gemma4-evaluate-static gemma4-predict-controls gemma4-chat-static generate-smoke-scene render-smoke-scan generate-scene-batch render-scene-batch multiscene-dry-run build-smoke-map semantic-sanity generate-dataset train evaluate evaluate-oracle-text evaluate-direct-images chat web robot robot-evaluate mcp report demo demo-check demo-leakage test
 
 doctor:
 	./scripts/doctor.sh
@@ -176,6 +187,64 @@ gemma4-v19-select-extension: gemma4-v19-run-extension
 	PYTHONPATH=src $(GEMMA4_PYTHON) -m semantic_3d_chat.evaluation.v19_extension_controller select-final --manifest $(GEMMA4_V19_EXTENSION_MANIFEST) --output $(GEMMA4_V19_EXTENSION_REPORT)
 
 gemma4-v19-extension: gemma4-v19-select-extension
+
+# V20 is a fresh architecture-only restart from the exact V18 epoch-4 source.
+# It preserves each slot's local signed-X content instead of reducing all slots
+# to V19's single moment. Unsafe optimizer stages are cached but always rebound
+# to fresh report-only preflight and update-one evidence before any resume.
+gemma4-v20-preflight:
+	PYTHONPATH=src $(GEMMA4_PYTHON) -m semantic_3d_chat.evaluation.v20_structural_preflight --config $(GEMMA4_V20_CONFIG) --report $(GEMMA4_V20_PREFLIGHT)
+
+gemma4-v20-stage1: gemma4-v20-preflight
+	@if [ -f "$(GEMMA4_V20_CHECKPOINT_ROOT)/epoch_001/metadata.json" ]; then \
+		echo "Reusing cached V20 epoch_001; the verifier will bind it to the fresh preflight."; \
+	elif [ -e "$(GEMMA4_V20_CHECKPOINT_ROOT)" ]; then \
+		echo "Incomplete V20 checkpoint root exists without epoch_001 metadata: $(GEMMA4_V20_CHECKPOINT_ROOT)" >&2; \
+		exit 2; \
+	else \
+		PYTHONPATH=src $(GEMMA4_PYTHON) -m semantic_3d_chat.training.train_adapter --config $(GEMMA4_V20_CONFIG) --epochs 1; \
+	fi
+
+gemma4-v20-verify-update1: gemma4-v20-stage1
+	PYTHONPATH=src $(GEMMA4_PYTHON) -m semantic_3d_chat.evaluation.v20_update1_verifier --config $(GEMMA4_V20_CONFIG) --preflight $(GEMMA4_V20_PREFLIGHT) --checkpoint $(GEMMA4_V20_CHECKPOINT_ROOT)/epoch_001 --report $(GEMMA4_V20_UPDATE1_REPORT)
+
+gemma4-v20-resume-screen: gemma4-v20-verify-update1
+	@if [ -f "$(GEMMA4_V20_CHECKPOINT_ROOT)/epoch_004/metadata.json" ]; then \
+		echo "Reusing cached V20 epoch_004; strict selection will validate cumulative history."; \
+	else \
+		PYTHONPATH=src $(GEMMA4_PYTHON) -m semantic_3d_chat.training.train_adapter --config $(GEMMA4_V20_CONFIG) --resume $(GEMMA4_V20_CHECKPOINT_ROOT)/epoch_001 --epochs 4; \
+	fi
+
+gemma4-v20-select: gemma4-v20-resume-screen
+	PYTHONPATH=src $(GEMMA4_PYTHON) -m semantic_3d_chat.evaluation.v20_epoch_selector --config $(GEMMA4_V20_CONFIG) --selection $(GEMMA4_V20_SELECTION) --update1-report $(GEMMA4_V20_UPDATE1_REPORT) --epoch 1=$(GEMMA4_V20_CHECKPOINT_ROOT)/epoch_001/metadata.json --epoch 2=$(GEMMA4_V20_CHECKPOINT_ROOT)/epoch_002/metadata.json --epoch 3=$(GEMMA4_V20_CHECKPOINT_ROOT)/epoch_003/metadata.json --epoch 4=$(GEMMA4_V20_CHECKPOINT_ROOT)/epoch_004/metadata.json --output $(GEMMA4_V20_SCREEN_REPORT)
+
+gemma4-v20-screen: gemma4-v20-select
+
+# The isolated update-8 branch is reachable only after the strict four-update
+# selector authorizes continuation while still denying greedy generation.
+gemma4-v20-prepare-extension: gemma4-v20-select
+	@if [ -e "$(GEMMA4_V20_EXTENSION_ROOT)" ]; then \
+		test -f "$(GEMMA4_V20_EXTENSION_MANIFEST)" || { echo "V20 extension root exists without its authorization manifest." >&2; exit 2; }; \
+		echo "Reusing cached V20 extension authorization; final selection will revalidate every hash."; \
+	else \
+		PYTHONPATH=src $(GEMMA4_PYTHON) -m semantic_3d_chat.evaluation.v20_extension_controller prepare --config $(GEMMA4_V20_CONFIG) --screen $(GEMMA4_V20_SCREEN_REPORT) --output $(GEMMA4_V20_EXTENSION_MANIFEST); \
+	fi
+
+gemma4-v20-run-extension: gemma4-v20-prepare-extension
+	@if [ -f "$(GEMMA4_V20_EXTENSION_ROOT)/epoch_008/metadata.json" ]; then \
+		echo "Reusing cached V20 update-8 extension; strict final selection will validate it."; \
+	elif [ -e "$(GEMMA4_V20_EXTENSION_ROOT)" ]; then \
+		echo "Incomplete V20 extension root exists; refusing to overwrite it: $(GEMMA4_V20_EXTENSION_ROOT)" >&2; \
+		exit 2; \
+	else \
+		resume_checkpoint="$$(PYTHONPATH=src $(GEMMA4_PYTHON) -c 'import json,sys; print(json.load(open(sys.argv[1], encoding="utf-8"))["selected_checkpoint"])' "$(GEMMA4_V20_EXTENSION_MANIFEST)")"; \
+		PYTHONPATH=src $(GEMMA4_PYTHON) -m semantic_3d_chat.training.train_adapter --config $(GEMMA4_V20_CONFIG) --resume "$$resume_checkpoint" --output-namespace $(GEMMA4_V20_EXTENSION_NAMESPACE) --epochs 8; \
+	fi
+
+gemma4-v20-select-extension: gemma4-v20-run-extension
+	PYTHONPATH=src $(GEMMA4_PYTHON) -m semantic_3d_chat.evaluation.v20_extension_controller select-final --manifest $(GEMMA4_V20_EXTENSION_MANIFEST) --output $(GEMMA4_V20_EXTENSION_REPORT)
+
+gemma4-v20-extension: gemma4-v20-select-extension
 
 # No Gemma checkpoint currently satisfies this gate. A future accepted pair must
 # be supplied explicitly and carry a hash-bound promotion.json beside the adapter.

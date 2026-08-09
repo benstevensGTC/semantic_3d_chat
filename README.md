@@ -813,7 +813,7 @@ The machine-readable evidence is
 final screen file SHA-256 is
 `f1d406dd9ba9b93488c07c905235f1045d2d904241f4e8a7c62f9e43d4854aa5`.
 
-#### Gemma V19 signed-X moment screen — staged, not yet behaviorally accepted
+#### Gemma V19 signed-X moment screen — completed, failed, and not promoted
 
 V18's frozen scene prefixes already separate the mirror pair more strongly than
 the color pair, but its learned residual update aligns about 5.8 times less with
@@ -858,6 +858,70 @@ If—and only if—the four-update selector returns its predeclared continuation
 decision, `make gemma4-v19-extension` hash-binds the selected checkpoint, resumes
 it in a separate namespace through update 12, and runs the strict final selector.
 It refuses both unauthorized continuation and overwrite of a partial run.
+
+The completed V19 screen did **not** authorize that branch. Its selected epoch 4
+retained the color control at 12/12 full-vocabulary sides and 6/6 complete units
+with minimum margin `+0.5`, but the mirror pair reached only 6/12 sides and 0/6
+complete units with minimum margin `-1.0`. Candidate and full-vocabulary mirror
+counts were identical and no pair flipped both predictions, so the remaining
+failure is directional scene-to-answer binding rather than an unrelated-token
+competition artifact. The strict result is
+`screen_failed_no_extension_no_greedy_audit`; V19 has no promotion, chat,
+held-out, leakage, or robot authorization. Its machine-readable decision is
+[`v19_epoch_screen.json`](reports/gemma4/metrics/v19_epoch_screen.json).
+
+#### Gemma V20 signed-X local-field screen — architecture-only staged test
+
+V20 restarts from the exact frozen V18 epoch-4 checkpoint; it does not load,
+stack, or continue V19's trained signed-X state. The losses, opaque pair IDs,
+question ordering, optimizer, scene encoder, V18 residual, LoRA banks, and Gemma
+decoder remain fixed. The single intended causal change is removal of V19's
+global signed-moment bottleneck. For every one of the 256 slots, V20 multiplies
+the centered local content by that slot's deterministic signed-X anchor, applies
+the same shared bias-free `128 -> 1536` projection, and FP32-centers the resulting
+delta over all slots. The Halton-derived slots are not exactly reflection-closed,
+so this is a signed-coordinate local field, not a claim of exact equivariance.
+All slots remain represented and the branch still receives no question, answer,
+caption, object label, oracle coordinate, or retrieval query.
+
+Only the zero-initialized 196,608-parameter projection is trainable. Its state
+also contains a fixed V2 architecture marker, preventing a V19 state from being
+mistaken for V20. The structural preflight evaluates both raw FP32 and effective
+BF16 deltas, local dependence, spatial rank, mirror-versus-color selectivity,
+frozen-state hashes, and the exact predicted first AdamW weight, module state,
+and optimizer moments without taking a live optimizer step. A separate update-1
+checkpoint must match those hashes exactly before updates 2--4 can resume.
+The conservative
+`maximum_per_scene_raw_and_effective_delta_to_core_rms_ratio: 0.01` policy
+applies independently to both the pre-cast and decoder-visible residuals.
+
+The four-update selector is report-only and accepts only exact cumulative
+updates 1--4 plus the exact `v20_update1_match.json` authorization. Report-only
+here means no Gemma load or inference: the selector deliberately reads each
+adapter with safetensors and each one-matrix AdamW state with
+`torch.load(weights_only=True, map_location="cpu")`. It validates the signed-X
+and frozen tensor hashes, requires optimizer step `N` at update `N`, and binds
+the actual adapter, metadata, and optimizer file hashes into every screen row.
+The update-1 report hash, rich-preflight reduction, source/config provenance,
+and exact epoch-1 artifacts are carried transitively into any extension launch
+and final report. Color must remain 12/12 sides and 6/6 units with positive
+candidate and full-vocabulary minimum margins. Continuation requires at least
+8/12 mirror sides and 2/6 mirror units; complete teacher-forced acceptance
+requires both pairs at 12/12 and 6/6 with every minimum margin positive. Greedy
+generation is forbidden until that complete gate passes. A continuation-only
+result may run through update 8 in an isolated namespace; a failed screen runs
+no extension.
+
+The immutable overlay is
+[`gemma4_color_mirror_signed_x_local_field_v20.yaml`](configs/experiments/gemma4_color_mirror_signed_x_local_field_v20.yaml).
+Individual guarded stages are `make gemma4-v20-preflight`,
+`make gemma4-v20-stage1`, `make gemma4-v20-verify-update1`,
+`make gemma4-v20-resume-screen`, and `make gemma4-v20-select`. Run the exact
+four-update chain with `make gemma4-v20-screen`. Only after its selector emits
+the continuation-only decision may `make gemma4-v20-extension` authorize and
+run the isolated update-8 branch. Cached completed checkpoints are reused, but
+fresh report-only evidence is required before a resume; incomplete namespaces
+are never overwritten.
 
 ### Fail-closed Gemma static evaluation and chat
 

@@ -39,12 +39,20 @@ from semantic_3d_chat.scene_encoder.global_residual import (
 )
 from semantic_3d_chat.scene_encoder.map_io import MapTensorData
 from semantic_3d_chat.scene_encoder.projector import SceneTokenizerOutput
-from semantic_3d_chat.scene_encoder.signed_x_residual import (
-    SignedXSceneResidual,
+from semantic_3d_chat.scene_encoder.signed_x_dispatch import (
     apply_signed_x_scene_residual,
     construct_signed_x_scene_residual,
     frozen_v18_centered_content_values,
     signed_x_scene_residual_settings,
+)
+from semantic_3d_chat.scene_encoder.signed_x_local_field import (
+    SIGNED_X_LOCAL_FIELD_ARCHITECTURE_MARKER,
+    SIGNED_X_LOCAL_FIELD_V2,
+    SignedXLocalFieldSceneResidual,
+)
+from semantic_3d_chat.scene_encoder.signed_x_residual import (
+    SIGNED_X_MOMENT_V1,
+    SignedXSceneResidual,
 )
 from semantic_3d_chat.training.checkpointing import (
     module_collection_state_sha256,
@@ -609,6 +617,7 @@ def _tiny_global_residual_runtime_checkpoint(
 
 def _tiny_signed_x_runtime_checkpoint(
     tmp_path: Path,
+    architecture_version: str = SIGNED_X_MOMENT_V1,
 ) -> tuple[
     dict,
     Path,
@@ -617,7 +626,7 @@ def _tiny_signed_x_runtime_checkpoint(
     str,
     str,
 ]:
-    """Build a strict V19-style checkpoint over a frozen trained V18 base."""
+    """Build a strict signed-X checkpoint over a frozen trained V18 base."""
 
     torch.manual_seed(19191)
     config = tiny_config()
@@ -653,13 +662,18 @@ def _tiny_signed_x_runtime_checkpoint(
         source_global.output_projection.weight.fill_(0.03125)
     global_state_hash = module_collection_state_sha256({"global_scene_residual": source_global})
 
-    initial_signed_x = SignedXSceneResidual(scene_dim=8, latent_count=4, content_dim=4)
+    signed_x_type = (
+        SignedXSceneResidual
+        if architecture_version == SIGNED_X_MOMENT_V1
+        else SignedXLocalFieldSceneResidual
+    )
+    initial_signed_x = signed_x_type(scene_dim=8, latent_count=4, content_dim=4)
     initial_signed_x_hash = module_collection_state_sha256(
         {"signed_x_scene_residual": initial_signed_x}
     )
     config["scene_encoder"]["signed_x_scene_residual"] = {
         "enabled": True,
-        "architecture_version": "signed_x_moment_v1",
+        "architecture_version": architecture_version,
         "expected_initial_state_sha256": initial_signed_x_hash,
     }
     config["training"] = {
@@ -733,7 +747,7 @@ def _tiny_signed_x_runtime_checkpoint(
         },
     }
     checkpoint = save_adapter_checkpoint(
-        tmp_path / "runtime_signed_x_residual",
+        tmp_path / f"runtime_signed_x_residual_{architecture_version}",
         {
             **scene_modules,
             "global_scene_residual": source_global,
@@ -897,6 +911,49 @@ def test_static_chat_roundtrips_signed_x_and_applies_core_then_global_then_signe
     assert summary["signed_x_scene_residual"] == signed_x_scene_residual_settings(config).contract()
     assert summary["signed_x_scene_residual_state_sha256"] == signed_x_hash
     assert summary["frozen_global_scene_residual_state_sha256"] == global_hash
+
+
+def test_static_chat_roundtrips_v20_local_field_and_reuses_question_independent_prefix(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    (
+        config,
+        checkpoint,
+        _source_global,
+        source_local_field,
+        _global_hash,
+        local_field_hash,
+    ) = _tiny_signed_x_runtime_checkpoint(tmp_path, SIGNED_X_LOCAL_FIELD_V2)
+    _mock_tiny_global_residual_runtime(monkeypatch)
+
+    runtime = StaticChatRuntime.load(
+        config,
+        "scene_000001",
+        checkpoint,
+        generation_function=lambda *_args: torch.tensor([[7, 2]]),
+    )
+
+    assert isinstance(runtime.signed_x_scene_residual, SignedXLocalFieldSceneResidual)
+    assert runtime.signed_x_scene_residual.architecture_marker.item() == (
+        SIGNED_X_LOCAL_FIELD_ARCHITECTURE_MARKER
+    )
+    assert (
+        module_collection_state_sha256({"signed_x_scene_residual": runtime.signed_x_scene_residual})
+        == local_field_hash
+    )
+    for name, expected in source_local_field.state_dict().items():
+        assert torch.equal(runtime.signed_x_scene_residual.state_dict()[name], expected)
+    assert runtime.scene_output.audit["signed_x_scene_residual_local_field_rms"].item() > 0.0
+    assert "signed_x_scene_residual_moment_rms" not in runtime.scene_output.audit
+
+    prefix_hash = runtime.current_prefix_hash()
+    assert runtime.answer("Which side is occupied?").prefix_hash == prefix_hash
+    assert runtime.answer("What changed?").prefix_hash == prefix_hash
+    assert runtime.current_prefix_hash() == prefix_hash
+    assert runtime.startup_summary()["signed_x_scene_residual"] == (
+        signed_x_scene_residual_settings(config).contract()
+    )
 
 
 @pytest.mark.parametrize(
