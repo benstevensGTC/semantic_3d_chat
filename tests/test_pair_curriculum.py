@@ -26,6 +26,7 @@ from semantic_3d_chat.training.pair_curriculum import (
 )
 from semantic_3d_chat.training.train_adapter import (
     best_pair_gate_passed_from_history,
+    combine_pair_training_losses,
     pair_batch_objective,
     pair_gate_checkpoint_improved,
     pair_gate_monitor_value,
@@ -280,6 +281,72 @@ def test_full_vocab_first_answer_token_margin_detects_non_candidate_winner() -> 
     assert margins.tolist() == pytest.approx([-1.0, 4.0])
 
 
+def test_full_vocab_margin_hinge_targets_only_strongest_non_target() -> None:
+    logits = torch.zeros(1, 3, 5, requires_grad=True)
+    labels = torch.tensor([[-100, -100, 1]])
+    with torch.no_grad():
+        # Target 1 beats paired alternative 2, but unrelated token 4 wins.
+        logits[0, 1] = torch.tensor([0.0, 3.0, 2.0, -1.0, 4.0])
+    margins = first_answer_token_full_vocab_margins(logits, labels)
+    full_vocab_loss = torch.relu(torch.tensor(1.0) - margins).mean()
+
+    full_vocab_loss.backward()
+
+    assert margins.tolist() == pytest.approx([-1.0])
+    assert float(logits.grad[0, 1, 1]) == pytest.approx(-1.0)
+    assert float(logits.grad[0, 1, 4]) == pytest.approx(1.0)
+    assert float(logits.grad[0, 1, 2]) == 0.0
+    assert float(logits.grad[0, 0].abs().sum()) == 0.0
+
+
+def test_pair_training_loss_applies_full_vocab_weight_and_zero_preserves_v10() -> None:
+    terms = [torch.tensor(value) for value in (1.0, 2.0, 3.0, 4.0, 5.0)]
+    v10 = combine_pair_training_losses(
+        *terms,
+        pair_ranking_weight=8.0,
+        full_vocab_ranking_weight=0.0,
+        diversity_weight=0.05,
+        scene_separation_weight=20.0,
+    )
+    v11 = combine_pair_training_losses(
+        *terms,
+        pair_ranking_weight=8.0,
+        full_vocab_ranking_weight=2.0,
+        diversity_weight=0.05,
+        scene_separation_weight=20.0,
+    )
+
+    assert float(v10) == pytest.approx(117.2)
+    assert float(v11) == pytest.approx(123.2)
+    assert float(v11 - v10) == pytest.approx(6.0)
+
+
+def test_full_vocab_training_settings_are_opt_in_and_validated() -> None:
+    settings = pair_curriculum_settings(
+        {
+            "training": {
+                "pair_ranking_weight": 8.0,
+                "pair_full_vocab_ranking_weight": 2.0,
+                "pair_full_vocab_ranking_margin": 1.0,
+            }
+        }
+    )
+
+    assert settings.full_vocab_ranking_weight == 2.0
+    assert settings.full_vocab_ranking_margin == 1.0
+    with pytest.raises(ValueError, match="requires pair_ranking_weight"):
+        pair_curriculum_settings({"training": {"pair_full_vocab_ranking_weight": 1.0}})
+    with pytest.raises(ValueError, match="margin cannot be negative"):
+        pair_curriculum_settings(
+            {
+                "training": {
+                    "pair_ranking_weight": 1.0,
+                    "pair_full_vocab_ranking_margin": -0.1,
+                }
+            }
+        )
+
+
 def test_full_vocab_top1_gate_is_opt_in_and_composes_with_pairwise_gate() -> None:
     pairwise_margins = [[1.0, 1.0]]
     full_vocab_margins = [[-1.0, 4.0]]
@@ -407,6 +474,7 @@ def test_pair_gate_config_is_explicit_and_defaults_remain_disabled() -> None:
     gemma_v8 = load_config("configs/experiments/gemma4_color_wiring_v8.yaml")
     gemma_v9 = load_config("configs/experiments/gemma4_color_wiring_v9.yaml")
     gemma_v10 = load_config("configs/experiments/gemma4_color_mirror_wiring_v10.yaml")
+    gemma_v11 = load_config("configs/experiments/gemma4_color_mirror_full_vocab_v11.yaml")
     assert pair_curriculum_settings(gemma_v1).ranking_mode == "nll"
     assert pair_curriculum_settings(gemma_v2).ranking_mode == "candidate_logit"
     assert gemma_v1["training"]["output_namespace"] == "gemma4_color_wiring"
@@ -428,6 +496,11 @@ def test_pair_gate_config_is_explicit_and_defaults_remain_disabled() -> None:
     )
     assert gemma_v10["training"]["gradient_accumulation"] == 12
     assert gemma_v10["training"]["initialize_from"].endswith("epoch_036")
+    v11_curriculum = pair_curriculum_settings(gemma_v11)
+    assert gemma_v11["training"]["output_namespace"] == ("gemma4_color_mirror_full_vocab_v11")
+    assert v11_curriculum.full_vocab_ranking_weight == 2.0
+    assert v11_curriculum.full_vocab_ranking_margin == 1.0
+    assert gemma_v11["training"]["initialize_from"].endswith("epoch_036")
 
 
 def test_pair_gate_best_checkpoint_selection_is_gate_pass_first() -> None:
@@ -599,6 +672,7 @@ def test_candidate_logit_pair_objective_uses_only_correct_forward_and_backpropag
         ranking_margin=0.5,
         ranking_mode="candidate_logit",
         collect_full_vocab_first_answer_token=True,
+        full_vocab_ranking_margin=10.0,
     )
 
     assert model.forward_calls == 1
@@ -614,9 +688,11 @@ def test_candidate_logit_pair_objective_uses_only_correct_forward_and_backpropag
     assert diagnostics["own_candidate_logits"] is not None
     assert diagnostics["alternate_candidate_logits"] is not None
     assert torch.all(diagnostics["first_answer_token_full_vocab_margins"] > 0.0)
+    full_vocab_loss = diagnostics["first_answer_token_full_vocab_ranking_loss"]
+    assert float(full_vocab_loss.detach()) > 0.0
     assert diagnostics["ranking_tokens_per_side"].tolist() == [[1, 1]]
     assert torch.all(diagnostics["margins"] > 0.0)
     assert float(ranking_loss.detach()) > 0.0
-    ranking_loss.backward()
+    (ranking_loss + full_vocab_loss).backward()
     assert reference_tokens.grad is not None and reference_tokens.grad.abs().sum() > 0
     assert counterfactual_tokens.grad is not None and counterfactual_tokens.grad.abs().sum() > 0

@@ -1,0 +1,15 @@
+_base_: gemma4_color_mirror_wiring_v10.yaml
+
+# V10 made the intended left/right token beat its paired alternative without
+# making it beat unrelated high-prior Gemma tokens (usually "unknown") during
+# real generation. Train a multiclass first-answer margin on the same correct
+# forward pass: target_logit - max(non_target_logits) must reach 1.0. The
+# candidate hinge remains active so both physical prefixes must still select
+# different answers; this term adds no labels and performs no extra forward.
+# Initialize from the proven v9 color checkpoint again, making v10 the exact
+# zero-full-vocabulary-loss ablation rather than carrying its partial forgetting
+# into this run.
+training:
+  output_namespace: gemma4_color_mirror_full_vocab_v11
+  pair_full_vocab_ranking_weight: 2.0
+  pair_full_vocab_ranking_margin: 1.0

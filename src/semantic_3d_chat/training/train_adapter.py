@@ -9,7 +9,7 @@ import re
 import shutil
 import time
 from collections import defaultdict
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -103,6 +103,57 @@ def file_sha256(path: Path) -> str:
         for chunk in iter(lambda: handle.read(1024 * 1024), b""):
             digest.update(chunk)
     return digest.hexdigest()
+
+
+def resolve_checkpoint_sources(
+    *,
+    cli_resume: Path | None,
+    cli_initialize_from: Path | None,
+    training_config: Mapping[str, object],
+) -> tuple[Path | str | None, Path | str | None]:
+    """Resolve exact-resume and weights-only initialization inputs.
+
+    An explicit resume continues an existing run and therefore intentionally
+    overrides a config's staged ``initialize_from`` default. Supplying both
+    command-line modes is still an error, as is an ambiguous config that sets
+    both modes without that explicit resume override.
+    """
+
+    configured_resume = training_config.get("resume_from")
+    configured_initialize = training_config.get("initialize_from")
+    if cli_resume is not None:
+        if cli_initialize_from is not None:
+            raise ValueError("resume_from and initialize_from are mutually exclusive")
+        return cli_resume, None
+    initialize_value = (
+        cli_initialize_from if cli_initialize_from is not None else configured_initialize
+    )
+    if configured_resume and initialize_value:
+        raise ValueError("resume_from and initialize_from are mutually exclusive")
+    return configured_resume, initialize_value
+
+
+def combine_pair_training_losses(
+    base_loss: torch.Tensor,
+    pair_ranking_loss: torch.Tensor,
+    full_vocab_ranking_loss: torch.Tensor,
+    diversity_loss: torch.Tensor,
+    scene_separation_loss: torch.Tensor,
+    *,
+    pair_ranking_weight: float,
+    full_vocab_ranking_weight: float,
+    diversity_weight: float,
+    scene_separation_weight: float,
+) -> torch.Tensor:
+    """Compose the audited pair objective from raw differentiable terms."""
+
+    return (
+        base_loss
+        + float(pair_ranking_weight) * pair_ranking_loss
+        + float(full_vocab_ranking_weight) * full_vocab_ranking_loss
+        + float(diversity_weight) * diversity_loss
+        + float(scene_separation_weight) * scene_separation_loss
+    )
 
 
 def pair_gate_checkpoint_improved(
@@ -1152,6 +1203,7 @@ def pair_batch_objective(
     ranking_margin: float,
     ranking_mode: str = "nll",
     collect_full_vocab_first_answer_token: bool = False,
+    full_vocab_ranking_margin: float = 0.0,
 ) -> tuple[
     torch.Tensor,
     torch.Tensor,
@@ -1280,6 +1332,12 @@ def pair_batch_objective(
         if collect_full_vocab_first_answer_token
         else None
     )
+    full_vocab_ranking_loss = torch.zeros((), device=language.device)
+    if full_vocab_first_token_margins is not None:
+        full_vocab_ranking_loss, _ = ranking_margin_hinge(
+            full_vocab_first_token_margins,
+            margin=full_vocab_ranking_margin,
+        )
     correct_nll: torch.Tensor | None
     swapped_nll: torch.Tensor | None
     own_candidate_logits: torch.Tensor | None = None
@@ -1370,6 +1428,7 @@ def pair_batch_objective(
         "own_candidate_logits": own_candidate_logits,
         "alternate_candidate_logits": alternate_candidate_logits,
         "first_answer_token_full_vocab_margins": full_vocab_first_token_margins,
+        "first_answer_token_full_vocab_ranking_loss": full_vocab_ranking_loss,
         "margins": margins,
         "ranking_tokens_per_side": torch.tensor(
             (
@@ -1418,7 +1477,7 @@ def evaluate_pair_candidate_gate(
     wrong_prefix_flip_threshold: float,
     first_answer_token_top1_accuracy_threshold: float | None = None,
     lora_installation: LoRAInstallation | None = None,
-) -> dict[str, float | int | bool | str | None]:
+) -> dict[str, object]:
     """Evaluate all training pair units with the configured deterministic ranking."""
 
     if not units:
@@ -1435,11 +1494,14 @@ def evaluate_pair_candidate_gate(
         by_pair[unit.pair_id].append(unit)
     all_margins: list[torch.Tensor] = []
     all_full_vocab_first_token_margins: list[torch.Tensor] = []
+    gate_metrics_by_pair: dict[str, dict[str, object]] = {}
     try:
         with torch.inference_mode():
             for pair_id in sorted(by_pair):
                 pair_units = by_pair[pair_id]
                 scene_ids = pair_units[0].scene_ids
+                pair_margins: list[torch.Tensor] = []
+                pair_full_vocab_margins: list[torch.Tensor] = []
                 outputs = {
                     scene_id: map_forward(scene_model, maps[scene_id]) for scene_id in scene_ids
                 }
@@ -1455,13 +1517,30 @@ def evaluate_pair_candidate_gate(
                         ranking_margin=ranking_margin,
                         ranking_mode=ranking_mode,
                         collect_full_vocab_first_answer_token=True,
+                        full_vocab_ranking_margin=float(
+                            config["training"].get("pair_full_vocab_ranking_margin", 0.0)
+                        ),
                     )
-                    all_margins.append(diagnostics["margins"].detach().float().cpu())
+                    detached_margins = diagnostics["margins"].detach().float().cpu()
+                    all_margins.append(detached_margins)
+                    pair_margins.append(detached_margins)
                     full_vocab_margins = diagnostics["first_answer_token_full_vocab_margins"]
                     assert isinstance(full_vocab_margins, torch.Tensor)
-                    all_full_vocab_first_token_margins.append(
-                        full_vocab_margins.detach().float().cpu()
-                    )
+                    detached_full_vocab_margins = full_vocab_margins.detach().float().cpu()
+                    all_full_vocab_first_token_margins.append(detached_full_vocab_margins)
+                    pair_full_vocab_margins.append(detached_full_vocab_margins)
+                gate_metrics_by_pair[pair_id] = pair_gate_metrics(
+                    torch.cat(pair_margins, dim=0),
+                    changed_unit_accuracy_threshold=changed_unit_accuracy_threshold,
+                    prediction_flip_threshold=prediction_flip_threshold,
+                    wrong_prefix_flip_threshold=wrong_prefix_flip_threshold,
+                    ranking_margin=ranking_margin,
+                    ranking_mode=ranking_mode,
+                    first_answer_token_full_vocab_margins=torch.cat(pair_full_vocab_margins, dim=0),
+                    first_answer_token_top1_accuracy_threshold=(
+                        first_answer_token_top1_accuracy_threshold
+                    ),
+                )
                 del outputs
     finally:
         for module, was_training in zip(modules, previous_modes, strict=True):
@@ -1480,6 +1559,7 @@ def evaluate_pair_candidate_gate(
         first_answer_token_top1_accuracy_threshold=(first_answer_token_top1_accuracy_threshold),
     )
     metrics["pair_count"] = len(by_pair)
+    metrics["by_pair"] = gate_metrics_by_pair
     return metrics
 
 
@@ -1720,6 +1800,8 @@ def main() -> None:
             "ranking_mode": pair_curriculum.ranking_mode,
             "ranking_margin": pair_curriculum.ranking_margin,
             "ranking_weight": pair_curriculum.ranking_weight,
+            "full_vocab_ranking_margin": pair_curriculum.full_vocab_ranking_margin,
+            "full_vocab_ranking_weight": pair_curriculum.full_vocab_ranking_weight,
             "gate_enabled": pair_curriculum.gate_enabled,
             "gate_every_epochs": pair_curriculum.gate_every_epochs,
             "gate_stop_when_passed": pair_curriculum.stop_when_gate_passes,
@@ -1854,10 +1936,11 @@ def main() -> None:
     global_step = 0
     optimizer_step = 0
     start_epoch = 1
-    resume_value = args.resume or config["training"].get("resume_from")
-    initialize_value = args.initialize_from or config["training"].get("initialize_from")
-    if resume_value and initialize_value:
-        raise ValueError("resume_from and initialize_from are mutually exclusive")
+    resume_value, initialize_value = resolve_checkpoint_sources(
+        cli_resume=args.resume,
+        cli_initialize_from=args.initialize_from,
+        training_config=config["training"],
+    )
     initialization_provenance: dict | None = None
     if initialize_value:
         initialize_path = Path(initialize_value).expanduser()
@@ -2083,6 +2166,8 @@ def main() -> None:
             "ranking_weight": pair_curriculum.ranking_weight,
             "ranking_margin": pair_curriculum.ranking_margin,
             "ranking_mode": pair_curriculum.ranking_mode,
+            "full_vocab_ranking_weight": pair_curriculum.full_vocab_ranking_weight,
+            "full_vocab_ranking_margin": pair_curriculum.full_vocab_ranking_margin,
             "batch_fraction": pair_curriculum.batch_fraction,
             "units_per_batch": pair_curriculum.units_per_batch,
             "steps_per_epoch": pair_curriculum.steps_per_epoch,
@@ -2099,6 +2184,12 @@ def main() -> None:
             and "max_units_per_pair" not in saved_pair_curriculum
         ):
             saved_pair_curriculum = {**saved_pair_curriculum, "max_units_per_pair": None}
+        if isinstance(saved_pair_curriculum, dict):
+            saved_pair_curriculum = {
+                "full_vocab_ranking_weight": 0.0,
+                "full_vocab_ranking_margin": 0.0,
+                **saved_pair_curriculum,
+            }
         if saved_pair_curriculum is not None and (
             saved_pair_curriculum != expected_pair_curriculum
         ):
@@ -2186,6 +2277,11 @@ def main() -> None:
         epoch_ranking_min_margins: list[float] = []
         epoch_ranking_side_accuracies: list[float] = []
         epoch_ranking_unit_accuracies: list[float] = []
+        epoch_full_vocab_ranking_losses: list[float] = []
+        epoch_full_vocab_ranking_margins: list[float] = []
+        epoch_full_vocab_ranking_min_margins: list[float] = []
+        epoch_full_vocab_side_accuracies: list[float] = []
+        epoch_full_vocab_unit_accuracies: list[float] = []
         epoch_pair_scene_token_gradient_norms: list[float] = []
         epoch_lora_gradient_norms: list[float] = []
         epoch_spatial_answer_losses: list[float] = []
@@ -2219,6 +2315,7 @@ def main() -> None:
             lora_installation.train()
         for curriculum_batch in curriculum:
             pair_ranking_loss = torch.zeros((), device=language.device)
+            full_vocab_ranking_loss = torch.zeros((), device=language.device)
             pair_ranking_diagnostics: dict[str, torch.Tensor | str | None] | None = None
             spatial_answer_loss = torch.zeros((), device=language.device)
             spatial_answer_diagnostics: dict[str, torch.Tensor | int] | None = None
@@ -2275,9 +2372,16 @@ def main() -> None:
                     config,
                     ranking_margin=pair_curriculum.ranking_margin,
                     ranking_mode=pair_curriculum.ranking_mode,
+                    collect_full_vocab_first_answer_token=(
+                        pair_curriculum.full_vocab_ranking_weight > 0
+                    ),
+                    full_vocab_ranking_margin=(pair_curriculum.full_vocab_ranking_margin),
                 )
                 spatial_answer_loss = pair_ranking_diagnostics["spatial_answer_contrastive_loss"]
                 spatial_answer_diagnostics = pair_ranking_diagnostics["spatial_answer_contrastive"]
+                full_vocab_ranking_loss = pair_ranking_diagnostics[
+                    "first_answer_token_full_vocab_ranking_loss"
+                ]
                 if anti_collapse["paired_scene_separation_weight"] > 0:
                     # Pair batches already paid for both scene forwards. Apply
                     # separation on every paired update rather than only once
@@ -2331,11 +2435,16 @@ def main() -> None:
                 )
                 del first_output
 
-            loss = (
-                base_loss
-                + pair_curriculum.ranking_weight * pair_ranking_loss
-                + float(anti_collapse["latent_diversity_weight"]) * diversity_loss
-                + float(anti_collapse["paired_scene_separation_weight"]) * pair_loss
+            loss = combine_pair_training_losses(
+                base_loss,
+                pair_ranking_loss,
+                full_vocab_ranking_loss,
+                diversity_loss,
+                pair_loss,
+                pair_ranking_weight=pair_curriculum.ranking_weight,
+                full_vocab_ranking_weight=pair_curriculum.full_vocab_ranking_weight,
+                diversity_weight=float(anti_collapse["latent_diversity_weight"]),
+                scene_separation_weight=float(anti_collapse["paired_scene_separation_weight"]),
             )
             (loss / accumulation).backward()
             pair_scene_token_gradient_norms = None
@@ -2386,6 +2495,25 @@ def main() -> None:
                 epoch_ranking_unit_accuracies.append(
                     float(pair_ranking_diagnostics["unit_accuracy"].detach().cpu())
                 )
+                full_vocab_margins = pair_ranking_diagnostics[
+                    "first_answer_token_full_vocab_margins"
+                ]
+                if full_vocab_margins is not None:
+                    epoch_full_vocab_ranking_losses.append(
+                        float(full_vocab_ranking_loss.detach().cpu())
+                    )
+                    epoch_full_vocab_ranking_margins.append(
+                        float(full_vocab_margins.detach().mean().cpu())
+                    )
+                    epoch_full_vocab_ranking_min_margins.append(
+                        float(full_vocab_margins.detach().min().cpu())
+                    )
+                    epoch_full_vocab_side_accuracies.append(
+                        float(full_vocab_margins.detach().gt(0).float().mean().cpu())
+                    )
+                    epoch_full_vocab_unit_accuracies.append(
+                        float(full_vocab_margins.detach().gt(0).all(dim=1).float().mean().cpu())
+                    )
             if spatial_answer_diagnostics is not None:
                 epoch_spatial_answer_losses.append(float(spatial_answer_loss.detach().cpu()))
                 epoch_spatial_answer_own_similarities.append(
@@ -2432,6 +2560,76 @@ def main() -> None:
                             None
                             if pair_ranking_diagnostics is None
                             else float(pair_ranking_diagnostics["margins"].detach().mean().cpu())
+                        ),
+                        "pair_full_vocab_ranking_loss": (
+                            None
+                            if pair_ranking_diagnostics is None
+                            or pair_ranking_diagnostics["first_answer_token_full_vocab_margins"]
+                            is None
+                            else float(full_vocab_ranking_loss.detach().cpu())
+                        ),
+                        "pair_full_vocab_weighted_ranking_loss": (
+                            None
+                            if pair_ranking_diagnostics is None
+                            or pair_ranking_diagnostics["first_answer_token_full_vocab_margins"]
+                            is None
+                            else float(
+                                pair_curriculum.full_vocab_ranking_weight
+                                * full_vocab_ranking_loss.detach().cpu()
+                            )
+                        ),
+                        "pair_full_vocab_mean_margin": (
+                            None
+                            if pair_ranking_diagnostics is None
+                            or pair_ranking_diagnostics["first_answer_token_full_vocab_margins"]
+                            is None
+                            else float(
+                                pair_ranking_diagnostics["first_answer_token_full_vocab_margins"]
+                                .detach()
+                                .mean()
+                                .cpu()
+                            )
+                        ),
+                        "pair_full_vocab_minimum_margin": (
+                            None
+                            if pair_ranking_diagnostics is None
+                            or pair_ranking_diagnostics["first_answer_token_full_vocab_margins"]
+                            is None
+                            else float(
+                                pair_ranking_diagnostics["first_answer_token_full_vocab_margins"]
+                                .detach()
+                                .min()
+                                .cpu()
+                            )
+                        ),
+                        "pair_full_vocab_top1_side_accuracy": (
+                            None
+                            if pair_ranking_diagnostics is None
+                            or pair_ranking_diagnostics["first_answer_token_full_vocab_margins"]
+                            is None
+                            else float(
+                                pair_ranking_diagnostics["first_answer_token_full_vocab_margins"]
+                                .detach()
+                                .gt(0)
+                                .float()
+                                .mean()
+                                .cpu()
+                            )
+                        ),
+                        "pair_full_vocab_top1_unit_accuracy": (
+                            None
+                            if pair_ranking_diagnostics is None
+                            or pair_ranking_diagnostics["first_answer_token_full_vocab_margins"]
+                            is None
+                            else float(
+                                pair_ranking_diagnostics["first_answer_token_full_vocab_margins"]
+                                .detach()
+                                .gt(0)
+                                .all(dim=1)
+                                .float()
+                                .mean()
+                                .cpu()
+                            )
                         ),
                         "correct_vs_swapped_nll_margin": (
                             None
@@ -2572,6 +2770,31 @@ def main() -> None:
         mean_ranking_unit_accuracy = (
             float(np.mean(epoch_ranking_unit_accuracies)) if epoch_ranking_unit_accuracies else None
         )
+        mean_full_vocab_ranking_loss = (
+            float(np.mean(epoch_full_vocab_ranking_losses))
+            if epoch_full_vocab_ranking_losses
+            else None
+        )
+        mean_full_vocab_ranking_margin = (
+            float(np.mean(epoch_full_vocab_ranking_margins))
+            if epoch_full_vocab_ranking_margins
+            else None
+        )
+        minimum_full_vocab_ranking_margin = (
+            float(np.min(epoch_full_vocab_ranking_min_margins))
+            if epoch_full_vocab_ranking_min_margins
+            else None
+        )
+        mean_full_vocab_side_accuracy = (
+            float(np.mean(epoch_full_vocab_side_accuracies))
+            if epoch_full_vocab_side_accuracies
+            else None
+        )
+        mean_full_vocab_unit_accuracy = (
+            float(np.mean(epoch_full_vocab_unit_accuracies))
+            if epoch_full_vocab_unit_accuracies
+            else None
+        )
         mean_pair_scene_token_gradient_norm = (
             float(np.mean(epoch_pair_scene_token_gradient_norms))
             if epoch_pair_scene_token_gradient_norms
@@ -2697,6 +2920,16 @@ def main() -> None:
                 ),
                 "pair_side_accuracy": mean_ranking_side_accuracy,
                 "pair_changed_unit_accuracy": mean_ranking_unit_accuracy,
+                "pair_full_vocab_ranking_loss": mean_full_vocab_ranking_loss,
+                "pair_full_vocab_weighted_ranking_loss": (
+                    None
+                    if mean_full_vocab_ranking_loss is None
+                    else pair_curriculum.full_vocab_ranking_weight * mean_full_vocab_ranking_loss
+                ),
+                "pair_full_vocab_mean_margin": mean_full_vocab_ranking_margin,
+                "pair_full_vocab_minimum_margin": minimum_full_vocab_ranking_margin,
+                "pair_full_vocab_top1_side_accuracy": mean_full_vocab_side_accuracy,
+                "pair_full_vocab_top1_unit_accuracy": mean_full_vocab_unit_accuracy,
                 "pair_mean_scene_token_gradient_norm": (mean_pair_scene_token_gradient_norm),
                 "lora_mean_optimizer_step_gradient_norm": (
                     float(np.mean(epoch_lora_gradient_norms)) if epoch_lora_gradient_norms else None
@@ -2799,6 +3032,8 @@ def main() -> None:
                 "ranking_weight": pair_curriculum.ranking_weight,
                 "ranking_margin": pair_curriculum.ranking_margin,
                 "ranking_mode": pair_curriculum.ranking_mode,
+                "full_vocab_ranking_weight": pair_curriculum.full_vocab_ranking_weight,
+                "full_vocab_ranking_margin": pair_curriculum.full_vocab_ranking_margin,
                 "batch_fraction": pair_curriculum.batch_fraction,
                 "units_per_batch": pair_curriculum.units_per_batch,
                 "steps_per_epoch": pair_curriculum.steps_per_epoch,
@@ -2866,6 +3101,17 @@ def main() -> None:
                     ),
                     "pair_side_accuracy": mean_ranking_side_accuracy,
                     "pair_changed_unit_accuracy": mean_ranking_unit_accuracy,
+                    "pair_full_vocab_ranking_loss": mean_full_vocab_ranking_loss,
+                    "pair_full_vocab_weighted_ranking_loss": (
+                        None
+                        if mean_full_vocab_ranking_loss is None
+                        else pair_curriculum.full_vocab_ranking_weight
+                        * mean_full_vocab_ranking_loss
+                    ),
+                    "pair_full_vocab_mean_margin": mean_full_vocab_ranking_margin,
+                    "pair_full_vocab_minimum_margin": minimum_full_vocab_ranking_margin,
+                    "pair_full_vocab_top1_side_accuracy": mean_full_vocab_side_accuracy,
+                    "pair_full_vocab_top1_unit_accuracy": mean_full_vocab_unit_accuracy,
                     "pair_mean_scene_token_gradient_norm": (mean_pair_scene_token_gradient_norm),
                     "spatial_answer_contrastive_loss": mean_spatial_answer_loss,
                     "spatial_answer_mean_own_similarity": (mean_spatial_answer_own_similarity),
@@ -2968,6 +3214,8 @@ def main() -> None:
             "ranking_weight": pair_curriculum.ranking_weight,
             "ranking_margin": pair_curriculum.ranking_margin,
             "ranking_mode": pair_curriculum.ranking_mode,
+            "full_vocab_ranking_weight": pair_curriculum.full_vocab_ranking_weight,
+            "full_vocab_ranking_margin": pair_curriculum.full_vocab_ranking_margin,
             "batch_fraction": pair_curriculum.batch_fraction,
             "units_per_batch": pair_curriculum.units_per_batch,
             "steps_per_epoch": pair_curriculum.steps_per_epoch,

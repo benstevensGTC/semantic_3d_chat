@@ -73,6 +73,8 @@ class PairCurriculumSettings:
     ranking_weight: float
     ranking_margin: float
     ranking_mode: Literal["nll", "candidate_logit"]
+    full_vocab_ranking_weight: float
+    full_vocab_ranking_margin: float
     batch_fraction: float
     units_per_batch: int
     steps_per_epoch: int | None
@@ -89,7 +91,7 @@ class PairCurriculumSettings:
 
     @property
     def enabled(self) -> bool:
-        return self.ranking_weight > 0 or self.pair_only
+        return self.ranking_weight > 0 or self.full_vocab_ranking_weight > 0 or self.pair_only
 
 
 def pair_curriculum_settings(config: Mapping[str, object]) -> PairCurriculumSettings:
@@ -99,8 +101,9 @@ def pair_curriculum_settings(config: Mapping[str, object]) -> PairCurriculumSett
     if not isinstance(raw_training, Mapping):
         raise TypeError("Config is missing a training mapping")
     ranking_weight = float(raw_training.get("pair_ranking_weight", 0.0))
+    full_vocab_ranking_weight = float(raw_training.get("pair_full_vocab_ranking_weight", 0.0))
     pair_only = bool(raw_training.get("pair_only_mode", False))
-    enabled = ranking_weight > 0 or pair_only
+    enabled = ranking_weight > 0 or full_vocab_ranking_weight > 0 or pair_only
     default_fraction = 1.0 if pair_only else (0.5 if enabled else 0.0)
     batch_size = int(raw_training.get("batch_size", 1))
     scene_ids_value = raw_training.get("pair_only_scene_ids", ())
@@ -116,6 +119,8 @@ def pair_curriculum_settings(config: Mapping[str, object]) -> PairCurriculumSett
         ranking_weight=ranking_weight,
         ranking_margin=float(raw_training.get("pair_ranking_margin", 0.5)),
         ranking_mode=ranking_mode,
+        full_vocab_ranking_weight=full_vocab_ranking_weight,
+        full_vocab_ranking_margin=float(raw_training.get("pair_full_vocab_ranking_margin", 0.0)),
         batch_fraction=float(raw_training.get("pair_batch_fraction", default_fraction)),
         units_per_batch=int(raw_training.get("pair_units_per_batch", max(1, batch_size // 2))),
         steps_per_epoch=None if steps_value is None else int(steps_value),
@@ -140,6 +145,12 @@ def pair_curriculum_settings(config: Mapping[str, object]) -> PairCurriculumSett
         raise ValueError("pair_ranking_weight cannot be negative")
     if settings.ranking_margin < 0:
         raise ValueError("pair_ranking_margin cannot be negative")
+    if settings.full_vocab_ranking_weight < 0:
+        raise ValueError("pair_full_vocab_ranking_weight cannot be negative")
+    if settings.full_vocab_ranking_margin < 0:
+        raise ValueError("pair_full_vocab_ranking_margin cannot be negative")
+    if settings.full_vocab_ranking_weight > 0 and settings.ranking_weight == 0:
+        raise ValueError("pair_full_vocab_ranking_weight requires pair_ranking_weight > 0")
     if settings.enabled and settings.ranking_weight == 0:
         raise ValueError("Pair-only mode requires a positive pair_ranking_weight")
     if settings.enabled and not 0.5 <= settings.batch_fraction <= 1.0:
