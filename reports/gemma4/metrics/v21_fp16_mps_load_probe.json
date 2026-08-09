@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "audit_type": "gemma4_fp16_mps_full_model_load_compatibility_probe",
+  "recorded_at_utc": "2026-08-09T16:45:46Z",
+  "model_id": "google/gemma-4-E2B-it",
+  "model_revision": "3e22461f65e89153144f8adb70e3b8c2cc9845a7",
+  "python_environment": ".venv-gemma4",
+  "torch_version": "2.13.0",
+  "transformers_version": "5.14.1",
+  "requested_dtype": "float16",
+  "requested_device_map": "mps",
+  "local_files_only": true,
+  "low_cpu_mem_usage": true,
+  "attempts": [
+    {
+      "attempt": 1,
+      "elapsed_seconds": 2.7,
+      "exit_code": 139,
+      "last_progress": null,
+      "model_constructed": false,
+      "forward_executed": false,
+      "outcome": "process_crashed_during_model_load"
+    },
+    {
+      "attempt": 2,
+      "elapsed_seconds": 363.0,
+      "exit_code": 130,
+      "last_progress": "Loading weights: 0% (0/1951)",
+      "model_constructed": false,
+      "forward_executed": false,
+      "termination": "manual_interrupt_after_no_progress",
+      "observed_rss_mib": 825,
+      "observed_system_free_memory_gib": 13,
+      "outcome": "weight_materialization_stalled"
+    }
+  ],
+  "result": "rejected",
+  "reason": "full-model FP16 Gemma loading on MPS was not reliable enough to authorize a training path",
+  "fallback": "retain the proven BF16 Gemma path and use a separately versioned phase-aware eligibility estimator",
+  "optimizer_constructed": false,
+  "optimizer_step_executed": false,
+  "checkpoint_written": false
+}

@@ -938,10 +938,42 @@ inflated the small color-pair differential from `0.000319` raw RMS to `0.001416`
 effective RMS, while the larger mirror differential changed from `0.002109` to
 `0.002539`. Thus subtracting two independently rounded responses confounds the
 intended pair signal with base-dependent quantization phase. V20's immutable
-decision is not being relaxed or reinterpreted. A separately versioned V21
-experiment will retain this diagnostic but gate eligibility on raw selectivity,
-per-scene BF16 survival, signal-aligned BF16 evidence with explicit phase-null
-controls, and exact predicted-update behavior through the frozen Gemma model.
+decision is not being relaxed or reinterpreted. A full-model FP16 MPS
+compatibility probe was attempted twice: one load crashed with exit 139, and
+the other remained stuck at 0% weight materialization for over six minutes
+before being stopped. It never constructed a model or ran inference, so FP16
+was rejected as unreliable on this machine. A separately versioned V21
+experiment retains the stable BF16 path and the legacy total-norm statistic as
+a diagnostic, while gating eligibility on raw selectivity, per-scene precision
+survival, signal-aligned evidence with explicit phase-null controls, and exact
+predicted-update behavior through the frozen Gemma model.
+
+#### Gemma V21 BF16 local-field screen — phase-aware estimator
+
+V21 is a fresh restart from the exact V18 epoch-4 checkpoint and loads no V20
+trained state (none exists). It keeps V20's 256-slot signed-X local field,
+zero-initialized 196,608-parameter projection, optimizer, exact twelve-unit
+order, pair losses, V18 scene bridge, frozen LoRA banks, and BF16 Gemma model
+path. V21 makes no model-path or training-policy change relative to V20; it
+changes only the preregistered eligibility estimator after V20 demonstrated
+that subtracting independently rounded scene responses confounds signal with
+base-token quantization phase.
+
+The V21 preflight remains no-live-step and adds two controls. A phase-aware
+audit decomposes the raw pair signal, exact decoder-visible pair response, and
+orthogonal quantization component; it also evaluates shared-base and
+common-delta nulls. Separately, the exact isolated first AdamW weight is run
+through frozen Gemma before any checkpoint is authorized. The color pair must
+remain a strict positive 12/12-side, 6/6-unit pass before and after that
+predicted update, and the mirror pair's configured weighted margin-hinge
+objective must strictly improve. The original total-norm pair statistic remains
+reported, but is explicitly diagnostic-only and cannot authorize or veto V21.
+
+Run the stages with `make gemma4-v21-preflight`, `make gemma4-v21-stage1`,
+`make gemma4-v21-verify-update1`, `make gemma4-v21-resume-screen`, and
+`make gemma4-v21-select`; `make gemma4-v21-screen` executes the guarded chain.
+No real optimizer step can run unless the BF16 structural, phase, functional,
+source-provenance, and zero-output-identity checks all pass.
 
 ### Fail-closed Gemma static evaluation and chat
 
