@@ -719,7 +719,7 @@ The immutable arm configs are
 and
 [`gemma4_color_mirror_global_scene_residual_v17_lr3e4.yaml`](configs/experiments/gemma4_color_mirror_global_scene_residual_v17_lr3e4.yaml).
 
-#### Gemma V18 centered content-gate screen — predeclared, not yet a result
+#### Gemma V18 centered content-gate screen — completed, mirror gate failed
 
 V17 proves that reducing the V16 learning rate does not remove the color/mirror
 tradeoff. V18 therefore restarts from the same exact V14 epoch-7 checkpoint with
@@ -776,8 +776,34 @@ preflight and update-one verification still run before a resume. The strict
 epoch selector reads only the resolved YAML, the deterministic selection JSON,
 and four checkpoint metadata JSON files; it performs no model inference and
 loads neither tensor checkpoints nor runtime/oracle artifacts.
-At this point V18 has no training result, promotion, generation, held-out, chat,
-leakage, or robot claim.
+The real preflight passed after two MPS-specific diagnostic defects were found,
+regression-tested, and fixed before training. Its isolated first AdamW update
+predicted residual-state SHA-256
+`599a3e8ba334299f71602e8892080e86facfaab3dce2aef7a258f1859747944a`
+and canonical optimizer-state SHA-256
+`cd19acb2f1bbe133307723125fc943dabc4bafa479fdf610534a95582a06d393`.
+The separately executed epoch-1 update matched both hashes exactly, including
+all eight parameter states, all 24 step/moment tensors, their order, and every
+AdamW option. Only then did the exact optimizer/history resume run epochs 2--4.
+
+V18 did not pass its behavioral screen. The strict selector chose epoch 4:
+color reached 12/12 full-vocabulary sides and 6/6 complete units with minimum
+full-vocabulary margin `+0.40625`, but mirror reached only 5/12 sides and 0/6
+complete units with minimum margin `-1.1875`. Earlier epochs never jointly
+preserved color and met the predeclared mirror continuation minimum. The
+selector therefore returned
+`screen_failed_no_extension_no_greedy_audit`; no extra epochs, free generation,
+promotion, held-out evaluation, chat, leakage, or robot claim is authorized.
+This falsifies the hypothesis that merely removing the V16 common-shift mode
+with a per-slot centered content gate is sufficient to bind mirrored geometry
+to left/right language.
+
+The machine-readable evidence is
+[`v18_structural_preflight.json`](reports/gemma4/metrics/v18_structural_preflight.json),
+[`v18_update1_match.json`](reports/gemma4/metrics/v18_update1_match.json), and
+[`v18_epoch_screen.json`](reports/gemma4/metrics/v18_epoch_screen.json). The
+final screen file SHA-256 is
+`f1d406dd9ba9b93488c07c905235f1045d2d904241f4e8a7c62f9e43d4854aa5`.
 
 ### Fail-closed Gemma static evaluation and chat
 

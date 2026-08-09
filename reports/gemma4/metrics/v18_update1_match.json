@@ -1,0 +1,417 @@
+{
+  "audit_type": "v18_exact_update1_match_verifier",
+  "checkpoint": {
+    "adapter_sha256": "db91b5859e69e24d8fb9dbff679e3f09be2c4abcb90480f580f6c089be9a8149",
+    "epoch": 1,
+    "global_step": 12,
+    "history_length": 1,
+    "metadata_sha256": "641be00fba2fb43caa6939d4d56dbfb7feeaf23b10e502a420ecc02ac8a9fd6c",
+    "optimizer_sha256": "dfd445bf9e9b2ebb4a28380f8022cae79e3dc4c4cbd83f2890e6f92de959a308",
+    "optimizer_size_bytes": 3208933,
+    "optimizer_state_manifest": {
+      "all_state_tensors_sha256": "ec3a17617e1f8eff10985991284aedbcb051d9fc62ebeaa4454af8a745f7e996",
+      "optimizer": "AdamW",
+      "param_groups": [
+        {
+          "amsgrad": false,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "capturable": false,
+          "decoupled_weight_decay": true,
+          "differentiable": false,
+          "eps": 1e-08,
+          "foreach": false,
+          "fused": false,
+          "lr": 0.001,
+          "maximize": false,
+          "name": "global_scene_residual",
+          "params": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "weight_decay": 0.0
+        }
+      ],
+      "parameter_order": [
+        {
+          "dtype": "float32",
+          "name": "scene_norm.weight",
+          "parameter_id": 0,
+          "shape": [
+            1536
+          ]
+        },
+        {
+          "dtype": "float32",
+          "name": "scene_norm.bias",
+          "parameter_id": 1,
+          "shape": [
+            1536
+          ]
+        },
+        {
+          "dtype": "float32",
+          "name": "scene_projection.weight",
+          "parameter_id": 2,
+          "shape": [
+            128,
+            1536
+          ]
+        },
+        {
+          "dtype": "float32",
+          "name": "scene_projection.bias",
+          "parameter_id": 3,
+          "shape": [
+            128
+          ]
+        },
+        {
+          "dtype": "float32",
+          "name": "position_projection.weight",
+          "parameter_id": 4,
+          "shape": [
+            128,
+            27
+          ]
+        },
+        {
+          "dtype": "float32",
+          "name": "position_projection.bias",
+          "parameter_id": 5,
+          "shape": [
+            128
+          ]
+        },
+        {
+          "dtype": "float32",
+          "name": "content_gate_projection.weight",
+          "parameter_id": 6,
+          "shape": [
+            1,
+            128
+          ]
+        },
+        {
+          "dtype": "float32",
+          "name": "output_projection.weight",
+          "parameter_id": 7,
+          "shape": [
+            1536,
+            128
+          ]
+        }
+      ],
+      "schema_version": 1,
+      "state_parameter_count": 8,
+      "states": [
+        {
+          "parameter_id": 0,
+          "parameter_name": "scene_norm.weight",
+          "state": {
+            "exp_avg": {
+              "dtype": "float32",
+              "finite": true,
+              "sha256": "62f5f2b546f23a8b9f19c77758a7b2b903648f6a304f59f76b455ae30af35adb",
+              "shape": [
+                1536
+              ]
+            },
+            "exp_avg_sq": {
+              "dtype": "float32",
+              "finite": true,
+              "sha256": "cc51b0ffd6cd5549b817ecb386ff1d1265b69ab5de0b0591dc081fa0f802df10",
+              "shape": [
+                1536
+              ]
+            },
+            "step": {
+              "dtype": "float32",
+              "finite": true,
+              "sha256": "27eba474bb69d6b41016220a789a78bb98f7dde8ce8341efa57c53773a12079b",
+              "shape": [],
+              "value": 1.0
+            }
+          }
+        },
+        {
+          "parameter_id": 1,
+          "parameter_name": "scene_norm.bias",
+          "state": {
+            "exp_avg": {
+              "dtype": "float32",
+              "finite": true,
+              "sha256": "47dfab1d30c4db6dc6c5c6fe194f677f3f37b2df687cffebfea7a742904f85c2",
+              "shape": [
+                1536
+              ]
+            },
+            "exp_avg_sq": {
+              "dtype": "float32",
+              "finite": true,
+              "sha256": "a42b4c6e12c17164510df69e3775319240e3e3138f75c6a393d8bc6fa8a8b470",
+              "shape": [
+                1536
+              ]
+            },
+            "step": {
+              "dtype": "float32",
+              "finite": true,
+              "sha256": "2c74477979c4b3b6c33fc8a440ec8b2484512217bb2b5335c7fa7704256cec3c",
+              "shape": [],
+              "value": 1.0
+            }
+          }
+        },
+        {
+          "parameter_id": 2,
+          "parameter_name": "scene_projection.weight",
+          "state": {
+            "exp_avg": {
+              "dtype": "float32",
+              "finite": true,
+              "sha256": "d14574e672b37b4e8ab64a03ada12fa2b66860f94013ec101b6185eacc40a217",
+              "shape": [
+                128,
+                1536
+              ]
+            },
+            "exp_avg_sq": {
+              "dtype": "float32",
+              "finite": true,
+              "sha256": "1d86401dd9767be65429e1d4f5f392ff38016d188a1237ae64c7f6a5070a9f48",
+              "shape": [
+                128,
+                1536
+              ]
+            },
+            "step": {
+              "dtype": "float32",
+              "finite": true,
+              "sha256": "adfa0c89d6f58be3d5affbc374b2d529c7804f892f48479a146668950e2dded4",
+              "shape": [],
+              "value": 1.0
+            }
+          }
+        },
+        {
+          "parameter_id": 3,
+          "parameter_name": "scene_projection.bias",
+          "state": {
+            "exp_avg": {
+              "dtype": "float32",
+              "finite": true,
+              "sha256": "14ec04e181f2020cd7f3e4b1f9e0e5334528b68587a53ddf972631d9ffecd7a0",
+              "shape": [
+                128
+              ]
+            },
+            "exp_avg_sq": {
+              "dtype": "float32",
+              "finite": true,
+              "sha256": "fd3674dea9aa261a71c54d10362df95da21120faf344648213d6d364c5b5ca1a",
+              "shape": [
+                128
+              ]
+            },
+            "step": {
+              "dtype": "float32",
+              "finite": true,
+              "sha256": "c60535ec703c3698391e3cbe005585f8b0bcdb494c24c9048e7634af082295ff",
+              "shape": [],
+              "value": 1.0
+            }
+          }
+        },
+        {
+          "parameter_id": 4,
+          "parameter_name": "position_projection.weight",
+          "state": {
+            "exp_avg": {
+              "dtype": "float32",
+              "finite": true,
+              "sha256": "eaf79ba4039b36b7a0e71c111f7ac62bc88be3d5341dc8575bf180056088b34c",
+              "shape": [
+                128,
+                27
+              ]
+            },
+            "exp_avg_sq": {
+              "dtype": "float32",
+              "finite": true,
+              "sha256": "757c33831d9b12b8a7d5e9a77927a056c95502df0360dc15ea6595e114e84967",
+              "shape": [
+                128,
+                27
+              ]
+            },
+            "step": {
+              "dtype": "float32",
+              "finite": true,
+              "sha256": "54b1d3cffccf77f3de4a11ea1831f5102fe1acc7abeb3c43e6d80e35e936c1a0",
+              "shape": [],
+              "value": 1.0
+            }
+          }
+        },
+        {
+          "parameter_id": 5,
+          "parameter_name": "position_projection.bias",
+          "state": {
+            "exp_avg": {
+              "dtype": "float32",
+              "finite": true,
+              "sha256": "9067059cc008d37447209b16531081b1d668a2cb36e73bbc0b1b207521db8e97",
+              "shape": [
+                128
+              ]
+            },
+            "exp_avg_sq": {
+              "dtype": "float32",
+              "finite": true,
+              "sha256": "dec835594177705f5a7bfaffd3f4d563ac0dc0fda9df6509d7bd1625fc7018fb",
+              "shape": [
+                128
+              ]
+            },
+            "step": {
+              "dtype": "float32",
+              "finite": true,
+              "sha256": "e8b05cbc73592ac600b7cd240d47ca1d4619bcf2f3d6385639bc348595be5c9d",
+              "shape": [],
+              "value": 1.0
+            }
+          }
+        },
+        {
+          "parameter_id": 6,
+          "parameter_name": "content_gate_projection.weight",
+          "state": {
+            "exp_avg": {
+              "dtype": "float32",
+              "finite": true,
+              "sha256": "ef73f3346e490eef9bc487e438f675e0d6b09615f0e14e512610e85e1ff977db",
+              "shape": [
+                1,
+                128
+              ]
+            },
+            "exp_avg_sq": {
+              "dtype": "float32",
+              "finite": true,
+              "sha256": "a0a19a43e481e38382c28997a39006d5119d183d6c108307daee82f672b8d85f",
+              "shape": [
+                1,
+                128
+              ]
+            },
+            "step": {
+              "dtype": "float32",
+              "finite": true,
+              "sha256": "ef731daf7c19ab594a30de09831cf23405d97b6552b48e6577f67313ce334dc4",
+              "shape": [],
+              "value": 1.0
+            }
+          }
+        },
+        {
+          "parameter_id": 7,
+          "parameter_name": "output_projection.weight",
+          "state": {
+            "exp_avg": {
+              "dtype": "float32",
+              "finite": true,
+              "sha256": "a358d5602165d82858b622baa2e9f55d128c7aef2ef0db456491d0f85da7f0c4",
+              "shape": [
+                1536,
+                128
+              ]
+            },
+            "exp_avg_sq": {
+              "dtype": "float32",
+              "finite": true,
+              "sha256": "aca05f13e52442d589027df7def2b718f68876968e3bb7da55745230cbdb8954",
+              "shape": [
+                1536,
+                128
+              ]
+            },
+            "step": {
+              "dtype": "float32",
+              "finite": true,
+              "sha256": "e0ac9a603452ada5e62c6196931f221dea28bbbc7b0ec82511f4c2ea5155891a",
+              "shape": [],
+              "value": 1.0
+            }
+          }
+        }
+      ]
+    },
+    "optimizer_state_sha256": "cd19acb2f1bbe133307723125fc943dabc4bafa479fdf610534a95582a06d393",
+    "optimizer_step": 1,
+    "path": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/checkpoints/gemma4_color_mirror_centered_content_gate_v18/epoch_001",
+    "residual_parameter_count": 400128,
+    "residual_state_sha256": "599a3e8ba334299f71602e8892080e86facfaab3dce2aef7a258f1859747944a",
+    "v18_stage_execution": {
+      "stage_1_exact_v14_restart_updates": 1,
+      "stage_1_stop_required": true,
+      "stage_2_load_history": true,
+      "stage_2_load_optimizer_state": true,
+      "stage_2_resume_from_epoch": 1,
+      "stage_2_target_total_optimizer_updates": 4
+    }
+  },
+  "config": {
+    "contract_sha256": "cce5899c4ab94096a8424823a5b8df63e9871c4ee9d0f79695238bdf0fb2798a",
+    "implementation_source_sha256": "10a0e9f5ce69636ea70c0948503f61b8fd966be35634048102a86033841eaa32",
+    "path": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/configs/experiments/gemma4_color_mirror_centered_content_gate_v18.yaml",
+    "sha256": "38b0fd8e679d239f5512c3df20c6b6080031062802c3c6b4d456e359e21d1dfe",
+    "short_hash": "38b0fd8e679d"
+  },
+  "match": true,
+  "match_report_sha256": "22d3fe42d6975d97a90350e1d9fa01be4b8dccce0da15ae7e8b30f05a1f01804",
+  "model_loaded": false,
+  "optimizer_deserialization": {
+    "canonical_state_validated": true,
+    "map_location": "cpu",
+    "weights_only": true
+  },
+  "optimizer_deserialized": true,
+  "oracle_loaded": false,
+  "preflight": {
+    "evidence_sha256": {
+      "v16_gradient_audit": "5e453933df459f7122ff8781bd2881838fb06a47c1a25e0193368edeedcede31",
+      "v17_lr_response": "3f63fd5654fb7120ed7aa9d28414490552eec32b3f170c3b80f992947d4161d9"
+    },
+    "file_sha256": "8e3207184b00b37c062d2002bd369eaeabf9f28295e3a5c49b3d9ec618e97920",
+    "isolated_clone_optimizer_steps": 1,
+    "live_state_unchanged": true,
+    "optimizer_state_sha256": "cd19acb2f1bbe133307723125fc943dabc4bafa479fdf610534a95582a06d393",
+    "optimizer_steps": 0,
+    "path": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/gemma4/metrics/v18_structural_preflight.json",
+    "predicted_residual_state_sha256": "599a3e8ba334299f71602e8892080e86facfaab3dce2aef7a258f1859747944a",
+    "rng_state_unchanged": true,
+    "structural_authorization": true
+  },
+  "report_only": true,
+  "scene_map_loaded": false,
+  "schema_version": 1,
+  "source_provenance": {
+    "available": true,
+    "head_commit": "251b776523d4a0d397b3c767120ae7d997fbe562",
+    "head_tree": "792efe8ed5bdd0c00fe4cb1f6a15ce9fdc93b6b7",
+    "is_clean": true,
+    "schema_version": 1,
+    "scope": "repository_excluding_generated_artifacts_v1",
+    "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "stage_2_authorized": true
+}
