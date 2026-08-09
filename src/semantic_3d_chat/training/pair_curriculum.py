@@ -10,12 +10,13 @@ scene's continuous prefix.
 from __future__ import annotations
 
 import hashlib
+import json
 import math
 import random
 from collections import defaultdict
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
-from typing import Literal, TypeVar
+from typing import Any, Literal, TypeVar
 
 import torch
 import torch.nn.functional as F
@@ -23,6 +24,310 @@ import torch.nn.functional as F
 from semantic_3d_chat.data.dataset import QARecord
 
 T = TypeVar("T")
+
+PAIR_OBJECTIVE_POLICY_SCHEMA_VERSION = 1
+
+
+def _finite_nonnegative_number(value: object, field: str) -> float:
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        raise TypeError(f"{field} must be numeric")
+    parsed = float(value)
+    if not math.isfinite(parsed) or parsed < 0.0:
+        raise ValueError(f"{field} must be finite and nonnegative")
+    return parsed
+
+
+@dataclass(frozen=True)
+class PairObjectivePolicy:
+    """One training-only loss policy for an opaque counterfactual pair."""
+
+    role: str
+    language_nll_weight: float
+    candidate_hinge_weight: float
+    candidate_margin: float
+    full_vocab_hinge_weight: float
+    full_vocab_margin: float
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.role, str) or not self.role.strip():
+            raise ValueError("pair objective role must be a nonempty string")
+        if self.role != self.role.strip():
+            raise ValueError("pair objective role cannot have surrounding whitespace")
+        for name, value in (
+            ("language_nll_weight", self.language_nll_weight),
+            ("candidate_hinge_weight", self.candidate_hinge_weight),
+            ("candidate_margin", self.candidate_margin),
+            ("full_vocab_hinge_weight", self.full_vocab_hinge_weight),
+            ("full_vocab_margin", self.full_vocab_margin),
+        ):
+            _finite_nonnegative_number(value, f"pair objective {name}")
+        if self.full_vocab_hinge_weight > 0.0 and self.candidate_hinge_weight == 0.0:
+            raise ValueError(
+                "pair objective full_vocab_hinge_weight requires candidate_hinge_weight > 0"
+            )
+        if (
+            self.language_nll_weight == 0.0
+            and self.candidate_hinge_weight == 0.0
+            and self.full_vocab_hinge_weight == 0.0
+        ):
+            raise ValueError("pair objective must enable at least one loss weight")
+
+    def contract(self) -> dict[str, str | float]:
+        return {
+            "role": self.role,
+            "language_nll_weight": float(self.language_nll_weight),
+            "candidate_hinge_weight": float(self.candidate_hinge_weight),
+            "candidate_margin": float(self.candidate_margin),
+            "full_vocab_hinge_weight": float(self.full_vocab_hinge_weight),
+            "full_vocab_margin": float(self.full_vocab_margin),
+        }
+
+
+@dataclass(frozen=True)
+class PairObjectivePolicySettings:
+    """Resolved per-pair policies with an exact legacy-global fallback."""
+
+    configured: bool
+    allow_unlisted_pair_ids: bool
+    legacy_default: PairObjectivePolicy
+    by_pair: tuple[tuple[str, PairObjectivePolicy], ...]
+
+    def __post_init__(self) -> None:
+        if type(self.configured) is not bool:
+            raise TypeError("pair objective configured flag must be a boolean")
+        if type(self.allow_unlisted_pair_ids) is not bool:
+            raise TypeError("pair objective allow_unlisted_pair_ids must be a boolean")
+        pair_ids = [pair_id for pair_id, _policy in self.by_pair]
+        if any(not isinstance(pair_id, str) or not pair_id for pair_id in pair_ids):
+            raise ValueError("pair objective IDs must be nonempty opaque strings")
+        if any(pair_id != pair_id.strip() for pair_id in pair_ids):
+            raise ValueError("pair objective IDs cannot have surrounding whitespace")
+        if len(pair_ids) != len(set(pair_ids)):
+            raise ValueError("pair objective IDs must be unique")
+        if pair_ids != sorted(pair_ids):
+            raise ValueError("pair objective policies must use canonical pair-ID order")
+        if not self.configured and (self.by_pair or not self.allow_unlisted_pair_ids):
+            raise ValueError("legacy pair objective settings cannot contain explicit policies")
+
+    @property
+    def pair_ids(self) -> tuple[str, ...]:
+        return tuple(pair_id for pair_id, _policy in self.by_pair)
+
+    def resolve(self, pair_id: str) -> PairObjectivePolicy:
+        """Resolve an explicit policy or the exact legacy-global fallback."""
+
+        if not isinstance(pair_id, str) or not pair_id:
+            raise ValueError("pair_id must be a nonempty opaque string")
+        for configured_pair_id, policy in self.by_pair:
+            if configured_pair_id == pair_id:
+                return policy
+        if self.allow_unlisted_pair_ids:
+            return self.legacy_default
+        raise KeyError(f"No pair objective policy is configured for {pair_id!r}")
+
+    def policy_for(self, pair_id: str) -> PairObjectivePolicy:
+        """Backward-compatible descriptive alias for :meth:`resolve`."""
+
+        return self.resolve(pair_id)
+
+    def contract(self) -> dict[str, Any]:
+        return {
+            "schema_version": PAIR_OBJECTIVE_POLICY_SCHEMA_VERSION,
+            "configured": self.configured,
+            "allow_unlisted_pair_ids": self.allow_unlisted_pair_ids,
+            "legacy_default": self.legacy_default.contract(),
+            "by_pair": {pair_id: policy.contract() for pair_id, policy in self.by_pair},
+        }
+
+
+def canonical_pair_objective_policy_sha256(value: Mapping[str, Any]) -> str:
+    """Hash one normalized policy contract with canonical JSON encoding."""
+
+    encoded = json.dumps(
+        value,
+        sort_keys=True,
+        separators=(",", ":"),
+        allow_nan=False,
+    ).encode("utf-8")
+    return hashlib.sha256(encoded).hexdigest()
+
+
+def pair_objective_policy_contract(
+    settings: PairObjectivePolicySettings,
+) -> dict[str, Any]:
+    """Return the canonical policy contract and its self-excluding hash."""
+
+    contract = settings.contract()
+    return {
+        **contract,
+        "contract_sha256": canonical_pair_objective_policy_sha256(contract),
+    }
+
+
+def _parse_pair_objective_policy(
+    value: object,
+    *,
+    field: str,
+) -> PairObjectivePolicy:
+    if not isinstance(value, Mapping):
+        raise TypeError(f"{field} must be an object")
+    expected_keys = {
+        "role",
+        "language_nll_weight",
+        "candidate_hinge_weight",
+        "candidate_margin",
+        "full_vocab_hinge_weight",
+        "full_vocab_margin",
+    }
+    observed_keys = set(value)
+    if observed_keys != expected_keys:
+        raise ValueError(
+            f"{field} keys mismatch: "
+            f"missing={sorted(expected_keys - observed_keys)} "
+            f"unknown={sorted(observed_keys - expected_keys)}"
+        )
+    role = value["role"]
+    if not isinstance(role, str):
+        raise TypeError(f"{field}.role must be a string")
+    return PairObjectivePolicy(
+        role=role,
+        language_nll_weight=_finite_nonnegative_number(
+            value["language_nll_weight"], f"{field}.language_nll_weight"
+        ),
+        candidate_hinge_weight=_finite_nonnegative_number(
+            value["candidate_hinge_weight"], f"{field}.candidate_hinge_weight"
+        ),
+        candidate_margin=_finite_nonnegative_number(
+            value["candidate_margin"], f"{field}.candidate_margin"
+        ),
+        full_vocab_hinge_weight=_finite_nonnegative_number(
+            value["full_vocab_hinge_weight"], f"{field}.full_vocab_hinge_weight"
+        ),
+        full_vocab_margin=_finite_nonnegative_number(
+            value["full_vocab_margin"], f"{field}.full_vocab_margin"
+        ),
+    )
+
+
+def pair_objective_policy_settings(
+    config: Mapping[str, object],
+) -> PairObjectivePolicySettings:
+    """Resolve optional schema-1 policies without changing legacy objectives."""
+
+    raw_training = config.get("training")
+    if not isinstance(raw_training, Mapping):
+        raise TypeError("Config is missing a training mapping")
+    legacy_default = PairObjectivePolicy(
+        role="legacy_global",
+        language_nll_weight=1.0,
+        candidate_hinge_weight=_finite_nonnegative_number(
+            raw_training.get("pair_ranking_weight", 0.0), "pair_ranking_weight"
+        ),
+        candidate_margin=_finite_nonnegative_number(
+            raw_training.get("pair_ranking_margin", 0.5), "pair_ranking_margin"
+        ),
+        full_vocab_hinge_weight=_finite_nonnegative_number(
+            raw_training.get("pair_full_vocab_ranking_weight", 0.0),
+            "pair_full_vocab_ranking_weight",
+        ),
+        full_vocab_margin=_finite_nonnegative_number(
+            raw_training.get("pair_full_vocab_ranking_margin", 0.0),
+            "pair_full_vocab_ranking_margin",
+        ),
+    )
+    raw = raw_training.get("pair_objectives")
+    if raw is None:
+        return PairObjectivePolicySettings(
+            configured=False,
+            allow_unlisted_pair_ids=True,
+            legacy_default=legacy_default,
+            by_pair=(),
+        )
+    if not isinstance(raw, Mapping):
+        raise TypeError("training.pair_objectives must be an object or null")
+    expected_keys = {"schema_version", "allow_unlisted_pair_ids", "by_pair"}
+    observed_keys = set(raw)
+    if observed_keys != expected_keys:
+        raise ValueError(
+            "training.pair_objectives keys mismatch: "
+            f"missing={sorted(expected_keys - observed_keys)} "
+            f"unknown={sorted(observed_keys - expected_keys)}"
+        )
+    schema_version = raw["schema_version"]
+    if type(schema_version) is not int or schema_version != PAIR_OBJECTIVE_POLICY_SCHEMA_VERSION:
+        raise ValueError(
+            "training.pair_objectives.schema_version must equal "
+            f"{PAIR_OBJECTIVE_POLICY_SCHEMA_VERSION}"
+        )
+    allow_unlisted = raw["allow_unlisted_pair_ids"]
+    if type(allow_unlisted) is not bool:
+        raise TypeError("training.pair_objectives.allow_unlisted_pair_ids must be a boolean")
+    raw_by_pair = raw["by_pair"]
+    if not isinstance(raw_by_pair, Mapping):
+        raise TypeError("training.pair_objectives.by_pair must be an object")
+    parsed: list[tuple[str, PairObjectivePolicy]] = []
+    for pair_id, policy in raw_by_pair.items():
+        if not isinstance(pair_id, str) or not pair_id:
+            raise ValueError("training.pair_objectives.by_pair keys must be opaque strings")
+        if pair_id != pair_id.strip():
+            raise ValueError("pair objective IDs cannot have surrounding whitespace")
+        parsed.append(
+            (
+                pair_id,
+                _parse_pair_objective_policy(
+                    policy,
+                    field=f"training.pair_objectives.by_pair[{pair_id!r}]",
+                ),
+            )
+        )
+    return PairObjectivePolicySettings(
+        configured=True,
+        allow_unlisted_pair_ids=allow_unlisted,
+        legacy_default=legacy_default,
+        by_pair=tuple(sorted(parsed, key=lambda item: item[0])),
+    )
+
+
+def validate_pair_objective_policy_coverage(
+    settings: PairObjectivePolicySettings,
+    selected_pair_ids: Sequence[str],
+) -> dict[str, Any]:
+    """Fail closed on stale policies or uncovered selected pair IDs."""
+
+    if isinstance(selected_pair_ids, str):
+        raise TypeError("selected_pair_ids must be a sequence of opaque pair IDs")
+    normalized: list[str] = []
+    for pair_id in selected_pair_ids:
+        if not isinstance(pair_id, str) or not pair_id:
+            raise ValueError("selected_pair_ids must contain nonempty opaque strings")
+        if pair_id != pair_id.strip():
+            raise ValueError("selected_pair_ids cannot contain surrounding whitespace")
+        normalized.append(pair_id)
+    if len(normalized) != len(set(normalized)):
+        raise ValueError("selected_pair_ids cannot contain duplicates")
+    selected = set(normalized)
+    configured = set(settings.pair_ids)
+    stale = configured - selected
+    if stale:
+        raise ValueError(f"Pair objective policies reference unselected pair IDs: {sorted(stale)}")
+    missing = selected - configured
+    if missing and not settings.allow_unlisted_pair_ids:
+        raise ValueError(f"Selected pair IDs lack pair objective policies: {sorted(missing)}")
+    ordered = sorted(selected)
+    resolved = {pair_id: settings.resolve(pair_id).contract() for pair_id in ordered}
+    evidence: dict[str, Any] = {
+        "schema_version": PAIR_OBJECTIVE_POLICY_SCHEMA_VERSION,
+        "selected_pair_ids": ordered,
+        "configured_pair_ids": sorted(configured),
+        "unlisted_pair_ids": sorted(missing),
+        "allow_unlisted_pair_ids": settings.allow_unlisted_pair_ids,
+        "resolved_by_pair": resolved,
+        "complete": True,
+    }
+    return {
+        **evidence,
+        "coverage_sha256": canonical_pair_objective_policy_sha256(evidence),
+    }
 
 
 @dataclass(frozen=True)

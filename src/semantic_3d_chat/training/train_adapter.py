@@ -54,6 +54,7 @@ from semantic_3d_chat.language.prefix_injection import (
     stack_prefix_batches,
 )
 from semantic_3d_chat.scene_encoder.global_residual import (
+    ZERO_SPATIAL_MEAN_CONTENT_GATE_V1,
     GlobalSceneResidual,
     apply_global_scene_residual,
     construct_global_scene_residual,
@@ -61,6 +62,13 @@ from semantic_3d_chat.scene_encoder.global_residual import (
 )
 from semantic_3d_chat.scene_encoder.map_io import MapTensorData, load_map_tensors
 from semantic_3d_chat.scene_encoder.projector import SceneTokenizer
+from semantic_3d_chat.scene_encoder.signed_x_residual import (
+    SignedXSceneResidual,
+    apply_signed_x_scene_residual,
+    construct_signed_x_scene_residual,
+    frozen_v18_centered_content_values,
+    signed_x_scene_residual_settings,
+)
 from semantic_3d_chat.training.checkpointing import (
     load_adapter_checkpoint,
     load_optimizer_checkpoint,
@@ -79,6 +87,7 @@ from semantic_3d_chat.training.losses import (
 )
 from semantic_3d_chat.training.pair_curriculum import (
     CounterfactualPairUnit,
+    PairObjectivePolicy,
     build_epoch_curriculum,
     build_exact_question_pair_units,
     candidate_logit_margins,
@@ -87,12 +96,15 @@ from semantic_3d_chat.training.pair_curriculum import (
     first_answer_token_full_vocab_margins,
     pair_curriculum_settings,
     pair_gate_metrics,
+    pair_objective_policy_contract,
+    pair_objective_policy_settings,
     pair_ranking_hinge,
     ranking_margin_hinge,
     restrict_labels_to_answer_mask,
     select_pair_only_records,
     single_differing_answer_token,
     token_normalized_nll,
+    validate_pair_objective_policy_coverage,
 )
 from semantic_3d_chat.training.source_provenance import (
     capture_git_source_provenance,
@@ -144,6 +156,24 @@ def declared_global_scene_residual_parameter_count(config: Mapping[str, object])
     return value
 
 
+def declared_signed_x_scene_residual_parameter_count(
+    config: Mapping[str, object],
+) -> int | None:
+    """Return an optional experiment assertion for the signed-X surface."""
+
+    experiment = config.get("experiment")
+    if experiment is None:
+        return None
+    if not isinstance(experiment, Mapping):
+        raise TypeError("experiment config must be a mapping")
+    value = experiment.get("signed_x_residual_parameter_count")
+    if value is None:
+        return None
+    if isinstance(value, bool) or not isinstance(value, int) or value <= 0:
+        raise ValueError("experiment.signed_x_residual_parameter_count must be a positive integer")
+    return value
+
+
 def explicit_adamw_options(config: Mapping[str, object]) -> dict[str, object]:
     """Return optional, fully explicit AdamW implementation controls.
 
@@ -179,9 +209,7 @@ def explicit_adamw_options(config: Mapping[str, object]) -> dict[str, object]:
     unknown = sorted(set(raw) - expected)
     missing = sorted(expected - set(raw))
     if missing or unknown:
-        raise ValueError(
-            f"training.optimizer keys mismatch: missing={missing} unknown={unknown}"
-        )
+        raise ValueError(f"training.optimizer keys mismatch: missing={missing} unknown={unknown}")
     if raw["name"] != "AdamW":
         raise ValueError("training.optimizer.name must equal 'AdamW'")
     for optimizer_key, training_key in (
@@ -306,6 +334,50 @@ def global_scene_residual_resume_metadata_mismatch(
     saved_count = metadata.get("global_scene_residual_parameter_count")
     if saved_count != module.parameter_count:
         mismatches["global_scene_residual_parameter_count"] = {
+            "checkpoint": saved_count,
+            "runtime": module.parameter_count,
+        }
+    return mismatches or None
+
+
+def validate_signed_x_scene_residual_state(
+    module: SignedXSceneResidual,
+    *,
+    expected_parameter_count: int | None,
+    context: str,
+) -> dict[str, object]:
+    """Validate the signed-X branch and its explicitly tiny parameter surface."""
+
+    audit = module.validate_structural_state()
+    observed = module.parameter_count
+    if expected_parameter_count is not None and observed != expected_parameter_count:
+        raise ValueError(
+            f"Signed-X residual parameter-count mismatch during {context}: "
+            f"expected={expected_parameter_count} observed={observed}"
+        )
+    if audit.get("parameter_count") != observed:
+        raise RuntimeError("Signed-X structural audit reported a stale parameter count")
+    return dict(audit)
+
+
+def signed_x_scene_residual_resume_metadata_mismatch(
+    metadata: Mapping[str, object],
+    module: SignedXSceneResidual,
+    *,
+    expected_initial_state_sha256: str,
+) -> dict[str, object] | None:
+    """Compare strict signed-X provenance before restoring resume tensors."""
+
+    mismatches: dict[str, object] = {}
+    saved_initial = metadata.get("signed_x_scene_residual_initial_state_sha256")
+    if saved_initial != expected_initial_state_sha256:
+        mismatches["signed_x_scene_residual_initial_state_sha256"] = {
+            "checkpoint": saved_initial,
+            "runtime": expected_initial_state_sha256,
+        }
+    saved_count = metadata.get("signed_x_scene_residual_parameter_count")
+    if saved_count != module.parameter_count:
+        mismatches["signed_x_scene_residual_parameter_count"] = {
             "checkpoint": saved_count,
             "runtime": module.parameter_count,
         }
@@ -533,6 +605,8 @@ def combine_pair_training_losses(
     diversity_loss: torch.Tensor,
     scene_separation_loss: torch.Tensor,
     *,
+    language_loss: torch.Tensor | None = None,
+    language_nll_weight: float = 1.0,
     pair_ranking_weight: float,
     full_vocab_ranking_weight: float,
     diversity_weight: float,
@@ -540,13 +614,37 @@ def combine_pair_training_losses(
 ) -> torch.Tensor:
     """Compose the audited pair objective from raw differentiable terms."""
 
+    if language_nll_weight != 1.0 and language_loss is None:
+        raise ValueError("language_loss is required when language_nll_weight differs from one")
+    weighted_base = base_loss
+    if language_nll_weight != 1.0:
+        assert language_loss is not None
+        weighted_base = base_loss + (float(language_nll_weight) - 1.0) * language_loss
+
     return (
-        base_loss
+        weighted_base
         + float(pair_ranking_weight) * pair_ranking_loss
         + float(full_vocab_ranking_weight) * full_vocab_ranking_loss
         + float(diversity_weight) * diversity_loss
         + float(scene_separation_weight) * scene_separation_loss
     )
+
+
+def validate_pair_objective_training_mode(
+    *,
+    configured: bool,
+    curriculum_enabled: bool,
+    pair_only: bool,
+) -> None:
+    """Keep schema-1 policies from being bypassed by legacy/standard batches."""
+
+    if configured and not curriculum_enabled:
+        raise ValueError("Explicit pair objective policies require an enabled pair curriculum")
+    if configured and not pair_only:
+        raise ValueError(
+            "Schema-1 pair objective policies require pair_only training so standard "
+            "batches cannot bypass a pair's configured language-NLL weight"
+        )
 
 
 def pair_gate_checkpoint_improved(
@@ -669,9 +767,13 @@ def build_adapter_optimizer(
         groups.append(
             {
                 "name": (
-                    "global_scene_residual"
-                    if config["training"].get("train_global_scene_residual_only", False)
-                    else "scene_adapter"
+                    "signed_x_output_projection"
+                    if config["training"].get("train_signed_x_scene_residual_only", False)
+                    else (
+                        "global_scene_residual"
+                        if config["training"].get("train_global_scene_residual_only", False)
+                        else "scene_adapter"
+                    )
                 ),
                 "params": scene_parameters,
                 "lr": float(config["training"]["learning_rate"]),
@@ -730,6 +832,7 @@ def map_forward(
     model: SceneTokenizer,
     data: MapTensorData,
     global_scene_residual: GlobalSceneResidual | None = None,
+    signed_x_scene_residual: SignedXSceneResidual | None = None,
 ):
     output = model(
         data.semantic,
@@ -741,7 +844,23 @@ def map_forward(
         data.room_min,
         data.room_max,
     )
-    return apply_global_scene_residual(output, global_scene_residual)
+    centered_content = None
+    if signed_x_scene_residual is not None:
+        if global_scene_residual is None:
+            raise ValueError("Signed-X scene residual requires the frozen V18 residual base")
+        centered_content = frozen_v18_centered_content_values(
+            global_scene_residual,
+            output.scene_tokens,
+        )
+    output = apply_global_scene_residual(output, global_scene_residual)
+    if signed_x_scene_residual is not None:
+        assert centered_content is not None
+        output = apply_signed_x_scene_residual(
+            output,
+            signed_x_scene_residual,
+            centered_content,
+        )
+    return output
 
 
 def training_map_forward(
@@ -750,6 +869,7 @@ def training_map_forward(
     *,
     freeze_scene_adapter: bool,
     global_scene_residual: GlobalSceneResidual | None = None,
+    signed_x_scene_residual: SignedXSceneResidual | None = None,
 ):
     """Encode frozen scene tokens without creating inference tensors.
 
@@ -759,9 +879,31 @@ def training_map_forward(
     """
 
     if not freeze_scene_adapter:
-        return map_forward(model, data, global_scene_residual)
+        return map_forward(
+            model,
+            data,
+            global_scene_residual,
+            signed_x_scene_residual,
+        )
     with torch.no_grad():
         output = map_forward(model, data)
+        if signed_x_scene_residual is not None:
+            if global_scene_residual is None:
+                raise ValueError("Signed-X scene residual requires the frozen V18 residual base")
+            centered_content = frozen_v18_centered_content_values(
+                global_scene_residual,
+                output.scene_tokens,
+            )
+            output = apply_global_scene_residual(output, global_scene_residual)
+        else:
+            centered_content = None
+    if signed_x_scene_residual is not None:
+        assert centered_content is not None
+        return apply_signed_x_scene_residual(
+            output,
+            signed_x_scene_residual,
+            centered_content,
+        )
     return apply_global_scene_residual(output, global_scene_residual)
 
 
@@ -816,6 +958,74 @@ def verify_zero_output_scene_residual_equivalence(
     return {
         "verified": True,
         "question_dependent_scene_processing": False,
+        "scene_count": len(scene_hashes),
+        "scene_prefixes": scene_hashes,
+    }
+
+
+def verify_zero_output_signed_x_residual_equivalence(
+    scene_model: SceneTokenizer,
+    global_scene_residual: GlobalSceneResidual,
+    signed_x_scene_residual: SignedXSceneResidual,
+    composer: ContinuousPrefixComposer,
+    maps: Mapping[str, MapTensorData],
+    *,
+    model_dtype: torch.dtype,
+) -> dict[str, object]:
+    """Prove that a fresh signed-X branch exactly preserves the loaded V18 base."""
+
+    modules: tuple[torch.nn.Module, ...] = (
+        scene_model,
+        global_scene_residual,
+        signed_x_scene_residual,
+        composer,
+    )
+    previous_modes = tuple(module.training for module in modules)
+    for module in modules:
+        module.eval()
+    scene_hashes: dict[str, dict[str, str]] = {}
+    try:
+        with torch.inference_mode():
+            for scene_id in sorted(maps):
+                core = map_forward(scene_model, maps[scene_id])
+                centered_content = frozen_v18_centered_content_values(
+                    global_scene_residual,
+                    core.scene_tokens,
+                )
+                base = apply_global_scene_residual(core, global_scene_residual)
+                adapted = apply_signed_x_scene_residual(
+                    base,
+                    signed_x_scene_residual,
+                    centered_content,
+                )
+                if not torch.equal(base.scene_tokens, adapted.scene_tokens):
+                    raise RuntimeError(
+                        f"Fresh signed-X residual changed update-0 tokens for {scene_id}"
+                    )
+                base_prefix = composer.scene_prefix(base.scene_tokens.to(dtype=model_dtype))
+                adapted_prefix = composer.scene_prefix(adapted.scene_tokens.to(dtype=model_dtype))
+                if not torch.equal(base_prefix, adapted_prefix):
+                    raise RuntimeError(
+                        f"Fresh signed-X residual changed update-0 prefix for {scene_id}"
+                    )
+                base_hash = prefix_sha256(base_prefix)
+                adapted_hash = prefix_sha256(adapted_prefix)
+                if base_hash != adapted_hash:
+                    raise RuntimeError(
+                        f"Fresh signed-X residual changed update-0 prefix hash for {scene_id}"
+                    )
+                scene_hashes[scene_id] = {
+                    "v18_base_prefix_sha256": base_hash,
+                    "signed_x_adapted_prefix_sha256": adapted_hash,
+                }
+    finally:
+        for module, was_training in zip(modules, previous_modes, strict=True):
+            module.train(was_training)
+    return {
+        "verified": True,
+        "base": "loaded_frozen_global_scene_residual",
+        "question_dependent_scene_processing": False,
+        "all_scene_slots_accounted": True,
         "scene_count": len(scene_hashes),
         "scene_prefixes": scene_hashes,
     }
@@ -2385,6 +2595,7 @@ def evaluate_pair_candidate_gate(
     language,
     scene_model: SceneTokenizer,
     global_scene_residual: GlobalSceneResidual | None = None,
+    signed_x_scene_residual: SignedXSceneResidual | None = None,
     composer: ContinuousPrefixComposer,
     grounding: QuestionGroundingHead,
     units_per_batch: int,
@@ -2402,7 +2613,13 @@ def evaluate_pair_candidate_gate(
         raise ValueError("Pair gate evaluation requires pair units")
     modules = tuple(
         module
-        for module in (scene_model, global_scene_residual, composer, grounding)
+        for module in (
+            scene_model,
+            global_scene_residual,
+            signed_x_scene_residual,
+            composer,
+            grounding,
+        )
         if module is not None
     )
     previous_modes = [module.training for module in modules]
@@ -2425,7 +2642,12 @@ def evaluate_pair_candidate_gate(
                 pair_margins: list[torch.Tensor] = []
                 pair_full_vocab_margins: list[torch.Tensor] = []
                 outputs = {
-                    scene_id: map_forward(scene_model, maps[scene_id], global_scene_residual)
+                    scene_id: map_forward(
+                        scene_model,
+                        maps[scene_id],
+                        global_scene_residual,
+                        signed_x_scene_residual,
+                    )
                     for scene_id in scene_ids
                 }
                 for offset in range(0, len(pair_units), units_per_batch):
@@ -2493,6 +2715,7 @@ def validation_loss(
     language,
     scene_model: SceneTokenizer,
     global_scene_residual: GlobalSceneResidual | None = None,
+    signed_x_scene_residual: SignedXSceneResidual | None = None,
     composer: ContinuousPrefixComposer,
     grounding: QuestionGroundingHead,
     semantic_dim: int,
@@ -2505,7 +2728,13 @@ def validation_loss(
         return None
     modules = tuple(
         module
-        for module in (scene_model, global_scene_residual, composer, grounding)
+        for module in (
+            scene_model,
+            global_scene_residual,
+            signed_x_scene_residual,
+            composer,
+            grounding,
+        )
         if module is not None
     )
     previous_modes = [module.training for module in modules]
@@ -2533,7 +2762,12 @@ def validation_loss(
                         f"Validation scene {scene_id} feature dimension {data.feature_dim} "
                         f"does not match training dimension {semantic_dim}"
                     )
-                output = map_forward(scene_model, data, global_scene_residual)
+                output = map_forward(
+                    scene_model,
+                    data,
+                    global_scene_residual,
+                    signed_x_scene_residual,
+                )
                 records = records_by_scene[scene_id]
                 for offset in range(0, len(records), batch_size):
                     batch_records = records[offset : offset + batch_size]
@@ -2598,7 +2832,9 @@ def main() -> None:
     configured_lora = lora_banks_settings(config)
     configured_lora_optimizer = lora_banks_optimizer_settings(config, configured_lora)
     residual_settings = global_scene_residual_settings(config)
+    signed_x_residual_settings = signed_x_scene_residual_settings(config)
     declared_residual_parameter_count = declared_global_scene_residual_parameter_count(config)
+    declared_signed_x_parameter_count = declared_signed_x_scene_residual_parameter_count(config)
     freeze_scene_adapter = config["training"].get("freeze_scene_adapter", False)
     if not isinstance(freeze_scene_adapter, bool):
         raise TypeError("training.freeze_scene_adapter must be a boolean")
@@ -2607,16 +2843,40 @@ def main() -> None:
     )
     if not isinstance(train_global_scene_residual_only, bool):
         raise TypeError("training.train_global_scene_residual_only must be a boolean")
-    if residual_settings.enabled != train_global_scene_residual_only:
+    train_signed_x_scene_residual_only = config["training"].get(
+        "train_signed_x_scene_residual_only", False
+    )
+    if not isinstance(train_signed_x_scene_residual_only, bool):
+        raise TypeError("training.train_signed_x_scene_residual_only must be a boolean")
+    if train_global_scene_residual_only and train_signed_x_scene_residual_only:
+        raise ValueError("Global-residual-only and signed-X-only training are mutually exclusive")
+    if residual_settings.enabled != (
+        train_global_scene_residual_only or train_signed_x_scene_residual_only
+    ):
         raise ValueError(
-            "Training global-scene-residual enablement must be explicit and exclusive: "
+            "Training residual-base enablement must be explicit and exclusive: "
             f"residual_enabled={residual_settings.enabled} "
-            f"train_global_scene_residual_only={train_global_scene_residual_only}"
+            f"train_global_scene_residual_only={train_global_scene_residual_only} "
+            f"train_signed_x_scene_residual_only={train_signed_x_scene_residual_only}"
         )
+    if signed_x_residual_settings.enabled != train_signed_x_scene_residual_only:
+        raise ValueError(
+            "Training signed-X enablement must be explicit and exclusive: "
+            f"signed_x_enabled={signed_x_residual_settings.enabled} "
+            f"train_signed_x_scene_residual_only={train_signed_x_scene_residual_only}"
+        )
+    if train_signed_x_scene_residual_only and (
+        residual_settings.architecture_version != ZERO_SPATIAL_MEAN_CONTENT_GATE_V1
+    ):
+        raise ValueError("Signed-X training requires the centered-content V18 residual base")
     if train_global_scene_residual_only and not freeze_scene_adapter:
         raise ValueError("Residual-only training requires the core scene adapter to be frozen")
     if train_global_scene_residual_only and configured_lora.trainable:
         raise ValueError("Residual-only training requires every language LoRA bank to be frozen")
+    if train_signed_x_scene_residual_only and not freeze_scene_adapter:
+        raise ValueError("Signed-X-only training requires the core scene adapter to be frozen")
+    if train_signed_x_scene_residual_only and configured_lora.trainable:
+        raise ValueError("Signed-X-only training requires every language LoRA bank to be frozen")
     initialize_legacy_lora_into_bank = config["training"].get("initialize_legacy_lora_into_bank")
     if initialize_legacy_lora_into_bank is not None and (
         not isinstance(initialize_legacy_lora_into_bank, str)
@@ -2632,12 +2892,35 @@ def main() -> None:
         raise ValueError("Named-bank freeze transition and legacy-bank aliasing are exclusive")
     if initialize_named_lora_freeze_transition and not train_global_scene_residual_only:
         raise ValueError("Named-bank freeze transition is restricted to residual-only training")
+    initialize_source_residual_into_frozen_base = config["training"].get(
+        "initialize_source_residual_into_frozen_base", False
+    )
+    if not isinstance(initialize_source_residual_into_frozen_base, bool):
+        raise TypeError("training.initialize_source_residual_into_frozen_base must be a boolean")
+    if initialize_source_residual_into_frozen_base and not train_signed_x_scene_residual_only:
+        raise ValueError(
+            "Source-residual freeze transition is restricted to signed-X-only training"
+        )
+    if initialize_source_residual_into_frozen_base and initialize_named_lora_freeze_transition:
+        raise ValueError("Residual-base and named-LoRA freeze transitions are mutually exclusive")
     initialize_expected_adapter_sha256 = optional_sha256_setting(
         config["training"], "initialize_expected_adapter_sha256"
     )
     initialize_expected_metadata_sha256 = optional_sha256_setting(
         config["training"], "initialize_expected_metadata_sha256"
     )
+    initialize_expected_global_scene_residual_state_sha256 = optional_sha256_setting(
+        config["training"],
+        "initialize_expected_global_scene_residual_state_sha256",
+    )
+    if (
+        initialize_source_residual_into_frozen_base
+        and initialize_expected_global_scene_residual_state_sha256 is None
+    ):
+        raise ValueError(
+            "Source-residual freeze transition requires "
+            "training.initialize_expected_global_scene_residual_state_sha256"
+        )
     source_provenance = capture_git_source_provenance(PROJECT_ROOT)
     language_decoder_gradient_checkpointing = config["training"].get(
         "language_decoder_gradient_checkpointing", False
@@ -2648,6 +2931,7 @@ def main() -> None:
     if gradient_accumulation < 1:
         raise ValueError("gradient_accumulation must be positive")
     pair_curriculum = pair_curriculum_settings(config)
+    pair_objectives = pair_objective_policy_settings(config)
     pair_gate_monitor_name = (
         "pair_composite_full_vocab_gate_margin"
         if pair_curriculum.first_answer_token_top1_accuracy_threshold is not None
@@ -2717,15 +3001,29 @@ def main() -> None:
             raise ValueError(
                 f"Frozen scene adapter requires all scene-only objectives to be disabled: {active}"
             )
-        if not configured_lora.trainable and not train_global_scene_residual_only:
+        if (
+            not configured_lora.trainable
+            and not train_global_scene_residual_only
+            and not train_signed_x_scene_residual_only
+        ):
             raise ValueError(
                 "Frozen scene adapter requires a trainable LoRA bank or the explicit "
-                "global-scene-residual-only path"
+                "global-scene-residual-only/signed-X-only path"
             )
     token_mixing = scene_token_mixing_settings(config)
     pair_units = build_exact_question_pair_units(records)
+    validate_pair_objective_training_mode(
+        configured=pair_objectives.configured,
+        curriculum_enabled=pair_curriculum.enabled,
+        pair_only=pair_curriculum.pair_only,
+    )
     if pair_curriculum.enabled and not pair_units:
         raise ValueError("The pair curriculum is enabled but selection contains no pair units")
+    pair_objective_coverage = validate_pair_objective_policy_coverage(
+        pair_objectives,
+        sorted({unit.pair_id for unit in pair_units}),
+    )
+    resolved_pair_objective_contract = pair_objective_policy_contract(pair_objectives)
     spatial_answer_targets = spatial_answer_target_audit(pair_units)
     spatial_answer_warmup_targets = spatial_answer_warmup_target_audit(pair_units)
     spatial_relation_targets = spatial_relation_target_audit(pair_units)
@@ -2750,6 +3048,30 @@ def main() -> None:
         for pair_id, first_scene, second_scene in training_pairs
     )
     pair_membership_sha256 = hashlib.sha256(pair_membership_text.encode("utf-8")).hexdigest()
+    pair_unit_selection = [
+        {
+            "pair_id": unit.pair_id,
+            "question_key": unit.question_key,
+            "scene_ids": list(unit.scene_ids),
+            "question_ids": [record.question_id for record in unit.records],
+        }
+        for unit in sorted(
+            pair_units,
+            key=lambda item: (
+                item.pair_id,
+                item.question_key,
+                item.reference.question_id,
+                item.counterfactual.question_id,
+            ),
+        )
+    ]
+    pair_unit_selection_sha256 = hashlib.sha256(
+        json.dumps(
+            pair_unit_selection,
+            sort_keys=True,
+            separators=(",", ":"),
+        ).encode("utf-8")
+    ).hexdigest()
     split_ids = split_scene_ids(qa_root, records)
     validation_path = qa_root / "validation.jsonl"
     validation_records: list[QARecord] = []
@@ -2787,6 +3109,7 @@ def main() -> None:
         "training_counterfactual_pair_count": len(training_pairs),
         "training_counterfactual_pair_membership_sha256": pair_membership_sha256,
         "counterfactual_pair_unit_count": len(pair_units),
+        "counterfactual_pair_unit_selection_sha256": pair_unit_selection_sha256,
         "scene_token_mixing": token_mixing,
         "spatial_answer_contrastive": spatial_answer_contrastive,
         "spatial_answer_target_audit": spatial_answer_targets,
@@ -2799,11 +3122,19 @@ def main() -> None:
         "language_decoder_gradient_checkpointing": (language_decoder_gradient_checkpointing),
         "freeze_scene_adapter": freeze_scene_adapter,
         "train_global_scene_residual_only": train_global_scene_residual_only,
+        "train_signed_x_scene_residual_only": train_signed_x_scene_residual_only,
         "global_scene_residual": residual_settings.contract(),
+        "signed_x_scene_residual": signed_x_residual_settings.contract(),
         "initialize_legacy_lora_into_bank": initialize_legacy_lora_into_bank,
         "initialize_named_lora_freeze_transition": initialize_named_lora_freeze_transition,
+        "initialize_source_residual_into_frozen_base": (
+            initialize_source_residual_into_frozen_base
+        ),
         "initialize_expected_adapter_sha256": initialize_expected_adapter_sha256,
         "initialize_expected_metadata_sha256": initialize_expected_metadata_sha256,
+        "initialize_expected_global_scene_residual_state_sha256": (
+            initialize_expected_global_scene_residual_state_sha256
+        ),
         "scene_prefix_after_bos": scene_prefix_after_bos,
         "scene_boundary_mode": scene_boundary_mode,
         "gemma4_native_image_contract": configured_native_boundary_contract,
@@ -2827,6 +3158,8 @@ def main() -> None:
             "gate_first_answer_token_top1_accuracy": (
                 pair_curriculum.first_answer_token_top1_accuracy_threshold
             ),
+            "objective_policy": resolved_pair_objective_contract,
+            "objective_policy_coverage": pair_objective_coverage,
         },
     }
     if configured_lora.enabled:
@@ -2950,6 +3283,40 @@ def main() -> None:
                 "experiment.residual_parameter_count requires an enabled global scene residual"
             )
         observed_initial_residual_sha256 = None
+    signed_x_scene_residual = construct_signed_x_scene_residual(
+        config,
+        scene_dim=language.hidden_size,
+        latent_count=int(config["scene_encoder"]["global_latents"]),
+        content_dim=residual_settings.width,
+    )
+    if signed_x_scene_residual is not None:
+        signed_x_scene_residual = signed_x_scene_residual.to(language.device)
+        validate_signed_x_scene_residual_state(
+            signed_x_scene_residual,
+            expected_parameter_count=declared_signed_x_parameter_count,
+            context="deterministic construction",
+        )
+        observed_initial_signed_x_sha256 = module_collection_state_sha256(
+            {"signed_x_scene_residual": signed_x_scene_residual}
+        )
+        if (
+            observed_initial_signed_x_sha256
+            != signed_x_residual_settings.expected_initial_state_sha256
+        ):
+            raise ValueError(
+                "Signed-X residual deterministic initial-state hash mismatch: "
+                f"expected={signed_x_residual_settings.expected_initial_state_sha256} "
+                f"observed={observed_initial_signed_x_sha256}"
+            )
+        if torch.count_nonzero(signed_x_scene_residual.output_projection.weight).item() != 0:
+            raise ValueError("Signed-X scene residual is not exact zero-output at initialization")
+    else:
+        if declared_signed_x_parameter_count is not None:
+            raise ValueError(
+                "experiment.signed_x_residual_parameter_count requires an enabled "
+                "signed-X scene residual"
+            )
+        observed_initial_signed_x_sha256 = None
     composer = ContinuousPrefixComposer(
         language.hidden_size,
         scene_prefix_after_bos=scene_prefix_after_bos,
@@ -2967,18 +3334,25 @@ def main() -> None:
         scene_model.requires_grad_(False).eval()
         composer.requires_grad_(False).eval()
         grounding.requires_grad_(False).eval()
+    if train_signed_x_scene_residual_only:
+        if global_scene_residual is None or signed_x_scene_residual is None:
+            raise RuntimeError("Signed-X-only training lost one of its residual modules")
+        global_scene_residual.requires_grad_(False).eval()
     scene_parameters = (
         list(scene_model.parameters()) + list(composer.parameters()) + list(grounding.parameters())
     )
     if global_scene_residual is not None:
         scene_parameters += list(global_scene_residual.parameters())
+    if signed_x_scene_residual is not None:
+        scene_parameters += list(signed_x_scene_residual.parameters())
     optimizer, parameters = build_adapter_optimizer(
         config,
         scene_parameters,
         lora_installation,
         configured_lora_optimizer,
     )
-    if global_scene_residual is not None:
+    if train_global_scene_residual_only:
+        assert global_scene_residual is not None
         expected_trainable_ids = {id(parameter) for parameter in global_scene_residual.parameters()}
         observed_trainable_ids = {id(parameter) for parameter in parameters}
         if observed_trainable_ids != expected_trainable_ids:
@@ -2987,6 +3361,20 @@ def main() -> None:
             )
         if [group.get("name") for group in optimizer.param_groups] != ["global_scene_residual"]:
             raise RuntimeError("Residual-only optimizer must contain exactly one named group")
+    if train_signed_x_scene_residual_only:
+        assert signed_x_scene_residual is not None
+        expected_trainable_ids = {id(signed_x_scene_residual.output_projection.weight)}
+        observed_trainable_ids = {id(parameter) for parameter in parameters}
+        if observed_trainable_ids != expected_trainable_ids:
+            raise RuntimeError(
+                "Signed-X-only optimizer surface contains missing or unexpected parameters"
+            )
+        if [group.get("name") for group in optimizer.param_groups] != [
+            "signed_x_output_projection"
+        ]:
+            raise RuntimeError(
+                "Signed-X-only optimizer must contain exactly one named output group"
+            )
     scene_checkpoint_modules = {
         "scene_model": scene_model,
         "composer": composer,
@@ -2995,6 +3383,8 @@ def main() -> None:
     checkpoint_modules = dict(scene_checkpoint_modules)
     if global_scene_residual is not None:
         checkpoint_modules["global_scene_residual"] = global_scene_residual
+    if signed_x_scene_residual is not None:
+        checkpoint_modules["signed_x_scene_residual"] = signed_x_scene_residual
     if lora_installation is not None:
         checkpoint_modules.update(lora_installation.state_modules())
     batch_size = int(config["training"]["batch_size"])
@@ -3019,6 +3409,10 @@ def main() -> None:
     if initialize_named_lora_freeze_transition and not (initialize_value or resume_value):
         raise ValueError(
             "initialize_named_lora_freeze_transition requires initialize_from for a new run"
+        )
+    if initialize_source_residual_into_frozen_base and not (initialize_value or resume_value):
+        raise ValueError(
+            "initialize_source_residual_into_frozen_base requires initialize_from for a new run"
         )
     initialization_provenance: dict | None = None
     if initialize_value:
@@ -3101,6 +3495,23 @@ def main() -> None:
                 initialization_mismatches["named_lora_freeze_transition"] = (
                     freeze_transition_mismatch
                 )
+        elif initialize_source_residual_into_frozen_base:
+            lora_mismatch = lora_checkpoint_contract_mismatch(
+                initialize_preflight, configured_lora_checkpoint_contract
+            )
+            if lora_mismatch is not None:
+                initialization_mismatches["lora"] = lora_mismatch
+            if initialize_preflight.get("global_scene_residual") != residual_settings.contract():
+                initialization_mismatches["global_scene_residual"] = {
+                    "checkpoint": initialize_preflight.get("global_scene_residual"),
+                    "runtime": residual_settings.contract(),
+                }
+            source_residual_hash = initialize_preflight.get("global_scene_residual_state_sha256")
+            if source_residual_hash != initialize_expected_global_scene_residual_state_sha256:
+                initialization_mismatches["global_scene_residual_state_sha256"] = {
+                    "checkpoint": source_residual_hash,
+                    "runtime": initialize_expected_global_scene_residual_state_sha256,
+                }
         else:
             lora_mismatch = lora_checkpoint_contract_mismatch(
                 initialize_preflight, configured_lora_checkpoint_contract
@@ -3121,6 +3532,12 @@ def main() -> None:
                 name: module
                 for name, module in checkpoint_modules.items()
                 if name != "global_scene_residual"
+            }
+        elif initialize_source_residual_into_frozen_base:
+            initialization_modules = {
+                name: module
+                for name, module in checkpoint_modules.items()
+                if name != "signed_x_scene_residual"
             }
         loaded_initialization = load_adapter_checkpoint(
             initialize_path,
@@ -3155,16 +3572,55 @@ def main() -> None:
             )
             if residual_sha_after_source_load != observed_initial_residual_sha256:
                 raise RuntimeError("Source checkpoint mutated the fresh residual state")
+        elif initialize_source_residual_into_frozen_base:
+            if global_scene_residual is None or signed_x_scene_residual is None:
+                raise RuntimeError("Source-residual transition lost a residual module")
+            if lora_installation is not None:
+                validate_lora_banks_checkpoint_state(
+                    loaded_initialization,
+                    lora_installation,
+                )
+            validate_global_scene_residual_state(
+                global_scene_residual,
+                expected_parameter_count=declared_residual_parameter_count,
+                context="frozen source-residual checkpoint initialization",
+            )
+            loaded_source_residual_hash = module_collection_state_sha256(
+                {"global_scene_residual": global_scene_residual}
+            )
+            if (
+                loaded_source_residual_hash
+                != initialize_expected_global_scene_residual_state_sha256
+            ):
+                raise ValueError(
+                    "Loaded source global residual state differs from its exact pin: "
+                    f"expected={initialize_expected_global_scene_residual_state_sha256} "
+                    f"observed={loaded_source_residual_hash}"
+                )
+            validate_signed_x_scene_residual_state(
+                signed_x_scene_residual,
+                expected_parameter_count=declared_signed_x_parameter_count,
+                context="fresh signed-X source transition",
+            )
+            signed_x_hash_after_source_load = module_collection_state_sha256(
+                {"signed_x_scene_residual": signed_x_scene_residual}
+            )
+            if signed_x_hash_after_source_load != observed_initial_signed_x_sha256:
+                raise RuntimeError("Source checkpoint mutated the fresh signed-X state")
         elif lora_installation is not None:
             validate_lora_banks_checkpoint_state(loaded_initialization, lora_installation)
         initialization_provenance = {
             "schema_version": (
-                3
+                4
+                if initialize_source_residual_into_frozen_base
+                else 3
                 if initialize_named_lora_freeze_transition
                 else (2 if legacy_initialization_bank is not None else 1)
             ),
             "mode": (
-                "named_lora_banks_frozen_plus_zero_output_scene_residual"
+                "frozen_v18_residual_base_plus_zero_output_signed_x_residual"
+                if initialize_source_residual_into_frozen_base
+                else "named_lora_banks_frozen_plus_zero_output_scene_residual"
                 if initialize_named_lora_freeze_transition
                 else (
                     "legacy_lora_into_frozen_named_bank"
@@ -3204,6 +3660,26 @@ def main() -> None:
                         observed_initial_residual_sha256
                     ),
                     "global_scene_residual_zero_output": True,
+                }
+            )
+        if initialize_source_residual_into_frozen_base:
+            assert global_scene_residual is not None
+            assert signed_x_scene_residual is not None
+            initialization_provenance.update(
+                {
+                    "source_global_scene_residual_state_sha256": (
+                        module_collection_state_sha256(
+                            {"global_scene_residual": global_scene_residual}
+                        )
+                    ),
+                    "expected_source_global_scene_residual_state_sha256": (
+                        initialize_expected_global_scene_residual_state_sha256
+                    ),
+                    "global_scene_residual_frozen": True,
+                    "signed_x_scene_residual_initial_state_sha256": (
+                        observed_initial_signed_x_sha256
+                    ),
+                    "signed_x_scene_residual_zero_output": True,
                 }
             )
         print(
@@ -3259,6 +3735,30 @@ def main() -> None:
                     "Resume checkpoint global-scene-residual provenance mismatch: "
                     f"{residual_metadata_mismatch}"
                 )
+        if resume_preflight.get("signed_x_scene_residual") != (
+            signed_x_residual_settings.contract()
+        ):
+            raise ValueError(
+                "Resume checkpoint signed-X residual contract mismatch: "
+                f"checkpoint={resume_preflight.get('signed_x_scene_residual')} "
+                f"runtime={signed_x_residual_settings.contract()}"
+            )
+        if signed_x_scene_residual is not None:
+            expected_initial_signed_x_hash = (
+                signed_x_residual_settings.expected_initial_state_sha256
+            )
+            if expected_initial_signed_x_hash is None:
+                raise RuntimeError("Enabled signed-X residual lost its initial-state hash")
+            signed_x_metadata_mismatch = signed_x_scene_residual_resume_metadata_mismatch(
+                resume_preflight,
+                signed_x_scene_residual,
+                expected_initial_state_sha256=expected_initial_signed_x_hash,
+            )
+            if signed_x_metadata_mismatch is not None:
+                raise ValueError(
+                    "Resume checkpoint signed-X residual provenance mismatch: "
+                    f"{signed_x_metadata_mismatch}"
+                )
         if configured_lora.enabled:
             provenance_mismatch = source_provenance_resume_contract_mismatch(
                 resume_preflight, source_provenance
@@ -3297,6 +3797,21 @@ def main() -> None:
             if value is not None
             and (initialization_provenance is None or initialization_provenance.get(key) != value)
         }
+        if initialize_expected_global_scene_residual_state_sha256 is not None and (
+            initialization_provenance is None
+            or initialization_provenance.get("expected_source_global_scene_residual_state_sha256")
+            != initialize_expected_global_scene_residual_state_sha256
+        ):
+            initialization_hash_mismatches["expected_source_global_scene_residual_state_sha256"] = {
+                "checkpoint": (
+                    None
+                    if initialization_provenance is None
+                    else initialization_provenance.get(
+                        "expected_source_global_scene_residual_state_sha256"
+                    )
+                ),
+                "runtime": initialize_expected_global_scene_residual_state_sha256,
+            }
         if initialization_hash_mismatches:
             raise ValueError(
                 "Resume checkpoint initialization artifact mismatch: "
@@ -3326,6 +3841,23 @@ def main() -> None:
                     f"checkpoint={resume_metadata.get('global_scene_residual_state_sha256')} "
                     f"runtime={observed_resumed_residual_hash}"
                 )
+        if signed_x_scene_residual is not None:
+            validate_signed_x_scene_residual_state(
+                signed_x_scene_residual,
+                expected_parameter_count=declared_signed_x_parameter_count,
+                context="resume checkpoint load",
+            )
+            observed_resumed_signed_x_hash = module_collection_state_sha256(
+                {"signed_x_scene_residual": signed_x_scene_residual}
+            )
+            if observed_resumed_signed_x_hash != resume_metadata.get(
+                "signed_x_scene_residual_state_sha256"
+            ):
+                raise ValueError(
+                    "Resumed signed-X residual state mismatch or tamper detected: "
+                    f"checkpoint={resume_metadata.get('signed_x_scene_residual_state_sha256')} "
+                    f"runtime={observed_resumed_signed_x_hash}"
+                )
         saved_freeze_scene_adapter = resume_metadata.get("freeze_scene_adapter", False)
         if saved_freeze_scene_adapter != freeze_scene_adapter:
             raise ValueError(
@@ -3336,6 +3868,10 @@ def main() -> None:
             train_global_scene_residual_only
         ):
             raise ValueError("Resume checkpoint residual-only training mode mismatch")
+        if resume_metadata.get("train_signed_x_scene_residual_only", False) != (
+            train_signed_x_scene_residual_only
+        ):
+            raise ValueError("Resume checkpoint signed-X-only training mode mismatch")
         expected = {
             "semantic_dim": semantic_dim,
             "language_hidden_dim": language.hidden_size,
@@ -3344,6 +3880,15 @@ def main() -> None:
             "scene_latents": int(config["scene_encoder"]["global_latents"]),
             "scene_model_dim": int(config["scene_encoder"]["model_dim"]),
         }
+        resume_selection_contract = {
+            "train_scene_ids": sorted(by_scene),
+            "counterfactual_pair_unit_count": len(pair_units),
+            "training_counterfactual_pair_membership_sha256": pair_membership_sha256,
+            "counterfactual_pair_unit_selection_sha256": pair_unit_selection_sha256,
+        }
+        for key, value in resume_selection_contract.items():
+            if pair_objectives.configured or key in resume_metadata:
+                expected[key] = value
         if "language_backend" in resume_metadata:
             expected["language_backend"] = language.backend_name
         saved_language_checkpointing = resume_metadata.get(
@@ -3453,6 +3998,8 @@ def main() -> None:
             "units_per_batch": pair_curriculum.units_per_batch,
             "steps_per_epoch": pair_curriculum.steps_per_epoch,
             "gate_enabled": pair_curriculum.gate_enabled,
+            "objective_policy": resolved_pair_objective_contract,
+            "objective_policy_coverage": pair_objective_coverage,
         }
         saved_pair_curriculum = resume_metadata.get("pair_curriculum")
         if isinstance(saved_pair_curriculum, dict) and "ranking_mode" not in saved_pair_curriculum:
@@ -3471,6 +4018,12 @@ def main() -> None:
                 "full_vocab_ranking_margin": 0.0,
                 **saved_pair_curriculum,
             }
+            if "objective_policy" not in saved_pair_curriculum and not pair_objectives.configured:
+                saved_pair_curriculum = {
+                    **saved_pair_curriculum,
+                    "objective_policy": resolved_pair_objective_contract,
+                    "objective_policy_coverage": pair_objective_coverage,
+                }
         if saved_pair_curriculum is not None and (
             saved_pair_curriculum != expected_pair_curriculum
         ):
@@ -3518,6 +4071,11 @@ def main() -> None:
             )
     scene_state_modules = scene_checkpoint_modules
     current_scene_state_sha256 = module_collection_state_sha256(scene_state_modules)
+    current_global_scene_residual_sha256 = (
+        None
+        if global_scene_residual is None
+        else module_collection_state_sha256({"global_scene_residual": global_scene_residual})
+    )
     current_frozen_lora_hashes = (
         {}
         if lora_installation is None
@@ -3529,6 +4087,9 @@ def main() -> None:
     )
     if resume_metadata is None:
         frozen_scene_state_sha256 = current_scene_state_sha256 if freeze_scene_adapter else None
+        frozen_global_scene_residual_state_sha256 = (
+            current_global_scene_residual_sha256 if train_signed_x_scene_residual_only else None
+        )
         frozen_lora_bank_state_sha256 = current_frozen_lora_hashes
         if lora_installation is not None:
             initial_hash_mismatches = {
@@ -3547,11 +4108,23 @@ def main() -> None:
                 )
     else:
         frozen_scene_state_sha256 = resume_metadata.get("frozen_scene_state_sha256")
+        frozen_global_scene_residual_state_sha256 = resume_metadata.get(
+            "frozen_global_scene_residual_state_sha256"
+        )
         frozen_lora_bank_state_sha256 = resume_metadata.get("frozen_lora_bank_state_sha256", {})
         if freeze_scene_adapter and frozen_scene_state_sha256 != current_scene_state_sha256:
             raise ValueError(
                 "Frozen scene adapter changed across resume: "
                 f"checkpoint={frozen_scene_state_sha256} runtime={current_scene_state_sha256}"
+            )
+        if (
+            train_signed_x_scene_residual_only
+            and frozen_global_scene_residual_state_sha256 != current_global_scene_residual_sha256
+        ):
+            raise ValueError(
+                "Frozen global scene residual changed across signed-X resume: "
+                f"checkpoint={frozen_global_scene_residual_state_sha256} "
+                f"runtime={current_global_scene_residual_sha256}"
             )
         if frozen_lora_bank_state_sha256 != current_frozen_lora_hashes:
             raise ValueError(
@@ -3559,7 +4132,32 @@ def main() -> None:
                 f"checkpoint={frozen_lora_bank_state_sha256} "
                 f"runtime={current_frozen_lora_hashes}"
             )
-    if global_scene_residual is not None:
+    if signed_x_scene_residual is not None:
+        assert global_scene_residual is not None
+        zero_output_equivalence = None
+        if resume_metadata is None:
+            signed_x_zero_output_equivalence = verify_zero_output_signed_x_residual_equivalence(
+                scene_model,
+                global_scene_residual,
+                signed_x_scene_residual,
+                composer,
+                maps,
+                model_dtype=next(language.model.parameters()).dtype,
+            )
+        else:
+            saved_signed_x_equivalence = resume_metadata.get(
+                "signed_x_scene_residual_zero_output_equivalence"
+            )
+            if (
+                not isinstance(saved_signed_x_equivalence, dict)
+                or saved_signed_x_equivalence.get("verified") is not True
+            ):
+                raise ValueError(
+                    "Signed-X resume checkpoint lacks verified update-0 base equivalence"
+                )
+            signed_x_zero_output_equivalence = saved_signed_x_equivalence
+    elif global_scene_residual is not None:
+        signed_x_zero_output_equivalence = None
         if resume_metadata is None:
             zero_output_equivalence = verify_zero_output_scene_residual_equivalence(
                 scene_model,
@@ -3580,6 +4178,7 @@ def main() -> None:
             zero_output_equivalence = saved_equivalence
     else:
         zero_output_equivalence = None
+        signed_x_zero_output_equivalence = None
     if resume_metadata is None:
         spatial_answer_warmup_metrics = run_spatial_answer_warmup(
             scene_model,
@@ -3635,13 +4234,16 @@ def main() -> None:
     for epoch in range(start_epoch, epochs + 1):
         epoch_losses: list[float] = []
         epoch_language_losses: list[float] = []
+        epoch_weighted_language_losses: list[float] = []
         epoch_grounding_losses: list[float] = []
         epoch_ranking_losses: list[float] = []
+        epoch_weighted_ranking_losses: list[float] = []
         epoch_ranking_margins: list[float] = []
         epoch_ranking_min_margins: list[float] = []
         epoch_ranking_side_accuracies: list[float] = []
         epoch_ranking_unit_accuracies: list[float] = []
         epoch_full_vocab_ranking_losses: list[float] = []
+        epoch_weighted_full_vocab_ranking_losses: list[float] = []
         epoch_full_vocab_ranking_margins: list[float] = []
         epoch_full_vocab_ranking_min_margins: list[float] = []
         epoch_full_vocab_side_accuracies: list[float] = []
@@ -3680,10 +4282,13 @@ def main() -> None:
         composer.train(not freeze_scene_adapter)
         grounding.train(not freeze_scene_adapter)
         if global_scene_residual is not None:
-            global_scene_residual.train(True)
+            global_scene_residual.train(not train_signed_x_scene_residual_only)
+        if signed_x_scene_residual is not None:
+            signed_x_scene_residual.train(True)
         if lora_installation is not None:
             lora_installation.train()
         for curriculum_batch in curriculum:
+            effective_pair_objective: PairObjectivePolicy = pair_objectives.legacy_default
             pair_ranking_loss = torch.zeros((), device=language.device)
             full_vocab_ranking_loss = torch.zeros((), device=language.device)
             pair_ranking_diagnostics: dict[str, torch.Tensor | str | None] | None = None
@@ -3701,6 +4306,7 @@ def main() -> None:
                     data,
                     freeze_scene_adapter=freeze_scene_adapter,
                     global_scene_residual=global_scene_residual,
+                    signed_x_scene_residual=signed_x_scene_residual,
                 )
                 outputs_by_scene = {scene_id: output}
                 base_loss, language_loss, grounding_loss = batch_objective(
@@ -3724,12 +4330,16 @@ def main() -> None:
                         maps[partner_scene_id],
                         freeze_scene_adapter=freeze_scene_adapter,
                         global_scene_residual=global_scene_residual,
+                        signed_x_scene_residual=signed_x_scene_residual,
                     )
                     separated_pair_ids.add(pair_id)
                 log_scene_ids = [scene_id]
                 pair_unit_count = 0
             else:
                 units = curriculum_batch.pair_units
+                if curriculum_batch.pair_id is None:
+                    raise RuntimeError("Pair curriculum batch has no opaque pair ID")
+                effective_pair_objective = pair_objectives.policy_for(curriculum_batch.pair_id)
                 scene_ids = units[0].scene_ids
                 if any(unit.scene_ids != scene_ids for unit in units):
                     raise ValueError("A pair batch contains inconsistent scene ordering")
@@ -3739,6 +4349,7 @@ def main() -> None:
                         maps[scene_id],
                         freeze_scene_adapter=freeze_scene_adapter,
                         global_scene_residual=global_scene_residual,
+                        signed_x_scene_residual=signed_x_scene_residual,
                     )
                     for scene_id in scene_ids
                 }
@@ -3762,9 +4373,16 @@ def main() -> None:
                     ranking_margin=pair_curriculum.ranking_margin,
                     ranking_mode=pair_curriculum.ranking_mode,
                     collect_full_vocab_first_answer_token=(
-                        pair_curriculum.full_vocab_ranking_weight > 0
+                        effective_pair_objective.full_vocab_hinge_weight > 0
                     ),
-                    full_vocab_ranking_margin=(pair_curriculum.full_vocab_ranking_margin),
+                    full_vocab_ranking_margin=(effective_pair_objective.full_vocab_margin),
+                )
+                margins = pair_ranking_diagnostics["margins"]
+                if not isinstance(margins, torch.Tensor):
+                    raise RuntimeError("Pair objective did not return differentiable margins")
+                pair_ranking_loss, _ = ranking_margin_hinge(
+                    margins,
+                    margin=effective_pair_objective.candidate_margin,
                 )
                 spatial_answer_loss = pair_ranking_diagnostics["spatial_answer_contrastive_loss"]
                 spatial_answer_diagnostics = pair_ranking_diagnostics["spatial_answer_contrastive"]
@@ -3836,8 +4454,10 @@ def main() -> None:
                 full_vocab_ranking_loss,
                 diversity_loss,
                 pair_loss,
-                pair_ranking_weight=pair_curriculum.ranking_weight,
-                full_vocab_ranking_weight=pair_curriculum.full_vocab_ranking_weight,
+                language_loss=language_loss,
+                language_nll_weight=effective_pair_objective.language_nll_weight,
+                pair_ranking_weight=effective_pair_objective.candidate_hinge_weight,
+                full_vocab_ranking_weight=effective_pair_objective.full_vocab_hinge_weight,
                 diversity_weight=float(anti_collapse["latent_diversity_weight"]),
                 scene_separation_weight=float(anti_collapse["paired_scene_separation_weight"]),
             )
@@ -3881,6 +4501,9 @@ def main() -> None:
             scalar = float(loss.detach().cpu())
             epoch_losses.append(scalar)
             epoch_language_losses.append(float(language_loss.detach().cpu()))
+            epoch_weighted_language_losses.append(
+                float(effective_pair_objective.language_nll_weight * language_loss.detach().cpu())
+            )
             epoch_grounding_losses.append(float(grounding_loss.detach().cpu()))
             epoch_diversity_losses.append(float(diversity_loss.detach().cpu()))
             epoch_diversity_cosines.append(float(diversity_mean_cosine.detach().cpu()))
@@ -3888,6 +4511,12 @@ def main() -> None:
             if pair_ranking_diagnostics is not None:
                 margins = pair_ranking_diagnostics["margins"]
                 epoch_ranking_losses.append(float(pair_ranking_loss.detach().cpu()))
+                epoch_weighted_ranking_losses.append(
+                    float(
+                        effective_pair_objective.candidate_hinge_weight
+                        * pair_ranking_loss.detach().cpu()
+                    )
+                )
                 epoch_ranking_margins.append(float(margins.detach().mean().cpu()))
                 epoch_ranking_min_margins.append(float(margins.detach().min().cpu()))
                 epoch_ranking_side_accuracies.append(
@@ -3899,6 +4528,12 @@ def main() -> None:
                 full_vocab_margins = pair_ranking_diagnostics[
                     "first_answer_token_full_vocab_margins"
                 ]
+                epoch_weighted_full_vocab_ranking_losses.append(
+                    float(
+                        effective_pair_objective.full_vocab_hinge_weight
+                        * full_vocab_ranking_loss.detach().cpu()
+                    )
+                )
                 if full_vocab_margins is not None:
                     epoch_full_vocab_ranking_losses.append(
                         float(full_vocab_ranking_loss.detach().cpu())
@@ -3955,6 +4590,11 @@ def main() -> None:
                         "scenes": log_scene_ids,
                         "counterfactual_pair_id": curriculum_batch.pair_id,
                         "pair_unit_count": pair_unit_count,
+                        "pair_objective_policy": (
+                            None
+                            if curriculum_batch.kind != "pair"
+                            else effective_pair_objective.contract()
+                        ),
                         "loss": scalar,
                         "language_loss": float(language_loss.detach().cpu()),
                         "grounding_loss": float(grounding_loss.detach().cpu()),
@@ -3987,7 +4627,7 @@ def main() -> None:
                             or pair_ranking_diagnostics["first_answer_token_full_vocab_margins"]
                             is None
                             else float(
-                                pair_curriculum.full_vocab_ranking_weight
+                                effective_pair_objective.full_vocab_hinge_weight
                                 * full_vocab_ranking_loss.detach().cpu()
                             )
                         ),
@@ -4211,6 +4851,7 @@ def main() -> None:
             accumulated_batches = 0
         mean_loss = float(np.mean(epoch_losses))
         mean_language_loss = float(np.mean(epoch_language_losses))
+        mean_weighted_language_loss = float(np.mean(epoch_weighted_language_losses))
         mean_grounding_loss = float(np.mean(epoch_grounding_losses))
         mean_diversity_loss = float(np.mean(epoch_diversity_losses))
         mean_diversity_cosine = float(np.mean(epoch_diversity_cosines))
@@ -4219,6 +4860,9 @@ def main() -> None:
         mean_pair_cosine = float(np.mean(epoch_pair_cosines)) if epoch_pair_cosines else None
         mean_pair_distance = float(np.mean(epoch_pair_distances)) if epoch_pair_distances else None
         mean_ranking_loss = float(np.mean(epoch_ranking_losses)) if epoch_ranking_losses else None
+        mean_weighted_ranking_loss = (
+            float(np.mean(epoch_weighted_ranking_losses)) if epoch_weighted_ranking_losses else None
+        )
         mean_ranking_margin = (
             float(np.mean(epoch_ranking_margins)) if epoch_ranking_margins else None
         )
@@ -4234,6 +4878,11 @@ def main() -> None:
         mean_full_vocab_ranking_loss = (
             float(np.mean(epoch_full_vocab_ranking_losses))
             if epoch_full_vocab_ranking_losses
+            else None
+        )
+        mean_weighted_full_vocab_ranking_loss = (
+            float(np.mean(epoch_weighted_full_vocab_ranking_losses))
+            if epoch_weighted_full_vocab_ranking_losses
             else None
         )
         mean_full_vocab_ranking_margin = (
@@ -4301,6 +4950,7 @@ def main() -> None:
                 language=language,
                 scene_model=scene_model,
                 global_scene_residual=global_scene_residual,
+                signed_x_scene_residual=signed_x_scene_residual,
                 composer=composer,
                 grounding=grounding,
                 units_per_batch=pair_curriculum.units_per_batch,
@@ -4327,6 +4977,7 @@ def main() -> None:
                 language=language,
                 scene_model=scene_model,
                 global_scene_residual=global_scene_residual,
+                signed_x_scene_residual=signed_x_scene_residual,
                 composer=composer,
                 grounding=grounding,
                 semantic_dim=semantic_dim,
@@ -4373,8 +5024,10 @@ def main() -> None:
                 "epoch": epoch,
                 "train_loss": mean_loss,
                 "train_language_loss": mean_language_loss,
+                "train_weighted_language_loss": mean_weighted_language_loss,
                 "train_grounding_loss": mean_grounding_loss,
                 "pair_ranking_loss": mean_ranking_loss,
+                "pair_weighted_ranking_loss": mean_weighted_ranking_loss,
                 "pair_ranking_mode": pair_curriculum.ranking_mode,
                 "pair_mean_ranking_margin": mean_ranking_margin,
                 "pair_minimum_ranking_margin": minimum_ranking_margin,
@@ -4397,11 +5050,7 @@ def main() -> None:
                 "pair_side_accuracy": mean_ranking_side_accuracy,
                 "pair_changed_unit_accuracy": mean_ranking_unit_accuracy,
                 "pair_full_vocab_ranking_loss": mean_full_vocab_ranking_loss,
-                "pair_full_vocab_weighted_ranking_loss": (
-                    None
-                    if mean_full_vocab_ranking_loss is None
-                    else pair_curriculum.full_vocab_ranking_weight * mean_full_vocab_ranking_loss
-                ),
+                "pair_full_vocab_weighted_ranking_loss": (mean_weighted_full_vocab_ranking_loss),
                 "pair_full_vocab_mean_margin": mean_full_vocab_ranking_margin,
                 "pair_full_vocab_minimum_margin": minimum_full_vocab_ranking_margin,
                 "pair_full_vocab_top1_side_accuracy": mean_full_vocab_side_accuracy,
@@ -4521,6 +5170,19 @@ def main() -> None:
                 )
             ),
             "global_scene_residual_zero_output_equivalence": zero_output_equivalence,
+            "signed_x_scene_residual": signed_x_residual_settings.contract(),
+            "signed_x_scene_residual_parameter_count": (
+                0 if signed_x_scene_residual is None else signed_x_scene_residual.parameter_count
+            ),
+            "signed_x_scene_residual_initial_state_sha256": (observed_initial_signed_x_sha256),
+            "signed_x_scene_residual_state_sha256": (
+                None
+                if signed_x_scene_residual is None
+                else module_collection_state_sha256(
+                    {"signed_x_scene_residual": signed_x_scene_residual}
+                )
+            ),
+            "signed_x_scene_residual_zero_output_equivalence": (signed_x_zero_output_equivalence),
             "question_dependent_scene_processing": False,
             "input_voxel_size_m": config["scene_encoder"].get("input_voxel_size_m"),
             **token_mixing,
@@ -4554,9 +5216,12 @@ def main() -> None:
                 "units_per_batch": pair_curriculum.units_per_batch,
                 "steps_per_epoch": pair_curriculum.steps_per_epoch,
                 "gate_enabled": pair_curriculum.gate_enabled,
+                "objective_policy": resolved_pair_objective_contract,
+                "objective_policy_coverage": pair_objective_coverage,
             },
             "pair_candidate_gate": pair_gate,
             "counterfactual_pair_unit_count": len(pair_units),
+            "counterfactual_pair_unit_selection_sha256": pair_unit_selection_sha256,
             "training_counterfactual_pair_count": len(training_pairs),
             "training_counterfactual_pair_membership_sha256": (pair_membership_sha256),
         }
@@ -4572,10 +5237,27 @@ def main() -> None:
             raise RuntimeError(
                 "Global scene residual state changed during checkpoint metadata save"
             )
+        current_signed_x_hash = (
+            None
+            if signed_x_scene_residual is None
+            else module_collection_state_sha256(
+                {"signed_x_scene_residual": signed_x_scene_residual}
+            )
+        )
+        if current_signed_x_hash != metadata["signed_x_scene_residual_state_sha256"]:
+            raise RuntimeError(
+                "Signed-X scene residual state changed during checkpoint metadata save"
+            )
         if global_scene_residual is not None:
             validate_global_scene_residual_state(
                 global_scene_residual,
                 expected_parameter_count=declared_residual_parameter_count,
+                context="checkpoint save",
+            )
+        if signed_x_scene_residual is not None:
+            validate_signed_x_scene_residual_state(
+                signed_x_scene_residual,
+                expected_parameter_count=declared_signed_x_parameter_count,
                 context="checkpoint save",
             )
         current_frozen_bank_hashes = (
@@ -4592,6 +5274,15 @@ def main() -> None:
                 "Frozen scene adapter changed before checkpoint save: "
                 f"expected={frozen_scene_state_sha256} observed={current_scene_hash}"
             )
+        if (
+            train_signed_x_scene_residual_only
+            and current_residual_hash != frozen_global_scene_residual_state_sha256
+        ):
+            raise RuntimeError(
+                "Frozen global scene residual changed during signed-X training: "
+                f"expected={frozen_global_scene_residual_state_sha256} "
+                f"observed={current_residual_hash}"
+            )
         if current_frozen_bank_hashes != frozen_lora_bank_state_sha256:
             raise RuntimeError(
                 "Frozen LoRA bank changed before checkpoint save: "
@@ -4603,18 +5294,29 @@ def main() -> None:
                 {
                     "freeze_scene_adapter": freeze_scene_adapter,
                     "train_global_scene_residual_only": train_global_scene_residual_only,
+                    "train_signed_x_scene_residual_only": (train_signed_x_scene_residual_only),
                     "frozen_scene_state_sha256": frozen_scene_state_sha256,
+                    "frozen_global_scene_residual_state_sha256": (
+                        frozen_global_scene_residual_state_sha256
+                    ),
                     "frozen_lora_bank_state_sha256": frozen_lora_bank_state_sha256,
                 }
             )
         if (
             initialize_expected_adapter_sha256 is not None
             or initialize_expected_metadata_sha256 is not None
+            or initialize_expected_global_scene_residual_state_sha256 is not None
         ):
             metadata.update(
                 {
                     "initialize_expected_adapter_sha256": (initialize_expected_adapter_sha256),
                     "initialize_expected_metadata_sha256": (initialize_expected_metadata_sha256),
+                    "initialize_expected_global_scene_residual_state_sha256": (
+                        initialize_expected_global_scene_residual_state_sha256
+                    ),
+                    "initialize_source_residual_into_frozen_base": (
+                        initialize_source_residual_into_frozen_base
+                    ),
                 }
             )
         if lora_installation is not None:
@@ -4645,6 +5347,7 @@ def main() -> None:
                     "paired_scene_mean_cosine_distance": mean_pair_distance,
                     "paired_scene_pairs_evaluated": len(epoch_pair_losses),
                     "pair_ranking_loss": mean_ranking_loss,
+                    "pair_weighted_ranking_loss": mean_weighted_ranking_loss,
                     "pair_ranking_mode": pair_curriculum.ranking_mode,
                     "pair_mean_ranking_margin": mean_ranking_margin,
                     "pair_minimum_ranking_margin": minimum_ranking_margin,
@@ -4668,10 +5371,7 @@ def main() -> None:
                     "pair_changed_unit_accuracy": mean_ranking_unit_accuracy,
                     "pair_full_vocab_ranking_loss": mean_full_vocab_ranking_loss,
                     "pair_full_vocab_weighted_ranking_loss": (
-                        None
-                        if mean_full_vocab_ranking_loss is None
-                        else pair_curriculum.full_vocab_ranking_weight
-                        * mean_full_vocab_ranking_loss
+                        mean_weighted_full_vocab_ranking_loss
                     ),
                     "pair_full_vocab_mean_margin": mean_full_vocab_ranking_margin,
                     "pair_full_vocab_minimum_margin": minimum_full_vocab_ranking_margin,
@@ -4774,8 +5474,15 @@ def main() -> None:
         "initialization_provenance": initialization_provenance,
         "initialize_expected_adapter_sha256": initialize_expected_adapter_sha256,
         "initialize_expected_metadata_sha256": initialize_expected_metadata_sha256,
+        "initialize_expected_global_scene_residual_state_sha256": (
+            initialize_expected_global_scene_residual_state_sha256
+        ),
+        "initialize_source_residual_into_frozen_base": (
+            initialize_source_residual_into_frozen_base
+        ),
         "freeze_scene_adapter": freeze_scene_adapter,
         "train_global_scene_residual_only": train_global_scene_residual_only,
+        "train_signed_x_scene_residual_only": train_signed_x_scene_residual_only,
         "global_scene_residual": residual_settings.contract(),
         "global_scene_residual_parameter_count": (
             0
@@ -4789,8 +5496,22 @@ def main() -> None:
             else module_collection_state_sha256({"global_scene_residual": global_scene_residual})
         ),
         "global_scene_residual_zero_output_equivalence": zero_output_equivalence,
+        "signed_x_scene_residual": signed_x_residual_settings.contract(),
+        "signed_x_scene_residual_parameter_count": (
+            0 if signed_x_scene_residual is None else signed_x_scene_residual.parameter_count
+        ),
+        "signed_x_scene_residual_initial_state_sha256": observed_initial_signed_x_sha256,
+        "signed_x_scene_residual_state_sha256": (
+            None
+            if signed_x_scene_residual is None
+            else module_collection_state_sha256(
+                {"signed_x_scene_residual": signed_x_scene_residual}
+            )
+        ),
+        "signed_x_scene_residual_zero_output_equivalence": (signed_x_zero_output_equivalence),
         "question_dependent_scene_processing": False,
         "frozen_scene_state_sha256": frozen_scene_state_sha256,
+        "frozen_global_scene_residual_state_sha256": (frozen_global_scene_residual_state_sha256),
         "frozen_lora_bank_state_sha256": frozen_lora_bank_state_sha256,
         "gradient_accumulation": gradient_accumulation,
         "semantic_dim": semantic_dim,
@@ -4828,6 +5549,8 @@ def main() -> None:
             "gate_enabled": pair_curriculum.gate_enabled,
             "gate_every_epochs": pair_curriculum.gate_every_epochs,
             "gate_stop_when_passed": pair_curriculum.stop_when_gate_passes,
+            "objective_policy": resolved_pair_objective_contract,
+            "objective_policy_coverage": pair_objective_coverage,
             "gate_thresholds": {
                 "changed_unit_accuracy": (pair_curriculum.changed_unit_accuracy_threshold),
                 "prediction_flip_rate": pair_curriculum.prediction_flip_threshold,
@@ -4838,6 +5561,7 @@ def main() -> None:
             },
         },
         "counterfactual_pair_unit_count": len(pair_units),
+        "counterfactual_pair_unit_selection_sha256": pair_unit_selection_sha256,
         "pair_candidate_gate": (history[-1].get("pair_candidate_gate") if history else None),
         "training_counterfactual_pair_count": len(training_pairs),
         "training_counterfactual_pair_membership_sha256": (pair_membership_sha256),

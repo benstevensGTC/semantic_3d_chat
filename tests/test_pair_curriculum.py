@@ -31,6 +31,7 @@ from semantic_3d_chat.training.train_adapter import (
     pair_gate_checkpoint_improved,
     pair_gate_monitor_value,
     should_stop_after_pair_gate,
+    validate_pair_objective_training_mode,
 )
 
 
@@ -319,6 +320,84 @@ def test_pair_training_loss_applies_full_vocab_weight_and_zero_preserves_v10() -
     assert float(v10) == pytest.approx(117.2)
     assert float(v11) == pytest.approx(123.2)
     assert float(v11 - v10) == pytest.approx(6.0)
+
+
+def test_pair_training_loss_nll_zero_removes_only_language_gradient() -> None:
+    language = torch.tensor(3.0, requires_grad=True)
+    grounding = torch.tensor(4.0, requires_grad=True)
+    candidate = torch.tensor(5.0, requires_grad=True)
+    full_vocab = torch.tensor(6.0, requires_grad=True)
+    zero = torch.tensor(0.0)
+
+    loss = combine_pair_training_losses(
+        language + grounding,
+        candidate,
+        full_vocab,
+        zero,
+        zero,
+        language_loss=language,
+        language_nll_weight=0.0,
+        pair_ranking_weight=8.0,
+        full_vocab_ranking_weight=2.0,
+        diversity_weight=0.0,
+        scene_separation_weight=0.0,
+    )
+    loss.backward()
+
+    assert float(loss.detach()) == pytest.approx(56.0)
+    assert float(language.grad) == 0.0
+    assert float(grounding.grad) == 1.0
+    assert float(candidate.grad) == 8.0
+    assert float(full_vocab.grad) == 2.0
+
+
+def test_pair_training_loss_weight_one_preserves_legacy_value_and_gradients() -> None:
+    values = [torch.tensor(float(index), requires_grad=True) for index in range(1, 6)]
+    legacy = combine_pair_training_losses(
+        *values,
+        pair_ranking_weight=8.0,
+        full_vocab_ranking_weight=2.0,
+        diversity_weight=0.05,
+        scene_separation_weight=20.0,
+    )
+    explicit = combine_pair_training_losses(
+        *values,
+        language_loss=values[0],
+        language_nll_weight=1.0,
+        pair_ranking_weight=8.0,
+        full_vocab_ranking_weight=2.0,
+        diversity_weight=0.05,
+        scene_separation_weight=20.0,
+    )
+
+    assert torch.equal(explicit, legacy)
+    explicit.backward()
+    assert [float(value.grad) for value in values] == pytest.approx([1.0, 8.0, 2.0, 0.05, 20.0])
+
+
+def test_explicit_pair_policies_require_enabled_pair_only_curriculum() -> None:
+    with pytest.raises(ValueError, match="enabled pair curriculum"):
+        validate_pair_objective_training_mode(
+            configured=True,
+            curriculum_enabled=False,
+            pair_only=True,
+        )
+    with pytest.raises(ValueError, match="pair_only"):
+        validate_pair_objective_training_mode(
+            configured=True,
+            curriculum_enabled=True,
+            pair_only=False,
+        )
+    validate_pair_objective_training_mode(
+        configured=True,
+        curriculum_enabled=True,
+        pair_only=True,
+    )
+    validate_pair_objective_training_mode(
+        configured=False,
+        curriculum_enabled=False,
+        pair_only=False,
+    )
 
 
 def test_full_vocab_training_settings_are_opt_in_and_validated() -> None:
