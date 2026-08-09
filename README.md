@@ -719,6 +719,66 @@ The immutable arm configs are
 and
 [`gemma4_color_mirror_global_scene_residual_v17_lr3e4.yaml`](configs/experiments/gemma4_color_mirror_global_scene_residual_v17_lr3e4.yaml).
 
+#### Gemma V18 centered content-gate screen — predeclared, not yet a result
+
+V17 proves that reducing the V16 learning rate does not remove the color/mirror
+tradeoff. V18 therefore restarts from the same exact V14 epoch-7 checkpoint with
+a new question-independent residual architecture; it does not inherit V16/V17
+weights, optimizer moments, or history. For scene slots `x_i`, it projects
+normalized content, subtracts the FP32 mean over all 256 slots, gates each slot
+with a learned scalar derived from that centered content, combines it with the
+persistent spatial Fourier feature, and subtracts the FP32 mean of the resulting
+learned delta before retaining the original token through the identity path.
+Every output consequently depends on every scene slot, while a common learned
+shift is structurally excluded. The API still accepts scene tokens only—never a
+question, answer, retrieval query, label, caption, or oracle coordinate.
+
+The new nested residual contract is schema 2, has 400,128 trainable parameters,
+starts with an exact-zero output projection, and has pinned initial-state SHA-256
+`f7f6353edb6216029bd155e2baab1b5051c85f297a0e6d6b63210354fe0ff0e0`.
+Omitting the architecture version still constructs the bit-identical V16 schema-1
+module with its original 400,000 parameters and state hash. Strict checkpoint
+loading rejects V16↔V18 state migration.
+
+Before training, an offline supervised diagnostic must reproduce the exact
+ordered 12 microsteps of epoch 1, accumulate the actual loss gradient, and run
+the exact pinned AdamW update on an isolated full-residual clone without
+mutating live parameters, optimizer state, or RNG. Each of the four scenes must have a nonzero finite raw and
+effective delta, raw common-energy fraction at most `1e-6`, raw slot-varying
+fraction at least `0.999999`, effective common-energy fraction at most `1e-3`,
+effective slot-varying fraction at least `0.999`, and effective delta/core RMS
+at most `0.05`. Both counterfactual scene pairs must receive distinct nonzero
+deltas. The looser effective bound is an implementation guard for the
+`3.11e-4` common-energy observed when an exactly centered FP32 delta is cast and
+added to BF16 tokens; it is not semantic-success evidence.
+
+Execution is deliberately staged. After the no-live-step preflight passes, stage 1
+runs exactly one update and stops. Its residual state hash must equal the
+preflight prediction before an exact optimizer/history resume may run updates
+2–4. The update-one verifier safely reads `optimizer.pt` with PyTorch's
+`weights_only` mode and requires exact equality with the preflight's canonical
+eight-parameter AdamW manifest: parameter order, named group, 24 moment/step
+tensors, step number, and every optimizer option are hash-bound. It also
+requires the current clean source provenance to equal both stored records.
+Eligible epochs must retain color at 12/12 sides and 6/6 complete units
+with positive minimum margins; continuation additionally requires mirror at
+least 8/12 and 2/6 in that same epoch. Ties prefer the earlier epoch. Greedy
+generation remains forbidden until color and mirror both reach 12/12 and 6/6
+with every required minimum margin strictly positive.
+
+The immutable launch contract is
+[`gemma4_color_mirror_centered_content_gate_v18.yaml`](configs/experiments/gemma4_color_mirror_centered_content_gate_v18.yaml).
+The guarded stages are independently rerunnable as `make gemma4-v18-preflight`,
+`make gemma4-v18-stage1`, `make gemma4-v18-verify-update1`,
+`make gemma4-v18-resume-screen`, and `make gemma4-v18-select`; the exact chain
+is `make gemma4-v18-screen`. Existing checkpoints are reused, but a fresh
+preflight and update-one verification still run before a resume. The strict
+epoch selector reads only the resolved YAML, the deterministic selection JSON,
+and four checkpoint metadata JSON files; it performs no model inference and
+loads neither tensor checkpoints nor runtime/oracle artifacts.
+At this point V18 has no training result, promotion, generation, held-out, chat,
+leakage, or robot claim.
+
 ### Fail-closed Gemma static evaluation and chat
 
 Gemma evaluation must use the isolated Transformers 5 environment and the exact

@@ -1,16 +1,19 @@
 from __future__ import annotations
 
+import copy
 import math
 
 import pytest
 import torch
 
 from semantic_3d_chat.evaluation.v16_gradient_audit import (
+    _functional_residual_delta,
     gradient_comparison,
     pair_delta_metrics,
     scene_delta_metrics,
     simulate_first_adamw_update,
 )
+from semantic_3d_chat.scene_encoder.global_residual import GlobalSceneResidual
 
 
 def test_gradient_comparison_reports_orthogonal_vectors() -> None:
@@ -77,3 +80,26 @@ def test_pair_delta_metrics_reports_relative_change() -> None:
     assert metrics["residual_to_core_pair_difference_ratio"] == pytest.approx(0.1)
     assert metrics["residual_core_difference_cosine"] == pytest.approx(1.0)
     assert math.isfinite(metrics["core_pair_difference_rms"])
+
+
+def test_functional_residual_simulation_uses_forward_without_mutating_module() -> None:
+    module = GlobalSceneResidual(
+        scene_dim=8,
+        latent_count=4,
+        width=3,
+        fourier_bands=2,
+        initialization_seed=91,
+    )
+    scene_tokens = torch.randn(2, 4, 8)
+    simulated_weight = torch.randn_like(module.output_projection.weight) * 1.0e-3
+    expected_module = copy.deepcopy(module)
+
+    state_before = {name: value.detach().clone() for name, value in module.state_dict().items()}
+    observed = _functional_residual_delta(module, scene_tokens, simulated_weight)
+    with torch.no_grad():
+        expected_module.output_projection.weight.copy_(simulated_weight)
+        expected = expected_module(scene_tokens) - scene_tokens
+
+    assert torch.equal(observed, expected)
+    for name, value in state_before.items():
+        assert torch.equal(module.state_dict()[name], value)

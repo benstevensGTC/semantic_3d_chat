@@ -10,8 +10,11 @@ from semantic_3d_chat.scene_encoder.global_residual import (
     GlobalSceneResidual,
 )
 from semantic_3d_chat.training.train_adapter import (
+    build_adapter_optimizer,
     declared_global_scene_residual_parameter_count,
+    explicit_adamw_options,
     global_scene_residual_resume_metadata_mismatch,
+    v18_stage_execution_metadata,
     validate_global_scene_residual_state,
 )
 
@@ -44,6 +47,110 @@ def test_declared_residual_parameter_count_is_optional_and_strict() -> None:
             )
     with pytest.raises(TypeError, match="mapping"):
         declared_global_scene_residual_parameter_count({"experiment": []})
+
+
+def test_explicit_adamw_options_are_complete_and_fail_closed() -> None:
+    assert explicit_adamw_options({"training": {}}) == {}
+    raw = {
+        "name": "AdamW",
+        "learning_rate": 1.0e-3,
+        "betas": [0.9, 0.999],
+        "epsilon": 1.0e-8,
+        "weight_decay": 0.0,
+        "foreach": False,
+        "fused": False,
+        "capturable": False,
+        "maximize": False,
+        "amsgrad": False,
+        "gradient_clip_norm": 1.0,
+        "accumulation_divisor": 12,
+        "step_index": 1,
+    }
+    training = {
+        "learning_rate": 1.0e-3,
+        "weight_decay": 0.0,
+        "gradient_clip_norm": 1.0,
+        "gradient_accumulation": 12,
+        "optimizer": raw,
+    }
+    assert explicit_adamw_options({"training": training}) == {
+        "betas": (0.9, 0.999),
+        "eps": 1.0e-8,
+        "foreach": False,
+        "fused": False,
+        "capturable": False,
+        "maximize": False,
+        "amsgrad": False,
+    }
+    with pytest.raises(ValueError, match="keys mismatch"):
+        explicit_adamw_options(
+            {
+                "training": {
+                    **training,
+                    "optimizer": {key: value for key, value in raw.items() if key != "fused"},
+                }
+            }
+        )
+    with pytest.raises(ValueError, match="cannot both"):
+        explicit_adamw_options(
+            {
+                "training": {
+                    **training,
+                    "optimizer": {**raw, "foreach": True, "fused": True},
+                }
+            }
+        )
+
+    parameter = torch.nn.Parameter(torch.ones(2))
+    optimizer, selected = build_adapter_optimizer(
+        {"training": training},
+        [parameter],
+        None,
+        None,
+    )
+    assert len(selected) == 1
+    assert selected[0] is parameter
+    group = optimizer.param_groups[0]
+    for key, expected in {
+        "lr": 1.0e-3,
+        "weight_decay": 0.0,
+        "betas": (0.9, 0.999),
+        "eps": 1.0e-8,
+        "foreach": False,
+        "fused": False,
+        "capturable": False,
+        "maximize": False,
+        "amsgrad": False,
+    }.items():
+        assert group[key] == expected
+
+
+def test_v18_stage_execution_metadata_is_exact_and_optional() -> None:
+    assert v18_stage_execution_metadata({}) is None
+    stages = {
+        "stage_1_exact_v14_restart_updates": 1,
+        "stage_1_stop_required": True,
+        "predicted_preflight_state_must_match_epoch_001": True,
+        "stage_2_resume_from_epoch": 1,
+        "stage_2_load_optimizer_state": True,
+        "stage_2_load_history": True,
+        "stage_2_target_total_optimizer_updates": 4,
+    }
+
+    observed = v18_stage_execution_metadata(
+        {"v18_screen": {"execution_stages": stages}}
+    )
+
+    assert observed == {
+        key: value
+        for key, value in stages.items()
+        if key != "predicted_preflight_state_must_match_epoch_001"
+    }
+    changed = {**stages, "stage_2_load_history": False}
+    with pytest.raises(ValueError, match="staged-resume contract"):
+        v18_stage_execution_metadata(
+            {"v18_screen": {"execution_stages": changed}}
+        )
 
 
 def test_training_state_validation_enforces_declared_count_and_all_state() -> None:

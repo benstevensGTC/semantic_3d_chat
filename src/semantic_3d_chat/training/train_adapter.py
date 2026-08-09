@@ -144,6 +144,130 @@ def declared_global_scene_residual_parameter_count(config: Mapping[str, object])
     return value
 
 
+def explicit_adamw_options(config: Mapping[str, object]) -> dict[str, object]:
+    """Return optional, fully explicit AdamW implementation controls.
+
+    Historical experiments omit ``training.optimizer`` and retain PyTorch's
+    defaults. Architecture screens that predict an exact first optimizer state
+    must declare every implementation-sensitive switch so the real optimizer
+    cannot silently choose a foreach or fused path.
+    """
+
+    training = config.get("training")
+    if not isinstance(training, Mapping):
+        raise TypeError("training config must be a mapping")
+    raw = training.get("optimizer")
+    if raw is None:
+        return {}
+    if not isinstance(raw, Mapping):
+        raise TypeError("training.optimizer must be a mapping")
+    expected = {
+        "name",
+        "learning_rate",
+        "betas",
+        "epsilon",
+        "weight_decay",
+        "foreach",
+        "fused",
+        "capturable",
+        "maximize",
+        "amsgrad",
+        "gradient_clip_norm",
+        "accumulation_divisor",
+        "step_index",
+    }
+    unknown = sorted(set(raw) - expected)
+    missing = sorted(expected - set(raw))
+    if missing or unknown:
+        raise ValueError(
+            f"training.optimizer keys mismatch: missing={missing} unknown={unknown}"
+        )
+    if raw["name"] != "AdamW":
+        raise ValueError("training.optimizer.name must equal 'AdamW'")
+    for optimizer_key, training_key in (
+        ("learning_rate", "learning_rate"),
+        ("weight_decay", "weight_decay"),
+        ("gradient_clip_norm", "gradient_clip_norm"),
+    ):
+        value = float(raw[optimizer_key])
+        if not math.isfinite(value) or value < 0.0:
+            raise ValueError(f"training.optimizer.{optimizer_key} must be finite and nonnegative")
+        if value != float(training[training_key]):
+            raise ValueError(
+                f"training.optimizer.{optimizer_key} disagrees with training.{training_key}"
+            )
+    accumulation_divisor = raw["accumulation_divisor"]
+    if (
+        isinstance(accumulation_divisor, bool)
+        or not isinstance(accumulation_divisor, int)
+        or accumulation_divisor < 1
+        or accumulation_divisor != int(training["gradient_accumulation"])
+    ):
+        raise ValueError(
+            "training.optimizer.accumulation_divisor must equal positive "
+            "training.gradient_accumulation"
+        )
+    if raw["step_index"] != 1:
+        raise ValueError("training.optimizer.step_index must equal 1")
+    betas = raw["betas"]
+    if isinstance(betas, (str, bytes)) or not isinstance(betas, Sequence) or len(betas) != 2:
+        raise TypeError("training.optimizer.betas must contain exactly two numbers")
+    parsed_betas = tuple(float(value) for value in betas)
+    if any(not math.isfinite(value) or not 0.0 <= value < 1.0 for value in parsed_betas):
+        raise ValueError("training.optimizer.betas must be finite values in [0,1)")
+    epsilon = float(raw["epsilon"])
+    if not math.isfinite(epsilon) or epsilon <= 0.0:
+        raise ValueError("training.optimizer.epsilon must be finite and positive")
+    switches: dict[str, bool] = {}
+    for name in ("foreach", "fused", "capturable", "maximize", "amsgrad"):
+        value = raw[name]
+        if not isinstance(value, bool):
+            raise TypeError(f"training.optimizer.{name} must be a boolean")
+        switches[name] = value
+    if switches["foreach"] and switches["fused"]:
+        raise ValueError("training.optimizer.foreach and fused cannot both be true")
+    return {"betas": parsed_betas, "eps": epsilon, **switches}
+
+
+def v18_stage_execution_metadata(config: Mapping[str, object]) -> dict[str, object] | None:
+    """Return the exact staged-resume intent for the pinned V18 screen.
+
+    Ordinary experiments have no ``v18_screen`` block and retain their legacy
+    checkpoint schema.  A V18 checkpoint records the operational subset of the
+    predeclared stage contract so a report-only verifier can prove that epoch 1
+    stopped before an optimizer/history resume to the four-update target.
+    """
+
+    raw_screen = config.get("v18_screen")
+    if raw_screen is None:
+        return None
+    if not isinstance(raw_screen, Mapping):
+        raise TypeError("v18_screen must be a mapping")
+    raw_stages = raw_screen.get("execution_stages")
+    if not isinstance(raw_stages, Mapping):
+        raise TypeError("v18_screen.execution_stages must be a mapping")
+    expected_with_prediction = {
+        "stage_1_exact_v14_restart_updates": 1,
+        "stage_1_stop_required": True,
+        "predicted_preflight_state_must_match_epoch_001": True,
+        "stage_2_resume_from_epoch": 1,
+        "stage_2_load_optimizer_state": True,
+        "stage_2_load_history": True,
+        "stage_2_target_total_optimizer_updates": 4,
+    }
+    observed = dict(raw_stages)
+    if observed != expected_with_prediction:
+        raise ValueError(
+            "v18_screen.execution_stages differs from the pinned staged-resume contract: "
+            f"expected={expected_with_prediction} observed={observed}"
+        )
+    return {
+        key: value
+        for key, value in expected_with_prediction.items()
+        if key != "predicted_preflight_state_must_match_epoch_001"
+    }
+
+
 def validate_global_scene_residual_state(
     module: GlobalSceneResidual,
     *,
@@ -526,6 +650,7 @@ def build_adapter_optimizer(
     """Build strict scene/LoRA groups, omitting intentionally frozen surfaces."""
 
     scene_parameters = [parameter for parameter in scene_parameters if parameter.requires_grad]
+    adamw_options = explicit_adamw_options(config)
     if lora_installation is None:
         if not scene_parameters:
             raise ValueError("Adapter optimizer has no trainable parameters")
@@ -533,6 +658,7 @@ def build_adapter_optimizer(
             scene_parameters,
             lr=float(config["training"]["learning_rate"]),
             weight_decay=float(config["training"]["weight_decay"]),
+            **adamw_options,
         )
         return optimizer, scene_parameters
     lora_parameters = lora_installation.parameters()
@@ -564,7 +690,7 @@ def build_adapter_optimizer(
         )
     if not groups:
         raise ValueError("Adapter optimizer has no trainable parameters")
-    optimizer = torch.optim.AdamW(groups)
+    optimizer = torch.optim.AdamW(groups, **adamw_options)
     return optimizer, scene_parameters + lora_parameters
 
 
@@ -2465,6 +2591,7 @@ def main() -> None:
     args = parser.parse_args()
     config = load_config(args.config)
     set_seed(int(config["seed"]))
+    v18_stage_execution = v18_stage_execution_metadata(config)
     scene_prefix_after_bos = scene_prefix_after_bos_setting(config)
     scene_boundary_mode = scene_boundary_mode_setting(config)
     configured_native_boundary_contract = native_gemma4_image_contract_setting(config)
@@ -3089,6 +3216,12 @@ def main() -> None:
         if not resume_path.is_absolute():
             resume_path = PROJECT_ROOT / resume_path
         resume_preflight = json.loads((resume_path / "metadata.json").read_text(encoding="utf-8"))
+        if resume_preflight.get("v18_stage_execution") != v18_stage_execution:
+            raise ValueError(
+                "Resume checkpoint V18 stage-execution contract mismatch: "
+                f"checkpoint={resume_preflight.get('v18_stage_execution')} "
+                f"runtime={v18_stage_execution}"
+            )
         boundary_preflight_mismatch = scene_boundary_contract_mismatch(
             resume_preflight,
             scene_boundary_mode,
@@ -4427,6 +4560,8 @@ def main() -> None:
             "training_counterfactual_pair_count": len(training_pairs),
             "training_counterfactual_pair_membership_sha256": (pair_membership_sha256),
         }
+        if v18_stage_execution is not None:
+            metadata["v18_stage_execution"] = v18_stage_execution
         current_scene_hash = module_collection_state_sha256(scene_state_modules)
         current_residual_hash = (
             None
@@ -4707,6 +4842,8 @@ def main() -> None:
         "training_counterfactual_pair_count": len(training_pairs),
         "training_counterfactual_pair_membership_sha256": (pair_membership_sha256),
     }
+    if v18_stage_execution is not None:
+        summary["v18_stage_execution"] = v18_stage_execution
     if lora_installation is not None:
         summary.update(
             {

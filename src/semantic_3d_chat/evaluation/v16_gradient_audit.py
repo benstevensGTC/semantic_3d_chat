@@ -19,6 +19,7 @@ from typing import Any
 
 import torch
 import torch.nn.functional as F
+from torch.func import functional_call
 
 
 def gradient_comparison(first: torch.Tensor, second: torch.Tensor) -> dict[str, float | int]:
@@ -156,23 +157,34 @@ def _parameter_gradient_norm(parameters: Sequence[torch.nn.Parameter]) -> float:
     return math.sqrt(squared)
 
 
-def _residual_hidden(module: torch.nn.Module, scene_tokens: torch.Tensor) -> torch.Tensor:
-    """Reproduce V16's hidden state without applying its output projection."""
-
-    normalized = module.scene_norm(scene_tokens)
-    local_content = module.scene_projection(normalized)
-    global_content = local_content.float().mean(dim=1, keepdim=True).to(local_content.dtype)
-    positions = module.position_projection(
-        module.position_features.to(device=scene_tokens.device, dtype=scene_tokens.dtype)
-    ).unsqueeze(0)
-    return torch.tanh(local_content + global_content + positions)
-
-
 def _functional_residual_delta(
     module: torch.nn.Module, scene_tokens: torch.Tensor, output_weight: torch.Tensor
 ) -> torch.Tensor:
-    hidden = _residual_hidden(module, scene_tokens)
-    return F.linear(hidden, output_weight.to(device=hidden.device, dtype=hidden.dtype))
+    """Evaluate a simulated output projection through the module's real forward.
+
+    Keeping the simulation architecture-agnostic is important for later
+    zero-output residual variants: spatial centering, gates, and other fixed
+    forward semantics must affect the simulated first step exactly as they
+    would affect a trained checkpoint. ``functional_call`` substitutes only
+    the output weight and leaves the audited module bit-for-bit untouched.
+    """
+
+    expected = module.output_projection.weight
+    if output_weight.shape != expected.shape:
+        raise ValueError(
+            "Simulated output weight shape mismatch: "
+            f"expected={list(expected.shape)} observed={list(output_weight.shape)}"
+        )
+    state: dict[str, torch.Tensor] = {
+        **dict(module.named_parameters()),
+        **dict(module.named_buffers()),
+    }
+    state["output_projection.weight"] = output_weight.to(
+        device=expected.device,
+        dtype=expected.dtype,
+    )
+    adapted = functional_call(module, state, (scene_tokens,), strict=True)
+    return adapted - scene_tokens
 
 
 def run_audit(
@@ -195,6 +207,7 @@ def run_audit(
         scene_prefix_after_bos_setting,
     )
     from semantic_3d_chat.scene_encoder.global_residual import (
+        GLOBAL_MEAN_V1,
         apply_global_scene_residual,
         construct_global_scene_residual,
         global_scene_residual_settings,
@@ -226,6 +239,11 @@ def run_audit(
     residual_settings = global_scene_residual_settings(config)
     if not residual_settings.enabled:
         raise ValueError("Audit requires an enabled global scene residual")
+    if residual_settings.architecture_version != GLOBAL_MEAN_V1:
+        raise ValueError(
+            "The V16 gradient audit is legacy-only and requires "
+            f"architecture_version={GLOBAL_MEAN_V1!r}"
+        )
     pair_settings = pair_curriculum_settings(config)
     if not pair_settings.pair_only or pair_settings.max_units_per_pair is None:
         raise ValueError("Audit requires the capped pair-only V16 curriculum")
