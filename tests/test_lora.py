@@ -731,6 +731,7 @@ def test_v14_lr_sweep_changes_only_screen_schedule_namespace_and_learning_rate()
         "lr1e4": 1e-4,
         "lr3e4": 3e-4,
         "lr1e3": 1e-3,
+        "lr2e3": 2e-3,
     }
     for suffix, learning_rate in arms.items():
         config = load_config(
