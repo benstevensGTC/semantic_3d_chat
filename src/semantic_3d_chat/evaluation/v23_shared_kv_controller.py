@@ -530,6 +530,47 @@ def _adapter_payload(adapter_path: Path) -> dict[str, Any]:
     }
 
 
+def _require_frozen_bank_pins(
+    bank_hashes: Mapping[str, Any],
+    *,
+    field: str,
+) -> None:
+    """Pin both inherited banks independently of checkpoint metadata aliases."""
+
+    _equal(
+        bank_hashes.get("inherited_v12"),
+        EXPECTED_FROZEN_HASHES["inherited_v12"],
+        f"{field} inherited_v12",
+    )
+    _equal(
+        bank_hashes.get("extension_v13"),
+        EXPECTED_FROZEN_HASHES["extension_v13"],
+        f"{field} extension_v13",
+    )
+
+
+def _require_new_bank_tensor_contract(state: Mapping[str, torch.Tensor], *, field: str) -> None:
+    """Validate every trainable tensor's exact key, shape, dtype, and finiteness."""
+
+    expected_keys = {
+        f"adapters.{index}.{suffix}" for index in range(4) for suffix in ("lora_a", "lora_b")
+    }
+    _equal(set(state), expected_keys, f"{field} tensor keys")
+    ordered_keys = [
+        f"adapters.{index}.{suffix}"
+        for index in range(4)
+        for suffix in ("lora_a", "lora_b")
+    ]
+    for key, expected_shape in zip(ordered_keys, EXPECTED_PARAMETER_SHAPES, strict=True):
+        tensor = state[key]
+        if not isinstance(tensor, torch.Tensor):
+            _fail(f"{field} {key} is not a tensor")
+        _equal(tuple(tensor.shape), expected_shape, f"{field} {key} shape")
+        _equal(tensor.dtype, torch.float32, f"{field} {key} dtype")
+        if not bool(torch.isfinite(tensor).all()):
+            _fail(f"{field} {key} is non-finite")
+
+
 def _optimizer_manifest(path: Path, *, expected_step: int = 1) -> dict[str, Any]:
     safe_optimizer = _regular_file(path, "V23 optimizer state")
     try:
@@ -816,7 +857,12 @@ def verify_update1(
         "recomputed frozen signed-X state",
     )
     _equal(payload["lora_bank_state_sha256"], dict(bank_hashes), "recomputed LoRA bank states")
+    _require_frozen_bank_pins(
+        payload["lora_bank_state_sha256"],
+        field="update-1 recomputed frozen bank",
+    )
     checkpoint_state = payload["new_bank_state"]
+    _require_new_bank_tensor_contract(checkpoint_state, field="update-1 new bank")
     _equal(tensor_state_sha256(checkpoint_state), bank_hashes.get(NEW_BANK), "new bank state hash")
     initial_state = collection.bank(NEW_BANK).installation.state_module.state_dict()
     for index in range(4):
@@ -893,6 +939,11 @@ def _epoch_record(
         "frozen_scene_state_sha256": EXPECTED_FROZEN_HASHES["scene"],
         "frozen_global_scene_residual_state_sha256": EXPECTED_FROZEN_HASHES["global"],
         "frozen_signed_x_scene_residual_state_sha256": EXPECTED_FROZEN_HASHES["signed_x"],
+        "global_scene_residual_state_sha256": EXPECTED_FROZEN_HASHES["global"],
+        "signed_x_scene_residual_state_sha256": EXPECTED_FROZEN_HASHES["signed_x"],
+        "freeze_scene_adapter": True,
+        "train_global_scene_residual_only": False,
+        "train_signed_x_scene_residual_only": False,
         "train_lora_with_frozen_scene_residual_stack": True,
     }.items():
         _equal(metadata.get(field), expected, f"epoch {epoch} {field}")
@@ -910,15 +961,15 @@ def _epoch_record(
     _equal(
         set(bank_hashes), {"inherited_v12", "extension_v13", NEW_BANK}, f"epoch {epoch} bank keys"
     )
+    _require_frozen_bank_pins(bank_hashes, field=f"epoch {epoch} metadata frozen bank")
+    collection = _install_shape_only(config)
+    settings = lora_banks_settings(config)
+    optimizer_settings = lora_banks_optimizer_settings(config, settings)
+    assert optimizer_settings is not None
     _equal(
-        bank_hashes.get("inherited_v12"),
-        EXPECTED_FROZEN_HASHES["inherited_v12"],
-        f"epoch {epoch} inherited bank pin",
-    )
-    _equal(
-        bank_hashes.get("extension_v13"),
-        EXPECTED_FROZEN_HASHES["extension_v13"],
-        f"epoch {epoch} extension bank pin",
+        metadata.get("lora"),
+        lora_banks_checkpoint_contract(settings, optimizer_settings, collection.parameter_counts),
+        f"epoch {epoch} LoRA contract",
     )
     checkpoint = metadata_path.parent
     adapter_path = _regular_file(checkpoint / "adapter.safetensors", f"epoch {epoch} adapter")
@@ -943,6 +994,14 @@ def _epoch_record(
         payload["lora_bank_state_sha256"],
         dict(bank_hashes),
         f"epoch {epoch} recomputed LoRA banks",
+    )
+    _require_frozen_bank_pins(
+        payload["lora_bank_state_sha256"],
+        field=f"epoch {epoch} recomputed frozen bank",
+    )
+    _require_new_bank_tensor_contract(
+        payload["new_bank_state"],
+        field=f"epoch {epoch} new bank",
     )
     optimizer_manifest = _optimizer_manifest(optimizer_path, expected_step=epoch)
     return {

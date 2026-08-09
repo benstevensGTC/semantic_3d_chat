@@ -258,6 +258,32 @@ def test_v23_adapter_payload_reads_real_safetensors_keys(tmp_path: Path) -> None
     }
 
 
+def test_v23_recomputed_old_bank_tamper_is_rejected() -> None:
+    observed = {
+        "inherited_v12": controller.EXPECTED_FROZEN_HASHES["inherited_v12"],
+        "extension_v13": "0" * 64,
+    }
+
+    with pytest.raises(controller.V23ControlViolation, match="extension_v13"):
+        controller._require_frozen_bank_pins(observed, field="tampered payload")
+
+
+def test_v23_new_bank_tensor_contract_rejects_nonfinite_tensor() -> None:
+    state = {
+        f"adapters.{index}.{suffix}": torch.zeros(shape, dtype=torch.float32)
+        for index in range(4)
+        for suffix, shape in zip(
+            ("lora_a", "lora_b"),
+            controller.EXPECTED_PARAMETER_SHAPES[index * 2 : index * 2 + 2],
+            strict=True,
+        )
+    }
+    state["adapters.2.lora_b"].reshape(-1)[0] = float("nan")
+
+    with pytest.raises(controller.V23ControlViolation, match="non-finite"):
+        controller._require_new_bank_tensor_contract(state, field="tampered new bank")
+
+
 def test_v23_optimizer_manifest_rejects_parameter_reordering(tmp_path: Path) -> None:
     state = _optimizer_state_dict()
     state["param_groups"][0]["params"] = [1, 0, *range(2, 8)]
