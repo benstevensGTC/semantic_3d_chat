@@ -24,6 +24,7 @@ from semantic_3d_chat.config import (
     project_path,
 )
 from semantic_3d_chat.data.dataset import QARecord, SceneQADataset
+from semantic_3d_chat.evaluation.candidate_gate_detail import build_candidate_gate_detail
 from semantic_3d_chat.language.local_lm import (
     load_local_language_model,
     prompt_token_ids,
@@ -694,6 +695,162 @@ def named_lora_extension_transition_mismatch(
             mismatches[f"{name}.parameter_counts"] = (
                 source_counts.get(name) if isinstance(source_counts, Mapping) else source_counts
             )
+    return mismatches or None
+
+
+def named_lora_freeze_and_extend_transition_mismatch(
+    metadata: Mapping[str, object], collection: LoRABankCollection | None
+) -> dict[str, object] | None:
+    """Validate freezing existing named banks while adding zero-output banks.
+
+    This explicit transition is stricter than silently relaxing
+    :func:`named_lora_extension_transition_mismatch`. The source checkpoint must
+    contain exactly the destination's frozen-bank subset. Rank, alpha, dropout,
+    target paths, parameter counts, wrapped modules, and current tensor hashes
+    remain exact. Only source trainability and initialization provenance may be
+    rewritten: each destination source bank must use ``checkpoint_overwrite``
+    with its expected state hash pinned to the source's current state. At least
+    one source bank must actually transition from trainable to frozen.
+    """
+
+    if collection is None or collection.settings.legacy_single_bank:
+        return {"collection": "named LoRA banks are required"}
+    frozen_banks = tuple(bank for bank in collection.banks if not bank.settings.trainable)
+    new_banks = tuple(bank for bank in collection.banks if bank.settings.trainable)
+    if not frozen_banks or not new_banks:
+        return {
+            "bank_roles": {
+                "frozen": [bank.settings.name for bank in frozen_banks],
+                "new_trainable": [bank.settings.name for bank in new_banks],
+            }
+        }
+    source_contract = metadata.get("lora")
+    if not isinstance(source_contract, Mapping) or source_contract.get("schema_version") != 2:
+        return {"checkpoint_lora": source_contract}
+    source_records = source_contract.get("banks")
+    if not isinstance(source_records, list):
+        return {"checkpoint_banks": source_records}
+
+    expected_source_names = {bank.settings.name for bank in frozen_banks}
+    mismatches: dict[str, object] = {}
+    source_by_name: dict[str, Mapping[str, object]] = {}
+    malformed_records: list[dict[str, object]] = []
+    duplicate_names: list[str] = []
+    for index, record in enumerate(source_records):
+        if not isinstance(record, Mapping):
+            malformed_records.append({"index": index, "reason": "not_mapping"})
+            continue
+        name = record.get("name")
+        if not isinstance(name, str) or not name:
+            malformed_records.append({"index": index, "reason": "missing_name"})
+            continue
+        if name in source_by_name:
+            duplicate_names.append(name)
+            continue
+        source_by_name[name] = record
+    if len(source_records) != len(expected_source_names):
+        mismatches["bank_record_count"] = {
+            "checkpoint": len(source_records),
+            "runtime_frozen_source": len(expected_source_names),
+        }
+    if malformed_records:
+        mismatches["malformed_bank_records"] = malformed_records
+    if duplicate_names:
+        mismatches["duplicate_bank_names"] = sorted(set(duplicate_names))
+    if set(source_by_name) != expected_source_names:
+        mismatches["bank_names"] = {
+            "checkpoint": sorted(source_by_name),
+            "runtime_frozen_source": sorted(expected_source_names),
+        }
+
+    source_hashes = metadata.get("lora_bank_state_sha256")
+    source_wrapped = metadata.get("lora_bank_wrapped_modules")
+    source_counts = metadata.get("lora_bank_parameter_counts")
+    for field, value in (
+        ("lora_bank_state_sha256", source_hashes),
+        ("lora_bank_wrapped_modules", source_wrapped),
+        ("lora_bank_parameter_counts", source_counts),
+    ):
+        if not isinstance(value, Mapping):
+            mismatches[field] = value
+        elif set(value) != expected_source_names:
+            mismatches[f"{field}.keys"] = {
+                "checkpoint": sorted(value),
+                "runtime": sorted(expected_source_names),
+            }
+    source_hashes = source_hashes if isinstance(source_hashes, Mapping) else {}
+    source_wrapped = source_wrapped if isinstance(source_wrapped, Mapping) else {}
+    source_counts = source_counts if isinstance(source_counts, Mapping) else {}
+
+    transitioned_trainable_banks: list[str] = []
+    required_record_keys = {
+        "name",
+        "trainable",
+        "rank",
+        "alpha",
+        "dropout",
+        "target_modules",
+        "initialization_algorithm",
+        "initialization_seed",
+        "expected_initial_state_sha256",
+        "adapter_parameter_count",
+    }
+    allowed_record_keys = required_record_keys | {"learning_rate", "weight_decay"}
+    for bank in frozen_banks:
+        name = bank.settings.name
+        record = source_by_name.get(name)
+        if record is None:
+            continue
+        if not isinstance(record.get("trainable"), bool):
+            mismatches[f"{name}.source_trainable"] = record.get("trainable")
+        elif record.get("trainable") is True:
+            transitioned_trainable_banks.append(name)
+        missing_keys = required_record_keys - set(record)
+        unknown_keys = set(record) - allowed_record_keys
+        if missing_keys or unknown_keys:
+            mismatches[f"{name}.record_keys"] = {
+                "missing": sorted(missing_keys),
+                "unknown": sorted(unknown_keys),
+            }
+        expected_architecture = {
+            "rank": bank.settings.adapter.rank,
+            "alpha": bank.settings.adapter.alpha,
+            "dropout": bank.settings.adapter.dropout,
+            "target_modules": list(bank.settings.adapter.target_modules),
+            "adapter_parameter_count": bank.installation.parameter_count,
+        }
+        observed_architecture = {key: record.get(key) for key in expected_architecture}
+        if observed_architecture != expected_architecture:
+            mismatches[f"{name}.architecture"] = {
+                "checkpoint": observed_architecture,
+                "runtime": expected_architecture,
+            }
+        if (
+            bank.settings.initialization_algorithm != "checkpoint_overwrite"
+            or bank.settings.initialization_seed is not None
+        ):
+            mismatches[f"{name}.destination_provenance"] = {
+                "initialization_algorithm": bank.settings.initialization_algorithm,
+                "initialization_seed": bank.settings.initialization_seed,
+            }
+        source_hash = source_hashes.get(name)
+        if (
+            not isinstance(source_hash, str)
+            or bank.settings.expected_initial_state_sha256 != source_hash
+        ):
+            mismatches[f"{name}.source_state"] = {
+                "checkpoint": source_hash,
+                "runtime_expected": bank.settings.expected_initial_state_sha256,
+            }
+        if source_wrapped.get(name) != list(bank.installation.target_names):
+            mismatches[f"{name}.wrapped_modules"] = source_wrapped.get(name)
+        if source_counts.get(name) != bank.installation.parameter_counts:
+            mismatches[f"{name}.parameter_counts"] = source_counts.get(name)
+    if not transitioned_trainable_banks:
+        mismatches["source_trainable_bank_transition"] = {
+            "required": "at least one existing source bank must become frozen",
+            "observed": transitioned_trainable_banks,
+        }
     return mismatches or None
 
 
@@ -2810,11 +2967,13 @@ def evaluate_pair_candidate_gate(
         by_pair[unit.pair_id].append(unit)
     all_margins: list[torch.Tensor] = []
     all_full_vocab_first_token_margins: list[torch.Tensor] = []
+    ordered_units: list[CounterfactualPairUnit] = []
     gate_metrics_by_pair: dict[str, dict[str, object]] = {}
     try:
         with torch.inference_mode():
             for pair_id in sorted(by_pair):
                 pair_units = by_pair[pair_id]
+                ordered_units.extend(pair_units)
                 scene_ids = pair_units[0].scene_ids
                 pair_margins: list[torch.Tensor] = []
                 pair_full_vocab_margins: list[torch.Tensor] = []
@@ -2882,6 +3041,32 @@ def evaluate_pair_candidate_gate(
     )
     metrics["pair_count"] = len(by_pair)
     metrics["by_pair"] = gate_metrics_by_pair
+    if ranking_mode == "candidate_logit":
+        candidate_token_ids: list[list[list[int]]] = []
+        for unit in ordered_units:
+            reference, counterfactual = unit.records
+            reference_answer_ids = tokenize_answer(
+                language.tokenizer, reference.answer, language.device
+            )
+            counterfactual_answer_ids = tokenize_answer(
+                language.tokenizer, counterfactual.answer, language.device
+            )
+            _, reference_token_id, counterfactual_token_id = single_differing_answer_token(
+                reference_answer_ids, counterfactual_answer_ids
+            )
+            candidate_token_ids.append(
+                [
+                    [reference_token_id, counterfactual_token_id],
+                    [counterfactual_token_id, reference_token_id],
+                ]
+            )
+        metrics["detail"] = build_candidate_gate_detail(
+            ordered_units,
+            torch.cat(all_margins, dim=0),
+            ranking_margin=ranking_margin,
+            candidate_token_ids=candidate_token_ids,
+            full_vocab_margins=torch.cat(all_full_vocab_first_token_margins, dim=0),
+        )
     return metrics
 
 
@@ -3099,6 +3284,28 @@ def main() -> None:
         raise ValueError("Named-bank freeze transition and legacy-bank aliasing are exclusive")
     if initialize_named_lora_freeze_transition and not train_global_scene_residual_only:
         raise ValueError("Named-bank freeze transition is restricted to residual-only training")
+    initialize_named_lora_freeze_and_extend_transition = config["training"].get(
+        "initialize_named_lora_freeze_and_extend_transition", False
+    )
+    if not isinstance(initialize_named_lora_freeze_and_extend_transition, bool):
+        raise TypeError(
+            "training.initialize_named_lora_freeze_and_extend_transition must be a boolean"
+        )
+    if initialize_named_lora_freeze_and_extend_transition and not (
+        train_lora_with_frozen_scene_residual_stack
+    ):
+        raise ValueError(
+            "Named-bank freeze-and-extend transition is restricted to frozen-residual-stack "
+            "LoRA training"
+        )
+    if initialize_named_lora_freeze_and_extend_transition and (
+        initialize_named_lora_freeze_transition
+        or initialize_legacy_lora_into_bank is not None
+    ):
+        raise ValueError(
+            "Named-bank freeze-and-extend transition is exclusive with legacy aliasing and "
+            "the residual-only named-bank freeze transition"
+        )
     initialize_source_residual_into_frozen_base = config["training"].get(
         "initialize_source_residual_into_frozen_base", False
     )
@@ -3110,6 +3317,13 @@ def main() -> None:
         )
     if initialize_source_residual_into_frozen_base and initialize_named_lora_freeze_transition:
         raise ValueError("Residual-base and named-LoRA freeze transitions are mutually exclusive")
+    if (
+        initialize_source_residual_into_frozen_base
+        and initialize_named_lora_freeze_and_extend_transition
+    ):
+        raise ValueError(
+            "Residual-base and named-LoRA freeze-and-extend transitions are mutually exclusive"
+        )
     initialize_expected_adapter_sha256 = optional_sha256_setting(
         config["training"], "initialize_expected_adapter_sha256"
     )
@@ -3353,6 +3567,9 @@ def main() -> None:
         "signed_x_scene_residual": signed_x_residual_settings.contract(),
         "initialize_legacy_lora_into_bank": initialize_legacy_lora_into_bank,
         "initialize_named_lora_freeze_transition": initialize_named_lora_freeze_transition,
+        "initialize_named_lora_freeze_and_extend_transition": (
+            initialize_named_lora_freeze_and_extend_transition
+        ),
         "initialize_source_residual_into_frozen_base": (
             initialize_source_residual_into_frozen_base
         ),
@@ -3658,6 +3875,13 @@ def main() -> None:
         raise ValueError(
             "initialize_named_lora_freeze_transition requires initialize_from for a new run"
         )
+    if initialize_named_lora_freeze_and_extend_transition and not (
+        initialize_value or resume_value
+    ):
+        raise ValueError(
+            "initialize_named_lora_freeze_and_extend_transition requires initialize_from "
+            "for a new run"
+        )
     if initialize_source_residual_into_frozen_base and not (initialize_value or resume_value):
         raise ValueError(
             "initialize_source_residual_into_frozen_base requires initialize_from for a new run"
@@ -3748,14 +3972,27 @@ def main() -> None:
                     freeze_transition_mismatch
                 )
         elif train_lora_with_frozen_scene_residual_stack:
-            extension_transition_mismatch = named_lora_extension_transition_mismatch(
-                initialize_preflight,
-                lora_installation if isinstance(lora_installation, LoRABankCollection) else None,
+            transition_collection = (
+                lora_installation if isinstance(lora_installation, LoRABankCollection) else None
+            )
+            extension_transition_mismatch = (
+                named_lora_freeze_and_extend_transition_mismatch(
+                    initialize_preflight,
+                    transition_collection,
+                )
+                if initialize_named_lora_freeze_and_extend_transition
+                else named_lora_extension_transition_mismatch(
+                    initialize_preflight,
+                    transition_collection,
+                )
             )
             if extension_transition_mismatch is not None:
-                initialization_mismatches["named_lora_extension_transition"] = (
-                    extension_transition_mismatch
+                transition_name = (
+                    "named_lora_freeze_and_extend_transition"
+                    if initialize_named_lora_freeze_and_extend_transition
+                    else "named_lora_extension_transition"
                 )
+                initialization_mismatches[transition_name] = extension_transition_mismatch
             source_scene_hash = initialize_preflight.get("frozen_scene_state_sha256")
             if source_scene_hash != initialize_expected_scene_state_sha256:
                 initialization_mismatches["frozen_scene_state_sha256"] = {
@@ -3953,7 +4190,9 @@ def main() -> None:
             validate_lora_banks_checkpoint_state(loaded_initialization, lora_installation)
         initialization_provenance = {
             "schema_version": (
-                5
+                6
+                if initialize_named_lora_freeze_and_extend_transition
+                else 5
                 if train_lora_with_frozen_scene_residual_stack
                 else 4
                 if initialize_source_residual_into_frozen_base
@@ -3962,7 +4201,9 @@ def main() -> None:
                 else (2 if legacy_initialization_bank is not None else 1)
             ),
             "mode": (
-                "frozen_scene_residual_stack_plus_zero_output_named_lora_extension"
+                "existing_named_lora_banks_frozen_plus_zero_output_named_lora_extension"
+                if initialize_named_lora_freeze_and_extend_transition
+                else "frozen_scene_residual_stack_plus_zero_output_named_lora_extension"
                 if train_lora_with_frozen_scene_residual_stack
                 else "frozen_v18_residual_base_plus_zero_output_signed_x_residual"
                 if initialize_source_residual_into_frozen_base

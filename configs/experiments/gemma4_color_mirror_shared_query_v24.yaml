@@ -1,0 +1,113 @@
+_base_: gemma4_color_mirror_shared_kv_v23.yaml
+
+# V23's shared-K/V bank reached 10/12 mirrored sides but did not pass the
+# complete teacher-forced gate. V24 preserves that selected epoch-2 state as
+# immutable context and changes exactly one trainable surface: a zero-output
+# query-only bank on the two physical attention layers immediately preceding
+# the previously explored late decoder stack. The complete 256-token scene
+# prefix remains fixed, global, and question-independent.
+language:
+  lora_banks:
+    extension_v23_shared_kv:
+      trainable: false
+      initialization_algorithm: checkpoint_overwrite
+      initialization_seed: null
+      expected_initial_state_sha256: 91a9eea577cab5a37e840cdf4007722a398415846af91280713bcb2cda0f045c
+    extension_v24_shared_query:
+      trainable: true
+      rank: 4
+      alpha: 8.0
+      dropout: 0.0
+      initialization_algorithm: cpu_kaiming_uniform_a_exact_zero_b
+      initialization_seed: 24024
+      expected_initial_state_sha256: e8734db171db6bd47a9a4f8c9d4a540903cc214a88abaab74820d566ee245f6b
+      target_modules:
+        - model.language_model.layers.28.self_attn.q_proj
+        - model.language_model.layers.29.self_attn.q_proj
+
+training:
+  output_namespace: gemma4_v24_shared_query
+  extension_output_namespace: gemma4_v24_shared_query_extension_u8
+  initialize_from: data_gemma4/checkpoints/gemma4_v23_shared_kv/epoch_002
+  initialize_expected_adapter_sha256: dba2511db49fa46af905b293fc999642286f8533fa1d4cca2c872ffda2980ea8
+  initialize_expected_metadata_sha256: 1c0436549e832c2ac9723e2556ad8bf09862020c6cda47db8358b2232b391ba0
+  initialize_expected_scene_state_sha256: 690bd890bfda024dbb5c7d3c68087b8113bc3b8ee81dd6143c7eb2a884e7245b
+  initialize_expected_global_scene_residual_state_sha256: ce3bf864eed6dd4a50f1b67296981e144d6a79e9cf192ad9a9230f2ae18208dc
+  initialize_expected_signed_x_scene_residual_state_sha256: e8dabc69627f60723b89520b02dfee985e49b7b7e35fdd1213cc79f7b8164f58
+  initialize_legacy_lora_into_bank: null
+  initialize_source_residual_into_frozen_base: false
+  initialize_named_lora_freeze_transition: false
+  initialize_named_lora_freeze_and_extend_transition: true
+  train_signed_x_scene_residual_only: false
+  train_global_scene_residual_only: false
+  train_lora_with_frozen_scene_residual_stack: true
+  freeze_scene_adapter: true
+
+  # One complete 12-microstep paired accumulation is one fresh AdamW update.
+  epochs: 4
+  pair_steps_per_epoch: 12
+  gradient_accumulation: 12
+  pair_gate_every_epochs: 1
+  pair_gate_stop_when_passed: false
+  early_stopping_patience: 0
+  learning_rate: 0.0003
+  lora_learning_rate: 0.0003
+  lora_weight_decay: 0.0
+  optimizer:
+    name: AdamW
+    learning_rate: 0.0003
+    weight_decay: 0.0
+    accumulation_divisor: 12
+    step_index: 1
+
+# V23 evidence remains immutable and cannot authorize V24 by itself. V24 has
+# its own bounded four-update screen and may continue only to update eight.
+v23_screen: null
+
+v24_screen:
+  schema_version: 1
+  role: frozen_v23_epoch2_shared_query_screen
+  primary_output_namespace: gemma4_v24_shared_query
+  extension_output_namespace: gemma4_v24_shared_query_extension_u8
+  source_checkpoint_epoch: 2
+  source_archive_summary_sha256: cdb7cabc2b6a9a8420e682a20067dd501cc58a69addb2fb828d2b99fc94df208
+  screen_optimizer_updates: 4
+  conditional_max_optimizer_updates: 8
+  stage_1_optimizer_updates: 1
+  stage_1_stop_required: true
+  stage_2_requires:
+    color_full_vocab_sides: 12
+    color_full_vocab_units: 6
+    color_positive_minimum_candidate_margin: true
+    color_positive_minimum_full_vocab_margin: true
+    mirror_minimum_full_vocab_sides: 8
+    mirror_minimum_full_vocab_units: 2
+  eligibility_requires:
+    color_full_vocab_sides: 12
+    color_full_vocab_units: 6
+    color_positive_minimum_candidate_margin: true
+    color_positive_minimum_full_vocab_margin: true
+  continuation_requires:
+    mirror_minimum_full_vocab_sides: 8
+    mirror_minimum_full_vocab_units: 2
+  full_teacher_gate_requires:
+    color_full_vocab_sides: 12
+    color_full_vocab_units: 6
+    mirror_full_vocab_sides: 12
+    mirror_full_vocab_units: 6
+    all_candidate_and_full_vocab_minimum_margins_positive: true
+  greedy_audit_only_after_full_teacher_gate: true
+
+experiment:
+  role: frozen_v23_epoch2_shared_query_falsifier_v24
+  question_dependent_scene_processing: false
+  question_dependent_retrieval: false
+  runtime_oracle_access: false
+  decoder_trainable_parameter_count: 36864
+  source_checkpoint_epoch: 2
+  source_scene_state_sha256: 690bd890bfda024dbb5c7d3c68087b8113bc3b8ee81dd6143c7eb2a884e7245b
+  source_global_scene_residual_state_sha256: ce3bf864eed6dd4a50f1b67296981e144d6a79e9cf192ad9a9230f2ae18208dc
+  source_signed_x_scene_residual_state_sha256: e8dabc69627f60723b89520b02dfee985e49b7b7e35fdd1213cc79f7b8164f58
+  source_inherited_bank_sha256: dec768bed654c8c4e16da0318857543ad54d8f5f68f4d24a9a87cd19ec706594
+  source_extension_bank_sha256: 4eb90fb9b0bea579d14cfcb0f61ebd5b6d566fd600bd3d5e1bfe5177a39e1b34
+  source_v23_shared_kv_bank_sha256: 91a9eea577cab5a37e840cdf4007722a398415846af91280713bcb2cda0f045c

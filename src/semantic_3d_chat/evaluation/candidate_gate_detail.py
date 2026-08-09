@@ -88,8 +88,7 @@ def _token_id(value: object, *, unit_index: int, side_index: int, candidate: str
         token_id = operator.index(value)
     except TypeError as exc:
         raise TypeError(
-            f"Unit {unit_index} side {side_index} {candidate} candidate token ID "
-            "must be an integer"
+            f"Unit {unit_index} side {side_index} {candidate} candidate token ID must be an integer"
         ) from exc
     if token_id < 0:
         raise ValueError("Candidate token IDs cannot be negative")
@@ -103,22 +102,19 @@ def _normalize_candidate_token_ids(
 ) -> list[tuple[tuple[int, int], tuple[int, int]]]:
     if isinstance(candidate_token_ids, (str, bytes)) or len(candidate_token_ids) != unit_count:
         raise ValueError(
-            "candidate_token_ids must have shape "
-            f"[{unit_count}][2 sides][2 candidates]"
+            f"candidate_token_ids must have shape [{unit_count}][2 sides][2 candidates]"
         )
     normalized: list[tuple[tuple[int, int], tuple[int, int]]] = []
     for unit_index, raw_sides in enumerate(candidate_token_ids):
         if isinstance(raw_sides, (str, bytes)) or len(raw_sides) != 2:
             raise ValueError(
-                "candidate_token_ids must have shape "
-                f"[{unit_count}][2 sides][2 candidates]"
+                f"candidate_token_ids must have shape [{unit_count}][2 sides][2 candidates]"
             )
         sides: list[tuple[int, int]] = []
         for side_index, raw_candidates in enumerate(raw_sides):
             if isinstance(raw_candidates, (str, bytes)) or len(raw_candidates) != 2:
                 raise ValueError(
-                    "candidate_token_ids must have shape "
-                    f"[{unit_count}][2 sides][2 candidates]"
+                    f"candidate_token_ids must have shape [{unit_count}][2 sides][2 candidates]"
                 )
             own = _token_id(
                 raw_candidates[0],
@@ -150,6 +146,7 @@ def build_candidate_gate_detail(
     *,
     ranking_margin: float = 0.5,
     candidate_token_ids: CandidateTokenIds | None = None,
+    full_vocab_margins: torch.Tensor | Sequence[Sequence[float]] | None = None,
 ) -> dict[str, object]:
     """Build JSON-safe candidate-gate evidence for every unit and side.
 
@@ -161,7 +158,9 @@ def build_candidate_gate_detail(
     When ``candidate_token_ids`` is absent, the function reads only the
     canonical ``answer`` targets from each training unit.  When token IDs are
     provided, it never reads answer text and the returned artifact contains no
-    target strings.  Neither mode reads question text or any oracle geometry.
+    target strings. ``full_vocab_margins`` optionally records the same first-token
+    target-versus-best-other evidence used by the hardened gate. Neither mode
+    reads question text or any oracle geometry.
     """
 
     if not units:
@@ -170,14 +169,17 @@ def build_candidate_gate_detail(
         raise ValueError("ranking_margin must be finite and non-negative")
 
     values = _margin_tensor(margins, unit_count=len(units))
+    full_vocab_values = (
+        None
+        if full_vocab_margins is None
+        else _margin_tensor(full_vocab_margins, unit_count=len(units))
+    )
     token_ids = (
         None
         if candidate_token_ids is None
         else _normalize_candidate_token_ids(candidate_token_ids, unit_count=len(units))
     )
-    representation = (
-        "canonical_training_targets" if token_ids is None else "candidate_token_ids"
-    )
+    representation = "canonical_training_targets" if token_ids is None else "candidate_token_ids"
 
     detail_units: list[dict[str, object]] = []
     side_preference_pass_count = 0
@@ -185,14 +187,14 @@ def build_candidate_gate_detail(
     changed_unit_pass_count = 0
     prediction_flip_count = 0
     wrong_prefix_flip_count = 0
+    full_vocab_top1_side_count = 0
+    full_vocab_top1_unit_count = 0
 
     for unit_index, unit in enumerate(units):
         records = unit.records
         if not isinstance(records, tuple) or len(records) != 2:
             raise ValueError(f"Unit {unit_index} must expose exactly two ordered records")
-        scene_ids = tuple(
-            _validate_opaque_id(record.scene_id, kind="scene") for record in records
-        )
+        scene_ids = tuple(_validate_opaque_id(record.scene_id, kind="scene") for record in records)
         question_ids = tuple(
             _validate_opaque_id(record.question_id, kind="question") for record in records
         )
@@ -201,7 +203,9 @@ def build_candidate_gate_detail(
 
         targets: tuple[str, str] | None = None
         if token_ids is None:
-            if not all(isinstance(record.answer, str) and record.answer.strip() for record in records):
+            if not all(
+                isinstance(record.answer, str) and record.answer.strip() for record in records
+            ):
                 raise ValueError("Canonical training targets must be non-empty strings")
             targets = (records[0].answer, records[1].answer)
             if targets[0].strip() == targets[1].strip():
@@ -210,6 +214,7 @@ def build_candidate_gate_detail(
         side_records: list[dict[str, object]] = []
         side_preference_passes: list[bool] = []
         side_configured_margin_passes: list[bool] = []
+        full_vocab_top1_passes: list[bool] = []
         for side_index, (scene_id, question_id) in enumerate(
             zip(scene_ids, question_ids, strict=True)
         ):
@@ -226,6 +231,16 @@ def build_candidate_gate_detail(
                 "own_preference_passed": own_preference_passed,
                 "configured_margin_passed": configured_margin_passed,
             }
+            if full_vocab_values is not None:
+                full_vocab_margin = float(full_vocab_values[unit_index, side_index].item())
+                full_vocab_top1_passed = full_vocab_margin > 0.0
+                side.update(
+                    {
+                        "first_token_target_vs_best_other_logit_margin": full_vocab_margin,
+                        "full_vocab_top1_passed": full_vocab_top1_passed,
+                    }
+                )
+                full_vocab_top1_passes.append(full_vocab_top1_passed)
             if token_ids is None:
                 assert targets is not None
                 own_target = targets[side_index]
@@ -260,24 +275,45 @@ def build_candidate_gate_detail(
         prediction_flip_passed = side_preference_passes[0] == side_preference_passes[1]
         wrong_prefix_flip_passed = changed_unit_passed
         unit_margin_passed = all(side_configured_margin_passes)
+        full_vocab_top1_unit_passed = (
+            None if full_vocab_values is None else all(full_vocab_top1_passes)
+        )
         side_preference_pass_count += sum(side_preference_passes)
         side_margin_pass_count += sum(side_configured_margin_passes)
         changed_unit_pass_count += int(changed_unit_passed)
         prediction_flip_count += int(prediction_flip_passed)
         wrong_prefix_flip_count += int(wrong_prefix_flip_passed)
-        detail_units.append(
+        if full_vocab_values is not None:
+            full_vocab_top1_side_count += sum(full_vocab_top1_passes)
+            full_vocab_top1_unit_count += int(bool(full_vocab_top1_unit_passed))
+        detail_unit: dict[str, object] = {
+            "unit_index": unit_index,
+            "scene_ids": list(scene_ids),
+            "question_ids": list(question_ids),
+            "changed_unit_passed": changed_unit_passed,
+            "prediction_flip_passed": prediction_flip_passed,
+            "wrong_prefix_flip_passed": wrong_prefix_flip_passed,
+            "configured_margin_passed": unit_margin_passed,
+            "sides": side_records,
+        }
+        if full_vocab_top1_unit_passed is not None:
+            detail_unit["full_vocab_top1_unit_passed"] = full_vocab_top1_unit_passed
+        detail_units.append(detail_unit)
+
+    summary_counts = {
+        "changed_units_passed": changed_unit_pass_count,
+        "side_preferences_passed": side_preference_pass_count,
+        "prediction_flips_passed": prediction_flip_count,
+        "wrong_prefix_flips_passed": wrong_prefix_flip_count,
+        "sides_at_configured_margin": side_margin_pass_count,
+    }
+    if full_vocab_values is not None:
+        summary_counts.update(
             {
-                "unit_index": unit_index,
-                "scene_ids": list(scene_ids),
-                "question_ids": list(question_ids),
-                "changed_unit_passed": changed_unit_passed,
-                "prediction_flip_passed": prediction_flip_passed,
-                "wrong_prefix_flip_passed": wrong_prefix_flip_passed,
-                "configured_margin_passed": unit_margin_passed,
-                "sides": side_records,
+                "full_vocab_top1_sides_passed": full_vocab_top1_side_count,
+                "full_vocab_top1_units_passed": full_vocab_top1_unit_count,
             }
         )
-
     return {
         "schema_version": 1,
         "artifact": "training_candidate_gate_detail",
@@ -287,17 +323,12 @@ def build_candidate_gate_detail(
         "contains_question_text": False,
         "contains_oracle_geometry": False,
         "contains_canonical_training_targets": token_ids is None,
+        "full_vocab_first_token_evaluated": full_vocab_values is not None,
         "ranking_margin": float(ranking_margin),
         "binary_prediction_rule": "margin > 0 selects own; margin <= 0 selects alternate",
         "configured_margin_rule": "margin >= ranking_margin",
         "unit_count": len(units),
         "side_count": len(units) * 2,
-        "summary_counts": {
-            "changed_units_passed": changed_unit_pass_count,
-            "side_preferences_passed": side_preference_pass_count,
-            "prediction_flips_passed": prediction_flip_count,
-            "wrong_prefix_flips_passed": wrong_prefix_flip_count,
-            "sides_at_configured_margin": side_margin_pass_count,
-        },
+        "summary_counts": summary_counts,
         "units": detail_units,
     }

@@ -151,6 +151,44 @@ def test_token_id_detail_never_reads_or_serializes_target_text() -> None:
     assert "answer" not in serialized
 
 
+def test_full_vocab_margins_expand_every_opaque_side_and_unit() -> None:
+    detail = build_candidate_gate_detail(
+        _units(),
+        [[0.75, 0.25], [0.6, -0.5]],
+        ranking_margin=0.5,
+        candidate_token_ids=[
+            [[1192, 9503], [9503, 1192]],
+            [[4432, 8841], [8841, 4432]],
+        ],
+        full_vocab_margins=[[0.5, 0.125], [1.0, -0.25]],
+    )
+
+    assert detail["full_vocab_first_token_evaluated"] is True
+    assert detail["contains_canonical_training_targets"] is False
+    assert detail["summary_counts"]["full_vocab_top1_sides_passed"] == 3
+    assert detail["summary_counts"]["full_vocab_top1_units_passed"] == 1
+    first, second = detail["units"]
+    assert first["full_vocab_top1_unit_passed"] is True
+    assert second["full_vocab_top1_unit_passed"] is False
+    assert first["sides"][0]["first_token_target_vs_best_other_logit_margin"] == pytest.approx(0.5)
+    assert second["sides"][1]["full_vocab_top1_passed"] is False
+
+
+def test_full_vocab_detail_rejects_misaligned_or_nonfinite_evidence() -> None:
+    with pytest.raises(ValueError, match="shape"):
+        build_candidate_gate_detail(
+            _units(),
+            [[0.1, 0.2], [0.3, 0.4]],
+            full_vocab_margins=[[0.1, 0.2]],
+        )
+    with pytest.raises(ValueError, match="NaN or infinity"):
+        build_candidate_gate_detail(
+            _units()[:1],
+            [[0.1, 0.2]],
+            full_vocab_margins=[[0.1, float("inf")]],
+        )
+
+
 def test_detail_counts_exactly_expand_existing_aggregate_gate() -> None:
     margins = [[0.75, -0.25], [0.6, 0.5]]
     detail = build_candidate_gate_detail(_units(), margins, ranking_margin=0.5)
