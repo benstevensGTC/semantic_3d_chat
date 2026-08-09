@@ -697,12 +697,14 @@ def fp64_pair_delta_metrics(
     shapes = {tuple(value.shape) for value in (first_core, second_core, first_delta, second_delta)}
     if len(shapes) != 1:
         raise ValueError("Pair tensors must all have the same shape")
-    core_difference = (
-        first_core.detach().to(torch.float64).cpu() - second_core.detach().to(torch.float64).cpu()
-    )
-    delta_difference = (
-        first_delta.detach().to(torch.float64).cpu() - second_delta.detach().to(torch.float64).cpu()
-    )
+    # MPS cannot perform FP64 casts. Transfer first, then perform the audit-only
+    # high-precision decomposition on CPU.
+    core_difference = first_core.detach().cpu().to(
+        torch.float64
+    ) - second_core.detach().cpu().to(torch.float64)
+    delta_difference = first_delta.detach().cpu().to(
+        torch.float64
+    ) - second_delta.detach().cpu().to(torch.float64)
     if not torch.isfinite(core_difference).all() or not torch.isfinite(delta_difference).all():
         raise ValueError("Pair differences must be finite")
     core_rms = core_difference.square().mean().sqrt()
