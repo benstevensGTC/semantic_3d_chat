@@ -1,0 +1,353 @@
+{
+  "schema_version": 1,
+  "artifact": "gemma4_color_wiring_v5_checkpoint_evaluation",
+  "status": "failed_teacher_forced_pair_gate_after_twelve_balanced_optimizer_updates",
+  "evaluation_only": true,
+  "source": {
+    "training_metrics": "reports/gemma4/metrics/training_gemma4_color_wiring_v5.json",
+    "training_metrics_sha256": "f5e28289f067e78fe01e155fd88c9d975d2a5016cc5d993c3d810d669f9ab739",
+    "checkpoint_metadata": "data_gemma4/checkpoints/gemma4_color_wiring_v5/epoch_012/metadata.json",
+    "checkpoint_metadata_sha256": "f202532a6821772c3e9384a9c4912a72557a6454356352d3b102c2170e6007d6",
+    "best_checkpoint_metadata": "data_gemma4/checkpoints/gemma4_color_wiring_v5/best/metadata.json",
+    "best_checkpoint_metadata_sha256": "47a9793d17c0b21af27a89e5c1b43a0ecade36d6c41cc9f29899b6f8dba5534a",
+    "selection_report": "reports/gemma4/metrics/training_selection_gemma4_color_wiring_v5.json",
+    "selection_report_sha256": "da2f9658271d70338a0aa267cfc0dc62fc027faec33716608cee91a213435c65",
+    "experiment_config": "configs/experiments/gemma4_color_wiring_v5.yaml",
+    "experiment_config_sha256": "d6273f0f2bcddeb27a1e4ca3868539aa6baf5973a29890953dce0e262b587c15",
+    "resolved_config_hash_recorded_by_checkpoint": "6810ebe34cf3",
+    "comparison_report": "reports/gemma4/metrics/gemma4_color_wiring_v4_failure.json",
+    "comparison_report_sha256": "d2a262aa98d0f7a7cbdeaae17847231e6b58da7d44e1269942836b5347abb986",
+    "source_scope": "Numeric v5 outcomes are copied from the completed training metrics and epoch-12 or best checkpoint metadata, or are exact integer counts derived from recorded rates and denominators. The v4 comparison is copied from the hashed v4 failure report. No oracle scene artifact was read to generate this report."
+  },
+  "oracle_scope": {
+    "training": "The scene-only warmup and per-batch spatial-answer contrastive objective used oracle target coordinates during training, as permitted supervision. Object labels, captions, and scene descriptions were not supplied to the continuous inference prefix.",
+    "report_generation": "This evaluation-only report reads training metrics, checkpoint metadata, configuration, and a prior evaluation report, not an oracle scene artifact.",
+    "runtime_inference": "Runtime inference was not exercised by this report, so this report makes no runtime oracle-isolation claim."
+  },
+  "run_state": {
+    "planned_epochs": 12,
+    "completed_epochs": 12,
+    "decoder_microsteps": 72,
+    "main_optimizer_steps": 12,
+    "elapsed_seconds": 576.7437601250131,
+    "elapsed_seconds_rounded_3dp": 576.744,
+    "latest_complete_checkpoint_path": "data_gemma4/checkpoints/gemma4_color_wiring_v5/epoch_012",
+    "best_checkpoint_path": "data_gemma4/checkpoints/gemma4_color_wiring_v5/best",
+    "best_epoch": 11,
+    "monitor_name": "pair_candidate_gate_hinge",
+    "best_monitor_loss": 0.4791666567325592,
+    "final_monitor_loss": 0.4869791567325592,
+    "final_train_loss": 18.843740781148274,
+    "stopped_early": false,
+    "gate_passed": false
+  },
+  "configuration": {
+    "output_namespace": "gemma4_color_wiring_v5",
+    "device": "mps",
+    "language_backend": "gemma4",
+    "language_model_id": "google/gemma-4-E2B-it",
+    "language_revision": "3e22461f65e89153144f8adb70e3b8c2cc9845a7",
+    "language_hidden_dim": 1536,
+    "language_decoder_gradient_checkpointing": true,
+    "scene_encoder_architecture_version": "signal_preserving_resampler_v3",
+    "semantic_dim": 3072,
+    "input_voxel_size_m": 0.15,
+    "raw_voxel_count": 74723,
+    "tokenizer_input_voxel_count": 8391,
+    "scene_model_dim": 384,
+    "scene_latents": 256,
+    "language_aligned_tail_dim": 1536,
+    "native_aligned_coverage_scale": 1.0,
+    "learned_scene_token_scale": 0.25,
+    "learned_scene_token_rms_target": 0.65,
+    "train_scene_ids": [
+      "scene_000003",
+      "scene_000004"
+    ],
+    "validation_scene_ids": [],
+    "test_scene_ids_not_evaluated_by_this_run": [
+      "scene_000005",
+      "scene_000006"
+    ],
+    "training_scene_count": 2,
+    "training_question_count": 12,
+    "training_counterfactual_pair_count": 1,
+    "counterfactual_pair_unit_count": 6,
+    "pair_ranking_mode": "candidate_logit",
+    "pair_ranking_weight": 8.0,
+    "pair_ranking_margin": 0.5,
+    "spatial_answer_contrastive_weight": 16.0,
+    "spatial_answer_contrastive_margin": 0.1,
+    "spatial_answer_unique_target_count": 3
+  },
+  "optimizer_schedule": {
+    "stage_1_scene_only_alignment_warmup": {
+      "optimizer": "AdamW",
+      "trainable_parameter_scope": [
+        "scene_model"
+      ],
+      "excluded_parameter_scope": [
+        "frozen_gemma_decoder",
+        "continuous_prefix_composer",
+        "grounding_head"
+      ],
+      "learning_rate": 0.001,
+      "learning_rate_schedule": "constant",
+      "weight_decay": 0.0,
+      "gradient_clip_norm": 1.0,
+      "requested_forward_steps": 50,
+      "executed_forward_steps": 28,
+      "executed_optimizer_steps": 27,
+      "deduplicated_physical_targets_per_forward": 3,
+      "supervised_sides_per_forward": 6,
+      "participating_scene_count_per_forward": 2,
+      "early_stop_check_position": "after forward metrics and before backward or optimizer update",
+      "stopped_before_update_on_pass_step": 28,
+      "optimizer_state_handoff_to_main_stage": false
+    },
+    "stage_2_decoder_conditioned_pair_training": {
+      "optimizer": "AdamW",
+      "trainable_parameter_scope": [
+        "scene_model",
+        "continuous_prefix_composer",
+        "grounding_head"
+      ],
+      "frozen_parameter_scope": [
+        "gemma_language_model"
+      ],
+      "learning_rate": 0.0001,
+      "learning_rate_schedule": "constant",
+      "weight_decay": 0.01,
+      "gradient_clip_norm": 1.0,
+      "gradient_accumulation_microbatches": 6,
+      "counterfactual_pair_units_per_microbatch": 1,
+      "microbatches_per_epoch": 6,
+      "optimizer_steps_per_epoch": 1,
+      "epochs": 12,
+      "total_microbatches": 72,
+      "total_optimizer_steps": 12,
+      "gradient_scaling": "Each microbatch loss was divided by six before backward, so each optimizer update used the exact arithmetic mean of all six counterfactual-unit gradients.",
+      "ordering_property": "No parameter update occurred between the six unit microbatches in an epoch; therefore the specific v4 mechanism in which a later unit optimizer step could overwrite an earlier unit within the same epoch was removed by construction.",
+      "main_optimizer_initialized_without_warmup_moments": true
+    }
+  },
+  "warmup_outcome": {
+    "completed": true,
+    "stopped_early": true,
+    "requested_steps": 50,
+    "forward_steps": 28,
+    "optimizer_steps": 27,
+    "deduplicated_physical_target_count": 3,
+    "eligible_side_count": 6,
+    "target_margin": 0.1,
+    "pass_step": 28,
+    "successful_side_count": 6,
+    "side_success_rate": 1.0,
+    "loss": 0.0,
+    "minimum_achieved_margin": 0.105218805372715,
+    "mean_achieved_margin": 0.14505083858966827,
+    "all_sides_passed": true,
+    "target_sha256": "2740103e978d42522abc6eb1185692ccfc23bea57f01be731ddaa05191f07665",
+    "interpretation_limit": "This was a six-side scene-only spatial-alignment warmup pass, not a pass of the six-unit decoder-conditioned candidate-logit gate."
+  },
+  "gate_definition": {
+    "evaluation_type": "teacher_forced_same_distribution_candidate_logit_ranking",
+    "ranking_mode": "candidate_logit",
+    "same_next_token_distribution": true,
+    "shared_candidate_tokens_excluded": true,
+    "free_generation_evaluated": false,
+    "changed_unit_accuracy_threshold": 0.95,
+    "prediction_flip_threshold": 1.0,
+    "wrong_prefix_flip_threshold": 1.0,
+    "unit_count": 6,
+    "side_count": 12,
+    "pair_count": 1
+  },
+  "gate_trajectory": [
+    {
+      "epoch": 1,
+      "changed_units_correct": 0,
+      "sides_correct": 6,
+      "prediction_flips": 0,
+      "mean_ranking_margin": -0.010416666977107525,
+      "minimum_ranking_margin": -2.25,
+      "ranking_hinge": 0.828125
+    },
+    {
+      "epoch": 2,
+      "changed_units_correct": 0,
+      "sides_correct": 5,
+      "prediction_flips": 1,
+      "mean_ranking_margin": 0.0416666679084301,
+      "minimum_ranking_margin": -2.125,
+      "ranking_hinge": 0.734375
+    },
+    {
+      "epoch": 3,
+      "changed_units_correct": 0,
+      "sides_correct": 6,
+      "prediction_flips": 0,
+      "mean_ranking_margin": -0.0364583320915699,
+      "minimum_ranking_margin": -1.9375,
+      "ranking_hinge": 0.7552083134651184
+    },
+    {
+      "epoch": 4,
+      "changed_units_correct": 0,
+      "sides_correct": 6,
+      "prediction_flips": 0,
+      "mean_ranking_margin": -0.0052083334885537624,
+      "minimum_ranking_margin": -1.5625,
+      "ranking_hinge": 0.6770833134651184
+    },
+    {
+      "epoch": 5,
+      "changed_units_correct": 0,
+      "sides_correct": 6,
+      "prediction_flips": 0,
+      "mean_ranking_margin": 0.01822916604578495,
+      "minimum_ranking_margin": -1.5625,
+      "ranking_hinge": 0.625
+    },
+    {
+      "epoch": 6,
+      "changed_units_correct": 0,
+      "sides_correct": 6,
+      "prediction_flips": 0,
+      "mean_ranking_margin": 0.01822916604578495,
+      "minimum_ranking_margin": -0.96875,
+      "ranking_hinge": 0.6171875
+    },
+    {
+      "epoch": 7,
+      "changed_units_correct": 1,
+      "sides_correct": 7,
+      "prediction_flips": 1,
+      "mean_ranking_margin": 0.0546875,
+      "minimum_ranking_margin": -1.3125,
+      "ranking_hinge": 0.6171875
+    },
+    {
+      "epoch": 8,
+      "changed_units_correct": 1,
+      "sides_correct": 7,
+      "prediction_flips": 1,
+      "mean_ranking_margin": 0.0364583320915699,
+      "minimum_ranking_margin": -1.40625,
+      "ranking_hinge": 0.6041666865348816
+    },
+    {
+      "epoch": 9,
+      "changed_units_correct": 1,
+      "sides_correct": 7,
+      "prediction_flips": 1,
+      "mean_ranking_margin": 0.0546875,
+      "minimum_ranking_margin": -1.3125,
+      "ranking_hinge": 0.5859375
+    },
+    {
+      "epoch": 10,
+      "changed_units_correct": 0,
+      "sides_correct": 6,
+      "prediction_flips": 0,
+      "mean_ranking_margin": 0.0651041641831398,
+      "minimum_ranking_margin": -1.125,
+      "ranking_hinge": 0.5052083134651184
+    },
+    {
+      "epoch": 11,
+      "changed_units_correct": 0,
+      "sides_correct": 6,
+      "prediction_flips": 0,
+      "mean_ranking_margin": 0.1171875,
+      "minimum_ranking_margin": -0.78125,
+      "ranking_hinge": 0.4791666567325592
+    },
+    {
+      "epoch": 12,
+      "changed_units_correct": 1,
+      "sides_correct": 7,
+      "prediction_flips": 1,
+      "mean_ranking_margin": 0.0950520858168602,
+      "minimum_ranking_margin": -0.8125,
+      "ranking_hinge": 0.4869791567325592
+    }
+  ],
+  "best_checkpoint_outcome": {
+    "epoch": 11,
+    "changed_units_correct": 0,
+    "changed_units_total": 6,
+    "changed_unit_accuracy": 0.0,
+    "sides_correct": 6,
+    "sides_total": 12,
+    "side_accuracy": 0.5,
+    "prediction_flips": 0,
+    "prediction_flip_rate": 0.0,
+    "wrong_prefix_flips": 0,
+    "wrong_prefix_flip_rate": 0.0,
+    "mean_ranking_margin": 0.1171875,
+    "minimum_ranking_margin": -0.78125,
+    "ranking_hinge_at_configured_margin": 0.4791666567325592,
+    "gate_passed": false
+  },
+  "final_checkpoint_outcome": {
+    "epoch": 12,
+    "changed_units_correct": 1,
+    "changed_units_total": 6,
+    "changed_unit_accuracy": 0.1666666716337204,
+    "sides_correct": 7,
+    "sides_total": 12,
+    "side_accuracy": 0.5833333134651184,
+    "prediction_flips": 1,
+    "prediction_flip_rate": 0.1666666716337204,
+    "wrong_prefix_flips": 1,
+    "wrong_prefix_flip_rate": 0.1666666716337204,
+    "mean_ranking_margin": 0.0950520858168602,
+    "minimum_ranking_margin": -0.8125,
+    "ranking_hinge_at_configured_margin": 0.4869791567325592,
+    "gate_passed": false
+  },
+  "comparison_with_v4": {
+    "controlled_change": "v5 inherited v4 and changed the main-stage schedule from one optimizer update after each single-unit microbatch to one optimizer update after accumulating the exact mean gradient over all six units.",
+    "v4_decoder_microsteps": 72,
+    "v5_decoder_microsteps": 72,
+    "v4_main_optimizer_steps": 72,
+    "v5_main_optimizer_steps": 12,
+    "v4_elapsed_seconds": 576.3742767919321,
+    "v5_elapsed_seconds": 576.7437601250131,
+    "v4_peak_changed_units_correct": 5,
+    "v5_peak_changed_units_correct": 1,
+    "v4_final_changed_units_correct": 4,
+    "v5_final_changed_units_correct": 1,
+    "v4_best_gate_hinge": 0.1223958358168602,
+    "v5_best_gate_hinge": 0.4791666567325592
+  },
+  "diagnosis": {
+    "classification": "balanced_schedule_removed_within_epoch_recency_but_failed_to_learn_the_six_unit_gate",
+    "measured_findings": [
+      "Each main-stage v5 parameter update incorporated all six counterfactual-unit gradients before the update, so the v4 within-epoch sequence of six separate unit-specific parameter updates was absent by construction.",
+      "The scene-only warmup passed 6/6 supervised sides at step 28 with minimum margin 0.105218805372715, above the 0.1 target.",
+      "Across 12 main-stage optimizer updates, the teacher-forced gate peaked at only 1/6 complete changed units and ended at 1/6; the best-hinge checkpoint at epoch 11 had 0/6 complete units.",
+      "Training loss decreased from 29.76682186126709 at epoch 1 to 18.843740781148274 at epoch 12, and gate hinge decreased from 0.828125 to a best value of 0.4791666567325592, demonstrating optimization progress that remained insufficient for the wiring gate.",
+      "With the same 72 decoder microsteps and approximately the same elapsed time as v4, v5 performed 12 main optimizer updates rather than 72 and achieved substantially weaker gate results."
+    ],
+    "evidence_supported_inference": "The balanced schedule appears under-updated for this 12-epoch budget: averaging six unit gradients reduced the number of AdamW updates by six while decoder compute and elapsed time stayed nearly unchanged. This is a supported explanation for slow gate progress, not a causal proof.",
+    "gradient_cancellation_hypothesis": "Conflicting unit gradients may also have canceled when averaged, but per-unit gradient vectors or cosine similarities were not logged. Gradient cancellation is therefore plausible but unmeasured and must not be stated as a result.",
+    "recency_claim_limit": "The schedule eliminated the specific within-epoch later-optimizer-step overwrite mechanism diagnosed for v4. It does not prove that every possible form of temporal interference or forgetting was eliminated."
+  },
+  "claim_limits": {
+    "free_generation_evaluated": false,
+    "held_out_scenes_evaluated": false,
+    "runtime_chat_evaluated": false,
+    "runtime_oracle_deletion_evaluated": false,
+    "prefix_invariance_evaluated": false,
+    "valid_claim": "v5 made measurable teacher-forced optimization progress under globally balanced six-unit updates but failed its small training wiring gate.",
+    "invalid_claims": [
+      "free-generation success",
+      "held-out scene generalization",
+      "runtime chat success",
+      "runtime oracle isolation",
+      "proven gradient cancellation"
+    ]
+  }
+}

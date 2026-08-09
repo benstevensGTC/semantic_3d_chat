@@ -1,0 +1,11 @@
+_base_: multiscene.yaml
+
+training:
+  output_namespace: multiscene_anticollapse
+  # Both objectives are training-only. They consume scene latents and opaque
+  # train-pair membership; neither changes the question-independent runtime.
+  latent_diversity_weight: 0.01
+  latent_diversity_cosine_margin: 0.20
+  latent_diversity_max_latents: 128
+  paired_scene_separation_weight: 0.02
+  paired_scene_cosine_distance_margin: 0.05

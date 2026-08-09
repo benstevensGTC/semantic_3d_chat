@@ -1,0 +1,12 @@
+_base_: gemma4_color_wiring_v3.yaml
+
+# Scene-only alignment warmup before the expensive frozen Gemma decoder loop.
+# Three physical color-swap targets are each supervised once even though the
+# QA corpus contains two paraphrases per target. Only scene_model parameters
+# update here; the main v3 candidate-logit and LM objectives then run unchanged.
+training:
+  output_namespace: gemma4_color_wiring_v4
+  spatial_answer_warmup_steps: 50
+  spatial_answer_warmup_learning_rate: 0.001
+  spatial_answer_warmup_margin_target: 0.10
+  spatial_answer_warmup_gradient_clip_norm: 1.0

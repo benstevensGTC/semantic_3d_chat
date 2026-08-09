@@ -1,0 +1,1 @@
+"""Bounded embodied-camera simulation."""

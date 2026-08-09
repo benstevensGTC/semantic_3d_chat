@@ -1,0 +1,341 @@
+{
+  "format_version": 1,
+  "status": "capability_validated_without_checkpoint_weights",
+  "model": {
+    "model_id": "google/gemma-4-E2B-it",
+    "requested_revision": "3e22461f65e89153144f8adb70e3b8c2cc9845a7",
+    "resolved_revision": "3e22461f65e89153144f8adb70e3b8c2cc9845a7",
+    "gated": false,
+    "private": false,
+    "license": "apache-2.0",
+    "checkpoint_size_bytes": 10246621918,
+    "config_sha256": "1b28f3d2c3100f6c594754b81107428bd7b822a7f48272ca681dae9d2ec38330",
+    "weights_downloaded_by_probe": false
+  },
+  "software": {
+    "python": "3.12.13",
+    "torch": "2.13.0",
+    "transformers": "5.14.1",
+    "platform": "macOS-26.5-arm64-arm-64bit",
+    "modeling_source_sha256": "ccab8e2dd80b71e9ca34e2c87291e17c40a27c755006e554da2ebf70d6616916"
+  },
+  "shape_and_memory": {
+    "model_card_declared_effective_parameters": 2300000000,
+    "total_parameters": 5104297504,
+    "component_parameters": {
+      "audio_tower": 304824608,
+      "embed_audio": 2359296,
+      "embed_vision": 1179648,
+      "language_model": 4628569344,
+      "vision_tower": 167364608
+    },
+    "checkpoint_bytes": 10246621918,
+    "weights_only": {
+      "bf16_or_fp16_bytes": 10208595008,
+      "bf16_or_fp16_gib": 9.507494986057281,
+      "fp32_bytes": 20417190016,
+      "fp32_gib": 19.014989972114563
+    },
+    "kv_cache_estimate": {
+      "assumptions": "bf16/fp16, batch=1, only non-shared KV layers, before sliding-window eviction; excludes activations and allocator overhead",
+      "bytes_per_token": 18432,
+      "mib_for_512_tokens": 9.0,
+      "mib_for_1024_tokens": 18.0
+    },
+    "warning": "Weights-only and KV figures are lower bounds, not a peak-MPS-memory promise. Training through a frozen decoder retains activations and needs substantially more.",
+    "text": {
+      "hidden_size": 1536,
+      "layers": 35,
+      "per_layer_embedding_dim": 256,
+      "kv_shared_layers": 20,
+      "sliding_window": 512
+    },
+    "vision": {
+      "hidden_size": 768,
+      "layers": 16,
+      "patch_size": 16,
+      "pooling_kernel_size": 3
+    }
+  },
+  "processor_grid_224_square": {
+    "input_complete_image_hw": [
+      224,
+      224
+    ],
+    "aspect_ratio_preserved": true,
+    "crop_used": false,
+    "resized_complete_image_hw": [
+      768,
+      768
+    ],
+    "padded_encoder_input_shape": [
+      1,
+      2520,
+      768
+    ],
+    "valid_pre_pool_tokens": 2304,
+    "valid_post_pool_tokens": 256,
+    "pre_pool_grid_hw": [
+      48,
+      48
+    ],
+    "post_pool_grid_hw": [
+      16,
+      16
+    ],
+    "post_token_pixel_span": 48,
+    "mapping": {
+      "pre_grid_hw": [
+        48,
+        48
+      ],
+      "post_grid_hw": [
+        16,
+        16
+      ],
+      "pre_token_count": 2304,
+      "post_token_count": 256,
+      "pooling_kernel_size": 3,
+      "mapping_sha256": "0f7d10977413caf2e62071eb59d809386922cef857b4713f6cef8027bbfba852",
+      "first_pre_xy": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          4,
+          0
+        ],
+        [
+          5,
+          0
+        ]
+      ],
+      "first_pre_to_post": [
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        2,
+        2,
+        2,
+        3,
+        3,
+        3
+      ],
+      "first_post_xy": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          4,
+          0
+        ],
+        [
+          5,
+          0
+        ]
+      ],
+      "last_post_xy": [
+        15,
+        15
+      ]
+    }
+  },
+  "tiny_cpu_vision": {
+    "passed": true,
+    "device": "cpu",
+    "complete_image_shape": [
+      1,
+      3,
+      96,
+      96
+    ],
+    "vision_forward_calls": 1,
+    "encoder_input_shape": [
+      1,
+      36,
+      768
+    ],
+    "hidden_state_shapes": [
+      [
+        1,
+        36,
+        16
+      ],
+      [
+        1,
+        36,
+        16
+      ],
+      [
+        4,
+        16
+      ]
+    ],
+    "pre_pool_layer_state_shape": [
+      1,
+      36,
+      16
+    ],
+    "post_pool_state_shape": [
+      4,
+      16
+    ],
+    "pre_pool_spatial_variance": 0.104593925178051,
+    "post_pool_spatial_variance": 1.9595394134521484,
+    "mapping": {
+      "pre_grid_hw": [
+        6,
+        6
+      ],
+      "post_grid_hw": [
+        2,
+        2
+      ],
+      "pre_token_count": 36,
+      "post_token_count": 4,
+      "pooling_kernel_size": 3,
+      "mapping_sha256": "db57c231a0ba58a9dd40a3066edb19a911b69535857453992255a2d6488368bd",
+      "first_pre_xy": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          4,
+          0
+        ],
+        [
+          5,
+          0
+        ]
+      ],
+      "first_pre_to_post": [
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1
+      ],
+      "first_post_xy": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ]
+      ],
+      "last_post_xy": [
+        1,
+        1
+      ]
+    },
+    "contract": "Each hidden state before the final tuple entry is localized on image_position_ids; the final/last_hidden_state is pooled and padding-stripped, with batch flattened."
+  },
+  "tiny_cpu_decoder": {
+    "passed": true,
+    "device": "cpu",
+    "arbitrary_scene_prefix_shape": [
+      1,
+      5,
+      32
+    ],
+    "prompt_token_count": 3,
+    "explicit_per_layer_inputs_shape": [
+      1,
+      8,
+      3,
+      8
+    ],
+    "scene_ple_identity": "pad_token_native_multimodal_convention",
+    "mm_token_type_for_scene_prefix": 0,
+    "first_logits_shape": [
+      1,
+      1,
+      64
+    ],
+    "cache_class": "DynamicCache",
+    "cache_length_before_increment": 8,
+    "cache_length_after_increment": 9,
+    "missing_ple_rejected": true,
+    "contract": "Use the native multimodal PAD-token PLE identity for arbitrary scene latents, learned token-identity PLE for prompt tokens, and supply the concatenated per_layer_inputs explicitly. On cached steps pass only the new token embedding/PLE plus a full-length attention mask."
+  },
+  "primary_integration_design": {
+    "path": [
+      "complete RGB image",
+      "one Gemma 4 vision-tower call",
+      "pre-pool localized patch hidden states + image_position_ids",
+      "depth projection and persistent 3D voxel fusion",
+      "question-independent full-scene resampler",
+      "projected continuous scene prefix with explicit PLE side input",
+      "Gemma 4 causal decoder"
+    ],
+    "direct_image_chat_primary": false,
+    "environmental_text_or_labels": false,
+    "question_dependent_retrieval": false,
+    "checkpoint_weights_downloaded_by_probe": false,
+    "checkpoint_weights_loaded_by_probe": false
+  },
+  "decision": {
+    "promising": true,
+    "reason": "Gemma 4 E2B provides an integrated 768D dense vision tower and 1536D local decoder, and both required low-level contracts pass with tiny CPU models.",
+    "remaining_gate": "Download the 10.25 GB checkpoint only after the current baseline is preserved, then measure real MPS forward stability, peak unified memory, dense feature quality, and adapter gradients before making it the primary model."
+  }
+}

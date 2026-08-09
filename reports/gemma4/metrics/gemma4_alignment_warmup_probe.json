@@ -1,0 +1,305 @@
+{
+  "schema_version": 1,
+  "artifact": "gemma4_alignment_warmup_cpu_probe",
+  "status": "first_pass_at_step_35_then_regressed_at_step_40",
+  "purpose": "Measure whether an alignment-only optimizer can teach the continuous scene tokenizer to separate the six red/blue counterfactual sides before any language-decoder training.",
+  "setup": {
+    "device": "cpu",
+    "mps_used": false,
+    "seed": 20260808,
+    "torch_threads": 8,
+    "scene_ids": [
+      "scene_000003",
+      "scene_000004"
+    ],
+    "maps": {
+      "scene_000003": {
+        "source_voxels": 74723,
+        "coarsened_training_voxels": 8391,
+        "semantic_feature_dim": 3072
+      },
+      "scene_000004": {
+        "source_voxels": 74723,
+        "coarsened_training_voxels": 8391,
+        "semantic_feature_dim": 3072
+      }
+    },
+    "scene_model_trainable_parameters": 9908854,
+    "scene_model_hidden_output_dim": 1536,
+    "learned_scene_token_scale": 0.25,
+    "optimizer": "AdamW",
+    "learning_rate": 0.001,
+    "weight_decay": 0.01,
+    "requested_optimizer_steps": 40,
+    "hinge_margin_target": 0.1,
+    "all_counterfactual_units": 6,
+    "deduplicated_physical_targets": 3,
+    "eligible_sides": 6,
+    "answer_embedding_rows": {
+      "weight_key": "model.language_model.embed_tokens.weight",
+      "red_token_id": 1192,
+      "blue_token_id": 9503,
+      "loaded_row_count": 2,
+      "embedding_dim": 1536
+    }
+  },
+  "scope": {
+    "full_language_model_loaded": false,
+    "language_decoder_forward_executed": false,
+    "mps_executed": false,
+    "files_modified_during_probe": false,
+    "direct_oracle_scene_files_loaded": false,
+    "oracle_derived_training_qa_used_for_supervision": true,
+    "chat_runtime_executed": false,
+    "runtime_oracle_isolation_claim": "None. This was a training-only diagnostic over prepared maps and oracle-derived QA targets, not chat inference.",
+    "environmental_input": "Continuous 3072D voxel-map features and geometry; answer rows and target coordinates were training supervision only.",
+    "optimized_modules": [
+      "scene_model"
+    ]
+  },
+  "side_order": [
+    {
+      "index": 0,
+      "target": "bowl",
+      "scene_id": "scene_000003",
+      "answer": "red",
+      "alternate": "blue",
+      "anchor_index": 59
+    },
+    {
+      "index": 1,
+      "target": "bowl",
+      "scene_id": "scene_000004",
+      "answer": "blue",
+      "alternate": "red",
+      "anchor_index": 59
+    },
+    {
+      "index": 2,
+      "target": "chair",
+      "scene_id": "scene_000003",
+      "answer": "blue",
+      "alternate": "red",
+      "anchor_index": 105
+    },
+    {
+      "index": 3,
+      "target": "chair",
+      "scene_id": "scene_000004",
+      "answer": "red",
+      "alternate": "blue",
+      "anchor_index": 105
+    },
+    {
+      "index": 4,
+      "target": "cube",
+      "scene_id": "scene_000003",
+      "answer": "red",
+      "alternate": "blue",
+      "anchor_index": 240
+    },
+    {
+      "index": 5,
+      "target": "cube",
+      "scene_id": "scene_000004",
+      "answer": "blue",
+      "alternate": "red",
+      "anchor_index": 240
+    }
+  ],
+  "metric_semantics": {
+    "achieved_margin": "cosine(scene_anchor, own_answer_row) - cosine(scene_anchor, alternate_answer_row)",
+    "loss": "mean(max(0, 0.1 - achieved_margin)) across the six sides",
+    "reported_loss_and_margins": "Post-optimizer evaluation forward, except step 0 which is the initial evaluation.",
+    "reported_gradient_norms": "Training forward immediately before the optimizer update associated with the reported step; null at step 0."
+  },
+  "trace": [
+    {
+      "step": 0,
+      "loss": 0.06920021027326584,
+      "mean_margin": 0.030799791837732,
+      "minimum_margin": -0.032647110521793365,
+      "margins_in_side_order": [
+        0.009645357728004456,
+        0.05342177674174309,
+        0.09480541944503784,
+        -0.005911476910114288,
+        -0.032647110521793365,
+        0.06548478454351425
+      ],
+      "global_gradient_norm": null,
+      "elapsed_seconds": 5.456776042003185,
+      "all_sides_passed": false
+    },
+    {
+      "step": 5,
+      "loss": 0.06363362073898315,
+      "mean_margin": 0.036366380751132965,
+      "minimum_margin": 0.01421598345041275,
+      "margins_in_side_order": [
+        0.04888996481895447,
+        0.02470479905605316,
+        0.06355463713407516,
+        0.04139205068349838,
+        0.01421598345041275,
+        0.025440849363803864
+      ],
+      "global_gradient_norm": 0.014580167362669063,
+      "elapsed_seconds": 13.936440167017281,
+      "all_sides_passed": false
+    },
+    {
+      "step": 10,
+      "loss": 0.05798865482211113,
+      "mean_margin": 0.04201134853065014,
+      "minimum_margin": 0.01563996821641922,
+      "margins_in_side_order": [
+        0.04058341309428215,
+        0.043783143162727356,
+        0.07519346475601196,
+        0.0434146523475647,
+        0.01563996821641922,
+        0.03345344960689545
+      ],
+      "global_gradient_norm": 0.06434295087791643,
+      "elapsed_seconds": 21.84853195794858,
+      "all_sides_passed": false
+    },
+    {
+      "step": 15,
+      "loss": 0.026966238394379616,
+      "mean_margin": 0.08344212174415588,
+      "minimum_margin": 0.00044023990631103516,
+      "margins_in_side_order": [
+        0.06825542449951172,
+        0.08462519943714142,
+        0.08488170802593231,
+        0.14351259171962738,
+        0.11893756687641144,
+        0.00044023990631103516
+      ],
+      "global_gradient_norm": 0.38366311746680204,
+      "elapsed_seconds": 29.86866220785305,
+      "all_sides_passed": false
+    },
+    {
+      "step": 20,
+      "loss": 0.03514625132083893,
+      "mean_margin": 0.0697943028062582,
+      "minimum_margin": 0.007367432117462158,
+      "margins_in_side_order": [
+        0.10640105605125427,
+        0.027673017233610153,
+        0.06702814251184464,
+        0.12324225157499313,
+        0.08705391734838486,
+        0.007367432117462158
+      ],
+      "global_gradient_norm": 0.8067336096274906,
+      "elapsed_seconds": 37.78941304190084,
+      "all_sides_passed": false
+    },
+    {
+      "step": 25,
+      "loss": 0.03701430559158325,
+      "mean_margin": 0.06889308368166287,
+      "minimum_margin": -0.000421866774559021,
+      "margins_in_side_order": [
+        0.03962747007608414,
+        0.09406321495771408,
+        0.13544432818889618,
+        0.05355241894721985,
+        -0.000421866774559021,
+        0.09109293669462204
+      ],
+      "global_gradient_norm": 0.3780337534204236,
+      "elapsed_seconds": 45.66094695799984,
+      "all_sides_passed": false
+    },
+    {
+      "step": 30,
+      "loss": 0.00026709833764471114,
+      "mean_margin": 0.11316583802302678,
+      "minimum_margin": 0.09890484809875488,
+      "margins_in_side_order": [
+        0.10104842483997345,
+        0.10073532164096832,
+        0.13772326707839966,
+        0.14109060168266296,
+        0.09890484809875488,
+        0.09949256479740143
+      ],
+      "global_gradient_norm": 0.3493348468811849,
+      "elapsed_seconds": 53.49389633303508,
+      "all_sides_passed": false
+    },
+    {
+      "step": 35,
+      "loss": 0.0,
+      "mean_margin": 0.15131146212418875,
+      "minimum_margin": 0.1103905439376831,
+      "margins_in_side_order": [
+        0.14198532700538635,
+        0.1103905439376831,
+        0.15639197826385498,
+        0.19105187058448792,
+        0.1887938380241394,
+        0.11925521492958069
+      ],
+      "global_gradient_norm": 0.37723745708728057,
+      "scene_token_gradient_norms": {
+        "scene_000003": 0.0,
+        "scene_000004": 0.012944002635776997
+      },
+      "elapsed_seconds": 61.34828416700475,
+      "all_sides_passed": true,
+      "first_pass": true
+    },
+    {
+      "step": 40,
+      "loss": 0.0006494782865047455,
+      "mean_margin": 0.1807649756471316,
+      "minimum_margin": 0.09610313177108765,
+      "margins_in_side_order": [
+        0.09610313177108765,
+        0.19264912605285645,
+        0.23606008291244507,
+        0.1908634603023529,
+        0.18468153476715088,
+        0.18423251807689667
+      ],
+      "global_gradient_norm": 0.0,
+      "scene_token_gradient_norms": {
+        "scene_000003": 0.0,
+        "scene_000004": 0.0
+      },
+      "elapsed_seconds": 69.2337276248727,
+      "all_sides_passed": false,
+      "regressed_after_first_pass": true
+    }
+  ],
+  "timing": {
+    "optimization_seconds": 63.776955832960084,
+    "total_seconds": 69.23377587483265,
+    "first_pass_elapsed_seconds": 61.34828416700475
+  },
+  "result": {
+    "first_passing_step": 35,
+    "first_pass_minimum_margin": 0.1103905439376831,
+    "step_40_minimum_margin": 0.09610313177108765,
+    "step_40_failing_side_index": 0,
+    "continued_optimization_regressed": true,
+    "engineering_conclusion": "The alignment-only warmup is viable, and training should stop immediately when every eligible side reaches the configured margin."
+  },
+  "numerical_validation": {
+    "validated": true,
+    "row_count": 9,
+    "mean_recomputed_from_six_margins": true,
+    "minimum_recomputed_from_six_margins": true,
+    "hinge_loss_recomputed_from_six_margins": true,
+    "maximum_absolute_mean_difference": 0.0,
+    "maximum_absolute_minimum_difference": 0.0,
+    "maximum_absolute_hinge_loss_difference": 3.3527612630646075e-09,
+    "difference_explanation": "The sub-nanometric loss differences are consistent with the original float32 reduction versus JSON double-precision recomputation."
+  }
+}

@@ -1,0 +1,20 @@
+_base_: gemma4_color_wiring_v6.yaml
+
+# Replace v6's trainable scene_start/scene_end vectors with Gemma 4's exact,
+# frozen native image boundaries. The values below are assertions against the
+# pinned local model and tokenizer, not constants trusted by the runtime.
+# Loading aborts if any identity or attention setting differs.
+language:
+  scene_boundary_mode: gemma4_native_image
+  gemma4_native_image_contract:
+    schema_version: 1
+    model_revision: 3e22461f65e89153144f8adb70e3b8c2cc9845a7
+    bos_token_id: 2
+    pad_token_id: 0
+    boi_token_id: 255999
+    image_token_id: 258880
+    eoi_token_id: 258882
+    use_bidirectional_attention: null
+
+training:
+  output_namespace: gemma4_color_wiring_v7

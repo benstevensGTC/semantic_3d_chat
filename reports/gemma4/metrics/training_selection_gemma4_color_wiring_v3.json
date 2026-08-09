@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "strategy": "paired_expected_change_then_least_represented_answer_type_v1",
+  "train": {
+    "schema_version": 1,
+    "available_count": 12,
+    "selected_count": 12,
+    "available_by_scene": {
+      "scene_000003": {
+        "count": 6,
+        "answer_types": {
+          "attribute": 6
+        },
+        "counterfactual_pair_ids": [
+          "pair_000001"
+        ],
+        "expected_change_key_count": 6
+      },
+      "scene_000004": {
+        "count": 6,
+        "answer_types": {
+          "attribute": 6
+        },
+        "counterfactual_pair_ids": [
+          "pair_000001"
+        ],
+        "expected_change_key_count": 6
+      }
+    },
+    "selected_by_scene": {
+      "scene_000003": {
+        "count": 6,
+        "answer_types": {
+          "attribute": 6
+        },
+        "counterfactual_pair_ids": [
+          "pair_000001"
+        ],
+        "expected_change_key_count": 6
+      },
+      "scene_000004": {
+        "count": 6,
+        "answer_types": {
+          "attribute": 6
+        },
+        "counterfactual_pair_ids": [
+          "pair_000001"
+        ],
+        "expected_change_key_count": 6
+      }
+    },
+    "selected_ids_sha256": "75be0908cd47ca2437c038d56160b5fc43115defdcfbac4f09ba50d1fc40b4ec",
+    "expected_change_units_selected": 6,
+    "expected_change_units_complete": 6,
+    "expected_change_units_incomplete": 0
+  },
+  "validation": null,
+  "train_scene_ids": [
+    "scene_000003",
+    "scene_000004"
+  ],
+  "validation_scene_ids": [],
+  "test_scene_ids": [
+    "scene_000005",
+    "scene_000006"
+  ],
+  "training_counterfactual_pair_count": 1,
+  "training_counterfactual_pair_membership_sha256": "dec429f6d317e9cd8db2bdd5a671ac0aafae14461e170fd872461dc07d9dcab9",
+  "counterfactual_pair_unit_count": 6,
+  "scene_token_mixing": {
+    "language_aligned_tail_dim": 1536,
+    "native_aligned_coverage_scale": 1.0,
+    "learned_scene_token_scale": 0.25,
+    "learned_scene_token_rms_target": 0.65
+  },
+  "spatial_answer_contrastive": {
+    "weight": 16.0,
+    "margin": 0.1
+  },
+  "spatial_answer_target_audit": {
+    "eligible_unit_count": 6,
+    "eligible_side_count": 12,
+    "unique_target_count": 3,
+    "unit_to_unique_target_ratio": 2.0
+  },
+  "language_decoder_gradient_checkpointing": true,
+  "pair_curriculum": {
+    "enabled": true,
+    "pair_only": true,
+    "pair_only_scene_ids": [
+      "scene_000003",
+      "scene_000004"
+    ],
+    "batch_fraction": 1.0,
+    "units_per_batch": 1,
+    "ranking_mode": "candidate_logit",
+    "ranking_margin": 0.5,
+    "ranking_weight": 8.0
+  }
+}

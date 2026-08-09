@@ -1,0 +1,14 @@
+_base_: gemma4_pair_gate.yaml
+
+# Stage-A wiring overfit: six exact-question units over the controlled color
+# swap. This is intentionally tiny so the expensive frozen Gemma decoder must
+# first prove it can distinguish two physical scene prefixes before scaling.
+training:
+  output_namespace: gemma4_color_wiring
+  pair_only_scene_ids:
+    - scene_000003
+    - scene_000004
+  max_questions_per_scene: 6
+  learning_rate: 0.0001
+  epochs: 12
+  pair_steps_per_epoch: 6

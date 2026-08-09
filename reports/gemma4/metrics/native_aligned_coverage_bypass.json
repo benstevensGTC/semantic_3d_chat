@@ -1,0 +1,46 @@
+{
+  "artifact": "native_aligned_coverage_bypass_diagnostic",
+  "config": "configs/gemma4_e2b.yaml",
+  "coverage": {
+    "global_scene_latents": 256,
+    "language_aligned_tail_dim": 1536,
+    "learned_scene_token_rms_target": 0.65,
+    "learned_scene_token_scale": 0.1,
+    "native_aligned_coverage_scale": 1.0,
+    "normalization": "global_softmax_over_all_aggregated_voxels_per_halton_anchor",
+    "question_dependent_selection": false,
+    "top_k_or_radius_pruning": false
+  },
+  "device": "cpu",
+  "pair": {
+    "cosine_distance": 0.0021736621856689453,
+    "delta_l2": 18.604568481445312,
+    "relative_l2": 0.06623610854148865,
+    "scene_a": "scene_000003",
+    "scene_b": "scene_000004"
+  },
+  "scenes": {
+    "scene_000003": {
+      "aggregated_voxels": 8391,
+      "all_voxels_contribute": true,
+      "minimum_anchor_voxel_weight": 5.163516788515332e-27,
+      "minimum_total_voxel_contribution": 0.004812161438167095,
+      "native_token_l2": 281.0528564453125,
+      "native_token_rms": 0.4482046961784363,
+      "native_token_shape": [1, 256, 1536],
+      "semantic_dim": 3072,
+      "source_voxels": 74723
+    },
+    "scene_000004": {
+      "aggregated_voxels": 8391,
+      "all_voxels_contribute": true,
+      "minimum_anchor_voxel_weight": 5.163516788515332e-27,
+      "minimum_total_voxel_contribution": 0.004812161438167095,
+      "native_token_l2": 280.7122802734375,
+      "native_token_rms": 0.44766199588775635,
+      "native_token_shape": [1, 256, 1536],
+      "semantic_dim": 3072,
+      "source_voxels": 74723
+    }
+  }
+}

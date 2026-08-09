@@ -1,0 +1,147 @@
+seed: 20260808
+paths:
+  data_root: data
+  reports_root: reports
+scene:
+  scene_id: scene_000001
+  room_size_m: [6.0, 5.0, 3.0]
+  variant: base
+  object_jitter_m: 0.12
+render:
+  resolution: [224, 224]
+  horizontal_fov_degrees: 72.0
+  engine: BLENDER_EEVEE_NEXT
+  samples: 32
+  camera_position_m: [0.0, 0.0, 1.4]
+  yaw_degrees: [0, 45, 90, 135, 180, 225, 270, 315]
+  pitch_degrees: [-25, 0, 25]
+vision:
+  model_id: openai/clip-vit-base-patch16
+  revision: 57c216476eefef5ab752ec549e440a49ae4ae5f3
+  input_size: 224
+  middle_layer: 6
+  late_layer: 12
+  feature_mode: middle_late_aligned
+  # Localized value tokens entering CLIP's final attention block, followed by
+  # the trained CLIP output/text-space projection.
+  aligned_method: maskclip_value
+  dtype: float16
+  batch_size: 1
+mapping:
+  voxel_size_m: 0.05
+  depth_min_m: 0.10
+  depth_max_m: 10.0
+  pixel_stride: 2
+  max_voxels: 120000
+  confidence_distance_scale_m: 6.0
+evaluation:
+  semantic_sanity:
+    top_k: 100
+    bbox_padding_voxels: 0.75
+    prompt_template: "a photo of a {}"
+    heatmap_max_points: 100000
+  baselines:
+    # Evaluation-only prohibited upper bound. This path deliberately reads the
+    # isolated oracle and supplies a textual scene description to the local LM.
+    oracle_text:
+      max_answer_tokens: 24
+      system_prompt: >-
+        This is an evaluation-only oracle-text upper bound. Answer the question
+        from the exact scene facts below. Match relationship subject and object
+        roles exactly. For presence, say yes only when the category occurs in
+        the exact inventory; otherwise say no. Reply with only a canonical
+        answer: yes/no, an integer, a color, an object name, or one of left,
+        right, above, below, in front, behind, near, far, on, under, or unknown.
+    # Direct-image control. Every selected entry is a complete rendered view;
+    # no manual crops, oracle metadata, depth, or segmentation are supplied.
+    direct_multiview:
+      model_id: HuggingFaceTB/SmolVLM-256M-Instruct
+      revision: 7e3e67edbbed1bf9888184d9df282b700a323964
+      license: Apache-2.0
+      dtype: float16
+      max_views: 24
+      resize_longest_edge: 512
+      max_answer_tokens: 24
+      system_prompt: >-
+        Answer the room question using only the complete camera images supplied
+        with it. Reply with only a canonical answer: yes/no, an integer, a color,
+        an object name, or one of left, right, above, below, in front, behind, on,
+        under, or unknown.
+scene_encoder:
+  # v3 preserves raw semantic/geometry content through fixed point and block
+  # residuals. Slot identities affect attention queries but are not emitted as
+  # scene payload, so pair diagnostics measure scene content.
+  architecture_version: signal_preserving_resampler_v3
+  # Raw 5 cm voxels remain stored. This deterministic, dimension-preserving
+  # aggregation makes training practical while every raw voxel contributes.
+  input_voxel_size_m: 0.15
+  block_size_m: 0.25
+  tokens_per_block: 2
+  model_dim: 384
+  global_latents: 256
+  heads: 8
+  block_layers: 1
+  global_layers: 2
+  fourier_bands: 8
+  coverage_temperature: 0.20
+  coverage_scale: 4.0
+  query_identity_scale: 0.05
+  projection_skip_scale: 1.0
+  semantic_skip_scale: 1.0
+  geometry_skip_scale: 0.5
+  block_content_residual_scale: 1.0
+  # Optional native language-aligned semantic tail. The CLIP/Qwen baseline has
+  # no feature stream in the Qwen hidden space, so its bypass remains disabled.
+  language_aligned_tail_dim: 0
+  native_aligned_coverage_scale: 0.0
+  learned_scene_token_scale: 1.0
+  learned_scene_token_rms_target: null
+language:
+  model_id: Qwen/Qwen2.5-0.5B-Instruct
+  revision: 7ae557604adf67be50417f59c2c2f167def9a775
+  dtype: float16
+  # Legacy-compatible by default. When enabled, retain the prompt's native BOS
+  # embedding first, then insert the learned continuous scene prefix before all
+  # remaining system/user prompt tokens.
+  scene_prefix_after_bos: false
+  max_question_tokens: 96
+  max_answer_tokens: 32
+  system_prompt: >-
+    You answer using only the continuous 3D scene memory supplied before this
+    conversation. Do not invent objects or relationships unsupported by the scene.
+    If there is not enough evidence, answer unknown.
+training:
+  # Recompute frozen language-decoder activations during scene-prefix
+  # backpropagation. Off by default; useful for large local multimodal models.
+  language_decoder_gradient_checkpointing: false
+  learning_rate: 0.0002
+  weight_decay: 0.01
+  epochs: 20
+  batch_size: 1
+  gradient_accumulation: 8
+  gradient_clip_norm: 1.0
+  grounding_weight: 0.25
+  grounding_anchor_weight: 1.0
+  validation_every_epochs: 1
+  early_stopping_patience: 5
+  early_stopping_min_delta: 0.0001
+robot:
+  radius_m: 0.25
+  camera_height_m: 1.20
+  initial_position_xy_m: [0.0, 0.0]
+  max_move_m: 0.50
+  max_move_to_m: 1.00
+  max_turn_degrees: 45.0
+  max_look_delta_degrees: 45.0
+  max_camera_yaw_offset_degrees: 90.0
+  max_pitch_degrees: 45.0
+  collision_z_min_m: 0.12
+  collision_z_max_m: 1.80
+  surface_padding_m: 0.035
+  scan_resolution: [224, 224]
+  scan_horizontal_fov_degrees: 72.0
+  scan_depth_min_m: 0.10
+  scan_depth_max_m: 10.0
+  history_length: 64
+  state_token_count: 4
+  state_encoder_hidden_dim: 256

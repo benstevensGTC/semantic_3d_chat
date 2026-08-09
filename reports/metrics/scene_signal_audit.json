@@ -1,0 +1,3475 @@
+{
+  "checkpoint": "data/checkpoints/multiscene/best",
+  "checkpoint_best_epoch": 4,
+  "checkpoint_sha256": "112eebef3852d5431029d1d8c3a8a4e77fd5600d5fc421e8e0f44642d29ff709",
+  "comparison_note": "Map semantic/RGB metrics compare only shared spatial cells; topology metrics separately measure cells added or removed. Downstream token metrics compare corresponding block queries or fixed global latent indices.",
+  "config": "configs/experiments/multiscene.yaml",
+  "device": "mps",
+  "figure": "reports/figures/scene_signal_audit.png",
+  "generation": null,
+  "learned_query_diversity": {
+    "global_resampler_queries": {
+      "mean_feature_std_across_tokens": 0.020007414743304253,
+      "mean_off_diagonal_cosine": 0.009564792737364769,
+      "minimum_off_diagonal_cosine": -0.17610512673854828,
+      "token_count": 256
+    },
+    "note": "The learned query parameters are diverse, but their output native latents collapse to mean off-diagonal cosine 0.9999944. The shared global context overwhelms query diversity."
+  },
+  "summary_findings": {
+    "raw_semantic_relative_l2_range": [0.09032217115128303, 0.5742494209284039],
+    "block_token_relative_l2_range": [0.006451626185256758, 0.04093100596646479],
+    "native_latent_relative_l2_range": [0.000042192851518309516, 0.000132947948599603],
+    "projected_token_relative_l2_range": [0.0000029812492037171457, 0.00001015447363434336],
+    "runtime_prefix_changed_element_fraction_range": [0.018130403100775193, 0.048852372286821706],
+    "raw_to_projected_attenuation_factor_range": [28549.585078549877, 56551.371592902906],
+    "diagnosis": "The counterfactual signal is present in raw and aggregated maps and remains visible in spatial block tokens. The dominant loss occurs in the global Perceiver resampler: its 256 native latents are almost duplicate vectors, and scene-pair relative L2 falls by roughly two to three further orders of magnitude before LM projection. Distinct SHA-256 hashes therefore certify only bitwise inequality, not a behaviorally useful separation.",
+    "recommended_fix": "Preserve spatially anchored latent diversity, add an explicit paired counterfactual scene-token separation/diversity objective, and keep or amplify projected scene differences above the float16 quantization floor before injecting them into the frozen language model."
+  },
+  "corroborating_control_results": {
+    "primary_exact_accuracy": 0.7481751824817519,
+    "primary_changed_when_expected_rate": 0.0,
+    "wrong_scene_prefix_exact_accuracy": 0.7518248175182481,
+    "semantic_shuffle_exact_accuracy": 0.7554744525547445,
+    "position_shuffle_exact_accuracy": 0.7518248175182481,
+    "geometry_only_exact_accuracy": 0.7518248175182481,
+    "interpretation": "Wrong-scene, shuffled-semantic, shuffled-position, and geometry-only controls match or slightly exceed primary exact accuracy, while primary changed-fact consistency is zero. This corroborates a learned near-constant soft-prompt/prior solution rather than effective use of scene-specific signal.",
+    "source_directory": "reports/metrics/controls"
+  },
+  "pairs": [
+    {
+      "aggregated_map": {
+        "rgb": {
+          "changed_element_fraction_at_1e-6": 0.028721248957216065,
+          "cosine_flat": 0.998249791359034,
+          "max_row_l2": 264.8715617443782,
+          "mean_absolute_difference": 1.0049040436020142,
+          "mean_row_cosine": 0.9980393811396538,
+          "mean_row_l2": 1.8642465782141906,
+          "minimum_row_cosine": 0.26880946223412394,
+          "relative_l2": 0.05916435375928576,
+          "rms_difference": 10.010004919167141,
+          "row_difference_concentration": {
+            "effective_changed_rows": 68.9556325677927,
+            "top_10_fraction": 0.22829050250199323,
+            "top_1_fraction": 0.027814234182250017,
+            "top_1_percent_fraction": 0.9718724485064095
+          },
+          "shape_common": [
+            8391,
+            3
+          ],
+          "top_changed_rows": [
+            {
+              "aligned_row": 4867,
+              "coordinate": [
+                0.5127906799316406,
+                0.5249999761581421,
+                0.9725290536880493
+              ],
+              "cosine": 0.29410705519395175,
+              "l2": 264.8715617443782,
+              "rank": 1
+            },
+            {
+              "aligned_row": 5002,
+              "coordinate": [
+                0.6634314060211182,
+                0.5249999761581421,
+                0.9728431105613708
+              ],
+              "cosine": 0.26880946223412394,
+              "l2": 262.9671556109895,
+              "rank": 2
+            },
+            {
+              "aligned_row": 4719,
+              "coordinate": [
+                0.42500001192092896,
+                0.6733572483062744,
+                0.9799280762672424
+              ],
+              "cosine": 0.44666720193809545,
+              "l2": 251.34899342639898,
+              "rank": 3
+            },
+            {
+              "aligned_row": 4715,
+              "coordinate": [
+                0.42500001192092896,
+                0.5619767308235168,
+                0.9766279458999634
+              ],
+              "cosine": 0.4569519238201907,
+              "l2": 250.5696185428938,
+              "rank": 4
+            },
+            {
+              "aligned_row": 3213,
+              "coordinate": [
+                -1.125,
+                0.32500001788139343,
+                0.42500001192092896
+              ],
+              "cosine": 0.4476289184672999,
+              "l2": 231.85510049282894,
+              "rank": 5
+            },
+            {
+              "aligned_row": 4724,
+              "coordinate": [
+                0.42500004172325134,
+                0.7930473685264587,
+                0.9767751097679138
+              ],
+              "cosine": 0.5351148126307814,
+              "l2": 230.13199095506457,
+              "rank": 6
+            },
+            {
+              "aligned_row": 4716,
+              "coordinate": [
+                0.42500001192092896,
+                0.5612385272979736,
+                1.0869266986846924
+              ],
+              "cosine": 0.6030063653802407,
+              "l2": 228.53050513278453,
+              "rank": 7
+            },
+            {
+              "aligned_row": 4720,
+              "coordinate": [
+                0.42500004172325134,
+                0.6729080080986023,
+                1.0877615213394165
+              ],
+              "cosine": 0.603592082357004,
+              "l2": 227.82415903417083,
+              "rank": 8
+            },
+            {
+              "aligned_row": 3600,
+              "coordinate": [
+                -0.8445945978164673,
+                0.7868243455886841,
+                0.6733108758926392
+              ],
+              "cosine": 0.6342597749126193,
+              "l2": 223.6400182510772,
+              "rank": 9
+            },
+            {
+              "aligned_row": 3599,
+              "coordinate": [
+                -0.8391509652137756,
+                0.7886792421340942,
+                0.5334905385971069
+              ],
+              "cosine": 0.6274866709893979,
+              "l2": 222.9206959651443,
+              "rank": 10
+            }
+          ]
+        },
+        "semantic": {
+          "changed_element_fraction_at_1e-6": 0.7941133101127696,
+          "cosine_flat": 0.9962174398485324,
+          "max_row_l2": 10.205628698313072,
+          "mean_absolute_difference": 0.014748117913630282,
+          "mean_row_cosine": 0.9946965309605481,
+          "mean_row_l2": 1.0207767812829338,
+          "minimum_row_cosine": 0.7539947700942102,
+          "relative_l2": 0.0869777518231211,
+          "rms_difference": 0.033881498833829765,
+          "row_difference_concentration": {
+            "effective_changed_rows": 989.0535422813588,
+            "top_10_fraction": 0.04219238551253693,
+            "top_1_fraction": 0.0052797167732009,
+            "top_1_percent_fraction": 0.217249876387936
+          },
+          "shape_common": [
+            8391,
+            2048
+          ],
+          "top_changed_rows": [
+            {
+              "aligned_row": 2984,
+              "coordinate": [
+                -1.2455881834030151,
+                -1.4220589399337769,
+                -0.02500000037252903
+              ],
+              "cosine": 0.7539947700942102,
+              "l2": 10.205628698313072,
+              "rank": 1
+            },
+            {
+              "aligned_row": 3416,
+              "coordinate": [
+                -0.9746988415718079,
+                0.7749999761581421,
+                0.8246987462043762
+              ],
+              "cosine": 0.779880713912054,
+              "l2": 9.529873888141378,
+              "rank": 2
+            },
+            {
+              "aligned_row": 2028,
+              "coordinate": [
+                -2.1570000648498535,
+                -0.07899999618530273,
+                0.02500000037252903
+              ],
+              "cosine": 0.8889597633825237,
+              "l2": 9.355726219039877,
+              "rank": 3
+            },
+            {
+              "aligned_row": 3231,
+              "coordinate": [
+                -1.1260582208633423,
+                0.7750000357627869,
+                0.8255290389060974
+              ],
+              "cosine": 0.7951831441724528,
+              "l2": 9.110279436365863,
+              "rank": 4
+            },
+            {
+              "aligned_row": 3417,
+              "coordinate": [
+                -0.9825000166893005,
+                0.7750000953674316,
+                0.9710714221000671
+              ],
+              "cosine": 0.8049982594273365,
+              "l2": 8.972253175123038,
+              "rank": 5
+            },
+            {
+              "aligned_row": 3233,
+              "coordinate": [
+                -1.126219630241394,
+                0.7750000357627869,
+                1.1296749114990234
+              ],
+              "cosine": 0.805105159214963,
+              "l2": 8.882763303496569,
+              "rank": 6
+            },
+            {
+              "aligned_row": 559,
+              "coordinate": [
+                -3.0250000953674316,
+                1.6750000715255737,
+                0.8250000476837158
+              ],
+              "cosine": 0.8068699198532624,
+              "l2": 8.833526306516509,
+              "rank": 7
+            },
+            {
+              "aligned_row": 3232,
+              "coordinate": [
+                -1.124253749847412,
+                0.7750000357627869,
+                0.9747511744499207
+              ],
+              "cosine": 0.8111634014448169,
+              "l2": 8.832846615274855,
+              "rank": 8
+            },
+            {
+              "aligned_row": 3418,
+              "coordinate": [
+                -0.9760489463806152,
+                0.7750000357627869,
+                1.1316434144973755
+              ],
+              "cosine": 0.8075458921220866,
+              "l2": 8.807984368643869,
+              "rank": 9
+            },
+            {
+              "aligned_row": 1861,
+              "coordinate": [
+                -2.329545497894287,
+                -0.09772726893424988,
+                0.02500000409781933
+              ],
+              "cosine": 0.8842364665372034,
+              "l2": 8.59117708456304,
+              "rank": 10
+            }
+          ]
+        },
+        "voxel_topology": {
+          "common_count": 8391,
+          "common_fraction_of_smaller": 1.0,
+          "count_a": 8391,
+          "count_b": 8391,
+          "jaccard": 1.0,
+          "only_a_count": 0,
+          "only_b_count": 0,
+          "union_count": 8391
+        }
+      },
+      "block_tokens": {
+        "block_topology": {
+          "common_count": 2998,
+          "common_fraction_of_smaller": 1.0,
+          "count_a": 2998,
+          "count_b": 2998,
+          "jaccard": 1.0,
+          "only_a_count": 0,
+          "only_b_count": 0,
+          "union_count": 2998
+        },
+        "common_block_tokens": {
+          "changed_element_fraction_at_1e-6": 0.8162472898599066,
+          "cosine_flat": 0.9999791882595555,
+          "max_row_l2": 0.9216657714658664,
+          "mean_absolute_difference": 0.003259276690937878,
+          "mean_row_cosine": 0.9999791881182898,
+          "mean_row_l2": 0.08006109953706685,
+          "minimum_row_cosine": 0.998901019067773,
+          "relative_l2": 0.006451626220484402,
+          "rms_difference": 0.006472411477254741,
+          "row_difference_concentration": {
+            "effective_changed_rows": 543.8482846836697,
+            "top_10_fraction": 0.06843347277779342,
+            "top_1_fraction": 0.00880687497450309,
+            "top_1_percent_fraction": 0.25438836732984893
+          },
+          "shape_common": [
+            5996,
+            384
+          ],
+          "top_changed_rows": [
+            {
+              "block_index": [
+                5,
+                4,
+                -1
+              ],
+              "coordinate": [
+                -1.625,
+                -1.375,
+                -0.125
+              ],
+              "cosine": 0.998901019067773,
+              "l2": 0.9216657714658664,
+              "rank": 1,
+              "token_within_block": 1
+            },
+            {
+              "block_index": [
+                5,
+                4,
+                -1
+              ],
+              "coordinate": [
+                -1.625,
+                -1.375,
+                -0.125
+              ],
+              "cosine": 0.9989037774235696,
+              "l2": 0.9205101745312493,
+              "rank": 2,
+              "token_within_block": 0
+            },
+            {
+              "block_index": [
+                7,
+                5,
+                0
+              ],
+              "coordinate": [
+                -1.125,
+                -1.125,
+                0.125
+              ],
+              "cosine": 0.9991785695246832,
+              "l2": 0.7967954419638886,
+              "rank": 3,
+              "token_within_block": 1
+            },
+            {
+              "block_index": [
+                6,
+                5,
+                0
+              ],
+              "coordinate": [
+                -1.375,
+                -1.125,
+                0.125
+              ],
+              "cosine": 0.999181143918536,
+              "l2": 0.7955863232787553,
+              "rank": 4,
+              "token_within_block": 1
+            },
+            {
+              "block_index": [
+                7,
+                5,
+                0
+              ],
+              "coordinate": [
+                -1.125,
+                -1.125,
+                0.125
+              ],
+              "cosine": 0.9991817813468509,
+              "l2": 0.7952374685021297,
+              "rank": 5,
+              "token_within_block": 0
+            },
+            {
+              "block_index": [
+                6,
+                5,
+                0
+              ],
+              "coordinate": [
+                -1.375,
+                -1.125,
+                0.125
+              ],
+              "cosine": 0.9991842465668584,
+              "l2": 0.7940786007015039,
+              "rank": 6,
+              "token_within_block": 0
+            },
+            {
+              "block_index": [
+                7,
+                13,
+                3
+              ],
+              "coordinate": [
+                -1.125,
+                0.875,
+                0.875
+              ],
+              "cosine": 0.9991901026282775,
+              "l2": 0.7911697724705006,
+              "rank": 7,
+              "token_within_block": 1
+            },
+            {
+              "block_index": [
+                7,
+                13,
+                3
+              ],
+              "coordinate": [
+                -1.125,
+                0.875,
+                0.875
+              ],
+              "cosine": 0.9991928962039993,
+              "l2": 0.789806153681166,
+              "rank": 8,
+              "token_within_block": 0
+            },
+            {
+              "block_index": [
+                3,
+                9,
+                0
+              ],
+              "coordinate": [
+                -2.125,
+                -0.125,
+                0.125
+              ],
+              "cosine": 0.999271588273692,
+              "l2": 0.7503590770075403,
+              "rank": 9,
+              "token_within_block": 1
+            },
+            {
+              "block_index": [
+                3,
+                9,
+                0
+              ],
+              "coordinate": [
+                -2.125,
+                -0.125,
+                0.125
+              ],
+              "cosine": 0.9992750509417339,
+              "l2": 0.7485739064190704,
+              "rank": 10,
+              "token_within_block": 0
+            }
+          ]
+        },
+        "tokens_per_block": 2
+      },
+      "change_type": "color_swap",
+      "final_prefix_runtime_float16": {
+        "changed_element_fraction_at_1e-6": 0.0181296719269103,
+        "cosine_flat": 0.9999999992240803,
+        "max_row_l2": 0.0029953288897015475,
+        "mean_absolute_difference": 2.4883557164655836e-06,
+        "mean_row_cosine": 0.9999999992324528,
+        "mean_row_l2": 0.0010561434410676792,
+        "minimum_row_cosine": 0.9999999951805875,
+        "relative_l2": 3.9393391733539304e-05,
+        "rms_difference": 3.969061538454973e-05,
+        "row_difference_concentration": {
+          "effective_changed_rows": 125.49955406389036,
+          "top_10_fraction": 0.1720628155039053,
+          "top_1_fraction": 0.024636876693692897,
+          "top_1_percent_fraction": 0.06578606577409925
+        },
+        "shape": [
+          1,
+          258,
+          896
+        ],
+        "shape_common": [
+          258,
+          896
+        ],
+        "top_changed_rows": [
+          {
+            "cosine": 0.9999999951805875,
+            "l2": 0.0029953288897015475,
+            "rank": 1,
+            "token_index": 143
+          },
+          {
+            "cosine": 0.9999999956555194,
+            "l2": 0.002837497789674862,
+            "rank": 2,
+            "token_index": 132
+          },
+          {
+            "cosine": 0.9999999962506563,
+            "l2": 0.0026332260397556634,
+            "rank": 3,
+            "token_index": 206
+          },
+          {
+            "cosine": 0.9999999965186003,
+            "l2": 0.0025320505687742023,
+            "rank": 4,
+            "token_index": 251
+          },
+          {
+            "cosine": 0.9999999966679244,
+            "l2": 0.0024731935960359422,
+            "rank": 5,
+            "token_index": 163
+          },
+          {
+            "cosine": 0.9999999970951997,
+            "l2": 0.0023110025895185806,
+            "rank": 6,
+            "token_index": 215
+          },
+          {
+            "cosine": 0.9999999971228594,
+            "l2": 0.00230174092246178,
+            "rank": 7,
+            "token_index": 50
+          },
+          {
+            "cosine": 0.9999999971223588,
+            "l2": 0.002298032373903543,
+            "rank": 8,
+            "token_index": 15
+          },
+          {
+            "cosine": 0.9999999971983909,
+            "l2": 0.002268778972103724,
+            "rank": 9,
+            "token_index": 233
+          },
+          {
+            "cosine": 0.9999999972371167,
+            "l2": 0.002260024831880182,
+            "rank": 10,
+            "token_index": 93
+          }
+        ]
+      },
+      "latent_diversity": {
+        "scene_a_native": {
+          "mean_feature_std_across_tokens": 0.0023726860526949167,
+          "mean_off_diagonal_cosine": 0.9999943971633911,
+          "minimum_off_diagonal_cosine": 0.9999921321868896,
+          "std_off_diagonal_cosine": 4.835444542550249e-07,
+          "token_count": 256
+        },
+        "scene_a_projected": {
+          "mean_feature_std_across_tokens": 0.00017333407595288008,
+          "mean_off_diagonal_cosine": 1.0,
+          "minimum_off_diagonal_cosine": 0.9999982118606567,
+          "std_off_diagonal_cosine": 4.0841842974259635e-07,
+          "token_count": 256
+        },
+        "scene_b_native": {
+          "mean_feature_std_across_tokens": 0.0023727063089609146,
+          "mean_off_diagonal_cosine": 0.9999943971633911,
+          "minimum_off_diagonal_cosine": 0.9999925494194031,
+          "std_off_diagonal_cosine": 4.854514941143862e-07,
+          "token_count": 256
+        },
+        "scene_b_projected": {
+          "mean_feature_std_across_tokens": 0.00017333522555418313,
+          "mean_off_diagonal_cosine": 1.0,
+          "minimum_off_diagonal_cosine": 0.9999980926513672,
+          "std_off_diagonal_cosine": 4.053982536333933e-07,
+          "token_count": 256
+        }
+      },
+      "native_latents": {
+        "changed_element_fraction_at_1e-6": 0.9848734537760416,
+        "cosine_flat": 0.9999999991098822,
+        "max_row_l2": 0.0008469506120425394,
+        "mean_absolute_difference": 3.3904575374850886e-05,
+        "mean_row_cosine": 0.9999999991098836,
+        "mean_row_l2": 0.0008321828321075752,
+        "minimum_row_cosine": 0.9999999990780276,
+        "relative_l2": 4.219285221201499e-05,
+        "rms_difference": 4.2467486637768634e-05,
+        "row_difference_concentration": {
+          "effective_changed_rows": 255.98385182055603,
+          "top_10_fraction": 0.03981660130614565,
+          "top_1_fraction": 0.004046055773641618,
+          "top_1_percent_fraction": 0.012020767015281665
+        },
+        "shape": [
+          1,
+          256,
+          384
+        ],
+        "shape_common": [
+          256,
+          384
+        ],
+        "top_changed_rows": [
+          {
+            "cosine": 0.9999999990780276,
+            "l2": 0.0008469506120425394,
+            "rank": 1,
+            "token_index": 73
+          },
+          {
+            "cosine": 0.9999999990909336,
+            "l2": 0.0008410017768155754,
+            "rank": 2,
+            "token_index": 236
+          },
+          {
+            "cosine": 0.9999999990918741,
+            "l2": 0.0008405669434729591,
+            "rank": 3,
+            "token_index": 218
+          },
+          {
+            "cosine": 0.9999999990921197,
+            "l2": 0.0008404523794495628,
+            "rank": 4,
+            "token_index": 21
+          },
+          {
+            "cosine": 0.9999999990931921,
+            "l2": 0.0008399554992115021,
+            "rank": 5,
+            "token_index": 255
+          },
+          {
+            "cosine": 0.9999999990934751,
+            "l2": 0.0008398252237206063,
+            "rank": 6,
+            "token_index": 33
+          },
+          {
+            "cosine": 0.9999999990948948,
+            "l2": 0.0008391670424389007,
+            "rank": 7,
+            "token_index": 170
+          },
+          {
+            "cosine": 0.9999999990973848,
+            "l2": 0.0008380101689953539,
+            "rank": 8,
+            "token_index": 241
+          },
+          {
+            "cosine": 0.9999999990975325,
+            "l2": 0.000837944244626835,
+            "rank": 9,
+            "token_index": 228
+          },
+          {
+            "cosine": 0.9999999990975695,
+            "l2": 0.000837925682947436,
+            "rank": 10,
+            "token_index": 107
+          }
+        ]
+      },
+      "pair_id": "pair_000001",
+      "prefix_exactly_equal": false,
+      "prefix_hash_a": "ca59c662782c191b3cc89f2f707006780adf501b1356a34f86c6106fbaeada91",
+      "prefix_hash_b": "ad7f15ecc0c1099d7e31ceb7b1dc72dcfd13bc31b8f1bb3a5a8a3559299a746c",
+      "projected_scene_tokens_float32": {
+        "changed_element_fraction_at_1e-6": 0.7560076032366071,
+        "cosine_flat": 0.9999999999955569,
+        "max_row_l2": 9.250077713162951e-05,
+        "mean_absolute_difference": 2.4481598229288337e-06,
+        "mean_row_cosine": 0.9999999999955579,
+        "mean_row_l2": 9.025993422174344e-05,
+        "minimum_row_cosine": 0.9999999999953338,
+        "relative_l2": 2.9812492078863414e-06,
+        "rms_difference": 3.0154824162610335e-06,
+        "row_difference_concentration": {
+          "effective_changed_rows": 255.92549660864236,
+          "top_10_fraction": 0.040615910900161235,
+          "top_1_fraction": 0.004102316720031643,
+          "top_1_percent_fraction": 0.012277674645991955
+        },
+        "shape": [
+          1,
+          256,
+          896
+        ],
+        "shape_common": [
+          256,
+          896
+        ],
+        "top_changed_rows": [
+          {
+            "cosine": 0.9999999999953338,
+            "l2": 9.250077713162951e-05,
+            "rank": 1,
+            "token_index": 181
+          },
+          {
+            "cosine": 0.9999999999953482,
+            "l2": 9.237566625366757e-05,
+            "rank": 2,
+            "token_index": 44
+          },
+          {
+            "cosine": 0.9999999999953559,
+            "l2": 9.229551731086784e-05,
+            "rank": 3,
+            "token_index": 2
+          },
+          {
+            "cosine": 0.9999999999953595,
+            "l2": 9.226070943879337e-05,
+            "rank": 4,
+            "token_index": 120
+          },
+          {
+            "cosine": 0.9999999999953849,
+            "l2": 9.2001182951574e-05,
+            "rank": 5,
+            "token_index": 72
+          },
+          {
+            "cosine": 0.9999999999953956,
+            "l2": 9.189837681634006e-05,
+            "rank": 6,
+            "token_index": 82
+          },
+          {
+            "cosine": 0.9999999999953989,
+            "l2": 9.185621058516662e-05,
+            "rank": 7,
+            "token_index": 73
+          },
+          {
+            "cosine": 0.9999999999954032,
+            "l2": 9.181723560131578e-05,
+            "rank": 8,
+            "token_index": 24
+          },
+          {
+            "cosine": 0.9999999999954094,
+            "l2": 9.175511358685747e-05,
+            "rank": 9,
+            "token_index": 59
+          },
+          {
+            "cosine": 0.99999999999542,
+            "l2": 9.163976928872286e-05,
+            "rank": 10,
+            "token_index": 35
+          }
+        ]
+      },
+      "projected_scene_tokens_runtime_float16": {
+        "changed_element_fraction_at_1e-6": 0.018271309988839284,
+        "cosine_flat": 0.9999999992240779,
+        "max_row_l2": 0.0029953288897015475,
+        "mean_absolute_difference": 2.507795995500471e-06,
+        "mean_row_cosine": 0.9999999992264562,
+        "mean_row_l2": 0.0010643945617010205,
+        "minimum_row_cosine": 0.9999999951805875,
+        "relative_l2": 3.939345983448557e-05,
+        "rms_difference": 3.9845355212659846e-05,
+        "row_difference_concentration": {
+          "effective_changed_rows": 125.49955406389036,
+          "top_10_fraction": 0.1720628155039053,
+          "top_1_fraction": 0.024636876693692897,
+          "top_1_percent_fraction": 0.06578606577409925
+        },
+        "shape": [
+          1,
+          256,
+          896
+        ],
+        "shape_common": [
+          256,
+          896
+        ],
+        "top_changed_rows": [
+          {
+            "cosine": 0.9999999951805875,
+            "l2": 0.0029953288897015475,
+            "rank": 1,
+            "token_index": 142
+          },
+          {
+            "cosine": 0.9999999956555194,
+            "l2": 0.002837497789674862,
+            "rank": 2,
+            "token_index": 131
+          },
+          {
+            "cosine": 0.9999999962506563,
+            "l2": 0.0026332260397556634,
+            "rank": 3,
+            "token_index": 205
+          },
+          {
+            "cosine": 0.9999999965186003,
+            "l2": 0.0025320505687742023,
+            "rank": 4,
+            "token_index": 250
+          },
+          {
+            "cosine": 0.9999999966679244,
+            "l2": 0.0024731935960359422,
+            "rank": 5,
+            "token_index": 162
+          },
+          {
+            "cosine": 0.9999999970951997,
+            "l2": 0.0023110025895185806,
+            "rank": 6,
+            "token_index": 214
+          },
+          {
+            "cosine": 0.9999999971228594,
+            "l2": 0.00230174092246178,
+            "rank": 7,
+            "token_index": 49
+          },
+          {
+            "cosine": 0.9999999971223588,
+            "l2": 0.002298032373903543,
+            "rank": 8,
+            "token_index": 14
+          },
+          {
+            "cosine": 0.9999999971983909,
+            "l2": 0.002268778972103724,
+            "rank": 9,
+            "token_index": 232
+          },
+          {
+            "cosine": 0.9999999972371167,
+            "l2": 0.002260024831880182,
+            "rank": 10,
+            "token_index": 92
+          }
+        ]
+      },
+      "raw_map": {
+        "rgb": {
+          "changed_element_fraction_at_1e-6": 0.01294559015742587,
+          "cosine_flat": 0.9985389601214153,
+          "max_row_l2": 270.4733278792984,
+          "mean_absolute_difference": 0.8059189114033878,
+          "mean_row_cosine": 0.9980995936055753,
+          "mean_row_l2": 1.4927129392782954,
+          "minimum_row_cosine": 0.023226003422147586,
+          "relative_l2": 0.05405632024972603,
+          "rms_difference": 9.477740283528055,
+          "row_difference_concentration": {
+            "effective_changed_rows": 482.18695881119544,
+            "top_10_fraction": 0.03612708538021095,
+            "top_1_fraction": 0.0036329860260334826,
+            "top_1_percent_fraction": 0.9995451691284112
+          },
+          "shape_common": [
+            74723,
+            3
+          ],
+          "top_changed_rows": [
+            {
+              "aligned_row": 43597,
+              "coordinate": [
+                0.625,
+                0.5250000357627869,
+                0.875
+              ],
+              "cosine": 0.19999881465851804,
+              "l2": 270.4733278792984,
+              "rank": 1
+            },
+            {
+              "aligned_row": 44060,
+              "coordinate": [
+                0.675000011920929,
+                0.5250000357627869,
+                0.925000011920929
+              ],
+              "cosine": 0.1994281876473242,
+              "l2": 270.4091908775298,
+              "rank": 2
+            },
+            {
+              "aligned_row": 44059,
+              "coordinate": [
+                0.675000011920929,
+                0.5250000357627869,
+                0.875
+              ],
+              "cosine": 0.1876117561714012,
+              "l2": 270.18890872555335,
+              "rank": 3
+            },
+            {
+              "aligned_row": 44061,
+              "coordinate": [
+                0.675000011920929,
+                0.5250000357627869,
+                0.9750000238418579
+              ],
+              "cosine": 0.21412394429383313,
+              "l2": 269.88884967852863,
+              "rank": 4
+            },
+            {
+              "aligned_row": 43598,
+              "coordinate": [
+                0.625,
+                0.5250000357627869,
+                0.925000011920929
+              ],
+              "cosine": 0.21603948806876458,
+              "l2": 269.8725806889158,
+              "rank": 5
+            },
+            {
+              "aligned_row": 43137,
+              "coordinate": [
+                0.574999988079071,
+                0.5250000357627869,
+                0.875
+              ],
+              "cosine": 0.21839454944911887,
+              "l2": 269.85931368091576,
+              "rank": 6
+            },
+            {
+              "aligned_row": 43599,
+              "coordinate": [
+                0.625,
+                0.5250000357627869,
+                0.9750000238418579
+              ],
+              "cosine": 0.22691224697580892,
+              "l2": 269.55447051330407,
+              "rank": 7
+            },
+            {
+              "aligned_row": 43138,
+              "coordinate": [
+                0.574999988079071,
+                0.5250000357627869,
+                0.925000011920929
+              ],
+              "cosine": 0.2361895873417636,
+              "l2": 269.16154111773494,
+              "rank": 8
+            },
+            {
+              "aligned_row": 44062,
+              "coordinate": [
+                0.675000011920929,
+                0.5250000357627869,
+                1.024999976158142
+              ],
+              "cosine": 0.2333504616409546,
+              "l2": 269.15305203169817,
+              "rank": 9
+            },
+            {
+              "aligned_row": 42676,
+              "coordinate": [
+                0.5250000357627869,
+                0.5250000357627869,
+                0.875
+              ],
+              "cosine": 0.24621243131296278,
+              "l2": 268.6072637444537,
+              "rank": 10
+            }
+          ]
+        },
+        "semantic": {
+          "changed_element_fraction_at_1e-6": 0.7126670584086392,
+          "cosine_flat": 0.9959209777331293,
+          "max_row_l2": 25.777512499720093,
+          "mean_absolute_difference": 0.015890709943920726,
+          "mean_row_cosine": 0.9939936218218068,
+          "mean_row_l2": 1.1068901736908279,
+          "minimum_row_cosine": 0.3519242534214054,
+          "relative_l2": 0.09032217079511158,
+          "rms_difference": 0.037639396461896894,
+          "row_difference_concentration": {
+            "effective_changed_rows": 7584.248503168819,
+            "top_10_fraction": 0.013929183995193078,
+            "top_1_fraction": 0.003064872823046086,
+            "top_1_percent_fraction": 0.22332294297229124
+          },
+          "shape_common": [
+            74723,
+            2048
+          ],
+          "top_changed_rows": [
+            {
+              "aligned_row": 2777,
+              "coordinate": [
+                -3.0250000953674316,
+                1.0750000476837158,
+                1.3250000476837158
+              ],
+              "cosine": 0.3519242534214054,
+              "l2": 25.777512499720093,
+              "rank": 1
+            },
+            {
+              "aligned_row": 2775,
+              "coordinate": [
+                -3.0250000953674316,
+                1.0750000476837158,
+                1.225000023841858
+              ],
+              "cosine": 0.6514614797710956,
+              "l2": 19.28358730000976,
+              "rank": 2
+            },
+            {
+              "aligned_row": 15490,
+              "coordinate": [
+                -2.174999952316284,
+                -0.17499999701976776,
+                0.02500000037252903
+              ],
+              "cosine": 0.5283716398506443,
+              "l2": 17.868285413491776,
+              "rank": 3
+            },
+            {
+              "aligned_row": 14548,
+              "coordinate": [
+                -2.2750000953674316,
+                -0.125,
+                0.02500000037252903
+              ],
+              "cosine": 0.5685224216355942,
+              "l2": 17.359968962072948,
+              "rank": 4
+            },
+            {
+              "aligned_row": 15498,
+              "coordinate": [
+                -2.174999952316284,
+                -0.07500000298023224,
+                0.02500000037252903
+              ],
+              "cosine": 0.5680234136055877,
+              "l2": 16.529227370524016,
+              "rank": 5
+            },
+            {
+              "aligned_row": 16462,
+              "coordinate": [
+                -2.075000047683716,
+                -0.02500000037252903,
+                0.02500000037252903
+              ],
+              "cosine": 0.5984603482214795,
+              "l2": 15.49591184324979,
+              "rank": 6
+            },
+            {
+              "aligned_row": 2674,
+              "coordinate": [
+                -3.0250000953674316,
+                0.9750000238418579,
+                1.225000023841858
+              ],
+              "cosine": 0.7831811670550709,
+              "l2": 15.375495874142954,
+              "rank": 7
+            },
+            {
+              "aligned_row": 24165,
+              "coordinate": [
+                -1.274999976158142,
+                -1.4250000715255737,
+                -0.02500000037252903
+              ],
+              "cosine": 0.6261377548631909,
+              "l2": 14.325417060415592,
+              "rank": 8
+            },
+            {
+              "aligned_row": 30174,
+              "coordinate": [
+                -0.7750000357627869,
+                -2.174999952316284,
+                0.02500000037252903
+              ],
+              "cosine": 0.9500570955438717,
+              "l2": 14.30719812317621,
+              "rank": 9
+            },
+            {
+              "aligned_row": 16451,
+              "coordinate": [
+                -2.075000047683716,
+                -0.17499999701976776,
+                0.02500000037252903
+              ],
+              "cosine": 0.6290112680788538,
+              "l2": 14.257612126230226,
+              "rank": 10
+            }
+          ]
+        },
+        "voxel_topology": {
+          "common_count": 74723,
+          "common_fraction_of_smaller": 1.0,
+          "count_a": 74723,
+          "count_b": 74723,
+          "jaccard": 1.0,
+          "only_a_count": 0,
+          "only_b_count": 0,
+          "union_count": 74723
+        }
+      },
+      "scene_a": "scene_000003",
+      "scene_b": "scene_000004",
+      "split": "train"
+    },
+    {
+      "aggregated_map": {
+        "rgb": {
+          "changed_element_fraction_at_1e-6": 0.6489146555211002,
+          "cosine_flat": 0.9775956737187554,
+          "max_row_l2": 257.86142668493113,
+          "mean_absolute_difference": 20.632202965688943,
+          "mean_row_cosine": 0.9985106668317867,
+          "mean_row_l2": 36.83251872703734,
+          "minimum_row_cosine": 0.8306200965160526,
+          "relative_l2": 0.21168054377827486,
+          "rms_difference": 35.08556447676872,
+          "row_difference_concentration": {
+            "effective_changed_rows": 1404.175024362887,
+            "top_10_fraction": 0.019668823752903086,
+            "top_1_fraction": 0.0024275394279872184,
+            "top_1_percent_fraction": 0.12238408005923582
+          },
+          "shape_common": [
+            7417,
+            3
+          ],
+          "top_changed_rows": [
+            {
+              "aligned_row": 3900,
+              "coordinate": [
+                0.1772727221250534,
+                0.875,
+                0.08181818574666977
+              ],
+              "cosine": 0.8970422732877247,
+              "l2": 257.86142668493113,
+              "rank": 1
+            },
+            {
+              "aligned_row": 2454,
+              "coordinate": [
+                -1.3874999284744263,
+                0.2571428716182709,
+                0.5196428894996643
+              ],
+              "cosine": 0.8306200965160526,
+              "l2": 252.36319662831593,
+              "rank": 2
+            },
+            {
+              "aligned_row": 4458,
+              "coordinate": [
+                0.824431836605072,
+                2.514772891998291,
+                2.0244319438934326
+              ],
+              "cosine": 0.9382810149233661,
+              "l2": 231.85027481064506,
+              "rank": 3
+            },
+            {
+              "aligned_row": 3076,
+              "coordinate": [
+                -0.8267698884010315,
+                2.424999952316284,
+                2.023672580718994
+              ],
+              "cosine": 0.9394702716261882,
+              "l2": 229.48443779969898,
+              "rank": 4
+            },
+            {
+              "aligned_row": 3504,
+              "coordinate": [
+                -0.2361111044883728,
+                0.8361110687255859,
+                0.02500000037252903
+              ],
+              "cosine": 0.9381449541787164,
+              "l2": 229.2786938938358,
+              "rank": 5
+            },
+            {
+              "aligned_row": 4605,
+              "coordinate": [
+                0.9725309014320374,
+                2.510802745819092,
+                2.0243828296661377
+              ],
+              "cosine": 0.963956378889477,
+              "l2": 227.18613749144038,
+              "rank": 6
+            },
+            {
+              "aligned_row": 2932,
+              "coordinate": [
+                -0.9585937261581421,
+                2.4320311546325684,
+                2.0210938453674316
+              ],
+              "cosine": 0.9647936077023932,
+              "l2": 226.34580093886515,
+              "rank": 7
+            },
+            {
+              "aligned_row": 119,
+              "coordinate": [
+                -3.0250000953674316,
+                -1.3950001001358032,
+                2.755000114440918
+              ],
+              "cosine": 0.999942855028849,
+              "l2": 222.01666603644424,
+              "rank": 8
+            },
+            {
+              "aligned_row": 5344,
+              "coordinate": [
+                1.8678570985794067,
+                -2.4869048595428467,
+                2.6202380657196045
+              ],
+              "cosine": 0.9999905119591581,
+              "l2": 220.75282524032278,
+              "rank": 9
+            },
+            {
+              "aligned_row": 2100,
+              "coordinate": [
+                -1.7220587730407715,
+                -2.482353448867798,
+                2.621323585510254
+              ],
+              "cosine": 0.999984606488923,
+              "l2": 220.70737389238883,
+              "rank": 10
+            }
+          ]
+        },
+        "semantic": {
+          "changed_element_fraction_at_1e-6": 0.9999725477576851,
+          "cosine_flat": 0.8647280283208738,
+          "max_row_l2": 47.67104594905491,
+          "mean_absolute_difference": 0.09847295555573941,
+          "mean_row_cosine": 0.8531538102668687,
+          "mean_row_l2": 7.822107738325928,
+          "minimum_row_cosine": -0.031848104196360326,
+          "relative_l2": 0.5201483105637695,
+          "rms_difference": 0.20566519052072718,
+          "row_difference_concentration": {
+            "effective_changed_rows": 1913.0352389733132,
+            "top_10_fraction": 0.026980611105151302,
+            "top_1_fraction": 0.003536955094545185,
+            "top_1_percent_fraction": 0.12688406595806
+          },
+          "shape_common": [
+            7417,
+            2048
+          ],
+          "top_changed_rows": [
+            {
+              "aligned_row": 3916,
+              "coordinate": [
+                0.1874999850988388,
+                1.4375,
+                0.02500000223517418
+              ],
+              "cosine": -0.031848104196360326,
+              "l2": 47.67104594905491,
+              "rank": 1
+            },
+            {
+              "aligned_row": 3915,
+              "coordinate": [
+                0.1855263113975525,
+                1.4171053171157837,
+                -0.02500000037252903
+              ],
+              "cosine": -0.003281234336487545,
+              "l2": 47.328808584621605,
+              "rank": 2
+            },
+            {
+              "aligned_row": 464,
+              "coordinate": [
+                -3.0250000953674316,
+                1.2704544067382812,
+                1.7181817293167114
+              ],
+              "cosine": 0.025592830687988004,
+              "l2": 44.290287467008405,
+              "rank": 3
+            },
+            {
+              "aligned_row": 2628,
+              "coordinate": [
+                -1.278333306312561,
+                2.5123331546783447,
+                0.5223333835601807
+              ],
+              "cosine": 0.052866968934599676,
+              "l2": 41.114834848214024,
+              "rank": 4
+            },
+            {
+              "aligned_row": 2629,
+              "coordinate": [
+                -1.2749998569488525,
+                2.510915517807007,
+                0.6785210967063904
+              ],
+              "cosine": 0.14678245695521733,
+              "l2": 40.72765957603975,
+              "rank": 5
+            },
+            {
+              "aligned_row": 5026,
+              "coordinate": [
+                1.4234615564346313,
+                2.5103845596313477,
+                0.5303846597671509
+              ],
+              "cosine": 0.07226169273725241,
+              "l2": 40.01621079265271,
+              "rank": 6
+            },
+            {
+              "aligned_row": 3924,
+              "coordinate": [
+                0.19499999284744263,
+                1.7383333444595337,
+                0.02500000037252903
+              ],
+              "cosine": 0.043877642455431236,
+              "l2": 39.45671684371568,
+              "rank": 7
+            },
+            {
+              "aligned_row": 4839,
+              "coordinate": [
+                1.2711539268493652,
+                -0.2230769246816635,
+                0.02499999850988388
+              ],
+              "cosine": 0.12748767947354964,
+              "l2": 39.199095990508766,
+              "rank": 8
+            },
+            {
+              "aligned_row": 4600,
+              "coordinate": [
+                0.9744012355804443,
+                2.5106289386749268,
+                1.2741016149520874
+              ],
+              "cosine": 0.07366945020671127,
+              "l2": 37.614562918533636,
+              "rank": 9
+            },
+            {
+              "aligned_row": 3920,
+              "coordinate": [
+                0.1903846263885498,
+                1.5750000476837158,
+                0.02499999850988388
+              ],
+              "cosine": 0.029239657763380285,
+              "l2": 37.4487531667027,
+              "rank": 10
+            }
+          ]
+        },
+        "voxel_topology": {
+          "common_count": 7417,
+          "common_fraction_of_smaller": 0.885294819766054,
+          "count_a": 8386,
+          "count_b": 8378,
+          "jaccard": 0.7935166363539103,
+          "only_a_count": 969,
+          "only_b_count": 961,
+          "union_count": 9347
+        }
+      },
+      "block_tokens": {
+        "block_topology": {
+          "common_count": 2642,
+          "common_fraction_of_smaller": 0.8827263615101905,
+          "count_a": 2999,
+          "count_b": 2993,
+          "jaccard": 0.7886567164179105,
+          "only_a_count": 357,
+          "only_b_count": 351,
+          "union_count": 3350
+        },
+        "common_block_tokens": {
+          "changed_element_fraction_at_1e-6": 0.9999635298385062,
+          "cosine_flat": 0.9991623263551707,
+          "max_row_l2": 3.060515757930674,
+          "mean_absolute_difference": 0.026373949192805425,
+          "mean_row_cosine": 0.9991623218910726,
+          "mean_row_l2": 0.6503262086626099,
+          "minimum_row_cosine": 0.987881544298477,
+          "relative_l2": 0.040931006456984234,
+          "rms_difference": 0.04106289519442834,
+          "row_difference_concentration": {
+            "effective_changed_rows": 1371.4165016782536,
+            "top_10_fraction": 0.02432519383779994,
+            "top_1_fraction": 0.0027377644085992796,
+            "top_1_percent_fraction": 0.10853483609468441
+          },
+          "shape_common": [
+            5284,
+            384
+          ],
+          "top_changed_rows": [
+            {
+              "block_index": [
+                6,
+                20,
+                2
+              ],
+              "coordinate": [
+                -1.375,
+                2.625,
+                0.625
+              ],
+              "cosine": 0.987881544298477,
+              "l2": 3.060515757930674,
+              "rank": 1,
+              "token_within_block": 1
+            },
+            {
+              "block_index": [
+                6,
+                20,
+                2
+              ],
+              "coordinate": [
+                -1.375,
+                2.625,
+                0.625
+              ],
+              "cosine": 0.9879159540795908,
+              "l2": 3.056175755843752,
+              "rank": 2,
+              "token_within_block": 0
+            },
+            {
+              "block_index": [
+                23,
+                5,
+                2
+              ],
+              "coordinate": [
+                2.875,
+                -1.125,
+                0.625
+              ],
+              "cosine": 0.9889615470317072,
+              "l2": 2.9210197959386677,
+              "rank": 3,
+              "token_within_block": 1
+            },
+            {
+              "block_index": [
+                23,
+                5,
+                2
+              ],
+              "coordinate": [
+                2.875,
+                -1.125,
+                0.625
+              ],
+              "cosine": 0.9889857763764448,
+              "l2": 2.9178197858779646,
+              "rank": 4,
+              "token_within_block": 0
+            },
+            {
+              "block_index": [
+                17,
+                20,
+                2
+              ],
+              "coordinate": [
+                1.375,
+                2.625,
+                0.625
+              ],
+              "cosine": 0.9893735717138729,
+              "l2": 2.8659818106227437,
+              "rank": 5,
+              "token_within_block": 1
+            },
+            {
+              "block_index": [
+                17,
+                20,
+                2
+              ],
+              "coordinate": [
+                1.375,
+                2.625,
+                0.625
+              ],
+              "cosine": 0.9894161366861475,
+              "l2": 2.860243702384011,
+              "rank": 6,
+              "token_within_block": 0
+            },
+            {
+              "block_index": [
+                -1,
+                14,
+                6
+              ],
+              "coordinate": [
+                -3.125,
+                1.125,
+                1.625
+              ],
+              "cosine": 0.98984613562076,
+              "l2": 2.8013600756669828,
+              "rank": 7,
+              "token_within_block": 1
+            },
+            {
+              "block_index": [
+                -1,
+                14,
+                6
+              ],
+              "coordinate": [
+                -3.125,
+                1.125,
+                1.625
+              ],
+              "cosine": 0.9898801640740426,
+              "l2": 2.796663997765342,
+              "rank": 8,
+              "token_within_block": 0
+            },
+            {
+              "block_index": [
+                23,
+                6,
+                2
+              ],
+              "coordinate": [
+                2.875,
+                -0.875,
+                0.625
+              ],
+              "cosine": 0.9900129809579877,
+              "l2": 2.7784042736331407,
+              "rank": 9,
+              "token_within_block": 1
+            },
+            {
+              "block_index": [
+                23,
+                6,
+                2
+              ],
+              "coordinate": [
+                2.875,
+                -0.875,
+                0.625
+              ],
+              "cosine": 0.9900540031182306,
+              "l2": 2.7726974081599787,
+              "rank": 10,
+              "token_within_block": 0
+            }
+          ]
+        },
+        "tokens_per_block": 2
+      },
+      "change_type": "mirror_lr",
+      "final_prefix_runtime_float16": {
+        "changed_element_fraction_at_1e-6": 0.048851917220376524,
+        "cosine_flat": 0.9999999976891327,
+        "max_row_l2": 0.003547977746791807,
+        "mean_absolute_difference": 8.230746320447785e-06,
+        "mean_row_cosine": 0.9999999977133645,
+        "mean_row_l2": 0.001975220056614366,
+        "minimum_row_cosine": 0.9999999931943377,
+        "relative_l2": 6.798609758258242e-05,
+        "rms_difference": 6.849903898201371e-05,
+        "row_difference_concentration": {
+          "effective_changed_rows": 199.0451672443779,
+          "top_10_fraction": 0.10000840995377552,
+          "top_1_fraction": 0.011605533293020588,
+          "top_1_percent_fraction": 0.03377237118400391
+        },
+        "shape": [
+          1,
+          258,
+          896
+        ],
+        "shape_common": [
+          258,
+          896
+        ],
+        "top_changed_rows": [
+          {
+            "cosine": 0.9999999931943377,
+            "l2": 0.003547977746791807,
+            "rank": 1,
+            "token_index": 143
+          },
+          {
+            "cosine": 0.9999999933949184,
+            "l2": 0.003481849256619716,
+            "rank": 2,
+            "token_index": 135
+          },
+          {
+            "cosine": 0.9999999935008347,
+            "l2": 0.00345258988178355,
+            "rank": 3,
+            "token_index": 154
+          },
+          {
+            "cosine": 0.9999999938315348,
+            "l2": 0.0033745796343207465,
+            "rank": 4,
+            "token_index": 141
+          },
+          {
+            "cosine": 0.99999999406214,
+            "l2": 0.00330113024958915,
+            "rank": 5,
+            "token_index": 243
+          },
+          {
+            "cosine": 0.9999999940603195,
+            "l2": 0.003300405027362913,
+            "rank": 6,
+            "token_index": 233
+          },
+          {
+            "cosine": 0.9999999944387759,
+            "l2": 0.003193431956045273,
+            "rank": 7,
+            "token_index": 226
+          },
+          {
+            "cosine": 0.9999999944748138,
+            "l2": 0.003187167580272117,
+            "rank": 8,
+            "token_index": 197
+          },
+          {
+            "cosine": 0.999999994958237,
+            "l2": 0.0030589222257388837,
+            "rank": 9,
+            "token_index": 220
+          },
+          {
+            "cosine": 0.9999999951330362,
+            "l2": 0.0029921754707021944,
+            "rank": 10,
+            "token_index": 159
+          }
+        ]
+      },
+      "latent_diversity": {
+        "scene_a_native": {
+          "mean_feature_std_across_tokens": 0.0023726874496787786,
+          "mean_off_diagonal_cosine": 0.9999943971633911,
+          "minimum_off_diagonal_cosine": 0.9999925494194031,
+          "std_off_diagonal_cosine": 4.847121317652636e-07,
+          "token_count": 256
+        },
+        "scene_a_projected": {
+          "mean_feature_std_across_tokens": 0.00017333448340650648,
+          "mean_off_diagonal_cosine": 1.0,
+          "minimum_off_diagonal_cosine": 0.9999983310699463,
+          "std_off_diagonal_cosine": 4.0471906004313496e-07,
+          "token_count": 256
+        },
+        "scene_b_native": {
+          "mean_feature_std_across_tokens": 0.0023726942017674446,
+          "mean_off_diagonal_cosine": 0.9999943971633911,
+          "minimum_off_diagonal_cosine": 0.9999921917915344,
+          "std_off_diagonal_cosine": 4.859119258071587e-07,
+          "token_count": 256
+        },
+        "scene_b_projected": {
+          "mean_feature_std_across_tokens": 0.00017333270807284862,
+          "mean_off_diagonal_cosine": 1.0,
+          "minimum_off_diagonal_cosine": 0.9999980330467224,
+          "std_off_diagonal_cosine": 4.0181276972361957e-07,
+          "token_count": 256
+        }
+      },
+      "native_latents": {
+        "changed_element_fraction_at_1e-6": 0.9943440755208334,
+        "cosine_flat": 0.9999999911624224,
+        "max_row_l2": 0.002659103800466997,
+        "mean_absolute_difference": 0.00010861641649576963,
+        "mean_row_cosine": 0.9999999911624236,
+        "mean_row_l2": 0.002622161054738387,
+        "minimum_row_cosine": 0.9999999909118662,
+        "relative_l2": 0.00013294795051702572,
+        "rms_difference": 0.0001338133098123763,
+        "row_difference_concentration": {
+          "effective_changed_rows": 255.9737894555067,
+          "top_10_fraction": 0.039905993936024016,
+          "top_1_fraction": 0.004016990142149526,
+          "top_1_percent_fraction": 0.012014931669191362
+        },
+        "shape": [
+          1,
+          256,
+          384
+        ],
+        "shape_common": [
+          256,
+          384
+        ],
+        "top_changed_rows": [
+          {
+            "cosine": 0.9999999909118662,
+            "l2": 0.002659103800466997,
+            "rank": 1,
+            "token_index": 78
+          },
+          {
+            "cosine": 0.9999999909348538,
+            "l2": 0.0026557400230508136,
+            "rank": 2,
+            "token_index": 208
+          },
+          {
+            "cosine": 0.9999999909704342,
+            "l2": 0.0026505234225724645,
+            "rank": 3,
+            "token_index": 33
+          },
+          {
+            "cosine": 0.9999999909718835,
+            "l2": 0.002650311610373719,
+            "rank": 4,
+            "token_index": 232
+          },
+          {
+            "cosine": 0.9999999909720275,
+            "l2": 0.002650292585798279,
+            "rank": 5,
+            "token_index": 236
+          },
+          {
+            "cosine": 0.999999990975078,
+            "l2": 0.002649846810010212,
+            "rank": 6,
+            "token_index": 132
+          },
+          {
+            "cosine": 0.9999999909865219,
+            "l2": 0.0026481627719308733,
+            "rank": 7,
+            "token_index": 17
+          },
+          {
+            "cosine": 0.9999999909920482,
+            "l2": 0.002647349030557829,
+            "rank": 8,
+            "token_index": 29
+          },
+          {
+            "cosine": 0.9999999909979259,
+            "l2": 0.002646487257567716,
+            "rank": 9,
+            "token_index": 190
+          },
+          {
+            "cosine": 0.999999991003292,
+            "l2": 0.0026456986060081587,
+            "rank": 10,
+            "token_index": 253
+          }
+        ]
+      },
+      "pair_id": "pair_000003",
+      "prefix_exactly_equal": false,
+      "prefix_hash_a": "dc6c495abb6fa37e0aed943063f657a3764dce22f9609ce863580bd8e725bee1",
+      "prefix_hash_b": "8a4a45b5dcba6f7a7c1af5d2e4d05dda6170564be81991fee610d60d03091fea",
+      "projected_scene_tokens_float32": {
+        "changed_element_fraction_at_1e-6": 0.9325169154575893,
+        "cosine_flat": 0.9999999999484441,
+        "max_row_l2": 0.00031554715627542777,
+        "mean_absolute_difference": 8.336285872141097e-06,
+        "mean_row_cosine": 0.9999999999484452,
+        "mean_row_l2": 0.00030743681965553454,
+        "minimum_row_cosine": 0.9999999999456926,
+        "relative_l2": 1.015447375604324e-05,
+        "rms_difference": 1.027107586099892e-05,
+        "row_difference_concentration": {
+          "effective_changed_rows": 255.93371474924746,
+          "top_10_fraction": 0.04046807174204483,
+          "top_1_fraction": 0.004114799634251289,
+          "top_1_percent_fraction": 0.012262810745698313
+        },
+        "shape": [
+          1,
+          256,
+          896
+        ],
+        "shape_common": [
+          256,
+          896
+        ],
+        "top_changed_rows": [
+          {
+            "cosine": 0.9999999999456926,
+            "l2": 0.00031554715627542777,
+            "rank": 1,
+            "token_index": 78
+          },
+          {
+            "cosine": 0.9999999999461726,
+            "l2": 0.0003141471062700816,
+            "rank": 2,
+            "token_index": 33
+          },
+          {
+            "cosine": 0.9999999999462896,
+            "l2": 0.00031381099304181017,
+            "rank": 3,
+            "token_index": 253
+          },
+          {
+            "cosine": 0.9999999999465375,
+            "l2": 0.0003130814368494689,
+            "rank": 4,
+            "token_index": 132
+          },
+          {
+            "cosine": 0.9999999999466338,
+            "l2": 0.00031280075523350883,
+            "rank": 5,
+            "token_index": 232
+          },
+          {
+            "cosine": 0.9999999999468441,
+            "l2": 0.00031218264611011424,
+            "rank": 6,
+            "token_index": 135
+          },
+          {
+            "cosine": 0.9999999999468908,
+            "l2": 0.00031204687829148946,
+            "rank": 7,
+            "token_index": 208
+          },
+          {
+            "cosine": 0.9999999999469161,
+            "l2": 0.0003119701965194498,
+            "rank": 8,
+            "token_index": 236
+          },
+          {
+            "cosine": 0.9999999999469591,
+            "l2": 0.00031184432075444794,
+            "rank": 9,
+            "token_index": 190
+          },
+          {
+            "cosine": 0.9999999999469609,
+            "l2": 0.00031183915047490495,
+            "rank": 10,
+            "token_index": 241
+          }
+        ]
+      },
+      "projected_scene_tokens_runtime_float16": {
+        "changed_element_fraction_at_1e-6": 0.04923357282366071,
+        "cosine_flat": 0.9999999976891248,
+        "max_row_l2": 0.003547977746791807,
+        "mean_absolute_difference": 8.295049026076282e-06,
+        "mean_row_cosine": 0.9999999976955001,
+        "mean_row_l2": 0.001990651463306666,
+        "minimum_row_cosine": 0.9999999931943377,
+        "relative_l2": 6.798621511294339e-05,
+        "rms_difference": 6.87660927783605e-05,
+        "row_difference_concentration": {
+          "effective_changed_rows": 199.0451672443779,
+          "top_10_fraction": 0.10000840995377552,
+          "top_1_fraction": 0.011605533293020588,
+          "top_1_percent_fraction": 0.03377237118400391
+        },
+        "shape": [
+          1,
+          256,
+          896
+        ],
+        "shape_common": [
+          256,
+          896
+        ],
+        "top_changed_rows": [
+          {
+            "cosine": 0.9999999931943377,
+            "l2": 0.003547977746791807,
+            "rank": 1,
+            "token_index": 142
+          },
+          {
+            "cosine": 0.9999999933949184,
+            "l2": 0.003481849256619716,
+            "rank": 2,
+            "token_index": 134
+          },
+          {
+            "cosine": 0.9999999935008347,
+            "l2": 0.00345258988178355,
+            "rank": 3,
+            "token_index": 153
+          },
+          {
+            "cosine": 0.9999999938315348,
+            "l2": 0.0033745796343207465,
+            "rank": 4,
+            "token_index": 140
+          },
+          {
+            "cosine": 0.99999999406214,
+            "l2": 0.00330113024958915,
+            "rank": 5,
+            "token_index": 242
+          },
+          {
+            "cosine": 0.9999999940603195,
+            "l2": 0.003300405027362913,
+            "rank": 6,
+            "token_index": 232
+          },
+          {
+            "cosine": 0.9999999944387759,
+            "l2": 0.003193431956045273,
+            "rank": 7,
+            "token_index": 225
+          },
+          {
+            "cosine": 0.9999999944748138,
+            "l2": 0.003187167580272117,
+            "rank": 8,
+            "token_index": 196
+          },
+          {
+            "cosine": 0.999999994958237,
+            "l2": 0.0030589222257388837,
+            "rank": 9,
+            "token_index": 219
+          },
+          {
+            "cosine": 0.9999999951330362,
+            "l2": 0.0029921754707021944,
+            "rank": 10,
+            "token_index": 158
+          }
+        ]
+      },
+      "raw_map": {
+        "rgb": {
+          "changed_element_fraction_at_1e-6": 0.6944777849588116,
+          "cosine_flat": 0.9780061148996686,
+          "max_row_l2": 267.95148814664196,
+          "mean_absolute_difference": 21.849000026919015,
+          "mean_row_cosine": 0.9990310842704402,
+          "mean_row_l2": 38.73948119717011,
+          "minimum_row_cosine": 0.8340417920865233,
+          "relative_l2": 0.20973958388587116,
+          "rms_difference": 36.11392854176658,
+          "row_difference_concentration": {
+            "effective_changed_rows": 11705.850789864926,
+            "top_10_fraction": 0.0027133750392121735,
+            "top_1_fraction": 0.0002823721216889458,
+            "top_1_percent_fraction": 0.13605331268005266
+          },
+          "shape_common": [
+            64986,
+            3
+          ],
+          "top_changed_rows": [
+            {
+              "aligned_row": 1010,
+              "coordinate": [
+                -3.0250000953674316,
+                -0.875,
+                2.7250001430511475
+              ],
+              "cosine": 0.9996256843394188,
+              "l2": 267.95148814664196,
+              "rank": 1
+            },
+            {
+              "aligned_row": 966,
+              "coordinate": [
+                -3.0250000953674316,
+                -0.925000011920929,
+                2.7750000953674316
+              ],
+              "cosine": 0.9993529542828765,
+              "l2": 267.93655965545275,
+              "rank": 2
+            },
+            {
+              "aligned_row": 1157,
+              "coordinate": [
+                -3.0250000953674316,
+                -0.7250000238418579,
+                2.7750000953674316
+              ],
+              "cosine": 0.9995993350938681,
+              "l2": 265.0641431804762,
+              "rank": 3
+            },
+            {
+              "aligned_row": 57208,
+              "coordinate": [
+                2.9750001430511475,
+                -0.9750000238418579,
+                2.7250001430511475
+              ],
+              "cosine": 0.9996998022113615,
+              "l2": 264.21609185366214,
+              "rank": 4
+            },
+            {
+              "aligned_row": 57517,
+              "coordinate": [
+                2.9750001430511475,
+                -0.7250000238418579,
+                2.7750000953674316
+              ],
+              "cosine": 0.9995368337567809,
+              "l2": 263.92050953421216,
+              "rank": 5
+            },
+            {
+              "aligned_row": 819,
+              "coordinate": [
+                -3.0250000953674316,
+                -1.0750000476837158,
+                2.7250001430511475
+              ],
+              "cosine": 0.9997258260212089,
+              "l2": 262.74131764912806,
+              "rank": 6
+            },
+            {
+              "aligned_row": 1257,
+              "coordinate": [
+                -3.0250000953674316,
+                -0.625,
+                2.7750000953674316
+              ],
+              "cosine": 0.9996722009605981,
+              "l2": 261.0402267850685,
+              "rank": 7
+            },
+            {
+              "aligned_row": 57025,
+              "coordinate": [
+                2.9750001430511475,
+                -1.125,
+                2.7250001430511475
+              ],
+              "cosine": 0.9997821102839992,
+              "l2": 257.9850167724519,
+              "rank": 8
+            },
+            {
+              "aligned_row": 61540,
+              "coordinate": [
+                3.0250000953674316,
+                -1.225000023841858,
+                2.7250001430511475
+              ],
+              "cosine": 0.9996936883086105,
+              "l2": 257.79306856909716,
+              "rank": 9
+            },
+            {
+              "aligned_row": 61896,
+              "coordinate": [
+                3.0250000953674316,
+                -0.925000011920929,
+                2.7250001430511475
+              ],
+              "cosine": 0.9999002563977039,
+              "l2": 257.7263287419671,
+              "rank": 10
+            }
+          ]
+        },
+        "semantic": {
+          "changed_element_fraction_at_1e-6": 0.9995462138600044,
+          "cosine_flat": 0.8351236252218398,
+          "max_row_l2": 80.54343234660983,
+          "mean_absolute_difference": 0.1121102350761336,
+          "mean_row_cosine": 0.8244258409846124,
+          "mean_row_l2": 9.106841389240405,
+          "minimum_row_cosine": -0.11459161236420144,
+          "relative_l2": 0.5742494187083818,
+          "rms_difference": 0.2429028109003511,
+          "row_difference_concentration": {
+            "effective_changed_rows": 13457.02360429957,
+            "top_10_fraction": 0.0067649971529513955,
+            "top_1_fraction": 0.0008261243563631969,
+            "top_1_percent_fraction": 0.15111085954274006
+          },
+          "shape_common": [
+            64986,
+            2048
+          ],
+          "top_changed_rows": [
+            {
+              "aligned_row": 39350,
+              "coordinate": [
+                0.875,
+                2.4750001430511475,
+                0.574999988079071
+              ],
+              "cosine": 0.45434915089218836,
+              "l2": 80.54343234660983,
+              "rank": 1
+            },
+            {
+              "aligned_row": 19408,
+              "coordinate": [
+                -1.4250000715255737,
+                2.4750001430511475,
+                0.574999988079071
+              ],
+              "cosine": -0.11022590245118867,
+              "l2": 76.75746004262858,
+              "rank": 2
+            },
+            {
+              "aligned_row": 2725,
+              "coordinate": [
+                -3.0250000953674316,
+                1.274999976158142,
+                1.725000023841858
+              ],
+              "cosine": -0.09772812173924272,
+              "l2": 76.64899856096338,
+              "rank": 3
+            },
+            {
+              "aligned_row": 19407,
+              "coordinate": [
+                -1.4250000715255737,
+                2.4750001430511475,
+                0.5250000357627869
+              ],
+              "cosine": -0.11459161236420144,
+              "l2": 73.9026608180427,
+              "rank": 4
+            },
+            {
+              "aligned_row": 52552,
+              "coordinate": [
+                2.4750001430511475,
+                -0.675000011920929,
+                -0.02500000037252903
+              ],
+              "cosine": -0.05534723709990326,
+              "l2": 71.97934618104377,
+              "rank": 5
+            },
+            {
+              "aligned_row": 22301,
+              "coordinate": [
+                -1.125,
+                2.4750001430511475,
+                0.4749999940395355
+              ],
+              "cosine": -0.004816673899633037,
+              "l2": 71.15284571729289,
+              "rank": 6
+            },
+            {
+              "aligned_row": 2593,
+              "coordinate": [
+                -3.0250000953674316,
+                1.125,
+                1.875
+              ],
+              "cosine": -0.08518015834035068,
+              "l2": 71.1466856165104,
+              "rank": 7
+            },
+            {
+              "aligned_row": 21853,
+              "coordinate": [
+                -1.1750000715255737,
+                2.5250000953674316,
+                0.5250000357627869
+              ],
+              "cosine": -0.0073603757946370495,
+              "l2": 69.80749987002109,
+              "rank": 8
+            },
+            {
+              "aligned_row": 2591,
+              "coordinate": [
+                -3.0250000953674316,
+                1.125,
+                1.725000023841858
+              ],
+              "cosine": -0.07505892534334754,
+              "l2": 69.65698441296378,
+              "rank": 9
+            },
+            {
+              "aligned_row": 22139,
+              "coordinate": [
+                -1.125,
+                -0.7750000357627869,
+                0.02500000037252903
+              ],
+              "cosine": 0.308788534534433,
+              "l2": 66.15566441936066,
+              "rank": 10
+            }
+          ]
+        },
+        "voxel_topology": {
+          "common_count": 64986,
+          "common_fraction_of_smaller": 0.8722367626333803,
+          "count_a": 74505,
+          "count_b": 74533,
+          "jaccard": 0.7731642316661115,
+          "only_a_count": 9519,
+          "only_b_count": 9547,
+          "union_count": 84052
+        }
+      },
+      "scene_a": "scene_000007",
+      "scene_b": "scene_000008",
+      "split": "train"
+    },
+    {
+      "aggregated_map": {
+        "rgb": {
+          "changed_element_fraction_at_1e-6": 0.021125089010206502,
+          "cosine_flat": 0.9999467925445756,
+          "max_row_l2": 159.04979834967233,
+          "mean_absolute_difference": 0.05369935909850432,
+          "mean_row_cosine": 0.9999745103734115,
+          "mean_row_l2": 0.10663402056851597,
+          "minimum_row_cosine": 0.9254823560460473,
+          "relative_l2": 0.010317686388652771,
+          "rms_difference": 1.7483477001026713,
+          "row_difference_concentration": {
+            "effective_changed_rows": 4.644851012715431,
+            "top_10_fraction": 0.9860209572936229,
+            "top_1_fraction": 0.32739189447259526,
+            "top_1_percent_fraction": 0.9999808306112083
+          },
+          "shape_common": [
+            8426,
+            3
+          ],
+          "top_changed_rows": [
+            {
+              "aligned_row": 4891,
+              "coordinate": [
+                0.4750000238418579,
+                0.6768450140953064,
+                0.8456642031669617
+              ],
+              "cosine": 0.9254823560460473,
+              "l2": 159.04979834967233,
+              "rank": 1
+            },
+            {
+              "aligned_row": 5041,
+              "coordinate": [
+                0.67315274477005,
+                0.5392857193946838,
+                0.8376847505569458
+              ],
+              "cosine": 0.9647743842786815,
+              "l2": 128.3924657682605,
+              "rank": 2
+            },
+            {
+              "aligned_row": 4896,
+              "coordinate": [
+                0.4772421419620514,
+                0.8169282674789429,
+                0.8409192562103271
+              ],
+              "cosine": 0.9654847489360366,
+              "l2": 119.50819375118981,
+              "rank": 3
+            },
+            {
+              "aligned_row": 4888,
+              "coordinate": [
+                0.5160550475120544,
+                0.5340595841407776,
+                0.8371560573577881
+              ],
+              "cosine": 0.975565032226896,
+              "l2": 109.17608255898864,
+              "rank": 4
+            },
+            {
+              "aligned_row": 6305,
+              "coordinate": [
+                1.8899999856948853,
+                1.5249998569488525,
+                0.7150000333786011
+              ],
+              "cosine": 0.9640883314757799,
+              "l2": 70.76233236086955,
+              "rank": 5
+            },
+            {
+              "aligned_row": 4740,
+              "coordinate": [
+                0.37520578503608704,
+                0.6710905432701111,
+                0.8250000476837158
+              ],
+              "cosine": 0.9991519529229014,
+              "l2": 33.539349538607574,
+              "rank": 6
+            },
+            {
+              "aligned_row": 6459,
+              "coordinate": [
+                2.058333396911621,
+                1.524999976158142,
+                0.6791666150093079
+              ],
+              "cosine": 0.993312923119484,
+              "l2": 27.50689778177792,
+              "rank": 7
+            },
+            {
+              "aligned_row": 4737,
+              "coordinate": [
+                0.3741689622402191,
+                0.5164127349853516,
+                0.8249999284744263
+              ],
+              "cosine": 0.9996477524137464,
+              "l2": 22.546016267981916,
+              "rank": 8
+            },
+            {
+              "aligned_row": 5048,
+              "coordinate": [
+                0.625,
+                1.024999976158142,
+                0.824999988079071
+              ],
+              "cosine": 0.9994721656301113,
+              "l2": 21.457342088222603,
+              "rank": 9
+            },
+            {
+              "aligned_row": 5193,
+              "coordinate": [
+                0.8299180269241333,
+                0.5248361229896545,
+                0.8276229500770569
+              ],
+              "cosine": 0.9995880172214071,
+              "l2": 18.627300221243285,
+              "rank": 10
+            }
+          ]
+        },
+        "semantic": {
+          "changed_element_fraction_at_1e-6": 0.6478570213290707,
+          "cosine_flat": 0.9952308924672372,
+          "max_row_l2": 28.249443938394585,
+          "mean_absolute_difference": 0.008667512782739879,
+          "mean_row_cosine": 0.9949231647275864,
+          "mean_row_l2": 0.6654284170862406,
+          "minimum_row_cosine": 0.22815270558187703,
+          "relative_l2": 0.09779519652418264,
+          "rms_difference": 0.03815620553262516,
+          "row_difference_concentration": {
+            "effective_changed_rows": 128.88592078388643,
+            "top_10_fraction": 0.23145782150959138,
+            "top_1_fraction": 0.03176420872202142,
+            "top_1_percent_fraction": 0.5524258586912196
+          },
+          "shape_common": [
+            8426,
+            2048
+          ],
+          "top_changed_rows": [
+            {
+              "aligned_row": 4624,
+              "coordinate": [
+                0.2192308008670807,
+                1.7346153259277344,
+                0.02499999850988388
+              ],
+              "cosine": 0.4604895014197232,
+              "l2": 28.249443938394585,
+              "rank": 1
+            },
+            {
+              "aligned_row": 5838,
+              "coordinate": [
+                1.4175373315811157,
+                2.508582353591919,
+                0.5264924764633179
+              ],
+              "cosine": 0.22815270558187703,
+              "l2": 26.003061721867134,
+              "rank": 2
+            },
+            {
+              "aligned_row": 4482,
+              "coordinate": [
+                0.06750000268220901,
+                1.8700001239776611,
+                0.02500000223517418
+              ],
+              "cosine": 0.642717473176905,
+              "l2": 25.78067721087356,
+              "rank": 3
+            },
+            {
+              "aligned_row": 5839,
+              "coordinate": [
+                1.4205883741378784,
+                2.5044119358062744,
+                0.679411768913269
+              ],
+              "cosine": 0.28386649453762863,
+              "l2": 25.734781489569105,
+              "rank": 4
+            },
+            {
+              "aligned_row": 4628,
+              "coordinate": [
+                0.22261905670166016,
+                1.870237946510315,
+                0.02500000223517418
+              ],
+              "cosine": 0.49141230481117415,
+              "l2": 24.991922360863235,
+              "rank": 5
+            },
+            {
+              "aligned_row": 4481,
+              "coordinate": [
+                0.07976190000772476,
+                1.875,
+                -0.02500000223517418
+              ],
+              "cosine": 0.6771622642388526,
+              "l2": 24.807247937897973,
+              "rank": 6
+            },
+            {
+              "aligned_row": 5684,
+              "coordinate": [
+                1.2730519771575928,
+                2.5081167221069336,
+                0.6769481301307678
+              ],
+              "cosine": 0.3623729158912324,
+              "l2": 23.078539174168725,
+              "rank": 7
+            },
+            {
+              "aligned_row": 5683,
+              "coordinate": [
+                1.2718353271484375,
+                2.511075973510742,
+                0.521202564239502
+              ],
+              "cosine": 0.32773282039029156,
+              "l2": 22.72827469525411,
+              "rank": 8
+            },
+            {
+              "aligned_row": 4623,
+              "coordinate": [
+                0.2361111044883728,
+                1.7083333730697632,
+                -0.02500000223517418
+              ],
+              "cosine": 0.538190766326669,
+              "l2": 19.90275926959576,
+              "rank": 9
+            },
+            {
+              "aligned_row": 5993,
+              "coordinate": [
+                1.5707142353057861,
+                2.507857084274292,
+                0.6771429181098938
+              ],
+              "cosine": 0.43795817572176987,
+              "l2": 18.128175060320032,
+              "rank": 10
+            }
+          ]
+        },
+        "voxel_topology": {
+          "common_count": 8426,
+          "common_fraction_of_smaller": 0.9983412322274882,
+          "count_a": 8440,
+          "count_b": 8469,
+          "jaccard": 0.993280679005069,
+          "only_a_count": 14,
+          "only_b_count": 43,
+          "union_count": 8483
+        }
+      },
+      "block_tokens": {
+        "block_topology": {
+          "common_count": 3015,
+          "common_fraction_of_smaller": 0.9983443708609272,
+          "count_a": 3020,
+          "count_b": 3031,
+          "jaccard": 0.9930830039525692,
+          "only_a_count": 5,
+          "only_b_count": 16,
+          "union_count": 3036
+        },
+        "common_block_tokens": {
+          "changed_element_fraction_at_1e-6": 0.6872382877280265,
+          "cosine_flat": 0.9999730766731593,
+          "max_row_l2": 2.223593608128081,
+          "mean_absolute_difference": 0.0022299403423115226,
+          "mean_row_cosine": 0.9999730768563233,
+          "mean_row_l2": 0.054749912103912494,
+          "minimum_row_cosine": 0.9936035199371231,
+          "relative_l2": 0.007338027917179667,
+          "rms_difference": 0.0073616697422761905,
+          "row_difference_concentration": {
+            "effective_changed_rows": 97.22957434958849,
+            "top_10_fraction": 0.2571414815259685,
+            "top_1_fraction": 0.03940121704794015,
+            "top_1_percent_fraction": 0.5834159950769349
+          },
+          "shape_common": [
+            6030,
+            384
+          ],
+          "top_changed_rows": [
+            {
+              "block_index": [
+                17,
+                20,
+                2
+              ],
+              "coordinate": [
+                1.375,
+                2.625,
+                0.625
+              ],
+              "cosine": 0.9936035199371231,
+              "l2": 2.223593608128081,
+              "rank": 1,
+              "token_within_block": 1
+            },
+            {
+              "block_index": [
+                17,
+                20,
+                2
+              ],
+              "coordinate": [
+                1.375,
+                2.625,
+                0.625
+              ],
+              "cosine": 0.9936144850876266,
+              "l2": 2.221691924179226,
+              "rank": 2,
+              "token_within_block": 0
+            },
+            {
+              "block_index": [
+                12,
+                17,
+                0
+              ],
+              "coordinate": [
+                0.125,
+                1.875,
+                0.125
+              ],
+              "cosine": 0.995235496046134,
+              "l2": 1.9190124078170145,
+              "rank": 3,
+              "token_within_block": 1
+            },
+            {
+              "block_index": [
+                12,
+                17,
+                0
+              ],
+              "coordinate": [
+                0.125,
+                1.875,
+                0.125
+              ],
+              "cosine": 0.9952494387434967,
+              "l2": 1.916202378407765,
+              "rank": 4,
+              "token_within_block": 0
+            },
+            {
+              "block_index": [
+                14,
+                12,
+                3
+              ],
+              "coordinate": [
+                0.625,
+                0.625,
+                0.875
+              ],
+              "cosine": 0.9963071373662229,
+              "l2": 1.689540364540537,
+              "rank": 5,
+              "token_within_block": 1
+            },
+            {
+              "block_index": [
+                14,
+                12,
+                3
+              ],
+              "coordinate": [
+                0.625,
+                0.625,
+                0.875
+              ],
+              "cosine": 0.9963116666310506,
+              "l2": 1.6885037047819613,
+              "rank": 6,
+              "token_within_block": 0
+            },
+            {
+              "block_index": [
+                12,
+                17,
+                -1
+              ],
+              "coordinate": [
+                0.125,
+                1.875,
+                -0.125
+              ],
+              "cosine": 0.9967454570321868,
+              "l2": 1.586055544371244,
+              "rank": 7,
+              "token_within_block": 1
+            },
+            {
+              "block_index": [
+                12,
+                17,
+                -1
+              ],
+              "coordinate": [
+                0.125,
+                1.875,
+                -0.125
+              ],
+              "cosine": 0.9967915179778268,
+              "l2": 1.5747933062972497,
+              "rank": 8,
+              "token_within_block": 0
+            },
+            {
+              "block_index": [
+                16,
+                20,
+                2
+              ],
+              "coordinate": [
+                1.125,
+                2.625,
+                0.625
+              ],
+              "cosine": 0.9971936220672347,
+              "l2": 1.4728332253813834,
+              "rank": 9,
+              "token_within_block": 1
+            },
+            {
+              "block_index": [
+                16,
+                20,
+                2
+              ],
+              "coordinate": [
+                1.125,
+                2.625,
+                0.625
+              ],
+              "cosine": 0.9972017146122036,
+              "l2": 1.4707130639962758,
+              "rank": 10,
+              "token_within_block": 0
+            }
+          ]
+        },
+        "tokens_per_block": 2
+      },
+      "change_type": "cube_support",
+      "final_prefix_runtime_float16": {
+        "changed_element_fraction_at_1e-6": 0.022823228128460687,
+        "cosine_flat": 0.9999999990373066,
+        "max_row_l2": 0.0036306247204913236,
+        "mean_absolute_difference": 3.247161871307052e-06,
+        "mean_row_cosine": 0.9999999990469491,
+        "mean_row_l2": 0.0012086815518697256,
+        "minimum_row_cosine": 0.9999999928192485,
+        "relative_l2": 4.387955844308933e-05,
+        "rms_difference": 4.4210637586617304e-05,
+        "row_difference_concentration": {
+          "effective_changed_rows": 134.937395749617,
+          "top_10_fraction": 0.16995981482998487,
+          "top_1_fraction": 0.02917302396884138,
+          "top_1_percent_fraction": 0.06851662500159697
+        },
+        "shape": [
+          1,
+          258,
+          896
+        ],
+        "shape_common": [
+          258,
+          896
+        ],
+        "top_changed_rows": [
+          {
+            "cosine": 0.9999999928192485,
+            "l2": 0.0036306247204913236,
+            "rank": 1,
+            "token_index": 214
+          },
+          {
+            "cosine": 0.9999999949051479,
+            "l2": 0.0030679241778153905,
+            "rank": 2,
+            "token_index": 186
+          },
+          {
+            "cosine": 0.9999999954379946,
+            "l2": 0.002892181638689123,
+            "rank": 3,
+            "token_index": 89
+          },
+          {
+            "cosine": 0.9999999960050394,
+            "l2": 0.002709464092609754,
+            "rank": 4,
+            "token_index": 242
+          },
+          {
+            "cosine": 0.999999996124639,
+            "l2": 0.0026677252187201905,
+            "rank": 5,
+            "token_index": 83
+          },
+          {
+            "cosine": 0.9999999963634026,
+            "l2": 0.002584553290977578,
+            "rank": 6,
+            "token_index": 97
+          },
+          {
+            "cosine": 0.9999999964032894,
+            "l2": 0.002575177250545353,
+            "rank": 7,
+            "token_index": 233
+          },
+          {
+            "cosine": 0.9999999964969515,
+            "l2": 0.0025352534421203138,
+            "rank": 8,
+            "token_index": 161
+          },
+          {
+            "cosine": 0.9999999968414639,
+            "l2": 0.0024198087172658503,
+            "rank": 9,
+            "token_index": 3
+          },
+          {
+            "cosine": 0.9999999968563029,
+            "l2": 0.00240485766405598,
+            "rank": 10,
+            "token_index": 135
+          }
+        ]
+      },
+      "latent_diversity": {
+        "scene_a_native": {
+          "mean_feature_std_across_tokens": 0.0023727405350655317,
+          "mean_off_diagonal_cosine": 0.9999943971633911,
+          "minimum_off_diagonal_cosine": 0.9999921917915344,
+          "std_off_diagonal_cosine": 4.836500124838494e-07,
+          "token_count": 256
+        },
+        "scene_a_projected": {
+          "mean_feature_std_across_tokens": 0.00017333784489892423,
+          "mean_off_diagonal_cosine": 1.0,
+          "minimum_off_diagonal_cosine": 0.9999980926513672,
+          "std_off_diagonal_cosine": 4.081973088432278e-07,
+          "token_count": 256
+        },
+        "scene_b_native": {
+          "mean_feature_std_across_tokens": 0.002372665796428919,
+          "mean_off_diagonal_cosine": 0.9999943971633911,
+          "minimum_off_diagonal_cosine": 0.9999926686286926,
+          "std_off_diagonal_cosine": 4.781985580848414e-07,
+          "token_count": 256
+        },
+        "scene_b_projected": {
+          "mean_feature_std_across_tokens": 0.00017333174764644355,
+          "mean_off_diagonal_cosine": 1.0,
+          "minimum_off_diagonal_cosine": 0.9999983310699463,
+          "std_off_diagonal_cosine": 4.0677196011529304e-07,
+          "token_count": 256
+        }
+      },
+      "native_latents": {
+        "changed_element_fraction_at_1e-6": 0.98675537109375,
+        "cosine_flat": 0.9999999984074853,
+        "max_row_l2": 0.001127807576225746,
+        "mean_absolute_difference": 4.522184113797678e-05,
+        "mean_row_cosine": 0.9999999984074865,
+        "mean_row_l2": 0.0011131044332909398,
+        "minimum_row_cosine": 0.9999999983651646,
+        "relative_l2": 5.64360776887119e-05,
+        "rms_difference": 5.680342318125675e-05,
+        "row_difference_concentration": {
+          "effective_changed_rows": 255.98012872820223,
+          "top_10_fraction": 0.03987457898776055,
+          "top_1_fraction": 0.00401005019079915,
+          "top_1_percent_fraction": 0.011991026898089792
+        },
+        "shape": [
+          1,
+          256,
+          384
+        ],
+        "shape_common": [
+          256,
+          384
+        ],
+        "top_changed_rows": [
+          {
+            "cosine": 0.9999999983651646,
+            "l2": 0.001127807576225746,
+            "rank": 1,
+            "token_index": 231
+          },
+          {
+            "cosine": 0.9999999983726019,
+            "l2": 0.0011252421844437754,
+            "rank": 2,
+            "token_index": 118
+          },
+          {
+            "cosine": 0.9999999983736877,
+            "l2": 0.0011248645365122623,
+            "rank": 3,
+            "token_index": 199
+          },
+          {
+            "cosine": 0.9999999983753555,
+            "l2": 0.0011242872517720182,
+            "rank": 4,
+            "token_index": 122
+          },
+          {
+            "cosine": 0.9999999983754585,
+            "l2": 0.0011242547390610562,
+            "rank": 5,
+            "token_index": 143
+          },
+          {
+            "cosine": 0.99999999837576,
+            "l2": 0.0011241483051834275,
+            "rank": 6,
+            "token_index": 98
+          },
+          {
+            "cosine": 0.9999999983757978,
+            "l2": 0.001124134583229539,
+            "rank": 7,
+            "token_index": 250
+          },
+          {
+            "cosine": 0.9999999983758031,
+            "l2": 0.0011241328793356903,
+            "rank": 8,
+            "token_index": 173
+          },
+          {
+            "cosine": 0.9999999983766793,
+            "l2": 0.0011238316175313289,
+            "rank": 9,
+            "token_index": 137
+          },
+          {
+            "cosine": 0.999999998377485,
+            "l2": 0.001123551423329067,
+            "rank": 10,
+            "token_index": 110
+          }
+        ]
+      },
+      "pair_id": "pair_000002",
+      "prefix_exactly_equal": false,
+      "prefix_hash_a": "ef432dd644cc28e7d06a0ea05aa7969452065d2402ad1734745894aa0648933d",
+      "prefix_hash_b": "745b9a762d2423c254b7100669cd1e98a7e4d8a17555882b0696f8fa47291d80",
+      "projected_scene_tokens_float32": {
+        "changed_element_fraction_at_1e-6": 0.8209490094866071,
+        "cosine_flat": 0.999999999991362,
+        "max_row_l2": 0.00012759297474936447,
+        "mean_absolute_difference": 3.3862980107609734e-06,
+        "mean_row_cosine": 0.9999999999913631,
+        "mean_row_l2": 0.00012584715867003702,
+        "minimum_row_cosine": 0.9999999999911219,
+        "relative_l2": 4.156606848104854e-06,
+        "rms_difference": 4.204336495324174e-06,
+        "row_difference_concentration": {
+          "effective_changed_rows": 255.96202341822124,
+          "top_10_fraction": 0.04003809320037047,
+          "top_1_fraction": 0.0040152317373961235,
+          "top_1_percent_fraction": 0.012032880133102821
+        },
+        "shape": [
+          1,
+          256,
+          896
+        ],
+        "shape_common": [
+          256,
+          896
+        ],
+        "top_changed_rows": [
+          {
+            "cosine": 0.9999999999911219,
+            "l2": 0.00012759297474936447,
+            "rank": 1,
+            "token_index": 231
+          },
+          {
+            "cosine": 0.9999999999911304,
+            "l2": 0.00012752829916520895,
+            "rank": 2,
+            "token_index": 173
+          },
+          {
+            "cosine": 0.9999999999911402,
+            "l2": 0.00012745394428584223,
+            "rank": 3,
+            "token_index": 185
+          },
+          {
+            "cosine": 0.9999999999911472,
+            "l2": 0.00012742825685458555,
+            "rank": 4,
+            "token_index": 112
+          },
+          {
+            "cosine": 0.9999999999911487,
+            "l2": 0.00012740751510595307,
+            "rank": 5,
+            "token_index": 218
+          },
+          {
+            "cosine": 0.9999999999911497,
+            "l2": 0.00012738159778320207,
+            "rank": 6,
+            "token_index": 121
+          },
+          {
+            "cosine": 0.9999999999911527,
+            "l2": 0.00012737731729747307,
+            "rank": 7,
+            "token_index": 83
+          },
+          {
+            "cosine": 0.9999999999911565,
+            "l2": 0.00012734160792393434,
+            "rank": 8,
+            "token_index": 159
+          },
+          {
+            "cosine": 0.9999999999911641,
+            "l2": 0.0001273050984350057,
+            "rank": 9,
+            "token_index": 249
+          },
+          {
+            "cosine": 0.9999999999911651,
+            "l2": 0.00012729666450748823,
+            "rank": 10,
+            "token_index": 143
+          }
+        ]
+      },
+      "projected_scene_tokens_runtime_float16": {
+        "changed_element_fraction_at_1e-6": 0.023001534598214284,
+        "cosine_flat": 0.9999999990373033,
+        "max_row_l2": 0.0036306247204913236,
+        "mean_absolute_difference": 3.272530323426638e-06,
+        "mean_row_cosine": 0.9999999990395035,
+        "mean_row_l2": 0.0012181243764937079,
+        "minimum_row_cosine": 0.9999999928192485,
+        "relative_l2": 4.387963429942798e-05,
+        "rms_difference": 4.438299940047456e-05,
+        "row_difference_concentration": {
+          "effective_changed_rows": 134.937395749617,
+          "top_10_fraction": 0.16995981482998487,
+          "top_1_fraction": 0.02917302396884138,
+          "top_1_percent_fraction": 0.06851662500159697
+        },
+        "shape": [
+          1,
+          256,
+          896
+        ],
+        "shape_common": [
+          256,
+          896
+        ],
+        "top_changed_rows": [
+          {
+            "cosine": 0.9999999928192485,
+            "l2": 0.0036306247204913236,
+            "rank": 1,
+            "token_index": 213
+          },
+          {
+            "cosine": 0.9999999949051479,
+            "l2": 0.0030679241778153905,
+            "rank": 2,
+            "token_index": 185
+          },
+          {
+            "cosine": 0.9999999954379946,
+            "l2": 0.002892181638689123,
+            "rank": 3,
+            "token_index": 88
+          },
+          {
+            "cosine": 0.9999999960050394,
+            "l2": 0.002709464092609754,
+            "rank": 4,
+            "token_index": 241
+          },
+          {
+            "cosine": 0.999999996124639,
+            "l2": 0.0026677252187201905,
+            "rank": 5,
+            "token_index": 82
+          },
+          {
+            "cosine": 0.9999999963634026,
+            "l2": 0.002584553290977578,
+            "rank": 6,
+            "token_index": 96
+          },
+          {
+            "cosine": 0.9999999964032894,
+            "l2": 0.002575177250545353,
+            "rank": 7,
+            "token_index": 232
+          },
+          {
+            "cosine": 0.9999999964969515,
+            "l2": 0.0025352534421203138,
+            "rank": 8,
+            "token_index": 160
+          },
+          {
+            "cosine": 0.9999999968414639,
+            "l2": 0.0024198087172658503,
+            "rank": 9,
+            "token_index": 2
+          },
+          {
+            "cosine": 0.9999999968563029,
+            "l2": 0.00240485766405598,
+            "rank": 10,
+            "token_index": 134
+          }
+        ]
+      },
+      "raw_map": {
+        "rgb": {
+          "changed_element_fraction_at_1e-6": 0.007563428754368647,
+          "cosine_flat": 0.9999676782025418,
+          "max_row_l2": 211.78953723846195,
+          "mean_absolute_difference": 0.03254805597413294,
+          "mean_row_cosine": 0.9999813616860899,
+          "mean_row_l2": 0.0641700788161211,
+          "minimum_row_cosine": 0.8333721898978351,
+          "relative_l2": 0.00804089233615915,
+          "rms_difference": 1.4113056450877366,
+          "row_difference_concentration": {
+            "effective_changed_rows": 14.854932938184476,
+            "top_10_fraction": 0.7465164274735598,
+            "top_1_fraction": 0.10013392786511831,
+            "top_1_percent_fraction": 0.9999998599558731
+          },
+          "shape_common": [
+            74966,
+            3
+          ],
+          "top_changed_rows": [
+            {
+              "aligned_row": 43415,
+              "coordinate": [
+                0.574999988079071,
+                0.574999988079071,
+                0.824999988079071
+              ],
+              "cosine": 0.8422095451439745,
+              "l2": 211.78953723846195,
+              "rank": 1
+            },
+            {
+              "aligned_row": 56742,
+              "coordinate": [
+                1.875,
+                1.524999976158142,
+                0.675000011920929
+              ],
+              "cosine": 0.8333721898978351,
+              "l2": 208.7547933314931,
+              "rank": 2
+            },
+            {
+              "aligned_row": 44317,
+              "coordinate": [
+                0.675000011920929,
+                0.574999988079071,
+                0.824999988079071
+              ],
+              "cosine": 0.855000525994039,
+              "l2": 208.52749643417377,
+              "rank": 3
+            },
+            {
+              "aligned_row": 42955,
+              "coordinate": [
+                0.5250000357627869,
+                0.574999988079071,
+                0.824999988079071
+              ],
+              "cosine": 0.8597231177593238,
+              "l2": 202.2039616511177,
+              "rank": 4
+            },
+            {
+              "aligned_row": 43866,
+              "coordinate": [
+                0.625,
+                0.574999988079071,
+                0.824999988079071
+              ],
+              "cosine": 0.8718475894729819,
+              "l2": 199.0426669631062,
+              "rank": 5
+            },
+            {
+              "aligned_row": 58129,
+              "coordinate": [
+                2.0250000953674316,
+                1.524999976158142,
+                0.625
+              ],
+              "cosine": 0.8530209851550066,
+              "l2": 196.8780412789975,
+              "rank": 6
+            },
+            {
+              "aligned_row": 44783,
+              "coordinate": [
+                0.7250000238418579,
+                0.574999988079071,
+                0.824999988079071
+              ],
+              "cosine": 0.891551577599397,
+              "l2": 190.81031705650824,
+              "rank": 7
+            },
+            {
+              "aligned_row": 42460,
+              "coordinate": [
+                0.4749999940395355,
+                0.675000011920929,
+                0.824999988079071
+              ],
+              "cosine": 0.9606835308749401,
+              "l2": 127.37185184814174,
+              "rank": 8
+            },
+            {
+              "aligned_row": 45264,
+              "coordinate": [
+                0.7750000357627869,
+                0.574999988079071,
+                0.824999988079071
+              ],
+              "cosine": 0.9689002746212286,
+              "l2": 123.7947295619557,
+              "rank": 9
+            },
+            {
+              "aligned_row": 57220,
+              "coordinate": [
+                1.9250000715255737,
+                1.524999976158142,
+                0.675000011920929
+              ],
+              "cosine": 0.8777642261904547,
+              "l2": 123.53492333554561,
+              "rank": 10
+            }
+          ]
+        },
+        "semantic": {
+          "changed_element_fraction_at_1e-6": 0.5282605849026558,
+          "cosine_flat": 0.9929674369474503,
+          "max_row_l2": 54.587929371536326,
+          "mean_absolute_difference": 0.010519260174848881,
+          "mean_row_cosine": 0.9926848370338907,
+          "mean_row_l2": 0.8180731792228869,
+          "minimum_row_cosine": -0.06239828821788304,
+          "relative_l2": 0.11866940084805257,
+          "rms_difference": 0.04947946147672411,
+          "row_difference_concentration": {
+            "effective_changed_rows": 851.0590057972174,
+            "top_10_fraction": 0.05850686780336532,
+            "top_1_fraction": 0.007927733138497149,
+            "top_1_percent_fraction": 0.5786007860520809
+          },
+          "shape_common": [
+            74966,
+            2048
+          ],
+          "top_changed_rows": [
+            {
+              "aligned_row": 52628,
+              "coordinate": [
+                1.475000023841858,
+                2.4750001430511475,
+                0.5250000357627869
+              ],
+              "cosine": -0.06239828821788304,
+              "l2": 54.587929371536326,
+              "rank": 1
+            },
+            {
+              "aligned_row": 52687,
+              "coordinate": [
+                1.475000023841858,
+                2.5250000953674316,
+                0.675000011920929
+              ],
+              "cosine": 0.11909203227148323,
+              "l2": 52.52174681630356,
+              "rank": 2
+            },
+            {
+              "aligned_row": 53158,
+              "coordinate": [
+                1.524999976158142,
+                2.4750001430511475,
+                0.574999988079071
+              ],
+              "cosine": -0.014104872825368743,
+              "l2": 46.74945819075644,
+              "rank": 3
+            },
+            {
+              "aligned_row": 35451,
+              "coordinate": [
+                -0.2750000059604645,
+                1.375,
+                0.02500000037252903
+              ],
+              "cosine": 0.24109767282102743,
+              "l2": 46.518888964570834,
+              "rank": 4
+            },
+            {
+              "aligned_row": 40035,
+              "coordinate": [
+                0.22500000894069672,
+                1.725000023841858,
+                -0.02500000037252903
+              ],
+              "cosine": 0.42650786478773595,
+              "l2": 46.436071600558925,
+              "rank": 5
+            },
+            {
+              "aligned_row": 52113,
+              "coordinate": [
+                1.4250000715255737,
+                2.4750001430511475,
+                0.5250000357627869
+              ],
+              "cosine": -0.020836560384806527,
+              "l2": 45.436639470063845,
+              "rank": 6
+            },
+            {
+              "aligned_row": 52178,
+              "coordinate": [
+                1.4250000715255737,
+                2.5250000953674316,
+                0.7750000357627869
+              ],
+              "cosine": 0.03541483875058779,
+              "l2": 44.760661859192226,
+              "rank": 7
+            },
+            {
+              "aligned_row": 39523,
+              "coordinate": [
+                0.17499999701976776,
+                1.8250000476837158,
+                0.02500000037252903
+              ],
+              "cosine": 0.4785116230412844,
+              "l2": 44.14216795370393,
+              "rank": 8
+            },
+            {
+              "aligned_row": 53159,
+              "coordinate": [
+                1.524999976158142,
+                2.4750001430511475,
+                0.625
+              ],
+              "cosine": 0.013761577705322613,
+              "l2": 43.53330809711541,
+              "rank": 9
+            },
+            {
+              "aligned_row": 38624,
+              "coordinate": [
+                0.07500000298023224,
+                1.9250000715255737,
+                0.02500000037252903
+              ],
+              "cosine": 0.5265129844032774,
+              "l2": 42.84180016404589,
+              "rank": 10
+            }
+          ]
+        },
+        "voxel_topology": {
+          "common_count": 74966,
+          "common_fraction_of_smaller": 0.9986412319496989,
+          "count_a": 75068,
+          "count_b": 75469,
+          "jaccard": 0.9919942835214567,
+          "only_a_count": 102,
+          "only_b_count": 503,
+          "union_count": 75571
+        }
+      },
+      "scene_a": "scene_000005",
+      "scene_b": "scene_000006",
+      "split": "test"
+    }
+  ],
+  "purpose": "Counterfactual signal audit from numeric maps through frozen-LM behavior",
+  "schema_version": 1
+}

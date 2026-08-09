@@ -1,0 +1,10 @@
+_base_: gemma4_color_wiring_v5.yaml
+
+# Preserve Gemma's native BOS token at absolute sequence position zero, then
+# insert [scene_start, all scene latents, scene_end] before the remaining
+# system/user prompt. No native BOI/EOI token identities are introduced.
+language:
+  scene_prefix_after_bos: true
+
+training:
+  output_namespace: gemma4_color_wiring_v6

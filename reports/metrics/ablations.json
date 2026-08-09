@@ -1,0 +1,91 @@
+{
+  "interpretation": {
+    "content_ablation_max_abs_delta": 0.007299270072992692,
+    "empty_prefix_collapse": true,
+    "warning": "A nonzero prefix is necessary, but the first multiscene checkpoint is insensitive to its scene-specific content."
+  },
+  "results": {
+    "empty_scene_prefix": {
+      "count_accuracy": 0.1111111111111111,
+      "counterfactual_changed_rate": 0.0,
+      "exact_accuracy_delta_vs_primary": -0.7481751824817519,
+      "grounding_mean_error_m": 2.014101784504607,
+      "normalized_exact_accuracy": 0.0,
+      "source": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/metrics/controls/empty_scene_prefix.json",
+      "spatial_relation_accuracy": 0.0
+    },
+    "geometry_only": {
+      "count_accuracy": 1.0,
+      "counterfactual_changed_rate": 0.25,
+      "exact_accuracy_delta_vs_primary": 0.0036496350364962904,
+      "grounding_mean_error_m": 1.7021195607692206,
+      "normalized_exact_accuracy": 0.7518248175182481,
+      "source": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/metrics/controls/geometry_only.json",
+      "spatial_relation_accuracy": 0.7941176470588235
+    },
+    "position_shuffle": {
+      "count_accuracy": 1.0,
+      "counterfactual_changed_rate": 0.0,
+      "exact_accuracy_delta_vs_primary": 0.0036496350364962904,
+      "grounding_mean_error_m": 1.702322859494522,
+      "normalized_exact_accuracy": 0.7518248175182481,
+      "source": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/metrics/controls/position_shuffle.json",
+      "spatial_relation_accuracy": 0.7941176470588235
+    },
+    "primary": {
+      "count_accuracy": 1.0,
+      "counterfactual_changed_rate": 0.0,
+      "exact_accuracy_delta_vs_primary": 0.0,
+      "grounding_mean_error_m": 1.702319549266858,
+      "normalized_exact_accuracy": 0.7481751824817519,
+      "source": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/metrics/controls/primary.json",
+      "spatial_relation_accuracy": 0.788235294117647
+    },
+    "remove_normals": {
+      "count_accuracy": 1.0,
+      "counterfactual_changed_rate": 0.0,
+      "exact_accuracy_delta_vs_primary": 0.0,
+      "grounding_mean_error_m": 1.702319549266858,
+      "normalized_exact_accuracy": 0.7481751824817519,
+      "source": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/metrics/controls/remove_normals.json",
+      "spatial_relation_accuracy": 0.788235294117647
+    },
+    "remove_rgb": {
+      "count_accuracy": 1.0,
+      "counterfactual_changed_rate": 0.0,
+      "exact_accuracy_delta_vs_primary": 0.0036496350364962904,
+      "grounding_mean_error_m": 1.7023208182554115,
+      "normalized_exact_accuracy": 0.7518248175182481,
+      "source": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/metrics/controls/remove_rgb.json",
+      "spatial_relation_accuracy": 0.7941176470588235
+    },
+    "semantic_shuffle": {
+      "count_accuracy": 1.0,
+      "counterfactual_changed_rate": 0.0,
+      "exact_accuracy_delta_vs_primary": 0.007299270072992692,
+      "grounding_mean_error_m": 1.7023228527790404,
+      "normalized_exact_accuracy": 0.7554744525547445,
+      "source": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/metrics/controls/semantic_shuffle.json",
+      "spatial_relation_accuracy": 0.7941176470588235
+    },
+    "semantics_without_xyz": {
+      "count_accuracy": 1.0,
+      "counterfactual_changed_rate": 0.0,
+      "exact_accuracy_delta_vs_primary": 0.0036496350364962904,
+      "grounding_mean_error_m": 1.7023789622065602,
+      "normalized_exact_accuracy": 0.7518248175182481,
+      "source": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/metrics/controls/semantics_without_xyz.json",
+      "spatial_relation_accuracy": 0.7941176470588235
+    },
+    "wrong_scene_prefix": {
+      "count_accuracy": 1.0,
+      "counterfactual_changed_rate": 0.0,
+      "exact_accuracy_delta_vs_primary": 0.0036496350364962904,
+      "grounding_mean_error_m": 1.7023195403821512,
+      "normalized_exact_accuracy": 0.7518248175182481,
+      "source": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/metrics/controls/wrong_scene_prefix.json",
+      "spatial_relation_accuracy": 0.7941176470588235
+    }
+  },
+  "schema_version": 1
+}

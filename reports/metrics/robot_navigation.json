@@ -1,0 +1,67 @@
+{
+  "benchmark_scope": "bounded_numeric_actions_collision_scan_and_reset",
+  "checks": {
+    "bounded_look_succeeded": true,
+    "bounded_turn_succeeded": true,
+    "collision_rejected_atomically": true,
+    "free_space_move_succeeded": true,
+    "mcp_structured_call_succeeded": true,
+    "mcp_tools_registered": true,
+    "numeric_start_state": true,
+    "reset_restores_episode": true,
+    "scan_updated_scene": true,
+    "stop_blocks_motion": true,
+    "turn_limit_rejected": true
+  },
+  "final_state": {
+    "action_count": 0,
+    "angular_velocity_degrees": 0.0,
+    "body_yaw_degrees": 0.0,
+    "camera_position_m": [
+      0.0,
+      0.0,
+      1.2
+    ],
+    "camera_yaw_degrees": 0.0,
+    "clearance_m": null,
+    "collision": false,
+    "distance_moved": 0.0,
+    "error_code": null,
+    "last_movement_delta_m": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "linear_velocity_xy_m": [
+      0.0,
+      0.0
+    ],
+    "observation_id": null,
+    "pitch_degrees": 0.0,
+    "position_m": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scan_count": 0,
+    "scan_coverage": 0.0,
+    "scene_id": "scene_000001",
+    "scene_version": 0,
+    "seed": 20260808,
+    "stopped": false,
+    "success": true,
+    "turn_degrees": 0.0,
+    "visible_voxels": 0
+  },
+  "map_source": "numeric_voxel_map",
+  "mcp_sdk_version": "2.0.0",
+  "mcp_tool_count": 9,
+  "metadata_or_labels_loaded": false,
+  "pass_rate": 1.0,
+  "passed": 11,
+  "scene_id": "scene_000001",
+  "schema_version": 1,
+  "semantic_target_navigation_evaluated": false,
+  "total": 11,
+  "trajectory_steps": 15
+}

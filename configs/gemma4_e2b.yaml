@@ -1,0 +1,53 @@
+_base_: default.yaml
+
+# Isolated candidate data prevents Gemma features/maps/checkpoints from
+# overwriting the preserved CLIP/Qwen artifacts.
+paths:
+  # Sanitized renders, oracle supervision, and QA splits remain in their
+  # existing roots. Gemma-derived runtime artifacts are physically isolated.
+  data_root: data
+  features_root: data_gemma4/features
+  maps_root: data_gemma4/maps
+  checkpoints_root: data_gemma4/checkpoints
+  reports_root: reports/gemma4
+
+vision:
+  backend: gemma4
+  model_id: google/gemma-4-E2B-it
+  revision: 3e22461f65e89153144f8adb70e3b8c2cc9845a7
+  # The source RGB/depth frame stays 224x224. Gemma's official processor
+  # resizes the complete square image to 768x768 without cropping, producing
+  # 48x48 pre-pool tokens. Geometry samples this grid back in normalized image
+  # coordinates against the original 224x224 metric depth.
+  input_size: 224
+  middle_layer: 8
+  late_layer: 16
+  feature_mode: middle_late_projected
+  aligned_method: pooled_native_projector_broadcast
+  # MPS compute uses BF16; portable cached dense features use NumPy FP16.
+  dtype: bfloat16
+  storage_dtype: float16
+  batch_size: 1
+
+language:
+  backend: gemma4
+  model_id: google/gemma-4-E2B-it
+  revision: 3e22461f65e89153144f8adb70e3b8c2cc9845a7
+  dtype: bfloat16
+
+scene_encoder:
+  # The final 1536 feature dimensions are outputs of Gemma's trained
+  # embed_vision projector and already inhabit the decoder embedding space.
+  # Pool every voxel into all fixed spatial anchors without query retrieval.
+  language_aligned_tail_dim: 1536
+  native_aligned_coverage_scale: 1.0
+  # Match the learned path to native Gemma visual-token RMS before applying a
+  # small residual scale; this prevents a ~50x norm mismatch from dominating.
+  learned_scene_token_scale: 0.1
+  learned_scene_token_rms_target: 0.65
+
+training:
+  output_namespace: gemma4_e2b
+  # The 4.6B-parameter frozen text decoder dominates activation memory. Only
+  # training enables recomputation; chat/evaluation loaders keep it disabled.
+  language_decoder_gradient_checkpointing: true

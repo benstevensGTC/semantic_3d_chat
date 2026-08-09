@@ -1,0 +1,12 @@
+_base_: gemma4_color_wiring_v4.yaml
+
+# Balance every optimizer update over the complete six-unit color-swap
+# curriculum. v4 updated once per unit, so the last hard target could undo a
+# previously correct target. Keeping one unit per decoder microbatch preserves
+# the measured 24 GB MPS memory envelope; accumulating all six gradients makes
+# the update globally balanced without retaining six decoder graphs at once.
+training:
+  output_namespace: gemma4_color_wiring_v5
+  pair_units_per_batch: 1
+  pair_steps_per_epoch: 6
+  gradient_accumulation: 6

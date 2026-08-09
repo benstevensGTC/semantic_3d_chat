@@ -1,0 +1,126 @@
+{
+  "schema_version": 1,
+  "strategy": "paired_expected_change_then_least_represented_answer_type_v1",
+  "train": {
+    "schema_version": 1,
+    "available_count": 82,
+    "selected_count": 82,
+    "available_by_scene": {
+      "scene_000003": {
+        "count": 6,
+        "answer_types": {
+          "attribute": 6
+        },
+        "counterfactual_pair_ids": [
+          "pair_000001"
+        ],
+        "expected_change_key_count": 6
+      },
+      "scene_000004": {
+        "count": 6,
+        "answer_types": {
+          "attribute": 6
+        },
+        "counterfactual_pair_ids": [
+          "pair_000001"
+        ],
+        "expected_change_key_count": 6
+      },
+      "scene_000007": {
+        "count": 35,
+        "answer_types": {
+          "spatial_relation": 35
+        },
+        "counterfactual_pair_ids": [
+          "pair_000003"
+        ],
+        "expected_change_key_count": 35
+      },
+      "scene_000008": {
+        "count": 35,
+        "answer_types": {
+          "spatial_relation": 35
+        },
+        "counterfactual_pair_ids": [
+          "pair_000003"
+        ],
+        "expected_change_key_count": 35
+      }
+    },
+    "selected_by_scene": {
+      "scene_000003": {
+        "count": 6,
+        "answer_types": {
+          "attribute": 6
+        },
+        "counterfactual_pair_ids": [
+          "pair_000001"
+        ],
+        "expected_change_key_count": 6
+      },
+      "scene_000004": {
+        "count": 6,
+        "answer_types": {
+          "attribute": 6
+        },
+        "counterfactual_pair_ids": [
+          "pair_000001"
+        ],
+        "expected_change_key_count": 6
+      },
+      "scene_000007": {
+        "count": 35,
+        "answer_types": {
+          "spatial_relation": 35
+        },
+        "counterfactual_pair_ids": [
+          "pair_000003"
+        ],
+        "expected_change_key_count": 35
+      },
+      "scene_000008": {
+        "count": 35,
+        "answer_types": {
+          "spatial_relation": 35
+        },
+        "counterfactual_pair_ids": [
+          "pair_000003"
+        ],
+        "expected_change_key_count": 35
+      }
+    },
+    "selected_ids_sha256": "197b0f471515f07be4ce579b7e24dd03e67736d0f43a0120ed2eae8c8f953781",
+    "expected_change_units_selected": 41,
+    "expected_change_units_complete": 41,
+    "expected_change_units_incomplete": 0
+  },
+  "validation": null,
+  "train_scene_ids": [
+    "scene_000003",
+    "scene_000004",
+    "scene_000007",
+    "scene_000008"
+  ],
+  "validation_scene_ids": [],
+  "test_scene_ids": [
+    "scene_000005",
+    "scene_000006"
+  ],
+  "training_counterfactual_pair_count": 2,
+  "training_counterfactual_pair_membership_sha256": "99ee448c23fb71b7269a353a54b2156ac55701847af170597dcc351af15cbcbe",
+  "counterfactual_pair_unit_count": 41,
+  "pair_curriculum": {
+    "enabled": true,
+    "pair_only": true,
+    "pair_only_scene_ids": [
+      "scene_000003",
+      "scene_000004",
+      "scene_000007",
+      "scene_000008"
+    ],
+    "batch_fraction": 1.0,
+    "units_per_batch": 1,
+    "ranking_margin": 0.5,
+    "ranking_weight": 8.0
+  }
+}

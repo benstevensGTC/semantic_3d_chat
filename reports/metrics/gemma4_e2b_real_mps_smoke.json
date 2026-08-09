@@ -1,0 +1,70 @@
+{
+  "format_version": 1,
+  "status": "passed",
+  "model": "google/gemma-4-E2B-it",
+  "revision": "3e22461f65e89153144f8adb70e3b8c2cc9845a7",
+  "checkpoint_access": {
+    "local_files_only": true,
+    "ungated_download": true,
+    "license": "apache-2.0"
+  },
+  "hardware": {
+    "platform": "Apple Silicon M4 Pro",
+    "unified_memory_gib": 24,
+    "device": "mps:0",
+    "dtype": "torch.bfloat16"
+  },
+  "load": {
+    "seconds": 3.007179500069469,
+    "mps_current_allocated_gib_after_probe": 0.1023869514465332,
+    "mps_driver_allocated_gib_after_probe": 10.566146850585938,
+    "process_max_rss_gib": 9.579116821289062,
+    "time_peak_memory_footprint_bytes": 12723659944
+  },
+  "full_image_vision": {
+    "scene_id": "scene_000001",
+    "frame_id": "f_000000",
+    "vision_forward_calls": 1,
+    "encoder_input_shape": [1, 2520, 768],
+    "position_id_shape": [1, 2520, 2],
+    "valid_pre_pool_patch_tokens": 2304,
+    "pre_pool_grid_hw": [48, 48],
+    "hidden_layer_count_including_input_and_post_pool": 17,
+    "pre_pool_hidden_shape": [1, 2520, 768],
+    "post_pool_hidden_shape": [256, 768],
+    "post_pool_grid_hw": [16, 16],
+    "middle_spatial_variance": 9.481629371643066,
+    "late_spatial_variance": 402.4288635253906,
+    "finite": true,
+    "seconds": 0.98422870808281,
+    "manual_crops_or_patch_reencoding": false
+  },
+  "continuous_prefix_decoder": {
+    "scene_prefix_shape": [1, 8, 1536],
+    "scene_prefix_source": "arbitrary_random_capability_probe",
+    "environmental_text_in_prefix": false,
+    "explicit_per_layer_input_shape": [1, 15, 35, 256],
+    "scene_ple_identity": "pad_token_native_multimodal_convention",
+    "first_logits_shape": [1, 1, 262144],
+    "cache_length_before_increment": 15,
+    "cache_length_after_increment": 16,
+    "finite": true,
+    "seconds_for_two_decoder_steps": 2.3725268749985844
+  },
+  "direct_image_baseline_smoke": {
+    "primary_path": false,
+    "input_complete_images": 1,
+    "input_tokens": 284,
+    "new_tokens": 64,
+    "generation_seconds": 4.205612415913492,
+    "response": "Here are the visible physical objects and their colors:\n\n* Wall: Off-white/Beige\n* Picture Frame: Brown (frame) and Yellow/Beige (matting/inside)\n* Floor: White/Light Gray\n* Furniture (Table/Bench): Light brown/...",
+    "response_truncated_at_max_new_tokens": true
+  },
+  "interpretation": {
+    "checkpoint_compatible_with_mac": true,
+    "dense_patch_contract_passed": true,
+    "continuous_prefix_contract_passed": true,
+    "trained_3d_scene_understanding_demonstrated": false,
+    "note": "This is a real-weight hardware and interface smoke test, not a static-scene QA result. The learned 3D adapter and held-out controls remain separate gates."
+  }
+}

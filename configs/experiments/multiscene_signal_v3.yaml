@@ -1,0 +1,17 @@
+_base_: multiscene.yaml
+
+# Strong scene-content path used after the v2 diagnostic showed that a large
+# fixed slot identity still dominated the spatially anchored coverage signal.
+scene_encoder:
+  coverage_temperature: 0.20
+  coverage_scale: 16.0
+  query_identity_scale: 0.05
+  projection_skip_scale: 4.0
+
+training:
+  output_namespace: multiscene_signal_v3
+  latent_diversity_weight: 0.10
+  latent_diversity_cosine_margin: 0.20
+  latent_diversity_max_latents: 128
+  paired_scene_separation_weight: 20.0
+  paired_scene_cosine_distance_margin: 0.05

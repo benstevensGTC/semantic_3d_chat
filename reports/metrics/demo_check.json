@@ -1,0 +1,208 @@
+{
+  "artifacts": {
+    "checkpoint": {
+      "adapter": {
+        "bytes": 35200504,
+        "path": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data/checkpoints/pair_gate_discriminative/best/adapter.safetensors",
+        "tensor_count": 91
+      },
+      "architecture_version": "signal_preserving_resampler_v3",
+      "config_hash_matches": false,
+      "epoch": 1,
+      "output_namespace": "pair_gate_discriminative",
+      "path": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data/checkpoints/pair_gate_discriminative/best",
+      "scene_tokenizer_contract": {
+        "language_aligned_tail_dim": null,
+        "learned_scene_token_rms_target": null,
+        "learned_scene_token_scale": null,
+        "native_aligned_coverage_scale": null
+      },
+      "schema_version": 3
+    },
+    "language_model_cache": {
+      "hidden_size": 896,
+      "model_id": "Qwen/Qwen2.5-0.5B-Instruct",
+      "revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+      "snapshot": "/Users/stevens/.cache/huggingface/hub/models--Qwen--Qwen2.5-0.5B-Instruct/snapshots/7ae557604adf67be50417f59c2c2f167def9a775",
+      "weight_files": [
+        "/Users/stevens/.cache/huggingface/hub/models--Qwen--Qwen2.5-0.5B-Instruct/snapshots/7ae557604adf67be50417f59c2c2f167def9a775/model.safetensors"
+      ]
+    },
+    "render_scan": {
+      "frame_count": 24,
+      "image_size": {
+        "height": 224,
+        "width": 224
+      },
+      "path": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data/rendered/scene_000001/manifest.json",
+      "verified_frame_artifact_count": 48
+    },
+    "vision_model_cache": {
+      "hidden_size": 512,
+      "model_id": "openai/clip-vit-base-patch16",
+      "revision": "57c216476eefef5ab752ec549e440a49ae4ae5f3",
+      "snapshot": "/Users/stevens/.cache/huggingface/hub/models--openai--clip-vit-base-patch16/snapshots/57c216476eefef5ab752ec549e440a49ae4ae5f3",
+      "weight_files": [
+        "/Users/stevens/.cache/huggingface/hub/models--openai--clip-vit-base-patch16/snapshots/57c216476eefef5ab752ec549e440a49ae4ae5f3/pytorch_model.bin"
+      ]
+    },
+    "visuals": {
+      "map_point_cloud": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/figures/scene_000001/map_rgb.ply",
+      "map_rgb": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/figures/scene_000001/map_rgb.png",
+      "overview": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data/rendered/scene_000001/p_000000.png"
+    },
+    "voxel_map": {
+      "arrays": {
+        "centers_world.npy": {
+          "dtype": "float32",
+          "shape": [
+            74699,
+            3
+          ]
+        },
+        "confidence.npy": {
+          "dtype": "float32",
+          "shape": [
+            74699
+          ]
+        },
+        "mean_rgb.npy": {
+          "dtype": "float32",
+          "shape": [
+            74699,
+            3
+          ]
+        },
+        "normal.npy": {
+          "dtype": "float32",
+          "shape": [
+            74699,
+            3
+          ]
+        },
+        "observation_count.npy": {
+          "dtype": "int32",
+          "shape": [
+            74699
+          ]
+        },
+        "semantic_features.npy": {
+          "dtype": "float16",
+          "shape": [
+            74699,
+            2048
+          ]
+        }
+      },
+      "bytes": 288771581,
+      "path": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data/maps/scene_000001/voxel_map.npz",
+      "semantic_dim": 2048,
+      "semantic_dtype": "float16",
+      "voxel_count": 74699
+    }
+  },
+  "checkpoint": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data/checkpoints/pair_gate_discriminative/best",
+  "checks": [
+    {
+      "detail": "/opt/homebrew/bin/blender",
+      "name": "executable:blender",
+      "passed": true
+    },
+    {
+      "detail": "/opt/homebrew/bin/uv",
+      "name": "executable:uv",
+      "passed": true
+    },
+    {
+      "detail": "available",
+      "name": "python_package:numpy",
+      "passed": true
+    },
+    {
+      "detail": "available",
+      "name": "python_package:safetensors",
+      "passed": true
+    },
+    {
+      "detail": "available",
+      "name": "python_package:torch",
+      "passed": true
+    },
+    {
+      "detail": "available",
+      "name": "python_package:transformers",
+      "passed": true
+    },
+    {
+      "detail": "available",
+      "name": "python_package:yaml",
+      "passed": true
+    },
+    {
+      "detail": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data/checkpoints/pair_gate_discriminative/best",
+      "name": "checkpoint_contract",
+      "passed": true
+    },
+    {
+      "detail": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data/rendered/scene_000001/manifest.json",
+      "name": "sanitized_render_scan",
+      "passed": true
+    },
+    {
+      "detail": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data/maps/scene_000001/voxel_map.npz",
+      "name": "numeric_voxel_map",
+      "passed": true
+    },
+    {
+      "detail": "map=2048, checkpoint=2048",
+      "name": "map_checkpoint_semantic_dim",
+      "passed": true
+    },
+    {
+      "detail": "openai/clip-vit-base-patch16",
+      "name": "local_model_cache:vision",
+      "passed": true
+    },
+    {
+      "detail": "Qwen/Qwen2.5-0.5B-Instruct",
+      "name": "local_model_cache:language",
+      "passed": true
+    },
+    {
+      "detail": "cache=896, checkpoint=896",
+      "name": "language_cache_checkpoint_hidden_size",
+      "passed": true
+    },
+    {
+      "detail": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data/rendered/scene_000001/p_000000.png",
+      "name": "visual:overview",
+      "passed": true
+    },
+    {
+      "detail": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/figures/scene_000001/map_rgb.png",
+      "name": "visual:map_rgb",
+      "passed": true
+    },
+    {
+      "detail": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/figures/scene_000001/map_rgb.ply",
+      "name": "visual:map_point_cloud",
+      "passed": true
+    }
+  ],
+  "config": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/configs/default.yaml",
+  "device_tensor_created": false,
+  "forbidden_inspected_paths": [],
+  "inference_performed": false,
+  "inspected_paths": [
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/configs/default.yaml",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data/checkpoints/pair_gate_discriminative/best/adapter.safetensors",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data/checkpoints/pair_gate_discriminative/best/metadata.json",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data/maps/scene_000001/voxel_map.npz",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data/rendered/scene_000001/manifest.json"
+  ],
+  "mode": "static_preflight",
+  "output": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/metrics/demo_check.json",
+  "passed": true,
+  "scene_id": "scene_000001",
+  "schema_version": 1
+}

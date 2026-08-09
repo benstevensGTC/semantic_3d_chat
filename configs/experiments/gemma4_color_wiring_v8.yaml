@@ -1,0 +1,19 @@
+_base_: gemma4_color_wiring_v7.yaml
+
+# Controlled fallback after the v7 frozen-decoder gate: keep the complete
+# continuous scene prefix and exact native Gemma image boundaries unchanged,
+# while adapting only the final decoder layer's query/output projections.
+language:
+  lora:
+    enabled: true
+    rank: 4
+    alpha: 8.0
+    dropout: 0.0
+    target_modules:
+      - model.language_model.layers.34.self_attn.q_proj
+      - model.language_model.layers.34.self_attn.o_proj
+
+training:
+  output_namespace: gemma4_color_wiring_v8
+  lora_learning_rate: 0.0001
+  lora_weight_decay: 0.0

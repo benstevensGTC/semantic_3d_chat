@@ -1,0 +1,27 @@
+# Isolated, weight-free Gemma 4 E2B capability environment.
+#
+# Install with:
+#   uv venv --python 3.12 .venv-gemma4
+#   uv pip install --python .venv-gemma4/bin/python -r requirements-gemma4-probe.txt
+#
+# Do not install the main project into this environment: its validated CLIP/Qwen
+# baseline intentionally pins Transformers <5.  Make targets use PYTHONPATH=src
+# so both environments can coexist without changing that baseline.
+accelerate==1.12.0
+huggingface-hub==1.27.0
+matplotlib==3.11.1
+numpy==2.5.1
+pillow==12.1.0
+psutil==7.2.2
+pyyaml==6.0.3
+pytest==8.4.2
+ruff==0.16.2
+safetensors==0.8.0
+scikit-learn==1.9.0
+sentencepiece==0.2.1
+starlette==1.6.0
+torch==2.13.0
+torchvision==0.28.0
+transformers==5.14.1
+typer==0.27.1
+uvicorn==0.52.1

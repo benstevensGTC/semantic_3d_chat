@@ -1,0 +1,12 @@
+_base_: default.yaml
+render:
+  resolution: [160, 160]
+  samples: 16
+mapping:
+  voxel_size_m: 0.075
+  pixel_stride: 2
+  max_voxels: 60000
+scene_encoder:
+  model_dim: 256
+  global_latents: 128
+  heads: 8

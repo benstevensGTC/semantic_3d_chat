@@ -1,0 +1,9 @@
+_base_: default.yaml
+mapping:
+  voxel_size_m: 0.035
+  pixel_stride: 1
+  max_voxels: 250000
+scene_encoder:
+  model_dim: 512
+  global_latents: 512
+  heads: 8

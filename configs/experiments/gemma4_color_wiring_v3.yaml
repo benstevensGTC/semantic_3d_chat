@@ -1,0 +1,11 @@
+_base_: gemma4_color_wiring_v2.yaml
+
+# Training-only target-localized contrastive bridge. Oracle coordinates select
+# the nearest fixed global scene-latent anchor during supervision, then that
+# final continuous scene token is aligned with the frozen Gemma embedding for
+# the correct color instead of its paired alternative. Runtime remains purely
+# continuous and never reads these targets or answer annotations.
+training:
+  output_namespace: gemma4_color_wiring_v3
+  spatial_answer_contrastive_weight: 16.0
+  spatial_answer_contrastive_margin: 0.1

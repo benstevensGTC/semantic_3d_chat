@@ -1,0 +1,44 @@
+{
+  "format_version": 1,
+  "status": "passed",
+  "model": "google/gemma-4-E2B-it",
+  "revision": "3e22461f65e89153144f8adb70e3b8c2cc9845a7",
+  "checkpoint_access": {
+    "local_files_only": true,
+    "checkpoint_format": "single_safetensors",
+    "strict_state_assignment": true
+  },
+  "hardware": {
+    "platform": "Apple Silicon M4 Pro",
+    "unified_memory_gib": 24,
+    "device": "mps:0",
+    "dtype": "torch.bfloat16"
+  },
+  "selected_modules": {
+    "vision_tower_parameters": 167364608,
+    "vision_projector_parameters": 1179648,
+    "total_parameters": 168544256,
+    "language_and_audio_loaded": false
+  },
+  "measurements": {
+    "load_seconds": 1.4624832079280168,
+    "one_complete_image_seconds": 0.4760793331079185,
+    "mps_driver_allocated_gib": 1.362030029296875,
+    "process_max_rss_gib": 1.3544158935546875,
+    "process_max_rss_bytes": 1454292992,
+    "time_peak_memory_footprint_bytes": 2176616008
+  },
+  "tensor_contract": {
+    "encoder_input_shape": [1, 2520, 768],
+    "valid_pre_pool_tokens": 2304,
+    "pre_pool_grid_hw": [48, 48],
+    "pre_pool_hidden_shape": [1, 2520, 768],
+    "post_pool_hidden_shape": [256, 768],
+    "post_pool_grid_hw": [16, 16],
+    "projected_post_pool_shape": [256, 1536],
+    "finite": true,
+    "vision_forward_calls": 1,
+    "manual_crops_or_patch_reencoding": false
+  },
+  "interpretation": "Production mapping needs only the vision tower and native projector. Selective strict loading reduces the measured MPS driver allocation from the full-model probe's 10.57 GiB to 1.36 GiB without changing the dense-token contract."
+}

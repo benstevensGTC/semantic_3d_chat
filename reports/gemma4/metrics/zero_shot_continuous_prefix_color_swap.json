@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "phase": "zero_shot_continuous_prefix_control",
+  "config": "configs/experiments/gemma4_color_wiring.yaml",
+  "runtime_inputs": [
+    "sanitized numeric voxel maps",
+    "continuous scene tokens",
+    "user question"
+  ],
+  "oracle_loaded_by_runtime": false,
+  "question": "What color is the cube? Answer with one color word.",
+  "results": [
+    {
+      "scene_id": "scene_000003",
+      "expected_answer_evaluation_only": "red",
+      "generated_answer": "white",
+      "exact_match": false,
+      "prefix_hash": "41bb84a7751939322ee1cbb9828445e5e7ca7f86f3b11631f4ddae58acefc184",
+      "seconds": 2.676063667051494,
+      "scene_token_rms": 0.45551589131355286
+    },
+    {
+      "scene_id": "scene_000004",
+      "expected_answer_evaluation_only": "blue",
+      "generated_answer": "white",
+      "exact_match": false,
+      "prefix_hash": "faac51bde25e20550f11f417c0ff469afc00422f96be37a7d995cf2a06a99288",
+      "seconds": 1.5194133331533521,
+      "scene_token_rms": 0.45500490069389343
+    }
+  ],
+  "exact_accuracy": 0.0,
+  "counterfactual_answer_changed": false,
+  "conclusion": "The native-aligned 3D prefix is not understood zero-shot; learned adaptation remains necessary."
+}

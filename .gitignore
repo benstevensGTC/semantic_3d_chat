@@ -1,0 +1,54 @@
+.DS_Store
+.env
+.env.*
+!.env.example
+!.env.*.example
+*.pem
+*.key
+*.p12
+.venv/
+.venv-gemma4/
+.cache/
+models/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+*.egg-info/
+
+# Downloaded models and generated experiment data.
+data/oracle/*
+data/rendered/*
+data/features/*
+data/maps/*
+data/scene_tokens/*
+data/qa/*
+data/checkpoints/*
+!data/**/.gitkeep
+
+# Isolated Gemma 4 feature/map/checkpoint artifacts remain local. Small
+# machine-readable metrics are source artifacts and stay reviewable in Git.
+data_gemma4/
+reports/gemma4/*
+!reports/gemma4/metrics/
+reports/gemma4/metrics/*
+!reports/gemma4/metrics/*.json
+!reports/gemma4/final_report.md
+
+# Generated reports remain local except for the small machine-readable summaries.
+# These directories contain nested per-scene/control artifacts, so ignore them
+# recursively rather than only matching files immediately below each directory.
+reports/figures/**
+reports/examples/**
+reports/predictions/**
+
+*.blend
+*.blend1
+*.exr
+*.npy
+*.npz
+*.pt
+*.safetensors
+uv.toml

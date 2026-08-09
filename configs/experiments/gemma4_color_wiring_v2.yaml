@@ -1,0 +1,11 @@
+_base_: gemma4_color_wiring.yaml
+
+# Candidate-logit rerun of the preserved v1 wiring experiment. The learned
+# stream stays present but is downweighted according to the real-map scale
+# sweep, while the native aligned all-voxel coverage stream remains unchanged.
+scene_encoder:
+  learned_scene_token_scale: 0.25
+
+training:
+  output_namespace: gemma4_color_wiring_v2
+  pair_ranking_mode: candidate_logit

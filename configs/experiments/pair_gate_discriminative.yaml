@@ -1,0 +1,20 @@
+_base_: pair_gate.yaml
+
+# Follow-up to the first pair-gate diagnostic. The original run reduced
+# ordinary CE while shared EOS scoring diluted the scene-discriminative margin
+# and left the balanced pair objective at its 0.5 cancellation saddle.
+training:
+  output_namespace: pair_gate_discriminative
+  learning_rate: 0.0003
+  gradient_accumulation: 1
+
+  # Make the scene-conditioned ranking direction dominate the global soft-
+  # prompt CE shortcut. The implementation scores only tokens that differ
+  # between the two candidates; full answer NLL remains the language loss.
+  pair_ranking_weight: 8.0
+
+  # Isolate the language wiring gate from the separately evaluated grounding
+  # head, and preserve projected scene separation on every paired update.
+  grounding_weight: 0.0
+  grounding_anchor_weight: 0.0
+  paired_scene_separation_weight: 20.0
