@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import json
+
 import pytest
 import torch
 
@@ -10,10 +12,13 @@ from semantic_3d_chat.training.checkpointing import (
     save_optimizer_checkpoint,
 )
 from semantic_3d_chat.training.train_adapter import (
+    load_qa_split_dataset,
     select_training_records,
+    split_scene_ids,
     training_artifact_paths,
     training_selection_summary,
     validate_output_namespace,
+    validate_qa_split_membership,
 )
 
 
@@ -50,6 +55,88 @@ def _typed_record(
         counterfactual_role=role,
         counterfactual_change_type="synthetic" if pair_id else None,
     )
+
+
+def _write_split_manifest(tmp_path, splits: dict[str, list[str]]) -> None:
+    tmp_path.joinpath("splits.json").write_text(
+        json.dumps({"splits": splits}), encoding="utf-8"
+    )
+
+
+def _write_records(tmp_path, split_name: str, records: list[QARecord]) -> None:
+    payload = [
+        {
+            "scene_id": record.scene_id,
+            "question_id": record.question_id,
+            "question": record.question,
+            "answer": record.answer,
+            "answer_type": record.answer_type,
+            "target_xyz": record.target_xyz,
+        }
+        for record in records
+    ]
+    tmp_path.joinpath(f"{split_name}.jsonl").write_text(
+        "".join(json.dumps(item) + "\n" for item in payload), encoding="utf-8"
+    )
+
+
+def test_qa_split_membership_rejects_contaminated_train_before_selection(tmp_path) -> None:
+    _write_split_manifest(
+        tmp_path,
+        {
+            "train": ["scene_000001"],
+            "validation": ["scene_000009"],
+            "test": ["scene_000005", "scene_000006"],
+        },
+    )
+    _write_records(
+        tmp_path,
+        "train",
+        [_record("scene_000001", 1), _record("scene_000005", 2)],
+    )
+
+    with pytest.raises(
+        ValueError,
+        match=r"train\.jsonl.*outside splits\.json train set.*scene_000005",
+    ):
+        load_qa_split_dataset(tmp_path, "train")
+
+
+def test_qa_split_membership_rejects_contaminated_validation(tmp_path) -> None:
+    _write_split_manifest(
+        tmp_path,
+        {
+            "train": ["scene_000001"],
+            "validation": ["scene_000009"],
+            "test": ["scene_000005"],
+        },
+    )
+    _write_records(
+        tmp_path,
+        "validation",
+        [_record("scene_000009", 1), _record("scene_000001", 2)],
+    )
+
+    with pytest.raises(
+        ValueError,
+        match=r"validation\.jsonl.*outside splits\.json validation set.*scene_000001",
+    ):
+        load_qa_split_dataset(tmp_path, "validation")
+
+
+def test_qa_split_membership_preserves_manifest_free_legacy_fallback(tmp_path) -> None:
+    records = [_record("scene_000011", 1)]
+    _write_records(tmp_path, "train", records)
+
+    dataset = load_qa_split_dataset(tmp_path, "train")
+
+    assert dataset.records == records
+    assert split_scene_ids(tmp_path, dataset.records) == {
+        "train": ["scene_000011"],
+        "validation": [],
+        "test": [],
+    }
+    validate_qa_split_membership(tmp_path, "train", dataset.records)
 
 
 def test_per_scene_question_cap_is_deterministic_and_balanced() -> None:

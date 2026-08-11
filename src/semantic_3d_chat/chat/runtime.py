@@ -39,6 +39,12 @@ from semantic_3d_chat.language.prefix_injection import (
     scene_prefix_after_bos_contract_mismatch,
     scene_prefix_after_bos_setting,
 )
+from semantic_3d_chat.scene_encoder.dense_alignment import (
+    DenseAlignmentResidual,
+    construct_dense_alignment,
+    dense_alignment_settings,
+    validate_dense_alignment_state,
+)
 from semantic_3d_chat.scene_encoder.global_residual import (
     ZERO_SPATIAL_MEAN_CONTENT_GATE_V1,
     GlobalSceneResidual,
@@ -56,8 +62,10 @@ from semantic_3d_chat.scene_encoder.signed_x_dispatch import (
     signed_x_scene_residual_settings,
 )
 from semantic_3d_chat.training.checkpointing import (
+    RUNTIME_METADATA_FILENAME,
     load_adapter_checkpoint,
     module_collection_state_sha256,
+    validate_runtime_checkpoint_metadata,
 )
 from semantic_3d_chat.training.losses import QuestionGroundingHead, denormalize_xyz
 
@@ -75,6 +83,25 @@ _SCENE_TOKENIZER_CONTRACT_DEFAULTS: dict[str, int | float | None] = {
     "learned_scene_token_scale": 1.0,
     "learned_scene_token_rms_target": None,
 }
+_DENSE_ALIGNMENT_RUNTIME_REQUIRED_KEYS = frozenset(
+    {
+        "dense_alignment",
+        "dense_alignment_parameter_count",
+        "dense_alignment_initial_state_sha256",
+        "dense_alignment_state_sha256",
+        "all_voxels_transformed",
+    }
+)
+_DENSE_ALIGNMENT_TRAINING_ONLY_KEYS = frozenset(
+    {
+        "dense_alignment_zero_output_equivalence",
+        "dense_alignment_calibration",
+        "dense_alignment_optimizer",
+    }
+)
+_DENSE_ALIGNMENT_METADATA_KEYS = (
+    _DENSE_ALIGNMENT_RUNTIME_REQUIRED_KEYS | _DENSE_ALIGNMENT_TRAINING_ONLY_KEYS
+)
 
 
 @dataclass(frozen=True)
@@ -104,13 +131,23 @@ def _guard_runtime_input(path: str | Path, purpose: str) -> Path:
 
 
 def _read_checkpoint_metadata(checkpoint: Path, audit: FileAccessAudit | None) -> dict[str, Any]:
-    metadata_path = _guard_runtime_input(checkpoint / "metadata.json", "checkpoint metadata")
+    unresolved = checkpoint / RUNTIME_METADATA_FILENAME
+    if unresolved.is_symlink():
+        raise ValueError("Runtime checkpoint metadata must not be a symbolic link")
+    if not unresolved.is_file():
+        raise FileNotFoundError(f"Runtime checkpoint metadata is missing: {unresolved}")
+    metadata_path = _guard_runtime_input(
+        unresolved, "runtime checkpoint metadata"
+    )
+    if metadata_path.name != RUNTIME_METADATA_FILENAME:
+        raise ValueError("Runtime checkpoint metadata resolved to a forbidden filename")
     if audit is not None:
         audit.record(metadata_path)
     with metadata_path.open("r", encoding="utf-8") as handle:
         metadata = json.load(handle)
     if not isinstance(metadata, dict):
         raise TypeError("Checkpoint metadata must be a JSON object")
+    validate_runtime_checkpoint_metadata(metadata)
     return metadata
 
 
@@ -223,16 +260,24 @@ def _signed_x_frozen_base_provenance_mismatch(
 
     provenance = metadata.get("initialization_provenance")
     signed_initial_hash = metadata.get("signed_x_scene_residual_initial_state_sha256")
+    signed_hash = metadata.get("signed_x_scene_residual_state_sha256")
+    frozen_signed_hash = metadata.get("frozen_signed_x_scene_residual_state_sha256")
+    if frozen_signed_hash is not None and frozen_signed_hash != signed_hash:
+        mismatch["frozen_signed_x_scene_residual_state_sha256"] = {
+            "checkpoint": frozen_signed_hash,
+            "required": signed_hash,
+        }
     required_provenance = {
-        "schema_version": 4,
-        "mode": "frozen_v18_residual_base_plus_zero_output_signed_x_residual",
+        "schema_version": 1,
         "source_global_scene_residual_state_sha256": base_hash,
-        "expected_source_global_scene_residual_state_sha256": base_hash,
+        "source_signed_x_scene_residual_state_sha256": signed_hash,
         "global_scene_residual_frozen": True,
+        "signed_x_scene_residual_frozen": (
+            True if frozen_signed_hash is not None else None
+        ),
         "signed_x_scene_residual_initial_state_sha256": signed_initial_hash,
-        "signed_x_scene_residual_zero_output": True,
-        "optimizer_state_loaded": False,
-        "history_loaded": False,
+        "signed_x_zero_output_transition_verified": True,
+        "question_dependent_scene_processing": False,
     }
     if not isinstance(provenance, dict):
         mismatch["initialization_provenance"] = {
@@ -247,11 +292,6 @@ def _signed_x_frozen_base_provenance_mismatch(
         }
         if provenance_mismatch:
             mismatch["initialization_provenance"] = provenance_mismatch
-    if metadata.get("train_signed_x_scene_residual_only") is not True:
-        mismatch["train_signed_x_scene_residual_only"] = {
-            "checkpoint": metadata.get("train_signed_x_scene_residual_only"),
-            "required": True,
-        }
     return mismatch or None
 
 
@@ -263,6 +303,7 @@ def validate_checkpoint_contract(
     language_hidden_dim: int,
     lora_parameter_count: int = 0,
     lora_parameter_counts: dict[str, int] | None = None,
+    dense_alignment_parameter_count: int = 0,
 ) -> list[str]:
     """Enforce adapter-shape compatibility while surfacing unrelated config drift."""
 
@@ -282,6 +323,14 @@ def validate_checkpoint_contract(
     residual_contract = residual_settings.contract()
     signed_x_settings = signed_x_scene_residual_settings(config)
     signed_x_contract = signed_x_settings.contract()
+    dense_settings = dense_alignment_settings(config)
+    dense_contract = dense_settings.contract()
+    checkpoint_dense_keys = sorted(_DENSE_ALIGNMENT_METADATA_KEYS & metadata.keys())
+    if not dense_settings.enabled and checkpoint_dense_keys:
+        raise ValueError(
+            "Checkpoint contains dense-alignment metadata while runtime dense alignment "
+            f"is disabled: {checkpoint_dense_keys}"
+        )
     checkpoint_signed_x_contract = metadata.get("signed_x_scene_residual")
     checkpoint_signed_x_enabled = bool(
         isinstance(checkpoint_signed_x_contract, dict)
@@ -315,10 +364,12 @@ def validate_checkpoint_contract(
                 "signed_x_scene_residual_zero_output_equivalence",
                 "frozen_global_scene_residual_state_sha256",
                 "initialization_provenance",
-                "train_signed_x_scene_residual_only",
                 "question_dependent_scene_processing",
             }
         )
+    if dense_settings.enabled:
+        required.update(_DENSE_ALIGNMENT_RUNTIME_REQUIRED_KEYS)
+        required.add("question_dependent_scene_processing")
     missing = sorted(required - metadata.keys())
     if missing:
         raise ValueError(f"Checkpoint metadata is missing required fields: {missing}")
@@ -369,6 +420,49 @@ def validate_checkpoint_contract(
             "checkpoint": metadata.get("signed_x_scene_residual"),
             "runtime": signed_x_contract,
         }
+    if dense_settings.enabled:
+        if metadata.get("dense_alignment") != dense_contract:
+            mismatches["dense_alignment"] = {
+                "checkpoint": metadata.get("dense_alignment"),
+                "runtime": dense_contract,
+            }
+        if (
+            isinstance(dense_alignment_parameter_count, bool)
+            or not isinstance(dense_alignment_parameter_count, int)
+            or dense_alignment_parameter_count < 1
+        ):
+            raise ValueError("Enabled dense alignment requires a positive runtime parameter count")
+        if metadata.get("dense_alignment_parameter_count") != (dense_alignment_parameter_count):
+            mismatches["dense_alignment_parameter_count"] = {
+                "checkpoint": metadata.get("dense_alignment_parameter_count"),
+                "runtime": dense_alignment_parameter_count,
+            }
+        if metadata.get("dense_alignment_initial_state_sha256") != (
+            dense_settings.expected_initial_state_sha256
+        ):
+            mismatches["dense_alignment_initial_state_sha256"] = {
+                "checkpoint": metadata.get("dense_alignment_initial_state_sha256"),
+                "runtime": dense_settings.expected_initial_state_sha256,
+            }
+        dense_state_hash = metadata.get("dense_alignment_state_sha256")
+        if (
+            not isinstance(dense_state_hash, str)
+            or re.fullmatch(r"[0-9a-f]{64}", dense_state_hash) is None
+        ):
+            mismatches["dense_alignment_state_sha256"] = {
+                "checkpoint": dense_state_hash,
+                "runtime": "<required-lowercase-sha256>",
+            }
+        if metadata.get("all_voxels_transformed") is not True:
+            mismatches["all_voxels_transformed"] = {
+                "checkpoint": metadata.get("all_voxels_transformed"),
+                "runtime": True,
+            }
+        if metadata.get("question_dependent_scene_processing") is not False:
+            mismatches["question_dependent_scene_processing"] = {
+                "checkpoint": metadata.get("question_dependent_scene_processing"),
+                "runtime": False,
+            }
     signed_x_base_provenance_mismatch = None
     if signed_x_contract["enabled"]:
         if not residual_contract["enabled"]:
@@ -531,6 +625,7 @@ class StaticChatRuntime:
         language: LocalLanguageModel,
         map_data: MapTensorData,
         scene_model: SceneTokenizer,
+        dense_aligner: DenseAlignmentResidual | None = None,
         global_scene_residual: GlobalSceneResidual | None = None,
         signed_x_scene_residual: SignedXSceneResidual | None = None,
         composer: ContinuousPrefixComposer,
@@ -547,6 +642,47 @@ class StaticChatRuntime:
         self.language = language
         self.map_data = map_data
         self.scene_model = scene_model.eval()
+        dense_settings = dense_alignment_settings(config)
+        if dense_settings.enabled != (dense_aligner is not None):
+            raise ValueError(
+                "Runtime dense-aligner construction does not match the configured enabled state"
+            )
+        self.dense_aligner = None if dense_aligner is None else dense_aligner.eval()
+        if self.dense_aligner is not None:
+            required_dense_metadata = _DENSE_ALIGNMENT_RUNTIME_REQUIRED_KEYS | {
+                "question_dependent_scene_processing"
+            }
+            missing_dense_metadata = sorted(
+                required_dense_metadata - self.checkpoint_metadata.keys()
+            )
+            if missing_dense_metadata:
+                raise ValueError(
+                    f"Runtime dense-alignment metadata is incomplete: {missing_dense_metadata}"
+                )
+            if self.checkpoint_metadata.get("dense_alignment") != dense_settings.contract():
+                raise ValueError("Runtime dense-alignment checkpoint contract mismatch")
+            if self.checkpoint_metadata.get("dense_alignment_initial_state_sha256") != (
+                dense_settings.expected_initial_state_sha256
+            ):
+                raise ValueError("Runtime dense-alignment initial-state contract mismatch")
+            dense_audit = validate_dense_alignment_state(
+                self.dense_aligner,
+                expected_parameter_count=self.checkpoint_metadata.get(
+                    "dense_alignment_parameter_count"
+                ),
+                context="runtime device initialization",
+            )
+            expected_dense_hash = self.checkpoint_metadata.get("dense_alignment_state_sha256")
+            if dense_audit["state_sha256"] != expected_dense_hash:
+                raise ValueError(
+                    "Dense-alignment state mismatch or tamper detected during runtime "
+                    f"initialization: checkpoint={expected_dense_hash} "
+                    f"runtime={dense_audit['state_sha256']}"
+                )
+            if self.checkpoint_metadata.get("all_voxels_transformed") is not True:
+                raise ValueError("Dense-alignment checkpoint must transform all voxels")
+            if self.checkpoint_metadata.get("question_dependent_scene_processing") is not False:
+                raise ValueError("Dense alignment must remain question-independent")
         self.global_scene_residual = (
             None if global_scene_residual is None else global_scene_residual.eval()
         )
@@ -669,6 +805,21 @@ class StaticChatRuntime:
                 "Checkpoint semantic dimension does not match the numeric voxel map: "
                 f"{metadata.get('semantic_dim')} != {map_data.feature_dim}"
             )
+        dense_aligner = construct_dense_alignment(config, semantic_dim=map_data.feature_dim)
+        if dense_aligner is not None:
+            dense_initial_audit = validate_dense_alignment_state(
+                dense_aligner,
+                context="runtime deterministic construction",
+            )
+            expected_initial_dense_hash = dense_alignment_settings(
+                config
+            ).expected_initial_state_sha256
+            if dense_initial_audit["state_sha256"] != expected_initial_dense_hash:
+                raise ValueError(
+                    "Dense-alignment deterministic initial-state mismatch: "
+                    f"configured={expected_initial_dense_hash} "
+                    f"runtime={dense_initial_audit['state_sha256']}"
+                )
 
         language = load_local_language_model(
             str(config["language"]["model_id"]),
@@ -704,6 +855,9 @@ class StaticChatRuntime:
             ),
             lora_parameter_counts=(
                 {} if lora_installation is None else lora_installation.parameter_counts
+            ),
+            dense_alignment_parameter_count=(
+                0 if dense_aligner is None else dense_aligner.parameter_count
             ),
         )
         scene_model = construct_scene_tokenizer(config, map_data.feature_dim, language.hidden_size)
@@ -771,6 +925,8 @@ class StaticChatRuntime:
             "grounding": grounding,
         }
         checkpoint_modules = dict(scene_checkpoint_modules)
+        if dense_aligner is not None:
+            checkpoint_modules["dense_aligner"] = dense_aligner
         if global_scene_residual is not None:
             checkpoint_modules["global_scene_residual"] = global_scene_residual
         if signed_x_scene_residual is not None:
@@ -781,6 +937,7 @@ class StaticChatRuntime:
             checkpoint_path,
             checkpoint_modules,
             device="cpu",
+            metadata_filename=RUNTIME_METADATA_FILENAME,
         )
         if loaded_metadata != metadata:
             raise RuntimeError("Checkpoint metadata changed while the runtime was loading")
@@ -796,6 +953,19 @@ class StaticChatRuntime:
         if lora_installation is not None:
             validate_lora_banks_checkpoint_state(metadata, lora_installation)
             language.model.requires_grad_(False)
+        if dense_aligner is not None:
+            dense_loaded_audit = validate_dense_alignment_state(
+                dense_aligner,
+                expected_parameter_count=metadata.get("dense_alignment_parameter_count"),
+                context="runtime checkpoint load",
+            )
+            expected_dense_state_hash = metadata.get("dense_alignment_state_sha256")
+            if dense_loaded_audit["state_sha256"] != expected_dense_state_hash:
+                raise ValueError(
+                    "Dense-alignment state mismatch or tamper detected: "
+                    f"checkpoint={expected_dense_state_hash} "
+                    f"runtime={dense_loaded_audit['state_sha256']}"
+                )
         observed_residual_hash = None
         if global_scene_residual is not None:
             _validate_global_scene_residual_state(
@@ -835,6 +1005,8 @@ class StaticChatRuntime:
                 )
         device = language.device
         scene_model = scene_model.to(device)
+        if dense_aligner is not None:
+            dense_aligner = dense_aligner.to(device)
         if global_scene_residual is not None:
             global_scene_residual = global_scene_residual.to(device)
         if signed_x_scene_residual is not None:
@@ -850,6 +1022,7 @@ class StaticChatRuntime:
             language=language,
             map_data=map_data,
             scene_model=scene_model,
+            dense_aligner=dense_aligner,
             global_scene_residual=global_scene_residual,
             signed_x_scene_residual=signed_x_scene_residual,
             composer=composer,
@@ -860,8 +1033,21 @@ class StaticChatRuntime:
 
     def _encode_complete_scene(self) -> SceneTokenizerOutput:
         data = self.map_data
+        semantic = data.semantic
+        if self.dense_aligner is not None:
+            semantic = self.dense_aligner(semantic)
+            if semantic.shape != data.semantic.shape:
+                raise RuntimeError(
+                    "Dense alignment changed the complete semantic-map shape: "
+                    f"input={tuple(data.semantic.shape)} output={tuple(semantic.shape)}"
+                )
+            if not torch.isfinite(semantic).all():
+                raise RuntimeError("Dense alignment produced NaN or infinity")
+            self.dense_alignment_transformed_voxels = int(semantic.shape[0])
+        else:
+            self.dense_alignment_transformed_voxels = 0
         output = self.scene_model(
-            data.semantic,
+            semantic,
             data.xyz,
             data.rgb,
             data.normal,
@@ -933,6 +1119,21 @@ class StaticChatRuntime:
         }
         if "lora" in self.checkpoint_metadata:
             summary["lora"] = self.checkpoint_metadata["lora"]
+        if self.dense_aligner is not None:
+            summary.update(
+                {
+                    "dense_alignment": self.checkpoint_metadata["dense_alignment"],
+                    "dense_alignment_parameter_count": self.dense_aligner.parameter_count,
+                    "dense_alignment_initial_state_sha256": self.checkpoint_metadata[
+                        "dense_alignment_initial_state_sha256"
+                    ],
+                    "dense_alignment_state_sha256": self.dense_aligner.state_sha256(),
+                    "dense_alignment_transformed_voxels": (self.dense_alignment_transformed_voxels),
+                    "all_voxels_transformed": (
+                        self.dense_alignment_transformed_voxels == self.map_data.voxel_count
+                    ),
+                }
+            )
         return summary
 
     def _question_token_count(self, question: str) -> int:

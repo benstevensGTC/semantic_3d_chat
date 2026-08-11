@@ -54,6 +54,12 @@ from semantic_3d_chat.language.prefix_injection import (
     scene_prefix_after_bos_setting,
     stack_prefix_batches,
 )
+from semantic_3d_chat.scene_encoder.dense_alignment import (
+    DenseAlignmentResidual,
+    construct_dense_alignment,
+    dense_alignment_settings,
+    validate_dense_alignment_state,
+)
 from semantic_3d_chat.scene_encoder.global_residual import (
     ZERO_SPATIAL_MEAN_CONTENT_GATE_V1,
     GlobalSceneResidual,
@@ -76,6 +82,10 @@ from semantic_3d_chat.training.checkpointing import (
     module_collection_state_sha256,
     save_adapter_checkpoint,
     save_optimizer_checkpoint,
+)
+from semantic_3d_chat.training.dense_alignment_calibration import (
+    require_dense_alignment_calibration_authorized,
+    run_dense_alignment_calibration_warmup,
 )
 from semantic_3d_chat.training.losses import (
     QuestionGroundingHead,
@@ -172,6 +182,29 @@ def declared_signed_x_scene_residual_parameter_count(
         return None
     if isinstance(value, bool) or not isinstance(value, int) or value <= 0:
         raise ValueError("experiment.signed_x_residual_parameter_count must be a positive integer")
+    return value
+
+
+def declared_dense_alignment_parameter_count(config: Mapping[str, object]) -> int | None:
+    """Return an optional experiment assertion for the dense alignment surface."""
+
+    experiment = config.get("experiment")
+    if experiment is None:
+        return None
+    if not isinstance(experiment, Mapping):
+        raise TypeError("experiment config must be a mapping")
+    canonical_key = "dense_alignment_trainable_parameter_count"
+    legacy_key = "dense_alignment_parameter_count"
+    if canonical_key in experiment and legacy_key in experiment:
+        raise ValueError(
+            "experiment must not declare both dense-alignment parameter-count keys"
+        )
+    key = canonical_key if canonical_key in experiment else legacy_key
+    value = experiment.get(key)
+    if value is None:
+        return None
+    if isinstance(value, bool) or not isinstance(value, int) or value <= 0:
+        raise ValueError(f"experiment.{key} must be a positive integer")
     return value
 
 
@@ -385,6 +418,83 @@ def signed_x_scene_residual_resume_metadata_mismatch(
     return mismatches or None
 
 
+def dense_alignment_resume_metadata_mismatch(
+    metadata: Mapping[str, object],
+    module: DenseAlignmentResidual,
+    *,
+    expected_initial_state_sha256: str,
+) -> dict[str, object] | None:
+    """Compare strict dense-alignment provenance before restoring resume tensors."""
+
+    mismatches: dict[str, object] = {}
+    saved_initial = metadata.get("dense_alignment_initial_state_sha256")
+    if saved_initial != expected_initial_state_sha256:
+        mismatches["dense_alignment_initial_state_sha256"] = {
+            "checkpoint": saved_initial,
+            "runtime": expected_initial_state_sha256,
+        }
+    saved_count = metadata.get("dense_alignment_parameter_count")
+    if saved_count != module.parameter_count:
+        mismatches["dense_alignment_parameter_count"] = {
+            "checkpoint": saved_count,
+            "runtime": module.parameter_count,
+        }
+    return mismatches or None
+
+
+def validate_dense_alignment_calibration_audit(
+    audit: Mapping[str, object],
+    module: DenseAlignmentResidual,
+    *,
+    expected_initial_state_sha256: str,
+    expected_calibration_final_state_sha256: str | None = None,
+) -> None:
+    """Validate immutable calibration provenance before fresh or resumed QA.
+
+    Before QA update one, the module must still equal the calibration-final
+    state.  On resume the module is expected to contain later QA updates, so
+    the immutable calibration hash is instead bound to initialization
+    provenance; the top-level checkpoint state hash independently binds the
+    current module.
+    """
+
+    require_dense_alignment_calibration_authorized(audit)
+    calibration_final = audit.get("final_state_sha256")
+    required_calibration_final = (
+        module.state_sha256()
+        if expected_calibration_final_state_sha256 is None
+        else expected_calibration_final_state_sha256
+    )
+    expected = {
+        "initial_state_sha256": expected_initial_state_sha256,
+        "final_state_sha256": required_calibration_final,
+        "pair_optimizer_state_empty_before_warmup": True,
+        "pair_optimizer_rebuilt_after_warmup": True,
+        "pair_optimizer_state_empty_after_warmup": True,
+        "pair_optimizer_steps_before_qa": 0,
+        "held_out_scene_gradient_access": False,
+        "category_text_prototypes_serialized": False,
+        "oracle_payload_retained": False,
+    }
+    mismatches = {
+        key: {"checkpoint": audit.get(key), "runtime": value}
+        for key, value in expected.items()
+        if audit.get(key) != value
+    }
+    training = audit.get("training")
+    if not isinstance(training, Mapping) or training.get("final_state_sha256") != (
+        calibration_final
+    ):
+        mismatches["training.final_state_sha256"] = {
+            "checkpoint": (
+                None if not isinstance(training, Mapping) else training.get("final_state_sha256")
+            ),
+            "runtime": calibration_final,
+        }
+    if mismatches:
+        raise ValueError(f"Dense-alignment calibration audit mismatch: {mismatches}")
+
+
 def verify_initialization_artifact_hashes(
     checkpoint: Path,
     *,
@@ -569,6 +679,40 @@ def validate_named_lora_freeze_transition_state(
         )
     if any(parameter.requires_grad for parameter in collection.all_parameters()):
         raise RuntimeError("A source LoRA bank remained trainable after freeze transition")
+
+
+def dense_alignment_source_checkpoint_modules(
+    checkpoint_modules: Mapping[str, torch.nn.Module],
+) -> dict[str, torch.nn.Module]:
+    """Exclude only the fresh dense residual from a named-bank source load.
+
+    The source must still populate the complete frozen scene/composer/grounding,
+    global residual, signed-X residual, and named-LoRA stack.  This narrow helper
+    prevents a future source migration from silently dropping another module.
+    """
+
+    expected_fresh_module = "dense_aligner"
+    if expected_fresh_module not in checkpoint_modules:
+        raise ValueError("Dense-alignment source transition requires a fresh dense module")
+    modules = {
+        name: module
+        for name, module in checkpoint_modules.items()
+        if name != expected_fresh_module
+    }
+    required = {
+        "scene_model",
+        "composer",
+        "grounding",
+        "global_scene_residual",
+        "signed_x_scene_residual",
+    }
+    missing = sorted(required - set(modules))
+    if missing:
+        raise ValueError(
+            "Dense-alignment source transition is missing frozen source modules: "
+            f"{missing}"
+        )
+    return modules
 
 
 def named_lora_extension_transition_mismatch(
@@ -1078,11 +1222,42 @@ def build_adapter_optimizer(
     scene_parameters: Sequence[torch.nn.Parameter],
     lora_installation: LoRABankCollection | LoRAInstallation | None,
     configured_lora_optimizer: LoRAOptimizerSettings | None,
+    *,
+    dense_alignment_parameters: Sequence[torch.nn.Parameter] = (),
 ) -> tuple[torch.optim.AdamW, list[torch.nn.Parameter]]:
-    """Build strict scene/LoRA groups, omitting intentionally frozen surfaces."""
+    """Build strict scene/LoRA/dense groups, omitting frozen surfaces."""
 
     scene_parameters = [parameter for parameter in scene_parameters if parameter.requires_grad]
+    dense_alignment_parameters = [
+        parameter for parameter in dense_alignment_parameters if parameter.requires_grad
+    ]
     adamw_options = explicit_adamw_options(config)
+    if dense_alignment_parameters:
+        lora_parameters = [] if lora_installation is None else lora_installation.parameters()
+        if scene_parameters or lora_parameters:
+            raise ValueError(
+                "Dense-alignment-only optimizer cannot include scene or language-LoRA parameters"
+            )
+        learning_rate = float(config["training"]["dense_alignment_learning_rate"])
+        weight_decay = float(config["training"]["dense_alignment_weight_decay"])
+        if not math.isfinite(learning_rate) or learning_rate <= 0.0:
+            raise ValueError("training.dense_alignment_learning_rate must be finite and positive")
+        if not math.isfinite(weight_decay) or weight_decay < 0.0:
+            raise ValueError(
+                "training.dense_alignment_weight_decay must be finite and nonnegative"
+            )
+        optimizer = torch.optim.AdamW(
+            [
+                {
+                    "name": "dense_alignment",
+                    "params": dense_alignment_parameters,
+                    "lr": learning_rate,
+                    "weight_decay": weight_decay,
+                }
+            ],
+            **adamw_options,
+        )
+        return optimizer, dense_alignment_parameters
     if lora_installation is None:
         if not scene_parameters:
             raise ValueError("Adapter optimizer has no trainable parameters")
@@ -1130,6 +1305,20 @@ def build_adapter_optimizer(
     return optimizer, scene_parameters + lora_parameters
 
 
+def parameter_gradient_l2(parameters: Sequence[torch.nn.Parameter]) -> float:
+    """Return the finite FP32 L2 norm over currently populated gradients."""
+
+    squared = 0.0
+    for parameter in parameters:
+        if parameter.grad is None:
+            continue
+        gradient = parameter.grad.detach().float()
+        if not torch.isfinite(gradient).all():
+            raise RuntimeError("Trainable adapter gradient contains NaN or infinity")
+        squared += float(torch.sum(gradient.square()).cpu())
+    return math.sqrt(squared)
+
+
 def scene_token_mixing_settings(config: dict) -> dict[str, int | float | None]:
     settings = config["scene_encoder"]
     return {
@@ -1167,9 +1356,18 @@ def map_forward(
     data: MapTensorData,
     global_scene_residual: GlobalSceneResidual | None = None,
     signed_x_scene_residual: SignedXSceneResidual | None = None,
+    dense_aligner: torch.nn.Module | None = None,
 ):
+    semantic = data.semantic if dense_aligner is None else dense_aligner(data.semantic)
+    if semantic.shape != data.semantic.shape:
+        raise ValueError(
+            "Dense aligner must preserve the complete semantic tensor shape: "
+            f"input={tuple(data.semantic.shape)} output={tuple(semantic.shape)}"
+        )
+    if not torch.isfinite(semantic).all():
+        raise ValueError("Dense aligner produced NaN or infinity")
     output = model(
-        data.semantic,
+        semantic,
         data.xyz,
         data.rgb,
         data.normal,
@@ -1204,6 +1402,7 @@ def training_map_forward(
     freeze_scene_adapter: bool,
     global_scene_residual: GlobalSceneResidual | None = None,
     signed_x_scene_residual: SignedXSceneResidual | None = None,
+    dense_aligner: torch.nn.Module | None = None,
 ):
     """Encode frozen scene tokens without creating inference tensors.
 
@@ -1212,15 +1411,19 @@ def training_map_forward(
     gradients.
     """
 
-    if not freeze_scene_adapter:
+    dense_alignment_trainable = dense_aligner is not None and any(
+        parameter.requires_grad for parameter in dense_aligner.parameters()
+    )
+    if not freeze_scene_adapter or dense_alignment_trainable:
         return map_forward(
             model,
             data,
             global_scene_residual,
             signed_x_scene_residual,
+            dense_aligner,
         )
     with torch.no_grad():
-        output = map_forward(model, data)
+        output = map_forward(model, data, dense_aligner=dense_aligner)
         if signed_x_scene_residual is not None:
             if global_scene_residual is None:
                 raise ValueError("Signed-X scene residual requires the frozen V18 residual base")
@@ -1360,6 +1563,95 @@ def verify_zero_output_signed_x_residual_equivalence(
         "base": "loaded_frozen_global_scene_residual",
         "question_dependent_scene_processing": False,
         "all_scene_slots_accounted": True,
+        "scene_count": len(scene_hashes),
+        "scene_prefixes": scene_hashes,
+    }
+
+
+def verify_zero_output_dense_alignment_equivalence(
+    scene_model: SceneTokenizer,
+    global_scene_residual: GlobalSceneResidual,
+    signed_x_scene_residual: SignedXSceneResidual,
+    dense_aligner: DenseAlignmentResidual,
+    composer: ContinuousPrefixComposer,
+    maps: Mapping[str, MapTensorData],
+    *,
+    model_dtype: torch.dtype,
+) -> dict[str, object]:
+    """Prove a fresh dense residual preserves the complete loaded scene stack.
+
+    This runs before the first question/update.  The source and adapted paths
+    see every voxel and differ only by insertion of the exact-zero dense
+    residual; neither path receives a question or oracle-derived selector.
+    """
+
+    modules: tuple[torch.nn.Module, ...] = (
+        scene_model,
+        global_scene_residual,
+        signed_x_scene_residual,
+        dense_aligner,
+        composer,
+    )
+    previous_modes = tuple(module.training for module in modules)
+    for module in modules:
+        module.eval()
+    scene_hashes: dict[str, dict[str, str]] = {}
+    try:
+        with torch.inference_mode():
+            for scene_id in sorted(maps):
+                data = maps[scene_id]
+                semantic_version = data.semantic._version
+                aligned_semantic = dense_aligner(data.semantic)
+                if not torch.equal(data.semantic, aligned_semantic):
+                    raise RuntimeError(
+                        f"Fresh dense alignment changed update-0 voxel features for {scene_id}"
+                    )
+                if data.semantic._version != semantic_version:
+                    raise RuntimeError(f"Dense alignment mutated the source map for {scene_id}")
+                base = map_forward(
+                    scene_model,
+                    data,
+                    global_scene_residual,
+                    signed_x_scene_residual,
+                )
+                adapted = map_forward(
+                    scene_model,
+                    data,
+                    global_scene_residual,
+                    signed_x_scene_residual,
+                    dense_aligner,
+                )
+                if data.semantic._version != semantic_version:
+                    raise RuntimeError(f"Dense-aligned map forwarding mutated {scene_id}")
+                if not torch.equal(base.scene_tokens, adapted.scene_tokens):
+                    raise RuntimeError(
+                        f"Fresh dense alignment changed update-0 scene tokens for {scene_id}"
+                    )
+                base_prefix = composer.scene_prefix(base.scene_tokens.to(dtype=model_dtype))
+                adapted_prefix = composer.scene_prefix(adapted.scene_tokens.to(dtype=model_dtype))
+                if not torch.equal(base_prefix, adapted_prefix):
+                    raise RuntimeError(
+                        f"Fresh dense alignment changed update-0 prefix for {scene_id}"
+                    )
+                base_hash = prefix_sha256(base_prefix)
+                adapted_hash = prefix_sha256(adapted_prefix)
+                if base_hash != adapted_hash:
+                    raise RuntimeError(
+                        f"Fresh dense alignment changed update-0 prefix hash for {scene_id}"
+                    )
+                scene_hashes[scene_id] = {
+                    "frozen_source_prefix_sha256": base_hash,
+                    "dense_aligned_prefix_sha256": adapted_hash,
+                }
+    finally:
+        for module, was_training in zip(modules, previous_modes, strict=True):
+            module.train(was_training)
+    return {
+        "verified": True,
+        "base": "loaded_frozen_scene_global_signed_x_and_named_lora_stack",
+        "question_dependent_scene_processing": False,
+        "all_voxels_transformed": True,
+        "source_map_mutated": False,
         "scene_count": len(scene_hashes),
         "scene_prefixes": scene_hashes,
     }
@@ -1585,22 +1877,63 @@ def training_artifact_paths(
     )
 
 
+def _persisted_split_scene_ids(qa_root: Path) -> dict[str, list[str]] | None:
+    """Return the persisted split manifest, or ``None`` for legacy datasets."""
+
+    manifest_path = qa_root / "splits.json"
+    if not manifest_path.is_file():
+        return None
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    if not isinstance(manifest, dict):
+        raise TypeError("QA split manifest must be a JSON object")
+    raw_splits = manifest.get("splits")
+    if not isinstance(raw_splits, dict):
+        raise TypeError("QA split manifest must contain a splits mapping")
+    result = {
+        name: sorted(str(scene_id) for scene_id in raw_splits.get(name, []))
+        for name in ("train", "validation", "test")
+    }
+    all_scenes = [scene_id for values in result.values() for scene_id in values]
+    if len(all_scenes) != len(set(all_scenes)):
+        raise ValueError("QA split manifest contains scene leakage")
+    return result
+
+
+def validate_qa_split_membership(
+    qa_root: Path,
+    split_name: str,
+    records: Sequence[QARecord],
+) -> None:
+    """Reject records whose scene is outside their persisted scene-level split."""
+
+    if split_name not in {"train", "validation", "test"}:
+        raise ValueError(f"Unsupported QA split name: {split_name!r}")
+    splits = _persisted_split_scene_ids(qa_root)
+    if splits is None:
+        return
+    allowed = set(splits[split_name])
+    unexpected = sorted({record.scene_id for record in records} - allowed)
+    if unexpected:
+        raise ValueError(
+            f"{split_name}.jsonl contains scenes outside splits.json {split_name} set: "
+            f"{unexpected}"
+        )
+
+
+def load_qa_split_dataset(qa_root: Path, split_name: str) -> SceneQADataset:
+    """Load one QA JSONL and validate all records before selection or filtering."""
+
+    dataset = SceneQADataset(qa_root / f"{split_name}.jsonl")
+    validate_qa_split_membership(qa_root, split_name, dataset.records)
+    return dataset
+
+
 def split_scene_ids(qa_root: Path, train_records: Sequence[QARecord]) -> dict[str, list[str]]:
     """Load the persisted scene-level split manifest for checkpoint provenance."""
 
-    manifest_path = qa_root / "splits.json"
-    if manifest_path.is_file():
-        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-        raw_splits = manifest.get("splits", {})
-        if isinstance(raw_splits, dict):
-            result = {
-                name: sorted(str(scene_id) for scene_id in raw_splits.get(name, []))
-                for name in ("train", "validation", "test")
-            }
-            all_scenes = [scene_id for values in result.values() for scene_id in values]
-            if len(all_scenes) != len(set(all_scenes)):
-                raise ValueError("QA split manifest contains scene leakage")
-            return result
+    persisted = _persisted_split_scene_ids(qa_root)
+    if persisted is not None:
+        return persisted
     return {
         "train": sorted({record.scene_id for record in train_records}),
         "validation": [],
@@ -2940,6 +3273,7 @@ def evaluate_pair_candidate_gate(
     wrong_prefix_flip_threshold: float,
     first_answer_token_top1_accuracy_threshold: float | None = None,
     lora_installation: LoRABankCollection | LoRAInstallation | None = None,
+    dense_aligner: torch.nn.Module | None = None,
 ) -> dict[str, object]:
     """Evaluate all training pair units with the configured deterministic ranking."""
 
@@ -2951,6 +3285,7 @@ def evaluate_pair_candidate_gate(
             scene_model,
             global_scene_residual,
             signed_x_scene_residual,
+            dense_aligner,
             composer,
             grounding,
         )
@@ -2983,6 +3318,7 @@ def evaluate_pair_candidate_gate(
                         maps[scene_id],
                         global_scene_residual,
                         signed_x_scene_residual,
+                        dense_aligner,
                     )
                     for scene_id in scene_ids
                 }
@@ -3083,6 +3419,7 @@ def validation_loss(
     semantic_dim: int,
     batch_size: int,
     lora_installation: LoRABankCollection | LoRAInstallation | None = None,
+    dense_aligner: torch.nn.Module | None = None,
 ) -> dict[str, float] | None:
     """Evaluate held-out teacher-forced loss while loading one scene map at a time."""
 
@@ -3094,6 +3431,7 @@ def validation_loss(
             scene_model,
             global_scene_residual,
             signed_x_scene_residual,
+            dense_aligner,
             composer,
             grounding,
         )
@@ -3129,6 +3467,7 @@ def validation_loss(
                     data,
                     global_scene_residual,
                     signed_x_scene_residual,
+                    dense_aligner,
                 )
                 records = records_by_scene[scene_id]
                 for offset in range(0, len(records), batch_size):
@@ -3195,8 +3534,10 @@ def main() -> None:
     configured_lora_optimizer = lora_banks_optimizer_settings(config, configured_lora)
     residual_settings = global_scene_residual_settings(config)
     signed_x_residual_settings = signed_x_scene_residual_settings(config)
+    dense_settings = dense_alignment_settings(config)
     declared_residual_parameter_count = declared_global_scene_residual_parameter_count(config)
     declared_signed_x_parameter_count = declared_signed_x_scene_residual_parameter_count(config)
+    declared_dense_parameter_count = declared_dense_alignment_parameter_count(config)
     freeze_scene_adapter = config["training"].get("freeze_scene_adapter", False)
     if not isinstance(freeze_scene_adapter, bool):
         raise TypeError("training.freeze_scene_adapter must be a boolean")
@@ -3215,22 +3556,27 @@ def main() -> None:
     )
     if not isinstance(train_lora_with_frozen_scene_residual_stack, bool):
         raise TypeError("training.train_lora_with_frozen_scene_residual_stack must be a boolean")
+    train_dense_alignment_only = config["training"].get("train_dense_alignment_only", False)
+    if not isinstance(train_dense_alignment_only, bool):
+        raise TypeError("training.train_dense_alignment_only must be a boolean")
     exclusive_training_modes = sum(
         (
             train_global_scene_residual_only,
             train_signed_x_scene_residual_only,
             train_lora_with_frozen_scene_residual_stack,
+            train_dense_alignment_only,
         )
     )
     if exclusive_training_modes > 1:
         raise ValueError(
-            "Global-residual-only, signed-X-only, and frozen-residual-stack LoRA "
+            "Global-residual-only, signed-X-only, frozen-residual-stack LoRA, and dense-alignment "
             "training are mutually exclusive"
         )
     if residual_settings.enabled != (
         train_global_scene_residual_only
         or train_signed_x_scene_residual_only
         or train_lora_with_frozen_scene_residual_stack
+        or train_dense_alignment_only
     ):
         raise ValueError(
             "Training residual-base enablement must be explicit and exclusive: "
@@ -3238,17 +3584,27 @@ def main() -> None:
             f"train_global_scene_residual_only={train_global_scene_residual_only} "
             f"train_signed_x_scene_residual_only={train_signed_x_scene_residual_only} "
             "train_lora_with_frozen_scene_residual_stack="
-            f"{train_lora_with_frozen_scene_residual_stack}"
+            f"{train_lora_with_frozen_scene_residual_stack} "
+            f"train_dense_alignment_only={train_dense_alignment_only}"
         )
     if signed_x_residual_settings.enabled != (
-        train_signed_x_scene_residual_only or train_lora_with_frozen_scene_residual_stack
+        train_signed_x_scene_residual_only
+        or train_lora_with_frozen_scene_residual_stack
+        or train_dense_alignment_only
     ):
         raise ValueError(
             "Training signed-X enablement must be explicit and exclusive: "
             f"signed_x_enabled={signed_x_residual_settings.enabled} "
             f"train_signed_x_scene_residual_only={train_signed_x_scene_residual_only} "
             "train_lora_with_frozen_scene_residual_stack="
-            f"{train_lora_with_frozen_scene_residual_stack}"
+            f"{train_lora_with_frozen_scene_residual_stack} "
+            f"train_dense_alignment_only={train_dense_alignment_only}"
+        )
+    if dense_settings.enabled != train_dense_alignment_only:
+        raise ValueError(
+            "Dense-alignment enablement must exactly match its exclusive training mode: "
+            f"dense_alignment_enabled={dense_settings.enabled} "
+            f"train_dense_alignment_only={train_dense_alignment_only}"
         )
     if train_signed_x_scene_residual_only and (
         residual_settings.architecture_version != ZERO_SPATIAL_MEAN_CONTENT_GATE_V1
@@ -3268,6 +3624,15 @@ def main() -> None:
         if not configured_lora.trainable:
             raise ValueError(
                 "Frozen-residual-stack LoRA training requires at least one trainable LoRA bank"
+            )
+    if train_dense_alignment_only:
+        if not freeze_scene_adapter:
+            raise ValueError("Dense-alignment-only training requires a frozen scene adapter")
+        if configured_lora.trainable:
+            raise ValueError("Dense-alignment-only training requires every LoRA bank to be frozen")
+        if residual_settings.architecture_version != ZERO_SPATIAL_MEAN_CONTENT_GATE_V1:
+            raise ValueError(
+                "Dense-alignment-only training requires the centered-content V18 residual base"
             )
     initialize_legacy_lora_into_bank = config["training"].get("initialize_legacy_lora_into_bank")
     if initialize_legacy_lora_into_bank is not None and (
@@ -3306,6 +3671,30 @@ def main() -> None:
             "Named-bank freeze-and-extend transition is exclusive with legacy aliasing and "
             "the residual-only named-bank freeze transition"
         )
+    initialize_named_lora_freeze_for_dense_alignment_transition = config["training"].get(
+        "initialize_named_lora_freeze_for_dense_alignment_transition", False
+    )
+    if not isinstance(initialize_named_lora_freeze_for_dense_alignment_transition, bool):
+        raise TypeError(
+            "training.initialize_named_lora_freeze_for_dense_alignment_transition must be "
+            "a boolean"
+        )
+    if initialize_named_lora_freeze_for_dense_alignment_transition and not (
+        train_dense_alignment_only
+    ):
+        raise ValueError(
+            "Named-LoRA dense-alignment freeze transition is restricted to "
+            "dense-alignment-only training"
+        )
+    if initialize_named_lora_freeze_for_dense_alignment_transition and (
+        initialize_named_lora_freeze_transition
+        or initialize_named_lora_freeze_and_extend_transition
+        or initialize_legacy_lora_into_bank is not None
+    ):
+        raise ValueError(
+            "Dense-alignment source transition is exclusive with every other named/legacy "
+            "LoRA transition"
+        )
     initialize_source_residual_into_frozen_base = config["training"].get(
         "initialize_source_residual_into_frozen_base", False
     )
@@ -3324,6 +3713,13 @@ def main() -> None:
         raise ValueError(
             "Residual-base and named-LoRA freeze-and-extend transitions are mutually exclusive"
         )
+    if (
+        initialize_source_residual_into_frozen_base
+        and initialize_named_lora_freeze_for_dense_alignment_transition
+    ):
+        raise ValueError(
+            "Residual-base and dense-alignment source transitions are mutually exclusive"
+        )
     initialize_expected_adapter_sha256 = optional_sha256_setting(
         config["training"], "initialize_expected_adapter_sha256"
     )
@@ -3341,6 +3737,10 @@ def main() -> None:
         config["training"],
         "initialize_expected_signed_x_scene_residual_state_sha256",
     )
+    initialize_expected_dense_alignment_state_sha256 = optional_sha256_setting(
+        config["training"],
+        "initialize_expected_dense_alignment_state_sha256",
+    )
     if (
         initialize_source_residual_into_frozen_base
         and initialize_expected_global_scene_residual_state_sha256 is None
@@ -3349,15 +3749,36 @@ def main() -> None:
             "Source-residual freeze transition requires "
             "training.initialize_expected_global_scene_residual_state_sha256"
         )
-    if train_lora_with_frozen_scene_residual_stack and (
+    if (train_lora_with_frozen_scene_residual_stack or train_dense_alignment_only) and (
         initialize_expected_scene_state_sha256 is None
         or initialize_expected_global_scene_residual_state_sha256 is None
         or initialize_expected_signed_x_scene_residual_state_sha256 is None
     ):
         raise ValueError(
-            "Frozen-residual-stack LoRA training requires exact source scene, global, and "
-            "signed-X residual state hashes"
+            "Frozen-stack LoRA/dense-alignment training requires exact source scene, global, "
+            "and signed-X residual state hashes"
         )
+    if train_dense_alignment_only and not (
+        initialize_named_lora_freeze_for_dense_alignment_transition
+    ):
+        raise ValueError(
+            "Dense-alignment-only training requires the explicit named-LoRA source freeze "
+            "transition"
+        )
+    if train_dense_alignment_only:
+        if initialize_expected_dense_alignment_state_sha256 is None:
+            raise ValueError(
+                "Dense-alignment-only training requires "
+                "training.initialize_expected_dense_alignment_state_sha256"
+            )
+        if initialize_expected_dense_alignment_state_sha256 != (
+            dense_settings.expected_initial_state_sha256
+        ):
+            raise ValueError(
+                "Configured dense-alignment initialization pins disagree: "
+                f"training={initialize_expected_dense_alignment_state_sha256} "
+                f"scene_encoder={dense_settings.expected_initial_state_sha256}"
+            )
     source_provenance = capture_git_source_provenance(PROJECT_ROOT)
     language_decoder_gradient_checkpointing = config["training"].get(
         "language_decoder_gradient_checkpointing", False
@@ -3375,8 +3796,7 @@ def main() -> None:
         else "pair_candidate_gate_hinge"
     )
     qa_root = artifact_root(config, "qa")
-    qa_path = qa_root / "train.jsonl"
-    dataset = SceneQADataset(qa_path)
+    dataset = load_qa_split_dataset(qa_root, "train")
     if not len(dataset):
         raise SystemExit("Training set is empty; run make generate-dataset")
     available_training_records = list(dataset.records)
@@ -3442,10 +3862,11 @@ def main() -> None:
             not configured_lora.trainable
             and not train_global_scene_residual_only
             and not train_signed_x_scene_residual_only
+            and not train_dense_alignment_only
         ):
             raise ValueError(
                 "Frozen scene adapter requires a trainable LoRA bank or the explicit "
-                "global-scene-residual-only/signed-X-only path"
+                "global-scene-residual-only/signed-X-only/dense-alignment-only path"
             )
     token_mixing = scene_token_mixing_settings(config)
     pair_units = build_exact_question_pair_units(records)
@@ -3513,7 +3934,7 @@ def main() -> None:
     validation_path = qa_root / "validation.jsonl"
     validation_records: list[QARecord] = []
     if validation_path.is_file() and not pair_curriculum.pair_only:
-        validation_dataset = SceneQADataset(validation_path)
+        validation_dataset = load_qa_split_dataset(qa_root, "validation")
         validation_cap = config["training"].get("max_validation_questions_per_scene", per_scene_cap)
         validation_records = select_training_records(
             validation_dataset.records,
@@ -3563,12 +3984,26 @@ def main() -> None:
         "train_lora_with_frozen_scene_residual_stack": (
             train_lora_with_frozen_scene_residual_stack
         ),
+        "train_dense_alignment_only": train_dense_alignment_only,
         "global_scene_residual": residual_settings.contract(),
         "signed_x_scene_residual": signed_x_residual_settings.contract(),
+        "dense_alignment": dense_settings.contract(),
+        "dense_alignment_optimizer": (
+            {
+                "name": "AdamW",
+                "learning_rate": float(config["training"]["dense_alignment_learning_rate"]),
+                "weight_decay": float(config["training"]["dense_alignment_weight_decay"]),
+            }
+            if train_dense_alignment_only
+            else None
+        ),
         "initialize_legacy_lora_into_bank": initialize_legacy_lora_into_bank,
         "initialize_named_lora_freeze_transition": initialize_named_lora_freeze_transition,
         "initialize_named_lora_freeze_and_extend_transition": (
             initialize_named_lora_freeze_and_extend_transition
+        ),
+        "initialize_named_lora_freeze_for_dense_alignment_transition": (
+            initialize_named_lora_freeze_for_dense_alignment_transition
         ),
         "initialize_source_residual_into_frozen_base": (
             initialize_source_residual_into_frozen_base
@@ -3581,6 +4016,9 @@ def main() -> None:
         ),
         "initialize_expected_signed_x_scene_residual_state_sha256": (
             initialize_expected_signed_x_scene_residual_state_sha256
+        ),
+        "initialize_expected_dense_alignment_state_sha256": (
+            initialize_expected_dense_alignment_state_sha256
         ),
         "scene_prefix_after_bos": scene_prefix_after_bos,
         "scene_boundary_mode": scene_boundary_mode,
@@ -3701,6 +4139,31 @@ def main() -> None:
     scene_model = construct_scene_tokenizer(config, semantic_dim, language.hidden_size).to(
         language.device
     )
+    dense_aligner = construct_dense_alignment(config, semantic_dim=semantic_dim)
+    if dense_aligner is not None:
+        dense_aligner = dense_aligner.to(language.device)
+        dense_audit = validate_dense_alignment_state(
+            dense_aligner,
+            expected_parameter_count=declared_dense_parameter_count,
+            context="deterministic construction",
+        )
+        observed_initial_dense_alignment_sha256 = str(dense_audit["state_sha256"])
+        if observed_initial_dense_alignment_sha256 != (
+            dense_settings.expected_initial_state_sha256
+        ):
+            raise ValueError(
+                "Dense-alignment deterministic initial-state hash mismatch: "
+                f"expected={dense_settings.expected_initial_state_sha256} "
+                f"observed={observed_initial_dense_alignment_sha256}"
+            )
+        if not bool(dense_audit["b_exact_zero"]):
+            raise ValueError("Dense alignment is not exact zero-output at initialization")
+    else:
+        if declared_dense_parameter_count is not None:
+            raise ValueError(
+                "experiment dense-alignment parameter count requires enabled dense alignment"
+            )
+        observed_initial_dense_alignment_sha256 = None
     global_scene_residual = construct_global_scene_residual(
         config,
         scene_dim=language.hidden_size,
@@ -3790,6 +4253,19 @@ def main() -> None:
             raise RuntimeError("Frozen-residual-stack LoRA training lost a residual module")
         global_scene_residual.requires_grad_(False).eval()
         signed_x_scene_residual.requires_grad_(False).eval()
+    if train_dense_alignment_only:
+        if (
+            dense_aligner is None
+            or global_scene_residual is None
+            or signed_x_scene_residual is None
+        ):
+            raise RuntimeError("Dense-alignment-only training lost part of its frozen source stack")
+        scene_model.requires_grad_(False).eval()
+        composer.requires_grad_(False).eval()
+        grounding.requires_grad_(False).eval()
+        global_scene_residual.requires_grad_(False).eval()
+        signed_x_scene_residual.requires_grad_(False).eval()
+        dense_aligner.requires_grad_(True).train()
     scene_parameters = (
         list(scene_model.parameters()) + list(composer.parameters()) + list(grounding.parameters())
     )
@@ -3802,6 +4278,9 @@ def main() -> None:
         scene_parameters,
         lora_installation,
         configured_lora_optimizer,
+        dense_alignment_parameters=(
+            () if dense_aligner is None else tuple(dense_aligner.parameters())
+        ),
     )
     if train_global_scene_residual_only:
         assert global_scene_residual is not None
@@ -3840,6 +4319,17 @@ def main() -> None:
             raise RuntimeError(
                 "Frozen-residual-stack optimizer must contain exactly one language-LoRA group"
             )
+    if train_dense_alignment_only:
+        assert dense_aligner is not None
+        expected_trainable_ids = [id(parameter) for parameter in dense_aligner.parameters()]
+        observed_trainable_ids = [id(parameter) for parameter in parameters]
+        if not expected_trainable_ids or observed_trainable_ids != expected_trainable_ids:
+            raise RuntimeError(
+                "Dense-alignment-only optimizer contains a missing, reordered, or unexpected "
+                "parameter"
+            )
+        if [group.get("name") for group in optimizer.param_groups] != ["dense_alignment"]:
+            raise RuntimeError("Dense-alignment-only optimizer must contain exactly one group")
     scene_checkpoint_modules = {
         "scene_model": scene_model,
         "composer": composer,
@@ -3850,6 +4340,8 @@ def main() -> None:
         checkpoint_modules["global_scene_residual"] = global_scene_residual
     if signed_x_scene_residual is not None:
         checkpoint_modules["signed_x_scene_residual"] = signed_x_scene_residual
+    if dense_aligner is not None:
+        checkpoint_modules["dense_aligner"] = dense_aligner
     if lora_installation is not None:
         checkpoint_modules.update(lora_installation.state_modules())
     batch_size = int(config["training"]["batch_size"])
@@ -3882,6 +4374,13 @@ def main() -> None:
             "initialize_named_lora_freeze_and_extend_transition requires initialize_from "
             "for a new run"
         )
+    if initialize_named_lora_freeze_for_dense_alignment_transition and not (
+        initialize_value or resume_value
+    ):
+        raise ValueError(
+            "initialize_named_lora_freeze_for_dense_alignment_transition requires "
+            "initialize_from for a new run"
+        )
     if initialize_source_residual_into_frozen_base and not (initialize_value or resume_value):
         raise ValueError(
             "initialize_source_residual_into_frozen_base requires initialize_from for a new run"
@@ -3890,6 +4389,8 @@ def main() -> None:
         raise ValueError(
             "Frozen-residual-stack LoRA training requires initialize_from for a new run"
         )
+    if train_dense_alignment_only and not (initialize_value or resume_value):
+        raise ValueError("Dense-alignment-only training requires initialize_from for a new run")
     initialization_provenance: dict | None = None
     if initialize_value:
         initialize_path = Path(initialize_value).expanduser()
@@ -3971,6 +4472,53 @@ def main() -> None:
                 initialization_mismatches["named_lora_freeze_transition"] = (
                     freeze_transition_mismatch
                 )
+        elif initialize_named_lora_freeze_for_dense_alignment_transition:
+            dense_freeze_mismatch = named_lora_freeze_transition_mismatch(
+                initialize_preflight,
+                lora_installation if isinstance(lora_installation, LoRABankCollection) else None,
+            )
+            if dense_freeze_mismatch is not None:
+                initialization_mismatches[
+                    "named_lora_freeze_for_dense_alignment_transition"
+                ] = dense_freeze_mismatch
+            source_scene_hash = initialize_preflight.get("frozen_scene_state_sha256")
+            if source_scene_hash != initialize_expected_scene_state_sha256:
+                initialization_mismatches["frozen_scene_state_sha256"] = {
+                    "checkpoint": source_scene_hash,
+                    "runtime": initialize_expected_scene_state_sha256,
+                }
+            if initialize_preflight.get("global_scene_residual") != residual_settings.contract():
+                initialization_mismatches["global_scene_residual"] = {
+                    "checkpoint": initialize_preflight.get("global_scene_residual"),
+                    "runtime": residual_settings.contract(),
+                }
+            if initialize_preflight.get("signed_x_scene_residual") != (
+                signed_x_residual_settings.contract()
+            ):
+                initialization_mismatches["signed_x_scene_residual"] = {
+                    "checkpoint": initialize_preflight.get("signed_x_scene_residual"),
+                    "runtime": signed_x_residual_settings.contract(),
+                }
+            source_global_hash = initialize_preflight.get("global_scene_residual_state_sha256")
+            if source_global_hash != initialize_expected_global_scene_residual_state_sha256:
+                initialization_mismatches["global_scene_residual_state_sha256"] = {
+                    "checkpoint": source_global_hash,
+                    "runtime": initialize_expected_global_scene_residual_state_sha256,
+                }
+            source_signed_x_hash = initialize_preflight.get("signed_x_scene_residual_state_sha256")
+            if source_signed_x_hash != initialize_expected_signed_x_scene_residual_state_sha256:
+                initialization_mismatches["signed_x_scene_residual_state_sha256"] = {
+                    "checkpoint": source_signed_x_hash,
+                    "runtime": initialize_expected_signed_x_scene_residual_state_sha256,
+                }
+            source_dense_contract = initialize_preflight.get(
+                "dense_alignment", {"schema_version": 1, "enabled": False}
+            )
+            if source_dense_contract != {"schema_version": 1, "enabled": False}:
+                initialization_mismatches["source_dense_alignment"] = {
+                    "checkpoint": source_dense_contract,
+                    "runtime_required": {"schema_version": 1, "enabled": False},
+                }
         elif train_lora_with_frozen_scene_residual_stack:
             transition_collection = (
                 lora_installation if isinstance(lora_installation, LoRABankCollection) else None
@@ -4061,6 +4609,10 @@ def main() -> None:
                 for name, module in checkpoint_modules.items()
                 if name != "global_scene_residual"
             }
+        elif initialize_named_lora_freeze_for_dense_alignment_transition:
+            initialization_modules = dense_alignment_source_checkpoint_modules(
+                checkpoint_modules
+            )
         elif train_lora_with_frozen_scene_residual_stack:
             if not isinstance(lora_installation, LoRABankCollection):
                 raise TypeError("Named LoRA extension transition requires named banks")
@@ -4107,6 +4659,64 @@ def main() -> None:
             )
             if residual_sha_after_source_load != observed_initial_residual_sha256:
                 raise RuntimeError("Source checkpoint mutated the fresh residual state")
+        elif initialize_named_lora_freeze_for_dense_alignment_transition:
+            if not isinstance(lora_installation, LoRABankCollection):
+                raise TypeError("Dense-alignment source transition requires named LoRA banks")
+            if (
+                dense_aligner is None
+                or global_scene_residual is None
+                or signed_x_scene_residual is None
+            ):
+                raise RuntimeError("Dense-alignment source transition lost a required module")
+            validate_named_lora_freeze_transition_state(
+                loaded_initialization,
+                lora_installation,
+            )
+            loaded_scene_hash = module_collection_state_sha256(scene_checkpoint_modules)
+            if loaded_scene_hash != initialize_expected_scene_state_sha256:
+                raise ValueError(
+                    "Loaded dense-alignment source scene stack differs from its exact pin: "
+                    f"expected={initialize_expected_scene_state_sha256} "
+                    f"observed={loaded_scene_hash}"
+                )
+            validate_global_scene_residual_state(
+                global_scene_residual,
+                expected_parameter_count=declared_residual_parameter_count,
+                context="dense-alignment source checkpoint initialization",
+            )
+            loaded_global_hash = module_collection_state_sha256(
+                {"global_scene_residual": global_scene_residual}
+            )
+            if loaded_global_hash != initialize_expected_global_scene_residual_state_sha256:
+                raise ValueError(
+                    "Loaded dense-alignment source global residual differs from its exact pin: "
+                    f"expected={initialize_expected_global_scene_residual_state_sha256} "
+                    f"observed={loaded_global_hash}"
+                )
+            validate_signed_x_scene_residual_state(
+                signed_x_scene_residual,
+                expected_parameter_count=declared_signed_x_parameter_count,
+                context="dense-alignment source checkpoint initialization",
+            )
+            loaded_signed_x_hash = module_collection_state_sha256(
+                {"signed_x_scene_residual": signed_x_scene_residual}
+            )
+            if loaded_signed_x_hash != initialize_expected_signed_x_scene_residual_state_sha256:
+                raise ValueError(
+                    "Loaded dense-alignment source signed-X residual differs from its exact pin: "
+                    f"expected={initialize_expected_signed_x_scene_residual_state_sha256} "
+                    f"observed={loaded_signed_x_hash}"
+                )
+            validate_dense_alignment_state(
+                dense_aligner,
+                expected_parameter_count=declared_dense_parameter_count,
+                context="fresh dense alignment after source checkpoint initialization",
+            )
+            dense_hash_after_source_load = dense_aligner.state_sha256()
+            if dense_hash_after_source_load != observed_initial_dense_alignment_sha256:
+                raise RuntimeError("Source checkpoint mutated the fresh dense-alignment state")
+            if not all(parameter.requires_grad for parameter in dense_aligner.parameters()):
+                raise RuntimeError("Fresh dense-alignment parameters are unexpectedly frozen")
         elif train_lora_with_frozen_scene_residual_stack:
             if not isinstance(lora_installation, LoRABankCollection):
                 raise TypeError("Named LoRA extension transition requires named banks")
@@ -4190,7 +4800,9 @@ def main() -> None:
             validate_lora_banks_checkpoint_state(loaded_initialization, lora_installation)
         initialization_provenance = {
             "schema_version": (
-                6
+                7
+                if initialize_named_lora_freeze_for_dense_alignment_transition
+                else 6
                 if initialize_named_lora_freeze_and_extend_transition
                 else 5
                 if train_lora_with_frozen_scene_residual_stack
@@ -4201,7 +4813,9 @@ def main() -> None:
                 else (2 if legacy_initialization_bank is not None else 1)
             ),
             "mode": (
-                "existing_named_lora_banks_frozen_plus_zero_output_named_lora_extension"
+                "frozen_named_lora_scene_stack_plus_zero_output_dense_alignment"
+                if initialize_named_lora_freeze_for_dense_alignment_transition
+                else "existing_named_lora_banks_frozen_plus_zero_output_named_lora_extension"
                 if initialize_named_lora_freeze_and_extend_transition
                 else "frozen_scene_residual_stack_plus_zero_output_named_lora_extension"
                 if train_lora_with_frozen_scene_residual_stack
@@ -4223,6 +4837,9 @@ def main() -> None:
             "checkpoint_output_namespace": initialize_preflight.get("output_namespace"),
             "checkpoint_config_hash": initialize_preflight.get("config_hash"),
             "checkpoint_source_provenance": initialize_preflight.get("source_provenance"),
+            "initialize_named_lora_freeze_for_dense_alignment_transition": (
+                initialize_named_lora_freeze_for_dense_alignment_transition
+            ),
             "optimizer_state_loaded": False,
             "history_loaded": False,
         }
@@ -4282,6 +4899,47 @@ def main() -> None:
                     ),
                     "all_source_scene_residuals_frozen": True,
                     "new_trainable_lora_banks_zero_output": True,
+                }
+            )
+        if initialize_named_lora_freeze_for_dense_alignment_transition:
+            assert isinstance(lora_installation, LoRABankCollection)
+            assert global_scene_residual is not None
+            assert signed_x_scene_residual is not None
+            assert dense_aligner is not None
+            initialization_provenance.update(
+                {
+                    "source_lora_bank_state_sha256": lora_installation.state_sha256(),
+                    "source_scene_state_sha256": module_collection_state_sha256(
+                        scene_checkpoint_modules
+                    ),
+                    "expected_source_scene_state_sha256": (
+                        initialize_expected_scene_state_sha256
+                    ),
+                    "source_global_scene_residual_state_sha256": (
+                        module_collection_state_sha256(
+                            {"global_scene_residual": global_scene_residual}
+                        )
+                    ),
+                    "expected_source_global_scene_residual_state_sha256": (
+                        initialize_expected_global_scene_residual_state_sha256
+                    ),
+                    "source_signed_x_scene_residual_state_sha256": (
+                        module_collection_state_sha256(
+                            {"signed_x_scene_residual": signed_x_scene_residual}
+                        )
+                    ),
+                    "expected_source_signed_x_scene_residual_state_sha256": (
+                        initialize_expected_signed_x_scene_residual_state_sha256
+                    ),
+                    "all_source_modules_frozen": True,
+                    "dense_alignment_initial_state_sha256": (
+                        observed_initial_dense_alignment_sha256
+                    ),
+                    "expected_dense_alignment_initial_state_sha256": (
+                        initialize_expected_dense_alignment_state_sha256
+                    ),
+                    "dense_alignment_zero_output": True,
+                    "source_checkpoint_loaded_dense_alignment": False,
                 }
             )
         if initialize_source_residual_into_frozen_base:
@@ -4381,6 +5039,26 @@ def main() -> None:
                     "Resume checkpoint signed-X residual provenance mismatch: "
                     f"{signed_x_metadata_mismatch}"
                 )
+        if resume_preflight.get("dense_alignment") != dense_settings.contract():
+            raise ValueError(
+                "Resume checkpoint dense-alignment contract mismatch: "
+                f"checkpoint={resume_preflight.get('dense_alignment')} "
+                f"runtime={dense_settings.contract()}"
+            )
+        if dense_aligner is not None:
+            expected_initial_dense_hash = dense_settings.expected_initial_state_sha256
+            if expected_initial_dense_hash is None:
+                raise RuntimeError("Enabled dense alignment lost its initial-state hash")
+            dense_metadata_mismatch = dense_alignment_resume_metadata_mismatch(
+                resume_preflight,
+                dense_aligner,
+                expected_initial_state_sha256=expected_initial_dense_hash,
+            )
+            if dense_metadata_mismatch is not None:
+                raise ValueError(
+                    "Resume checkpoint dense-alignment provenance mismatch: "
+                    f"{dense_metadata_mismatch}"
+                )
         if configured_lora.enabled:
             provenance_mismatch = source_provenance_resume_contract_mismatch(
                 resume_preflight, source_provenance
@@ -4464,6 +5142,25 @@ def main() -> None:
                 ),
                 "runtime": initialize_expected_signed_x_scene_residual_state_sha256,
             }
+        if initialize_expected_dense_alignment_state_sha256 is not None and (
+            initialization_provenance is None
+            or initialization_provenance.get(
+                "expected_dense_alignment_initial_state_sha256"
+            )
+            != initialize_expected_dense_alignment_state_sha256
+        ):
+            initialization_hash_mismatches[
+                "expected_dense_alignment_initial_state_sha256"
+            ] = {
+                "checkpoint": (
+                    None
+                    if initialization_provenance is None
+                    else initialization_provenance.get(
+                        "expected_dense_alignment_initial_state_sha256"
+                    )
+                ),
+                "runtime": initialize_expected_dense_alignment_state_sha256,
+            }
         if initialization_hash_mismatches:
             raise ValueError(
                 "Resume checkpoint initialization artifact mismatch: "
@@ -4510,6 +5207,21 @@ def main() -> None:
                     f"checkpoint={resume_metadata.get('signed_x_scene_residual_state_sha256')} "
                     f"runtime={observed_resumed_signed_x_hash}"
                 )
+        if dense_aligner is not None:
+            validate_dense_alignment_state(
+                dense_aligner,
+                expected_parameter_count=declared_dense_parameter_count,
+                context="resume checkpoint load",
+            )
+            observed_resumed_dense_hash = dense_aligner.state_sha256()
+            if observed_resumed_dense_hash != resume_metadata.get(
+                "dense_alignment_state_sha256"
+            ):
+                raise ValueError(
+                    "Resumed dense-alignment state mismatch or tamper detected: "
+                    f"checkpoint={resume_metadata.get('dense_alignment_state_sha256')} "
+                    f"runtime={observed_resumed_dense_hash}"
+                )
         saved_freeze_scene_adapter = resume_metadata.get("freeze_scene_adapter", False)
         if saved_freeze_scene_adapter != freeze_scene_adapter:
             raise ValueError(
@@ -4528,6 +5240,10 @@ def main() -> None:
             train_lora_with_frozen_scene_residual_stack
         ):
             raise ValueError("Resume checkpoint frozen-residual-stack LoRA mode mismatch")
+        if resume_metadata.get("train_dense_alignment_only", False) != (
+            train_dense_alignment_only
+        ):
+            raise ValueError("Resume checkpoint dense-alignment-only training mode mismatch")
         expected = {
             "semantic_dim": semantic_dim,
             "language_hidden_dim": language.hidden_size,
@@ -4701,7 +5417,7 @@ def main() -> None:
         expected_optimizer_parameter_ids = [
             id(parameter) for group in optimizer.param_groups for parameter in group["params"]
         ]
-        if train_lora_with_frozen_scene_residual_stack:
+        if train_lora_with_frozen_scene_residual_stack or train_dense_alignment_only:
             raw_optimizer_state = torch.load(
                 resume_path / "optimizer.pt",
                 map_location="cpu",
@@ -4774,17 +5490,17 @@ def main() -> None:
             ]
             if resumed_optimizer_groups != expected_optimizer_groups:
                 raise ValueError(
-                    "Frozen-residual-stack optimizer hyperparameters changed during resume: "
+                    "Exclusive adapter optimizer hyperparameters changed during resume: "
                     f"checkpoint={resumed_optimizer_groups} runtime={expected_optimizer_groups}"
                 )
             if resumed_optimizer_parameter_ids != expected_optimizer_parameter_ids:
                 raise ValueError(
-                    "Frozen-residual-stack optimizer parameter order changed during resume"
+                    "Exclusive adapter optimizer parameter order changed during resume"
                 )
             expected_step = int(resume_metadata.get("optimizer_step", -1))
             if expected_step < 1 or set(optimizer.state) != set(parameters):
                 raise ValueError(
-                    "Frozen-residual-stack optimizer state does not cover the exact live surface"
+                    "Exclusive adapter optimizer state does not cover the exact live surface"
                 )
             for index, parameter in enumerate(parameters):
                 state = optimizer.state[parameter]
@@ -4853,6 +5569,9 @@ def main() -> None:
         if signed_x_scene_residual is None
         else module_collection_state_sha256({"signed_x_scene_residual": signed_x_scene_residual})
     )
+    current_dense_alignment_sha256 = (
+        None if dense_aligner is None else dense_aligner.state_sha256()
+    )
     current_frozen_lora_hashes = (
         {}
         if lora_installation is None
@@ -4862,6 +5581,16 @@ def main() -> None:
             if not bank.settings.trainable
         }
     )
+    if (
+        train_dense_alignment_only
+        and resume_metadata is None
+        and current_dense_alignment_sha256 != observed_initial_dense_alignment_sha256
+    ):
+        raise RuntimeError(
+            "Fresh dense-alignment state changed before update-0 equivalence: "
+            f"expected={observed_initial_dense_alignment_sha256} "
+            f"observed={current_dense_alignment_sha256}"
+        )
     if train_lora_with_frozen_scene_residual_stack:
         assert isinstance(lora_installation, LoRABankCollection)
         exact_frozen_lora_hashes = {
@@ -4897,19 +5626,23 @@ def main() -> None:
         }
         if direct_pin_mismatches:
             raise ValueError(
-                "Frozen-residual-stack LoRA state differs from direct source pins: "
+                "Frozen source stack differs from direct source pins: "
                 f"{direct_pin_mismatches}"
             )
     if resume_metadata is None:
         frozen_scene_state_sha256 = current_scene_state_sha256 if freeze_scene_adapter else None
         frozen_global_scene_residual_state_sha256 = (
             current_global_scene_residual_sha256
-            if (train_signed_x_scene_residual_only or train_lora_with_frozen_scene_residual_stack)
+            if (
+                train_signed_x_scene_residual_only
+                or train_lora_with_frozen_scene_residual_stack
+                or train_dense_alignment_only
+            )
             else None
         )
         frozen_signed_x_scene_residual_state_sha256 = (
             current_signed_x_scene_residual_sha256
-            if train_lora_with_frozen_scene_residual_stack
+            if train_lora_with_frozen_scene_residual_stack or train_dense_alignment_only
             else None
         )
         frozen_lora_bank_state_sha256 = current_frozen_lora_hashes
@@ -4943,7 +5676,9 @@ def main() -> None:
                 f"checkpoint={frozen_scene_state_sha256} runtime={current_scene_state_sha256}"
             )
         if (
-            train_signed_x_scene_residual_only or train_lora_with_frozen_scene_residual_stack
+            train_signed_x_scene_residual_only
+            or train_lora_with_frozen_scene_residual_stack
+            or train_dense_alignment_only
         ) and frozen_global_scene_residual_state_sha256 != current_global_scene_residual_sha256:
             raise ValueError(
                 "Frozen global scene residual changed across signed-X resume: "
@@ -4951,7 +5686,7 @@ def main() -> None:
                 f"runtime={current_global_scene_residual_sha256}"
             )
         if (
-            train_lora_with_frozen_scene_residual_stack
+            (train_lora_with_frozen_scene_residual_stack or train_dense_alignment_only)
             and frozen_signed_x_scene_residual_state_sha256
             != current_signed_x_scene_residual_sha256
         ):
@@ -4969,7 +5704,9 @@ def main() -> None:
     if signed_x_scene_residual is not None:
         assert global_scene_residual is not None
         zero_output_equivalence = None
-        if resume_metadata is None and train_lora_with_frozen_scene_residual_stack:
+        if resume_metadata is None and (
+            train_lora_with_frozen_scene_residual_stack or train_dense_alignment_only
+        ):
             source_equivalence = loaded_initialization.get(
                 "signed_x_scene_residual_zero_output_equivalence"
             )
@@ -5025,6 +5762,145 @@ def main() -> None:
     else:
         zero_output_equivalence = None
         signed_x_zero_output_equivalence = None
+    if dense_aligner is not None:
+        assert global_scene_residual is not None
+        assert signed_x_scene_residual is not None
+        if resume_metadata is None:
+            dense_alignment_zero_output_equivalence = (
+                verify_zero_output_dense_alignment_equivalence(
+                    scene_model,
+                    global_scene_residual,
+                    signed_x_scene_residual,
+                    dense_aligner,
+                    composer,
+                    maps,
+                    model_dtype=next(language.model.parameters()).dtype,
+                )
+            )
+            if initialization_provenance is not None:
+                initialization_provenance["dense_alignment_zero_output_equivalence"] = (
+                    dense_alignment_zero_output_equivalence
+                )
+        else:
+            saved_dense_equivalence = resume_metadata.get(
+                "dense_alignment_zero_output_equivalence"
+            )
+            if (
+                not isinstance(saved_dense_equivalence, dict)
+                or saved_dense_equivalence.get("verified") is not True
+            ):
+                raise ValueError(
+                    "Dense-alignment resume checkpoint lacks verified update-0 equivalence"
+                )
+            dense_alignment_zero_output_equivalence = saved_dense_equivalence
+    else:
+        dense_alignment_zero_output_equivalence = None
+    if dense_aligner is not None:
+        if observed_initial_dense_alignment_sha256 is None:
+            raise RuntimeError("Enabled dense alignment lost its deterministic initial hash")
+        if resume_metadata is None:
+            pair_optimizer_empty_before_warmup = not optimizer.state
+            if (
+                not pair_optimizer_empty_before_warmup
+                or optimizer_step != 0
+                or global_step != 0
+            ):
+                raise RuntimeError(
+                    "Dense calibration must precede every paired-QA optimizer update/state"
+                )
+            dense_training_device = dense_aligner.alignment_a.device
+            dense_aligner.to("cpu")
+            try:
+                dense_alignment_calibration = run_dense_alignment_calibration_warmup(
+                    config,
+                    dense_aligner,
+                )
+                require_dense_alignment_calibration_authorized(
+                    dense_alignment_calibration
+                )
+            finally:
+                dense_aligner.to(dense_training_device)
+
+            # The calibration optimizer is deliberately local to the isolated
+            # runner. Rebuild the paired-QA optimizer against the post-warmup
+            # device tensors so QA update 1 starts from empty AdamW state.
+            optimizer, parameters = build_adapter_optimizer(
+                config,
+                scene_parameters,
+                lora_installation,
+                configured_lora_optimizer,
+                dense_alignment_parameters=tuple(dense_aligner.parameters()),
+            )
+            if optimizer.state:
+                raise RuntimeError("Rebuilt paired-QA optimizer unexpectedly retained state")
+            expected_dense_ids = [id(parameter) for parameter in dense_aligner.parameters()]
+            observed_dense_ids = [id(parameter) for parameter in parameters]
+            if observed_dense_ids != expected_dense_ids:
+                raise RuntimeError(
+                    "Rebuilt paired-QA optimizer is detached from the calibrated bridge"
+                )
+            if [group.get("name") for group in optimizer.param_groups] != [
+                "dense_alignment"
+            ]:
+                raise RuntimeError("Rebuilt paired-QA optimizer has an invalid group surface")
+            dense_alignment_calibration.update(
+                {
+                    "pair_optimizer_state_empty_before_warmup": (
+                        pair_optimizer_empty_before_warmup
+                    ),
+                    "pair_optimizer_rebuilt_after_warmup": True,
+                    "pair_optimizer_state_empty_after_warmup": not optimizer.state,
+                    "pair_optimizer_steps_before_qa": optimizer_step,
+                    "held_out_scene_gradient_access": False,
+                    "category_text_prototypes_serialized": False,
+                    "oracle_payload_retained": False,
+                }
+            )
+            validate_dense_alignment_calibration_audit(
+                dense_alignment_calibration,
+                dense_aligner,
+                expected_initial_state_sha256=observed_initial_dense_alignment_sha256,
+            )
+            if initialization_provenance is not None:
+                initialization_provenance.update(
+                    {
+                        "dense_alignment_calibration_authorized": True,
+                        "dense_alignment_calibration_final_state_sha256": (
+                            dense_aligner.state_sha256()
+                        ),
+                        "pair_optimizer_rebuilt_after_dense_alignment_calibration": True,
+                    }
+                )
+        else:
+            saved_calibration = resume_metadata.get("dense_alignment_calibration")
+            if not isinstance(saved_calibration, Mapping):
+                raise ValueError(
+                    "Dense-alignment resume checkpoint lacks its calibration audit"
+                )
+            dense_alignment_calibration = dict(saved_calibration)
+            resume_initialization = resume_metadata.get("initialization_provenance")
+            if not isinstance(resume_initialization, Mapping):
+                raise ValueError(
+                    "Dense-alignment resume checkpoint lacks initialization provenance"
+                )
+            calibration_final_hash = resume_initialization.get(
+                "dense_alignment_calibration_final_state_sha256"
+            )
+            if (
+                not isinstance(calibration_final_hash, str)
+                or re.fullmatch(r"[0-9a-f]{64}", calibration_final_hash) is None
+            ):
+                raise ValueError(
+                    "Dense-alignment resume checkpoint lacks a valid calibration-final hash"
+                )
+            validate_dense_alignment_calibration_audit(
+                dense_alignment_calibration,
+                dense_aligner,
+                expected_initial_state_sha256=observed_initial_dense_alignment_sha256,
+                expected_calibration_final_state_sha256=calibration_final_hash,
+            )
+    else:
+        dense_alignment_calibration = None
     if resume_metadata is None:
         spatial_answer_warmup_metrics = run_spatial_answer_warmup(
             scene_model,
@@ -5096,6 +5972,7 @@ def main() -> None:
         epoch_full_vocab_unit_accuracies: list[float] = []
         epoch_pair_scene_token_gradient_norms: list[float] = []
         epoch_lora_gradient_norms: list[float] = []
+        epoch_dense_alignment_gradient_norms: list[float] = []
         epoch_spatial_answer_losses: list[float] = []
         epoch_spatial_answer_own_similarities: list[float] = []
         epoch_spatial_answer_alternate_similarities: list[float] = []
@@ -5132,10 +6009,18 @@ def main() -> None:
                 not (
                     train_signed_x_scene_residual_only
                     or train_lora_with_frozen_scene_residual_stack
+                    or train_dense_alignment_only
                 )
             )
         if signed_x_scene_residual is not None:
-            signed_x_scene_residual.train(not train_lora_with_frozen_scene_residual_stack)
+            signed_x_scene_residual.train(
+                not (
+                    train_lora_with_frozen_scene_residual_stack
+                    or train_dense_alignment_only
+                )
+            )
+        if dense_aligner is not None:
+            dense_aligner.train(train_dense_alignment_only)
         if lora_installation is not None:
             lora_installation.train()
         for curriculum_batch in curriculum:
@@ -5158,6 +6043,7 @@ def main() -> None:
                     freeze_scene_adapter=freeze_scene_adapter,
                     global_scene_residual=global_scene_residual,
                     signed_x_scene_residual=signed_x_scene_residual,
+                    dense_aligner=dense_aligner,
                 )
                 outputs_by_scene = {scene_id: output}
                 base_loss, language_loss, grounding_loss = batch_objective(
@@ -5182,6 +6068,7 @@ def main() -> None:
                         freeze_scene_adapter=freeze_scene_adapter,
                         global_scene_residual=global_scene_residual,
                         signed_x_scene_residual=signed_x_scene_residual,
+                        dense_aligner=dense_aligner,
                     )
                     separated_pair_ids.add(pair_id)
                 log_scene_ids = [scene_id]
@@ -5201,6 +6088,7 @@ def main() -> None:
                         freeze_scene_adapter=freeze_scene_adapter,
                         global_scene_residual=global_scene_residual,
                         signed_x_scene_residual=signed_x_scene_residual,
+                        dense_aligner=dense_aligner,
                     )
                     for scene_id in scene_ids
                 }
@@ -5314,7 +6202,9 @@ def main() -> None:
             )
             (loss / accumulation).backward()
             pair_scene_token_gradient_norms = None
-            if curriculum_batch.kind == "pair" and not freeze_scene_adapter:
+            if curriculum_batch.kind == "pair" and (
+                not freeze_scene_adapter or train_dense_alignment_only
+            ):
                 pair_scene_token_gradient_norms = {
                     scene_id: (
                         None
@@ -5333,6 +6223,7 @@ def main() -> None:
             lora_gradient_norms = (
                 None if lora_installation is None else lora_installation.gradient_norms()
             )
+            dense_alignment_gradient_norm = None
             if accumulated_batches == accumulation:
                 if lora_gradient_norms is not None:
                     epoch_lora_gradient_norms.append(float(lora_gradient_norms["total_l2"]))
@@ -5342,6 +6233,18 @@ def main() -> None:
                         and float(lora_gradient_norms["total_l2"]) <= 0.0
                     ):
                         raise RuntimeError("Frozen-scene training produced no LoRA-bank gradient")
+                if train_dense_alignment_only:
+                    assert dense_aligner is not None
+                    dense_alignment_gradient_norm = parameter_gradient_l2(
+                        tuple(dense_aligner.parameters())
+                    )
+                    epoch_dense_alignment_gradient_norms.append(
+                        dense_alignment_gradient_norm
+                    )
+                    if dense_alignment_gradient_norm <= 0.0:
+                        raise RuntimeError(
+                            "Dense-alignment-only training produced no dense gradient"
+                        )
                 torch.nn.utils.clip_grad_norm_(
                     parameters, float(config["training"]["gradient_clip_norm"])
                 )
@@ -5566,6 +6469,9 @@ def main() -> None:
                         ),
                         "pair_scene_token_gradient_norms": (pair_scene_token_gradient_norms),
                         "lora_gradient_norms": lora_gradient_norms,
+                        "dense_alignment_gradient_norm": (
+                            dense_alignment_gradient_norm
+                        ),
                         "spatial_answer_contrastive_loss": (
                             None
                             if spatial_answer_diagnostics is None
@@ -5693,6 +6599,18 @@ def main() -> None:
                     ),
                     flush=True,
                 )
+            if train_dense_alignment_only:
+                assert dense_aligner is not None
+                dense_alignment_gradient_norm = parameter_gradient_l2(
+                    tuple(dense_aligner.parameters())
+                )
+                epoch_dense_alignment_gradient_norms.append(
+                    dense_alignment_gradient_norm
+                )
+                if dense_alignment_gradient_norm <= 0.0:
+                    raise RuntimeError(
+                        "Dense-alignment-only training produced no dense gradient"
+                    )
             torch.nn.utils.clip_grad_norm_(
                 parameters, float(config["training"]["gradient_clip_norm"])
             )
@@ -5802,6 +6720,7 @@ def main() -> None:
                 scene_model=scene_model,
                 global_scene_residual=global_scene_residual,
                 signed_x_scene_residual=signed_x_scene_residual,
+                dense_aligner=dense_aligner,
                 composer=composer,
                 grounding=grounding,
                 units_per_batch=pair_curriculum.units_per_batch,
@@ -5829,6 +6748,7 @@ def main() -> None:
                 scene_model=scene_model,
                 global_scene_residual=global_scene_residual,
                 signed_x_scene_residual=signed_x_scene_residual,
+                dense_aligner=dense_aligner,
                 composer=composer,
                 grounding=grounding,
                 semantic_dim=semantic_dim,
@@ -5912,6 +6832,16 @@ def main() -> None:
                 ),
                 "lora_max_optimizer_step_gradient_norm": (
                     max(epoch_lora_gradient_norms) if epoch_lora_gradient_norms else None
+                ),
+                "dense_alignment_mean_optimizer_step_gradient_norm": (
+                    float(np.mean(epoch_dense_alignment_gradient_norms))
+                    if epoch_dense_alignment_gradient_norms
+                    else None
+                ),
+                "dense_alignment_max_optimizer_step_gradient_norm": (
+                    max(epoch_dense_alignment_gradient_norms)
+                    if epoch_dense_alignment_gradient_norms
+                    else None
                 ),
                 "spatial_answer_contrastive_loss": mean_spatial_answer_loss,
                 "spatial_answer_mean_own_similarity": (mean_spatial_answer_own_similarity),
@@ -6034,7 +6964,35 @@ def main() -> None:
                 )
             ),
             "signed_x_scene_residual_zero_output_equivalence": (signed_x_zero_output_equivalence),
+            "dense_alignment": dense_settings.contract(),
+            "dense_alignment_parameter_count": (
+                0 if dense_aligner is None else dense_aligner.parameter_count
+            ),
+            "dense_alignment_initial_state_sha256": (
+                observed_initial_dense_alignment_sha256
+            ),
+            "dense_alignment_state_sha256": (
+                None if dense_aligner is None else dense_aligner.state_sha256()
+            ),
+            "dense_alignment_zero_output_equivalence": (
+                dense_alignment_zero_output_equivalence
+            ),
+            "dense_alignment_calibration": dense_alignment_calibration,
+            "dense_alignment_optimizer": (
+                {
+                    "name": "AdamW",
+                    "learning_rate": float(
+                        config["training"]["dense_alignment_learning_rate"]
+                    ),
+                    "weight_decay": float(
+                        config["training"]["dense_alignment_weight_decay"]
+                    ),
+                }
+                if train_dense_alignment_only
+                else None
+            ),
             "question_dependent_scene_processing": False,
+            "all_voxels_transformed": dense_aligner is not None,
             "input_voxel_size_m": config["scene_encoder"].get("input_voxel_size_m"),
             **token_mixing,
             "output_namespace": output_namespace,
@@ -6099,6 +7057,11 @@ def main() -> None:
             raise RuntimeError(
                 "Signed-X scene residual state changed during checkpoint metadata save"
             )
+        current_dense_hash = None if dense_aligner is None else dense_aligner.state_sha256()
+        if current_dense_hash != metadata["dense_alignment_state_sha256"]:
+            raise RuntimeError(
+                "Dense-alignment state changed during checkpoint metadata save"
+            )
         if global_scene_residual is not None:
             validate_global_scene_residual_state(
                 global_scene_residual,
@@ -6109,6 +7072,12 @@ def main() -> None:
             validate_signed_x_scene_residual_state(
                 signed_x_scene_residual,
                 expected_parameter_count=declared_signed_x_parameter_count,
+                context="checkpoint save",
+            )
+        if dense_aligner is not None:
+            validate_dense_alignment_state(
+                dense_aligner,
+                expected_parameter_count=declared_dense_parameter_count,
                 context="checkpoint save",
             )
         current_frozen_bank_hashes = (
@@ -6126,7 +7095,9 @@ def main() -> None:
                 f"expected={frozen_scene_state_sha256} observed={current_scene_hash}"
             )
         if (
-            train_signed_x_scene_residual_only or train_lora_with_frozen_scene_residual_stack
+            train_signed_x_scene_residual_only
+            or train_lora_with_frozen_scene_residual_stack
+            or train_dense_alignment_only
         ) and current_residual_hash != frozen_global_scene_residual_state_sha256:
             raise RuntimeError(
                 "Frozen global scene residual changed during signed-X training: "
@@ -6134,7 +7105,7 @@ def main() -> None:
                 f"observed={current_residual_hash}"
             )
         if (
-            train_lora_with_frozen_scene_residual_stack
+            (train_lora_with_frozen_scene_residual_stack or train_dense_alignment_only)
             and current_signed_x_hash != frozen_signed_x_scene_residual_state_sha256
         ):
             raise RuntimeError(
@@ -6157,6 +7128,7 @@ def main() -> None:
                     "train_lora_with_frozen_scene_residual_stack": (
                         train_lora_with_frozen_scene_residual_stack
                     ),
+                    "train_dense_alignment_only": train_dense_alignment_only,
                     "frozen_scene_state_sha256": frozen_scene_state_sha256,
                     "frozen_global_scene_residual_state_sha256": (
                         frozen_global_scene_residual_state_sha256
@@ -6165,6 +7137,9 @@ def main() -> None:
                         frozen_signed_x_scene_residual_state_sha256
                     ),
                     "frozen_lora_bank_state_sha256": frozen_lora_bank_state_sha256,
+                    "initialize_named_lora_freeze_for_dense_alignment_transition": (
+                        initialize_named_lora_freeze_for_dense_alignment_transition
+                    ),
                 }
             )
         if (
@@ -6173,6 +7148,7 @@ def main() -> None:
             or initialize_expected_scene_state_sha256 is not None
             or initialize_expected_global_scene_residual_state_sha256 is not None
             or initialize_expected_signed_x_scene_residual_state_sha256 is not None
+            or initialize_expected_dense_alignment_state_sha256 is not None
         ):
             metadata.update(
                 {
@@ -6187,8 +7163,14 @@ def main() -> None:
                     "initialize_expected_signed_x_scene_residual_state_sha256": (
                         initialize_expected_signed_x_scene_residual_state_sha256
                     ),
+                    "initialize_expected_dense_alignment_state_sha256": (
+                        initialize_expected_dense_alignment_state_sha256
+                    ),
                     "initialize_source_residual_into_frozen_base": (
                         initialize_source_residual_into_frozen_base
+                    ),
+                    "initialize_named_lora_freeze_for_dense_alignment_transition": (
+                        initialize_named_lora_freeze_for_dense_alignment_transition
                     ),
                 }
             )

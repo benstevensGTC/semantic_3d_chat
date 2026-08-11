@@ -85,13 +85,31 @@ GEMMA4_V24_EXTENSION_ROOT := data_gemma4/checkpoints/$(GEMMA4_V24_EXTENSION_NAME
 GEMMA4_V24_EXTENSION_MANIFEST := reports/gemma4/metrics/v24_extension_launch.json
 GEMMA4_V24_EXTENSION_REPLAY := reports/gemma4/metrics/v24_extension_replay.json
 GEMMA4_V24_EXTENSION_REPORT := reports/gemma4/metrics/v24_extension_final.json
+GEMMA4_V25_CONFIG := configs/experiments/gemma4_color_mirror_dense_alignment_v25.yaml
+GEMMA4_V25_NAMESPACE := gemma4_v25_dense_alignment
+GEMMA4_V25_CHECKPOINT_ROOT := data_gemma4/checkpoints/$(GEMMA4_V25_NAMESPACE)
+GEMMA4_V25_PREFLIGHT := reports/gemma4/metrics/v25_structural_preflight.json
+GEMMA4_V25_CALIBRATION_REPORT := reports/gemma4/metrics/v25_dense_alignment_calibration.json
+GEMMA4_V25_CALIBRATION_BRIDGE := reports/gemma4/artifacts/v25_dense_alignment_bridge.safetensors
+GEMMA4_V25_CALIBRATION_DECISION := reports/gemma4/metrics/v25_dense_alignment_calibration_decision.json
+GEMMA4_V25_UPDATE1_REPORT := reports/gemma4/metrics/v25_update1_match.json
+GEMMA4_V25_SCREEN_REPORT := reports/gemma4/metrics/v25_epoch_screen.json
+GEMMA4_V26_CONFIG := configs/experiments/gemma4_color_mirror_dense_alignment_v26.yaml
+GEMMA4_V26_NAMESPACE := gemma4_v26_dense_alignment
+GEMMA4_V26_CHECKPOINT_ROOT := data_gemma4/checkpoints/$(GEMMA4_V26_NAMESPACE)
+GEMMA4_V26_PREFLIGHT := reports/gemma4/metrics/v26_structural_preflight.json
+GEMMA4_V26_CALIBRATION_REPORT := reports/gemma4/metrics/v26_dense_alignment_calibration.json
+GEMMA4_V26_CALIBRATION_BRIDGE := reports/gemma4/artifacts/v26_dense_alignment_bridge.safetensors
+GEMMA4_V26_CALIBRATION_DECISION := reports/gemma4/metrics/v26_dense_alignment_calibration_decision.json
+GEMMA4_V26_UPDATE1_REPORT := reports/gemma4/metrics/v26_update1_match.json
+GEMMA4_V26_SCREEN_REPORT := reports/gemma4/metrics/v26_epoch_screen.json
 BLENDER := blender
 CONFIG ?= configs/default.yaml
 BATCH_CONFIG ?= configs/experiments/multiscene.yaml
 SCENE ?= scene_000001
 CHECKPOINT ?=
 
-.PHONY: doctor setup download-models download-baselines setup-gemma4-probe download-gemma4-config download-gemma4-weights gemma4-probe gemma4-probe-test extract-gemma4-scene build-gemma4-map gemma4-semantic-sanity gemma4-extract-smoke gemma4-build-smoke-map train-gemma4 gemma4-v18-preflight gemma4-v18-stage1 gemma4-v18-verify-update1 gemma4-v18-resume-screen gemma4-v18-select gemma4-v18-screen gemma4-v19-preflight gemma4-v19-stage1 gemma4-v19-verify-update1 gemma4-v19-resume-screen gemma4-v19-select gemma4-v19-screen gemma4-v19-prepare-extension gemma4-v19-run-extension gemma4-v19-select-extension gemma4-v19-extension gemma4-v20-preflight gemma4-v20-stage1 gemma4-v20-verify-update1 gemma4-v20-resume-screen gemma4-v20-select gemma4-v20-screen gemma4-v20-prepare-extension gemma4-v20-run-extension gemma4-v20-select-extension gemma4-v20-extension gemma4-v21-preflight gemma4-v21-stage1 gemma4-v21-verify-update1 gemma4-v21-resume-screen gemma4-v21-select gemma4-v21-screen gemma4-v21-prepare-extension gemma4-v21-run-extension gemma4-v21-select-extension gemma4-v21-extension gemma4-v22-preflight gemma4-v22-stage1 gemma4-v22-verify-update1 gemma4-v22-resume-screen gemma4-v22-select gemma4-v22-screen gemma4-v22-prepare-extension gemma4-v22-run-extension gemma4-v22-select-extension gemma4-v22-extension gemma4-v23-preflight gemma4-v23-stage1 gemma4-v23-verify-update1 gemma4-v23-resume-screen gemma4-v23-select gemma4-v23-screen gemma4-v23-prepare-extension gemma4-v23-run-extension-replay gemma4-v23-verify-extension-replay gemma4-v23-run-extension gemma4-v23-select-extension gemma4-v23-extension gemma4-v24-preflight gemma4-v24-stage1 gemma4-v24-verify-update1 gemma4-v24-resume-screen gemma4-v24-select gemma4-v24-screen gemma4-v24-prepare-extension gemma4-v24-run-extension-replay gemma4-v24-verify-extension-replay gemma4-v24-run-extension gemma4-v24-select-extension gemma4-v24-extension require-gemma4-promoted chat-gemma4 gemma4-prepare-questions gemma4-predict-static gemma4-score-static gemma4-evaluate-static gemma4-predict-controls gemma4-chat-static generate-smoke-scene render-smoke-scan generate-scene-batch render-scene-batch multiscene-dry-run build-smoke-map semantic-sanity generate-dataset train evaluate evaluate-oracle-text evaluate-direct-images chat web robot robot-evaluate mcp report demo demo-check demo-leakage test
+.PHONY: doctor setup download-models download-baselines setup-gemma4-probe download-gemma4-config download-gemma4-weights gemma4-probe gemma4-probe-test extract-gemma4-scene build-gemma4-map gemma4-semantic-sanity gemma4-extract-smoke gemma4-build-smoke-map train-gemma4 gemma4-v18-preflight gemma4-v18-stage1 gemma4-v18-verify-update1 gemma4-v18-resume-screen gemma4-v18-select gemma4-v18-screen gemma4-v19-preflight gemma4-v19-stage1 gemma4-v19-verify-update1 gemma4-v19-resume-screen gemma4-v19-select gemma4-v19-screen gemma4-v19-prepare-extension gemma4-v19-run-extension gemma4-v19-select-extension gemma4-v19-extension gemma4-v20-preflight gemma4-v20-stage1 gemma4-v20-verify-update1 gemma4-v20-resume-screen gemma4-v20-select gemma4-v20-screen gemma4-v20-prepare-extension gemma4-v20-run-extension gemma4-v20-select-extension gemma4-v20-extension gemma4-v21-preflight gemma4-v21-stage1 gemma4-v21-verify-update1 gemma4-v21-resume-screen gemma4-v21-select gemma4-v21-screen gemma4-v21-prepare-extension gemma4-v21-run-extension gemma4-v21-select-extension gemma4-v21-extension gemma4-v22-preflight gemma4-v22-stage1 gemma4-v22-verify-update1 gemma4-v22-resume-screen gemma4-v22-select gemma4-v22-screen gemma4-v22-prepare-extension gemma4-v22-run-extension gemma4-v22-select-extension gemma4-v22-extension gemma4-v23-preflight gemma4-v23-stage1 gemma4-v23-verify-update1 gemma4-v23-resume-screen gemma4-v23-select gemma4-v23-screen gemma4-v23-prepare-extension gemma4-v23-run-extension-replay gemma4-v23-verify-extension-replay gemma4-v23-run-extension gemma4-v23-select-extension gemma4-v23-extension gemma4-v24-preflight gemma4-v24-stage1 gemma4-v24-verify-update1 gemma4-v24-resume-screen gemma4-v24-select gemma4-v24-screen gemma4-v24-prepare-extension gemma4-v24-run-extension-replay gemma4-v24-verify-extension-replay gemma4-v24-run-extension gemma4-v24-select-extension gemma4-v24-extension gemma4-v25-preflight gemma4-v25-calibrate gemma4-v25-verify-calibration gemma4-v25-stage1 gemma4-v25-verify-update1 gemma4-v25-resume-screen gemma4-v25-select gemma4-v25-screen gemma4-v26-preflight gemma4-v26-calibrate gemma4-v26-verify-calibration gemma4-v26-stage1 gemma4-v26-verify-update1 gemma4-v26-resume-screen gemma4-v26-select gemma4-v26-screen require-gemma4-promoted chat-gemma4 gemma4-prepare-questions gemma4-predict-static gemma4-score-static gemma4-evaluate-static gemma4-predict-controls gemma4-chat-static generate-smoke-scene render-smoke-scan generate-scene-batch render-scene-batch multiscene-dry-run build-smoke-map semantic-sanity generate-dataset train evaluate evaluate-oracle-text evaluate-direct-images chat web robot robot-evaluate mcp report demo demo-check demo-leakage test
 
 doctor:
 	./scripts/doctor.sh
@@ -466,6 +484,95 @@ gemma4-v24-select: gemma4-v24-resume-screen
 	PYTHONPATH=src $(GEMMA4_PYTHON) -m semantic_3d_chat.evaluation.v24_shared_query_controller select --config $(GEMMA4_V24_CONFIG) --update1-report $(GEMMA4_V24_UPDATE1_REPORT) --epoch 1=$(GEMMA4_V24_CHECKPOINT_ROOT)/epoch_001/metadata.json --epoch 2=$(GEMMA4_V24_CHECKPOINT_ROOT)/epoch_002/metadata.json --epoch 3=$(GEMMA4_V24_CHECKPOINT_ROOT)/epoch_003/metadata.json --epoch 4=$(GEMMA4_V24_CHECKPOINT_ROOT)/epoch_004/metadata.json --output $(GEMMA4_V24_SCREEN_REPORT)
 
 gemma4-v24-screen: gemma4-v24-select
+
+# V25 adds one all-voxel rank-eight visual-to-language bridge to the sealed
+# V24 epoch-1 stack. Preflight authorizes only bounded semantic calibration;
+# update-1 verification must independently authorize paired QA updates 2--4.
+gemma4-v25-preflight:
+	PYTHONPATH=src $(GEMMA4_PYTHON) -m semantic_3d_chat.evaluation.v25_dense_alignment_controller preflight --config $(GEMMA4_V25_CONFIG) --output $(GEMMA4_V25_PREFLIGHT)
+
+# Standalone reproducibility probe. The trainer repeats the same fail-closed
+# calibration internally before QA and does not consume this report/bridge.
+gemma4-v25-calibrate: gemma4-v25-preflight
+	@set +e; \
+	PYTHONPATH=src $(GEMMA4_PYTHON) -m semantic_3d_chat.training.dense_alignment_calibration --config $(GEMMA4_V25_CONFIG) --bridge-output $(GEMMA4_V25_CALIBRATION_BRIDGE) --report-output $(GEMMA4_V25_CALIBRATION_REPORT); \
+	status=$$?; \
+	set -e; \
+	if [ "$$status" -ne 0 ] && [ "$$status" -ne 2 ]; then exit "$$status"; fi; \
+	test -f "$(GEMMA4_V25_CALIBRATION_REPORT)" || { echo "V25 calibration produced no decision report." >&2; exit 2; }
+
+gemma4-v25-verify-calibration: gemma4-v25-calibrate
+	PYTHONPATH=src $(GEMMA4_PYTHON) -m semantic_3d_chat.evaluation.v25_dense_alignment_controller verify-calibration --config $(GEMMA4_V25_CONFIG) --calibration $(GEMMA4_V25_CALIBRATION_REPORT) --output $(GEMMA4_V25_CALIBRATION_DECISION)
+
+gemma4-v25-stage1: gemma4-v25-verify-calibration
+	@PYTHONPATH=src $(GEMMA4_PYTHON) -c 'import json,sys; report=json.load(open(sys.argv[1], encoding="utf-8")); sys.exit(0 if report.get("paired_qa_stage_authorized") is True else 2)' "$(GEMMA4_V25_CALIBRATION_DECISION)" || { echo "V25 calibration is deterministically denied at the pinned 20-step limit; refusing to launch paired-QA training." >&2; exit 2; }
+	@if [ -f "$(GEMMA4_V25_CHECKPOINT_ROOT)/epoch_001/metadata.json" ]; then \
+		echo "Reusing cached V25 epoch_001; the verifier will bind it to the fresh preflight."; \
+	elif [ -e "$(GEMMA4_V25_CHECKPOINT_ROOT)" ]; then \
+		echo "Incomplete V25 checkpoint root exists without epoch_001 metadata: $(GEMMA4_V25_CHECKPOINT_ROOT)" >&2; \
+		exit 2; \
+	else \
+		PYTHONPATH=src $(GEMMA4_PYTHON) -m semantic_3d_chat.training.train_adapter --config $(GEMMA4_V25_CONFIG) --epochs 1; \
+	fi
+
+gemma4-v25-verify-update1: gemma4-v25-stage1
+	PYTHONPATH=src $(GEMMA4_PYTHON) -m semantic_3d_chat.evaluation.v25_dense_alignment_controller verify-update1 --config $(GEMMA4_V25_CONFIG) --preflight $(GEMMA4_V25_PREFLIGHT) --checkpoint $(GEMMA4_V25_CHECKPOINT_ROOT)/epoch_001 --output $(GEMMA4_V25_UPDATE1_REPORT)
+
+gemma4-v25-resume-screen: gemma4-v25-verify-update1
+	@PYTHONPATH=src $(GEMMA4_PYTHON) -c 'import json,sys; report=json.load(open(sys.argv[1], encoding="utf-8")); sys.exit(0 if report.get("stage_2_authorized") is True else 2)' "$(GEMMA4_V25_UPDATE1_REPORT)" || { echo "V25 update 1 did not pass calibration/localization and the preregistered teacher-forced stage-2 gate; refusing updates 2--4." >&2; exit 2; }
+	@if [ -f "$(GEMMA4_V25_CHECKPOINT_ROOT)/epoch_004/metadata.json" ]; then \
+		echo "Reusing cached V25 epoch_004; strict selection will validate all four updates."; \
+	else \
+		PYTHONPATH=src $(GEMMA4_PYTHON) -m semantic_3d_chat.training.train_adapter --config $(GEMMA4_V25_CONFIG) --resume $(GEMMA4_V25_CHECKPOINT_ROOT)/epoch_001 --epochs 4; \
+	fi
+
+gemma4-v25-select: gemma4-v25-resume-screen
+	PYTHONPATH=src $(GEMMA4_PYTHON) -m semantic_3d_chat.evaluation.v25_dense_alignment_controller select --config $(GEMMA4_V25_CONFIG) --update1-report $(GEMMA4_V25_UPDATE1_REPORT) --epoch 1=$(GEMMA4_V25_CHECKPOINT_ROOT)/epoch_001/metadata.json --epoch 2=$(GEMMA4_V25_CHECKPOINT_ROOT)/epoch_002/metadata.json --epoch 3=$(GEMMA4_V25_CHECKPOINT_ROOT)/epoch_003/metadata.json --epoch 4=$(GEMMA4_V25_CHECKPOINT_ROOT)/epoch_004/metadata.json --output $(GEMMA4_V25_SCREEN_REPORT)
+
+gemma4-v25-screen: gemma4-v25-select
+
+# V26 corrects V25's calibration split: gradients use only scenes 1/2/9/10,
+# scenes 7/8 are semantic validation, and scenes 3/4 plus final QA test scenes
+# 5/6 are rejected by the map/oracle loader recorder.  No paired-QA optimizer
+# may run until the exact selected calibration report and tensor-only bridge
+# pass the controller's byte-level verification.
+gemma4-v26-preflight:
+	PYTHONPATH=src $(GEMMA4_PYTHON) -m semantic_3d_chat.evaluation.v26_dense_alignment_controller preflight --config $(GEMMA4_V26_CONFIG) --output $(GEMMA4_V26_PREFLIGHT)
+
+gemma4-v26-calibrate: gemma4-v26-preflight
+	PYTHONPATH=src $(GEMMA4_PYTHON) -m semantic_3d_chat.training.dense_alignment_calibration --config $(GEMMA4_V26_CONFIG) --bridge-output $(GEMMA4_V26_CALIBRATION_BRIDGE) --report-output $(GEMMA4_V26_CALIBRATION_REPORT)
+
+gemma4-v26-verify-calibration: gemma4-v26-calibrate
+	PYTHONPATH=src $(GEMMA4_PYTHON) -m semantic_3d_chat.evaluation.v26_dense_alignment_controller verify-calibration --config $(GEMMA4_V26_CONFIG) --preflight $(GEMMA4_V26_PREFLIGHT) --calibration $(GEMMA4_V26_CALIBRATION_REPORT) --bridge $(GEMMA4_V26_CALIBRATION_BRIDGE) --output $(GEMMA4_V26_CALIBRATION_DECISION)
+
+gemma4-v26-stage1: gemma4-v26-verify-calibration
+	@PYTHONPATH=src $(GEMMA4_PYTHON) -c 'import json,sys; report=json.load(open(sys.argv[1], encoding="utf-8")); sys.exit(0 if report.get("paired_qa_stage_authorized") is True and report.get("final_qa_test_untouched") is True else 2)' "$(GEMMA4_V26_CALIBRATION_DECISION)" || { echo "V26 exact calibration/access gate did not authorize paired-QA update 1." >&2; exit 2; }
+	@if [ -f "$(GEMMA4_V26_CHECKPOINT_ROOT)/epoch_001/metadata.json" ] && [ -f "$(GEMMA4_V26_CHECKPOINT_ROOT)/epoch_001/runtime_metadata.json" ] && [ -f "$(GEMMA4_V26_CHECKPOINT_ROOT)/epoch_001/adapter.safetensors" ] && [ -f "$(GEMMA4_V26_CHECKPOINT_ROOT)/epoch_001/optimizer.pt" ]; then \
+		echo "Reusing complete cached V26 epoch_001; strict verification will audit metadata, adapter, and optimizer hashes."; \
+	elif [ -e "$(GEMMA4_V26_CHECKPOINT_ROOT)" ]; then \
+		echo "Incomplete V26 checkpoint root exists without all epoch_001 artifacts: $(GEMMA4_V26_CHECKPOINT_ROOT)" >&2; \
+		exit 2; \
+	else \
+		PYTHONPATH=src $(GEMMA4_PYTHON) -m semantic_3d_chat.training.train_adapter --config $(GEMMA4_V26_CONFIG) --epochs 1; \
+	fi
+
+gemma4-v26-verify-update1: gemma4-v26-stage1
+	PYTHONPATH=src $(GEMMA4_PYTHON) -m semantic_3d_chat.evaluation.v26_dense_alignment_controller verify-update1 --config $(GEMMA4_V26_CONFIG) --preflight $(GEMMA4_V26_PREFLIGHT) --calibration-decision $(GEMMA4_V26_CALIBRATION_DECISION) --checkpoint $(GEMMA4_V26_CHECKPOINT_ROOT)/epoch_001 --output $(GEMMA4_V26_UPDATE1_REPORT)
+
+# Updates 2--4 remain inaccessible until update 1 passes calibration provenance,
+# teacher forcing, frozen-state, adapter-state, and sanitized runtime-sidecar gates.
+gemma4-v26-resume-screen: gemma4-v26-verify-update1
+	@PYTHONPATH=src $(GEMMA4_PYTHON) -c 'import json,sys; report=json.load(open(sys.argv[1], encoding="utf-8")); sys.exit(0 if report.get("stage_2_authorized") is True and report.get("final_qa_test_untouched") is True else 2)' "$(GEMMA4_V26_UPDATE1_REPORT)" || { echo "V26 update 1 did not authorize updates 2--4." >&2; exit 2; }
+	@if [ -f "$(GEMMA4_V26_CHECKPOINT_ROOT)/epoch_004/metadata.json" ] && [ -f "$(GEMMA4_V26_CHECKPOINT_ROOT)/epoch_004/runtime_metadata.json" ] && [ -f "$(GEMMA4_V26_CHECKPOINT_ROOT)/epoch_004/adapter.safetensors" ] && [ -f "$(GEMMA4_V26_CHECKPOINT_ROOT)/epoch_004/optimizer.pt" ]; then \
+		echo "Reusing cached V26 epoch_004; selector will audit every checkpoint artifact."; \
+	else \
+		PYTHONPATH=src $(GEMMA4_PYTHON) -m semantic_3d_chat.training.train_adapter --config $(GEMMA4_V26_CONFIG) --resume $(GEMMA4_V26_CHECKPOINT_ROOT)/epoch_001 --epochs 4; \
+	fi
+
+gemma4-v26-select: gemma4-v26-resume-screen
+	PYTHONPATH=src $(GEMMA4_PYTHON) -m semantic_3d_chat.evaluation.v26_dense_alignment_controller select --config $(GEMMA4_V26_CONFIG) --update1-report $(GEMMA4_V26_UPDATE1_REPORT) --epoch 1=$(GEMMA4_V26_CHECKPOINT_ROOT)/epoch_001 --epoch 2=$(GEMMA4_V26_CHECKPOINT_ROOT)/epoch_002 --epoch 3=$(GEMMA4_V26_CHECKPOINT_ROOT)/epoch_003 --epoch 4=$(GEMMA4_V26_CHECKPOINT_ROOT)/epoch_004 --output $(GEMMA4_V26_SCREEN_REPORT)
+
+gemma4-v26-screen: gemma4-v26-select
 
 # V23's control plane was added after its four-update evidence was produced.
 # The trainer therefore runs from a temporary detached worktree at the exact

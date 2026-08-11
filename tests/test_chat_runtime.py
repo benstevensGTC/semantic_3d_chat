@@ -56,6 +56,7 @@ from semantic_3d_chat.scene_encoder.signed_x_residual import (
 )
 from semantic_3d_chat.training.checkpointing import (
     module_collection_state_sha256,
+    runtime_checkpoint_metadata,
     save_adapter_checkpoint,
 )
 from semantic_3d_chat.training.losses import QuestionGroundingHead
@@ -964,7 +965,10 @@ def test_static_chat_roundtrips_v20_local_field_and_reuses_question_independent_
             ("signed_x_scene_residual_zero_output_equivalence", "all_scene_slots_accounted"),
             False,
         ),
-        (("initialization_provenance", "optimizer_state_loaded"), True),
+        (
+            ("initialization_provenance", "signed_x_zero_output_transition_verified"),
+            False,
+        ),
     ],
 )
 def test_checkpoint_contract_rejects_signed_x_without_explicit_frozen_base_evidence(
@@ -973,13 +977,61 @@ def test_checkpoint_contract_rejects_signed_x_without_explicit_frozen_base_evide
     bad_value: object,
 ) -> None:
     config, checkpoint, *_rest = _tiny_signed_x_runtime_checkpoint(tmp_path)
-    metadata = json.loads((checkpoint / "metadata.json").read_text(encoding="utf-8"))
+    metadata = json.loads((checkpoint / "runtime_metadata.json").read_text(encoding="utf-8"))
     section, field = metadata_path
     metadata[section][field] = bad_value
 
     with pytest.raises(ValueError, match="signed_x_frozen_v18_base_provenance"):
         validate_checkpoint_contract(
             metadata,
+            config,
+            semantic_dim=7,
+            language_hidden_dim=8,
+        )
+
+
+def test_runtime_provenance_sanitizes_later_stage_training_history(tmp_path: Path) -> None:
+    config, checkpoint, _global, _signed, _global_hash, signed_hash = (
+        _tiny_signed_x_runtime_checkpoint(tmp_path)
+    )
+    training_metadata = json.loads((checkpoint / "metadata.json").read_text(encoding="utf-8"))
+    training_metadata["frozen_signed_x_scene_residual_state_sha256"] = signed_hash
+    training_metadata["initialization_provenance"] = {
+        "schema_version": 7,
+        "mode": "frozen_named_lora_scene_stack_plus_zero_output_dense_alignment",
+        "checkpoint": "training-only/source",
+        "history_loaded": False,
+        "question_ids": ["q_000031"],
+    }
+
+    runtime_metadata = runtime_checkpoint_metadata(training_metadata)
+
+    assert runtime_metadata["initialization_provenance"] == {
+        "schema_version": 1,
+        "source_global_scene_residual_state_sha256": training_metadata[
+            "global_scene_residual_state_sha256"
+        ],
+        "source_signed_x_scene_residual_state_sha256": signed_hash,
+        "global_scene_residual_frozen": True,
+        "signed_x_scene_residual_frozen": True,
+        "signed_x_scene_residual_initial_state_sha256": training_metadata[
+            "signed_x_scene_residual_initial_state_sha256"
+        ],
+        "signed_x_zero_output_transition_verified": True,
+        "question_dependent_scene_processing": False,
+    }
+    assert "history" not in runtime_metadata
+    assert "question_ids" not in json.dumps(runtime_metadata)
+    validate_checkpoint_contract(
+        runtime_metadata,
+        config,
+        semantic_dim=7,
+        language_hidden_dim=8,
+    )
+    runtime_metadata["frozen_signed_x_scene_residual_state_sha256"] = "f" * 64
+    with pytest.raises(ValueError, match="frozen_signed_x_scene_residual_state_sha256"):
+        validate_checkpoint_contract(
+            runtime_metadata,
             config,
             semantic_dim=7,
             language_hidden_dim=8,
@@ -1032,7 +1084,7 @@ def test_static_chat_rejects_signed_x_deterministic_initial_hash_mismatch(
     config["scene_encoder"]["signed_x_scene_residual"]["expected_initial_state_sha256"] = (
         wrong_initial_hash
     )
-    metadata_path = checkpoint / "metadata.json"
+    metadata_path = checkpoint / "runtime_metadata.json"
     metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
     metadata["signed_x_scene_residual"]["expected_initial_state_sha256"] = wrong_initial_hash
     metadata["signed_x_scene_residual_initial_state_sha256"] = wrong_initial_hash
@@ -1051,7 +1103,7 @@ def test_static_chat_rejects_signed_x_parameter_count_metadata_mismatch(
 ) -> None:
     config, checkpoint, _global, signed_x, *_hashes = _tiny_signed_x_runtime_checkpoint(tmp_path)
     _mock_tiny_global_residual_runtime(monkeypatch)
-    metadata_path = checkpoint / "metadata.json"
+    metadata_path = checkpoint / "runtime_metadata.json"
     metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
     metadata["signed_x_scene_residual_parameter_count"] = signed_x.parameter_count - 1
     metadata_path.write_text(json.dumps(metadata, indent=2) + "\n", encoding="utf-8")
@@ -1083,14 +1135,18 @@ def test_static_chat_rejects_rehashed_signed_x_anchor_tamper(
     tensors = load_file(checkpoint / "adapter.safetensors")
     tensors["signed_x_scene_residual.signed_x_anchors"].view(-1)[0].add_(0.125)
     save_file(tensors, checkpoint / "adapter.safetensors")
-    metadata_path = checkpoint / "metadata.json"
+    metadata_path = checkpoint / "runtime_metadata.json"
     metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
     signed_x_state = {
         name: value
         for name, value in tensors.items()
         if name.startswith("signed_x_scene_residual.")
     }
-    metadata["signed_x_scene_residual_state_sha256"] = tensor_state_sha256(signed_x_state)
+    rehashed_state = tensor_state_sha256(signed_x_state)
+    metadata["signed_x_scene_residual_state_sha256"] = rehashed_state
+    metadata["initialization_provenance"][
+        "source_signed_x_scene_residual_state_sha256"
+    ] = rehashed_state
     metadata_path.write_text(json.dumps(metadata, indent=2) + "\n", encoding="utf-8")
 
     with pytest.raises(ValueError, match="signed-X anchors"):
@@ -1130,7 +1186,7 @@ def _rewrite_residual_tensors_and_attest_hash(
     """Model an attacker changing both tensor state and its adjacent metadata hash."""
 
     save_file(tensors, checkpoint / "adapter.safetensors")
-    metadata_path = checkpoint / "metadata.json"
+    metadata_path = checkpoint / "runtime_metadata.json"
     metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
     residual_state = {
         name: value for name, value in tensors.items() if name.startswith("global_scene_residual.")
@@ -1191,7 +1247,7 @@ def test_static_chat_rejects_residual_parameter_count_metadata_mismatch(
         tmp_path, content_gated=True
     )
     _mock_tiny_global_residual_runtime(monkeypatch)
-    metadata_path = checkpoint / "metadata.json"
+    metadata_path = checkpoint / "runtime_metadata.json"
     metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
     metadata["global_scene_residual_parameter_count"] = source_residual.parameter_count - 1
     metadata_path.write_text(json.dumps(metadata, indent=2) + "\n", encoding="utf-8")

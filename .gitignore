@@ -36,6 +36,8 @@ reports/gemma4/*
 reports/gemma4/metrics/*
 !reports/gemma4/metrics/*.json
 !reports/gemma4/final_report.md
+!reports/gemma4/artifacts/
+reports/gemma4/artifacts/*
 
 # Generated reports remain local except for the small machine-readable summaries.
 # These directories contain nested per-scene/control artifacts, so ignore them
@@ -51,4 +53,5 @@ reports/predictions/**
 *.npz
 *.pt
 *.safetensors
+!reports/gemma4/artifacts/v26_dense_alignment_bridge.safetensors
 uv.toml
