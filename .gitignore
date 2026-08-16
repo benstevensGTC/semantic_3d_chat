@@ -26,18 +26,32 @@ data/maps/*
 data/scene_tokens/*
 data/qa/*
 data/checkpoints/*
+data/runtime_assets/*
+data/robot/
 !data/**/.gitkeep
 
 # Isolated Gemma 4 feature/map/checkpoint artifacts remain local. Small
 # machine-readable metrics are source artifacts and stay reviewable in Git.
 data_gemma4/
+data_diverse20/
+data_diverse28/
+data_diverse52/
+data_multi_position/
+data_gemma4_multi_position/
+# Machine-local pointer to an accepted checkpoint; generated only after promotion.
+configs/runtime/primary.json
 reports/gemma4/*
 !reports/gemma4/metrics/
 reports/gemma4/metrics/*
 !reports/gemma4/metrics/*.json
 !reports/gemma4/final_report.md
+!reports/gemma4/figures/
+reports/gemma4/figures/*
+!reports/gemma4/figures/blender_rover_v14_approach_chair_before.png
+!reports/gemma4/figures/blender_rover_v14_approach_chair_complete.png
 !reports/gemma4/artifacts/
 reports/gemma4/artifacts/*
+reports/gemma4_multi_position/
 
 # Generated reports remain local except for the small machine-readable summaries.
 # These directories contain nested per-scene/control artifacts, so ignore them

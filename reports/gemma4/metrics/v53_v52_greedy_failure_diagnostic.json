@@ -1,0 +1,1902 @@
+{
+  "access_audit": {
+    "final_test_loaded": false,
+    "forbidden_file_accesses": [],
+    "loaded_file_count": 153,
+    "loaded_file_inventory_sha256": "6b1cf080bf4dbf527537e6dfd906b4f0de3b2c6d1da4d887710c1be82e4d58f0",
+    "optimizer_file_reads": [],
+    "oracle_loaded": false,
+    "passed": true,
+    "training_map_count": 16,
+    "training_map_inventory_sha256": "b2c3e28d95e1def158792f9fcf873eeeb523cd37dda3b985ea07f7201a98435f",
+    "validation_qa_loaded": false
+  },
+  "artifact": "v53_v52_greedy_failure_diagnostic",
+  "authorization": {
+    "authorization_id": "v53_v52_greedy_failure_diagnostic",
+    "checks": {
+      "access_clean": true,
+      "artifact": true,
+      "failed_without_winner": true,
+      "final_source_restored_exact": true,
+      "no_checkpoint_or_restricted_action": true,
+      "target_greedy_evidence_exact": true,
+      "target_non_greedy_all_pass": true,
+      "target_only_full_failure_is_greedy_complete_units": true,
+      "target_source_restored_exact": true,
+      "target_spec_exact": true
+    },
+    "predecessor_path": "reports/gemma4/metrics/v52_query_alpha_refinement.json",
+    "predecessor_sha256": "6b653d1ff69d6b0dfe2cce6968478e5b47cef627550b282a2c8e7bc3cc197fd9"
+  },
+  "candidate_reconstruction": {
+    "authorized_surface_state_sha256": "04cb7ac08c062c921a1711cb87acb57af6fa31637f61cb774cfbcd9a28ce8eef",
+    "candidate_id": "guarded_scene_alpha_1p0_query_alpha_2p0625",
+    "declared_order": 1,
+    "direction_id": "guarded_both_sign",
+    "frozen_state_sha256": "31cb215cf0d1623886d4a79203c501912e66537021da53dd711124abdc2e36fa",
+    "full_tensor_state_sha256": "aae9f67451f9f3f4aeb4d1cbb39fc6c9d3cd935521c9a84704b217ac64f18119",
+    "query_alpha": 2.0625,
+    "query_learning_rate": 8e-06,
+    "query_state_changed": true,
+    "query_state_sha256": "5144ecc81defa65266e54c3d83a1243d948ebad890cdbed812af1bcc46138249",
+    "reconstructed_candidate_authorized_surface_state_exact": true,
+    "reconstructed_candidate_full_tensor_state_exact": true,
+    "reconstructed_directly_from_v47_u4": true,
+    "scene_alpha": 1.0,
+    "scene_learning_rate": 1e-05,
+    "scene_readout_state_changed": true,
+    "scene_readout_state_sha256": "4a0b76ada4ba42b076798b91ff8bcbdd414ede1dca2abff75aaba06bbe949baa",
+    "source_v47_u4_exact_before_reconstruction": true
+  },
+  "chat_promotion_executed": false,
+  "checkpoint_written": false,
+  "detailed_greedy": {
+    "broad_rows": [
+      {
+        "answer_type": "attribute",
+        "expected_normalized_answer": "red",
+        "generated_normalized_answer": "orange",
+        "legacy_exact_correct": false,
+        "question_id": "q_000093",
+        "reordered_list_rescue": false,
+        "scene_id": "scene_000014",
+        "type_aware_correct": false
+      },
+      {
+        "answer_type": "count",
+        "expected_normalized_answer": "1",
+        "generated_normalized_answer": "1",
+        "legacy_exact_correct": true,
+        "question_id": "q_000127",
+        "reordered_list_rescue": false,
+        "scene_id": "scene_000012",
+        "type_aware_correct": true
+      },
+      {
+        "answer_type": "metric",
+        "expected_normalized_answer": "cube",
+        "generated_normalized_answer": "closest to camera",
+        "legacy_exact_correct": false,
+        "question_id": "q_000101",
+        "reordered_list_rescue": false,
+        "scene_id": "scene_000033",
+        "type_aware_correct": false
+      },
+      {
+        "answer_type": "orientation",
+        "expected_normalized_answer": "upright",
+        "generated_normalized_answer": "upright",
+        "legacy_exact_correct": true,
+        "question_id": "q_000019",
+        "reordered_list_rescue": false,
+        "scene_id": "scene_000033",
+        "type_aware_correct": true
+      },
+      {
+        "answer_type": "presence",
+        "expected_normalized_answer": "yes",
+        "generated_normalized_answer": "yes there is chair in room",
+        "legacy_exact_correct": false,
+        "question_id": "q_000107",
+        "reordered_list_rescue": false,
+        "scene_id": "scene_000036",
+        "type_aware_correct": false
+      },
+      {
+        "answer_type": "spatial_relation",
+        "expected_normalized_answer": "behind",
+        "generated_normalized_answer": "behind",
+        "legacy_exact_correct": true,
+        "question_id": "q_000082",
+        "reordered_list_rescue": false,
+        "scene_id": "scene_000037",
+        "type_aware_correct": true
+      },
+      {
+        "answer_type": "support",
+        "expected_normalized_answer": "floor",
+        "generated_normalized_answer": "on floor",
+        "legacy_exact_correct": false,
+        "question_id": "q_000094",
+        "reordered_list_rescue": false,
+        "scene_id": "scene_000015",
+        "type_aware_correct": false
+      },
+      {
+        "answer_type": "attribute",
+        "expected_normalized_answer": "red",
+        "generated_normalized_answer": "orange",
+        "legacy_exact_correct": false,
+        "question_id": "q_000048",
+        "reordered_list_rescue": false,
+        "scene_id": "scene_000037",
+        "type_aware_correct": false
+      },
+      {
+        "answer_type": "count",
+        "expected_normalized_answer": "1",
+        "generated_normalized_answer": "i cannot find any cubes in provided image",
+        "legacy_exact_correct": false,
+        "question_id": "q_000111",
+        "reordered_list_rescue": false,
+        "scene_id": "scene_000034",
+        "type_aware_correct": false
+      },
+      {
+        "answer_type": "metric",
+        "expected_normalized_answer": "cube",
+        "generated_normalized_answer": "closest to camera is orange brown object on left",
+        "legacy_exact_correct": false,
+        "question_id": "q_000079",
+        "reordered_list_rescue": false,
+        "scene_id": "scene_000032",
+        "type_aware_correct": false
+      },
+      {
+        "answer_type": "orientation",
+        "expected_normalized_answer": "upright",
+        "generated_normalized_answer": "upright",
+        "legacy_exact_correct": true,
+        "question_id": "q_000092",
+        "reordered_list_rescue": false,
+        "scene_id": "scene_000034",
+        "type_aware_correct": true
+      },
+      {
+        "answer_type": "presence",
+        "expected_normalized_answer": "yes",
+        "generated_normalized_answer": "yes",
+        "legacy_exact_correct": true,
+        "question_id": "q_000100",
+        "reordered_list_rescue": false,
+        "scene_id": "scene_000018",
+        "type_aware_correct": true
+      },
+      {
+        "answer_type": "spatial_relation",
+        "expected_normalized_answer": "above",
+        "generated_normalized_answer": "below",
+        "legacy_exact_correct": false,
+        "question_id": "q_000099",
+        "reordered_list_rescue": false,
+        "scene_id": "scene_000011",
+        "type_aware_correct": false
+      },
+      {
+        "answer_type": "support",
+        "expected_normalized_answer": "book cube",
+        "generated_normalized_answer": "table",
+        "legacy_exact_correct": false,
+        "question_id": "q_000138",
+        "reordered_list_rescue": false,
+        "scene_id": "scene_000013",
+        "type_aware_correct": false
+      },
+      {
+        "answer_type": "attribute",
+        "expected_normalized_answer": "yellow",
+        "generated_normalized_answer": "red",
+        "legacy_exact_correct": false,
+        "question_id": "q_000053",
+        "reordered_list_rescue": false,
+        "scene_id": "scene_000037",
+        "type_aware_correct": false
+      },
+      {
+        "answer_type": "count",
+        "expected_normalized_answer": "1",
+        "generated_normalized_answer": "1",
+        "legacy_exact_correct": true,
+        "question_id": "q_000089",
+        "reordered_list_rescue": false,
+        "scene_id": "scene_000031",
+        "type_aware_correct": true
+      },
+      {
+        "answer_type": "metric",
+        "expected_normalized_answer": "cube",
+        "generated_normalized_answer": "closest to camera is orange object",
+        "legacy_exact_correct": false,
+        "question_id": "q_000030",
+        "reordered_list_rescue": false,
+        "scene_id": "scene_000035",
+        "type_aware_correct": false
+      },
+      {
+        "answer_type": "orientation",
+        "expected_normalized_answer": "upright",
+        "generated_normalized_answer": "upright",
+        "legacy_exact_correct": true,
+        "question_id": "q_000005",
+        "reordered_list_rescue": false,
+        "scene_id": "scene_000015",
+        "type_aware_correct": true
+      },
+      {
+        "answer_type": "presence",
+        "expected_normalized_answer": "no",
+        "generated_normalized_answer": "no",
+        "legacy_exact_correct": true,
+        "question_id": "q_000082",
+        "reordered_list_rescue": false,
+        "scene_id": "scene_000013",
+        "type_aware_correct": true
+      },
+      {
+        "answer_type": "spatial_relation",
+        "expected_normalized_answer": "right",
+        "generated_normalized_answer": "right",
+        "legacy_exact_correct": true,
+        "question_id": "q_000014",
+        "reordered_list_rescue": false,
+        "scene_id": "scene_000037",
+        "type_aware_correct": true
+      },
+      {
+        "answer_type": "support",
+        "expected_normalized_answer": "wall",
+        "generated_normalized_answer": "floor",
+        "legacy_exact_correct": false,
+        "question_id": "q_000035",
+        "reordered_list_rescue": false,
+        "scene_id": "scene_000014",
+        "type_aware_correct": false
+      },
+      {
+        "answer_type": "attribute",
+        "expected_normalized_answer": "terracotta",
+        "generated_normalized_answer": "light blue",
+        "legacy_exact_correct": false,
+        "question_id": "q_000011",
+        "reordered_list_rescue": false,
+        "scene_id": "scene_000017",
+        "type_aware_correct": false
+      },
+      {
+        "answer_type": "count",
+        "expected_normalized_answer": "1",
+        "generated_normalized_answer": "1",
+        "legacy_exact_correct": true,
+        "question_id": "q_000085",
+        "reordered_list_rescue": false,
+        "scene_id": "scene_000033",
+        "type_aware_correct": true
+      },
+      {
+        "answer_type": "metric",
+        "expected_normalized_answer": "cube",
+        "generated_normalized_answer": "closest to camera is blue object",
+        "legacy_exact_correct": false,
+        "question_id": "q_000128",
+        "reordered_list_rescue": false,
+        "scene_id": "scene_000015",
+        "type_aware_correct": false
+      },
+      {
+        "answer_type": "orientation",
+        "expected_normalized_answer": "upright",
+        "generated_normalized_answer": "upright",
+        "legacy_exact_correct": true,
+        "question_id": "q_000004",
+        "reordered_list_rescue": false,
+        "scene_id": "scene_000031",
+        "type_aware_correct": true
+      },
+      {
+        "answer_type": "presence",
+        "expected_normalized_answer": "yes",
+        "generated_normalized_answer": "no",
+        "legacy_exact_correct": false,
+        "question_id": "q_000073",
+        "reordered_list_rescue": false,
+        "scene_id": "scene_000038",
+        "type_aware_correct": false
+      },
+      {
+        "answer_type": "spatial_relation",
+        "expected_normalized_answer": "below",
+        "generated_normalized_answer": "below",
+        "legacy_exact_correct": true,
+        "question_id": "q_000045",
+        "reordered_list_rescue": false,
+        "scene_id": "scene_000037",
+        "type_aware_correct": true
+      },
+      {
+        "answer_type": "support",
+        "expected_normalized_answer": "on",
+        "generated_normalized_answer": "under table",
+        "legacy_exact_correct": false,
+        "question_id": "q_000135",
+        "reordered_list_rescue": false,
+        "scene_id": "scene_000013",
+        "type_aware_correct": false
+      },
+      {
+        "answer_type": "attribute",
+        "expected_normalized_answer": "blue",
+        "generated_normalized_answer": "blue",
+        "legacy_exact_correct": true,
+        "question_id": "q_000016",
+        "reordered_list_rescue": false,
+        "scene_id": "scene_000018",
+        "type_aware_correct": true
+      },
+      {
+        "answer_type": "count",
+        "expected_normalized_answer": "1",
+        "generated_normalized_answer": "1",
+        "legacy_exact_correct": true,
+        "question_id": "q_000082",
+        "reordered_list_rescue": false,
+        "scene_id": "scene_000018",
+        "type_aware_correct": true
+      },
+      {
+        "answer_type": "metric",
+        "expected_normalized_answer": "cube",
+        "generated_normalized_answer": "closest to camera is blue object",
+        "legacy_exact_correct": false,
+        "question_id": "q_000033",
+        "reordered_list_rescue": false,
+        "scene_id": "scene_000011",
+        "type_aware_correct": false
+      },
+      {
+        "answer_type": "orientation",
+        "expected_normalized_answer": "upright",
+        "generated_normalized_answer": "upright",
+        "legacy_exact_correct": true,
+        "question_id": "q_000016",
+        "reordered_list_rescue": false,
+        "scene_id": "scene_000016",
+        "type_aware_correct": true
+      },
+      {
+        "answer_type": "presence",
+        "expected_normalized_answer": "no",
+        "generated_normalized_answer": "no",
+        "legacy_exact_correct": true,
+        "question_id": "q_000137",
+        "reordered_list_rescue": false,
+        "scene_id": "scene_000035",
+        "type_aware_correct": true
+      },
+      {
+        "answer_type": "spatial_relation",
+        "expected_normalized_answer": "above",
+        "generated_normalized_answer": "below",
+        "legacy_exact_correct": false,
+        "question_id": "q_000131",
+        "reordered_list_rescue": false,
+        "scene_id": "scene_000012",
+        "type_aware_correct": false
+      },
+      {
+        "answer_type": "support",
+        "expected_normalized_answer": "wall",
+        "generated_normalized_answer": "floor",
+        "legacy_exact_correct": false,
+        "question_id": "q_000086",
+        "reordered_list_rescue": false,
+        "scene_id": "scene_000011",
+        "type_aware_correct": false
+      },
+      {
+        "answer_type": "attribute",
+        "expected_normalized_answer": "blue",
+        "generated_normalized_answer": "blue",
+        "legacy_exact_correct": true,
+        "question_id": "q_000141",
+        "reordered_list_rescue": false,
+        "scene_id": "scene_000013",
+        "type_aware_correct": true
+      },
+      {
+        "answer_type": "count",
+        "expected_normalized_answer": "1",
+        "generated_normalized_answer": "1",
+        "legacy_exact_correct": true,
+        "question_id": "q_000102",
+        "reordered_list_rescue": false,
+        "scene_id": "scene_000014",
+        "type_aware_correct": true
+      },
+      {
+        "answer_type": "metric",
+        "expected_normalized_answer": "cube",
+        "generated_normalized_answer": "closest to camera is blue object",
+        "legacy_exact_correct": false,
+        "question_id": "q_000080",
+        "reordered_list_rescue": false,
+        "scene_id": "scene_000037",
+        "type_aware_correct": false
+      },
+      {
+        "answer_type": "orientation",
+        "expected_normalized_answer": "upright",
+        "generated_normalized_answer": "upright",
+        "legacy_exact_correct": true,
+        "question_id": "q_000078",
+        "reordered_list_rescue": false,
+        "scene_id": "scene_000032",
+        "type_aware_correct": true
+      },
+      {
+        "answer_type": "presence",
+        "expected_normalized_answer": "yes",
+        "generated_normalized_answer": "no",
+        "legacy_exact_correct": false,
+        "question_id": "q_000060",
+        "reordered_list_rescue": false,
+        "scene_id": "scene_000036",
+        "type_aware_correct": false
+      },
+      {
+        "answer_type": "spatial_relation",
+        "expected_normalized_answer": "in front",
+        "generated_normalized_answer": "behind",
+        "legacy_exact_correct": false,
+        "question_id": "q_000134",
+        "reordered_list_rescue": false,
+        "scene_id": "scene_000032",
+        "type_aware_correct": false
+      },
+      {
+        "answer_type": "support",
+        "expected_normalized_answer": "book cube",
+        "generated_normalized_answer": "blue object is on table",
+        "legacy_exact_correct": false,
+        "question_id": "q_000101",
+        "reordered_list_rescue": false,
+        "scene_id": "scene_000017",
+        "type_aware_correct": false
+      },
+      {
+        "answer_type": "attribute",
+        "expected_normalized_answer": "blue",
+        "generated_normalized_answer": "blue",
+        "legacy_exact_correct": true,
+        "question_id": "q_000064",
+        "reordered_list_rescue": false,
+        "scene_id": "scene_000017",
+        "type_aware_correct": true
+      },
+      {
+        "answer_type": "count",
+        "expected_normalized_answer": "1",
+        "generated_normalized_answer": "1",
+        "legacy_exact_correct": true,
+        "question_id": "q_000136",
+        "reordered_list_rescue": false,
+        "scene_id": "scene_000035",
+        "type_aware_correct": true
+      },
+      {
+        "answer_type": "metric",
+        "expected_normalized_answer": "cube",
+        "generated_normalized_answer": "closest to camera",
+        "legacy_exact_correct": false,
+        "question_id": "q_000035",
+        "reordered_list_rescue": false,
+        "scene_id": "scene_000034",
+        "type_aware_correct": false
+      },
+      {
+        "answer_type": "orientation",
+        "expected_normalized_answer": "upright",
+        "generated_normalized_answer": "upright",
+        "legacy_exact_correct": true,
+        "question_id": "q_000058",
+        "reordered_list_rescue": false,
+        "scene_id": "scene_000038",
+        "type_aware_correct": true
+      },
+      {
+        "answer_type": "presence",
+        "expected_normalized_answer": "no",
+        "generated_normalized_answer": "there is piece of furniture that resembles sofa in room",
+        "legacy_exact_correct": false,
+        "question_id": "q_000074",
+        "reordered_list_rescue": false,
+        "scene_id": "scene_000031",
+        "type_aware_correct": false
+      },
+      {
+        "answer_type": "spatial_relation",
+        "expected_normalized_answer": "below",
+        "generated_normalized_answer": "below",
+        "legacy_exact_correct": true,
+        "question_id": "q_000033",
+        "reordered_list_rescue": false,
+        "scene_id": "scene_000012",
+        "type_aware_correct": true
+      }
+    ],
+    "broad_rows_sha256": "488dabfca6da0fd716c661268180a2b3874fc6c48f0b3b3ed5f0dbe3da69f35a",
+    "contains_normalized_training_answers": true,
+    "contains_question_text": false,
+    "final_test_loaded": false,
+    "oracle_loaded": false,
+    "pair_units": [
+      {
+        "family": "other",
+        "legacy_failure_classification": "one_sided_failure",
+        "legacy_greedy_complete": false,
+        "pair_id": "pair_000005",
+        "question_key": "cfq_a578dc166be9a217",
+        "scene_ids": [
+          "scene_000011",
+          "scene_000012"
+        ],
+        "sides": [
+          {
+            "answer_type": "orientation",
+            "expected_normalized_answer": "upright",
+            "generated_normalized_answer": "upright",
+            "legacy_exact_correct": true,
+            "question_id": "q_000069",
+            "reordered_list_rescue": false,
+            "scene_id": "scene_000011",
+            "side_index": 0,
+            "teacher_cross_prefix_margin": 0.03746062517166138,
+            "teacher_side_margin": 0.4871199131011963,
+            "teacher_side_positive": true,
+            "type_aware_correct": true
+          },
+          {
+            "answer_type": "orientation",
+            "expected_normalized_answer": "upside down",
+            "generated_normalized_answer": "upright",
+            "legacy_exact_correct": false,
+            "question_id": "q_000030",
+            "reordered_list_rescue": false,
+            "scene_id": "scene_000012",
+            "side_index": 1,
+            "teacher_cross_prefix_margin": 0.09552180767059326,
+            "teacher_side_margin": -0.35413748025894165,
+            "teacher_side_positive": false,
+            "type_aware_correct": false
+          }
+        ],
+        "teacher_complete": false,
+        "teacher_cross_prefix_complete": true,
+        "type_aware_failure_classification": "one_sided_failure",
+        "type_aware_greedy_complete": false
+      },
+      {
+        "family": "other",
+        "legacy_failure_classification": "one_sided_failure",
+        "legacy_greedy_complete": false,
+        "pair_id": "pair_000006",
+        "question_key": "cfq_0a79d507273195ef",
+        "scene_ids": [
+          "scene_000013",
+          "scene_000014"
+        ],
+        "sides": [
+          {
+            "answer_type": "spatial_relation",
+            "expected_normalized_answer": "right",
+            "generated_normalized_answer": "right",
+            "legacy_exact_correct": true,
+            "question_id": "q_000033",
+            "reordered_list_rescue": false,
+            "scene_id": "scene_000013",
+            "side_index": 0,
+            "teacher_cross_prefix_margin": 0.07669591903686523,
+            "teacher_side_margin": 0.125,
+            "teacher_side_positive": true,
+            "type_aware_correct": true
+          },
+          {
+            "answer_type": "spatial_relation",
+            "expected_normalized_answer": "left",
+            "generated_normalized_answer": "right",
+            "legacy_exact_correct": false,
+            "question_id": "q_000124",
+            "reordered_list_rescue": false,
+            "scene_id": "scene_000014",
+            "side_index": 1,
+            "teacher_cross_prefix_margin": 0.048304080963134766,
+            "teacher_side_margin": 0.0,
+            "teacher_side_positive": false,
+            "type_aware_correct": false
+          }
+        ],
+        "teacher_complete": false,
+        "teacher_cross_prefix_complete": true,
+        "type_aware_failure_classification": "one_sided_failure",
+        "type_aware_greedy_complete": false
+      },
+      {
+        "family": "other",
+        "legacy_failure_classification": "complete_success",
+        "legacy_greedy_complete": true,
+        "pair_id": "pair_000006",
+        "question_key": "cfq_5c84a2c27d2be251",
+        "scene_ids": [
+          "scene_000013",
+          "scene_000014"
+        ],
+        "sides": [
+          {
+            "answer_type": "spatial_relation",
+            "expected_normalized_answer": "left",
+            "generated_normalized_answer": "left",
+            "legacy_exact_correct": true,
+            "question_id": "q_000127",
+            "reordered_list_rescue": false,
+            "scene_id": "scene_000013",
+            "side_index": 0,
+            "teacher_cross_prefix_margin": 0.17795002460479736,
+            "teacher_side_margin": 0.25,
+            "teacher_side_positive": true,
+            "type_aware_correct": true
+          },
+          {
+            "answer_type": "spatial_relation",
+            "expected_normalized_answer": "right",
+            "generated_normalized_answer": "right",
+            "legacy_exact_correct": true,
+            "question_id": "q_000034",
+            "reordered_list_rescue": false,
+            "scene_id": "scene_000014",
+            "side_index": 1,
+            "teacher_cross_prefix_margin": 0.2595500349998474,
+            "teacher_side_margin": 0.18750005960464478,
+            "teacher_side_positive": true,
+            "type_aware_correct": true
+          }
+        ],
+        "teacher_complete": true,
+        "teacher_cross_prefix_complete": true,
+        "type_aware_failure_classification": "complete_success",
+        "type_aware_greedy_complete": true
+      },
+      {
+        "family": "other",
+        "legacy_failure_classification": "one_sided_failure",
+        "legacy_greedy_complete": false,
+        "pair_id": "pair_000006",
+        "question_key": "cfq_8e9855d51fa91bfb",
+        "scene_ids": [
+          "scene_000013",
+          "scene_000014"
+        ],
+        "sides": [
+          {
+            "answer_type": "spatial_relation",
+            "expected_normalized_answer": "left",
+            "generated_normalized_answer": "left",
+            "legacy_exact_correct": true,
+            "question_id": "q_000084",
+            "reordered_list_rescue": false,
+            "scene_id": "scene_000013",
+            "side_index": 0,
+            "teacher_cross_prefix_margin": -0.004892289638519287,
+            "teacher_side_margin": 1.0,
+            "teacher_side_positive": true,
+            "type_aware_correct": true
+          },
+          {
+            "answer_type": "spatial_relation",
+            "expected_normalized_answer": "right",
+            "generated_normalized_answer": "left",
+            "legacy_exact_correct": false,
+            "question_id": "q_000057",
+            "reordered_list_rescue": false,
+            "scene_id": "scene_000014",
+            "side_index": 1,
+            "teacher_cross_prefix_margin": 0.0048923492431640625,
+            "teacher_side_margin": -0.9999999403953552,
+            "teacher_side_positive": false,
+            "type_aware_correct": false
+          }
+        ],
+        "teacher_complete": false,
+        "teacher_cross_prefix_complete": false,
+        "type_aware_failure_classification": "one_sided_failure",
+        "type_aware_greedy_complete": false
+      },
+      {
+        "family": "other",
+        "legacy_failure_classification": "one_sided_failure",
+        "legacy_greedy_complete": false,
+        "pair_id": "pair_000006",
+        "question_key": "cfq_f1e8f24afac4339b",
+        "scene_ids": [
+          "scene_000013",
+          "scene_000014"
+        ],
+        "sides": [
+          {
+            "answer_type": "spatial_relation",
+            "expected_normalized_answer": "right",
+            "generated_normalized_answer": "right",
+            "legacy_exact_correct": true,
+            "question_id": "q_000058",
+            "reordered_list_rescue": false,
+            "scene_id": "scene_000013",
+            "side_index": 0,
+            "teacher_cross_prefix_margin": 0.08000820875167847,
+            "teacher_side_margin": 1.125,
+            "teacher_side_positive": true,
+            "type_aware_correct": true
+          },
+          {
+            "answer_type": "spatial_relation",
+            "expected_normalized_answer": "left",
+            "generated_normalized_answer": "right",
+            "legacy_exact_correct": false,
+            "question_id": "q_000134",
+            "reordered_list_rescue": false,
+            "scene_id": "scene_000014",
+            "side_index": 1,
+            "teacher_cross_prefix_margin": 0.04499173164367676,
+            "teacher_side_margin": -1.0,
+            "teacher_side_positive": false,
+            "type_aware_correct": false
+          }
+        ],
+        "teacher_complete": false,
+        "teacher_cross_prefix_complete": true,
+        "type_aware_failure_classification": "one_sided_failure",
+        "type_aware_greedy_complete": false
+      },
+      {
+        "family": "other",
+        "legacy_failure_classification": "complete_failure",
+        "legacy_greedy_complete": false,
+        "pair_id": "pair_000007",
+        "question_key": "cfq_736067b51ce93c49",
+        "scene_ids": [
+          "scene_000015",
+          "scene_000016"
+        ],
+        "sides": [
+          {
+            "answer_type": "attribute",
+            "expected_normalized_answer": "green",
+            "generated_normalized_answer": "orange",
+            "legacy_exact_correct": false,
+            "question_id": "q_000134",
+            "reordered_list_rescue": false,
+            "scene_id": "scene_000015",
+            "side_index": 0,
+            "teacher_cross_prefix_margin": -0.36348390579223633,
+            "teacher_side_margin": 0.1875,
+            "teacher_side_positive": true,
+            "type_aware_correct": false
+          },
+          {
+            "answer_type": "attribute",
+            "expected_normalized_answer": "yellow",
+            "generated_normalized_answer": "red",
+            "legacy_exact_correct": false,
+            "question_id": "q_000063",
+            "reordered_list_rescue": false,
+            "scene_id": "scene_000016",
+            "side_index": 1,
+            "teacher_cross_prefix_margin": 0.11348390579223633,
+            "teacher_side_margin": -0.4375,
+            "teacher_side_positive": false,
+            "type_aware_correct": false
+          }
+        ],
+        "teacher_complete": false,
+        "teacher_cross_prefix_complete": false,
+        "type_aware_failure_classification": "complete_failure",
+        "type_aware_greedy_complete": false
+      },
+      {
+        "family": "other",
+        "legacy_failure_classification": "complete_failure",
+        "legacy_greedy_complete": false,
+        "pair_id": "pair_000007",
+        "question_key": "cfq_997610c185204121",
+        "scene_ids": [
+          "scene_000015",
+          "scene_000016"
+        ],
+        "sides": [
+          {
+            "answer_type": "attribute",
+            "expected_normalized_answer": "green",
+            "generated_normalized_answer": "red",
+            "legacy_exact_correct": false,
+            "question_id": "q_000088",
+            "reordered_list_rescue": false,
+            "scene_id": "scene_000015",
+            "side_index": 0,
+            "teacher_cross_prefix_margin": 0.3158717155456543,
+            "teacher_side_margin": 0.25,
+            "teacher_side_positive": true,
+            "type_aware_correct": false
+          },
+          {
+            "answer_type": "attribute",
+            "expected_normalized_answer": "yellow",
+            "generated_normalized_answer": "red",
+            "legacy_exact_correct": false,
+            "question_id": "q_000088",
+            "reordered_list_rescue": false,
+            "scene_id": "scene_000016",
+            "side_index": 1,
+            "teacher_cross_prefix_margin": 0.7466282844543457,
+            "teacher_side_margin": 0.8125,
+            "teacher_side_positive": true,
+            "type_aware_correct": false
+          }
+        ],
+        "teacher_complete": true,
+        "teacher_cross_prefix_complete": true,
+        "type_aware_failure_classification": "complete_failure",
+        "type_aware_greedy_complete": false
+      },
+      {
+        "family": "other",
+        "legacy_failure_classification": "one_sided_failure",
+        "legacy_greedy_complete": false,
+        "pair_id": "pair_000007",
+        "question_key": "cfq_bd500364dac52b59",
+        "scene_ids": [
+          "scene_000015",
+          "scene_000016"
+        ],
+        "sides": [
+          {
+            "answer_type": "attribute",
+            "expected_normalized_answer": "yellow",
+            "generated_normalized_answer": "brown",
+            "legacy_exact_correct": false,
+            "question_id": "q_000007",
+            "reordered_list_rescue": false,
+            "scene_id": "scene_000015",
+            "side_index": 0,
+            "teacher_cross_prefix_margin": 7.126027584075928,
+            "teacher_side_margin": 5.179687023162842,
+            "teacher_side_positive": true,
+            "type_aware_correct": false
+          },
+          {
+            "answer_type": "attribute",
+            "expected_normalized_answer": "green",
+            "generated_normalized_answer": "green",
+            "legacy_exact_correct": true,
+            "question_id": "q_000098",
+            "reordered_list_rescue": false,
+            "scene_id": "scene_000016",
+            "side_index": 1,
+            "teacher_cross_prefix_margin": 9.178659439086914,
+            "teacher_side_margin": 11.125,
+            "teacher_side_positive": true,
+            "type_aware_correct": true
+          }
+        ],
+        "teacher_complete": true,
+        "teacher_cross_prefix_complete": true,
+        "type_aware_failure_classification": "one_sided_failure",
+        "type_aware_greedy_complete": false
+      },
+      {
+        "family": "other",
+        "legacy_failure_classification": "one_sided_failure",
+        "legacy_greedy_complete": false,
+        "pair_id": "pair_000007",
+        "question_key": "cfq_f004e89a2284b94a",
+        "scene_ids": [
+          "scene_000015",
+          "scene_000016"
+        ],
+        "sides": [
+          {
+            "answer_type": "attribute",
+            "expected_normalized_answer": "yellow",
+            "generated_normalized_answer": "brown",
+            "legacy_exact_correct": false,
+            "question_id": "q_000068",
+            "reordered_list_rescue": false,
+            "scene_id": "scene_000015",
+            "side_index": 0,
+            "teacher_cross_prefix_margin": 8.38989543914795,
+            "teacher_side_margin": 5.203125,
+            "teacher_side_positive": true,
+            "type_aware_correct": false
+          },
+          {
+            "answer_type": "attribute",
+            "expected_normalized_answer": "green",
+            "generated_normalized_answer": "green",
+            "legacy_exact_correct": true,
+            "question_id": "q_000125",
+            "reordered_list_rescue": false,
+            "scene_id": "scene_000016",
+            "side_index": 1,
+            "teacher_cross_prefix_margin": 8.75072956085205,
+            "teacher_side_margin": 11.9375,
+            "teacher_side_positive": true,
+            "type_aware_correct": true
+          }
+        ],
+        "teacher_complete": true,
+        "teacher_cross_prefix_complete": true,
+        "type_aware_failure_classification": "one_sided_failure",
+        "type_aware_greedy_complete": false
+      },
+      {
+        "family": "other",
+        "legacy_failure_classification": "one_sided_failure",
+        "legacy_greedy_complete": false,
+        "pair_id": "pair_000008",
+        "question_key": "cfq_39808de4310f3388",
+        "scene_ids": [
+          "scene_000017",
+          "scene_000018"
+        ],
+        "sides": [
+          {
+            "answer_type": "count",
+            "expected_normalized_answer": "1",
+            "generated_normalized_answer": "1",
+            "legacy_exact_correct": true,
+            "question_id": "q_000142",
+            "reordered_list_rescue": false,
+            "scene_id": "scene_000017",
+            "side_index": 0,
+            "teacher_cross_prefix_margin": -0.02008339762687683,
+            "teacher_side_margin": 2.625,
+            "teacher_side_positive": true,
+            "type_aware_correct": true
+          },
+          {
+            "answer_type": "count",
+            "expected_normalized_answer": "2",
+            "generated_normalized_answer": "1",
+            "legacy_exact_correct": false,
+            "question_id": "q_000028",
+            "reordered_list_rescue": false,
+            "scene_id": "scene_000018",
+            "side_index": 1,
+            "teacher_cross_prefix_margin": 0.20758342742919922,
+            "teacher_side_margin": -2.4375,
+            "teacher_side_positive": false,
+            "type_aware_correct": false
+          }
+        ],
+        "teacher_complete": false,
+        "teacher_cross_prefix_complete": false,
+        "type_aware_failure_classification": "one_sided_failure",
+        "type_aware_greedy_complete": false
+      },
+      {
+        "family": "book_support",
+        "legacy_failure_classification": "complete_failure",
+        "legacy_greedy_complete": false,
+        "pair_id": "pair_000015",
+        "question_key": "cfq_13b1138d14c52a7c",
+        "scene_ids": [
+          "scene_000031",
+          "scene_000032"
+        ],
+        "sides": [
+          {
+            "answer_type": "support",
+            "expected_normalized_answer": "on",
+            "generated_normalized_answer": "under table",
+            "legacy_exact_correct": false,
+            "question_id": "q_000039",
+            "reordered_list_rescue": false,
+            "scene_id": "scene_000031",
+            "side_index": 0,
+            "teacher_cross_prefix_margin": 0.1536579132080078,
+            "teacher_side_margin": -7.0625,
+            "teacher_side_positive": false,
+            "type_aware_correct": false
+          },
+          {
+            "answer_type": "support",
+            "expected_normalized_answer": "under",
+            "generated_normalized_answer": "under table",
+            "legacy_exact_correct": false,
+            "question_id": "q_000065",
+            "reordered_list_rescue": false,
+            "scene_id": "scene_000032",
+            "side_index": 1,
+            "teacher_cross_prefix_margin": 0.0338420569896698,
+            "teacher_side_margin": 7.25,
+            "teacher_side_positive": true,
+            "type_aware_correct": false
+          }
+        ],
+        "teacher_complete": false,
+        "teacher_cross_prefix_complete": true,
+        "type_aware_failure_classification": "complete_failure",
+        "type_aware_greedy_complete": false
+      },
+      {
+        "family": "book_support",
+        "legacy_failure_classification": "complete_failure",
+        "legacy_greedy_complete": false,
+        "pair_id": "pair_000015",
+        "question_key": "cfq_163eb92339ad35a5",
+        "scene_ids": [
+          "scene_000031",
+          "scene_000032"
+        ],
+        "sides": [
+          {
+            "answer_type": "support",
+            "expected_normalized_answer": "book cube",
+            "generated_normalized_answer": "green plant is on table",
+            "legacy_exact_correct": false,
+            "question_id": "q_000057",
+            "reordered_list_rescue": false,
+            "scene_id": "scene_000031",
+            "side_index": 0,
+            "teacher_cross_prefix_margin": -0.2697749137878418,
+            "teacher_side_margin": 0.15128803253173828,
+            "teacher_side_positive": true,
+            "type_aware_correct": false
+          },
+          {
+            "answer_type": "support",
+            "expected_normalized_answer": "cube",
+            "generated_normalized_answer": "plant is on table",
+            "legacy_exact_correct": false,
+            "question_id": "q_000003",
+            "reordered_list_rescue": false,
+            "scene_id": "scene_000032",
+            "side_index": 1,
+            "teacher_cross_prefix_margin": 0.7832951545715332,
+            "teacher_side_margin": 0.3622322082519531,
+            "teacher_side_positive": true,
+            "type_aware_correct": false
+          }
+        ],
+        "teacher_complete": true,
+        "teacher_cross_prefix_complete": false,
+        "type_aware_failure_classification": "complete_failure",
+        "type_aware_greedy_complete": false
+      },
+      {
+        "family": "book_support",
+        "legacy_failure_classification": "one_sided_failure",
+        "legacy_greedy_complete": false,
+        "pair_id": "pair_000015",
+        "question_key": "cfq_a1c673a1197a0961",
+        "scene_ids": [
+          "scene_000031",
+          "scene_000032"
+        ],
+        "sides": [
+          {
+            "answer_type": "spatial_relation",
+            "expected_normalized_answer": "above",
+            "generated_normalized_answer": "below",
+            "legacy_exact_correct": false,
+            "question_id": "q_000053",
+            "reordered_list_rescue": false,
+            "scene_id": "scene_000031",
+            "side_index": 0,
+            "teacher_cross_prefix_margin": -0.054845571517944336,
+            "teacher_side_margin": -3.375,
+            "teacher_side_positive": false,
+            "type_aware_correct": false
+          },
+          {
+            "answer_type": "spatial_relation",
+            "expected_normalized_answer": "below",
+            "generated_normalized_answer": "below",
+            "legacy_exact_correct": true,
+            "question_id": "q_000034",
+            "reordered_list_rescue": false,
+            "scene_id": "scene_000032",
+            "side_index": 1,
+            "teacher_cross_prefix_margin": -0.007654368877410889,
+            "teacher_side_margin": 3.3125,
+            "teacher_side_positive": true,
+            "type_aware_correct": true
+          }
+        ],
+        "teacher_complete": false,
+        "teacher_cross_prefix_complete": false,
+        "type_aware_failure_classification": "one_sided_failure",
+        "type_aware_greedy_complete": false
+      },
+      {
+        "family": "book_support",
+        "legacy_failure_classification": "one_sided_failure",
+        "legacy_greedy_complete": false,
+        "pair_id": "pair_000015",
+        "question_key": "cfq_ac7ac024c40aaddc",
+        "scene_ids": [
+          "scene_000031",
+          "scene_000032"
+        ],
+        "sides": [
+          {
+            "answer_type": "spatial_relation",
+            "expected_normalized_answer": "below",
+            "generated_normalized_answer": "below",
+            "legacy_exact_correct": true,
+            "question_id": "q_000050",
+            "reordered_list_rescue": false,
+            "scene_id": "scene_000031",
+            "side_index": 0,
+            "teacher_cross_prefix_margin": 0.0053313374519348145,
+            "teacher_side_margin": 3.75,
+            "teacher_side_positive": true,
+            "type_aware_correct": true
+          },
+          {
+            "answer_type": "spatial_relation",
+            "expected_normalized_answer": "above",
+            "generated_normalized_answer": "below",
+            "legacy_exact_correct": false,
+            "question_id": "q_000069",
+            "reordered_list_rescue": false,
+            "scene_id": "scene_000032",
+            "side_index": 1,
+            "teacher_cross_prefix_margin": -0.005331277847290039,
+            "teacher_side_margin": -3.75,
+            "teacher_side_positive": false,
+            "type_aware_correct": false
+          }
+        ],
+        "teacher_complete": false,
+        "teacher_cross_prefix_complete": false,
+        "type_aware_failure_classification": "one_sided_failure",
+        "type_aware_greedy_complete": false
+      },
+      {
+        "family": "mirror_lr",
+        "legacy_failure_classification": "complete_success",
+        "legacy_greedy_complete": true,
+        "pair_id": "pair_000016",
+        "question_key": "cfq_699675ceeaf65406",
+        "scene_ids": [
+          "scene_000033",
+          "scene_000034"
+        ],
+        "sides": [
+          {
+            "answer_type": "spatial_relation",
+            "expected_normalized_answer": "left",
+            "generated_normalized_answer": "left",
+            "legacy_exact_correct": true,
+            "question_id": "q_000023",
+            "reordered_list_rescue": false,
+            "scene_id": "scene_000033",
+            "side_index": 0,
+            "teacher_cross_prefix_margin": 0.41963833570480347,
+            "teacher_side_margin": 0.5625000596046448,
+            "teacher_side_positive": true,
+            "type_aware_correct": true
+          },
+          {
+            "answer_type": "spatial_relation",
+            "expected_normalized_answer": "right",
+            "generated_normalized_answer": "right",
+            "legacy_exact_correct": true,
+            "question_id": "q_000084",
+            "reordered_list_rescue": false,
+            "scene_id": "scene_000034",
+            "side_index": 1,
+            "teacher_cross_prefix_margin": 0.3303617238998413,
+            "teacher_side_margin": 0.1875,
+            "teacher_side_positive": true,
+            "type_aware_correct": true
+          }
+        ],
+        "teacher_complete": true,
+        "teacher_cross_prefix_complete": true,
+        "type_aware_failure_classification": "complete_success",
+        "type_aware_greedy_complete": true
+      },
+      {
+        "family": "mirror_lr",
+        "legacy_failure_classification": "complete_success",
+        "legacy_greedy_complete": true,
+        "pair_id": "pair_000016",
+        "question_key": "cfq_9152e66b248e4692",
+        "scene_ids": [
+          "scene_000033",
+          "scene_000034"
+        ],
+        "sides": [
+          {
+            "answer_type": "spatial_relation",
+            "expected_normalized_answer": "left",
+            "generated_normalized_answer": "left",
+            "legacy_exact_correct": true,
+            "question_id": "q_000097",
+            "reordered_list_rescue": false,
+            "scene_id": "scene_000033",
+            "side_index": 0,
+            "teacher_cross_prefix_margin": 1.3975766897201538,
+            "teacher_side_margin": 0.5625,
+            "teacher_side_positive": true,
+            "type_aware_correct": true
+          },
+          {
+            "answer_type": "spatial_relation",
+            "expected_normalized_answer": "right",
+            "generated_normalized_answer": "right",
+            "legacy_exact_correct": true,
+            "question_id": "q_000087",
+            "reordered_list_rescue": false,
+            "scene_id": "scene_000034",
+            "side_index": 1,
+            "teacher_cross_prefix_margin": 0.9774233102798462,
+            "teacher_side_margin": 1.8125,
+            "teacher_side_positive": true,
+            "type_aware_correct": true
+          }
+        ],
+        "teacher_complete": true,
+        "teacher_cross_prefix_complete": true,
+        "type_aware_failure_classification": "complete_success",
+        "type_aware_greedy_complete": true
+      },
+      {
+        "family": "mirror_lr",
+        "legacy_failure_classification": "one_sided_failure",
+        "legacy_greedy_complete": false,
+        "pair_id": "pair_000016",
+        "question_key": "cfq_e08b96268b3c2a10",
+        "scene_ids": [
+          "scene_000033",
+          "scene_000034"
+        ],
+        "sides": [
+          {
+            "answer_type": "spatial_relation",
+            "expected_normalized_answer": "left",
+            "generated_normalized_answer": "right",
+            "legacy_exact_correct": false,
+            "question_id": "q_000111",
+            "reordered_list_rescue": false,
+            "scene_id": "scene_000033",
+            "side_index": 0,
+            "teacher_cross_prefix_margin": 1.1325562000274658,
+            "teacher_side_margin": -0.8125000596046448,
+            "teacher_side_positive": false,
+            "type_aware_correct": false
+          },
+          {
+            "answer_type": "spatial_relation",
+            "expected_normalized_answer": "right",
+            "generated_normalized_answer": "right",
+            "legacy_exact_correct": true,
+            "question_id": "q_000080",
+            "reordered_list_rescue": false,
+            "scene_id": "scene_000034",
+            "side_index": 1,
+            "teacher_cross_prefix_margin": 0.36744382977485657,
+            "teacher_side_margin": 2.3125,
+            "teacher_side_positive": true,
+            "type_aware_correct": true
+          }
+        ],
+        "teacher_complete": false,
+        "teacher_cross_prefix_complete": true,
+        "type_aware_failure_classification": "one_sided_failure",
+        "type_aware_greedy_complete": false
+      },
+      {
+        "family": "mirror_lr",
+        "legacy_failure_classification": "one_sided_failure",
+        "legacy_greedy_complete": false,
+        "pair_id": "pair_000016",
+        "question_key": "cfq_efba0c82a7336161",
+        "scene_ids": [
+          "scene_000033",
+          "scene_000034"
+        ],
+        "sides": [
+          {
+            "answer_type": "spatial_relation",
+            "expected_normalized_answer": "left",
+            "generated_normalized_answer": "right",
+            "legacy_exact_correct": false,
+            "question_id": "q_000140",
+            "reordered_list_rescue": false,
+            "scene_id": "scene_000033",
+            "side_index": 0,
+            "teacher_cross_prefix_margin": 1.5571551322937012,
+            "teacher_side_margin": -0.3750000596046448,
+            "teacher_side_positive": false,
+            "type_aware_correct": false
+          },
+          {
+            "answer_type": "spatial_relation",
+            "expected_normalized_answer": "right",
+            "generated_normalized_answer": "right",
+            "legacy_exact_correct": true,
+            "question_id": "q_000056",
+            "reordered_list_rescue": false,
+            "scene_id": "scene_000034",
+            "side_index": 1,
+            "teacher_cross_prefix_margin": 0.5678447484970093,
+            "teacher_side_margin": 2.5,
+            "teacher_side_positive": true,
+            "type_aware_correct": true
+          }
+        ],
+        "teacher_complete": false,
+        "teacher_cross_prefix_complete": true,
+        "type_aware_failure_classification": "one_sided_failure",
+        "type_aware_greedy_complete": false
+      },
+      {
+        "family": "picture_support",
+        "legacy_failure_classification": "one_sided_failure",
+        "legacy_greedy_complete": false,
+        "pair_id": "pair_000017",
+        "question_key": "cfq_1c8b8cd72fcde904",
+        "scene_ids": [
+          "scene_000035",
+          "scene_000036"
+        ],
+        "sides": [
+          {
+            "answer_type": "spatial_relation",
+            "expected_normalized_answer": "above",
+            "generated_normalized_answer": "below",
+            "legacy_exact_correct": false,
+            "question_id": "q_000046",
+            "reordered_list_rescue": false,
+            "scene_id": "scene_000035",
+            "side_index": 0,
+            "teacher_cross_prefix_margin": 0.6703135967254639,
+            "teacher_side_margin": -3.0,
+            "teacher_side_positive": false,
+            "type_aware_correct": false
+          },
+          {
+            "answer_type": "spatial_relation",
+            "expected_normalized_answer": "below",
+            "generated_normalized_answer": "below",
+            "legacy_exact_correct": true,
+            "question_id": "q_000019",
+            "reordered_list_rescue": false,
+            "scene_id": "scene_000036",
+            "side_index": 1,
+            "teacher_cross_prefix_margin": 0.017186395823955536,
+            "teacher_side_margin": 3.6875,
+            "teacher_side_positive": true,
+            "type_aware_correct": true
+          }
+        ],
+        "teacher_complete": false,
+        "teacher_cross_prefix_complete": true,
+        "type_aware_failure_classification": "one_sided_failure",
+        "type_aware_greedy_complete": false
+      },
+      {
+        "family": "picture_support",
+        "legacy_failure_classification": "one_sided_failure",
+        "legacy_greedy_complete": false,
+        "pair_id": "pair_000017",
+        "question_key": "cfq_66aab89cee5bef49",
+        "scene_ids": [
+          "scene_000035",
+          "scene_000036"
+        ],
+        "sides": [
+          {
+            "answer_type": "spatial_relation",
+            "expected_normalized_answer": "above",
+            "generated_normalized_answer": "below",
+            "legacy_exact_correct": false,
+            "question_id": "q_000041",
+            "reordered_list_rescue": false,
+            "scene_id": "scene_000035",
+            "side_index": 0,
+            "teacher_cross_prefix_margin": -0.17717337608337402,
+            "teacher_side_margin": -3.375,
+            "teacher_side_positive": false,
+            "type_aware_correct": false
+          },
+          {
+            "answer_type": "spatial_relation",
+            "expected_normalized_answer": "below",
+            "generated_normalized_answer": "below",
+            "legacy_exact_correct": true,
+            "question_id": "q_000033",
+            "reordered_list_rescue": false,
+            "scene_id": "scene_000036",
+            "side_index": 1,
+            "teacher_cross_prefix_margin": -0.07282678782939911,
+            "teacher_side_margin": 3.125,
+            "teacher_side_positive": true,
+            "type_aware_correct": true
+          }
+        ],
+        "teacher_complete": false,
+        "teacher_cross_prefix_complete": false,
+        "type_aware_failure_classification": "one_sided_failure",
+        "type_aware_greedy_complete": false
+      },
+      {
+        "family": "picture_support",
+        "legacy_failure_classification": "one_sided_failure",
+        "legacy_greedy_complete": false,
+        "pair_id": "pair_000017",
+        "question_key": "cfq_d469c4ac156ac42d",
+        "scene_ids": [
+          "scene_000035",
+          "scene_000036"
+        ],
+        "sides": [
+          {
+            "answer_type": "spatial_relation",
+            "expected_normalized_answer": "above",
+            "generated_normalized_answer": "below",
+            "legacy_exact_correct": false,
+            "question_id": "q_000089",
+            "reordered_list_rescue": false,
+            "scene_id": "scene_000035",
+            "side_index": 0,
+            "teacher_cross_prefix_margin": 1.47627854347229,
+            "teacher_side_margin": -1.75,
+            "teacher_side_positive": false,
+            "type_aware_correct": false
+          },
+          {
+            "answer_type": "spatial_relation",
+            "expected_normalized_answer": "below",
+            "generated_normalized_answer": "below",
+            "legacy_exact_correct": true,
+            "question_id": "q_000080",
+            "reordered_list_rescue": false,
+            "scene_id": "scene_000036",
+            "side_index": 1,
+            "teacher_cross_prefix_margin": 0.273721307516098,
+            "teacher_side_margin": 3.5,
+            "teacher_side_positive": true,
+            "type_aware_correct": true
+          }
+        ],
+        "teacher_complete": false,
+        "teacher_cross_prefix_complete": true,
+        "type_aware_failure_classification": "one_sided_failure",
+        "type_aware_greedy_complete": false
+      },
+      {
+        "family": "picture_support",
+        "legacy_failure_classification": "one_sided_failure",
+        "legacy_greedy_complete": false,
+        "pair_id": "pair_000017",
+        "question_key": "cfq_fa3601dfffa80a0e",
+        "scene_ids": [
+          "scene_000035",
+          "scene_000036"
+        ],
+        "sides": [
+          {
+            "answer_type": "spatial_relation",
+            "expected_normalized_answer": "above",
+            "generated_normalized_answer": "below",
+            "legacy_exact_correct": false,
+            "question_id": "q_000034",
+            "reordered_list_rescue": false,
+            "scene_id": "scene_000035",
+            "side_index": 0,
+            "teacher_cross_prefix_margin": 0.499967098236084,
+            "teacher_side_margin": -3.375,
+            "teacher_side_positive": false,
+            "type_aware_correct": false
+          },
+          {
+            "answer_type": "spatial_relation",
+            "expected_normalized_answer": "below",
+            "generated_normalized_answer": "below",
+            "legacy_exact_correct": true,
+            "question_id": "q_000011",
+            "reordered_list_rescue": false,
+            "scene_id": "scene_000036",
+            "side_index": 1,
+            "teacher_cross_prefix_margin": 0.06253281235694885,
+            "teacher_side_margin": 3.9375,
+            "teacher_side_positive": true,
+            "type_aware_correct": true
+          }
+        ],
+        "teacher_complete": false,
+        "teacher_cross_prefix_complete": true,
+        "type_aware_failure_classification": "one_sided_failure",
+        "type_aware_greedy_complete": false
+      },
+      {
+        "family": "other",
+        "legacy_failure_classification": "complete_success",
+        "legacy_greedy_complete": true,
+        "pair_id": "pair_000018",
+        "question_key": "cfq_90b3d9852a93ce2a",
+        "scene_ids": [
+          "scene_000037",
+          "scene_000038"
+        ],
+        "sides": [
+          {
+            "answer_type": "count",
+            "expected_normalized_answer": "1",
+            "generated_normalized_answer": "1",
+            "legacy_exact_correct": true,
+            "question_id": "q_000057",
+            "reordered_list_rescue": false,
+            "scene_id": "scene_000037",
+            "side_index": 0,
+            "teacher_cross_prefix_margin": 1.2443550825119019,
+            "teacher_side_margin": 6.8125,
+            "teacher_side_positive": true,
+            "type_aware_correct": true
+          },
+          {
+            "answer_type": "count",
+            "expected_normalized_answer": "0",
+            "generated_normalized_answer": "0",
+            "legacy_exact_correct": true,
+            "question_id": "q_000064",
+            "reordered_list_rescue": false,
+            "scene_id": "scene_000038",
+            "side_index": 1,
+            "teacher_cross_prefix_margin": 6.505644798278809,
+            "teacher_side_margin": 0.9375,
+            "teacher_side_positive": true,
+            "type_aware_correct": true
+          }
+        ],
+        "teacher_complete": true,
+        "teacher_cross_prefix_complete": true,
+        "type_aware_failure_classification": "complete_success",
+        "type_aware_greedy_complete": true
+      },
+      {
+        "family": "other",
+        "legacy_failure_classification": "complete_failure",
+        "legacy_greedy_complete": false,
+        "pair_id": "pair_000018",
+        "question_key": "cfq_b2c2e9aec9f883bc",
+        "scene_ids": [
+          "scene_000037",
+          "scene_000038"
+        ],
+        "sides": [
+          {
+            "answer_type": "presence",
+            "expected_normalized_answer": "yes",
+            "generated_normalized_answer": "floor lamp",
+            "legacy_exact_correct": false,
+            "question_id": "q_000022",
+            "reordered_list_rescue": false,
+            "scene_id": "scene_000037",
+            "side_index": 0,
+            "teacher_cross_prefix_margin": 5.082571029663086,
+            "teacher_side_margin": 4.9375,
+            "teacher_side_positive": true,
+            "type_aware_correct": false
+          },
+          {
+            "answer_type": "presence",
+            "expected_normalized_answer": "no",
+            "generated_normalized_answer": "floor lamp",
+            "legacy_exact_correct": false,
+            "question_id": "q_000105",
+            "reordered_list_rescue": false,
+            "scene_id": "scene_000038",
+            "side_index": 1,
+            "teacher_cross_prefix_margin": 3.901803493499756,
+            "teacher_side_margin": 4.046874523162842,
+            "teacher_side_positive": true,
+            "type_aware_correct": false
+          }
+        ],
+        "teacher_complete": true,
+        "teacher_cross_prefix_complete": true,
+        "type_aware_failure_classification": "complete_failure",
+        "type_aware_greedy_complete": false
+      },
+      {
+        "family": "other",
+        "legacy_failure_classification": "one_sided_failure",
+        "legacy_greedy_complete": false,
+        "pair_id": "pair_000018",
+        "question_key": "cfq_f58d3fc750290b0f",
+        "scene_ids": [
+          "scene_000037",
+          "scene_000038"
+        ],
+        "sides": [
+          {
+            "answer_type": "presence",
+            "expected_normalized_answer": "yes",
+            "generated_normalized_answer": "yes there is floor lamp in room",
+            "legacy_exact_correct": false,
+            "question_id": "q_000051",
+            "reordered_list_rescue": false,
+            "scene_id": "scene_000037",
+            "side_index": 0,
+            "teacher_cross_prefix_margin": 4.9357194900512695,
+            "teacher_side_margin": 6.1875,
+            "teacher_side_positive": true,
+            "type_aware_correct": false
+          },
+          {
+            "answer_type": "presence",
+            "expected_normalized_answer": "no",
+            "generated_normalized_answer": "no",
+            "legacy_exact_correct": true,
+            "question_id": "q_000051",
+            "reordered_list_rescue": false,
+            "scene_id": "scene_000038",
+            "side_index": 1,
+            "teacher_cross_prefix_margin": 6.3142805099487305,
+            "teacher_side_margin": 5.0625,
+            "teacher_side_positive": true,
+            "type_aware_correct": true
+          }
+        ],
+        "teacher_complete": true,
+        "teacher_cross_prefix_complete": true,
+        "type_aware_failure_classification": "one_sided_failure",
+        "type_aware_greedy_complete": false
+      }
+    ],
+    "pair_units_sha256": "08e8efdab45911bcf31973f98aba0b6772bbf6be4d24f8cc1a342b1e03549704",
+    "schema_version": 1,
+    "summary": {
+      "broad_exact_accuracy": 0.4791666666666667,
+      "broad_exact_correct": 23,
+      "broad_reordered_list_rescue_rows": 0,
+      "broad_row_count": 48,
+      "changed_row_count": 50,
+      "changed_rows_exact_correct": 24,
+      "changed_unit_count": 25,
+      "complete_physical_pair_coverage": 3,
+      "complete_units": 4,
+      "complete_units_by_family": {
+        "book_support": 0,
+        "mirror_lr": 2,
+        "picture_support": 0
+      },
+      "legacy_exact": {
+        "broad_accuracy": 0.4791666666666667,
+        "broad_rows_correct": 23,
+        "changed_rows_correct": 24,
+        "complete_physical_pair_coverage": 3,
+        "complete_units": 4,
+        "complete_units_by_family": {
+          "book_support": 0,
+          "mirror_lr": 2,
+          "picture_support": 0
+        },
+        "failure_classification_counts": {
+          "complete_failure": 5,
+          "complete_success": 4,
+          "one_sided_failure": 16
+        }
+      },
+      "reordered_list_rescue_rows": 0,
+      "reordered_list_rescue_units": 0,
+      "schema_version": 1,
+      "teacher_complete_but_greedy_incomplete_units": 6,
+      "type_aware": {
+        "broad_accuracy": 0.4791666666666667,
+        "broad_rows_correct": 23,
+        "changed_rows_correct": 24,
+        "complete_physical_pair_coverage": 3,
+        "complete_units": 4,
+        "complete_units_by_family": {
+          "book_support": 0,
+          "mirror_lr": 2,
+          "picture_support": 0
+        },
+        "failure_classification_counts": {
+          "complete_failure": 5,
+          "complete_success": 4,
+          "one_sided_failure": 16
+        }
+      }
+    },
+    "training_scenes_only": true,
+    "validation_qa_loaded": false
+  },
+  "embodied_promotion_executed": false,
+  "execution_errors": [],
+  "final_test_scenes_touched": false,
+  "non_greedy": {
+    "all_v51_checks_passed": true,
+    "broad_nll": 2.9172720114390054,
+    "broad_row_count": 48,
+    "pair_metrics_sha256": "40f1d59ffdaf830767784043b46d4ba88d35e91ac6eae9b694796edbe5cb20a1"
+  },
+  "optimizer_constructed_or_loaded": false,
+  "optimizer_state_file_opened": false,
+  "optimizer_step_executed": false,
+  "oracle_loaded": false,
+  "passed": true,
+  "preparation": {
+    "all_16_training_maps_cached": true,
+    "all_candidate_scene_tensors_bit_identical": true,
+    "candidate_count": 4,
+    "candidate_grid": [
+      {
+        "candidate_id": "guarded_scene_alpha_1p0_query_alpha_2p03125",
+        "declared_order": 0,
+        "query_alpha": 2.03125,
+        "scene_alpha": 1.0
+      },
+      {
+        "candidate_id": "guarded_scene_alpha_1p0_query_alpha_2p0625",
+        "declared_order": 1,
+        "query_alpha": 2.0625,
+        "scene_alpha": 1.0
+      },
+      {
+        "candidate_id": "guarded_scene_alpha_1p0_query_alpha_2p125",
+        "declared_order": 2,
+        "query_alpha": 2.125,
+        "scene_alpha": 1.0
+      },
+      {
+        "candidate_id": "guarded_scene_alpha_1p0_query_alpha_2p1875",
+        "declared_order": 3,
+        "query_alpha": 2.1875,
+        "scene_alpha": 1.0
+      }
+    ],
+    "candidate_hash_inventory": {
+      "guarded_scene_alpha_1p0_query_alpha_2p03125": {
+        "authorized_surface_state_sha256": "df88c8347f455205ecfe980f405a568ff6bc5729eadbe9563c4f3d71ad3ff770",
+        "frozen_state_sha256": "31cb215cf0d1623886d4a79203c501912e66537021da53dd711124abdc2e36fa",
+        "full_tensor_state_sha256": "10abc0bebc3f48e5b42c3982de390c1df5971f4ac50da528457e142170f90081",
+        "query_state_sha256": "cc3c40b88af31e7663cb7939b8b909796c14b998f669aaf7216bd271b64ea8ca",
+        "scene_readout_state_sha256": "4a0b76ada4ba42b076798b91ff8bcbdd414ede1dca2abff75aaba06bbe949baa"
+      },
+      "guarded_scene_alpha_1p0_query_alpha_2p0625": {
+        "authorized_surface_state_sha256": "04cb7ac08c062c921a1711cb87acb57af6fa31637f61cb774cfbcd9a28ce8eef",
+        "frozen_state_sha256": "31cb215cf0d1623886d4a79203c501912e66537021da53dd711124abdc2e36fa",
+        "full_tensor_state_sha256": "aae9f67451f9f3f4aeb4d1cbb39fc6c9d3cd935521c9a84704b217ac64f18119",
+        "query_state_sha256": "5144ecc81defa65266e54c3d83a1243d948ebad890cdbed812af1bcc46138249",
+        "scene_readout_state_sha256": "4a0b76ada4ba42b076798b91ff8bcbdd414ede1dca2abff75aaba06bbe949baa"
+      },
+      "guarded_scene_alpha_1p0_query_alpha_2p125": {
+        "authorized_surface_state_sha256": "2c1eef9392f57a52e99f69202414be575d196a645fa4d06860751761bc2af7e4",
+        "frozen_state_sha256": "31cb215cf0d1623886d4a79203c501912e66537021da53dd711124abdc2e36fa",
+        "full_tensor_state_sha256": "ae7c5013f5fcb21a59f82234b0591545ed3add923c1b53ab4fb0f359e0eeac92",
+        "query_state_sha256": "2adf81a23abd9b0fdad54211138071199a09ce7594c403bf84c8b6ee39e0eff8",
+        "scene_readout_state_sha256": "4a0b76ada4ba42b076798b91ff8bcbdd414ede1dca2abff75aaba06bbe949baa"
+      },
+      "guarded_scene_alpha_1p0_query_alpha_2p1875": {
+        "authorized_surface_state_sha256": "5c468878fa099cba93fa8dd2fe374b6e90d724a496b88be27986af207f99a485",
+        "frozen_state_sha256": "31cb215cf0d1623886d4a79203c501912e66537021da53dd711124abdc2e36fa",
+        "full_tensor_state_sha256": "0737a8679ebc46bc02857889b9329e83a05e1599f47548c730ce81cf3d7e7ac6",
+        "query_state_sha256": "64cfa95f889977e6a9444c2d91db92e4e52c46a8657aaffa35112f58402a64db",
+        "scene_readout_state_sha256": "4a0b76ada4ba42b076798b91ff8bcbdd414ede1dca2abff75aaba06bbe949baa"
+      }
+    },
+    "candidate_hash_inventory_fixed_before_any_candidate_forward": true,
+    "candidate_scene_readout_state_sha256": "4a0b76ada4ba42b076798b91ff8bcbdd414ede1dca2abff75aaba06bbe949baa",
+    "direction_audit_sha256": "2d325cebd47fe03e3f021f4a2cd150f51d4448b88046e4a1fc370bd1a19d55bf",
+    "direction_components": [
+      "g_book",
+      "g_mirror",
+      "g5_guard"
+    ],
+    "direction_id": "guarded_both_sign",
+    "exact_three_autograd_grad_probes_reused_for_all_candidates": true,
+    "expected_original_prefix_trust_rms": 0.0016845178324729204,
+    "frozen_state_sha256": "31cb215cf0d1623886d4a79203c501912e66537021da53dd711124abdc2e36fa",
+    "gradient_audit_sha256": "a7bcdbcfb51cf03648abb178157973dcf5d4c8940e1e1704d92467726bd301dd",
+    "gradient_specs": [
+      {
+        "gradient_id": "g_book",
+        "loss": "negative_selected_side_margin",
+        "pair_id": "pair_000015",
+        "question_key": "cfq_163eb92339ad35a5",
+        "side_index": 0
+      },
+      {
+        "gradient_id": "g_mirror",
+        "loss": "negative_selected_side_margin",
+        "pair_id": "pair_000016",
+        "question_key": "cfq_699675ceeaf65406",
+        "side_index": 1
+      },
+      {
+        "gradient_id": "g5_guard",
+        "loss": "negative_selected_side_margin",
+        "pair_id": "pair_000006",
+        "question_key": "cfq_5c84a2c27d2be251",
+        "side_index": 0
+      }
+    ],
+    "nonselectable_v50_anchor": {
+      "authorized_surface_state_sha256": "5009ee3fcbd0b44c7811938965fe62ae3c447480934cf4515f44ac93de9b9729",
+      "candidate_id": "guarded_scene_alpha_1p0_query_alpha_2p0",
+      "evaluated_as_v51_candidate": false,
+      "full_tensor_state_sha256": "f1702c1b1a9916de7125476b1a67fd120f0ca81616444e90bd5e656480ef69f2",
+      "query_alpha": 2.0,
+      "scene_alpha": 1.0,
+      "selectable": false
+    },
+    "nonselectable_v50_query_alpha_anchor": 2.0,
+    "optimizer_constructed_or_loaded": false,
+    "prefix_reference_checkpoint": "data_gemma4/checkpoints/gemma4_v47_book_continuation_l14_query/update_000",
+    "prefix_reference_full_tensor_state_sha256": "1d5adc1fb0d7a895056b77d38c8a12aba95c9997ec8a94edf68673f9c58fb954",
+    "prefix_reference_hash_inventory_sha256": "42960ef8a0dadd58f5b39a7ae6b5f0c8cd996dc0a3770d913689aaa35014ed66",
+    "query_alpha_grid_declared_order": [
+      2.03125,
+      2.0625,
+      2.125,
+      2.1875
+    ],
+    "question_dependent_retrieval": false,
+    "question_dependent_scene_processing": false,
+    "scene_alpha_fixed": 1.0,
+    "source_authorized_surface_state_sha256": "a23de4988774a966c0d7aac378ede5d15a3fa1d96093c5039f181a62b0bb09b0",
+    "source_checkpoint": "data_gemma4/checkpoints/gemma4_v47_book_continuation_l14_query/update_004",
+    "source_full_tensor_state_sha256": "adfc0400d1a3bb49b278cd3012ab571d01465f2380881f986c085a25474276e5",
+    "v49_candidate_reconstructed_before_v51_direction": true
+  },
+  "runtime_promotion_executed": false,
+  "schema_version": 1,
+  "scope": {
+    "chat_promotion_executed": false,
+    "checkpoint_written": false,
+    "embodied_promotion_executed": false,
+    "final_test_loaded": false,
+    "only_one_candidate_reconstructed": true,
+    "optimizer_constructed_or_loaded": false,
+    "optimizer_state_file_opened": false,
+    "optimizer_step_executed": false,
+    "oracle_loaded": false,
+    "parameter_gradient_accumulation": false,
+    "report_only": true,
+    "runtime_promotion_executed": false,
+    "selector_executed": false,
+    "target_candidate": {
+      "candidate_id": "guarded_scene_alpha_1p0_query_alpha_2p0625",
+      "declared_order": 1,
+      "query_alpha": 2.0625,
+      "scene_alpha": 1.0
+    },
+    "validation_environment_maps_loaded": false,
+    "validation_qa_loaded": false
+  },
+  "selector_executed": false,
+  "source_restoration": {
+    "all_parameter_gradients_absent": true,
+    "attempted": true,
+    "authorized_surface_state_sha256": "a23de4988774a966c0d7aac378ede5d15a3fa1d96093c5039f181a62b0bb09b0",
+    "frozen_state_sha256": "31cb215cf0d1623886d4a79203c501912e66537021da53dd711124abdc2e36fa",
+    "full_tensor_state_sha256": "adfc0400d1a3bb49b278cd3012ab571d01465f2380881f986c085a25474276e5",
+    "passed": true
+  },
+  "validation_environment_maps_loaded": false,
+  "validation_qa_loaded": false
+}

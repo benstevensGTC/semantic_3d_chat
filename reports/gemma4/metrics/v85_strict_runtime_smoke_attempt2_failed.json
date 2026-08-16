@@ -1,0 +1,14 @@
+{
+  "artifact": "gemma4_v85_strict_runtime_smoke_failed_attempt_v1",
+  "schema_version": 85,
+  "attempt": 2,
+  "status": "operator_harness_refused_candidate_before_any_question",
+  "model_loaded": true,
+  "questions_answered": 0,
+  "oracle_physically_unavailable": true,
+  "oracle_restored_after_runtime": true,
+  "forbidden_access_count": 0,
+  "failure": "candidate smoke omitted the explicit allow-candidate CLI flag",
+  "repair": "pass allow-candidate only in the pre-promotion smoke harness; promoted default chat remains fail-closed",
+  "audit": "reports/gemma4/metrics/v85_strict_runtime_smoke_attempt2_failed_access.json"
+}

@@ -1,0 +1,571 @@
+{
+  "arbitrary_training_authorized": false,
+  "artifact": "v47_book_continuation_terminal_gate",
+  "candidate_checkpoint_write_authorized": false,
+  "chat_promotion_authorized": false,
+  "checkpoint_inventory": {
+    "checkpoint_steps_persisted": [
+      0,
+      2,
+      4
+    ],
+    "directory_entries": {
+      "update_000": [
+        "adapter.safetensors",
+        "metadata.json",
+        "runtime_metadata.json"
+      ],
+      "update_002": [
+        "adapter.safetensors",
+        "metadata.json",
+        "optimizer.pt",
+        "runtime_metadata.json"
+      ],
+      "update_004": [
+        "adapter.safetensors",
+        "metadata.json",
+        "optimizer.pt",
+        "runtime_metadata.json"
+      ]
+    },
+    "file_sha256": {
+      "update_000/adapter.safetensors": "c47bbb9bacbb5bc8178e9a1797ec47b04ee4a3709042c6b30f6935eacc4686f0",
+      "update_000/metadata.json": "e76e8a905af53fb082684000a6a6e16845b79e0795b6dbb047a2703245198574",
+      "update_000/runtime_metadata.json": "01e645b82c5e533dd2319ef8a97171437b149c4e1ef86201f83fdb22de047987",
+      "update_002/adapter.safetensors": "8cb88aafa34ce5b0021cc74a240cce2275d11a1241fce4149af81671f13465fd",
+      "update_002/metadata.json": "e39e6f624b3f7b5204ac587ce21e21ec77e03239750164fcc9c2b583b5de091a",
+      "update_002/optimizer.pt": "e6960f67de249a9e485c6126a860fadf038f8e70642392154b06c4c3e910608b",
+      "update_002/runtime_metadata.json": "70840d1fc29daff0ce2327fb7a2ab6c8e7f16cbcc9b8d95ae8c2bb2db27cffdc",
+      "update_004/adapter.safetensors": "8f903f5d1ba93d37ccd6204e3b58c9a5529ff9ee2b74edca0787ecb5a2c62c66",
+      "update_004/metadata.json": "c6affe7f60c094580e2ea5f5d1330f475bf359e0a3a58bfc3bf3b3ada1de0be1",
+      "update_004/optimizer.pt": "fe66be9cae13951fbfc217e0c512e43366c347181457c9e551230a9d6001db80",
+      "update_004/runtime_metadata.json": "4e3a1af91642c9f2adb0b3e43997455a1aea31f86bf45618459d6005a68d4bbf"
+    },
+    "manifest_sha256": "0c457e644a41e4e6af0e31fb64a5bb60655a46f9828e664aae3119256d6e8b64",
+    "optimizer_files_bytes_hashed_only": true,
+    "optimizer_state_deserialized": false,
+    "root": "data_gemma4/checkpoints/gemma4_v47_book_continuation_l14_query",
+    "root_entries": [
+      "update_000",
+      "update_002",
+      "update_004"
+    ],
+    "update_006_absent": true,
+    "update_008_absent": true
+  },
+  "conditional_successor_authorization": {
+    "authorization_id": "v48_v47_u4_dual_margin_no_step_diagnostic",
+    "authorized": true,
+    "authorized_config": "configs/experiments/gemma4_diverse28_book_continuation_v47.yaml",
+    "authorized_report": "reports/gemma4/metrics/v48_v47_u4_dual_margin_no_step_diagnostic.json",
+    "authorized_script": "src/semantic_3d_chat/evaluation/v48_v47_u4_dual_margin_screen.py",
+    "authorized_test": "tests/test_v48_v47_u4_dual_margin_screen.py",
+    "candidate_grid": {
+      "alpha_grid": [
+        0.125,
+        0.25,
+        0.5,
+        1.0,
+        2.0
+      ],
+      "candidate_formula": "float32_P0-alpha*lr_group*sign(normalized_component_sum)",
+      "candidate_relative_prefix_trust_per_candidate": true,
+      "direction_ids": [
+        "dual_query_sign",
+        "dual_both_sign",
+        "guarded_both_sign"
+      ],
+      "exact_candidate_count": 15,
+      "exact_source_restoration_before_and_after_every_probe": true,
+      "full_25_unit_teacher_metrics_per_candidate": true,
+      "full_fixed_48_row_broad_nll_per_candidate": true,
+      "prehash_all_candidates_before_candidate_forward": true,
+      "query_learning_rate": 8e-06,
+      "scene_readout_learning_rate": 1e-05
+    },
+    "explicit_terminal_sha256_cli_required": true,
+    "fixed_data_boundary": {
+      "blocking_file_access_audit_required": true,
+      "complete_pre_question_scene_prefixes": true,
+      "question_dependent_retrieval": false,
+      "question_dependent_scene_processing": false,
+      "scene_count": 16,
+      "scene_ids": [
+        "scene_000011",
+        "scene_000012",
+        "scene_000013",
+        "scene_000014",
+        "scene_000015",
+        "scene_000016",
+        "scene_000017",
+        "scene_000018",
+        "scene_000031",
+        "scene_000032",
+        "scene_000033",
+        "scene_000034",
+        "scene_000035",
+        "scene_000036",
+        "scene_000037",
+        "scene_000038"
+      ],
+      "training_scenes_only": true
+    },
+    "fixed_evidence": {
+      "broad_nll": 2.9172145972649255,
+      "greedy_broad_exact_correct": 23,
+      "greedy_broad_row_count": 48,
+      "greedy_complete_units": 4,
+      "priority_deficit_improvement": 0.7275158166885376,
+      "source_prefix_trust_rms": 0.001376520493067801,
+      "teacher_book_complete_units": 0,
+      "teacher_book_cross_prefix_complete_units": 1,
+      "teacher_complete_physical_pair_coverage": 4,
+      "teacher_complete_units": 8,
+      "teacher_cross_prefix_complete_units": 17,
+      "teacher_mirror_complete_units": 1,
+      "teacher_positive_sides": 33
+    },
+    "forbidden_actions": {
+      "backward_or_parameter_gradient_accumulation": true,
+      "candidate_or_checkpoint_write": true,
+      "chat_promotion": true,
+      "embodied_promotion": true,
+      "final_test_access": true,
+      "gradient_outside_exact_three_specs": true,
+      "optimizer_construction": true,
+      "optimizer_state_deserialization": true,
+      "optimizer_state_file_open": true,
+      "optimizer_state_loading": true,
+      "optimizer_step": true,
+      "oracle_access": true,
+      "parameter_state_persist": true,
+      "runtime_promotion": true,
+      "selector_execution": true,
+      "validation_access": true
+    },
+    "implementation_integrity": {
+      "config_sha256": "6b15813237b217d8daad446c799127215bbb1366f2b442b61e975787efa4f6b7",
+      "script_sha256": "c132e66568b626658315dc90c3638e52677d299900d863270ddfced07c580611",
+      "test_sha256": "e522471a3ca88ea363bf59c2de0bb5f2a9d1cee628a8e874264fa2d2db52e31a"
+    },
+    "invocation_contract": {
+      "expected_value": "sha256_of_materialized_v47_terminal_passed_explicitly",
+      "required_cli_argument": "--expected-v47-terminal-sha256",
+      "terminal_path": "reports/gemma4/metrics/v47_book_continuation_terminal_gate.json",
+      "v48_must_authenticate_terminal_bytes_and_exact_authorization": true,
+      "v48_must_not_embed_terminal_sha256": true
+    },
+    "measurements": {
+      "exact_three_torch_autograd_grad_probes_authorized": true,
+      "isolated_side_gradient_specs": [
+        {
+          "gradient_id": "g_book",
+          "loss": "negative_selected_side_margin",
+          "pair_id": "pair_000015",
+          "question_key": "cfq_163eb92339ad35a5",
+          "side_index": 0
+        },
+        {
+          "gradient_id": "g_mirror",
+          "loss": "negative_selected_side_margin",
+          "pair_id": "pair_000016",
+          "question_key": "cfq_699675ceeaf65406",
+          "side_index": 1
+        },
+        {
+          "gradient_id": "g5_guard",
+          "loss": "negative_selected_side_margin",
+          "pair_id": "pair_000006",
+          "question_key": "cfq_5c84a2c27d2be251",
+          "side_index": 0
+        }
+      ],
+      "normalize_each_nonzero_component": "unit_l2_within_each_scene_or_query_group_before_combination",
+      "report_raw_norms_and_pairwise_cosines_by_group": true
+    },
+    "only_exact_action": "one_bounded_read_only_v48_train_checkpoint_dual_margin_diagnostic",
+    "schema_version": 1,
+    "scope": {
+      "candidate_checkpoint_write_authorized": false,
+      "candidate_selection_authorized": false,
+      "final_test_access_authorized": false,
+      "greedy_generation_authorized": false,
+      "optimizer_construction_or_step_authorized": false,
+      "oracle_access_authorized": false,
+      "report_only_output": true,
+      "runtime_promotion_authorized": false,
+      "selector_execution_authorized": false,
+      "train_only": true,
+      "validation_access_authorized": false
+    },
+    "source": {
+      "authorized_surface_state_sha256": "a23de4988774a966c0d7aac378ede5d15a3fa1d96093c5039f181a62b0bb09b0",
+      "checkpoint": "data_gemma4/checkpoints/gemma4_v47_book_continuation_l14_query/update_004",
+      "file_sha256": {
+        "adapter.safetensors": "8f903f5d1ba93d37ccd6204e3b58c9a5529ff9ee2b74edca0787ecb5a2c62c66",
+        "metadata.json": "c6affe7f60c094580e2ea5f5d1330f475bf359e0a3a58bfc3bf3b3ada1de0be1",
+        "optimizer.pt": "fe66be9cae13951fbfc217e0c512e43366c347181457c9e551230a9d6001db80",
+        "runtime_metadata.json": "4e3a1af91642c9f2adb0b3e43997455a1aea31f86bf45618459d6005a68d4bbf"
+      },
+      "frozen_state_sha256": "31cb215cf0d1623886d4a79203c501912e66537021da53dd711124abdc2e36fa",
+      "full_tensor_state_sha256": "adfc0400d1a3bb49b278cd3012ab571d01465f2380881f986c085a25474276e5",
+      "optimizer_file_open_authorized": false
+    }
+  },
+  "embodied_promotion_authorized": false,
+  "execution_conclusion": {
+    "final_test_loaded": false,
+    "frozen_state_exact": true,
+    "oracle_loaded": false,
+    "runtime_promoted": false,
+    "selector_executed": false,
+    "update4_checkpoint_persisted": true,
+    "update4_gate_passed": false,
+    "update6_checkpoint_present": false,
+    "update8_checkpoint_or_gate_present": false,
+    "update_five_executed": false,
+    "updates_one_through_four_executed": true,
+    "validation_loaded": false
+  },
+  "final_test_access_authorized": false,
+  "history_audit": {
+    "authorized_state_sha256_by_update": {
+      "0": "d60b665d9a970433b2ed59e6769b9114468bef608b98eae828268101d39db56c",
+      "1": "3884b84fef87a61468f5e5c0df5581adf030b906ee908b19c68e9e3a3f4a764b",
+      "2": "21aea698f93f0a70d4aaadd207ede168e9e8c70dd77a3343b0570a4e05f3cf51",
+      "3": "63388b92dac73b05bf64db08bc2428dc3d23ba2d5a99aac2db3cfc0725643191",
+      "4": "a23de4988774a966c0d7aac378ede5d15a3fa1d96093c5039f181a62b0bb09b0"
+    },
+    "checkpoint_steps_persisted": [
+      0,
+      2,
+      4
+    ],
+    "fixed_broad_question_ids": [
+      "q_000099",
+      "q_000138",
+      "q_000053",
+      "q_000089"
+    ],
+    "fixed_target_pair": "pair_000015",
+    "fixed_target_question_key": "cfq_163eb92339ad35a5",
+    "history_frozen_hash_exact_every_step": true,
+    "history_lengths": [
+      1,
+      3,
+      5
+    ],
+    "history_prefixes_bit_exact": true,
+    "no_update_after_four_persisted": true,
+    "optimizer_updates_executed": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "prefix_trust_rms_by_update": {
+      "0": 0.0,
+      "1": 0.00044878781773149967,
+      "2": 0.0008764256490394473,
+      "3": 0.0011487154988572001,
+      "4": 0.001376520493067801
+    },
+    "query_state_sha256_by_update": {
+      "0": "493f0f2f1034c93cee9164407650f5f96341aa0d0cf448285f420ce8bb721e7e",
+      "1": "31e16a8fe80edcea01d48c85b9ecc8e43698d09bdbd57d05ee7446736707897e",
+      "2": "c8911efc4673653db8e8705d69334e7577cc9f99e35487bcf1cf51bb37946ee1",
+      "3": "3a2d05bfc930b5ba61d85369839ac1cfece6f30a2996bbd11f9262f9a3ba23fc",
+      "4": "0c3f6a7015b373642e903f372963afc0ad2d30b70def7df438d879df960f67f0"
+    },
+    "scene_readout_state_sha256_by_update": {
+      "0": "4d7c17c6cf88c1ff99c52d91f19cff061e4370c73bb0cc1bc4bda149f592dbce",
+      "1": "f7294823acd0a82657c19046e27b1ec014605d0726c71d349a6d4209bd4cd1a8",
+      "2": "efa7dbaace12edd0e436fefd2c0a041bac4b7ce7a13a2b1f354a40866ef33f79",
+      "3": "d28a8d2686614565574b4c65a4b843d512a9e084c5971cd5f0eb41bc1f4a90b9",
+      "4": "8b2fa6d1a45e21b52b394338e43c8fbd250b68d4cca421139d46b1125bf2f3bd"
+    },
+    "update2_integrity_gate_passed": true
+  },
+  "input_integrity": {
+    "file_sha256": {
+      "configs/experiments/gemma4_diverse28_book_continuation_v47.yaml": "6b15813237b217d8daad446c799127215bbb1366f2b442b61e975787efa4f6b7",
+      "reports/gemma4/metrics/training_selection_gemma4_color_mirror_full_vocab_v11_resume36.json": "c0086f66edbb8854a7938e09c57535bfd47100adbaf3b3c95eeb4b08014ce2f8",
+      "reports/gemma4/metrics/v46_v45_u4_lost_side_no_step_diagnostic.json": "ce48a1fd484fa5dab71c76a2dd3e39194dd6964e068d6762925a02fb73f6aee6",
+      "reports/gemma4/metrics/v46_v45_u4_lost_side_terminal_gate.json": "de66c9844786c8718399c75162e0b13313b778c1b7d5fa7edcd4133d4d31b60d",
+      "src/semantic_3d_chat/training/train_book_continuation_v47.py": "971fdbaf2f6e6b22dc27b83cfa0f6604c2c1145d92509c06bc98410f6927ea22",
+      "tests/test_train_book_continuation_v47.py": "86c3e0e49b0c42b1161227cdc42ff577afca6b37bd0db183ca1648f23125aedd"
+    },
+    "normalized_config_hash": "9c79d3cb5af0",
+    "protected_v11_access": "bytes_hashed_only",
+    "v46_diagnostic_access": "bytes_hashed_only"
+  },
+  "only_exact_successor_authorized": "v48_v47_u4_dual_margin_no_step_diagnostic",
+  "oracle_access_authorized": false,
+  "passed": true,
+  "resume_v47_training_authorized": false,
+  "runtime_metadata_audit": {
+    "update_000": {
+      "optimizer_step": 0,
+      "runtime_metadata_sha256": "01e645b82c5e533dd2319ef8a97171437b149c4e1ef86201f83fdb22de047987",
+      "sanitized_runtime_exact": true,
+      "training_history_qa_and_gate_fields_absent": true
+    },
+    "update_002": {
+      "optimizer_step": 2,
+      "runtime_metadata_sha256": "70840d1fc29daff0ce2327fb7a2ab6c8e7f16cbcc9b8d95ae8c2bb2db27cffdc",
+      "sanitized_runtime_exact": true,
+      "training_history_qa_and_gate_fields_absent": true
+    },
+    "update_004": {
+      "optimizer_step": 4,
+      "runtime_metadata_sha256": "4e3a1af91642c9f2adb0b3e43997455a1aea31f86bf45618459d6005a68d4bbf",
+      "sanitized_runtime_exact": true,
+      "training_history_qa_and_gate_fields_absent": true
+    }
+  },
+  "runtime_promotion_authorized": false,
+  "schema_version": 1,
+  "selector_execution_authorized": false,
+  "tensor_transition": {
+    "all_tensors_finite": true,
+    "authorized_parameter_count": 415744,
+    "authorized_parameter_counts": [
+      393216,
+      6144,
+      16384
+    ],
+    "authorized_parameter_names": [
+      "block_cross_residual.w_o",
+      "lora_banks.extension_v28_stage_b_query.adapters.1.lora_a",
+      "lora_banks.extension_v28_stage_b_query.adapters.1.lora_b"
+    ],
+    "authorized_parameter_shapes": [
+      [
+        256,
+        1536
+      ],
+      [
+        4,
+        1536
+      ],
+      [
+        4096,
+        4
+      ]
+    ],
+    "changed_tensor_names": {
+      "update_002": [
+        "block_cross_residual.w_o",
+        "lora_banks.extension_v28_stage_b_query.adapters.1.lora_a",
+        "lora_banks.extension_v28_stage_b_query.adapters.1.lora_b"
+      ],
+      "update_004": [
+        "block_cross_residual.w_o",
+        "lora_banks.extension_v28_stage_b_query.adapters.1.lora_a",
+        "lora_banks.extension_v28_stage_b_query.adapters.1.lora_b"
+      ]
+    },
+    "frozen_state_bit_exact_through_update_four": true,
+    "only_three_authorized_tensors_changed": true,
+    "state_sha256": {
+      "update_000": {
+        "authorized": "d60b665d9a970433b2ed59e6769b9114468bef608b98eae828268101d39db56c",
+        "frozen": "31cb215cf0d1623886d4a79203c501912e66537021da53dd711124abdc2e36fa",
+        "full": "1d5adc1fb0d7a895056b77d38c8a12aba95c9997ec8a94edf68673f9c58fb954"
+      },
+      "update_002": {
+        "authorized": "21aea698f93f0a70d4aaadd207ede168e9e8c70dd77a3343b0570a4e05f3cf51",
+        "frozen": "31cb215cf0d1623886d4a79203c501912e66537021da53dd711124abdc2e36fa",
+        "full": "16c6432bcb4f74d81577e1857757d5fdacc8b2ffe79dca619646bafa6ca36996"
+      },
+      "update_004": {
+        "authorized": "a23de4988774a966c0d7aac378ede5d15a3fa1d96093c5039f181a62b0bb09b0",
+        "frozen": "31cb215cf0d1623886d4a79203c501912e66537021da53dd711124abdc2e36fa",
+        "full": "adfc0400d1a3bb49b278cd3012ab571d01465f2380881f986c085a25474276e5"
+      }
+    },
+    "tensor_count_each_checkpoint": 179
+  },
+  "terminal_conclusion": "update4_train_only_gate_failed_stop_is_final",
+  "terminal_materialization_authorized": true,
+  "terminal_process_access_audit": {
+    "adapter_tensors_loaded_on_cpu_for_hash_and_equality_audit": true,
+    "final_test_loaded": false,
+    "gemma_loaded": false,
+    "maps_loaded": false,
+    "optimizer_deserialized": false,
+    "optimizer_files_bytes_hashed_only": true,
+    "optimizer_step_executed": false,
+    "oracle_loaded": false,
+    "protected_v11_report_access": "bytes_hashed_only",
+    "qa_loaded": false,
+    "validation_loaded": false
+  },
+  "update4_gate_replay": {
+    "broad_nll_maximum": 2.9213306349515915,
+    "checks": {
+      "book_complete_units_at_least_1": false,
+      "book_cross_prefix_complete_units_at_least_1": true,
+      "both_authorized_parameter_groups_changed": true,
+      "both_lost_side_margins_remain_strictly_positive": false,
+      "broad_greedy_exact_correct_at_least_23_of_48": true,
+      "broad_nll_at_most_authorized_maximum": true,
+      "complete_physical_pair_id_coverage_at_least_5": false,
+      "frozen_state_exact": true,
+      "mirror_complete_units_at_least_2": false,
+      "priority_teacher_deficit_improved_at_least_0_5_vs_original_v41_u0": true,
+      "query_state_changed": true,
+      "scene_readout_state_changed": true,
+      "source_prefix_trust_rms_at_most_0_002": true,
+      "teacher_complete_units_at_least_10": false,
+      "teacher_cross_complete_units_at_least_17": true,
+      "teacher_positive_sides_at_least_35": false,
+      "train_greedy_complete_units_at_least_5": false,
+      "update2_integrity_gate_passed": true
+    },
+    "failed_checks": [
+      "book_complete_units_at_least_1",
+      "both_lost_side_margins_remain_strictly_positive",
+      "complete_physical_pair_id_coverage_at_least_5",
+      "mirror_complete_units_at_least_2",
+      "teacher_complete_units_at_least_10",
+      "teacher_positive_sides_at_least_35",
+      "train_greedy_complete_units_at_least_5"
+    ],
+    "greedy": {
+      "broad_exact_correct": 23,
+      "broad_exact_threshold": 23,
+      "broad_row_count": 48,
+      "changed_row_count": 50,
+      "changed_rows_exact_correct": 24,
+      "changed_unit_count": 25,
+      "complete_physical_pair_coverage": 3,
+      "complete_units": 4,
+      "complete_units_by_family": {
+        "book_support": 0,
+        "mirror_lr": 2,
+        "picture_support": 0
+      },
+      "complete_units_threshold": 5
+    },
+    "lost_side_evidence": [
+      {
+        "margin": 0.0625,
+        "pair_id": "pair_000006",
+        "question_key": "cfq_5c84a2c27d2be251",
+        "side_index": 0,
+        "strictly_positive": true
+      },
+      {
+        "margin": 0.0,
+        "pair_id": "pair_000016",
+        "question_key": "cfq_699675ceeaf65406",
+        "side_index": 1,
+        "strictly_positive": false
+      }
+    ],
+    "original_v41_priority_side_deficit": 31.113729119300842,
+    "passed": false,
+    "passing_checks": [
+      "book_cross_prefix_complete_units_at_least_1",
+      "both_authorized_parameter_groups_changed",
+      "broad_greedy_exact_correct_at_least_23_of_48",
+      "broad_nll_at_most_authorized_maximum",
+      "frozen_state_exact",
+      "priority_teacher_deficit_improved_at_least_0_5_vs_original_v41_u0",
+      "query_state_changed",
+      "scene_readout_state_changed",
+      "source_prefix_trust_rms_at_most_0_002",
+      "teacher_cross_complete_units_at_least_17",
+      "update2_integrity_gate_passed"
+    ],
+    "priority_side_deficit_improvement": 0.7275158166885376,
+    "source_broad_nll": 2.91504575808843,
+    "stopped_before_update_five": true,
+    "teacher_forced": {
+      "book_complete_threshold": 1,
+      "book_cross_threshold": 1,
+      "complete_physical_pair_coverage": 4,
+      "complete_units": 8,
+      "complete_units_by_family": {
+        "book_support": 0,
+        "mirror_lr": 1,
+        "picture_support": 0
+      },
+      "cross_prefix_complete_units": 17,
+      "cross_prefix_complete_units_by_family": {
+        "book_support": 1,
+        "mirror_lr": 4,
+        "picture_support": 2
+      },
+      "mirror_complete_threshold": 2,
+      "physical_pair_threshold": 5,
+      "positive_sides": 33,
+      "teacher_complete_threshold": 10,
+      "teacher_cross_threshold": 17,
+      "teacher_positive_threshold": 35
+    },
+    "update4_broad_nll": 2.9172145972649255,
+    "update4_priority_side_deficit": 30.386213302612305,
+    "update4_source_prefix_trust_rms": 0.001376520493067801
+  },
+  "v46_predecessor_authentication": {
+    "authorization_checks": {
+      "authorization": true,
+      "boundary": true,
+      "identity": true,
+      "implementation": true,
+      "only_successor": true,
+      "paths": true,
+      "schedule": true,
+      "source": true
+    },
+    "authorization_id": "v47_exact_book_support_continuation",
+    "exact_v47_authorization_authenticated": true,
+    "terminal_path": "reports/gemma4/metrics/v46_v45_u4_lost_side_terminal_gate.json",
+    "terminal_sha256": "de66c9844786c8718399c75162e0b13313b778c1b7d5fa7edcd4133d4d31b60d",
+    "v46_report_sha256": "ce48a1fd484fa5dab71c76a2dd3e39194dd6964e068d6762925a02fb73f6aee6"
+  },
+  "v47_final_train_only_gate_passed": false,
+  "v47_provenance": {
+    "exact_train_scene_count": 16,
+    "exact_train_scene_ids": [
+      "scene_000011",
+      "scene_000012",
+      "scene_000013",
+      "scene_000014",
+      "scene_000015",
+      "scene_000016",
+      "scene_000017",
+      "scene_000018",
+      "scene_000031",
+      "scene_000032",
+      "scene_000033",
+      "scene_000034",
+      "scene_000035",
+      "scene_000036",
+      "scene_000037",
+      "scene_000038"
+    ],
+    "question_dependent_scene_processing_or_retrieval": false,
+    "reconstructed_candidate_authorized_surface_state_sha256": "d60b665d9a970433b2ed59e6769b9114468bef608b98eae828268101d39db56c",
+    "reconstructed_candidate_full_tensor_state_sha256": "1d5adc1fb0d7a895056b77d38c8a12aba95c9997ec8a94edf68673f9c58fb954",
+    "same_exact_v46_authorization_at_updates_zero_two_four": true,
+    "schedule_sha256": "5284e4ff377fc6ea4668c73e398929d8589f0ef45953e0da25b78c82508d5ed3",
+    "source_optimizer_files_or_states_loaded": false,
+    "v46_terminal_sha256": "de66c9844786c8718399c75162e0b13313b778c1b7d5fa7edcd4133d4d31b60d",
+    "validation_oracle_and_final_access": false
+  },
+  "v48_implementation_reference": {
+    "diagnostic_path": "src/semantic_3d_chat/evaluation/v48_v47_u4_dual_margin_screen.py",
+    "diagnostic_sha256": "c132e66568b626658315dc90c3638e52677d299900d863270ddfced07c580611",
+    "implementation_authenticated": true,
+    "implementation_files_opened": true,
+    "report_path": "reports/gemma4/metrics/v48_v47_u4_dual_margin_no_step_diagnostic.json",
+    "status": "stable_v48_implementation_bytes_authenticated",
+    "test_path": "tests/test_v48_v47_u4_dual_margin_screen.py",
+    "test_sha256": "e522471a3ca88ea363bf59c2de0bb5f2a9d1cee628a8e874264fa2d2db52e31a"
+  },
+  "v48_v47_u4_dual_margin_no_step_diagnostic_authorized": true,
+  "validation_access_authorized": false
+}

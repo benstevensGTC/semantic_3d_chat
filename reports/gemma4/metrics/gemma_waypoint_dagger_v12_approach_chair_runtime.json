@@ -1,0 +1,1791 @@
+{
+  "accepted_decision_count": 19,
+  "actions": [
+    {
+      "collision": false,
+      "distance_moved": 0.0,
+      "error_code": null,
+      "stopped": false,
+      "success": true,
+      "turn_degrees": 37.0789794921875
+    },
+    {
+      "collision": false,
+      "distance_moved": 0.34608057888196475,
+      "error_code": null,
+      "stopped": false,
+      "success": true,
+      "turn_degrees": 0.0
+    },
+    {
+      "collision": false,
+      "distance_moved": 0.0,
+      "error_code": null,
+      "stopped": false,
+      "success": true,
+      "turn_degrees": 39.99080276489258
+    },
+    {
+      "collision": false,
+      "distance_moved": 0.0,
+      "error_code": null,
+      "stopped": false,
+      "success": true,
+      "turn_degrees": 39.79410171508789
+    },
+    {
+      "collision": false,
+      "distance_moved": 0.0,
+      "error_code": null,
+      "stopped": false,
+      "success": true,
+      "turn_degrees": 39.99504852294922
+    },
+    {
+      "collision": false,
+      "distance_moved": 0.3818747143805224,
+      "error_code": null,
+      "stopped": false,
+      "success": true,
+      "turn_degrees": 0.0
+    },
+    {
+      "collision": false,
+      "distance_moved": 0.0,
+      "error_code": null,
+      "stopped": false,
+      "success": true,
+      "turn_degrees": -39.991268157958984
+    },
+    {
+      "collision": false,
+      "distance_moved": 0.0,
+      "error_code": null,
+      "stopped": false,
+      "success": true,
+      "turn_degrees": -39.87109375
+    },
+    {
+      "collision": false,
+      "distance_moved": 0.0,
+      "error_code": null,
+      "stopped": false,
+      "success": true,
+      "turn_degrees": -39.999454498291016
+    },
+    {
+      "collision": false,
+      "distance_moved": 0.3977309468833207,
+      "error_code": null,
+      "stopped": false,
+      "success": true,
+      "turn_degrees": 0.0
+    },
+    {
+      "collision": false,
+      "distance_moved": 0.0,
+      "error_code": null,
+      "stopped": false,
+      "success": true,
+      "turn_degrees": 40.0
+    },
+    {
+      "collision": false,
+      "distance_moved": 0.3759867564215823,
+      "error_code": null,
+      "stopped": false,
+      "success": true,
+      "turn_degrees": 0.0
+    },
+    {
+      "collision": false,
+      "distance_moved": 0.391687546408347,
+      "error_code": null,
+      "stopped": false,
+      "success": true,
+      "turn_degrees": 0.0
+    },
+    {
+      "collision": false,
+      "distance_moved": 0.4030944127584349,
+      "error_code": null,
+      "stopped": false,
+      "success": true,
+      "turn_degrees": 0.0
+    },
+    {
+      "collision": false,
+      "distance_moved": 0.0,
+      "error_code": null,
+      "stopped": false,
+      "success": true,
+      "turn_degrees": -29.254222869873047
+    },
+    {
+      "collision": false,
+      "distance_moved": 0.35868108437126245,
+      "error_code": null,
+      "stopped": false,
+      "success": true,
+      "turn_degrees": 0.0
+    },
+    {
+      "collision": false,
+      "distance_moved": 0.42764399383495133,
+      "error_code": null,
+      "stopped": false,
+      "success": true,
+      "turn_degrees": 0.0
+    },
+    {
+      "collision": false,
+      "distance_moved": 0.43636892659429166,
+      "error_code": null,
+      "stopped": false,
+      "success": true,
+      "turn_degrees": 0.0
+    }
+  ],
+  "actual_gemma_causal_forward_every_step": true,
+  "capture_transport": "loopback_public_http_api",
+  "cloud_model_used": false,
+  "deterministic_route_planner_used": false,
+  "elapsed_seconds": 12.167337749997387,
+  "fallback_used": false,
+  "final_state": {
+    "action_count": 18,
+    "body_yaw_degrees": -42.25710678100586,
+    "collision": false,
+    "map_version": 0,
+    "position_xy_m": [
+      0.8517921291267163,
+      2.177798059977371
+    ],
+    "scan_count": 0,
+    "scene_id": "scene_000001",
+    "scene_prefix_hash": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95",
+    "stopped": false
+  },
+  "goal_id": "approach_chair",
+  "instruction": "Move close to the chair, then stop.",
+  "local_inference": true,
+  "model_decision_count": 33,
+  "model_decisions": [
+    {
+      "accepted": true,
+      "active_prefix_sha256": "0ba226709092bf3ef2aa50748394b404ff699bacbb90fae3e91410a540a287f2",
+      "actual_gemma_causal_forward": true,
+      "checkpoint_sha256": "95bbc0cd68a73f81dc0bc1d5875993cdcb7b6ccf092d4f13811f005e8ca1e9be",
+      "decision_position": 330,
+      "decision_tensor_sha256": "9ac5fffce6ac3e71262db106e87699323d94e29d2c0d31d0c590aeea47e823bd",
+      "derived_absolute_facing_heading_degrees": -52.9210205078125,
+      "derived_world_waypoint_xy_m": null,
+      "deterministic_route_planner_used": false,
+      "error_code": null,
+      "executed": true,
+      "history_token_count": 0,
+      "instruction_sha256": "3fb8d75b8368a34e5540c1623e2707404f7ac8a5ead4bad0dcc3caff58146ac2",
+      "model_action": "face",
+      "model_action_logits": [
+        -1.5443620681762695,
+        12.084988594055176,
+        -10.755462646484375
+      ],
+      "model_action_probabilities": [
+        1.2046134543197695e-06,
+        0.9999988079071045,
+        1.2036993624064962e-10
+      ],
+      "model_desired_heading_degrees": -52.9210205078125,
+      "model_selected_every_waypoint_and_heading": true,
+      "model_turn_delta_degrees": 37.0789794921875,
+      "model_waypoint_delta_robot_m": [
+        -0.04639541357755661,
+        0.3395809233188629
+      ],
+      "primitive_arguments": {
+        "angle_degrees": 37.0789794921875
+      },
+      "primitive_tool": "turn",
+      "prompt_token_count": 68,
+      "robot_token_count": 4,
+      "robot_tokens_sha256": "961e0d489190500887e181b2fafcb643c572c0936e63b9e0f4489b6c646ec1ee",
+      "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95",
+      "scene_token_count": 258,
+      "step": 1,
+      "substitution_applied": false,
+      "synthetic_stop_applied": false
+    },
+    {
+      "accepted": true,
+      "active_prefix_sha256": "ff14f582c63d4e72c166364921db6439434815a06979b494380919966deae572",
+      "actual_gemma_causal_forward": true,
+      "checkpoint_sha256": "95bbc0cd68a73f81dc0bc1d5875993cdcb7b6ccf092d4f13811f005e8ca1e9be",
+      "decision_position": 331,
+      "decision_tensor_sha256": "dac1b222425c04944de5e1a4b339fb6309628d8554d6a2e6c077739430bbd214",
+      "derived_absolute_facing_heading_degrees": -13.071861267089844,
+      "derived_world_waypoint_xy_m": [
+        -0.22512217403212736,
+        -0.03972887057312949
+      ],
+      "deterministic_route_planner_used": false,
+      "error_code": null,
+      "executed": true,
+      "history_token_count": 1,
+      "instruction_sha256": "3fb8d75b8368a34e5540c1623e2707404f7ac8a5ead4bad0dcc3caff58146ac2",
+      "model_action": "move_to",
+      "model_action_logits": [
+        1.467170238494873,
+        -0.3262035846710205,
+        -1.2630711793899536
+      ],
+      "model_action_probabilities": [
+        0.8119510412216187,
+        0.1351069062948227,
+        0.05294209346175194
+      ],
+      "model_desired_heading_degrees": -13.071861267089844,
+      "model_selected_every_waypoint_and_heading": true,
+      "model_turn_delta_degrees": 39.849159240722656,
+      "model_waypoint_delta_robot_m": [
+        -0.0020273402333259583,
+        0.346074640750885
+      ],
+      "primitive_arguments": {
+        "x": -0.22512217403212736,
+        "y": -0.03972887057312949
+      },
+      "primitive_tool": "move_to",
+      "prompt_token_count": 68,
+      "robot_token_count": 4,
+      "robot_tokens_sha256": "67477383bc329669d19405272da3cd325fbb9eca8cb43a4a828feaf4ca344600",
+      "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95",
+      "scene_token_count": 258,
+      "step": 2,
+      "substitution_applied": false,
+      "synthetic_stop_applied": false
+    },
+    {
+      "accepted": true,
+      "active_prefix_sha256": "99a25baa849af70f5aaf1fe98bbede9bb9123f808267d36c8495927068ab2551",
+      "actual_gemma_causal_forward": true,
+      "checkpoint_sha256": "95bbc0cd68a73f81dc0bc1d5875993cdcb7b6ccf092d4f13811f005e8ca1e9be",
+      "decision_position": 332,
+      "decision_tensor_sha256": "984f204a926b8cc537f4b9717f9130a6db85312f387fea96e13ec5869d649a7b",
+      "derived_absolute_facing_heading_degrees": -12.930217742919922,
+      "derived_world_waypoint_xy_m": null,
+      "deterministic_route_planner_used": false,
+      "error_code": null,
+      "executed": true,
+      "history_token_count": 2,
+      "instruction_sha256": "3fb8d75b8368a34e5540c1623e2707404f7ac8a5ead4bad0dcc3caff58146ac2",
+      "model_action": "face",
+      "model_action_logits": [
+        -0.5565199851989746,
+        5.803117752075195,
+        -5.423252582550049
+      ],
+      "model_action_probabilities": [
+        0.0017269827658310533,
+        0.9982597231864929,
+        1.329514452663716e-05
+      ],
+      "model_desired_heading_degrees": -12.930217742919922,
+      "model_selected_every_waypoint_and_heading": true,
+      "model_turn_delta_degrees": 39.99080276489258,
+      "model_waypoint_delta_robot_m": [
+        -0.016726404428482056,
+        0.4187617003917694
+      ],
+      "primitive_arguments": {
+        "angle_degrees": 39.99080276489258
+      },
+      "primitive_tool": "turn",
+      "prompt_token_count": 68,
+      "robot_token_count": 4,
+      "robot_tokens_sha256": "1c48542131d38c54486f6af76758f587848377f045df29633fbec9320594f5a6",
+      "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95",
+      "scene_token_count": 258,
+      "step": 3,
+      "substitution_applied": false,
+      "synthetic_stop_applied": false
+    },
+    {
+      "accepted": true,
+      "active_prefix_sha256": "6a3352d59fa73160d67dd3a1c0378c2b826a40b07d0fd0636fa9ecb8bdf0b6c9",
+      "actual_gemma_causal_forward": true,
+      "checkpoint_sha256": "95bbc0cd68a73f81dc0bc1d5875993cdcb7b6ccf092d4f13811f005e8ca1e9be",
+      "decision_position": 333,
+      "decision_tensor_sha256": "e8d5b4f398352f2d23097f0f5ae10990f3d2a7260c9368b2e7483faefa828f54",
+      "derived_absolute_facing_heading_degrees": 26.86388397216797,
+      "derived_world_waypoint_xy_m": null,
+      "deterministic_route_planner_used": false,
+      "error_code": null,
+      "executed": true,
+      "history_token_count": 3,
+      "instruction_sha256": "3fb8d75b8368a34e5540c1623e2707404f7ac8a5ead4bad0dcc3caff58146ac2",
+      "model_action": "face",
+      "model_action_logits": [
+        -13.928285598754883,
+        10.21247386932373,
+        3.640341281890869
+      ],
+      "model_action_probabilities": [
+        3.274875509662323e-11,
+        0.9986031651496887,
+        0.00139685720205307
+      ],
+      "model_desired_heading_degrees": 26.86388397216797,
+      "model_selected_every_waypoint_and_heading": true,
+      "model_turn_delta_degrees": 39.79410171508789,
+      "model_waypoint_delta_robot_m": [
+        0.038073889911174774,
+        0.4180609881877899
+      ],
+      "primitive_arguments": {
+        "angle_degrees": 39.79410171508789
+      },
+      "primitive_tool": "turn",
+      "prompt_token_count": 68,
+      "robot_token_count": 4,
+      "robot_tokens_sha256": "2a3f20655b958b83b3508951111b595e162ac8a42b5700d736127b5487e7ac06",
+      "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95",
+      "scene_token_count": 258,
+      "step": 4,
+      "substitution_applied": false,
+      "synthetic_stop_applied": false
+    },
+    {
+      "accepted": true,
+      "active_prefix_sha256": "bde3bf834e4a5bb017f34ccc7f5c890a030925b23060c2682d8e594a93786fd1",
+      "actual_gemma_causal_forward": true,
+      "checkpoint_sha256": "95bbc0cd68a73f81dc0bc1d5875993cdcb7b6ccf092d4f13811f005e8ca1e9be",
+      "decision_position": 334,
+      "decision_tensor_sha256": "5ed5bc8310a0faa261bee116d16885444878f6f45bce55b0edb89a351e892b5e",
+      "derived_absolute_facing_heading_degrees": 66.85893249511719,
+      "derived_world_waypoint_xy_m": null,
+      "deterministic_route_planner_used": false,
+      "error_code": null,
+      "executed": true,
+      "history_token_count": 4,
+      "instruction_sha256": "3fb8d75b8368a34e5540c1623e2707404f7ac8a5ead4bad0dcc3caff58146ac2",
+      "model_action": "face",
+      "model_action_logits": [
+        -11.705909729003906,
+        8.000751495361328,
+        3.645853042602539
+      ],
+      "model_action_probabilities": [
+        2.728747450220226e-09,
+        0.9873191118240356,
+        0.012680874206125736
+      ],
+      "model_desired_heading_degrees": 66.85893249511719,
+      "model_selected_every_waypoint_and_heading": true,
+      "model_turn_delta_degrees": 39.99504852294922,
+      "model_waypoint_delta_robot_m": [
+        -0.03341811150312424,
+        0.3929811716079712
+      ],
+      "primitive_arguments": {
+        "angle_degrees": 39.99504852294922
+      },
+      "primitive_tool": "turn",
+      "prompt_token_count": 68,
+      "robot_token_count": 4,
+      "robot_tokens_sha256": "fafa8cdfdf76274e391f60438f8254b19baaad2889c9fc83855a599235611983",
+      "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95",
+      "scene_token_count": 258,
+      "step": 5,
+      "substitution_applied": false,
+      "synthetic_stop_applied": false
+    },
+    {
+      "accepted": true,
+      "active_prefix_sha256": "0bb2c9c2e23cedd40420b11489e0870479cbb10050aff90ef4ab8c8f78daeab7",
+      "actual_gemma_causal_forward": true,
+      "checkpoint_sha256": "95bbc0cd68a73f81dc0bc1d5875993cdcb7b6ccf092d4f13811f005e8ca1e9be",
+      "decision_position": 335,
+      "decision_tensor_sha256": "7a3b7525166740ccc2dd4d08a82fa6c90cd40e6d14ded02186caabd9f70a6f09",
+      "derived_absolute_facing_heading_degrees": 106.76245498657227,
+      "derived_world_waypoint_xy_m": [
+        -0.5988088173928836,
+        0.038926008849424557
+      ],
+      "deterministic_route_planner_used": false,
+      "error_code": null,
+      "executed": true,
+      "history_token_count": 5,
+      "instruction_sha256": "3fb8d75b8368a34e5540c1623e2707404f7ac8a5ead4bad0dcc3caff58146ac2",
+      "model_action": "move_to",
+      "model_action_logits": [
+        1.194913387298584,
+        -0.09724736213684082,
+        -1.2299472093582153
+      ],
+      "model_action_probabilities": [
+        0.7335857152938843,
+        0.2014988660812378,
+        0.06491534411907196
+      ],
+      "model_desired_heading_degrees": 106.76245498657227,
+      "model_selected_every_waypoint_and_heading": true,
+      "model_turn_delta_degrees": 39.90352249145508,
+      "model_waypoint_delta_robot_m": [
+        -0.07453116029500961,
+        0.3745309114456177
+      ],
+      "primitive_arguments": {
+        "x": -0.5988088173928836,
+        "y": 0.038926008849424557
+      },
+      "primitive_tool": "move_to",
+      "prompt_token_count": 68,
+      "robot_token_count": 4,
+      "robot_tokens_sha256": "af542a463531d1b50c71508813f33ee053c7460b2fc6cb5e4a8651133d3f3c2a",
+      "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95",
+      "scene_token_count": 258,
+      "step": 6,
+      "substitution_applied": false,
+      "synthetic_stop_applied": false
+    },
+    {
+      "accepted": false,
+      "active_prefix_sha256": "269b8d1cd5923ed86960821bd52dee9f26a76ffd1b7e1769f4ead7e03d994e86",
+      "actual_gemma_causal_forward": true,
+      "checkpoint_sha256": "95bbc0cd68a73f81dc0bc1d5875993cdcb7b6ccf092d4f13811f005e8ca1e9be",
+      "decision_position": 336,
+      "decision_tensor_sha256": "98accae16e7ace12fbbac99eb9380f6c001cfb79f1e3b4260e188517ea010e0a",
+      "derived_absolute_facing_heading_degrees": 27.14521026611328,
+      "derived_world_waypoint_xy_m": [
+        -1.0019727722385383,
+        0.13958021732350578
+      ],
+      "deterministic_route_planner_used": false,
+      "error_code": "E_MODEL_COLLISION",
+      "executed": false,
+      "history_token_count": 6,
+      "instruction_sha256": "3fb8d75b8368a34e5540c1623e2707404f7ac8a5ead4bad0dcc3caff58146ac2",
+      "model_action": "move_to",
+      "model_action_logits": [
+        20.019935607910156,
+        -12.072169303894043,
+        -8.232641220092773
+      ],
+      "model_action_probabilities": [
+        1.0,
+        1.1549828713602103e-14,
+        5.371082268182392e-13
+      ],
+      "model_desired_heading_degrees": 27.14521026611328,
+      "model_selected_every_waypoint_and_heading": true,
+      "model_turn_delta_degrees": -39.713722229003906,
+      "model_waypoint_delta_robot_m": [
+        -0.06588637083768845,
+        0.4102821350097656
+      ],
+      "primitive_arguments": {
+        "x": -1.0019727722385383,
+        "y": 0.13958021732350578
+      },
+      "primitive_tool": "move_to",
+      "prompt_token_count": 68,
+      "robot_token_count": 4,
+      "robot_tokens_sha256": "e1d56da3a914aa131dc5188aa69331f7f59307d07ca1e1b587c4e19ee90f7010",
+      "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95",
+      "scene_token_count": 258,
+      "step": 7,
+      "substitution_applied": false,
+      "synthetic_stop_applied": false
+    },
+    {
+      "accepted": false,
+      "active_prefix_sha256": "269b8d1cd5923ed86960821bd52dee9f26a76ffd1b7e1769f4ead7e03d994e86",
+      "actual_gemma_causal_forward": true,
+      "checkpoint_sha256": "95bbc0cd68a73f81dc0bc1d5875993cdcb7b6ccf092d4f13811f005e8ca1e9be",
+      "decision_position": 337,
+      "decision_tensor_sha256": "873ec4ae5ee7ddc64621ecfb1f22eb4aa218e7a32c20e52b424001729c4e488d",
+      "derived_absolute_facing_heading_degrees": 32.611366271972656,
+      "derived_world_waypoint_xy_m": [
+        -1.0004996995489448,
+        0.16200604102730196
+      ],
+      "deterministic_route_planner_used": false,
+      "error_code": "E_MODEL_COLLISION",
+      "executed": false,
+      "history_token_count": 7,
+      "instruction_sha256": "3fb8d75b8368a34e5540c1623e2707404f7ac8a5ead4bad0dcc3caff58146ac2",
+      "model_action": "move_to",
+      "model_action_logits": [
+        17.635438919067383,
+        0.2956359386444092,
+        -18.312660217285156
+      ],
+      "model_action_probabilities": [
+        1.0,
+        2.9472634111016305e-08,
+        2.443091571111862e-16
+      ],
+      "model_desired_heading_degrees": 32.611366271972656,
+      "model_selected_every_waypoint_and_heading": true,
+      "model_turn_delta_degrees": -34.24756622314453,
+      "model_waypoint_delta_robot_m": [
+        -0.04468601569533348,
+        0.4177408516407013
+      ],
+      "primitive_arguments": {
+        "x": -1.0004996995489448,
+        "y": 0.16200604102730196
+      },
+      "primitive_tool": "move_to",
+      "prompt_token_count": 68,
+      "robot_token_count": 4,
+      "robot_tokens_sha256": "e1d56da3a914aa131dc5188aa69331f7f59307d07ca1e1b587c4e19ee90f7010",
+      "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95",
+      "scene_token_count": 258,
+      "step": 8,
+      "substitution_applied": false,
+      "synthetic_stop_applied": false
+    },
+    {
+      "accepted": false,
+      "active_prefix_sha256": "269b8d1cd5923ed86960821bd52dee9f26a76ffd1b7e1769f4ead7e03d994e86",
+      "actual_gemma_causal_forward": true,
+      "checkpoint_sha256": "95bbc0cd68a73f81dc0bc1d5875993cdcb7b6ccf092d4f13811f005e8ca1e9be",
+      "decision_position": 338,
+      "decision_tensor_sha256": "ca11ad416b89e5f22f6cb5736c0492a5de4a3f439ab01c872707f1dacab317c5",
+      "derived_absolute_facing_heading_degrees": 30.018463134765625,
+      "derived_world_waypoint_xy_m": [
+        -1.0174920275244808,
+        0.15849325981217
+      ],
+      "deterministic_route_planner_used": false,
+      "error_code": "E_MODEL_COLLISION",
+      "executed": false,
+      "history_token_count": 8,
+      "instruction_sha256": "3fb8d75b8368a34e5540c1623e2707404f7ac8a5ead4bad0dcc3caff58146ac2",
+      "model_action": "move_to",
+      "model_action_logits": [
+        29.338520050048828,
+        -8.222029685974121,
+        -21.509157180786133
+      ],
+      "model_action_probabilities": [
+        1.0,
+        4.871470775499958e-17,
+        8.262919765205143e-23
+      ],
+      "model_desired_heading_degrees": 30.018463134765625,
+      "model_selected_every_waypoint_and_heading": true,
+      "model_turn_delta_degrees": -36.84046936035156,
+      "model_waypoint_delta_robot_m": [
+        -0.05459408089518547,
+        0.431985467672348
+      ],
+      "primitive_arguments": {
+        "x": -1.0174920275244808,
+        "y": 0.15849325981217
+      },
+      "primitive_tool": "move_to",
+      "prompt_token_count": 68,
+      "robot_token_count": 4,
+      "robot_tokens_sha256": "e1d56da3a914aa131dc5188aa69331f7f59307d07ca1e1b587c4e19ee90f7010",
+      "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95",
+      "scene_token_count": 258,
+      "step": 9,
+      "substitution_applied": false,
+      "synthetic_stop_applied": false
+    },
+    {
+      "accepted": false,
+      "active_prefix_sha256": "269b8d1cd5923ed86960821bd52dee9f26a76ffd1b7e1769f4ead7e03d994e86",
+      "actual_gemma_causal_forward": true,
+      "checkpoint_sha256": "95bbc0cd68a73f81dc0bc1d5875993cdcb7b6ccf092d4f13811f005e8ca1e9be",
+      "decision_position": 339,
+      "decision_tensor_sha256": "4e67f9f829d30fde27c9440c82df7a3e9f67517401f99c6e80b49c2cc8fd1501",
+      "derived_absolute_facing_heading_degrees": 26.98021697998047,
+      "derived_world_waypoint_xy_m": [
+        -1.005373887696254,
+        0.21005160168554174
+      ],
+      "deterministic_route_planner_used": false,
+      "error_code": "E_MODEL_COLLISION",
+      "executed": false,
+      "history_token_count": 9,
+      "instruction_sha256": "3fb8d75b8368a34e5540c1623e2707404f7ac8a5ead4bad0dcc3caff58146ac2",
+      "model_action": "move_to",
+      "model_action_logits": [
+        16.553794860839844,
+        5.523392677307129,
+        -22.475933074951172
+      ],
+      "model_action_probabilities": [
+        0.9999837875366211,
+        1.6201312973862514e-05,
+        1.1209790361099183e-17
+      ],
+      "model_desired_heading_degrees": 26.98021697998047,
+      "model_selected_every_waypoint_and_heading": true,
+      "model_turn_delta_degrees": -39.87871551513672,
+      "model_waypoint_delta_robot_m": [
+        -0.0024217364843934774,
+        0.44110459089279175
+      ],
+      "primitive_arguments": {
+        "x": -1.005373887696254,
+        "y": 0.21005160168554174
+      },
+      "primitive_tool": "move_to",
+      "prompt_token_count": 68,
+      "robot_token_count": 4,
+      "robot_tokens_sha256": "e1d56da3a914aa131dc5188aa69331f7f59307d07ca1e1b587c4e19ee90f7010",
+      "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95",
+      "scene_token_count": 258,
+      "step": 10,
+      "substitution_applied": false,
+      "synthetic_stop_applied": false
+    },
+    {
+      "accepted": false,
+      "active_prefix_sha256": "269b8d1cd5923ed86960821bd52dee9f26a76ffd1b7e1769f4ead7e03d994e86",
+      "actual_gemma_causal_forward": true,
+      "checkpoint_sha256": "95bbc0cd68a73f81dc0bc1d5875993cdcb7b6ccf092d4f13811f005e8ca1e9be",
+      "decision_position": 340,
+      "decision_tensor_sha256": "d041ca94ea0bc937d326b799164d71d5629661fa0577df102146436ab6452d66",
+      "derived_absolute_facing_heading_degrees": 26.896060943603516,
+      "derived_world_waypoint_xy_m": [
+        -1.0253863624536046,
+        0.18943352563560586
+      ],
+      "deterministic_route_planner_used": false,
+      "error_code": "E_MODEL_COLLISION",
+      "executed": false,
+      "history_token_count": 10,
+      "instruction_sha256": "3fb8d75b8368a34e5540c1623e2707404f7ac8a5ead4bad0dcc3caff58146ac2",
+      "model_action": "move_to",
+      "model_action_logits": [
+        22.31169891357422,
+        -3.2019169330596924,
+        -19.447175979614258
+      ],
+      "model_action_probabilities": [
+        1.0,
+        8.309543157725141e-12,
+        7.3173177638143925e-19
+      ],
+      "model_desired_heading_degrees": 26.896060943603516,
+      "model_selected_every_waypoint_and_heading": true,
+      "model_turn_delta_degrees": -39.96287155151367,
+      "model_waypoint_delta_robot_m": [
+        -0.029245711863040924,
+        0.45140403509140015
+      ],
+      "primitive_arguments": {
+        "x": -1.0253863624536046,
+        "y": 0.18943352563560586
+      },
+      "primitive_tool": "move_to",
+      "prompt_token_count": 68,
+      "robot_token_count": 4,
+      "robot_tokens_sha256": "e1d56da3a914aa131dc5188aa69331f7f59307d07ca1e1b587c4e19ee90f7010",
+      "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95",
+      "scene_token_count": 258,
+      "step": 11,
+      "substitution_applied": false,
+      "synthetic_stop_applied": false
+    },
+    {
+      "accepted": true,
+      "active_prefix_sha256": "269b8d1cd5923ed86960821bd52dee9f26a76ffd1b7e1769f4ead7e03d994e86",
+      "actual_gemma_causal_forward": true,
+      "checkpoint_sha256": "95bbc0cd68a73f81dc0bc1d5875993cdcb7b6ccf092d4f13811f005e8ca1e9be",
+      "decision_position": 341,
+      "decision_tensor_sha256": "5d5f7ac7d47a796c47b221e6f16aae1732c38a6ff06cfab0bdd99be59d397bfa",
+      "derived_absolute_facing_heading_degrees": 26.867664337158203,
+      "derived_world_waypoint_xy_m": null,
+      "deterministic_route_planner_used": false,
+      "error_code": null,
+      "executed": true,
+      "history_token_count": 11,
+      "instruction_sha256": "3fb8d75b8368a34e5540c1623e2707404f7ac8a5ead4bad0dcc3caff58146ac2",
+      "model_action": "face",
+      "model_action_logits": [
+        -7.033814907073975,
+        23.086990356445312,
+        -16.374496459960938
+      ],
+      "model_action_probabilities": [
+        8.29278255765585e-14,
+        1.0,
+        7.279374678923855e-18
+      ],
+      "model_desired_heading_degrees": 26.867664337158203,
+      "model_selected_every_waypoint_and_heading": true,
+      "model_turn_delta_degrees": -39.991268157958984,
+      "model_waypoint_delta_robot_m": [
+        -0.009939728304743767,
+        0.433131605386734
+      ],
+      "primitive_arguments": {
+        "angle_degrees": -39.991268157958984
+      },
+      "primitive_tool": "turn",
+      "prompt_token_count": 68,
+      "robot_token_count": 4,
+      "robot_tokens_sha256": "e1d56da3a914aa131dc5188aa69331f7f59307d07ca1e1b587c4e19ee90f7010",
+      "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95",
+      "scene_token_count": 258,
+      "step": 12,
+      "substitution_applied": false,
+      "synthetic_stop_applied": false
+    },
+    {
+      "accepted": false,
+      "active_prefix_sha256": "ac1b4afa1a4937bb4958af3ab82f0869e0b3f0d9765cc0a82d12a641735d16c7",
+      "actual_gemma_causal_forward": true,
+      "checkpoint_sha256": "95bbc0cd68a73f81dc0bc1d5875993cdcb7b6ccf092d4f13811f005e8ca1e9be",
+      "decision_position": 342,
+      "decision_tensor_sha256": "202b3284117fc4716dcdc213fea4e713702eb99d5d03c1bd70a36a5edf810b29",
+      "derived_absolute_facing_heading_degrees": -13.132335662841797,
+      "derived_world_waypoint_xy_m": [
+        -0.8116895398521693,
+        0.30206539564362933
+      ],
+      "deterministic_route_planner_used": false,
+      "error_code": "E_MODEL_COLLISION",
+      "executed": false,
+      "history_token_count": 12,
+      "instruction_sha256": "3fb8d75b8368a34e5540c1623e2707404f7ac8a5ead4bad0dcc3caff58146ac2",
+      "model_action": "move_to",
+      "model_action_logits": [
+        28.729185104370117,
+        -12.674162864685059,
+        -16.35039520263672
+      ],
+      "model_action_probabilities": [
+        1.0,
+        1.0441307518788684e-18,
+        2.6435419294533257e-20
+      ],
+      "model_desired_heading_degrees": -13.132335662841797,
+      "model_selected_every_waypoint_and_heading": true,
+      "model_turn_delta_degrees": -40.0,
+      "model_waypoint_delta_robot_m": [
+        -0.07097989320755005,
+        0.33094167709350586
+      ],
+      "primitive_arguments": {
+        "x": -0.8116895398521693,
+        "y": 0.30206539564362933
+      },
+      "primitive_tool": "move_to",
+      "prompt_token_count": 68,
+      "robot_token_count": 4,
+      "robot_tokens_sha256": "09a07b58f3b416b5e9022365cfe1b31cf8a501677c383073f1b89b4830474e6e",
+      "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95",
+      "scene_token_count": 258,
+      "step": 13,
+      "substitution_applied": false,
+      "synthetic_stop_applied": false
+    },
+    {
+      "accepted": false,
+      "active_prefix_sha256": "ac1b4afa1a4937bb4958af3ab82f0869e0b3f0d9765cc0a82d12a641735d16c7",
+      "actual_gemma_causal_forward": true,
+      "checkpoint_sha256": "95bbc0cd68a73f81dc0bc1d5875993cdcb7b6ccf092d4f13811f005e8ca1e9be",
+      "decision_position": 343,
+      "decision_tensor_sha256": "e7327fd8f8fa82cf8a7f7f8474e3784a7b63f7a57ab395e09253d3982144f67c",
+      "derived_absolute_facing_heading_degrees": -13.127086639404297,
+      "derived_world_waypoint_xy_m": [
+        -0.7958565433061175,
+        0.3534121061817086
+      ],
+      "deterministic_route_planner_used": false,
+      "error_code": "E_MODEL_COLLISION",
+      "executed": false,
+      "history_token_count": 13,
+      "instruction_sha256": "3fb8d75b8368a34e5540c1623e2707404f7ac8a5ead4bad0dcc3caff58146ac2",
+      "model_action": "move_to",
+      "model_action_logits": [
+        22.501846313476562,
+        -7.326147079467773,
+        -15.468816757202148
+      ],
+      "model_action_probabilities": [
+        1.0,
+        1.1113915235165528e-13,
+        3.23258345267681e-17
+      ],
+      "model_desired_heading_degrees": -13.127086639404297,
+      "model_selected_every_waypoint_and_heading": true,
+      "model_turn_delta_degrees": -39.9947509765625,
+      "model_waypoint_delta_robot_m": [
+        -0.03365083783864975,
+        0.36959022283554077
+      ],
+      "primitive_arguments": {
+        "x": -0.7958565433061175,
+        "y": 0.3534121061817086
+      },
+      "primitive_tool": "move_to",
+      "prompt_token_count": 68,
+      "robot_token_count": 4,
+      "robot_tokens_sha256": "09a07b58f3b416b5e9022365cfe1b31cf8a501677c383073f1b89b4830474e6e",
+      "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95",
+      "scene_token_count": 258,
+      "step": 14,
+      "substitution_applied": false,
+      "synthetic_stop_applied": false
+    },
+    {
+      "accepted": false,
+      "active_prefix_sha256": "ac1b4afa1a4937bb4958af3ab82f0869e0b3f0d9765cc0a82d12a641735d16c7",
+      "actual_gemma_causal_forward": true,
+      "checkpoint_sha256": "95bbc0cd68a73f81dc0bc1d5875993cdcb7b6ccf092d4f13811f005e8ca1e9be",
+      "decision_position": 344,
+      "decision_tensor_sha256": "27dbcd7de1d87f6586994111e078ebb0f7d424302667e562c9f773ccc551e286",
+      "derived_absolute_facing_heading_degrees": -11.950424194335938,
+      "derived_world_waypoint_xy_m": [
+        -0.7955351205367529,
+        0.3703718376188417
+      ],
+      "deterministic_route_planner_used": false,
+      "error_code": "E_MODEL_COLLISION",
+      "executed": false,
+      "history_token_count": 14,
+      "instruction_sha256": "3fb8d75b8368a34e5540c1623e2707404f7ac8a5ead4bad0dcc3caff58146ac2",
+      "model_action": "move_to",
+      "model_action_logits": [
+        14.212347030639648,
+        -6.527613639831543,
+        -7.912550449371338
+      ],
+      "model_action_probabilities": [
+        1.0,
+        9.83444770064068e-10,
+        2.461950643350974e-10
+      ],
+      "model_desired_heading_degrees": -11.950424194335938,
+      "model_selected_every_waypoint_and_heading": true,
+      "model_turn_delta_degrees": -38.81808853149414,
+      "model_waypoint_delta_robot_m": [
+        -0.025699477642774582,
+        0.38457393646240234
+      ],
+      "primitive_arguments": {
+        "x": -0.7955351205367529,
+        "y": 0.3703718376188417
+      },
+      "primitive_tool": "move_to",
+      "prompt_token_count": 68,
+      "robot_token_count": 4,
+      "robot_tokens_sha256": "09a07b58f3b416b5e9022365cfe1b31cf8a501677c383073f1b89b4830474e6e",
+      "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95",
+      "scene_token_count": 258,
+      "step": 15,
+      "substitution_applied": false,
+      "synthetic_stop_applied": false
+    },
+    {
+      "accepted": false,
+      "active_prefix_sha256": "ac1b4afa1a4937bb4958af3ab82f0869e0b3f0d9765cc0a82d12a641735d16c7",
+      "actual_gemma_causal_forward": true,
+      "checkpoint_sha256": "95bbc0cd68a73f81dc0bc1d5875993cdcb7b6ccf092d4f13811f005e8ca1e9be",
+      "decision_position": 345,
+      "decision_tensor_sha256": "7c260f2c53f79021f334831336eead4c7eec5115064b111747e74d995bf132c8",
+      "derived_absolute_facing_heading_degrees": -13.05624771118164,
+      "derived_world_waypoint_xy_m": [
+        -0.7497605992005469,
+        0.3778400701844899
+      ],
+      "deterministic_route_planner_used": false,
+      "error_code": "E_MODEL_COLLISION",
+      "executed": false,
+      "history_token_count": 15,
+      "instruction_sha256": "3fb8d75b8368a34e5540c1623e2707404f7ac8a5ead4bad0dcc3caff58146ac2",
+      "model_action": "move_to",
+      "model_action_logits": [
+        1.5337576866149902,
+        -1.1671526432037354,
+        -0.5347260236740112
+      ],
+      "model_action_probabilities": [
+        0.837856650352478,
+        0.056257352232933044,
+        0.10588601231575012
+      ],
+      "model_desired_heading_degrees": -13.05624771118164,
+      "model_selected_every_waypoint_and_heading": true,
+      "model_turn_delta_degrees": -39.923912048339844,
+      "model_waypoint_delta_robot_m": [
+        0.01850893720984459,
+        0.3705490529537201
+      ],
+      "primitive_arguments": {
+        "x": -0.7497605992005469,
+        "y": 0.3778400701844899
+      },
+      "primitive_tool": "move_to",
+      "prompt_token_count": 68,
+      "robot_token_count": 4,
+      "robot_tokens_sha256": "09a07b58f3b416b5e9022365cfe1b31cf8a501677c383073f1b89b4830474e6e",
+      "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95",
+      "scene_token_count": 258,
+      "step": 16,
+      "substitution_applied": false,
+      "synthetic_stop_applied": false
+    },
+    {
+      "accepted": true,
+      "active_prefix_sha256": "ac1b4afa1a4937bb4958af3ab82f0869e0b3f0d9765cc0a82d12a641735d16c7",
+      "actual_gemma_causal_forward": true,
+      "checkpoint_sha256": "95bbc0cd68a73f81dc0bc1d5875993cdcb7b6ccf092d4f13811f005e8ca1e9be",
+      "decision_position": 346,
+      "decision_tensor_sha256": "def8b76b86d3a1ad71679f6a7e88a0096dac951b8fbe0a982a8e7a62b2a9ac0e",
+      "derived_absolute_facing_heading_degrees": -13.003429412841797,
+      "derived_world_waypoint_xy_m": null,
+      "deterministic_route_planner_used": false,
+      "error_code": null,
+      "executed": true,
+      "history_token_count": 16,
+      "instruction_sha256": "3fb8d75b8368a34e5540c1623e2707404f7ac8a5ead4bad0dcc3caff58146ac2",
+      "model_action": "face",
+      "model_action_logits": [
+        -8.98992919921875,
+        5.891831398010254,
+        2.9813618659973145
+      ],
+      "model_action_probabilities": [
+        3.265181192091404e-07,
+        0.9483612179756165,
+        0.051638416945934296
+      ],
+      "model_desired_heading_degrees": -13.003429412841797,
+      "model_selected_every_waypoint_and_heading": true,
+      "model_turn_delta_degrees": -39.87109375,
+      "model_waypoint_delta_robot_m": [
+        0.010416826233267784,
+        0.3729499876499176
+      ],
+      "primitive_arguments": {
+        "angle_degrees": -39.87109375
+      },
+      "primitive_tool": "turn",
+      "prompt_token_count": 68,
+      "robot_token_count": 4,
+      "robot_tokens_sha256": "09a07b58f3b416b5e9022365cfe1b31cf8a501677c383073f1b89b4830474e6e",
+      "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95",
+      "scene_token_count": 258,
+      "step": 17,
+      "substitution_applied": false,
+      "synthetic_stop_applied": false
+    },
+    {
+      "accepted": true,
+      "active_prefix_sha256": "0e80667725654c4a3c0dff1e67bd8e8689ea8e6062dd2ff903f616eb718d9a48",
+      "actual_gemma_causal_forward": true,
+      "checkpoint_sha256": "95bbc0cd68a73f81dc0bc1d5875993cdcb7b6ccf092d4f13811f005e8ca1e9be",
+      "decision_position": 346,
+      "decision_tensor_sha256": "991d7fb8c4a9bda533ea8acd66a7effb1a37805e16286ded2ff04b30d569a3b5",
+      "derived_absolute_facing_heading_degrees": -53.00288391113281,
+      "derived_world_waypoint_xy_m": null,
+      "deterministic_route_planner_used": false,
+      "error_code": null,
+      "executed": true,
+      "history_token_count": 16,
+      "instruction_sha256": "3fb8d75b8368a34e5540c1623e2707404f7ac8a5ead4bad0dcc3caff58146ac2",
+      "model_action": "face",
+      "model_action_logits": [
+        2.4658989906311035,
+        3.316307783126831,
+        -5.967327117919922
+      ],
+      "model_action_probabilities": [
+        0.2993276119232178,
+        0.7006072402000427,
+        6.510931416414678e-05
+      ],
+      "model_desired_heading_degrees": -53.00288391113281,
+      "model_selected_every_waypoint_and_heading": true,
+      "model_turn_delta_degrees": -39.999454498291016,
+      "model_waypoint_delta_robot_m": [
+        0.0102862399071455,
+        0.38789060711860657
+      ],
+      "primitive_arguments": {
+        "angle_degrees": -39.999454498291016
+      },
+      "primitive_tool": "turn",
+      "prompt_token_count": 68,
+      "robot_token_count": 4,
+      "robot_tokens_sha256": "a05a8ea68db33ef6ced1e89f6ca2cf299379e17917dc50eb9fbc68596c13526f",
+      "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95",
+      "scene_token_count": 258,
+      "step": 18,
+      "substitution_applied": false,
+      "synthetic_stop_applied": false
+    },
+    {
+      "accepted": true,
+      "active_prefix_sha256": "1a8f4728af1a60c3614bfea7fa3bdd0707e5af479bbae818d12c5c77edc79808",
+      "actual_gemma_causal_forward": true,
+      "checkpoint_sha256": "95bbc0cd68a73f81dc0bc1d5875993cdcb7b6ccf092d4f13811f005e8ca1e9be",
+      "decision_position": 346,
+      "decision_tensor_sha256": "a084430c623987523365f68c3c9837efd4321601155c1d9a98abf68bea51c0d7",
+      "derived_absolute_facing_heading_degrees": -92.9901123046875,
+      "derived_world_waypoint_xy_m": [
+        -0.2630898206924607,
+        0.2521926526621978
+      ],
+      "deterministic_route_planner_used": false,
+      "error_code": null,
+      "executed": true,
+      "history_token_count": 16,
+      "instruction_sha256": "3fb8d75b8368a34e5540c1623e2707404f7ac8a5ead4bad0dcc3caff58146ac2",
+      "model_action": "move_to",
+      "model_action_logits": [
+        3.970919132232666,
+        0.613213300704956,
+        -4.751359939575195
+      ],
+      "model_action_probabilities": [
+        0.9662041068077087,
+        0.03363843262195587,
+        0.00015740968228783458
+      ],
+      "model_desired_heading_degrees": -92.9901123046875,
+      "model_selected_every_waypoint_and_heading": true,
+      "model_turn_delta_degrees": -39.98722839355469,
+      "model_waypoint_delta_robot_m": [
+        0.03169846534729004,
+        0.3964657783508301
+      ],
+      "primitive_arguments": {
+        "x": -0.2630898206924607,
+        "y": 0.2521926526621978
+      },
+      "primitive_tool": "move_to",
+      "prompt_token_count": 68,
+      "robot_token_count": 4,
+      "robot_tokens_sha256": "1e52e36987acbbd7cda4280121affb754d6e3b0339775e4cd452d8c2554e6972",
+      "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95",
+      "scene_token_count": 258,
+      "step": 19,
+      "substitution_applied": false,
+      "synthetic_stop_applied": false
+    },
+    {
+      "accepted": false,
+      "active_prefix_sha256": "92db9414dacce4cc1d56001ca2b2ff5e9a5336017d377869b87880753e2d3745",
+      "actual_gemma_causal_forward": true,
+      "checkpoint_sha256": "95bbc0cd68a73f81dc0bc1d5875993cdcb7b6ccf092d4f13811f005e8ca1e9be",
+      "decision_position": 346,
+      "decision_tensor_sha256": "14685e54177367a83026f83d5394afc8ed8891c75cddb79851114847fb681e5c",
+      "derived_absolute_facing_heading_degrees": -92.63164138793945,
+      "derived_world_waypoint_xy_m": [
+        0.08895650114719283,
+        0.5003377256083409
+      ],
+      "deterministic_route_planner_used": false,
+      "error_code": "E_MODEL_COLLISION",
+      "executed": false,
+      "history_token_count": 16,
+      "instruction_sha256": "3fb8d75b8368a34e5540c1623e2707404f7ac8a5ead4bad0dcc3caff58146ac2",
+      "model_action": "move_to",
+      "model_action_logits": [
+        11.208778381347656,
+        -8.050949096679688,
+        -3.2792534828186035
+      ],
+      "model_action_probabilities": [
+        0.9999995231628418,
+        4.321220714587071e-09,
+        5.104200795358338e-07
+      ],
+      "model_desired_heading_degrees": -92.63164138793945,
+      "model_selected_every_waypoint_and_heading": true,
+      "model_turn_delta_degrees": -39.62875747680664,
+      "model_waypoint_delta_robot_m": [
+        0.013667630031704903,
+        0.4304948151111603
+      ],
+      "primitive_arguments": {
+        "x": 0.08895650114719283,
+        "y": 0.5003377256083409
+      },
+      "primitive_tool": "move_to",
+      "prompt_token_count": 68,
+      "robot_token_count": 4,
+      "robot_tokens_sha256": "6ed2163e21b9b3c41cb5f7ab172fa62f70710e7e3dc2de793a07eeb138fef494",
+      "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95",
+      "scene_token_count": 258,
+      "step": 20,
+      "substitution_applied": false,
+      "synthetic_stop_applied": false
+    },
+    {
+      "accepted": false,
+      "active_prefix_sha256": "92db9414dacce4cc1d56001ca2b2ff5e9a5336017d377869b87880753e2d3745",
+      "actual_gemma_causal_forward": true,
+      "checkpoint_sha256": "95bbc0cd68a73f81dc0bc1d5875993cdcb7b6ccf092d4f13811f005e8ca1e9be",
+      "decision_position": 346,
+      "decision_tensor_sha256": "82f144adad75e9b00cf075f87230b83feb9e8207d7cc14d93a28499c52162e0e",
+      "derived_absolute_facing_heading_degrees": -91.64044952392578,
+      "derived_world_waypoint_xy_m": [
+        0.10012657341311548,
+        0.5213534376187771
+      ],
+      "deterministic_route_planner_used": false,
+      "error_code": "E_MODEL_COLLISION",
+      "executed": false,
+      "history_token_count": 16,
+      "instruction_sha256": "3fb8d75b8368a34e5540c1623e2707404f7ac8a5ead4bad0dcc3caff58146ac2",
+      "model_action": "move_to",
+      "model_action_logits": [
+        24.2474422454834,
+        -14.291559219360352,
+        -10.164953231811523
+      ],
+      "model_action_probabilities": [
+        1.0,
+        1.8311517250129313e-17,
+        1.1347143470203042e-15
+      ],
+      "model_desired_heading_degrees": -91.64044952392578,
+      "model_selected_every_waypoint_and_heading": true,
+      "model_turn_delta_degrees": -38.63756561279297,
+      "model_waypoint_delta_robot_m": [
+        0.0036049678456038237,
+        0.4520626962184906
+      ],
+      "primitive_arguments": {
+        "x": 0.10012657341311548,
+        "y": 0.5213534376187771
+      },
+      "primitive_tool": "move_to",
+      "prompt_token_count": 68,
+      "robot_token_count": 4,
+      "robot_tokens_sha256": "6ed2163e21b9b3c41cb5f7ab172fa62f70710e7e3dc2de793a07eeb138fef494",
+      "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95",
+      "scene_token_count": 258,
+      "step": 21,
+      "substitution_applied": false,
+      "synthetic_stop_applied": false
+    },
+    {
+      "accepted": false,
+      "active_prefix_sha256": "92db9414dacce4cc1d56001ca2b2ff5e9a5336017d377869b87880753e2d3745",
+      "actual_gemma_causal_forward": true,
+      "checkpoint_sha256": "95bbc0cd68a73f81dc0bc1d5875993cdcb7b6ccf092d4f13811f005e8ca1e9be",
+      "decision_position": 346,
+      "decision_tensor_sha256": "c44fe7862a7a5b4f5d863c763ef185516de87552c6ea6da2eb9c6d3ba193e982",
+      "derived_absolute_facing_heading_degrees": -13.158977508544922,
+      "derived_world_waypoint_xy_m": [
+        0.03971846107863031,
+        0.5448450956769744
+      ],
+      "deterministic_route_planner_used": false,
+      "error_code": "E_MODEL_COLLISION",
+      "executed": false,
+      "history_token_count": 16,
+      "instruction_sha256": "3fb8d75b8368a34e5540c1623e2707404f7ac8a5ead4bad0dcc3caff58146ac2",
+      "model_action": "move_to",
+      "model_action_logits": [
+        10.078950881958008,
+        0.4656531810760498,
+        -10.767524719238281
+      ],
+      "model_action_probabilities": [
+        0.999933123588562,
+        6.682961247861385e-05,
+        8.840191356718208e-10
+      ],
+      "model_desired_heading_degrees": -13.158977508544922,
+      "model_selected_every_waypoint_and_heading": true,
+      "model_turn_delta_degrees": 39.84390640258789,
+      "model_waypoint_delta_robot_m": [
+        -0.05150909721851349,
+        0.4179534912109375
+      ],
+      "primitive_arguments": {
+        "x": 0.03971846107863031,
+        "y": 0.5448450956769744
+      },
+      "primitive_tool": "move_to",
+      "prompt_token_count": 68,
+      "robot_token_count": 4,
+      "robot_tokens_sha256": "6ed2163e21b9b3c41cb5f7ab172fa62f70710e7e3dc2de793a07eeb138fef494",
+      "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95",
+      "scene_token_count": 258,
+      "step": 22,
+      "substitution_applied": false,
+      "synthetic_stop_applied": false
+    },
+    {
+      "accepted": true,
+      "active_prefix_sha256": "92db9414dacce4cc1d56001ca2b2ff5e9a5336017d377869b87880753e2d3745",
+      "actual_gemma_causal_forward": true,
+      "checkpoint_sha256": "95bbc0cd68a73f81dc0bc1d5875993cdcb7b6ccf092d4f13811f005e8ca1e9be",
+      "decision_position": 346,
+      "decision_tensor_sha256": "d5f722d1a91fa47ef199131af52c9fafa031b496603ac7aa62354d0f7082242a",
+      "derived_absolute_facing_heading_degrees": -13.002883911132812,
+      "derived_world_waypoint_xy_m": null,
+      "deterministic_route_planner_used": false,
+      "error_code": null,
+      "executed": true,
+      "history_token_count": 16,
+      "instruction_sha256": "3fb8d75b8368a34e5540c1623e2707404f7ac8a5ead4bad0dcc3caff58146ac2",
+      "model_action": "face",
+      "model_action_logits": [
+        0.655982494354248,
+        14.531716346740723,
+        -15.446867942810059
+      ],
+      "model_action_probabilities": [
+        9.415529689249524e-07,
+        0.9999990463256836,
+        9.56017627258901e-14
+      ],
+      "model_desired_heading_degrees": -13.002883911132812,
+      "model_selected_every_waypoint_and_heading": true,
+      "model_turn_delta_degrees": 40.0,
+      "model_waypoint_delta_robot_m": [
+        -0.07346896082162857,
+        0.39594966173171997
+      ],
+      "primitive_arguments": {
+        "angle_degrees": 40.0
+      },
+      "primitive_tool": "turn",
+      "prompt_token_count": 68,
+      "robot_token_count": 4,
+      "robot_tokens_sha256": "6ed2163e21b9b3c41cb5f7ab172fa62f70710e7e3dc2de793a07eeb138fef494",
+      "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95",
+      "scene_token_count": 258,
+      "step": 23,
+      "substitution_applied": false,
+      "synthetic_stop_applied": false
+    },
+    {
+      "accepted": true,
+      "active_prefix_sha256": "0336155de0356754a52d9ad031db8b683e71a056a5b9397b044e26c6adcdd125",
+      "actual_gemma_causal_forward": true,
+      "checkpoint_sha256": "95bbc0cd68a73f81dc0bc1d5875993cdcb7b6ccf092d4f13811f005e8ca1e9be",
+      "decision_position": 346,
+      "decision_tensor_sha256": "def5b5d5463258ba29d58240c93e824d633c4ff000dc21d31a3e5e30ea579be9",
+      "derived_absolute_facing_heading_degrees": 16.58234405517578,
+      "derived_world_waypoint_xy_m": [
+        -0.2627006390978787,
+        0.6281792076639807
+      ],
+      "deterministic_route_planner_used": false,
+      "error_code": null,
+      "executed": true,
+      "history_token_count": 16,
+      "instruction_sha256": "3fb8d75b8368a34e5540c1623e2707404f7ac8a5ead4bad0dcc3caff58146ac2",
+      "model_action": "move_to",
+      "model_action_logits": [
+        9.728282928466797,
+        3.7447335720062256,
+        -13.742176055908203
+      ],
+      "model_action_probabilities": [
+        0.9974864721298218,
+        0.0025135334581136703,
+        6.394641760554265e-11
+      ],
+      "model_desired_heading_degrees": 16.58234405517578,
+      "model_selected_every_waypoint_and_heading": true,
+      "model_turn_delta_degrees": 29.585227966308594,
+      "model_waypoint_delta_robot_m": [
+        -0.08421780914068222,
+        0.36643335223197937
+      ],
+      "primitive_arguments": {
+        "x": -0.2627006390978787,
+        "y": 0.6281792076639807
+      },
+      "primitive_tool": "move_to",
+      "prompt_token_count": 68,
+      "robot_token_count": 4,
+      "robot_tokens_sha256": "0bd5c1b6ad630ac195191764df9f9dac2c45c55181f8c166680ffe35360b4c80",
+      "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95",
+      "scene_token_count": 258,
+      "step": 24,
+      "substitution_applied": false,
+      "synthetic_stop_applied": false
+    },
+    {
+      "accepted": true,
+      "active_prefix_sha256": "d3a77b57ec4b376f147fb6b796b27b06b3e37acd022190f92e63a32573aaa163",
+      "actual_gemma_causal_forward": true,
+      "checkpoint_sha256": "95bbc0cd68a73f81dc0bc1d5875993cdcb7b6ccf092d4f13811f005e8ca1e9be",
+      "decision_position": 346,
+      "decision_tensor_sha256": "3d3b9cf48b58f70668db45191882104efae1f1bef614187d1418535f8d476dc4",
+      "derived_absolute_facing_heading_degrees": -52.99565887451172,
+      "derived_world_waypoint_xy_m": [
+        -0.2075983968365797,
+        1.0159715192292929
+      ],
+      "deterministic_route_planner_used": false,
+      "error_code": null,
+      "executed": true,
+      "history_token_count": 16,
+      "instruction_sha256": "3fb8d75b8368a34e5540c1623e2707404f7ac8a5ead4bad0dcc3caff58146ac2",
+      "model_action": "move_to",
+      "model_action_logits": [
+        16.49504852294922,
+        -2.5762574672698975,
+        -14.214521408081055
+      ],
+      "model_action_probabilities": [
+        1.0,
+        5.217193788098484e-09,
+        4.6026001749004813e-14
+      ],
+      "model_desired_heading_degrees": -52.99565887451172,
+      "model_selected_every_waypoint_and_heading": true,
+      "model_turn_delta_degrees": -39.992774963378906,
+      "model_waypoint_delta_robot_m": [
+        -0.03356395661830902,
+        0.39024683833122253
+      ],
+      "primitive_arguments": {
+        "x": -0.2075983968365797,
+        "y": 1.0159715192292929
+      },
+      "primitive_tool": "move_to",
+      "prompt_token_count": 68,
+      "robot_token_count": 4,
+      "robot_tokens_sha256": "7762b7ff4ef009a24b654e75f7f0a7a07f5db0372f166a4059bc0f89901b3607",
+      "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95",
+      "scene_token_count": 258,
+      "step": 25,
+      "substitution_applied": false,
+      "synthetic_stop_applied": false
+    },
+    {
+      "accepted": true,
+      "active_prefix_sha256": "6d5ce524c52bd1cfa44e683bbcd0e95212e138b7ed5d7b6fd0593e8d47749168",
+      "actual_gemma_causal_forward": true,
+      "checkpoint_sha256": "95bbc0cd68a73f81dc0bc1d5875993cdcb7b6ccf092d4f13811f005e8ca1e9be",
+      "decision_position": 346,
+      "decision_tensor_sha256": "4980b1c7680151adc87458f2e99ccdc21e9772dcf277e9938112fd9ce40a47c6",
+      "derived_absolute_facing_heading_degrees": -50.748722076416016,
+      "derived_world_waypoint_xy_m": [
+        -0.09270584811322916,
+        1.4023454415440888
+      ],
+      "deterministic_route_planner_used": false,
+      "error_code": null,
+      "executed": true,
+      "history_token_count": 16,
+      "instruction_sha256": "3fb8d75b8368a34e5540c1623e2707404f7ac8a5ead4bad0dcc3caff58146ac2",
+      "model_action": "move_to",
+      "model_action_logits": [
+        8.571924209594727,
+        -3.252887010574341,
+        -5.5184125900268555
+      ],
+      "model_action_probabilities": [
+        0.9999920129776001,
+        7.3205947046517394e-06,
+        7.596980822199839e-07
+      ],
+      "model_desired_heading_degrees": -50.748722076416016,
+      "model_selected_every_waypoint_and_heading": true,
+      "model_turn_delta_degrees": -37.7458381652832,
+      "model_waypoint_delta_robot_m": [
+        0.025012388825416565,
+        0.4023176431655884
+      ],
+      "primitive_arguments": {
+        "x": -0.09270584811322916,
+        "y": 1.4023454415440888
+      },
+      "primitive_tool": "move_to",
+      "prompt_token_count": 68,
+      "robot_token_count": 4,
+      "robot_tokens_sha256": "f0dacb6615ae23ed3316bd849edb5d63eb2912bdaad9ea278e74a41152848437",
+      "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95",
+      "scene_token_count": 258,
+      "step": 26,
+      "substitution_applied": false,
+      "synthetic_stop_applied": false
+    },
+    {
+      "accepted": true,
+      "active_prefix_sha256": "201e4d720439b30684426eca7ee8f490f242ee10c9ed811751021a1832e8e221",
+      "actual_gemma_causal_forward": true,
+      "checkpoint_sha256": "95bbc0cd68a73f81dc0bc1d5875993cdcb7b6ccf092d4f13811f005e8ca1e9be",
+      "decision_position": 346,
+      "decision_tensor_sha256": "d6e77f64f1c63eafc93fcac0fc688d0e511bd281f3f61152df0afa4870f45f44",
+      "derived_absolute_facing_heading_degrees": -42.25710678100586,
+      "derived_world_waypoint_xy_m": null,
+      "deterministic_route_planner_used": false,
+      "error_code": null,
+      "executed": true,
+      "history_token_count": 16,
+      "instruction_sha256": "3fb8d75b8368a34e5540c1623e2707404f7ac8a5ead4bad0dcc3caff58146ac2",
+      "model_action": "face",
+      "model_action_logits": [
+        -2.2344160079956055,
+        8.688331604003906,
+        -6.637548446655273
+      ],
+      "model_action_probabilities": [
+        1.8042765077552758e-05,
+        0.9999817609786987,
+        2.2082434725234634e-07
+      ],
+      "model_desired_heading_degrees": -42.25710678100586,
+      "model_selected_every_waypoint_and_heading": true,
+      "model_turn_delta_degrees": -29.254222869873047,
+      "model_waypoint_delta_robot_m": [
+        0.053243689239025116,
+        0.3929666578769684
+      ],
+      "primitive_arguments": {
+        "angle_degrees": -29.254222869873047
+      },
+      "primitive_tool": "turn",
+      "prompt_token_count": 68,
+      "robot_token_count": 4,
+      "robot_tokens_sha256": "60e8730affe7b3b94a25b1b37133540ee9f4b460ba9442f92597508e8927825c",
+      "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95",
+      "scene_token_count": 258,
+      "step": 27,
+      "substitution_applied": false,
+      "synthetic_stop_applied": false
+    },
+    {
+      "accepted": true,
+      "active_prefix_sha256": "1d0227cee1963f276a6575463bd24df1ea3f8403593c08b0406add73580ef80d",
+      "actual_gemma_causal_forward": true,
+      "checkpoint_sha256": "95bbc0cd68a73f81dc0bc1d5875993cdcb7b6ccf092d4f13811f005e8ca1e9be",
+      "decision_position": 346,
+      "decision_tensor_sha256": "9af0171a19f39e34a8b1bd6822ad921c6b44c06915b30d2115a240bb6f85d1ba",
+      "derived_absolute_facing_heading_degrees": -4.986454010009766,
+      "derived_world_waypoint_xy_m": [
+        0.1757547647106521,
+        1.6402130930816
+      ],
+      "deterministic_route_planner_used": false,
+      "error_code": null,
+      "executed": true,
+      "history_token_count": 16,
+      "instruction_sha256": "3fb8d75b8368a34e5540c1623e2707404f7ac8a5ead4bad0dcc3caff58146ac2",
+      "model_action": "move_to",
+      "model_action_logits": [
+        7.389501094818115,
+        1.6770856380462646,
+        -9.305240631103516
+      ],
+      "model_action_probabilities": [
+        0.9967061877250671,
+        0.0032937948126345873,
+        5.5992870784393745e-08
+      ],
+      "model_desired_heading_degrees": -4.986454010009766,
+      "model_selected_every_waypoint_and_heading": true,
+      "model_turn_delta_degrees": 37.270652770996094,
+      "model_waypoint_delta_robot_m": [
+        0.038740869611501694,
+        0.35658276081085205
+      ],
+      "primitive_arguments": {
+        "x": 0.1757547647106521,
+        "y": 1.6402130930816
+      },
+      "primitive_tool": "move_to",
+      "prompt_token_count": 68,
+      "robot_token_count": 4,
+      "robot_tokens_sha256": "e4bc0887239482ba6637e49b8fa09d26b3aba982722877cbb6b8eb6eb8169efe",
+      "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95",
+      "scene_token_count": 258,
+      "step": 28,
+      "substitution_applied": false,
+      "synthetic_stop_applied": false
+    },
+    {
+      "accepted": true,
+      "active_prefix_sha256": "10de783cc779a803913146d230f7dcbfd120ed2bd5e3b010b5fa739c4902aee1",
+      "actual_gemma_causal_forward": true,
+      "checkpoint_sha256": "95bbc0cd68a73f81dc0bc1d5875993cdcb7b6ccf092d4f13811f005e8ca1e9be",
+      "decision_position": 346,
+      "decision_tensor_sha256": "f136f9092f40a1bf02527d25a860f8bd9adfc01e8c1523707299e1ab591e9019",
+      "derived_absolute_facing_heading_degrees": -78.56073379516602,
+      "derived_world_waypoint_xy_m": [
+        0.5034399082280472,
+        1.9149890603369115
+      ],
+      "deterministic_route_planner_used": false,
+      "error_code": null,
+      "executed": true,
+      "history_token_count": 16,
+      "instruction_sha256": "3fb8d75b8368a34e5540c1623e2707404f7ac8a5ead4bad0dcc3caff58146ac2",
+      "model_action": "move_to",
+      "model_action_logits": [
+        11.885404586791992,
+        -0.8132822513580322,
+        -11.293283462524414
+      ],
+      "model_action_probabilities": [
+        0.9999969005584717,
+        3.0551259442290757e-06,
+        8.582668603596133e-11
+      ],
+      "model_desired_heading_degrees": -78.56073379516602,
+      "model_selected_every_waypoint_and_heading": true,
+      "model_turn_delta_degrees": -36.303627014160156,
+      "model_waypoint_delta_robot_m": [
+        0.05775568634271622,
+        0.4237259328365326
+      ],
+      "primitive_arguments": {
+        "x": 0.5034399082280472,
+        "y": 1.9149890603369115
+      },
+      "primitive_tool": "move_to",
+      "prompt_token_count": 68,
+      "robot_token_count": 4,
+      "robot_tokens_sha256": "3cbc530186b8df8914add96352d77b19d505515ca21a9b9cb8997f2a12983b12",
+      "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95",
+      "scene_token_count": 258,
+      "step": 29,
+      "substitution_applied": false,
+      "synthetic_stop_applied": false
+    },
+    {
+      "accepted": true,
+      "active_prefix_sha256": "793502ccb2b4f04f55c073ec8b7fdf33a84ad41d04e925b4e399c4b3c1d9bd13",
+      "actual_gemma_causal_forward": true,
+      "checkpoint_sha256": "95bbc0cd68a73f81dc0bc1d5875993cdcb7b6ccf092d4f13811f005e8ca1e9be",
+      "decision_position": 346,
+      "decision_tensor_sha256": "b823656b0dec5b0fb0fc9eae9abe15a865ce757085980b4fe24e5f016c0bdf78",
+      "derived_absolute_facing_heading_degrees": -80.7359619140625,
+      "derived_world_waypoint_xy_m": [
+        0.8517921291267163,
+        2.177798059977371
+      ],
+      "deterministic_route_planner_used": false,
+      "error_code": null,
+      "executed": true,
+      "history_token_count": 16,
+      "instruction_sha256": "3fb8d75b8368a34e5540c1623e2707404f7ac8a5ead4bad0dcc3caff58146ac2",
+      "model_action": "move_to",
+      "model_action_logits": [
+        5.189889430999756,
+        3.9197356700897217,
+        -9.311299324035645
+      ],
+      "model_action_probabilities": [
+        0.7807688117027283,
+        0.21923086047172546,
+        3.933112679987971e-07
+      ],
+      "model_desired_heading_degrees": -80.7359619140625,
+      "model_selected_every_waypoint_and_heading": true,
+      "model_turn_delta_degrees": -38.47885513305664,
+      "model_waypoint_delta_robot_m": [
+        0.08109939843416214,
+        0.42876651883125305
+      ],
+      "primitive_arguments": {
+        "x": 0.8517921291267163,
+        "y": 2.177798059977371
+      },
+      "primitive_tool": "move_to",
+      "prompt_token_count": 68,
+      "robot_token_count": 4,
+      "robot_tokens_sha256": "3d84224776aeb6e7eb79aa1e36b985853888e41c3cc434e85316519ad86fb935",
+      "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95",
+      "scene_token_count": 258,
+      "step": 30,
+      "substitution_applied": false,
+      "synthetic_stop_applied": false
+    },
+    {
+      "accepted": false,
+      "active_prefix_sha256": "61a867877ee642432f2eb794e11a5129040ce0cc9095084a4ad58a798411bb08",
+      "actual_gemma_causal_forward": true,
+      "checkpoint_sha256": "95bbc0cd68a73f81dc0bc1d5875993cdcb7b6ccf092d4f13811f005e8ca1e9be",
+      "decision_position": 346,
+      "decision_tensor_sha256": "49d94b915be54df8d1863f88979f06edd1f298a570179e5013a8058b895910ef",
+      "derived_absolute_facing_heading_degrees": -82.13737487792969,
+      "derived_world_waypoint_xy_m": [
+        1.1093281990186012,
+        2.4741134143539596
+      ],
+      "deterministic_route_planner_used": false,
+      "error_code": "E_LIMIT",
+      "executed": false,
+      "history_token_count": 16,
+      "instruction_sha256": "3fb8d75b8368a34e5540c1623e2707404f7ac8a5ead4bad0dcc3caff58146ac2",
+      "model_action": "move_to",
+      "model_action_logits": [
+        16.183727264404297,
+        -2.741460084915161,
+        -13.721763610839844
+      ],
+      "model_action_probabilities": [
+        1.0,
+        6.038030075927736e-09,
+        1.0285142963001315e-13
+      ],
+      "model_desired_heading_degrees": -82.13737487792969,
+      "model_selected_every_waypoint_and_heading": true,
+      "model_turn_delta_degrees": -39.88026809692383,
+      "model_waypoint_delta_robot_m": [
+        -0.008648425340652466,
+        0.39249563217163086
+      ],
+      "primitive_arguments": {
+        "x": 1.1093281990186012,
+        "y": 2.4741134143539596
+      },
+      "primitive_tool": "move_to",
+      "prompt_token_count": 68,
+      "robot_token_count": 4,
+      "robot_tokens_sha256": "c85704e08b028f71196af06617c98ac9d3d28c28670206fd82bb042c7bb209dd",
+      "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95",
+      "scene_token_count": 258,
+      "step": 31,
+      "substitution_applied": false,
+      "synthetic_stop_applied": false
+    },
+    {
+      "accepted": false,
+      "active_prefix_sha256": "61a867877ee642432f2eb794e11a5129040ce0cc9095084a4ad58a798411bb08",
+      "actual_gemma_causal_forward": true,
+      "checkpoint_sha256": "95bbc0cd68a73f81dc0bc1d5875993cdcb7b6ccf092d4f13811f005e8ca1e9be",
+      "decision_position": 346,
+      "decision_tensor_sha256": "f4046aba9fa2c5eb9f878d49305a79400ffb7c9b42ec5a752eb02f8a074c6243",
+      "derived_absolute_facing_heading_degrees": -67.59795379638672,
+      "derived_world_waypoint_xy_m": [
+        0.9713605101132863,
+        2.4852474829054727
+      ],
+      "deterministic_route_planner_used": false,
+      "error_code": "E_LIMIT",
+      "executed": false,
+      "history_token_count": 16,
+      "instruction_sha256": "3fb8d75b8368a34e5540c1623e2707404f7ac8a5ead4bad0dcc3caff58146ac2",
+      "model_action": "move_to",
+      "model_action_logits": [
+        14.478279113769531,
+        0.049123525619506836,
+        -14.799823760986328
+      ],
+      "model_action_probabilities": [
+        0.9999994039535522,
+        5.413737653725548e-07,
+        1.9261107736968236e-13
+      ],
+      "model_desired_heading_degrees": -67.59795379638672,
+      "model_selected_every_waypoint_and_heading": true,
+      "model_turn_delta_degrees": -25.34084701538086,
+      "model_waypoint_delta_robot_m": [
+        -0.1182503029704094,
+        0.30795878171920776
+      ],
+      "primitive_arguments": {
+        "x": 0.9713605101132863,
+        "y": 2.4852474829054727
+      },
+      "primitive_tool": "move_to",
+      "prompt_token_count": 68,
+      "robot_token_count": 4,
+      "robot_tokens_sha256": "c85704e08b028f71196af06617c98ac9d3d28c28670206fd82bb042c7bb209dd",
+      "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95",
+      "scene_token_count": 258,
+      "step": 32,
+      "substitution_applied": false,
+      "synthetic_stop_applied": false
+    },
+    {
+      "accepted": true,
+      "active_prefix_sha256": "61a867877ee642432f2eb794e11a5129040ce0cc9095084a4ad58a798411bb08",
+      "actual_gemma_causal_forward": true,
+      "checkpoint_sha256": "95bbc0cd68a73f81dc0bc1d5875993cdcb7b6ccf092d4f13811f005e8ca1e9be",
+      "decision_position": 346,
+      "decision_tensor_sha256": "76e11622138762b4cf26c9c3863eb64909d24d001e4f5924bdac31f79ccde874",
+      "derived_absolute_facing_heading_degrees": -51.79410362243652,
+      "derived_world_waypoint_xy_m": null,
+      "deterministic_route_planner_used": false,
+      "error_code": null,
+      "executed": true,
+      "history_token_count": 16,
+      "instruction_sha256": "3fb8d75b8368a34e5540c1623e2707404f7ac8a5ead4bad0dcc3caff58146ac2",
+      "model_action": "stop",
+      "model_action_logits": [
+        0.4936232566833496,
+        -1.870581865310669,
+        1.242444634437561
+      ],
+      "model_action_probabilities": [
+        0.31166917085647583,
+        0.02930437959730625,
+        0.6590264439582825
+      ],
+      "model_desired_heading_degrees": -51.79410362243652,
+      "model_selected_every_waypoint_and_heading": true,
+      "model_turn_delta_degrees": -9.536996841430664,
+      "model_waypoint_delta_robot_m": [
+        0.08968500047922134,
+        0.3574269413948059
+      ],
+      "primitive_arguments": {},
+      "primitive_tool": "stop",
+      "prompt_token_count": 68,
+      "robot_token_count": 4,
+      "robot_tokens_sha256": "c85704e08b028f71196af06617c98ac9d3d28c28670206fd82bb042c7bb209dd",
+      "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95",
+      "scene_token_count": 258,
+      "step": 33,
+      "substitution_applied": false,
+      "synthetic_stop_applied": false
+    }
+  ],
+  "model_selected_every_waypoint_and_heading": true,
+  "model_selected_terminal_stop": true,
+  "path_length_m": 3.5191489605346775,
+  "rejected_decision_count": 14,
+  "runtime_environmental_metadata_fields": [],
+  "runtime_forbidden_access_count": 0,
+  "scene_id": "scene_000001",
+  "scene_memory": {
+    "forbidden_access_count": 0,
+    "map_version": 0,
+    "model_dim": 1536,
+    "processed_voxels": 8422,
+    "question_dependent_scene_retrieval": false,
+    "robot_state_token_count": 4,
+    "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95",
+    "semantic_feature_dim": 3072,
+    "source_voxels": 74699,
+    "tensor_shape": [
+      1,
+      258,
+      1536
+    ],
+    "token_count": 258
+  },
+  "schema": "semantic_3d_chat.gemma_waypoint_object_runtime.v1",
+  "startup_state": {
+    "action_count": 0,
+    "body_yaw_degrees": -90.0,
+    "collision": false,
+    "map_version": 0,
+    "position_xy_m": [
+      -0.5,
+      -0.25
+    ],
+    "scan_count": 0,
+    "scene_id": "scene_000001",
+    "scene_prefix_hash": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95",
+    "stopped": false
+  },
+  "substitution_applied": false,
+  "synthetic_stop_applied": false
+}

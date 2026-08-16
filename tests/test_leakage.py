@@ -17,7 +17,13 @@ class FakeRuntime:
         self.questions_answered = 0
 
     def startup_summary(self):
-        return {"prefix_hash": self.scene_prefix_hash, "processed_voxels": 12}
+        return {
+            "prefix_hash": self.scene_prefix_hash,
+            "processed_voxels": 12,
+            "strict_fixed_environment_embedding_input": True,
+            "environment_conditioned_input_sha256": self.scene_prefix_hash,
+            "question_conditioned_scene_readout_tokens": False,
+        }
 
     def current_prefix_hash(self):
         return self.scene_prefix_hash
@@ -92,6 +98,7 @@ def test_leakage_evaluation_loads_runtime_while_oracle_is_absent(tmp_path: Path)
     assert report["oracle_restored"]
     assert report["prefix_computed_before_first_question"]
     assert report["prefix_invariant"]
+    assert report["strict_fixed_environment_embedding_input"] is True
     assert report["forbidden_accesses"] == []
     assert str(numeric.resolve()) in report["loaded_files"]
     assert output.is_file()

@@ -1,0 +1,441 @@
+{
+  "artifact": "gemma4_v54_fixed_prefix_decoder_reader_v6_2_training_release",
+  "atomic_publication_root": "data_gemma4/checkpoints/gemma4_v54_fixed_prefix_decoder_reader_v6_2",
+  "authorized": {
+    "atomic_publication_envelope_required": true,
+    "deferred_or_final_qa_access": false,
+    "exact_optimizer_updates": 96,
+    "intermediate_checkpoint_or_selection": false,
+    "maximum_training_runs": 1,
+    "optimizer_construction": true,
+    "oracle_access": false
+  },
+  "base_checkpoint_fingerprint": "3e128b40c1b73bb32750285679cda6b1bea364e67465e986a94a81dfc95e81e8",
+  "base_runtime_effective_sha256": "714c60ce9ccb1dff69c72f6618f8afb6f31bc60a830b5ee0fb794fedaa8a321e",
+  "bound_source_inventory_sha256": "bab4313b7f1ef3a4b1aacb4c67de286110cd30da178ca349c5984a1eb8b46f48",
+  "bound_source_sha256": {
+    "pyproject.toml": "8e4d07448c0fe5f9648920988a88896bbbec118554a768d6d814f461a392faef",
+    "requirements-gemma4-probe.txt": "30d001c1f1623dcb7480e8a96b5b1080300ab51c87a39e0cf7653329fff61f66",
+    "scripts/run_gemma4_v54_fixed_prefix_decoder_reader_v6.sh": "fc4649ad897fa53ab4f58a1107651bb2cb1b4596add5ebd2730732ad49f0667e",
+    "scripts/run_gemma4_v54_fixed_prefix_decoder_reader_v6_2.sh": "914a94b3b5dd6e9f4ab3a356c287fa745a9c2533c9037f158ab1754bd4d60fd8",
+    "src/semantic_3d_chat/__init__.py": "dd5d96051df28b6b062554909bb8abfb34432e2baf804ac8e67970e4f60f12fd",
+    "src/semantic_3d_chat/chat/__init__.py": "14e799f8e47219875b723514cb242525240542ca0cbb2c64271ed504a0c060f5",
+    "src/semantic_3d_chat/chat/file_audit.py": "a6a61b27454c939de011ed87ca27b056f43b92c5d30c203f36844246245b1364",
+    "src/semantic_3d_chat/chat/runtime.py": "2a6f43a74ac94e2b64e7cbc3b19d07ca619095f3153054e2edcfc3f5b432d711",
+    "src/semantic_3d_chat/chat/runtime_config.py": "48a0a3eed9d34724cd6d55e4c06381c92aa6977e6222fdd7979d45550a1b1c24",
+    "src/semantic_3d_chat/config.py": "f31ba226689b59ed8b6930eafc408e8e0c201090f66d4df86f9ce7a124b78b1e",
+    "src/semantic_3d_chat/coordinates.py": "490b2e8c0943226ed5d525138744a1e582d62aa1e75bd380bd33c67a79f808ce",
+    "src/semantic_3d_chat/data/__init__.py": "c84c883154751e1d309c094f536288123d04ce7897d18efb9ced4134a6dfe249",
+    "src/semantic_3d_chat/data/dataset.py": "056544fb98ecd5e91e4372e362d592e0ba46b4d2066c455653616bab983ee3c7",
+    "src/semantic_3d_chat/device.py": "09d83709aec72cd329eeb8e4fa3d714ce22f10da01cbb20f1541b2c9d6d08699",
+    "src/semantic_3d_chat/evaluation/__init__.py": "3a262f8409702be357c9e21001f40a0001fd998db07d4ab80bb7c181d54b5618",
+    "src/semantic_3d_chat/evaluation/baseline_io.py": "3555027d5c1bc67fc97746d3ba85f0b675f4eaacd73184f7f58802fc4bf8e4e0",
+    "src/semantic_3d_chat/evaluation/candidate_gate_detail.py": "493dca99e261a9d655a3171f7c1fd31285e29a5ede6ea8017f85bfe6475eb11c",
+    "src/semantic_3d_chat/evaluation/fixed_prefix_decoder_reader_v6_1_release.py": "b4ff43f8ce074c504f7a5b0ac41ece1dba70c433d3bc03934bded5d8c9a8cacc",
+    "src/semantic_3d_chat/evaluation/fixed_prefix_decoder_reader_v6_preregistration.py": "b347df8a9cd52c50a76b9a4455fae04be0ffc4fc250256f0f9cff5bf3cc5ef56",
+    "src/semantic_3d_chat/evaluation/fixed_prefix_decoder_reader_v6_release.py": "572990655bcc1b3c711e99098d05c111ca9987752fb2a8ed51e294ce512418cc",
+    "src/semantic_3d_chat/evaluation/fixed_prefix_ple_v54_preregistration.py": "29ad92242ba48b8b1caa56bf5888b3d578641843de67b752232a82f75a77d2f2",
+    "src/semantic_3d_chat/evaluation/fixed_prefix_ple_v54_v2_preregistration.py": "9d026b5d41848809ab223d064a1b212ca99744453040d584e42674da3b7aa339",
+    "src/semantic_3d_chat/evaluation/fixed_prefix_ple_v54_v3_preregistration.py": "682e4ae3cac8d9881c94e8e56d7763ccc350aee8941c25f0fd22bbbd5faec71b",
+    "src/semantic_3d_chat/evaluation/fixed_prefix_ple_v54_v4_preregistration.py": "cbcb629593aeb1608a68575e1bf67df12534180f8c9ea207c6f86085c7270595",
+    "src/semantic_3d_chat/evaluation/gemma4_semantic_sanity.py": "344b76c73c047ec96f351baa01d3171ebbdd3603fb919613b3d882174f7aea8f",
+    "src/semantic_3d_chat/evaluation/gemma4_tool_decoder_preregistration_v2.py": "70ec273250765bacf8cc54c32ea52dd4ea7212725f94b80b52a9a6631c3c8ecc",
+    "src/semantic_3d_chat/evaluation/metrics.py": "08f27c1f7560f7bf7cfb272bc44bb777bcd40c96311e78c092ba5c98028245e3",
+    "src/semantic_3d_chat/evaluation/ple_reader_preregistration.py": "6e9539358523fe721a4ff42deb3cf158724614a68214dec6b38cb70381175c29",
+    "src/semantic_3d_chat/evaluation/prediction_artifacts.py": "df75b6b6ca8e55b3821279ac52841a8b383f277ffd6bf4a0ada20782af769e26",
+    "src/semantic_3d_chat/evaluation/run.py": "7d0df6064adb536057640aae911bf8040ccf8d2e64e788c7fc5da70517c1ad6c",
+    "src/semantic_3d_chat/evaluation/semantic_sanity.py": "93242e6df8f3b4607e1a26aba9c1fd7e7be9604ee1402bb9bed7bc1e2204fe2c",
+    "src/semantic_3d_chat/evaluation/v55_development_score.py": "23ea365bbcfc06aa7aaa4d0881bdc3973ff3f0381e8464a765697f897909cfc6",
+    "src/semantic_3d_chat/language/__init__.py": "912c4ec3d4dcc1d611cfc2c6192f82dd6e46fb15f0cd6409eba4eccbe27d1595",
+    "src/semantic_3d_chat/language/fixed_prefix_decoder_reader_v6.py": "4214846092f1fe0ca16a2c4e8cc369fad47598453e12c62c429fcc6e698a9627",
+    "src/semantic_3d_chat/language/gemma4_answer_tail.py": "45dda5f3418ebb1755216f9c594c7461d3e49b7308aef737cad2fd7ddb96b524",
+    "src/semantic_3d_chat/language/gemma4_backend.py": "34edd02ae6c712b9c9cf2ec6586b1819a90631702baae0c2960ecc57bcff60cf",
+    "src/semantic_3d_chat/language/gemma4_tool_decoder_v1.py": "367ffbd07d32d299eebeab8ecbead60da46a218e50e1bea2ed29038711c15ff2",
+    "src/semantic_3d_chat/language/gemma4_tool_decoder_v2.py": "1e9e8d223d9494d8641142ec658fb26261222f3e69d340453fd2951e4367f875",
+    "src/semantic_3d_chat/language/generation.py": "1ecb0154316588f4b47e5a21df61af7f10bd0ae01c147ba2e3eb9a86125d3c44",
+    "src/semantic_3d_chat/language/local_lm.py": "0d8c4de10d8aa2c1c426d4aa48c8059fafd7eb85e3b2f4a02794ea9bea9bb372",
+    "src/semantic_3d_chat/language/lora.py": "f7c3ce3a4d46c0fcfef5e4cd360b4e12387799a9f6ccc0e2ffa74cba6ad56899",
+    "src/semantic_3d_chat/language/prefix_injection.py": "17bbff15ed12e506ef79ad9f4cbd4fa8a4e392fe14a0f8eced338f4ebc0028e9",
+    "src/semantic_3d_chat/mapping/__init__.py": "699c17e9126e5ddec1ea35cf89b746a1e7c7872ccc9cc6aa0dfb5038dfceda7a",
+    "src/semantic_3d_chat/mapping/depth_projection.py": "d29c080d497528622a07924c35454b5f3fa80201d16f9af013b35625061fdb8b",
+    "src/semantic_3d_chat/mapping/fusion.py": "a13b9e5395a57177798148a2425002b500713dda9a69a424df5b4c746acc46ee",
+    "src/semantic_3d_chat/mapping/semantic_codec.py": "aa7b93d7528c528f1c8496e2ee109fcf49a58952c34819ab27e3744b2a1daf9d",
+    "src/semantic_3d_chat/mapping/voxel_map.py": "10b9b72b9503d5ed9c6f63001a6f0027e305b10d9ac0d1c464859499f6727029",
+    "src/semantic_3d_chat/rendering_io.py": "bf4bc4b1382eca886ec2073b83121dbfb44c8b400c2e8581d3d286fab6bebe9c",
+    "src/semantic_3d_chat/robot/__init__.py": "7b456aff7011b666405e70a0991ae83c10d071a6862b61e048759cb9909a7e03",
+    "src/semantic_3d_chat/robot/collision.py": "c88c8fdf4dd9377f829991c122f2639be35a7824db18edf48a4baa23151b6e3d",
+    "src/semantic_3d_chat/robot/llm_tool_policy.py": "62382585b704c7229a593fba42f283af70ee7ca821480e1c6364e15838d13614",
+    "src/semantic_3d_chat/robot/navigation_policy.py": "3a090c0664de8f299669c4eaf2f08b856fc7fb509a001c6aa0489cfc3a2ac372",
+    "src/semantic_3d_chat/robot/runtime_refresh.py": "737c5357343794a84de3f39fc109845ad2104519887425abb6f965d7b85cab72",
+    "src/semantic_3d_chat/robot/semantic_mapping.py": "807441b4007d0ebbaf1d542d9a6ab3d9530a5054bea4afd7035742699784cd1f",
+    "src/semantic_3d_chat/robot/simulator.py": "596d3ac6fb02aa09e7f3738d85d5c79a2ce75689178b5066f3c57fef91c23a80",
+    "src/semantic_3d_chat/robot/state_checkpoint.py": "d3adba158742a066fdefd8b76c198a4fd55a4622bffc4c7d215fc3ce596e03f0",
+    "src/semantic_3d_chat/robot/state_encoder.py": "cd9885f5b3b3ea1c794c1889a5cbf1afb6fba040b79109e9898871ecc2b329e7",
+    "src/semantic_3d_chat/robot/tools.py": "4057e63ed6d039589f7e7ddd43360985c30ce49c8f41d0070d9c8eec738e210d",
+    "src/semantic_3d_chat/scene_encoder/__init__.py": "40e0cdabf687addc255f58114ce4f3c77b217a50e1232641e2131b8779123250",
+    "src/semantic_3d_chat/scene_encoder/block_cross_residual.py": "bdc4a6b78003b14c8be6bd95a7fefb104b2e3d64fa484e803a40d5e11b4dd5af",
+    "src/semantic_3d_chat/scene_encoder/dense_alignment.py": "df8759757f8cd3d2f37f2b3b09692af9da73a533f8eef7169b0693841b955a54",
+    "src/semantic_3d_chat/scene_encoder/dense_sidecar_adapter.py": "9e92c2461f8014965055c5d293fdde9ae09769b67b9f7d6596e306b66b1e7bd6",
+    "src/semantic_3d_chat/scene_encoder/global_residual.py": "10a0e9f5ce69636ea70c0948503f61b8fd966be35634048102a86033841eaa32",
+    "src/semantic_3d_chat/scene_encoder/map_io.py": "10c53adf865caf4d2323c919e807ed05781202e9c6395e9ea54f02fa6c456047",
+    "src/semantic_3d_chat/scene_encoder/perceiver.py": "292734f935a31145c7b8aa004bf88b17dd291477103776f9d1dff0e2683a27c0",
+    "src/semantic_3d_chat/scene_encoder/point_tokens.py": "6623fe0c44b5ec55f5ef4d02424b65b217626b410ac2b9184e3a507cf411289d",
+    "src/semantic_3d_chat/scene_encoder/projector.py": "173d9ad4625689e0e76d0705f1f4600338244012401d2d48c0b942533f947825",
+    "src/semantic_3d_chat/scene_encoder/question_control.py": "290002b24bed21e50cf9ad380d1f358cd3fcbf0043b8cf3c8b171cdb8f8b2e15",
+    "src/semantic_3d_chat/scene_encoder/signed_x_dispatch.py": "b521ef27966c462b9c278f0d0df8769fbecc01562ad35e036a82ab6bd197fee1",
+    "src/semantic_3d_chat/scene_encoder/signed_x_local_field.py": "58644793c49599e6af29b0e836f38fc0ab28aa9b645736e586510d6da846797f",
+    "src/semantic_3d_chat/scene_encoder/signed_x_residual.py": "1249daa01ee8c262727b550e7fd474affec506c4c007b74e1f1cfd21f81cc2a2",
+    "src/semantic_3d_chat/scene_encoder/spatial_blocks.py": "b3137df7bfa941ae8a5f6e01a636d2ef6a45ddb6887bfeb2779b58a5c8b4acd0",
+    "src/semantic_3d_chat/training/__init__.py": "5481f8e8379451b94eb700ee078b5e426f08de5475aca16e5447313153bd77e1",
+    "src/semantic_3d_chat/training/checkpointing.py": "cff711f037ac9162478d1eab94ef93e57635133936e13b4ce3628b3e9e51e27d",
+    "src/semantic_3d_chat/training/dense_alignment_calibration.py": "31b9881d88334c66bb0760ca42fb3b63c46414f1d2ab0f0e86dffd67ce2da6c5",
+    "src/semantic_3d_chat/training/dense_alignment_supervision.py": "8d82a71c49239314d5f5a1cba7ae5fc03510fa32abefb03d4210ecfe211f0717",
+    "src/semantic_3d_chat/training/losses.py": "02e98ea84fdfea12193f349034f7b3265258aae648a7bd6be61284d4f215ab86",
+    "src/semantic_3d_chat/training/pair_curriculum.py": "9177a8cfd6892b99052c4721ebf688e9238b267c120140705294f5d885eda001",
+    "src/semantic_3d_chat/training/smoke_fixed_prefix_decoder_reader_v6.py": "f0d1b8a8c6e85b92acacb197e779357b7130e89c324b0ffc4f3ae7d96746e80a",
+    "src/semantic_3d_chat/training/source_provenance.py": "b8a37483bcf8fc122a6dddccb51ff34cf64d325f3f592e99ec51cbbe38d5da02",
+    "src/semantic_3d_chat/training/train_adapter.py": "726ea1a97e0ee0a874cd885fb94b9dbe356bdcf9a751b99046f6d6c11cd56027",
+    "src/semantic_3d_chat/training/train_fixed_prefix_decoder_reader_v6_1.py": "3cad2b908ad32ff7e47d4e72356da80b824f05e013991b9f1d6d8866e7ffe3e2",
+    "src/semantic_3d_chat/training/train_fixed_prefix_decoder_reader_v6_2.py": "27e46801be3a39d518e29e1cb8fb589e54e6ada8292176696482b706aa419fde",
+    "src/semantic_3d_chat/training/train_fixed_prefix_ple_v54.py": "244519ba4ee1f7aa6e4904e20a9cba76fd0af8b028ad005c04fbd9ee39c1b99d",
+    "src/semantic_3d_chat/training/train_fixed_prefix_ple_v54_v3.py": "23fe6025a3a479aad06b6e99957f59e4b2fd72ef80f87422c4a786dfc9a88770",
+    "src/semantic_3d_chat/training/train_fixed_prefix_ple_v54_v4.py": "6e023ac794b73f063cc89c55955c7b45ecf774a0b0d93fa0750d70487961a9ed",
+    "src/semantic_3d_chat/training/train_question_control_v56.py": "98263dd8a98ebf5557ed4db32fea3ceca1c95f0c487de25edf6f693b901f080f",
+    "src/semantic_3d_chat/vision/__init__.py": "877b0af5f3c2becc7b87bafcbd7979ab4798f35d965adfa4ded1df1cd2f81ef4",
+    "src/semantic_3d_chat/vision/encoder.py": "ac2c605a7203f2b5c19f8a7fc2be55baa3ec66232258b27565ad641455de28d4",
+    "src/semantic_3d_chat/vision/gemma4_encoder.py": "e0f6765ec95b0dc3e6abcc59e32a26ecf2ba1d38f94dd6f3fc332330bd7e3fe1",
+    "src/semantic_3d_chat/vision/gemma4_probe.py": "4e20a5d49bb4bee4a840f76df97bc5d9901f6e6517595a106c2032edfba06445",
+    "src/semantic_3d_chat/vision/model_registry.py": "23ee04ae3bd2c504a25585ef86d446bdd310da29f1df5e71b690c4aff53ec447",
+    "src/semantic_3d_chat/vision/patch_features.py": "8ccc4750cb65ee7fd27c5d0014b0a63c6bec59dff53de45d53d708c0d1f8626d",
+    "tests/test_fixed_prefix_decoder_reader_v6_release.py": "54ec07b0b14a27a4b0c1469b9fef1c5ecb8ffda3b73031873d676aa84a233e81",
+    "tests/test_smoke_fixed_prefix_decoder_reader_v6.py": "a00922151c8dc14ee3c31678c1c217a36a6734abd9ff0fa7d32cd47353424e24",
+    "tests/test_train_fixed_prefix_decoder_reader_v6_2.py": "a32d946255dc115b304bbbb5e3024033bbe96fafed7e74a209627f27d66e32ac",
+    "uv.lock": "b02785e314b7e8ccaac539116626b2149455f45e11b5c61083b41f8678711bd4"
+  },
+  "bound_training_asset_inventory_sha256": "e2b778d8143ee4c588981bf154ddf541fb8ff133e953a3d20c2c05c428a65878",
+  "bound_training_asset_sha256": {
+    "configs/experiments/gemma4_v54_fixed_prefix_decoder_reader_v6.yaml": {
+      "sha256": "cad5f0af664021b6e5c2bacb2ad1261d3222862e916b320effffe75ae6ab5cf0",
+      "size_bytes": 7644
+    },
+    "configs/experiments/gemma4_v54_fixed_prefix_ple_reader_v1.yaml": {
+      "sha256": "7ce074e5a35cfab9476fcb2c46a0d45391aff94733f20633928544b1df90dda6",
+      "size_bytes": 2418
+    },
+    "configs/experiments/gemma4_v54_fixed_prefix_ple_reader_v1_retention.json": {
+      "sha256": "0b2c48236e085960811ac6c9be94440814a141fdc05ed92c1e8f498a2c04f3cb",
+      "size_bytes": 1376
+    },
+    "configs/runtime/gemma4_v54.yaml": {
+      "sha256": "891c58faaaa5fcd2ed76c7e3871f14c5d8c5ae2e05d9fa4ddd5193773d40e56b",
+      "size_bytes": 6307
+    },
+    "data_gemma4/checkpoints/gemma4_v54_semantic_greedy_gate/update_000/adapter.safetensors": {
+      "sha256": "6c627f0a0d9efb7100489c24cbd4acafe10456b79280a64a85399a21cb541daf",
+      "size_bytes": 55956825
+    },
+    "data_gemma4/checkpoints/gemma4_v54_semantic_greedy_gate/update_000/metadata.json": {
+      "sha256": "db1435f8d38ca587e34dcd55dc4d37532efc0504bfb62bc115838dc0ab7a7ece",
+      "size_bytes": 459323
+    },
+    "data_gemma4/checkpoints/gemma4_v54_semantic_greedy_gate/update_000/runtime_metadata.json": {
+      "sha256": "807515461c71b08c08dfbd08a184a653e791413748530fa69402512eca6f6fdd",
+      "size_bytes": 15858
+    },
+    "data_gemma4/scene_tokens/v56_question_control_full_prefixes/manifest.json": {
+      "sha256": "5a288a7fef65a957ba7b20132c63380cfadc7edbc37b32c1885037f939b9db61",
+      "size_bytes": 15551
+    },
+    "data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000011.safetensors": {
+      "sha256": "f145d53995de985e5ab5bfbcafbc0155ac594411c64b83a253235fdf3316ef2e",
+      "size_bytes": 792664
+    },
+    "data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000012.safetensors": {
+      "sha256": "8e5c1c6a872861804da20242ad4b7dfa182b05eb0f7c7cf520200962ca2139a0",
+      "size_bytes": 792664
+    },
+    "data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000013.safetensors": {
+      "sha256": "92a26d6ab8f65490c24a2c308ef5856127180ff054b10c5a47e5b485706865c8",
+      "size_bytes": 792664
+    },
+    "data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000014.safetensors": {
+      "sha256": "d20ee8531c4ad9510bff5e667afe788daa0f71537499d8e8825dd5c184c16d9c",
+      "size_bytes": 792664
+    },
+    "data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000015.safetensors": {
+      "sha256": "fcd012d8d78b26c1f89f85ed8ab9b2e40cf3c497fd6190e49235c920ecfd0f5e",
+      "size_bytes": 792664
+    },
+    "data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000016.safetensors": {
+      "sha256": "29ea80332f0eddf7cf7f749bc2be6d4dde015f5382b207a4338d9fdf3fd22a37",
+      "size_bytes": 792664
+    },
+    "data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000017.safetensors": {
+      "sha256": "cec73bd20cbfc91e795d41c5c9abbcd364ccd32c6f732e00641e75073a9e304b",
+      "size_bytes": 792664
+    },
+    "data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000018.safetensors": {
+      "sha256": "3fc1044db7d60915517143f293d6b320595511d0baa353f1afb7a18a13839a82",
+      "size_bytes": 792664
+    },
+    "data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000019.safetensors": {
+      "sha256": "d2e02f5d081406f304438ea82540a98d9601a095e61be0bfc8df6df0a442b51a",
+      "size_bytes": 792664
+    },
+    "data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000020.safetensors": {
+      "sha256": "5cf8fcf777e5e109c77837fd131ce486880e75cf8c541d8c46ab714b7d729894",
+      "size_bytes": 792664
+    },
+    "data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000021.safetensors": {
+      "sha256": "48949f3dee923132be82f5f3a49e539d9c836af3a4a3d163cc1dac573f0a04e6",
+      "size_bytes": 792664
+    },
+    "data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000022.safetensors": {
+      "sha256": "3c31979b5fb697511b529075b4759414c54463d5c17bb6ef7ffa1a6de46183b2",
+      "size_bytes": 792664
+    },
+    "data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000023.safetensors": {
+      "sha256": "e87a5fc652da5aa8fcc617f56eabcd183652a83a51f5059ccab8d57f49df9c95",
+      "size_bytes": 792664
+    },
+    "data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000024.safetensors": {
+      "sha256": "89891eda081a15de0b41281a928a2d661b858da19f988a90913a62705d02f7f9",
+      "size_bytes": 792664
+    },
+    "data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000031.safetensors": {
+      "sha256": "9266a80cea0b783543a31a4f65380aec6a83983c75522cab8c59c496dce28a06",
+      "size_bytes": 792664
+    },
+    "data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000032.safetensors": {
+      "sha256": "f26110e896b602133d5863e800a986925253e8ac4699ba5ef3d41b9a9cac476b",
+      "size_bytes": 792664
+    },
+    "data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000033.safetensors": {
+      "sha256": "1bfafd889a9106889b9d3eeee979b3a955e55aec4ff0bd3764cb7e8d5689bb47",
+      "size_bytes": 792664
+    },
+    "data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000034.safetensors": {
+      "sha256": "f5da47f374810c272b169d4a9e2bdc4e65d14bf483350bce3e92ccf036d3220f",
+      "size_bytes": 792664
+    },
+    "data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000035.safetensors": {
+      "sha256": "d1dc4475b1f966c4be71e35a9af13fae3c4277734dad22e33ee4306a33beea70",
+      "size_bytes": 792664
+    },
+    "data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000036.safetensors": {
+      "sha256": "4b03854957350908cd767ad545fb162a0bd2012363c15057d909329e6b81d0b8",
+      "size_bytes": 792664
+    },
+    "data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000037.safetensors": {
+      "sha256": "1a1ed4ad4ec59f78b6b03483dff53300570caaff53ea8bbd4853569d135bbbb6",
+      "size_bytes": 792664
+    },
+    "data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000038.safetensors": {
+      "sha256": "4685a1a3707b08394e66226c610180d68bb9b9753fcf3de78a23f5ff5b74b90f",
+      "size_bytes": 792664
+    },
+    "data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000039.safetensors": {
+      "sha256": "d21c34d2bd1a6930e2a285982d12f6325f054b9e6d60792ab0227667c83d3afd",
+      "size_bytes": 792664
+    },
+    "data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000040.safetensors": {
+      "sha256": "f8097017d403d94b91d7de0a66e334105cd6fbb80e069c7d85023db4f1896066",
+      "size_bytes": 792664
+    },
+    "data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000041.safetensors": {
+      "sha256": "7319ed8b266b45a21e294384f1c75c6e1ee240a8866bbc8b1d391ca3a71764c7",
+      "size_bytes": 792664
+    },
+    "data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000042.safetensors": {
+      "sha256": "b9e11d4f797bbe8034b615585f63ca8663299e7a371317fe4267a4018b6398e6",
+      "size_bytes": 792664
+    },
+    "data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000043.safetensors": {
+      "sha256": "d41bdcd91cdf22d24750fbcad48bd5ff3959fa4a350ee64be70ed29d061c38cf",
+      "size_bytes": 792664
+    },
+    "data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000044.safetensors": {
+      "sha256": "b58b839d41bfaddee6978c3d336790e6920e706535820c4a54c73bbb14aa5749",
+      "size_bytes": 792664
+    },
+    "data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000045.safetensors": {
+      "sha256": "e52ec6de3e4bc7cf11bbe6ac96a3aaec02974394eca77f5c0a700e441e5aac78",
+      "size_bytes": 792664
+    },
+    "data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000046.safetensors": {
+      "sha256": "7c007370d26446410ea6c4c1cc35a61e17eb17b141d2bc4a5a8853306fa6d996",
+      "size_bytes": 792664
+    },
+    "data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000047.safetensors": {
+      "sha256": "6dbb040d9d62b05137d6a809cac3eeb1d370fca63f7c1c750e2565c6ced23a1c",
+      "size_bytes": 792664
+    },
+    "data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000048.safetensors": {
+      "sha256": "bb99a88659751fdeeaf43f3451e33d1987b56981e27f9d077d6bebe474e0834b",
+      "size_bytes": 792664
+    },
+    "data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000049.safetensors": {
+      "sha256": "ea8f09f1416efd53468878ab0f416f7908aab143d1c9f0d2885c3b24a100990a",
+      "size_bytes": 792664
+    },
+    "data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000050.safetensors": {
+      "sha256": "792943b1946162d1f889b7e6dfec9751ffc45b4557722b025e350d2862996b83",
+      "size_bytes": 792664
+    },
+    "data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000051.safetensors": {
+      "sha256": "55e169a26fccaf72fbd03126303caa1c8b7137d755b02cd4d1412c9ee9bdae3f",
+      "size_bytes": 792664
+    },
+    "data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000052.safetensors": {
+      "sha256": "1ad8c9df9d7fb1e05eab2c5857f68901528fd2a0b7449ceaec0317f7d123880f",
+      "size_bytes": 792664
+    },
+    "data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000053.safetensors": {
+      "sha256": "3d7b845acb3b6e4207418f92ddaba335b019e49f3749a6f9a7f3e7fb12e2a6a5",
+      "size_bytes": 792664
+    },
+    "data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000054.safetensors": {
+      "sha256": "1c254c1d069bc2b4f877eed4f8e15fbee97c1dfa45706645bfba020e8317e8b6",
+      "size_bytes": 792664
+    },
+    "data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000055.safetensors": {
+      "sha256": "be91c51dff9cae281bb4b321ba17f4bc6b1363bcbf4ad05cbaa95aad7caa5518",
+      "size_bytes": 792664
+    },
+    "data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000056.safetensors": {
+      "sha256": "f209c32ee0d02d9e021158bab372ddd4f79810b2e6a13db288748e6cd14d209b",
+      "size_bytes": 792664
+    },
+    "data_gemma4/training/v62_pair_disjoint/train.jsonl": {
+      "sha256": "84b99385fadc5d06e44465ada5902f56131192298ca1539373dc3b334608cbf1",
+      "size_bytes": 299401
+    },
+    "reports/gemma4/metrics/gemma4_v54_fixed_prefix_decoder_reader_v6_1_mps_smoke.json": {
+      "sha256": "099c1fa684439814b58c17223781b745e406d17cc20c65c402159bd0ede18add",
+      "size_bytes": 54855
+    },
+    "reports/gemma4/metrics/gemma4_v54_fixed_prefix_decoder_reader_v6_1_mps_smoke_attempt.json": {
+      "sha256": "ec462122b737cda9bd111afa2a66f187039711e3f211ea3901f2eaa15986e53a",
+      "size_bytes": 501
+    },
+    "reports/gemma4/metrics/gemma4_v54_fixed_prefix_decoder_reader_v6_1_mps_smoke_release.json": {
+      "sha256": "4456ebd11d8cbb154236aa6962bfc5875499580ab326068b1b9581f2127e4b33",
+      "size_bytes": 14661
+    },
+    "reports/gemma4/predictions/v62_v54_no_control_internal_validation.jsonl": {
+      "sha256": "df66de37e918ba068fbcd91308803746122c938ccccadf063d1b1343f1a4c902",
+      "size_bytes": 174038
+    },
+    "reports/gemma4/questions/v62_internal_validation.json": {
+      "sha256": "078f65e1402e6e382a7bfdb2ad4b8a65d58e3164705a8a46cd222503aa201052",
+      "size_bytes": 52038
+    },
+    "reports/gemma4/scorer_only/v62_internal_validation_references.json": {
+      "sha256": "4202e777ee57ab3f7da329f15589e56b8b0464b782fb4d856dd1a3281ff3115c",
+      "size_bytes": 175497
+    }
+  },
+  "file_audit": "data_gemma4/checkpoints/gemma4_v54_fixed_prefix_decoder_reader_v6_2/file_audit.json",
+  "local_model_binding": {
+    "installed_transformers_sources": {
+      "transformers.loss.loss_utils": {
+        "basename": "loss_utils.py",
+        "sha256": "83db16b24ce5c3a0642097624aa9a0ae7eb72445c41d8b4d5059a129862fdbbe",
+        "size_bytes": 8540
+      },
+      "transformers.models.gemma4.modeling_gemma4": {
+        "basename": "modeling_gemma4.py",
+        "sha256": "ccab8e2dd80b71e9ca34e2c87291e17c40a27c755006e554da2ebf70d6616916",
+        "size_bytes": 125730
+      }
+    },
+    "snapshot_files": {
+      ".gitattributes": {
+        "resolved_blob": "52373fe24473b1aa44333d318f578ae6bf04b49b",
+        "sha256": "34448b82c17d60fec9b65b1f093c115ddbaadc04beb1b0140b6bfed2e012a930",
+        "size_bytes": 1570
+      },
+      "README.md": {
+        "resolved_blob": "61e18105d7cb61ce375aa16ed66442b85116bb8a",
+        "sha256": "3e0608a6be80e3eb040a5aa6c76707809503deb85be6360184a118fb6156526c",
+        "size_bytes": 27955
+      },
+      "chat_template.jinja": {
+        "resolved_blob": "fbe3b59b625cd1b8850ea592d4203df6ec04684b",
+        "sha256": "0a2c8073c878ab1da004bee933a998606537bbb62016310352c7285c3f01c5b5",
+        "size_bytes": 18569
+      },
+      "config.json": {
+        "resolved_blob": "923b5e9405e7d319572b0c1b1a89291512262aa3",
+        "sha256": "1b28f3d2c3100f6c594754b81107428bd7b822a7f48272ca681dae9d2ec38330",
+        "size_bytes": 4954
+      },
+      "generation_config.json": {
+        "resolved_blob": "e605bb4523b1462ea9d9a3810b9e3ecf7ab7b1f6",
+        "sha256": "d4226bbe3117d2d253ba4609720ba82c6c4ce4627a9a6ae05387c78983ac03de",
+        "size_bytes": 208
+      },
+      "model.safetensors": {
+        "resolved_blob": "2db5482b20d746879bb3ef79b5203e9075a2e2b98f54ec7c2f281c1477ddc550",
+        "sha256": "2db5482b20d746879bb3ef79b5203e9075a2e2b98f54ec7c2f281c1477ddc550",
+        "size_bytes": 10246621918
+      },
+      "processor_config.json": {
+        "resolved_blob": "5465974d23e1eca2c46c2809b26c997946ce0d90",
+        "sha256": "32bdf45d2ad4cc29a0822ddd157a182de76644f0419a6228d151495256e9813c",
+        "size_bytes": 1689
+      },
+      "tokenizer.json": {
+        "resolved_blob": "cc8d3a0ce36466ccc1278bf987df5f71db1719b9ca6b4118264f45cb627bfe0f",
+        "sha256": "cc8d3a0ce36466ccc1278bf987df5f71db1719b9ca6b4118264f45cb627bfe0f",
+        "size_bytes": 32169626
+      },
+      "tokenizer_config.json": {
+        "resolved_blob": "6068e357379d36f823c377e30efb101fa2c67fe4",
+        "sha256": "9f4fec4b1dc6ecddf8f4a92e9caea5971c0e67d81309f3f9066a2bee8c362633",
+        "size_bytes": 3082
+      }
+    },
+    "weights": {
+      "actual_model_bytes_streamed": true,
+      "model_weights_blob_sha256": "2db5482b20d746879bb3ef79b5203e9075a2e2b98f54ec7c2f281c1477ddc550",
+      "model_weights_size_bytes": 10246621918
+    }
+  },
+  "output_checkpoint": "data_gemma4/checkpoints/gemma4_v54_fixed_prefix_decoder_reader_v6_2/checkpoint",
+  "qa_forward_contract": {
+    "full_sequence_logits": true,
+    "labels_passed_to_huggingface_model": true,
+    "path": "full_huggingface_forward_token_normalized_ce",
+    "shape_specialized_selected_logit_training": false,
+    "token_normalized_answer_cross_entropy": true
+  },
+  "required_attempt_journal": "reports/gemma4/metrics/gemma4_v54_fixed_prefix_decoder_reader_v6_2_training_attempt.json",
+  "schema_version": 1,
+  "sealed_v6_1_terminal_failure": {
+    "attempt_sha256": "ec462122b737cda9bd111afa2a66f187039711e3f211ea3901f2eaa15986e53a",
+    "failed_aggregate_gates": [
+      "cosine",
+      "relative_l2"
+    ],
+    "full_reference_gradient_branches": [
+      "aggregate",
+      "broad",
+      "correct",
+      "wrong"
+    ],
+    "full_reference_gradient_coverage": [
+      "model.language_model.layers.32.mlp.down_proj",
+      "model.language_model.layers.33.mlp.down_proj"
+    ],
+    "full_reference_gradients_finite_nonzero": true,
+    "full_reference_lora_a_exact_zero": true,
+    "objective_equivalence_recomputed_passed": true,
+    "passed": true,
+    "release_sha256": "4456ebd11d8cbb154236aa6962bfc5875499580ab326068b1b9581f2127e4b33",
+    "sole_failed_comparison": "tail_vs_full_aggregate",
+    "terminal_failure_sha256": "099c1fa684439814b58c17223781b745e406d17cc20c65c402159bd0ede18add"
+  },
+  "status": "released_exactly_one_full_reference_96_update_training_run",
+  "terminal_result": "data_gemma4/checkpoints/gemma4_v54_fixed_prefix_decoder_reader_v6_2/terminal_result.json"
+}

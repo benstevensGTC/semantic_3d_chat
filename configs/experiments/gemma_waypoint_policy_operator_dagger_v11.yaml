@@ -1,0 +1,47 @@
+_base_: gemma_waypoint_policy_operator_dagger_v10.yaml
+
+# V11 preserves every V4--V10 lap correction and adds one training-only branch
+# from the sealed V10 object-goal evaluation. The D1 FACE was directionally
+# correct (-52.29 degrees versus the bounded teacher's -50 degrees), so the
+# first semantic divergence is D2: Gemma selected MOVE_TO while the safe
+# continuous-geometry expert required another FACE. Runtime still has no
+# planner, target lookup, oracle coordinates, route, fallback, or STOP gate.
+gemma_waypoint_traces:
+  history_parameterization: selected_action_parameters_goal_progress_v2
+  history_feature_dim: 16
+  profiles:
+    operator:
+      live_object_goal_dagger_augmentation:
+        enabled: true
+        runtime_report_path: reports/gemma4/metrics/gemma_waypoint_dagger_v10_approach_chair_runtime.json
+        runtime_report_sha256: a42a7445e1cdfa424b184f1a5958db197b5f7dcc1a0f15ed5ff4dffe521e71e6
+        score_report_path: reports/gemma4/metrics/gemma_waypoint_dagger_v10_object_goals_score.json
+        score_report_sha256: 51b6ebd72849343094b39f33377a8d9a705223c7f49d5a3ee42b3a06e550b3d7
+        scene_id: scene_000001
+        goal_id: approach_chair
+        instruction: Move close to the chair, then stop.
+        initial_pose_xy_yaw: [-0.5, -0.25, -90.0]
+        checkpoint_sha256: cee930ef97c30747505ece026399042014a4ae7f43e8c29e3d19f5755b69b4f9
+        scene_prefix_sha256: 52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95
+        correction_decision_step: 2
+        observed_model_action: move_to
+        expected_pose_xy_yaw: [-0.5, -0.25, -52.29376220703125]
+        expected_input_sha256: d5f4822df96b50edb3727198119cb12d1a1c34b91ccb7ed73ab7e892b5774bb6
+        expected_expert_first_action: FACE
+        target_category: chair
+        target_instance_id: i_000101
+        maximum_total_decisions: 32
+        minimum_center_progress_m: 0.25
+        maximum_bbox_standoff_m: 0.60
+
+gemma_waypoint_policy:
+  trace_dataset: data_gemma4/training/gemma_waypoint_policy_v2_operator_dagger_v11
+  hidden_cache: data_gemma4/training/gemma_waypoint_policy_v2_operator_dagger_v11_runtime_aligned_hidden
+  checkpoint_output: data_gemma4/checkpoints/gemma_waypoint_policy_v2_operator_dagger_v11_runtime_aligned
+  history_dim: 16
+  history_parameterization: selected_action_parameters_goal_progress_v2
+  # Preserve the V10 regularized action refit exactly.
+  action_refit_max_iter: 500
+  action_refit_learning_rate: 0.5
+  action_refit_l2_weight: 0.00001
+  minimum_training_action_accuracy: 0.995

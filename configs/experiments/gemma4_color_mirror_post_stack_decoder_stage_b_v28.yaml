@@ -1,0 +1,61 @@
+_base_: gemma4_color_mirror_post_stack_sidecar_v28.yaml
+
+# Optional V28 Stage B.  This transition is legal only after the independent
+# Stage-A selector approves a nonzero post-stack sidecar checkpoint.  Every
+# selected scene tensor and inherited decoder bank remains frozen.  The sole
+# new surface is a disjoint query-only LoRA bank at Gemma language layers 13
+# and 14, beside (but not overlapping) V23's frozen shared K/V bank.
+language:
+  lora_banks:
+    extension_v28_stage_b_query:
+      trainable: true
+      rank: 4
+      alpha: 8.0
+      dropout: 0.0
+      target_modules:
+        - model.language_model.layers.13.self_attn.q_proj
+        - model.language_model.layers.14.self_attn.q_proj
+      initialization_algorithm: cpu_kaiming_uniform_a_exact_zero_b
+      initialization_seed: 29029
+      expected_initial_state_sha256: a6d144a8507a0cf66e70fe9aae8bf2dcc916dc274612456bf5ad22132d5fc795
+
+training:
+  output_namespace: gemma4_v28_post_stack_decoder_stage_b
+  lora_learning_rate: 0.0001
+  lora_weight_decay: 0.0
+  post_stack_decoder_stage_b:
+    enabled: true
+    max_optimizer_steps: 4
+    evaluation_interval_steps: 1
+    batch_size: 1
+    gradient_accumulation: 12
+    learning_rate: 0.0001
+    weight_decay: 0.0
+    gradient_clip_norm: 1.0
+    minimum_answer_types: 4
+    trainable_bank: extension_v28_stage_b_query
+
+v28_stage_b:
+  schema_version: 1
+  role: selector_gated_broad_qa_decoder_adaptation
+  source_config: configs/experiments/gemma4_color_mirror_post_stack_sidecar_v28.yaml
+  stage_a_selection_report: reports/gemma4/metrics/v28_stage_a_selection.json
+  stage_a_checkpoint_root: data_gemma4/checkpoints/gemma4_v28_post_stack_sidecar/stage_a
+  new_bank: extension_v28_stage_b_query
+  new_bank_parameter_count: 36864
+  new_bank_initial_state_sha256: a6d144a8507a0cf66e70fe9aae8bf2dcc916dc274612456bf5ad22132d5fc795
+  update_zero_validation_nll_absolute_tolerance: 1.0e-7
+  selection_requires:
+    color_full_vocab_sides: 12
+    mirror_full_vocab_sides: 10
+    no_new_negative_sides: true
+    validation_nll_must_improve: true
+
+experiment:
+  role: selector_gated_fresh_query_lora_stage_b_v28
+  question_dependent_scene_processing: false
+  question_dependent_retrieval: false
+  runtime_oracle_access: false
+  runtime_category_strings: false
+  runtime_text_prototypes: false
+  decoder_trainable_parameter_count: 36864

@@ -1,0 +1,38 @@
+{
+  "artifact": "gemma4_v54_fixed_prefix_attention_reader_v6_3_terminal",
+  "authenticator_source_sha256": "f4435c251f0f1064777b5266c4ea960e1cd787b78636324f2440e1d4bf9d656a",
+  "authenticator_test_sha256": "24848efdcf4ea076417e044a23a9ab00d5445f448a5843eca2890069b1205b55",
+  "continuation": "v6_4_pair_disjoint_train_only_confirmation",
+  "continuation_may_read_deferred_or_final": false,
+  "continuation_may_read_internal_validation": false,
+  "continuation_may_read_oracle": false,
+  "gradient_evidence": {
+    "gradient_l2": 0.7324481761796539,
+    "passed": true,
+    "sha256": "93f4fb452e51eae425ca412f92b150a40ef59cb255cba30da531e271f9a45354",
+    "trainable_parameter_count": 30720
+  },
+  "pilot_evidence": {
+    "checkpoint_absent": true,
+    "complete_unit_delta": 2,
+    "mean_margin_delta": 0.005331867933273338,
+    "mean_softplus_delta": -0.0017896795878187266,
+    "passed": true,
+    "positive_margin_side_delta": 1,
+    "promotion_authorized": false,
+    "sha256": "43fbce25b0b1566ef73bc0ba8e0440f218f388497605359e26f97af306b3dc67",
+    "status": "diagnostic_pass"
+  },
+  "runtime_checkpoint_exists": false,
+  "runtime_checkpoint_promotion_authorized": false,
+  "schema_version": 1,
+  "status": "positive_train_only_pilot_continuation_authorized_no_runtime_promotion",
+  "v6_3_pinned_sha256": {
+    "configs/experiments/gemma4_v54_fixed_prefix_attention_reader_v6_3.yaml": "fd2d76f7742d9429f73c564c2ec5fa9d3e6e665f3b15e764bb15b0292c617399",
+    "reports/gemma4/metrics/gemma4_v54_fixed_prefix_attention_reader_v6_3_gradient_screen.json": "93f4fb452e51eae425ca412f92b150a40ef59cb255cba30da531e271f9a45354",
+    "reports/gemma4/metrics/gemma4_v54_fixed_prefix_attention_reader_v6_3_pilot.json": "43fbce25b0b1566ef73bc0ba8e0440f218f388497605359e26f97af306b3dc67",
+    "scripts/run_gemma4_v54_fixed_prefix_attention_reader_v6_3.sh": "106d7e61f0bc00fa4df7d5371aca6c893e0ee7844869cc4300f6e404d897e5c1",
+    "src/semantic_3d_chat/training/train_fixed_prefix_attention_reader_v6_3.py": "1375d47453b4d4609d68837bcdabedca934fcb2f66e51382465ec19875c7a488",
+    "tests/test_fixed_prefix_attention_reader_v6_3.py": "b838551c798d716b49c269f0e4b64b1e77b55b21b390e5730a6ab046c83add22"
+  }
+}

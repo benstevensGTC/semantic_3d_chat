@@ -1,0 +1,615 @@
+{
+  "access_audit": {
+    "final_test_loaded": false,
+    "forbidden_file_accesses": [],
+    "loaded_file_count": 153,
+    "loaded_file_inventory_sha256": "6b1cf080bf4dbf527537e6dfd906b4f0de3b2c6d1da4d887710c1be82e4d58f0",
+    "optimizer_file_reads": [],
+    "oracle_loaded": false,
+    "passed": true,
+    "training_map_count": 16,
+    "training_map_inventory_sha256": "b2c3e28d95e1def158792f9fcf873eeeb523cd37dda3b985ea07f7201a98435f",
+    "validation_qa_loaded": false
+  },
+  "artifact": "v50_scene_query_alpha_grid",
+  "authorization": {
+    "authorization_id": "v50_scene_query_alpha_grid",
+    "checks": {
+      "action": true,
+      "artifact": true,
+      "authorization_id": true,
+      "authorized": true,
+      "check_names": true,
+      "checkpoint": true,
+      "cli": true,
+      "config": true,
+      "config_hash": true,
+      "evaluation": true,
+      "explicit_sha": true,
+      "gradient_specs": true,
+      "grid_fixed": true,
+      "grid_formula": true,
+      "grid_integrity": true,
+      "grid_inventory": true,
+      "grid_order": true,
+      "grid_rates": true,
+      "hashes_complete": true,
+      "no_embedded_sha": true,
+      "normalization": true,
+      "passed": true,
+      "persistence": true,
+      "prefix_authorized": true,
+      "prefix_checkpoint": true,
+      "prefix_files": true,
+      "prefix_frozen": true,
+      "prefix_full": true,
+      "prefix_scope": true,
+      "report": true,
+      "scope": true,
+      "script": true,
+      "script_hash": true,
+      "source_authorized": true,
+      "source_checkpoint": true,
+      "source_files": true,
+      "source_frozen": true,
+      "source_full": true,
+      "source_optimizer_forbidden": true,
+      "successor": true,
+      "terminal_auth": true,
+      "terminal_path": true,
+      "terminal_ready": true,
+      "test": true,
+      "test_hash": true,
+      "thresholds": true,
+      "v49_failed_only_trust": true,
+      "v49_report": true
+    },
+    "terminal_path": "reports/gemma4/metrics/v49_guarded_candidate_terminal_gate.json",
+    "terminal_sha256": "4f8ac8fadca37499da3dc3e2f672956c78e126ec4f4089d98d2172f1294a0944"
+  },
+  "candidate_grid": {
+    "candidates": [
+      {
+        "candidate": {
+          "candidate_id": "guarded_scene_alpha_1p0_query_alpha_2p0",
+          "declared_order": 0,
+          "query_alpha": 2.0,
+          "scene_alpha": 1.0
+        },
+        "candidate_reconstruction": {
+          "authorized_surface_state_sha256": "5009ee3fcbd0b44c7811938965fe62ae3c447480934cf4515f44ac93de9b9729",
+          "candidate_id": "guarded_scene_alpha_1p0_query_alpha_2p0",
+          "declared_order": 0,
+          "direction_id": "guarded_both_sign",
+          "frozen_state_sha256": "31cb215cf0d1623886d4a79203c501912e66537021da53dd711124abdc2e36fa",
+          "full_tensor_state_sha256": "f1702c1b1a9916de7125476b1a67fd120f0ca81616444e90bd5e656480ef69f2",
+          "query_alpha": 2.0,
+          "query_learning_rate": 8e-06,
+          "query_state_changed": true,
+          "reconstructed_candidate_authorized_surface_state_exact": true,
+          "reconstructed_candidate_full_tensor_state_exact": true,
+          "reconstructed_directly_from_v47_u4": true,
+          "scene_alpha": 1.0,
+          "scene_learning_rate": 1e-05,
+          "scene_readout_state_changed": true,
+          "source_v47_u4_exact_before_reconstruction": true
+        },
+        "evaluation_error": null,
+        "full_gate_passed": false,
+        "greedy_gate": {
+          "authorized": false,
+          "checks": {},
+          "evidence": null,
+          "executed": false,
+          "passed": false,
+          "skipped_due_pre_gate": true
+        },
+        "non_greedy_pre_gate": {
+          "checks": {
+            "book_complete_units_at_least_1": true,
+            "book_cross_prefix_complete_units_at_least_1": true,
+            "both_lost_sides_strictly_positive": true,
+            "broad_nll_at_most_v45_maximum": true,
+            "complete_physical_pair_coverage_at_least_5": true,
+            "frozen_state_exact": true,
+            "mirror_complete_units_at_least_2": true,
+            "original_v46_candidate_relative_prefix_trust_rms_at_most_0_002": true,
+            "priority_deficit_improvement_at_least_0_5_vs_original_v41_u0": true,
+            "query_state_changed": true,
+            "reconstructed_candidate_authorized_surface_state_exact": true,
+            "reconstructed_candidate_full_tensor_state_exact": true,
+            "scene_readout_state_changed": true,
+            "source_v47_u4_exact_before_reconstruction": true,
+            "teacher_complete_units_at_least_10": true,
+            "teacher_cross_prefix_complete_units_at_least_17": true,
+            "teacher_positive_sides_at_least_35": false
+          },
+          "evaluated": true,
+          "evidence": {
+            "broad_nll": 2.9192593644062677,
+            "broad_row_count": 48,
+            "complete_physical_pair_coverage": 5,
+            "complete_units": 10,
+            "complete_units_by_family": {
+              "book_support": 1,
+              "mirror_lr": 2,
+              "picture_support": 0
+            },
+            "cross_prefix_complete_units": 19,
+            "cross_prefix_complete_units_by_family": {
+              "book_support": 2,
+              "mirror_lr": 4,
+              "picture_support": 3
+            },
+            "focus_units": {
+              "cfq_163eb92339ad35a5": {
+                "cross_prefix_margins": [
+                  -0.3522062301635742,
+                  0.799860954284668
+                ],
+                "pair_id": "pair_000015",
+                "side_margins": [
+                  0.17867755889892578,
+                  0.26897716522216797
+                ]
+              },
+              "cfq_5c84a2c27d2be251": {
+                "cross_prefix_margins": [
+                  0.13776278495788574,
+                  0.17473727464675903
+                ],
+                "pair_id": "pair_000006",
+                "side_margins": [
+                  0.125,
+                  0.18750005960464478
+                ]
+              },
+              "cfq_699675ceeaf65406": {
+                "cross_prefix_margins": [
+                  0.38092952966690063,
+                  0.24407052993774414
+                ],
+                "pair_id": "pair_000016",
+                "side_margins": [
+                  0.5625000596046448,
+                  0.0625
+                ]
+              }
+            },
+            "original_v46_candidate_relative_prefix_trust_rms": 0.0016845178324729204,
+            "pair_metrics_sha256": "ed80ccf793801c3488509800e5e34828fdf1187a2c22977a4bb0c2c282cd3356",
+            "per_unit_nll_row_count": 25,
+            "per_unit_nll_sha256": "2550d9151ce063d6e0a200de41a83ec180af66762c34509aa213eb8aea2e2082",
+            "positive_sides": 34,
+            "priority_deficit_improvement_vs_original_v41_u0": 1.561383843421936,
+            "priority_side_deficit": 29.552345275878906,
+            "unit_count": 25
+          },
+          "passed": false
+        },
+        "source_restoration": {
+          "all_parameter_gradients_absent": true,
+          "attempted": true,
+          "authorized_surface_state_sha256": "a23de4988774a966c0d7aac378ede5d15a3fa1d96093c5039f181a62b0bb09b0",
+          "frozen_state_sha256": "31cb215cf0d1623886d4a79203c501912e66537021da53dd711124abdc2e36fa",
+          "full_tensor_state_sha256": "adfc0400d1a3bb49b278cd3012ab571d01465f2380881f986c085a25474276e5",
+          "passed": true
+        }
+      },
+      {
+        "candidate": {
+          "candidate_id": "guarded_scene_alpha_0p5_query_alpha_2p0",
+          "declared_order": 1,
+          "query_alpha": 2.0,
+          "scene_alpha": 0.5
+        },
+        "candidate_reconstruction": {
+          "authorized_surface_state_sha256": "87e24de4810a75db1e028fcaabe8b034587bf573f7dc0be4474f547736c47ffd",
+          "candidate_id": "guarded_scene_alpha_0p5_query_alpha_2p0",
+          "declared_order": 1,
+          "direction_id": "guarded_both_sign",
+          "frozen_state_sha256": "31cb215cf0d1623886d4a79203c501912e66537021da53dd711124abdc2e36fa",
+          "full_tensor_state_sha256": "cde14585e3c2bec543fe162aeae5f94c6d810f26921a46414618d3ecdf7bdac8",
+          "query_alpha": 2.0,
+          "query_learning_rate": 8e-06,
+          "query_state_changed": true,
+          "reconstructed_candidate_authorized_surface_state_exact": true,
+          "reconstructed_candidate_full_tensor_state_exact": true,
+          "reconstructed_directly_from_v47_u4": true,
+          "scene_alpha": 0.5,
+          "scene_learning_rate": 1e-05,
+          "scene_readout_state_changed": true,
+          "source_v47_u4_exact_before_reconstruction": true
+        },
+        "evaluation_error": null,
+        "full_gate_passed": false,
+        "greedy_gate": {
+          "authorized": false,
+          "checks": {},
+          "evidence": null,
+          "executed": false,
+          "passed": false,
+          "skipped_due_pre_gate": true
+        },
+        "non_greedy_pre_gate": {
+          "checks": {
+            "book_complete_units_at_least_1": true,
+            "book_cross_prefix_complete_units_at_least_1": false,
+            "both_lost_sides_strictly_positive": false,
+            "broad_nll_at_most_v45_maximum": false,
+            "complete_physical_pair_coverage_at_least_5": false,
+            "frozen_state_exact": true,
+            "mirror_complete_units_at_least_2": true,
+            "original_v46_candidate_relative_prefix_trust_rms_at_most_0_002": true,
+            "priority_deficit_improvement_at_least_0_5_vs_original_v41_u0": true,
+            "query_state_changed": true,
+            "reconstructed_candidate_authorized_surface_state_exact": true,
+            "reconstructed_candidate_full_tensor_state_exact": true,
+            "scene_readout_state_changed": true,
+            "source_v47_u4_exact_before_reconstruction": true,
+            "teacher_complete_units_at_least_10": false,
+            "teacher_cross_prefix_complete_units_at_least_17": true,
+            "teacher_positive_sides_at_least_35": false
+          },
+          "evaluated": true,
+          "evidence": {
+            "broad_nll": 2.9219946761926017,
+            "broad_row_count": 48,
+            "complete_physical_pair_coverage": 4,
+            "complete_units": 9,
+            "complete_units_by_family": {
+              "book_support": 1,
+              "mirror_lr": 2,
+              "picture_support": 0
+            },
+            "cross_prefix_complete_units": 17,
+            "cross_prefix_complete_units_by_family": {
+              "book_support": 0,
+              "mirror_lr": 4,
+              "picture_support": 3
+            },
+            "focus_units": {
+              "cfq_163eb92339ad35a5": {
+                "cross_prefix_margins": [
+                  -0.20572996139526367,
+                  0.6864471435546875
+                ],
+                "pair_id": "pair_000015",
+                "side_margins": [
+                  0.04553365707397461,
+                  0.4351835250854492
+                ]
+              },
+              "cfq_5c84a2c27d2be251": {
+                "cross_prefix_margins": [
+                  0.09422612190246582,
+                  0.09327387809753418
+                ],
+                "pair_id": "pair_000006",
+                "side_margins": [
+                  0.0,
+                  0.1875
+                ]
+              },
+              "cfq_699675ceeaf65406": {
+                "cross_prefix_margins": [
+                  0.41619718074798584,
+                  0.33380281925201416
+                ],
+                "pair_id": "pair_000016",
+                "side_margins": [
+                  0.5,
+                  0.25
+                ]
+              }
+            },
+            "original_v46_candidate_relative_prefix_trust_rms": 0.0015219253255054355,
+            "pair_metrics_sha256": "d3b08bfff461ac4b22c1feced5932d2731835adacaac87c39a833a1e26c0eaa4",
+            "per_unit_nll_row_count": 25,
+            "per_unit_nll_sha256": "9e68d120a1c6c0e8ff2f58428983ec41c26e9e69847ab153de7efbd00f830a53",
+            "positive_sides": 34,
+            "priority_deficit_improvement_vs_original_v41_u0": 1.7194461822509766,
+            "priority_side_deficit": 29.394282937049866,
+            "unit_count": 25
+          },
+          "passed": false
+        },
+        "source_restoration": {
+          "all_parameter_gradients_absent": true,
+          "attempted": true,
+          "authorized_surface_state_sha256": "a23de4988774a966c0d7aac378ede5d15a3fa1d96093c5039f181a62b0bb09b0",
+          "frozen_state_sha256": "31cb215cf0d1623886d4a79203c501912e66537021da53dd711124abdc2e36fa",
+          "full_tensor_state_sha256": "adfc0400d1a3bb49b278cd3012ab571d01465f2380881f986c085a25474276e5",
+          "passed": true
+        }
+      },
+      {
+        "candidate": {
+          "candidate_id": "guarded_scene_alpha_0p25_query_alpha_2p0",
+          "declared_order": 2,
+          "query_alpha": 2.0,
+          "scene_alpha": 0.25
+        },
+        "candidate_reconstruction": {
+          "authorized_surface_state_sha256": "c8d49a0890338732a335892aca97858954b3e4d40b7b7e42d826211a12ab6a78",
+          "candidate_id": "guarded_scene_alpha_0p25_query_alpha_2p0",
+          "declared_order": 2,
+          "direction_id": "guarded_both_sign",
+          "frozen_state_sha256": "31cb215cf0d1623886d4a79203c501912e66537021da53dd711124abdc2e36fa",
+          "full_tensor_state_sha256": "d8da8979f60a6d29eae3405d5ac243061c0ce172d1512eade2ff6a0078f02ae1",
+          "query_alpha": 2.0,
+          "query_learning_rate": 8e-06,
+          "query_state_changed": true,
+          "reconstructed_candidate_authorized_surface_state_exact": true,
+          "reconstructed_candidate_full_tensor_state_exact": true,
+          "reconstructed_directly_from_v47_u4": true,
+          "scene_alpha": 0.25,
+          "scene_learning_rate": 1e-05,
+          "scene_readout_state_changed": true,
+          "source_v47_u4_exact_before_reconstruction": true
+        },
+        "evaluation_error": null,
+        "full_gate_passed": false,
+        "greedy_gate": {
+          "authorized": false,
+          "checks": {},
+          "evidence": null,
+          "executed": false,
+          "passed": false,
+          "skipped_due_pre_gate": true
+        },
+        "non_greedy_pre_gate": {
+          "checks": {
+            "book_complete_units_at_least_1": false,
+            "book_cross_prefix_complete_units_at_least_1": false,
+            "both_lost_sides_strictly_positive": false,
+            "broad_nll_at_most_v45_maximum": false,
+            "complete_physical_pair_coverage_at_least_5": false,
+            "frozen_state_exact": true,
+            "mirror_complete_units_at_least_2": false,
+            "original_v46_candidate_relative_prefix_trust_rms_at_most_0_002": true,
+            "priority_deficit_improvement_at_least_0_5_vs_original_v41_u0": true,
+            "query_state_changed": true,
+            "reconstructed_candidate_authorized_surface_state_exact": true,
+            "reconstructed_candidate_full_tensor_state_exact": true,
+            "scene_readout_state_changed": true,
+            "source_v47_u4_exact_before_reconstruction": true,
+            "teacher_complete_units_at_least_10": false,
+            "teacher_cross_prefix_complete_units_at_least_17": true,
+            "teacher_positive_sides_at_least_35": false
+          },
+          "evaluated": true,
+          "evidence": {
+            "broad_nll": 2.925658881664276,
+            "broad_row_count": 48,
+            "complete_physical_pair_coverage": 4,
+            "complete_units": 8,
+            "complete_units_by_family": {
+              "book_support": 0,
+              "mirror_lr": 1,
+              "picture_support": 0
+            },
+            "cross_prefix_complete_units": 17,
+            "cross_prefix_complete_units_by_family": {
+              "book_support": 0,
+              "mirror_lr": 4,
+              "picture_support": 3
+            },
+            "focus_units": {
+              "cfq_163eb92339ad35a5": {
+                "cross_prefix_margins": [
+                  -0.2710723876953125,
+                  0.6306672096252441
+                ],
+                "pair_id": "pair_000015",
+                "side_margins": [
+                  -0.04788827896118164,
+                  0.4074831008911133
+                ]
+              },
+              "cfq_5c84a2c27d2be251": {
+                "cross_prefix_margins": [
+                  0.22804725170135498,
+                  0.271952748298645
+                ],
+                "pair_id": "pair_000006",
+                "side_margins": [
+                  0.1875,
+                  0.3125
+                ]
+              },
+              "cfq_699675ceeaf65406": {
+                "cross_prefix_margins": [
+                  0.2939990162849426,
+                  0.1435009241104126
+                ],
+                "pair_id": "pair_000016",
+                "side_margins": [
+                  0.4374999403953552,
+                  0.0
+                ]
+              }
+            },
+            "original_v46_candidate_relative_prefix_trust_rms": 0.001446736161597073,
+            "pair_metrics_sha256": "20f0a258c31db098ad65720a63b39d347392eb44711705e5bf3632fb7535ebc7",
+            "per_unit_nll_row_count": 25,
+            "per_unit_nll_sha256": "6f4d0b41a26eb760a99bcaa228e19d1a05a9faf1075f385d7d2e688de16c6a21",
+            "positive_sides": 32,
+            "priority_deficit_improvement_vs_original_v41_u0": 1.473323941230774,
+            "priority_side_deficit": 29.64040517807007,
+            "unit_count": 25
+          },
+          "passed": false
+        },
+        "source_restoration": {
+          "all_parameter_gradients_absent": true,
+          "attempted": true,
+          "authorized_surface_state_sha256": "a23de4988774a966c0d7aac378ede5d15a3fa1d96093c5039f181a62b0bb09b0",
+          "frozen_state_sha256": "31cb215cf0d1623886d4a79203c501912e66537021da53dd711124abdc2e36fa",
+          "full_tensor_state_sha256": "adfc0400d1a3bb49b278cd3012ab571d01465f2380881f986c085a25474276e5",
+          "passed": true
+        }
+      }
+    ],
+    "complete_fixed_grid_evaluated_before_selection": true,
+    "declared": [
+      {
+        "candidate_id": "guarded_scene_alpha_1p0_query_alpha_2p0",
+        "declared_order": 0,
+        "query_alpha": 2.0,
+        "scene_alpha": 1.0
+      },
+      {
+        "candidate_id": "guarded_scene_alpha_0p5_query_alpha_2p0",
+        "declared_order": 1,
+        "query_alpha": 2.0,
+        "scene_alpha": 0.5
+      },
+      {
+        "candidate_id": "guarded_scene_alpha_0p25_query_alpha_2p0",
+        "declared_order": 2,
+        "query_alpha": 2.0,
+        "scene_alpha": 0.25
+      }
+    ],
+    "declared_count": 3,
+    "evaluated_count": 3,
+    "evaluated_ids": [
+      "guarded_scene_alpha_1p0_query_alpha_2p0",
+      "guarded_scene_alpha_0p5_query_alpha_2p0",
+      "guarded_scene_alpha_0p25_query_alpha_2p0"
+    ]
+  },
+  "chat_promotion_executed": false,
+  "checkpoint": {
+    "inventory": null,
+    "optimizer_file_written": false,
+    "path": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/checkpoints/gemma4_v50_scene_query_alpha_grid/update_000",
+    "published_after_restoration_and_access_audit": false,
+    "root": "data_gemma4/checkpoints/gemma4_v50_scene_query_alpha_grid",
+    "staged_after_complete_grid": false,
+    "write_iff_final_gate_passed": true,
+    "written": false
+  },
+  "embodied_promotion_executed": false,
+  "final_source_restoration": {
+    "all_parameter_gradients_absent": true,
+    "attempted": true,
+    "authorized_surface_state_sha256": "a23de4988774a966c0d7aac378ede5d15a3fa1d96093c5039f181a62b0bb09b0",
+    "frozen_state_sha256": "31cb215cf0d1623886d4a79203c501912e66537021da53dd711124abdc2e36fa",
+    "full_tensor_state_sha256": "adfc0400d1a3bb49b278cd3012ab571d01465f2380881f986c085a25474276e5",
+    "passed": true
+  },
+  "final_test_scenes_touched": false,
+  "final_train_gate": {
+    "access_audit_passed": true,
+    "evaluation_complete": true,
+    "execution_errors": [],
+    "grid_complete": true,
+    "passed": false,
+    "source_restored_exact": true,
+    "winner_exists": false
+  },
+  "optimizer_constructed_or_loaded": false,
+  "optimizer_state_file_opened": false,
+  "optimizer_step_executed": false,
+  "oracle_loaded": false,
+  "passed": false,
+  "preparation": {
+    "all_16_training_maps_cached": true,
+    "candidate_count": 3,
+    "candidate_grid": [
+      {
+        "candidate_id": "guarded_scene_alpha_1p0_query_alpha_2p0",
+        "declared_order": 0,
+        "query_alpha": 2.0,
+        "scene_alpha": 1.0
+      },
+      {
+        "candidate_id": "guarded_scene_alpha_0p5_query_alpha_2p0",
+        "declared_order": 1,
+        "query_alpha": 2.0,
+        "scene_alpha": 0.5
+      },
+      {
+        "candidate_id": "guarded_scene_alpha_0p25_query_alpha_2p0",
+        "declared_order": 2,
+        "query_alpha": 2.0,
+        "scene_alpha": 0.25
+      }
+    ],
+    "candidate_hash_inventory": {
+      "guarded_scene_alpha_0p25_query_alpha_2p0": {
+        "authorized_surface_state_sha256": "c8d49a0890338732a335892aca97858954b3e4d40b7b7e42d826211a12ab6a78",
+        "frozen_state_sha256": "31cb215cf0d1623886d4a79203c501912e66537021da53dd711124abdc2e36fa",
+        "full_tensor_state_sha256": "d8da8979f60a6d29eae3405d5ac243061c0ce172d1512eade2ff6a0078f02ae1"
+      },
+      "guarded_scene_alpha_0p5_query_alpha_2p0": {
+        "authorized_surface_state_sha256": "87e24de4810a75db1e028fcaabe8b034587bf573f7dc0be4474f547736c47ffd",
+        "frozen_state_sha256": "31cb215cf0d1623886d4a79203c501912e66537021da53dd711124abdc2e36fa",
+        "full_tensor_state_sha256": "cde14585e3c2bec543fe162aeae5f94c6d810f26921a46414618d3ecdf7bdac8"
+      },
+      "guarded_scene_alpha_1p0_query_alpha_2p0": {
+        "authorized_surface_state_sha256": "5009ee3fcbd0b44c7811938965fe62ae3c447480934cf4515f44ac93de9b9729",
+        "frozen_state_sha256": "31cb215cf0d1623886d4a79203c501912e66537021da53dd711124abdc2e36fa",
+        "full_tensor_state_sha256": "f1702c1b1a9916de7125476b1a67fd120f0ca81616444e90bd5e656480ef69f2"
+      }
+    },
+    "candidate_hash_inventory_fixed_before_any_candidate_forward": true,
+    "direction_audit_sha256": "2d325cebd47fe03e3f021f4a2cd150f51d4448b88046e4a1fc370bd1a19d55bf",
+    "direction_components": [
+      "g_book",
+      "g_mirror",
+      "g5_guard"
+    ],
+    "direction_id": "guarded_both_sign",
+    "exact_three_autograd_grad_probes_reused_for_all_candidates": true,
+    "frozen_state_sha256": "31cb215cf0d1623886d4a79203c501912e66537021da53dd711124abdc2e36fa",
+    "gradient_audit_sha256": "a7bcdbcfb51cf03648abb178157973dcf5d4c8940e1e1704d92467726bd301dd",
+    "gradient_specs": [
+      {
+        "gradient_id": "g_book",
+        "loss": "negative_selected_side_margin",
+        "pair_id": "pair_000015",
+        "question_key": "cfq_163eb92339ad35a5",
+        "side_index": 0
+      },
+      {
+        "gradient_id": "g_mirror",
+        "loss": "negative_selected_side_margin",
+        "pair_id": "pair_000016",
+        "question_key": "cfq_699675ceeaf65406",
+        "side_index": 1
+      },
+      {
+        "gradient_id": "g5_guard",
+        "loss": "negative_selected_side_margin",
+        "pair_id": "pair_000006",
+        "question_key": "cfq_5c84a2c27d2be251",
+        "side_index": 0
+      }
+    ],
+    "optimizer_constructed_or_loaded": false,
+    "prefix_reference_checkpoint": "data_gemma4/checkpoints/gemma4_v47_book_continuation_l14_query/update_000",
+    "prefix_reference_full_tensor_state_sha256": "1d5adc1fb0d7a895056b77d38c8a12aba95c9997ec8a94edf68673f9c58fb954",
+    "prefix_reference_hash_inventory_sha256": "42960ef8a0dadd58f5b39a7ae6b5f0c8cd996dc0a3770d913689aaa35014ed66",
+    "question_dependent_retrieval": false,
+    "question_dependent_scene_processing": false,
+    "source_authorized_surface_state_sha256": "a23de4988774a966c0d7aac378ede5d15a3fa1d96093c5039f181a62b0bb09b0",
+    "source_checkpoint": "data_gemma4/checkpoints/gemma4_v47_book_continuation_l14_query/update_004",
+    "source_full_tensor_state_sha256": "adfc0400d1a3bb49b278cd3012ab571d01465f2380881f986c085a25474276e5",
+    "v49_candidate_reconstructed_before_v50_direction": true
+  },
+  "question_dependent_retrieval": false,
+  "runtime_promotion_executed": false,
+  "schema_version": 1,
+  "selection": {
+    "passing_candidate_ids": [],
+    "performed_after_complete_grid": true,
+    "rule": "first_full_pass_in_declared_order",
+    "winner": null
+  },
+  "selector_executed": false,
+  "validation_environment_maps_loaded": false,
+  "validation_qa_loaded": false
+}

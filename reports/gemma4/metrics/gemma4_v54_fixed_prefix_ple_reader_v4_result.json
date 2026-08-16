@@ -1,0 +1,154 @@
+{
+  "artifact": "gemma4_v54_fixed_prefix_ple_reader_v4_terminal_result",
+  "checkpoint": null,
+  "checkpoint_published": false,
+  "elapsed_seconds": 550.0162444168236,
+  "fixed_prefix": {
+    "all_scene_latents_present": true,
+    "computed_before_question": true,
+    "question_dependent_retrieval": false,
+    "same_prefix_for_unchanged_scene": true,
+    "shape": [
+      1,
+      258,
+      1536
+    ]
+  },
+  "memory": {
+    "mps_current_allocated_bytes": 255007232,
+    "mps_driver_allocated_bytes": 11638603776,
+    "peak_process_rss_bytes": 8510439424
+  },
+  "passed": false,
+  "preregistration_sha256": "34b4576a6ced7003c916c5dc3deabecf8e6e70a0e39bcc8329d039fd00ef3d59",
+  "promotion_eligible": false,
+  "runtime_leakage": {
+    "environmental_text_inputs": [],
+    "oracle_runtime_access": false,
+    "training_qa_not_in_runtime_checkpoint": true,
+    "validation_answers_not_in_runtime_checkpoint": true
+  },
+  "schema_version": 1,
+  "selection": {
+    "baseline_retention": {
+      "example_count": 16,
+      "maximum_ce_increase_nats": 0.0,
+      "maximum_kl_nats": 3.166496753692627e-08,
+      "mean_ce_increase_nats": 0.0,
+      "mean_kl_nats": -4.251539564847917e-09,
+      "metrics_sha256": "22d050473192b621592df9c681f5387eed800dc26a9eb305a07ee1f4648fb33e",
+      "next_token_top1_agreement": 1.0
+    },
+    "baseline_teacher": {
+      "answer_logit_positions_only": true,
+      "answer_nll_count": 384,
+      "answer_nll_mean": 3.2358317994512618,
+      "changed_complete_units": 12,
+      "changed_margin_mean": 0.1370591429563669,
+      "changed_margin_sha256": "bbfc1a42066963226578c70b468b96524adc8e1e3729245ec83fa5a67877d3a1",
+      "changed_positive_margin_rate": 0.5769230769230769,
+      "changed_positive_margin_sides": 30,
+      "changed_side_count": 52,
+      "changed_unit_count": 26,
+      "correct_nll_sha256": "1c92fb2d34dc996e68509d468a6e34757752fe9a75496d690750aed827572e6d",
+      "evaluation_microbatch_size": 1
+    },
+    "candidate_retention": {
+      "example_count": 16,
+      "maximum_ce_increase_nats": 0.45147132873535156,
+      "maximum_kl_nats": 0.012627258896827698,
+      "mean_ce_increase_nats": 0.00832055578712243,
+      "mean_kl_nats": 0.0022776707519369666,
+      "metrics_sha256": "1d33015205b5ec77c5c57534c0246581e6a57f69bc1e402b454e6ece2efb76a4",
+      "next_token_top1_agreement": 1.0
+    },
+    "candidate_teacher": {
+      "answer_logit_positions_only": true,
+      "answer_nll_count": 384,
+      "answer_nll_mean": 2.036423228079608,
+      "changed_complete_units": 10,
+      "changed_margin_mean": 0.09991184765329728,
+      "changed_margin_sha256": "edcbbd4f28298876660b2e69149e2495fafdf61c7d47c15323187be2b650b8a5",
+      "changed_positive_margin_rate": 0.5384615384615384,
+      "changed_positive_margin_sides": 28,
+      "changed_side_count": 52,
+      "changed_unit_count": 26,
+      "correct_nll_sha256": "a3804754574afe07a43b2c5b16ba43a69d912b50ed60c59eeff5048f2a7fbbef",
+      "evaluation_microbatch_size": 1
+    },
+    "checks": {
+      "changed_pair_complete_unit_delta": false,
+      "changed_wrong_prefix_positive_margin_rate": false,
+      "changed_wrong_prefix_positive_margin_rate_delta": false,
+      "greedy_exact_accuracy_delta": false,
+      "retention_mean_ce_increase": true,
+      "retention_mean_kl": true,
+      "retention_next_token_top1_agreement": true,
+      "validation_answer_nll_improvement": true
+    },
+    "greedy": null,
+    "passed": false
+  },
+  "smoke_report_sha256": "4d76f2f6de14fd5d1e5130d50fded5627418cec83fb5f505d57db49f9244d345",
+  "status": "failed_no_checkpoint",
+  "training": {
+    "final_adapter_state_sha256": "60c3c5ce9fd2c01361b91e171ac02c9e32f8a48480960b143f0a9143aaf1eca5",
+    "final_trace": [
+      {
+        "adapter_state_sha256": "06b20fcb10b7b8affc3ec0da82dc5f8d6fc91ee35d20177c7e143c9fec0dc418",
+        "mean_preupdate_changed_margin": 0.05808326601982117,
+        "mean_qa_loss": 0.9361581653356552,
+        "preclip_gradient_l2": 5.255143642425537,
+        "retention_kl": 0.000849017349537462,
+        "update": 38
+      },
+      {
+        "adapter_state_sha256": "b321b5d94c127b43d8271605f6785567e7fe591aac5cf0d967ee63e25f1fc15d",
+        "mean_preupdate_changed_margin": 2.340113639831543,
+        "mean_qa_loss": 1.7216371893882751,
+        "preclip_gradient_l2": 9.354059219360352,
+        "retention_kl": 0.0014216321287676692,
+        "update": 39
+      },
+      {
+        "adapter_state_sha256": "60c3c5ce9fd2c01361b91e171ac02c9e32f8a48480960b143f0a9143aaf1eca5",
+        "mean_preupdate_changed_margin": 0.06711122393608093,
+        "mean_qa_loss": 1.2293625846505165,
+        "preclip_gradient_l2": 3.926619291305542,
+        "retention_kl": 0.00040588335832580924,
+        "update": 40
+      }
+    ],
+    "gradient_accumulation": 4,
+    "initial_trace": [
+      {
+        "adapter_state_sha256": "714ae9cd0b644e1dc884735034f86349245af2dc9c5bb2f93829f4f61e9abe7a",
+        "mean_preupdate_changed_margin": 0.18516182899475098,
+        "mean_qa_loss": 2.9958527088165283,
+        "preclip_gradient_l2": 1.1948747634887695,
+        "retention_kl": 1.7583897715667263e-06,
+        "update": 1
+      },
+      {
+        "adapter_state_sha256": "41c14148a93ec5a81d75cfea6539c69f89fd4aaedd28c2bd1f20e34e39d9bc3e",
+        "mean_preupdate_changed_margin": 0.09089720249176025,
+        "mean_qa_loss": 2.866540640592575,
+        "preclip_gradient_l2": 0.49887967109680176,
+        "retention_kl": 1.8295959307579324e-06,
+        "update": 2
+      },
+      {
+        "adapter_state_sha256": "5ab403c7d716c27e2e8cce365a8ecc2b7f5c69ef6efa6ecb765f11d9658b196b",
+        "mean_preupdate_changed_margin": 1.6573622226715088,
+        "mean_qa_loss": 3.680325001478195,
+        "preclip_gradient_l2": 1.317465901374817,
+        "retention_kl": 0.008962525054812431,
+        "update": 3
+      }
+    ],
+    "maximum_preclip_gradient_l2": 9.354059219360352,
+    "trace_sha256": "4519ed02994b9ddcc23e29581a78bbdab6663c805facceaa5168adf60063653c",
+    "trainable_parameter_count": 41984,
+    "updates": 40
+  }
+}

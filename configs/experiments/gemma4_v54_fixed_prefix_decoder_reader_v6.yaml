@@ -1,0 +1,183 @@
+experiment:
+  schema_version: 1
+  artifact: gemma4_v54_fixed_prefix_decoder_reader_v6
+  status: unsealed_draft_training_not_authorized
+  predecessor: gemma4_v54_fixed_prefix_ple_reader_v5
+  base_runtime_config: configs/runtime/gemma4_v54.yaml
+  base_checkpoint: data_gemma4/checkpoints/gemma4_v54_semantic_greedy_gate/update_000
+  prefix_cache: data_gemma4/scene_tokens/v56_question_control_full_prefixes
+  train_qa: data_gemma4/training/v62_pair_disjoint/train.jsonl
+  validation_questions: reports/gemma4/questions/v62_internal_validation.json
+  validation_references: reports/gemma4/scorer_only/v62_internal_validation_references.json
+  baseline_predictions: reports/gemma4/predictions/v62_v54_no_control_internal_validation.jsonl
+  retention_corpus: configs/experiments/gemma4_v54_fixed_prefix_ple_reader_v1_retention.json
+  question_dependent_retrieval: false
+  fixed_prefix_tokens: 258
+  scene_latents: 256
+  scene_hidden_dimension: 1536
+
+decoder_adapter:
+  exact_targets:
+    - model.language_model.layers.32.mlp.down_proj
+    - model.language_model.layers.33.mlp.down_proj
+  causal_position: post_attention_mlp_residual_writes_in_layers_32_and_33_before_layer_34
+  module_shapes_out_in:
+    model.language_model.layers.32.mlp.down_proj: [1536, 12288]
+    model.language_model.layers.33.mlp.down_proj: [1536, 12288]
+  rank: 4
+  alpha: 8.0
+  dropout: 0.0
+  dtype: float32
+  trainable_parameter_count: 110592
+  initialization_seed: 720054
+  expected_initial_state_sha256: 6d3570a60306d4d28aa2ca35962e161582a478b959098cf2bf89be2cce56f2e2
+  merge: false
+  base_model_frozen: true
+  v54_banks_frozen: true
+  v54_prefixes_frozen: true
+  layer_34_claim_scope: structural_target_disjointness_only_until_real_joint_runtime_smoke
+
+objective:
+  numeric_coefficients_reused_from_v5: true
+  exact_objective_inheritance_from_v5: false
+  changed_from_v5:
+    - contrastive_population_expanded_from_80_curated_sides_to_288_answer_varying_rows
+    - wrong_prefixes_include_fixed_cross_pair_exact_question_controls
+    - three_contrastive_rows_and_three_nonvarying_rows_per_update
+  contrastive_correct_answer_ce_weight: 0.5
+  broad_answer_ce_weight: 0.5
+  wrong_prefix_hinge_weight: 4.0
+  wrong_prefix_margin_nats_per_token: 0.5
+  retention_kl_weight: 0.5
+  answer_suffix_only: true
+  labels_before_answer_suffix: -100
+
+optimization:
+  inherited_from_v5:
+    - seed
+    - adamw_family_and_default_numeric_parameters_now_made_explicit
+    - peak_and_minimum_learning_rates
+    - warmup_length
+    - weight_decay
+    - gradient_clip
+  changed_from_v5:
+    - maximum_updates_80_to_96
+    - row_schedule_and_contrastive_population
+    - decoder_gradient_checkpointing_true_to_false_resource_only
+  seed: 720054
+  optimizer: adamw
+  adamw_beta1: 0.9
+  adamw_beta2: 0.999
+  adamw_epsilon: 1.0e-08
+  adamw_amsgrad: false
+  adamw_maximize: false
+  adamw_foreach: false
+  adamw_capturable: false
+  adamw_differentiable: false
+  adamw_fused: false
+  peak_learning_rate: 0.0001
+  minimum_learning_rate: 0.00001
+  linear_warmup_updates: 8
+  learning_rate_formula: "u<=8: 1e-4*u/8; u>8: 1e-5+0.5*(1e-4-1e-5)*(1+cos(pi*(u-8)/88))"
+  learning_rate_update_1: 0.0000125
+  learning_rate_update_8: 0.0001
+  learning_rate_update_96: 0.00001
+  weight_decay: 0.0
+  maximum_updates: 96
+  gradient_clip_l2: 1.0
+  decoder_gradient_checkpointing: false
+  answer_logit_positions_only: true
+  evaluation_microbatch_size: 1
+  gradient_aggregation: exact_weighted_sum_of_3_contrastive_3_broad_and_1_retention_terms
+  gradient_term_order: 3_contrastive_in_schedule_order_then_3_broad_in_schedule_order_then_retention
+  divide_total_loss_by_component_count: false
+  zero_grad_set_to_none: true
+  optimizer_steps_per_update: 1
+  retention_teacher: frozen_baseline_fp32_next_token_logits_captured_before_optimizer
+  retention_cycle: corpus_index_equals_update_minus_1_modulo_16
+  retention_examples: 16
+  retention_exposures_per_example: 6
+
+schedule:
+  answer_varying_rows_per_update: 3
+  nonvarying_rows_per_update: 3
+  exact_question_answer_varying_train_rows: 288
+  exact_question_nonvarying_train_rows: 288
+  every_training_row_exactly_once: true
+  deterministic_answer_different_wrong_prefix_per_varying_row: true
+  wrong_prefix_assignment_sha256: 875cb3ed4893314494e90d563e1e961358a4fa34ccd6888545a20cfce903c5ff
+  update_schedule_sha256: c9680e1de5cb179a833284da7033a8bddda7bfe23d59c9defc02543804382270
+  checkpoint_selection: final_state_after_update_96_only
+  intermediate_selection: false
+  intermediate_checkpoint: false
+  best_loss_selection: false
+  post_hoc_state_selection: false
+
+sequence_lengths:
+  fixed_prefix_tokens: 258
+  maximum_train_prompt_tokens: 63
+  maximum_train_answer_tokens: 4
+  maximum_train_teacher_sequence_tokens: 324
+  maximum_validation_prompt_tokens: 64
+  maximum_validation_answer_tokens: 4
+  maximum_validation_teacher_sequence_tokens: 325
+  maximum_retention_prompt_tokens: 13
+  maximum_greedy_new_tokens: 32
+  maximum_validation_greedy_sequence_tokens: 354
+  layer_32_and_33_sliding_window_tokens: 512
+
+selection:
+  curated_thresholds_reused_unchanged_from_v5: true
+  validation_answer_nll_population: all_384_internal_validation_rows
+  validation_answer_nll_improvement_minimum: 0.03
+  curated_population: 52_sides_in_26_physical_counterfactual_units
+  changed_wrong_prefix_positive_margin_rate_minimum: 0.65
+  changed_wrong_prefix_positive_margin_rate_delta_minimum: 0.10
+  changed_pair_complete_unit_delta_minimum: 3
+  expanded_population: all_170_fixed_answer_varying_internal_validation_rows
+  expanded_wrong_prefix_assignment_sha256: a2eaff713e8a51beec6779fc3d1720f179e2290ecaaf176d13ae1cc8d4362dcd
+  full_answer_varying_wrong_prefix_positive_margin_rate_minimum: 0.65
+  full_answer_varying_wrong_prefix_positive_margin_rate_delta_minimum: 0.10
+  answer_type_family_count: 7
+  macro_answer_type_positive_margin_rate_minimum: 0.65
+  macro_answer_type_positive_margin_rate_delta_minimum: 0.10
+  minimum_per_answer_type_positive_margin_rate: 0.50
+  minimum_per_answer_type_positive_margin_rate_delta: 0.0
+  selected_negative_scope_count: 2
+  macro_selected_scope_positive_margin_rate_minimum: 0.65
+  macro_selected_scope_positive_margin_rate_delta_minimum: 0.10
+  minimum_per_selected_scope_positive_margin_rate: 0.55
+  minimum_per_selected_scope_positive_margin_rate_delta: 0.0
+  margin_definition: wrong_prefix_answer_nll_minus_correct_prefix_answer_nll
+  positive_margin_comparison: strict_greater_than_zero
+  family_macro_definition: unweighted_mean_of_the_7_answer_type_rates
+  scope_macro_definition: unweighted_mean_of_same_pair_and_cross_pair_rates
+  greedy_population: fixed_first_6_rows_in_manifest_order_for_each_of_16_validation_scenes
+  greedy_row_count: 96
+  greedy_subset_sha256: 1d06ad2292635f438af38bfb31f05d0502972244b2c46d9691067fc8fb6756cd
+  greedy_exact_accuracy_delta_minimum: 0.02
+  retention_population: all_16_non_environmental_prompts
+  retention_mean_ce_increase_nats_maximum: 0.03
+  retention_mean_kl_nats_maximum: 0.02
+  retention_next_token_top1_agreement_minimum: 0.98
+  every_gate_required: true
+  failed_run_publishes_no_checkpoint: true
+
+deferred_holdout:
+  scene_ids: [scene_000057, scene_000058, scene_000059, scene_000060, scene_000061, scene_000062]
+  question_count: 216
+  evaluate_only_after_internal_selection_passes: true
+  accessed_for_v6_draft: false
+
+final_split:
+  scene_ids: [scene_000025, scene_000026, scene_000027, scene_000028, scene_000029, scene_000030]
+  accessed_for_v6_draft: false
+
+execution:
+  preregistration_sealed: false
+  full_gemma_loaded: false
+  mps_used: false
+  optimizer_constructed: false
+  training_authorized: false
+  training_executed: false
+  checkpoint_published: false

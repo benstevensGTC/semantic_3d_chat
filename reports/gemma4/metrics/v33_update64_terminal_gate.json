@@ -1,0 +1,84 @@
+{
+  "artifact": "v33_update64_terminal_gate",
+  "audit_method": "checkpoint_metadata_and_tensors_only",
+  "checkpoint_root": "data_gemma4/checkpoints/gemma4_v33_diverse28_environmental_sidecar",
+  "conditional_v34_base_surface_authorized": true,
+  "config": {
+    "path": "configs/experiments/gemma4_diverse28_environmental_sidecar_v33.yaml",
+    "sha256": "e920d28da8ab0abc3c0ab2c4ad812a2743d1894b769c6302097ac41c31da3905"
+  },
+  "final_test_scenes_touched": false,
+  "gemma_loaded": false,
+  "no_update_072_or_later": true,
+  "observed_saved_optimizer_steps": [
+    0,
+    8,
+    16,
+    24,
+    32,
+    40,
+    48,
+    56,
+    64
+  ],
+  "oracle_loaded": false,
+  "passed": true,
+  "qa_loaded": false,
+  "scene_maps_loaded": false,
+  "schedule_sha256": "90b7c3b337f573b47a75ed3faefc915eacd98c9ef11b572ff3c45c4166fc9590",
+  "schema_version": 1,
+  "stopped_at_optimizer_step": 64,
+  "tensor_transition": {
+    "changed_parameter_count": 404608,
+    "changed_tensor_count": 8,
+    "changed_tensor_names": [
+      "dense_sidecar_adapter.channel_gain",
+      "dense_sidecar_adapter.output_projection.weight",
+      "dense_sidecar_adapter.position_projection.bias",
+      "dense_sidecar_adapter.position_projection.weight",
+      "dense_sidecar_adapter.sidecar_norm.bias",
+      "dense_sidecar_adapter.sidecar_norm.weight",
+      "dense_sidecar_adapter.sidecar_projection.bias",
+      "dense_sidecar_adapter.sidecar_projection.weight"
+    ],
+    "frozen_tensor_count": 160,
+    "terminal_frozen_tensor_state_sha256": "d21e3c26b3842f2d22fe6ecb9a53e5cbde4378ccd8e8e99f812c6587981af63b",
+    "terminal_full_tensor_state_sha256": "cb7bb3b48ace60212ee5c7f326839bf2ddd993810417de45c9a9cbc666313fe6"
+  },
+  "true_optimizer_steps_completed": 64,
+  "update64_checkpoint": "data_gemma4/checkpoints/gemma4_v33_diverse28_environmental_sidecar/update_064",
+  "update64_file_sha256": {
+    "adapter.safetensors": "32c071d7acca0e52f8ae4c3dee8cba83319d67b184bbb3ab9957a6f6c4fcf987",
+    "metadata.json": "ef97dfc3415eb4cfbdf30fe952e85db5ea4c54e4dec896a40725fb41fd787c91",
+    "optimizer.pt": "845aa42380b5c8c575162cb003fcadc7761fd615071b9dab71d9da4a85ba3d09",
+    "runtime_metadata.json": "fe8df1c8c052ac50899eb19952f96b74ac691780e20b604ba4e11072db32e168"
+  },
+  "update64_gate_evidence": {
+    "book_update0_mean_margin": 0.06537121534347534,
+    "book_update64_mean_margin": -0.006955236196517944,
+    "checks": {
+      "book_advantage_positive": false,
+      "nonmirror_teacher_complete": false,
+      "picture_advantage_positive": false,
+      "unrelated_prefix_rms_inflation_bounded": true,
+      "weak_pair_prefix_rms_improved_25pct": false
+    },
+    "nonmirror_teacher_complete_units": 0,
+    "passed": false,
+    "picture_update0_mean_margin": -0.0546875,
+    "picture_update64_mean_margin": -0.177734375,
+    "unrelated_prefix_rms_ratio": 1.000552564097064,
+    "weak_pair_prefix_rms_ratio": 1.000267116920406
+  },
+  "v29_source": {
+    "adapter_sha256": "3cedada0b685d62aea533a298428b28e46c58601ec9748f80986faf0070fbbe8",
+    "checkpoint": "data_gemma4/checkpoints/gemma4_v29_diverse20_post_stack_decoder_stage_b/update_004",
+    "runtime_metadata_sha256": "c5bd5fc737ad639528a03a8518a769ec08d40f8fc1c5655437f5c539655326b9",
+    "selected_update": 4,
+    "selection_report": "reports/gemma4/metrics/v29_diverse_stage_b_selection.json",
+    "selection_report_sha256": "d7acbd7173f079f257619510df36ad3c73f953e7cf0123b7bd383ad01ddfe91a"
+  },
+  "v32_rejection_report_sha256": "2ffeb2655cd6a8627ea9e06c8f261113b0b225a1b39de4eb32126693063c13b7",
+  "v33_chat_promotion_eligible": false,
+  "v33_development_selection_passed": false
+}

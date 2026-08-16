@@ -1,0 +1,771 @@
+{
+  "all_saved_arms_inspected": true,
+  "all_scene_prefixes_built_before_questions": true,
+  "answer_text_serialized": false,
+  "arms": [
+    {
+      "arm_index": 0,
+      "broad_retention_exact_accuracy": 0.125,
+      "broad_retention_exact_correct": 6,
+      "broad_retention_row_count": 48,
+      "checkpoint": "data_gemma4/checkpoints/gemma4_v32_diverse28_microstep/update_000",
+      "checks": {
+        "below_selected_v29_source_nll": true,
+        "broad_exact_accuracy_retained": true,
+        "color_retained": true,
+        "greedy_changed_units_demonstrated": false,
+        "mirror_retained": true,
+        "no_new_negative_sides": true,
+        "pair_mean_margin_strictly_improved": false,
+        "pair_minimum_margin_met": true,
+        "pair_passed_units_improved": false
+      },
+      "color_full_vocab_sides": 12,
+      "color_full_vocab_units": 6,
+      "eligible": false,
+      "fresh_bank_state_sha256": "2b1d89fbb9189ac551bf12905cf94036ebaa84696449b31c2b37b69d478fb70d",
+      "frozen_inherited_state_sha256": "8f3cb54e1670bb0719843e539b908e623b9ec507b8ffd838f2f234b3862b9fab",
+      "greedy_changed_row_count": 24,
+      "greedy_changed_unit_count": 12,
+      "greedy_exact_complete_units_correct": 0,
+      "greedy_exact_correct_sides": 0,
+      "greedy_prediction_changed_units": 0,
+      "mirror_full_vocab_sides": 10,
+      "mirror_full_vocab_units": 4,
+      "new_negative_sides": [],
+      "optimizer_step": 0,
+      "prefix_sha256_by_validation_scene": {
+        "scene_000019": "8e426d32bbe53831fac9e66a59901277ce4595df2871bf2a672a2cffe462ec64",
+        "scene_000020": "64aa52dbd84a506b89fed32037184123aea295e1e46bb06310864862bb548eb0",
+        "scene_000021": "9de88785c1e9dbe0b6078239dbc561983c2c0e58ea703dd32e93ccd88ccf874b",
+        "scene_000022": "d5c4f362ec7f1eb7bbee0b8b95d1731f21a8b0a5819ae7f484bf89f8cb5fefa8",
+        "scene_000023": "65bade91a0101f5cf8fc0cb53c8ee05191a34cb363ab56532a6de2c82e71c458",
+        "scene_000024": "23505e572dcd9a61901410f640cc1fc12524197f69d113eb60a4061a04fcc4a1"
+      },
+      "update": 0,
+      "validation_answer_token_nll": 3.731349760459529,
+      "validation_pair_mean_margin": 0.08168623596429825,
+      "validation_pair_mean_margin_delta_from_update0": 0.0,
+      "validation_pair_minimum_margin": -8.8125,
+      "validation_pair_passed_sides": 12,
+      "validation_pair_passed_unit_delta_from_update0": 0,
+      "validation_pair_passed_units": 0
+    },
+    {
+      "arm_index": 1,
+      "broad_retention_exact_accuracy": 0.125,
+      "broad_retention_exact_correct": 6,
+      "broad_retention_row_count": 48,
+      "checkpoint": "data_gemma4/checkpoints/gemma4_v32_diverse28_microstep/update_008",
+      "checks": {
+        "below_selected_v29_source_nll": true,
+        "broad_exact_accuracy_retained": true,
+        "color_retained": true,
+        "greedy_changed_units_demonstrated": false,
+        "mirror_retained": false,
+        "no_new_negative_sides": false,
+        "pair_mean_margin_strictly_improved": false,
+        "pair_minimum_margin_met": true,
+        "pair_passed_units_improved": false
+      },
+      "color_full_vocab_sides": 12,
+      "color_full_vocab_units": 6,
+      "eligible": false,
+      "fresh_bank_state_sha256": "99f92d80ab398c8da72293f19ccc33a5b6017fa286fd488aebe21dce0d83ab24",
+      "frozen_inherited_state_sha256": "8f3cb54e1670bb0719843e539b908e623b9ec507b8ffd838f2f234b3862b9fab",
+      "greedy_changed_row_count": 24,
+      "greedy_changed_unit_count": 12,
+      "greedy_exact_complete_units_correct": 0,
+      "greedy_exact_correct_sides": 0,
+      "greedy_prediction_changed_units": 0,
+      "mirror_full_vocab_sides": 9,
+      "mirror_full_vocab_units": 3,
+      "new_negative_sides": [
+        [
+          "scene_000007",
+          "q_000000"
+        ]
+      ],
+      "optimizer_step": 8,
+      "prefix_sha256_by_validation_scene": {
+        "scene_000019": "58dd3fadfad5362626ef2c208d77dfa3981801b702b2d69ccf5db39854932141",
+        "scene_000020": "8bed2ef8bfaad2b1d21c442604e2cb3d6f41e79443e172c10068b0a567e674b1",
+        "scene_000021": "7fc8c29d3af612076ff865cb4f7df4dd07a2f1a32bca2d31a2fa8a944257a090",
+        "scene_000022": "9a87ab08e3c5de337ed5ba7656d0bfcae9f45441ec413f4356699e136f0627cf",
+        "scene_000023": "078a4d39cfa36ae2527ae6ff8b03e667209874e8349bd8abf297bcf622d4625e",
+        "scene_000024": "c236a18416462cbb8365a406a8bf69d41ec35dc28b19e4990b9d5b3a7b64cdb4"
+      },
+      "update": 8,
+      "validation_answer_token_nll": 3.694320725897948,
+      "validation_pair_mean_margin": 0.023796660204728443,
+      "validation_pair_mean_margin_delta_from_update0": -0.05788957575956981,
+      "validation_pair_minimum_margin": -8.9375,
+      "validation_pair_passed_sides": 12,
+      "validation_pair_passed_unit_delta_from_update0": 0,
+      "validation_pair_passed_units": 0
+    },
+    {
+      "arm_index": 2,
+      "broad_retention_exact_accuracy": 0.125,
+      "broad_retention_exact_correct": 6,
+      "broad_retention_row_count": 48,
+      "checkpoint": "data_gemma4/checkpoints/gemma4_v32_diverse28_microstep/update_016",
+      "checks": {
+        "below_selected_v29_source_nll": true,
+        "broad_exact_accuracy_retained": true,
+        "color_retained": true,
+        "greedy_changed_units_demonstrated": false,
+        "mirror_retained": true,
+        "no_new_negative_sides": true,
+        "pair_mean_margin_strictly_improved": false,
+        "pair_minimum_margin_met": true,
+        "pair_passed_units_improved": true
+      },
+      "color_full_vocab_sides": 12,
+      "color_full_vocab_units": 6,
+      "eligible": false,
+      "fresh_bank_state_sha256": "a8d90f8829cb6d0fef777f2e85f93ccdac11b1059fb566225ecb414455ecf0d4",
+      "frozen_inherited_state_sha256": "8f3cb54e1670bb0719843e539b908e623b9ec507b8ffd838f2f234b3862b9fab",
+      "greedy_changed_row_count": 24,
+      "greedy_changed_unit_count": 12,
+      "greedy_exact_complete_units_correct": 0,
+      "greedy_exact_correct_sides": 0,
+      "greedy_prediction_changed_units": 1,
+      "mirror_full_vocab_sides": 10,
+      "mirror_full_vocab_units": 4,
+      "new_negative_sides": [],
+      "optimizer_step": 16,
+      "prefix_sha256_by_validation_scene": {
+        "scene_000019": "98a2f2b223ffeb87daba7c16626b633be113749f0d9ff93118b0f53330f19959",
+        "scene_000020": "2497a1b96e625f1371d9f335feb289bf87b10988089bdc304c605afdddf8f4cb",
+        "scene_000021": "e7372306a56c9a2679d0b98011b6001375122f8a0559ad890ffb715abc0f2b7a",
+        "scene_000022": "36c1d667affefc0da5353bc0a040be288e9c03415537e4a5abec30e364a6d06f",
+        "scene_000023": "1970aab1ad11f12cd63e303a0c99253e448e39c4668c684a6b4f3c2f1bbad62f",
+        "scene_000024": "e27f9ed21f05b4b007ee3d3b27aa8328776e564ae35dfb0cc2b07a79c2ad870c"
+      },
+      "update": 16,
+      "validation_answer_token_nll": 3.6135394035114183,
+      "validation_pair_mean_margin": 0.0173386683066686,
+      "validation_pair_mean_margin_delta_from_update0": -0.06434756765762965,
+      "validation_pair_minimum_margin": -9.09375,
+      "validation_pair_passed_sides": 13,
+      "validation_pair_passed_unit_delta_from_update0": 1,
+      "validation_pair_passed_units": 1
+    },
+    {
+      "arm_index": 3,
+      "broad_retention_exact_accuracy": 0.125,
+      "broad_retention_exact_correct": 6,
+      "broad_retention_row_count": 48,
+      "checkpoint": "data_gemma4/checkpoints/gemma4_v32_diverse28_microstep/update_024",
+      "checks": {
+        "below_selected_v29_source_nll": true,
+        "broad_exact_accuracy_retained": true,
+        "color_retained": true,
+        "greedy_changed_units_demonstrated": false,
+        "mirror_retained": false,
+        "no_new_negative_sides": false,
+        "pair_mean_margin_strictly_improved": false,
+        "pair_minimum_margin_met": true,
+        "pair_passed_units_improved": true
+      },
+      "color_full_vocab_sides": 12,
+      "color_full_vocab_units": 6,
+      "eligible": false,
+      "fresh_bank_state_sha256": "c8800f7832111b44040d9fdefed053a16b5fc5ca02e7ff308ef34185f6fd42a6",
+      "frozen_inherited_state_sha256": "8f3cb54e1670bb0719843e539b908e623b9ec507b8ffd838f2f234b3862b9fab",
+      "greedy_changed_row_count": 24,
+      "greedy_changed_unit_count": 12,
+      "greedy_exact_complete_units_correct": 0,
+      "greedy_exact_correct_sides": 0,
+      "greedy_prediction_changed_units": 2,
+      "mirror_full_vocab_sides": 8,
+      "mirror_full_vocab_units": 2,
+      "new_negative_sides": [
+        [
+          "scene_000007",
+          "q_000000"
+        ],
+        [
+          "scene_000007",
+          "q_000114"
+        ]
+      ],
+      "optimizer_step": 24,
+      "prefix_sha256_by_validation_scene": {
+        "scene_000019": "c4f08d8b3180c43043d2b259d1f74a64c44e6e6a4f5530753975034d8eaece99",
+        "scene_000020": "e07ce0356680f23454d276952b0ef0b1ca8ce05876303755f46b6ba81a12dee1",
+        "scene_000021": "4358bf61ebfe8d6e6670e9c83a1c97c2120a9191b3b21f990bec088cb3132d8d",
+        "scene_000022": "ad8f3f9854e64b3d0824027268f1a60401988b293937f567a21067d37d3ea154",
+        "scene_000023": "b8bbf551ece77816d3fd77e148b87fef5285e82433c5a9ee565365f29e27c818",
+        "scene_000024": "c4f897df3133f1259eb89b4ac5d1e4cc42652e8419b88bce4ae352f5fb9519d8"
+      },
+      "update": 24,
+      "validation_answer_token_nll": 3.5720580207804837,
+      "validation_pair_mean_margin": -0.010031543672084808,
+      "validation_pair_mean_margin_delta_from_update0": -0.09171777963638306,
+      "validation_pair_minimum_margin": -8.96875,
+      "validation_pair_passed_sides": 13,
+      "validation_pair_passed_unit_delta_from_update0": 1,
+      "validation_pair_passed_units": 1
+    },
+    {
+      "arm_index": 4,
+      "broad_retention_exact_accuracy": 0.125,
+      "broad_retention_exact_correct": 6,
+      "broad_retention_row_count": 48,
+      "checkpoint": "data_gemma4/checkpoints/gemma4_v32_diverse28_microstep/update_032",
+      "checks": {
+        "below_selected_v29_source_nll": true,
+        "broad_exact_accuracy_retained": true,
+        "color_retained": false,
+        "greedy_changed_units_demonstrated": false,
+        "mirror_retained": false,
+        "no_new_negative_sides": false,
+        "pair_mean_margin_strictly_improved": false,
+        "pair_minimum_margin_met": true,
+        "pair_passed_units_improved": false
+      },
+      "color_full_vocab_sides": 11,
+      "color_full_vocab_units": 5,
+      "eligible": false,
+      "fresh_bank_state_sha256": "aa6e9d122a9ab61cdfd2e136ebdf41c25fd8611a5381448b3f2e0cbcdde71eaf",
+      "frozen_inherited_state_sha256": "8f3cb54e1670bb0719843e539b908e623b9ec507b8ffd838f2f234b3862b9fab",
+      "greedy_changed_row_count": 24,
+      "greedy_changed_unit_count": 12,
+      "greedy_exact_complete_units_correct": 0,
+      "greedy_exact_correct_sides": 0,
+      "greedy_prediction_changed_units": 1,
+      "mirror_full_vocab_sides": 8,
+      "mirror_full_vocab_units": 2,
+      "new_negative_sides": [
+        [
+          "scene_000004",
+          "q_000080"
+        ],
+        [
+          "scene_000007",
+          "q_000000"
+        ],
+        [
+          "scene_000007",
+          "q_000114"
+        ]
+      ],
+      "optimizer_step": 32,
+      "prefix_sha256_by_validation_scene": {
+        "scene_000019": "7c07da6ed5332d46406157ecc0eeac6ba9c160f2236bbe028ee589a97fdd4131",
+        "scene_000020": "91c6c031059b38326efc912ac59761f7da3af10731e44d93d214f124d0568e80",
+        "scene_000021": "802ca2201770bb955ed4c037c1ec5bfc4380e036579531ef820cff41d495e3ff",
+        "scene_000022": "22bc9469a6a544abd5595582ac923459cff51441453fab07f75e0745b4fb9f25",
+        "scene_000023": "f77884699d2a4395e7fb4fc43068819788f6681d4b1b02daa5c2ffd45bf22359",
+        "scene_000024": "7f78c3a61c72df56850b52b2bd626c1df4e716fddeb2cd3fa567e6f2b3308d4d"
+      },
+      "update": 32,
+      "validation_answer_token_nll": 3.499800600525406,
+      "validation_pair_mean_margin": 0.038998156785964966,
+      "validation_pair_mean_margin_delta_from_update0": -0.04268807917833328,
+      "validation_pair_minimum_margin": -8.90625,
+      "validation_pair_passed_sides": 12,
+      "validation_pair_passed_unit_delta_from_update0": 0,
+      "validation_pair_passed_units": 0
+    },
+    {
+      "arm_index": 5,
+      "broad_retention_exact_accuracy": 0.125,
+      "broad_retention_exact_correct": 6,
+      "broad_retention_row_count": 48,
+      "checkpoint": "data_gemma4/checkpoints/gemma4_v32_diverse28_microstep/update_040",
+      "checks": {
+        "below_selected_v29_source_nll": true,
+        "broad_exact_accuracy_retained": true,
+        "color_retained": false,
+        "greedy_changed_units_demonstrated": false,
+        "mirror_retained": false,
+        "no_new_negative_sides": false,
+        "pair_mean_margin_strictly_improved": true,
+        "pair_minimum_margin_met": true,
+        "pair_passed_units_improved": true
+      },
+      "color_full_vocab_sides": 11,
+      "color_full_vocab_units": 5,
+      "eligible": false,
+      "fresh_bank_state_sha256": "2fab6ee20a1d1af0e1eefe9ff6e751da5d80f6917c1d7c87ac8ec1604f5fc4bb",
+      "frozen_inherited_state_sha256": "8f3cb54e1670bb0719843e539b908e623b9ec507b8ffd838f2f234b3862b9fab",
+      "greedy_changed_row_count": 24,
+      "greedy_changed_unit_count": 12,
+      "greedy_exact_complete_units_correct": 0,
+      "greedy_exact_correct_sides": 0,
+      "greedy_prediction_changed_units": 3,
+      "mirror_full_vocab_sides": 8,
+      "mirror_full_vocab_units": 2,
+      "new_negative_sides": [
+        [
+          "scene_000004",
+          "q_000080"
+        ],
+        [
+          "scene_000007",
+          "q_000000"
+        ],
+        [
+          "scene_000007",
+          "q_000114"
+        ]
+      ],
+      "optimizer_step": 40,
+      "prefix_sha256_by_validation_scene": {
+        "scene_000019": "9b3c141701d697642412f329cd573c5ae0832fc2d04e505c48219451099521eb",
+        "scene_000020": "ac1f11b0700a84f8495e12c2525d190420e7407a3381780d50d206f18dd8024d",
+        "scene_000021": "9a6dc8b62c70a79a8d1385481be6367a75d65aeded7f3cbcbb02888481cc87a9",
+        "scene_000022": "5f7631fd9aa43322453975629fba0b845387fefbcad758f30fed8ead76a43eb7",
+        "scene_000023": "d17bb1d894a2592f973aea26cb34fbd55e493480c7aa6dc7080cbfeb7165127f",
+        "scene_000024": "a558d4756d7b0de0ec22e799195b66491de34587c120cee8498ebd3131027e98"
+      },
+      "update": 40,
+      "validation_answer_token_nll": 3.5086544179530055,
+      "validation_pair_mean_margin": 0.10101651151974995,
+      "validation_pair_mean_margin_delta_from_update0": 0.019330275555451706,
+      "validation_pair_minimum_margin": -8.84375,
+      "validation_pair_passed_sides": 13,
+      "validation_pair_passed_unit_delta_from_update0": 1,
+      "validation_pair_passed_units": 1
+    },
+    {
+      "arm_index": 6,
+      "broad_retention_exact_accuracy": 0.125,
+      "broad_retention_exact_correct": 6,
+      "broad_retention_row_count": 48,
+      "checkpoint": "data_gemma4/checkpoints/gemma4_v32_diverse28_microstep/update_048",
+      "checks": {
+        "below_selected_v29_source_nll": true,
+        "broad_exact_accuracy_retained": true,
+        "color_retained": false,
+        "greedy_changed_units_demonstrated": false,
+        "mirror_retained": false,
+        "no_new_negative_sides": false,
+        "pair_mean_margin_strictly_improved": false,
+        "pair_minimum_margin_met": true,
+        "pair_passed_units_improved": true
+      },
+      "color_full_vocab_sides": 11,
+      "color_full_vocab_units": 5,
+      "eligible": false,
+      "fresh_bank_state_sha256": "fc46ac53271dd76251eafb768600564b9a2d158864607f8d5d0b9c291669d1d8",
+      "frozen_inherited_state_sha256": "8f3cb54e1670bb0719843e539b908e623b9ec507b8ffd838f2f234b3862b9fab",
+      "greedy_changed_row_count": 24,
+      "greedy_changed_unit_count": 12,
+      "greedy_exact_complete_units_correct": 0,
+      "greedy_exact_correct_sides": 0,
+      "greedy_prediction_changed_units": 2,
+      "mirror_full_vocab_sides": 8,
+      "mirror_full_vocab_units": 2,
+      "new_negative_sides": [
+        [
+          "scene_000004",
+          "q_000080"
+        ],
+        [
+          "scene_000007",
+          "q_000000"
+        ],
+        [
+          "scene_000007",
+          "q_000114"
+        ]
+      ],
+      "optimizer_step": 48,
+      "prefix_sha256_by_validation_scene": {
+        "scene_000019": "1d503f6aa8f7daed8ab37a4428eb81371f2a5f060ac36d312e978b4349052fc6",
+        "scene_000020": "1b4411470778ecd38ad5b7c32eec6a33ff82529cab04d32ebd8bd5baf1991dfd",
+        "scene_000021": "6136bc1b1c0f3254af8eca13a86e2e3152e1d955146caa635c13452f20a7a7e2",
+        "scene_000022": "4997e626696c8664aa351731770a095f09b6c2567efff24129bedd80f5facc5e",
+        "scene_000023": "64975dfca4ecc8bb790feb401aed43dbc603049303587046b206ea34c570d383",
+        "scene_000024": "ef45f96f39f879862774d531557007a05fa1ee0be75d19e9cd00683aa12db213"
+      },
+      "update": 48,
+      "validation_answer_token_nll": 3.486120455242969,
+      "validation_pair_mean_margin": 0.02376670887072881,
+      "validation_pair_mean_margin_delta_from_update0": -0.05791952709356944,
+      "validation_pair_minimum_margin": -8.9375,
+      "validation_pair_passed_sides": 13,
+      "validation_pair_passed_unit_delta_from_update0": 1,
+      "validation_pair_passed_units": 1
+    },
+    {
+      "arm_index": 7,
+      "broad_retention_exact_accuracy": 0.125,
+      "broad_retention_exact_correct": 6,
+      "broad_retention_row_count": 48,
+      "checkpoint": "data_gemma4/checkpoints/gemma4_v32_diverse28_microstep/update_056",
+      "checks": {
+        "below_selected_v29_source_nll": true,
+        "broad_exact_accuracy_retained": true,
+        "color_retained": false,
+        "greedy_changed_units_demonstrated": false,
+        "mirror_retained": false,
+        "no_new_negative_sides": false,
+        "pair_mean_margin_strictly_improved": true,
+        "pair_minimum_margin_met": true,
+        "pair_passed_units_improved": true
+      },
+      "color_full_vocab_sides": 11,
+      "color_full_vocab_units": 5,
+      "eligible": false,
+      "fresh_bank_state_sha256": "2872d45700dde595914a1f2cd68ce02208b061e50509db425393e5f7df82e088",
+      "frozen_inherited_state_sha256": "8f3cb54e1670bb0719843e539b908e623b9ec507b8ffd838f2f234b3862b9fab",
+      "greedy_changed_row_count": 24,
+      "greedy_changed_unit_count": 12,
+      "greedy_exact_complete_units_correct": 0,
+      "greedy_exact_correct_sides": 0,
+      "greedy_prediction_changed_units": 3,
+      "mirror_full_vocab_sides": 8,
+      "mirror_full_vocab_units": 2,
+      "new_negative_sides": [
+        [
+          "scene_000004",
+          "q_000080"
+        ],
+        [
+          "scene_000007",
+          "q_000000"
+        ],
+        [
+          "scene_000007",
+          "q_000114"
+        ]
+      ],
+      "optimizer_step": 56,
+      "prefix_sha256_by_validation_scene": {
+        "scene_000019": "a8a6f07d49eef82f14f3585cb434cb100f1534c32e329bfd6b37f7bb74292070",
+        "scene_000020": "edd9fde5db4c9136c7bbec87011d99212d19643b89294378caaa15440fb02720",
+        "scene_000021": "e21c386d7e44688e85116272e033b8f61726c46d571202dd65208275ef294fb4",
+        "scene_000022": "b15679f77301120cb1f0641693f7e69099316eacfc2ce8d2354859d6aacfa2d1",
+        "scene_000023": "f1e35842615bd2c0c5eab35caff881df1d56aecb5edeff696cf34e204442a2a5",
+        "scene_000024": "3c9421ce8735599a264067f0cd2f0fc18f0450f534dfd503512f9f96adecdc89"
+      },
+      "update": 56,
+      "validation_answer_token_nll": 3.458213445627027,
+      "validation_pair_mean_margin": 0.1324559599161148,
+      "validation_pair_mean_margin_delta_from_update0": 0.05076972395181656,
+      "validation_pair_minimum_margin": -8.8125,
+      "validation_pair_passed_sides": 13,
+      "validation_pair_passed_unit_delta_from_update0": 1,
+      "validation_pair_passed_units": 1
+    },
+    {
+      "arm_index": 8,
+      "broad_retention_exact_accuracy": 0.125,
+      "broad_retention_exact_correct": 6,
+      "broad_retention_row_count": 48,
+      "checkpoint": "data_gemma4/checkpoints/gemma4_v32_diverse28_microstep/update_064",
+      "checks": {
+        "below_selected_v29_source_nll": true,
+        "broad_exact_accuracy_retained": true,
+        "color_retained": false,
+        "greedy_changed_units_demonstrated": false,
+        "mirror_retained": false,
+        "no_new_negative_sides": false,
+        "pair_mean_margin_strictly_improved": false,
+        "pair_minimum_margin_met": true,
+        "pair_passed_units_improved": true
+      },
+      "color_full_vocab_sides": 10,
+      "color_full_vocab_units": 4,
+      "eligible": false,
+      "fresh_bank_state_sha256": "a2282d51012699e70ca8999a2a2bb35aa2c7cac87cc96f931261becd5ba17c9a",
+      "frozen_inherited_state_sha256": "8f3cb54e1670bb0719843e539b908e623b9ec507b8ffd838f2f234b3862b9fab",
+      "greedy_changed_row_count": 24,
+      "greedy_changed_unit_count": 12,
+      "greedy_exact_complete_units_correct": 0,
+      "greedy_exact_correct_sides": 0,
+      "greedy_prediction_changed_units": 2,
+      "mirror_full_vocab_sides": 8,
+      "mirror_full_vocab_units": 2,
+      "new_negative_sides": [
+        [
+          "scene_000004",
+          "q_000080"
+        ],
+        [
+          "scene_000004",
+          "q_000105"
+        ],
+        [
+          "scene_000007",
+          "q_000000"
+        ],
+        [
+          "scene_000007",
+          "q_000114"
+        ]
+      ],
+      "optimizer_step": 64,
+      "prefix_sha256_by_validation_scene": {
+        "scene_000019": "994ad0c561886f15f4d982bca59ee2e7b7f804c7d04232ad79c5589238b9d834",
+        "scene_000020": "aad35ba0bec2afbf50831e3b814218c44243c83b78af5194a45dae74042c0c74",
+        "scene_000021": "321bae597873ad7aca8500f02d50bd34d82f62f30f28042ff7ff6888b33dbd31",
+        "scene_000022": "3dbab40588b46040df6491389b0605b4fc0f15dedd2effe8737537b0f40530c8",
+        "scene_000023": "327d2b30de1b04b9621012f6bb1921cbd2b3cc833e5b238c46e74e5fcbb4f34b",
+        "scene_000024": "a41cd2a2733c032a10c00ab46bfe89933b3f272c9c4312066bddf9eedfcb3c42"
+      },
+      "update": 64,
+      "validation_answer_token_nll": 3.4618067241929196,
+      "validation_pair_mean_margin": 0.006805986166000366,
+      "validation_pair_mean_margin_delta_from_update0": -0.07488024979829788,
+      "validation_pair_minimum_margin": -8.8125,
+      "validation_pair_passed_sides": 13,
+      "validation_pair_passed_unit_delta_from_update0": 1,
+      "validation_pair_passed_units": 1
+    },
+    {
+      "arm_index": 9,
+      "broad_retention_exact_accuracy": 0.125,
+      "broad_retention_exact_correct": 6,
+      "broad_retention_row_count": 48,
+      "checkpoint": "data_gemma4/checkpoints/gemma4_v32_diverse28_microstep/update_072",
+      "checks": {
+        "below_selected_v29_source_nll": true,
+        "broad_exact_accuracy_retained": true,
+        "color_retained": false,
+        "greedy_changed_units_demonstrated": false,
+        "mirror_retained": false,
+        "no_new_negative_sides": false,
+        "pair_mean_margin_strictly_improved": false,
+        "pair_minimum_margin_met": true,
+        "pair_passed_units_improved": false
+      },
+      "color_full_vocab_sides": 10,
+      "color_full_vocab_units": 4,
+      "eligible": false,
+      "fresh_bank_state_sha256": "8f7cd871cc69db1dc3d25e1ced6ea01ae3521093f9bf9011078095bc91edc614",
+      "frozen_inherited_state_sha256": "8f3cb54e1670bb0719843e539b908e623b9ec507b8ffd838f2f234b3862b9fab",
+      "greedy_changed_row_count": 24,
+      "greedy_changed_unit_count": 12,
+      "greedy_exact_complete_units_correct": 0,
+      "greedy_exact_correct_sides": 0,
+      "greedy_prediction_changed_units": 1,
+      "mirror_full_vocab_sides": 8,
+      "mirror_full_vocab_units": 2,
+      "new_negative_sides": [
+        [
+          "scene_000004",
+          "q_000080"
+        ],
+        [
+          "scene_000004",
+          "q_000105"
+        ],
+        [
+          "scene_000007",
+          "q_000000"
+        ],
+        [
+          "scene_000007",
+          "q_000114"
+        ]
+      ],
+      "optimizer_step": 72,
+      "prefix_sha256_by_validation_scene": {
+        "scene_000019": "54d3db6f66069dde76fb962909507e59704e0283f78931466ce6d35a779d86e2",
+        "scene_000020": "8b13c281212be80e10277844d3043ef8bb76c531187195156a4dd9fd1ca34c92",
+        "scene_000021": "82e8364c531b1b735abdb97ea62f01993235d182e8dfd50aa2854813e863ed5b",
+        "scene_000022": "f89c926f9049060d96dfc27d85ca5e448410af060a458e69685f76cc255db526",
+        "scene_000023": "93376d8e25da96d97292f6a64f70c4af7b99cd863f470e0b9fdc35dcee0ec280",
+        "scene_000024": "8f8bed1e6a4c0d2a6f718a02e1d62714c60d41b30640244270a3d0f69edfed02"
+      },
+      "update": 72,
+      "validation_answer_token_nll": 3.4322390499766224,
+      "validation_pair_mean_margin": 0.009124219417572021,
+      "validation_pair_mean_margin_delta_from_update0": -0.07256201654672623,
+      "validation_pair_minimum_margin": -8.8125,
+      "validation_pair_passed_sides": 12,
+      "validation_pair_passed_unit_delta_from_update0": 0,
+      "validation_pair_passed_units": 0
+    },
+    {
+      "arm_index": 10,
+      "broad_retention_exact_accuracy": 0.125,
+      "broad_retention_exact_correct": 6,
+      "broad_retention_row_count": 48,
+      "checkpoint": "data_gemma4/checkpoints/gemma4_v32_diverse28_microstep/update_080",
+      "checks": {
+        "below_selected_v29_source_nll": true,
+        "broad_exact_accuracy_retained": true,
+        "color_retained": false,
+        "greedy_changed_units_demonstrated": false,
+        "mirror_retained": false,
+        "no_new_negative_sides": false,
+        "pair_mean_margin_strictly_improved": false,
+        "pair_minimum_margin_met": true,
+        "pair_passed_units_improved": true
+      },
+      "color_full_vocab_sides": 10,
+      "color_full_vocab_units": 4,
+      "eligible": false,
+      "fresh_bank_state_sha256": "8b8fcfab7a15e130223467bdf7fe70cddee94a86c4675e75d3d49f4458cc7a32",
+      "frozen_inherited_state_sha256": "8f3cb54e1670bb0719843e539b908e623b9ec507b8ffd838f2f234b3862b9fab",
+      "greedy_changed_row_count": 24,
+      "greedy_changed_unit_count": 12,
+      "greedy_exact_complete_units_correct": 0,
+      "greedy_exact_correct_sides": 0,
+      "greedy_prediction_changed_units": 2,
+      "mirror_full_vocab_sides": 8,
+      "mirror_full_vocab_units": 2,
+      "new_negative_sides": [
+        [
+          "scene_000004",
+          "q_000080"
+        ],
+        [
+          "scene_000004",
+          "q_000105"
+        ],
+        [
+          "scene_000007",
+          "q_000000"
+        ],
+        [
+          "scene_000007",
+          "q_000114"
+        ]
+      ],
+      "optimizer_step": 80,
+      "prefix_sha256_by_validation_scene": {
+        "scene_000019": "b539677368ad761a0f8bf6aee0e3a73349d26037281fc9930774bb8526c8ba53",
+        "scene_000020": "467e4d39aea9f928dff258914e7f75de7ef9dc3fd507c1bdb4bdc9ec454e59f1",
+        "scene_000021": "4f1d0e05591140d145a9f87ac8a3247df08ff055dc86aff834eaea31dc10ef80",
+        "scene_000022": "9497f9eb5c41005b9b05f82a40b7dffd0608ce8bcbcb84eb7733e528d96d690f",
+        "scene_000023": "a37b36e162c383d702f93d6b2c349dacc6af217c865d0057cfb87fe92e703162",
+        "scene_000024": "78debf716c6461f7cbf1d88af37e0382b92bf437f41c271d437ba01df6556cb5"
+      },
+      "update": 80,
+      "validation_answer_token_nll": 3.4049320340984397,
+      "validation_pair_mean_margin": 0.041983067989349365,
+      "validation_pair_mean_margin_delta_from_update0": -0.03970316797494888,
+      "validation_pair_minimum_margin": -8.875,
+      "validation_pair_passed_sides": 13,
+      "validation_pair_passed_unit_delta_from_update0": 1,
+      "validation_pair_passed_units": 1
+    }
+  ],
+  "artifact": "v32_true_microstep_development_selection",
+  "chat_promotion": {
+    "aggregate_validation_exact_accuracy_no_regression": true,
+    "checks": {
+      "aggregate_validation_exact_accuracy_retained": false,
+      "changed_complete_pair_threshold_met": false,
+      "development_checkpoint_selected": false
+    },
+    "eligible": false,
+    "evaluated": false,
+    "label": "chat_promotion_not_merely_development_progress",
+    "selected_aggregate_validation": null,
+    "update0_aggregate_validation": null,
+    "validation_changed_complete_pairs_minimum": 6
+  },
+  "chat_promotion_eligible": false,
+  "deferred_final_scene_ids": [
+    "scene_000025",
+    "scene_000026",
+    "scene_000027",
+    "scene_000028",
+    "scene_000029",
+    "scene_000030"
+  ],
+  "development_progress_is_not_chat_promotion": true,
+  "development_selection_passed": false,
+  "development_validation_model_selection_only": true,
+  "final_test_scenes_touched": false,
+  "frozen_inherited_state_sha256": "8f3cb54e1670bb0719843e539b908e623b9ec507b8ffd838f2f234b3862b9fab",
+  "model_load_count": 1,
+  "optimizer_state_steps_verified": [
+    8,
+    16,
+    24,
+    32,
+    40,
+    48,
+    56,
+    64,
+    72,
+    80
+  ],
+  "oracle_loaded": false,
+  "passed": false,
+  "question_dependent_retrieval": false,
+  "question_dependent_scene_processing": false,
+  "question_text_serialized": false,
+  "requirements": {
+    "broad_exact_accuracy_no_regression": true,
+    "broad_retention_subset_size": 48,
+    "chat_promotion_aggregate_validation_exact_accuracy_no_regression": true,
+    "chat_promotion_changed_complete_pairs_minimum": 6,
+    "color_full_vocab_sides": 12,
+    "greedy_changed_row_count": 24,
+    "minimum_greedy_complete_units_correct": 1,
+    "minimum_mean_margin_improvement": 0.01,
+    "minimum_pair_margin": -10.0,
+    "minimum_passed_unit_improvement": 1,
+    "mirror_full_vocab_sides": 10,
+    "no_new_negative_sides": true,
+    "selected_v29_source_nll_must_improve": true,
+    "validation_pair_unit_count": 12
+  },
+  "saved_optimizer_steps": [
+    0,
+    8,
+    16,
+    24,
+    32,
+    40,
+    48,
+    56,
+    64,
+    72,
+    80
+  ],
+  "schema_version": 1,
+  "selected_checkpoint": null,
+  "selected_optimizer_step": null,
+  "selected_update": null,
+  "source_v29": {
+    "adapter_sha256": "3cedada0b685d62aea533a298428b28e46c58601ec9748f80986faf0070fbbe8",
+    "checkpoint": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/checkpoints/gemma4_v29_diverse20_post_stack_decoder_stage_b/update_004",
+    "runtime_metadata_sha256": "c5bd5fc737ad639528a03a8518a769ec08d40f8fc1c5655437f5c539655326b9",
+    "selected_update": 4,
+    "selection_report": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/gemma4/metrics/v29_diverse_stage_b_selection.json",
+    "selection_report_sha256": "d7acbd7173f079f257619510df36ad3c73f953e7cf0123b7bd383ad01ddfe91a",
+    "validation_answer_token_nll": 3.7313497670822673
+  },
+  "train_scene_ids": [
+    "scene_000011",
+    "scene_000012",
+    "scene_000013",
+    "scene_000014",
+    "scene_000015",
+    "scene_000016",
+    "scene_000017",
+    "scene_000018",
+    "scene_000031",
+    "scene_000032",
+    "scene_000033",
+    "scene_000034",
+    "scene_000035",
+    "scene_000036",
+    "scene_000037",
+    "scene_000038"
+  ],
+  "training_evaluation_only": true,
+  "update0_broad_exact_accuracy": 0.125,
+  "update0_pair_mean_margin": 0.08168623596429825,
+  "update0_pair_passed_units": 0,
+  "validation_scene_ids": [
+    "scene_000019",
+    "scene_000020",
+    "scene_000021",
+    "scene_000022",
+    "scene_000023",
+    "scene_000024"
+  ]
+}

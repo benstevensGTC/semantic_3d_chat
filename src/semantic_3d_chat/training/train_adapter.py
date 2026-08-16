@@ -60,6 +60,10 @@ from semantic_3d_chat.scene_encoder.dense_alignment import (
     dense_alignment_settings,
     validate_dense_alignment_state,
 )
+from semantic_3d_chat.scene_encoder.dense_sidecar_adapter import (
+    DenseSidecarAdapter,
+    apply_dense_sidecar_adapter,
+)
 from semantic_3d_chat.scene_encoder.global_residual import (
     ZERO_SPATIAL_MEAN_CONTENT_GATE_V1,
     GlobalSceneResidual,
@@ -1357,8 +1361,18 @@ def map_forward(
     global_scene_residual: GlobalSceneResidual | None = None,
     signed_x_scene_residual: SignedXSceneResidual | None = None,
     dense_aligner: torch.nn.Module | None = None,
+    dense_sidecar_adapter: DenseSidecarAdapter | None = None,
 ):
-    semantic = data.semantic if dense_aligner is None else dense_aligner(data.semantic)
+    aligned_sidecar = None
+    aligned_sidecar_scale = 0.0
+    if dense_aligner is None:
+        semantic = data.semantic
+    elif isinstance(dense_aligner, DenseAlignmentResidual):
+        semantic, aligned_sidecar, aligned_sidecar_scale = dense_aligner.scene_inputs(
+            data.semantic
+        )
+    else:
+        semantic = dense_aligner(data.semantic)
     if semantic.shape != data.semantic.shape:
         raise ValueError(
             "Dense aligner must preserve the complete semantic tensor shape: "
@@ -1366,7 +1380,7 @@ def map_forward(
         )
     if not torch.isfinite(semantic).all():
         raise ValueError("Dense aligner produced NaN or infinity")
-    output = model(
+    scene_arguments = (
         semantic,
         data.xyz,
         data.rgb,
@@ -1375,6 +1389,15 @@ def map_forward(
         data.observation_count,
         data.room_min,
         data.room_max,
+    )
+    output = (
+        model(*scene_arguments)
+        if aligned_sidecar is None
+        else model(
+            *scene_arguments,
+            aligned_sidecar=aligned_sidecar,
+            aligned_sidecar_scale=aligned_sidecar_scale,
+        )
     )
     centered_content = None
     if signed_x_scene_residual is not None:
@@ -1392,7 +1415,7 @@ def map_forward(
             signed_x_scene_residual,
             centered_content,
         )
-    return output
+    return apply_dense_sidecar_adapter(output, dense_sidecar_adapter)
 
 
 def training_map_forward(
@@ -1403,6 +1426,7 @@ def training_map_forward(
     global_scene_residual: GlobalSceneResidual | None = None,
     signed_x_scene_residual: SignedXSceneResidual | None = None,
     dense_aligner: torch.nn.Module | None = None,
+    dense_sidecar_adapter: DenseSidecarAdapter | None = None,
 ):
     """Encode frozen scene tokens without creating inference tensors.
 
@@ -1414,6 +1438,25 @@ def training_map_forward(
     dense_alignment_trainable = dense_aligner is not None and any(
         parameter.requires_grad for parameter in dense_aligner.parameters()
     )
+    dense_sidecar_trainable = dense_sidecar_adapter is not None and any(
+        parameter.requires_grad for parameter in dense_sidecar_adapter.parameters()
+    )
+    if dense_sidecar_adapter is not None and freeze_scene_adapter:
+        # Build the complete immutable V24 stack and calibrated all-voxel field
+        # without retaining its graph, then open gradients only through the
+        # explicitly trainable post-stack adapter.
+        with torch.no_grad():
+            frozen_output = map_forward(
+                model,
+                data,
+                global_scene_residual,
+                signed_x_scene_residual,
+                dense_aligner,
+            )
+        if dense_sidecar_trainable:
+            return apply_dense_sidecar_adapter(frozen_output, dense_sidecar_adapter)
+        with torch.no_grad():
+            return apply_dense_sidecar_adapter(frozen_output, dense_sidecar_adapter)
     if not freeze_scene_adapter or dense_alignment_trainable:
         return map_forward(
             model,
@@ -1421,6 +1464,7 @@ def training_map_forward(
             global_scene_residual,
             signed_x_scene_residual,
             dense_aligner,
+            dense_sidecar_adapter,
         )
     with torch.no_grad():
         output = map_forward(model, data, dense_aligner=dense_aligner)
@@ -3274,6 +3318,7 @@ def evaluate_pair_candidate_gate(
     first_answer_token_top1_accuracy_threshold: float | None = None,
     lora_installation: LoRABankCollection | LoRAInstallation | None = None,
     dense_aligner: torch.nn.Module | None = None,
+    dense_sidecar_adapter: DenseSidecarAdapter | None = None,
 ) -> dict[str, object]:
     """Evaluate all training pair units with the configured deterministic ranking."""
 
@@ -3286,6 +3331,7 @@ def evaluate_pair_candidate_gate(
             global_scene_residual,
             signed_x_scene_residual,
             dense_aligner,
+            dense_sidecar_adapter,
             composer,
             grounding,
         )
@@ -3319,6 +3365,7 @@ def evaluate_pair_candidate_gate(
                         global_scene_residual,
                         signed_x_scene_residual,
                         dense_aligner,
+                        dense_sidecar_adapter,
                     )
                     for scene_id in scene_ids
                 }
@@ -3420,6 +3467,7 @@ def validation_loss(
     batch_size: int,
     lora_installation: LoRABankCollection | LoRAInstallation | None = None,
     dense_aligner: torch.nn.Module | None = None,
+    dense_sidecar_adapter: DenseSidecarAdapter | None = None,
 ) -> dict[str, float] | None:
     """Evaluate held-out teacher-forced loss while loading one scene map at a time."""
 
@@ -3432,6 +3480,7 @@ def validation_loss(
             global_scene_residual,
             signed_x_scene_residual,
             dense_aligner,
+            dense_sidecar_adapter,
             composer,
             grounding,
         )
@@ -3468,6 +3517,7 @@ def validation_loss(
                     global_scene_residual,
                     signed_x_scene_residual,
                     dense_aligner,
+                    dense_sidecar_adapter,
                 )
                 records = records_by_scene[scene_id]
                 for offset in range(0, len(records), batch_size):

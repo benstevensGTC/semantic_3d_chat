@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import argparse
-import hashlib
 import importlib.util
 import json
 import math
@@ -19,6 +18,11 @@ from typing import Any
 
 import numpy as np
 
+from semantic_3d_chat.chat.promotion import validate_chat_promotion
+from semantic_3d_chat.chat.runtime_config import (
+    is_runtime_config_path,
+    load_runtime_config,
+)
 from semantic_3d_chat.config import (
     PROJECT_ROOT,
     artifact_root,
@@ -31,7 +35,6 @@ from semantic_3d_chat.config import (
 SCENE_ID = re.compile(r"scene_[0-9]{6}")
 FRAME_ID = re.compile(r"f_[0-9]{6}")
 SUPPORTED_CHECKPOINT_SCHEMAS = {1, 2, 3}
-PROMOTION_SCHEMA_VERSION = 1
 SCENE_TOKENIZER_CONTRACT_DEFAULTS: dict[str, int | float | None] = {
     "language_aligned_tail_dim": 0,
     "native_aligned_coverage_scale": 0.0,
@@ -62,6 +65,11 @@ FORBIDDEN_MANIFEST_KEY_TERMS = (
     "support",
     "visibility",
 )
+EXPERIMENT_CONFIG_ROOT = (PROJECT_ROOT / "configs" / "experiments").resolve()
+LEGACY_DEMO_CONFIGS = frozenset(
+    (PROJECT_ROOT / "configs" / name).resolve()
+    for name in ("default.yaml", "small_mac.yaml", "large_mac.yaml")
+)
 
 
 @dataclass(frozen=True)
@@ -74,6 +82,77 @@ class Check:
 def _rooted(path: str | Path) -> Path:
     candidate = Path(path).expanduser()
     return candidate.resolve() if candidate.is_absolute() else (PROJECT_ROOT / candidate).resolve()
+
+
+def _unresolved_rooted(path: str | Path) -> Path:
+    candidate = Path(path).expanduser()
+    rooted = candidate if candidate.is_absolute() else PROJECT_ROOT / candidate
+    return Path(os.path.abspath(rooted))
+
+
+def _reject_symlink_components(path: Path, purpose: str) -> None:
+    current = Path(path.anchor)
+    for component in path.parts[1:]:
+        current /= component
+        if current.is_symlink():
+            raise ValueError(f"{purpose} must not use symbolic-link path components: {current}")
+
+
+def _is_below(path: Path, root: Path) -> bool:
+    try:
+        path.relative_to(root)
+    except ValueError:
+        return False
+    return True
+
+
+def load_demo_config(path: str | Path) -> dict[str, Any]:
+    """Load only a standalone runtime config or an explicit legacy allowlist.
+
+    The classification is based on a canonical path before the first YAML read.
+    Training/experiment configs and copied path aliases are therefore refused
+    without expanding their inheritance or exposing supervision fields to a
+    production/demo process.
+    """
+
+    unresolved = _unresolved_rooted(path)
+    _reject_symlink_components(unresolved, "Demo config")
+    resolved = unresolved.resolve()
+    if _is_below(resolved, EXPERIMENT_CONFIG_ROOT):
+        raise ValueError(
+            "Demo preflight refuses training/experiment configs before opening them"
+        )
+    if is_runtime_config_path(resolved):
+        return load_runtime_config(unresolved)
+    if resolved not in LEGACY_DEMO_CONFIGS:
+        raise ValueError(
+            "Demo preflight accepts only standalone configs/runtime YAML or the "
+            "explicit legacy default/small_mac/large_mac allowlist"
+        )
+    config = load_config(unresolved)
+    if str(config.get("language", {}).get("backend", "auto")).casefold() == "gemma4":
+        raise ValueError(
+            "Gemma demo requires a standalone configs/runtime configuration"
+        )
+    return config
+
+
+def describe_demo_config(path: str | Path, scene_id: str) -> dict[str, Any]:
+    """Return the small path/backend surface needed by the shell launcher."""
+
+    if not SCENE_ID.fullmatch(scene_id):
+        raise ValueError("scene must be opaque and match scene_ followed by six digits")
+    config = load_demo_config(path)
+    return {
+        "config": str(Path(str(config["_config_path"])).resolve()),
+        "language_backend": str(config.get("language", {}).get("backend", "auto")),
+        "runtime_safe": config.get("_runtime_safe_config") is True,
+        "render_manifest": str(
+            project_path(config, "rendered", scene_id, "manifest.json").resolve()
+        ),
+        "map_path": str(project_path(config, "maps", scene_id, "voxel_map.npz").resolve()),
+        "reports_root": str(reports_root(config).resolve()),
+    }
 
 
 def _equal_number(left: Any, right: Any, tolerance: float = 1e-9) -> bool:
@@ -158,49 +237,16 @@ def _read_json_object(path: Path) -> dict[str, Any]:
     return payload
 
 
-def _sha256_file(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
-
-
 def inspect_promotion(checkpoint: Path, config: dict[str, Any]) -> dict[str, Any]:
-    """Validate an explicit behavioral-promotion record for a checkpoint/config pair."""
+    """Use the same strict promotion validator as the interactive entry points."""
 
-    promotion_path = checkpoint / "promotion.json"
-    promotion = _read_json_object(promotion_path)
-    expected = {
-        "schema_version": PROMOTION_SCHEMA_VERSION,
-        "status": "accepted",
-        "config_hash": config_hash(config),
-        "checkpoint_metadata_sha256": _sha256_file(checkpoint / "metadata.json"),
-        "checkpoint_adapter_sha256": _sha256_file(checkpoint / "adapter.safetensors"),
-    }
-    errors = [
-        f"{key}: promotion={promotion.get(key)!r}, expected={value!r}"
-        for key, value in expected.items()
-        if promotion.get(key) != value
-    ]
-    evidence = promotion.get("evidence")
-    if (
-        not isinstance(evidence, list)
-        or not evidence
-        or not all(isinstance(item, str) and item.strip() for item in evidence)
-    ):
-        errors.append("evidence must be a non-empty list of artifact paths")
-    if errors:
-        raise ValueError("invalid behavioral promotion record: " + "; ".join(errors))
-    return {
-        "path": str(promotion_path.resolve()),
-        "schema_version": PROMOTION_SCHEMA_VERSION,
-        "status": "accepted",
-        "config_hash": expected["config_hash"],
-        "checkpoint_metadata_sha256": expected["checkpoint_metadata_sha256"],
-        "checkpoint_adapter_sha256": expected["checkpoint_adapter_sha256"],
-        "evidence": evidence,
-    }
+    if config.get("_runtime_safe_config") is not True:
+        raise ValueError("Promotion validation requires a standalone runtime config")
+    config_path = config.get("_config_path")
+    if not isinstance(config_path, str):
+        raise TypeError("Promotion validation requires the standalone runtime config path")
+    promotion = validate_chat_promotion(checkpoint, config_path, config)
+    return {"path": str((checkpoint / "promotion.json").resolve()), **promotion}
 
 
 def resolve_checkpoint(config: dict[str, Any], requested: str | Path | None = None) -> Path:
@@ -431,7 +477,7 @@ def run_checks(
     if not SCENE_ID.fullmatch(scene_id):
         raise ValueError("scene must be opaque and match scene_ followed by six digits")
     resolved_config = _rooted(config_path)
-    config = load_config(resolved_config)
+    config = load_demo_config(resolved_config)
     checks: list[Check] = []
     artifacts: dict[str, Any] = {}
 
@@ -588,6 +634,11 @@ def parser() -> argparse.ArgumentParser:
         help="Print the selected compatible checkpoint path and perform no artifact checks.",
     )
     result.add_argument(
+        "--describe-config",
+        action="store_true",
+        help="Print the safely classified config/backend/artifact paths and exit.",
+    )
+    result.add_argument(
         "--require-promotion",
         action="store_true",
         help=(
@@ -607,7 +658,24 @@ def parser() -> argparse.ArgumentParser:
 
 def main(argv: list[str] | None = None) -> int:
     args = parser().parse_args(argv)
-    config = load_config(_rooted(args.config))
+    if args.describe_config:
+        try:
+            print(
+                json.dumps(
+                    describe_demo_config(args.config, args.scene),
+                    sort_keys=True,
+                    allow_nan=False,
+                )
+            )
+        except (OSError, ValueError, TypeError, json.JSONDecodeError) as exc:
+            print(str(exc), file=sys.stderr)
+            return 4
+        return 0
+    try:
+        config = load_demo_config(args.config)
+    except (OSError, ValueError, TypeError, json.JSONDecodeError) as exc:
+        print(str(exc), file=sys.stderr)
+        return 4
     if args.resolve_checkpoint:
         try:
             checkpoint = resolve_checkpoint(config, args.checkpoint)
@@ -618,12 +686,16 @@ def main(argv: list[str] | None = None) -> int:
             print(str(exc), file=sys.stderr)
             return 4
         return 0
-    report = run_checks(
-        args.config,
-        args.scene,
-        args.checkpoint,
-        require_promotion=args.require_promotion,
-    )
+    try:
+        report = run_checks(
+            args.config,
+            args.scene,
+            args.checkpoint,
+            require_promotion=args.require_promotion,
+        )
+    except (OSError, ValueError, TypeError, json.JSONDecodeError) as exc:
+        print(str(exc), file=sys.stderr)
+        return 4
     if not args.no_write:
         output = _rooted(args.output)
         report["output"] = str(output)

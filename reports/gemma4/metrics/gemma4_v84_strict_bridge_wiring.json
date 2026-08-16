@@ -1,0 +1,255 @@
+{
+  "artifact": "gemma4_v84_strict_fixed_memory_bridge_wiring_v1",
+  "candidate": {
+    "metadata_sha256": "d77bcfd5c3a3f65873366695d3387d65f364343f9f4c7c679e83d44931ea2aa5",
+    "path": "reports/gemma4/artifacts/v84_strict_bridge_wiring",
+    "runtime_promotion_authorized": false
+  },
+  "deferred_final_loaded": false,
+  "development_rows_loaded_by_training_run": 0,
+  "device": "mps",
+  "elapsed_seconds": 22.516682124929503,
+  "final_mean_correct_scene_nll": 3.1652339696884155,
+  "final_rows": [
+    {
+      "answer": "on",
+      "correct_scene": {
+        "answer_token_count": 2.0,
+        "answer_token_top1_accuracy": 0.0,
+        "mean_nll": 3.620880603790283
+      },
+      "greedy_normalized_exact": false,
+      "greedy_prediction": "under the table",
+      "paired_wrong_scene": {
+        "answer_token_count": 2.0,
+        "answer_token_top1_accuracy": 0.0,
+        "mean_nll": 3.38016414642334
+      },
+      "question_id": "q_000130",
+      "scene_id": "scene_000019",
+      "wrong_minus_correct_nll": -0.24071645736694336
+    },
+    {
+      "answer": "under",
+      "correct_scene": {
+        "answer_token_count": 2.0,
+        "answer_token_top1_accuracy": 0.5,
+        "mean_nll": 2.709587335586548
+      },
+      "greedy_normalized_exact": false,
+      "greedy_prediction": "under the table",
+      "paired_wrong_scene": {
+        "answer_token_count": 2.0,
+        "answer_token_top1_accuracy": 0.5,
+        "mean_nll": 3.409335136413574
+      },
+      "question_id": "q_000001",
+      "scene_id": "scene_000020",
+      "wrong_minus_correct_nll": 0.6997478008270264
+    }
+  ],
+  "gates": {
+    "both_rows_nll_improve": true,
+    "final_mean_nll_below_initial": true,
+    "memory_hash_invariant": true,
+    "nonzero_finite_gradient_every_update": true
+  },
+  "initial_mean_correct_scene_nll": 5.284232020378113,
+  "initial_rows": [
+    {
+      "answer": "on",
+      "correct_scene": {
+        "answer_token_count": 2.0,
+        "answer_token_top1_accuracy": 0.0,
+        "mean_nll": 6.771114349365234
+      },
+      "greedy_normalized_exact": false,
+      "greedy_prediction": "under the table",
+      "paired_wrong_scene": {
+        "answer_token_count": 2.0,
+        "answer_token_top1_accuracy": 0.0,
+        "mean_nll": 6.5604705810546875
+      },
+      "question_id": "q_000130",
+      "scene_id": "scene_000019",
+      "wrong_minus_correct_nll": -0.21064376831054688
+    },
+    {
+      "answer": "under",
+      "correct_scene": {
+        "answer_token_count": 2.0,
+        "answer_token_top1_accuracy": 0.5,
+        "mean_nll": 3.797349691390991
+      },
+      "greedy_normalized_exact": false,
+      "greedy_prediction": "under the table",
+      "paired_wrong_scene": {
+        "answer_token_count": 2.0,
+        "answer_token_top1_accuracy": 0.5,
+        "mean_nll": 4.379833698272705
+      },
+      "question_id": "q_000001",
+      "scene_id": "scene_000020",
+      "wrong_minus_correct_nll": 0.5824840068817139
+    }
+  ],
+  "layout_audits": [
+    {
+      "answer_only_supervision": true,
+      "answer_tokens": 2,
+      "control_tokens": 0,
+      "memory_supplied_directly": true,
+      "memory_tokens": 738,
+      "prepared_tokens": 802,
+      "prompt_tokens": 62,
+      "question_derived_environmental_tokens": 0
+    },
+    {
+      "answer_only_supervision": true,
+      "answer_tokens": 2,
+      "control_tokens": 0,
+      "memory_supplied_directly": true,
+      "memory_tokens": 738,
+      "prepared_tokens": 802,
+      "prompt_tokens": 62,
+      "question_derived_environmental_tokens": 0
+    }
+  ],
+  "mean_correct_scene_nll_delta": -2.1189980506896973,
+  "model_id": "google/gemma-4-E2B-it",
+  "model_revision": "3e22461f65e89153144f8adb70e3b8c2cc9845a7",
+  "official_test_loaded": false,
+  "official_validation_loaded": false,
+  "optimizer_updates": 4,
+  "oracle_loaded": false,
+  "passed": true,
+  "preflight_bindings": {
+    "config_sha256": "7ac74708f0404e6aae84cc3f90dfb82a88acf8ea15b4e6eff2c4c7cf1b07a2f0",
+    "cpu_preflight_sha256": "f12af4c68f9dd4d3cc2b015f6136ce207a0785772dbd1fd37658104e71721428",
+    "preregistration_sha256": "a0f100abc05b3bcbc5c052e005e41797425df2d48dcd71d14c4b7e4842a96faa"
+  },
+  "runtime_promotion_authorized": false,
+  "scene_memories": {
+    "compiled_before_question_tokenization": true,
+    "hash_invariant": true,
+    "hashes_after": {
+      "scene_000019": "6956932c8d1c4f9e590236089c05935e5628e7bd62ae9ae17e5e8d8a59873fc2",
+      "scene_000020": "97e0077c7d8cd00017d928c1e783f85a556474c179b2b482622ea4faae222c8c"
+    },
+    "hashes_before": {
+      "scene_000019": "6956932c8d1c4f9e590236089c05935e5628e7bd62ae9ae17e5e8d8a59873fc2",
+      "scene_000020": "97e0077c7d8cd00017d928c1e783f85a556474c179b2b482622ea4faae222c8c"
+    },
+    "question_conditioned_environmental_readout": false,
+    "question_dependent_retrieval": false,
+    "question_derived_environmental_tokens": 0,
+    "shape_each": [
+      1,
+      738,
+      1536
+    ]
+  },
+  "schema_version": 84,
+  "sealed_historical_16_loaded": false,
+  "source_lora": {
+    "adapter_sha256": "6c627f0a0d9efb7100489c24cbd4acafe10456b79280a64a85399a21cb541daf",
+    "fresh_initial_state_sha256": "1ec186d64cab68a3ea2000968a0ca643e591cc32669c6b1b7138deb365cc5cc1",
+    "frozen_bank_state_sha256": {
+      "extension_v13": "4eb90fb9b0bea579d14cfcb0f61ebd5b6d566fd600bd3d5e1bfe5177a39e1b34",
+      "extension_v23_shared_kv": "5c9233bd96b381e2f63443f8a739a868a21997b28061d90fb407a46d9de2d4cb",
+      "extension_v24_shared_query": "6db2807476506b947bbaf01837490e97c12e57b1906bab671ef7c82ed36d6399",
+      "extension_v28_stage_b_query": "ac90fc60e944b792d41fc18a21daca3ed87a7ec634a7a5c8594339371b0631e9",
+      "extension_v30_joint_pair_query": "050706c300e6fb0ac8e4cc02e26c565b54a9a89505104302d4ffcedc02124c64",
+      "inherited_v12": "dec768bed654c8c4e16da0318857543ad54d8f5f68f4d24a9a87cd19ec706594"
+    },
+    "runtime_metadata_sha256": "807515461c71b08c08dfbd08a184a653e791413748530fa69402512eca6f6fdd"
+  },
+  "status": "passed",
+  "strict_input_contract": {
+    "all_738_memory_slots_retained": true,
+    "compiled_before_question": true,
+    "control_tokens": 0,
+    "environmental_text_inputs": [],
+    "gemma_is_only_question_dependent_consumer": true,
+    "layout": [
+      "boi",
+      "96_groups_each_probe_key_plus_four_scene_values",
+      "all_256_base_latents",
+      "eoi"
+    ],
+    "memory_projector_enabled": false,
+    "question_conditioned_environmental_readout": false,
+    "question_dependent_retrieval": false,
+    "question_dependent_scene_processing": false,
+    "question_derived_environmental_tokens": 0,
+    "reused_byte_identically_across_questions": true,
+    "semantic_or_spatial_top_k_selection": false,
+    "shape_per_scene": [
+      1,
+      738,
+      1536
+    ],
+    "supplied_directly_to_native_gemma_image_prefix": true
+  },
+  "trainable_bank": {
+    "final_state_sha256": "431be8704c953e0f66c4f0e7df54cc8c70a5686fa21246eaffe2625c3cea4446",
+    "initial_state_sha256": "1ec186d64cab68a3ea2000968a0ca643e591cc32669c6b1b7138deb365cc5cc1",
+    "name": "v84_strict_fixed_memory_bridge",
+    "parameter_count": 55296,
+    "target_module": "model.language_model.layers.34.mlp.down_proj",
+    "unmerged": true
+  },
+  "training_history": [
+    {
+      "clip_return_l2": 1.1403253078460693,
+      "gradient_l2_before_clip": 1.1403253078460693,
+      "mean_nll": 5.284232020378113,
+      "row_mean_nll": [
+        6.771114349365234,
+        3.797349691390991
+      ],
+      "state_sha256": "5ce0dd6485d66b421822689424f51d98a8764260a2c199640e3e7e4a832207c1",
+      "update": 1
+    },
+    {
+      "clip_return_l2": 3.097693920135498,
+      "gradient_l2_before_clip": 3.0976939763058975,
+      "mean_nll": 5.261197209358215,
+      "row_mean_nll": [
+        6.740464210510254,
+        3.7819302082061768
+      ],
+      "state_sha256": "431060a95969aef5b7881eacbefdc8cb55d5c417295ef7c1f22e2bb3be3f0021",
+      "update": 2
+    },
+    {
+      "clip_return_l2": 7.275454521179199,
+      "gradient_l2_before_clip": 7.275454467268221,
+      "mean_nll": 4.89531683921814,
+      "row_mean_nll": [
+        6.168495178222656,
+        3.622138500213623
+      ],
+      "state_sha256": "902ec417f22562d41f0648f3c8a80c351eb2bca895f707e0a181f64a18c0a51e",
+      "update": 3
+    },
+    {
+      "clip_return_l2": 11.837092399597168,
+      "gradient_l2_before_clip": 11.837092872110821,
+      "mean_nll": 4.1800655126571655,
+      "row_mean_nll": [
+        5.10240364074707,
+        3.2577273845672607
+      ],
+      "state_sha256": "431be8704c953e0f66c4f0e7df54cc8c70a5686fa21246eaffe2625c3cea4446",
+      "update": 4
+    }
+  ],
+  "wiring_unit": {
+    "change_type": "book_support",
+    "pair_id": "pair_000009",
+    "question_key": "cfq_5611adccccae59f1",
+    "question_sha256": "6814a2d1df181bdc66709937305cd3d652b5c83fb27b0a37dad4ba12b70dc122",
+    "same_question_both_sides": true
+  }
+}

@@ -1,0 +1,501 @@
+{
+  "aggregate": {
+    "mean_correct_vs_distractor_margin": -0.0070099478157667015,
+    "mean_precision_at_k": 0.4169230769230769,
+    "mean_random_hit_at_k_probability": 0.5829034031613195,
+    "mean_random_precision_at_k": 0.08093783859664772,
+    "mean_random_top1_probability": 0.08093783859664772,
+    "mean_region_margin": -0.007784765786849535,
+    "mean_target_recall_at_k": 0.04529248066947336,
+    "positive_correct_vs_distractor_margin_rate": 0.38461538461538464,
+    "positive_region_margin_rate": 0.38461538461538464,
+    "precision_at_k_minus_random": 0.3359852383264292,
+    "scorable_queries": 13,
+    "top1_accuracy_minus_random": 0.4575236998648907,
+    "top1_localization_accuracy": 0.5384615384615384,
+    "top_k_accuracy_minus_random": 0.26325044299252665,
+    "top_k_localization_accuracy": 0.8461538461538461,
+    "unscorable_queries": 0
+  },
+  "artifacts": {
+    "heatmaps": [],
+    "view_consistency_histogram": null
+  },
+  "bbox_padding_m": 0.037500000000000006,
+  "bbox_padding_voxels": 0.75,
+  "cpu_only": true,
+  "evaluation_only": true,
+  "feature_layout": {
+    "aligned_method": "pooled_native_projector_broadcast",
+    "gemma_native_projected": [
+      1536,
+      3072
+    ],
+    "late": [
+      768,
+      1536
+    ],
+    "middle": [
+      0,
+      768
+    ],
+    "scored_slice": "gemma_native_projected",
+    "total_dim": 3072
+  },
+  "language_embedding_model": "google/gemma-4-E2B-it",
+  "language_embedding_revision": "3e22461f65e89153144f8adb70e3b8c2cc9845a7",
+  "local_files_only": true,
+  "map_content_hash": "8a1bfb34c9fab9d860227d769098ade88aa5b244b2151172af6fd36d5bea3189",
+  "map_path": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/maps/scene_000016/voxel_map.npz",
+  "phase": "gemma4_semantic_sanity",
+  "queries": [
+    {
+      "best_distractor_category": "chair",
+      "best_other_query_similarity_on_target": 0.08291502296924591,
+      "category": "book",
+      "correct_vs_distractor_margin": -0.045834098011255264,
+      "distractor_region_top_similarity": 0.08223483711481094,
+      "encoder_prompt": "book",
+      "hit_at_k": true,
+      "precision_at_k": 0.01,
+      "query_id": "query_000",
+      "random_hit_at_k_probability": 0.14869694152888657,
+      "random_precision_at_k": 0.0016075263858326854,
+      "random_top1_probability": 0.0016075263858326854,
+      "ranking_k": 100,
+      "region_margin": -0.0451539121568203,
+      "scorable": true,
+      "target_instance_count": 1,
+      "target_recall_at_k": 0.00819672131147541,
+      "target_top_similarity": 0.037080924957990646,
+      "target_voxel_count": 122,
+      "text": "book",
+      "top1_hit": false,
+      "top_voxel_similarity": 0.0912955030798912,
+      "top_voxel_xyz_m": [
+        -2.4750001430511475,
+        -2.4750001430511475,
+        1.9250000715255737
+      ]
+    },
+    {
+      "best_distractor_category": "chair",
+      "best_other_query_similarity_on_target": 0.0820150375366211,
+      "category": "bowl",
+      "correct_vs_distractor_margin": -0.03037967160344124,
+      "distractor_region_top_similarity": 0.07682333886623383,
+      "encoder_prompt": "bowl",
+      "hit_at_k": true,
+      "precision_at_k": 0.08,
+      "query_id": "query_001",
+      "random_hit_at_k_probability": 0.2530932349481849,
+      "random_precision_at_k": 0.002911994518598553,
+      "random_top1_probability": 0.002911994518598553,
+      "ranking_k": 100,
+      "region_margin": -0.02518797293305397,
+      "scorable": true,
+      "target_instance_count": 1,
+      "target_recall_at_k": 0.03619909502262444,
+      "target_top_similarity": 0.051635365933179855,
+      "target_voxel_count": 221,
+      "text": "bowl",
+      "top1_hit": true,
+      "top_voxel_similarity": 0.08855602890253067,
+      "top_voxel_xyz_m": [
+        -2.174999952316284,
+        -1.274999976158142,
+        0.02500000037252903
+      ]
+    },
+    {
+      "best_distractor_category": "floor",
+      "best_other_query_similarity_on_target": 0.11594728380441666,
+      "category": "cabinet",
+      "correct_vs_distractor_margin": -0.043544866144657135,
+      "distractor_region_top_similarity": 0.11852912604808807,
+      "encoder_prompt": "cabinet",
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "query_id": "query_002",
+      "random_hit_at_k_probability": 0.5871466345503651,
+      "random_precision_at_k": 0.008801865784723228,
+      "random_top1_probability": 0.008801865784723228,
+      "ranking_k": 100,
+      "region_margin": -0.04612670838832855,
+      "scorable": true,
+      "target_instance_count": 1,
+      "target_recall_at_k": 0.0,
+      "target_top_similarity": 0.07240241765975952,
+      "target_voxel_count": 668,
+      "text": "cabinet",
+      "top1_hit": false,
+      "top_voxel_similarity": 0.12920255959033966,
+      "top_voxel_xyz_m": [
+        -0.17499999701976776,
+        1.1750000715255737,
+        0.824999988079071
+      ]
+    },
+    {
+      "best_distractor_category": "floor",
+      "best_other_query_similarity_on_target": 0.12831450998783112,
+      "category": "ceiling",
+      "correct_vs_distractor_margin": -0.0032305121421813965,
+      "distractor_region_top_similarity": 0.11801803857088089,
+      "encoder_prompt": "ceiling",
+      "hit_at_k": true,
+      "precision_at_k": 0.73,
+      "query_id": "query_003",
+      "random_hit_at_k_probability": 0.9999999999983713,
+      "random_precision_at_k": 0.23755814106702858,
+      "random_top1_probability": 0.23755814106702858,
+      "ranking_k": 100,
+      "region_margin": 0.007065959274768829,
+      "scorable": true,
+      "target_instance_count": 1,
+      "target_recall_at_k": 0.004049032114925953,
+      "target_top_similarity": 0.12508399784564972,
+      "target_voxel_count": 18029,
+      "text": "ceiling",
+      "top1_hit": true,
+      "top_voxel_similarity": 0.13484156131744385,
+      "top_voxel_xyz_m": [
+        0.9750000238418579,
+        -2.325000047683716,
+        3.0250000953674316
+      ]
+    },
+    {
+      "best_distractor_category": "floor",
+      "best_other_query_similarity_on_target": 0.09475555270910263,
+      "category": "chair",
+      "correct_vs_distractor_margin": 0.040818773210048676,
+      "distractor_region_top_similarity": 0.14826622605323792,
+      "encoder_prompt": "chair",
+      "hit_at_k": true,
+      "precision_at_k": 0.33,
+      "query_id": "query_004",
+      "random_hit_at_k_probability": 0.5657466575808819,
+      "random_precision_at_k": 0.008301160844873704,
+      "random_top1_probability": 0.008301160844873704,
+      "ranking_k": 100,
+      "region_margin": -0.012691900134086609,
+      "scorable": true,
+      "target_instance_count": 1,
+      "target_recall_at_k": 0.05238095238095238,
+      "target_top_similarity": 0.1355743259191513,
+      "target_voxel_count": 630,
+      "text": "chair",
+      "top1_hit": false,
+      "top_voxel_similarity": 0.159086674451828,
+      "top_voxel_xyz_m": [
+        -3.0250000953674316,
+        0.2750000059604645,
+        0.17499999701976776
+      ]
+    },
+    {
+      "best_distractor_category": "floor",
+      "best_other_query_similarity_on_target": 0.07096569985151291,
+      "category": "cube",
+      "correct_vs_distractor_margin": -0.009512033313512802,
+      "distractor_region_top_similarity": 0.12718014419078827,
+      "encoder_prompt": "cube",
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "query_id": "query_005",
+      "random_hit_at_k_probability": 0.12360420871141822,
+      "random_precision_at_k": 0.0013176445785513815,
+      "random_top1_probability": 0.0013176445785513815,
+      "ranking_k": 100,
+      "region_margin": -0.06572647765278816,
+      "scorable": true,
+      "target_instance_count": 1,
+      "target_recall_at_k": 0.0,
+      "target_top_similarity": 0.06145366653800011,
+      "target_voxel_count": 100,
+      "text": "cube",
+      "top1_hit": false,
+      "top_voxel_similarity": 0.1302751749753952,
+      "top_voxel_xyz_m": [
+        -2.924999952316284,
+        2.4750001430511475,
+        2.7750000953674316
+      ]
+    },
+    {
+      "best_distractor_category": "floor",
+      "best_other_query_similarity_on_target": 0.11461565643548965,
+      "category": "door",
+      "correct_vs_distractor_margin": 0.028334714472293854,
+      "distractor_region_top_similarity": 0.11960230767726898,
+      "encoder_prompt": "door",
+      "hit_at_k": true,
+      "precision_at_k": 0.92,
+      "query_id": "query_006",
+      "random_hit_at_k_probability": 0.7161062394207334,
+      "random_precision_at_k": 0.012504447050452611,
+      "random_top1_probability": 0.012504447050452611,
+      "ranking_k": 100,
+      "region_margin": 0.023348063230514526,
+      "scorable": true,
+      "target_instance_count": 1,
+      "target_recall_at_k": 0.09694415173867228,
+      "target_top_similarity": 0.1429503709077835,
+      "target_voxel_count": 949,
+      "text": "door",
+      "top1_hit": true,
+      "top_voxel_similarity": 0.15797170996665955,
+      "top_voxel_xyz_m": [
+        -1.9250000715255737,
+        -2.4750001430511475,
+        1.024999976158142
+      ]
+    },
+    {
+      "best_distractor_category": "chair",
+      "best_other_query_similarity_on_target": 0.130451038479805,
+      "category": "floor",
+      "correct_vs_distractor_margin": 0.005012288689613342,
+      "distractor_region_top_similarity": 0.13881558179855347,
+      "encoder_prompt": "floor",
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "query_id": "query_007",
+      "random_hit_at_k_probability": 0.9999999992872636,
+      "random_precision_at_k": 0.189793525094541,
+      "random_top1_probability": 0.189793525094541,
+      "ranking_k": 100,
+      "region_margin": -0.003352254629135132,
+      "scorable": true,
+      "target_instance_count": 1,
+      "target_recall_at_k": 0.0013885031935573452,
+      "target_top_similarity": 0.13546332716941833,
+      "target_voxel_count": 14404,
+      "text": "floor",
+      "top1_hit": false,
+      "top_voxel_similarity": 0.15518172085285187,
+      "top_voxel_xyz_m": [
+        -0.17499999701976776,
+        1.1750000715255737,
+        0.824999988079071
+      ]
+    },
+    {
+      "best_distractor_category": "floor",
+      "best_other_query_similarity_on_target": 0.09935242682695389,
+      "category": "floor lamp",
+      "correct_vs_distractor_margin": 0.03140809386968613,
+      "distractor_region_top_similarity": 0.13712963461875916,
+      "encoder_prompt": "floor lamp",
+      "hit_at_k": true,
+      "precision_at_k": 0.11,
+      "query_id": "query_008",
+      "random_hit_at_k_probability": 0.6043553918211607,
+      "random_precision_at_k": 0.009223512049859672,
+      "random_top1_probability": 0.009223512049859672,
+      "ranking_k": 100,
+      "region_margin": -0.006369113922119141,
+      "scorable": true,
+      "target_instance_count": 1,
+      "target_recall_at_k": 0.015714285714285715,
+      "target_top_similarity": 0.13076052069664001,
+      "target_voxel_count": 700,
+      "text": "floor lamp",
+      "top1_hit": false,
+      "top_voxel_similarity": 0.1454858034849167,
+      "top_voxel_xyz_m": [
+        -2.9750001430511475,
+        1.774999976158142,
+        1.6750000715255737
+      ]
+    },
+    {
+      "best_distractor_category": "floor",
+      "best_other_query_similarity_on_target": 0.09804252535104752,
+      "category": "picture frame",
+      "correct_vs_distractor_margin": 0.02386542409658432,
+      "distractor_region_top_similarity": 0.0886600986123085,
+      "encoder_prompt": "picture frame",
+      "hit_at_k": true,
+      "precision_at_k": 0.94,
+      "query_id": "query_009",
+      "random_hit_at_k_probability": 0.49271932975308913,
+      "random_precision_at_k": 0.006759516687968588,
+      "random_top1_probability": 0.006759516687968588,
+      "ranking_k": 100,
+      "region_margin": 0.033247850835323334,
+      "scorable": true,
+      "target_instance_count": 1,
+      "target_recall_at_k": 0.18323586744639375,
+      "target_top_similarity": 0.12190794944763184,
+      "target_voxel_count": 513,
+      "text": "picture frame",
+      "top1_hit": true,
+      "top_voxel_similarity": 0.14409559965133667,
+      "top_voxel_xyz_m": [
+        0.7750000357627869,
+        2.424999952316284,
+        1.4250000715255737
+      ]
+    },
+    {
+      "best_distractor_category": "floor",
+      "best_other_query_similarity_on_target": 0.11371540278196335,
+      "category": "plant pot",
+      "correct_vs_distractor_margin": -0.03580261766910553,
+      "distractor_region_top_similarity": 0.08413519710302353,
+      "encoder_prompt": "plant pot",
+      "hit_at_k": true,
+      "precision_at_k": 0.39,
+      "query_id": "query_010",
+      "random_hit_at_k_probability": 0.3593847302443152,
+      "random_precision_at_k": 0.004440462229718156,
+      "random_top1_probability": 0.004440462229718156,
+      "ranking_k": 100,
+      "region_margin": -0.0062224119901657104,
+      "scorable": true,
+      "target_instance_count": 1,
+      "target_recall_at_k": 0.11572700296735905,
+      "target_top_similarity": 0.07791278511285782,
+      "target_voxel_count": 337,
+      "text": "plant pot",
+      "top1_hit": true,
+      "top_voxel_similarity": 0.10325182229280472,
+      "top_voxel_xyz_m": [
+        2.325000047683716,
+        1.5750000476837158,
+        0.5250000357627869
+      ]
+    },
+    {
+      "best_distractor_category": "floor",
+      "best_other_query_similarity_on_target": 0.1335618793964386,
+      "category": "table",
+      "correct_vs_distractor_margin": -0.03493516892194748,
+      "distractor_region_top_similarity": 0.08717237412929535,
+      "encoder_prompt": "table",
+      "hit_at_k": true,
+      "precision_at_k": 0.71,
+      "query_id": "query_011",
+      "random_hit_at_k_probability": 0.7268908732524845,
+      "random_precision_at_k": 0.01288656397823251,
+      "random_top1_probability": 0.01288656397823251,
+      "ranking_k": 100,
+      "region_margin": 0.01145433634519577,
+      "scorable": true,
+      "target_instance_count": 1,
+      "target_recall_at_k": 0.07259713701431493,
+      "target_top_similarity": 0.09862671047449112,
+      "target_voxel_count": 978,
+      "text": "table",
+      "top1_hit": true,
+      "top_voxel_similarity": 0.12997308373451233,
+      "top_voxel_xyz_m": [
+        0.22500000894069672,
+        0.5250000357627869,
+        0.7750000357627869
+      ]
+    },
+    {
+      "best_distractor_category": "chair",
+      "best_other_query_similarity_on_target": 0.14551807940006256,
+      "category": "wall",
+      "correct_vs_distractor_margin": -0.01732964813709259,
+      "distractor_region_top_similarity": 0.09367584437131882,
+      "encoder_prompt": "wall",
+      "hit_at_k": true,
+      "precision_at_k": 1.0,
+      "query_id": "query_012",
+      "random_hit_at_k_probability": 1.0,
+      "random_precision_at_k": 0.5560855414860395,
+      "random_top1_probability": 0.5560855414860395,
+      "ranking_k": 100,
+      "region_margin": 0.034512586891651154,
+      "scorable": true,
+      "target_instance_count": 4,
+      "target_recall_at_k": 0.002369499798592517,
+      "target_top_similarity": 0.12818843126296997,
+      "target_voxel_count": 42203,
+      "text": "wall",
+      "top1_hit": true,
+      "top_voxel_similarity": 0.13881370425224304,
+      "top_voxel_xyz_m": [
+        2.9750001430511475,
+        -0.375,
+        1.274999976158142
+      ]
+    }
+  ],
+  "query_count": 13,
+  "same_voxel_consistency": {
+    "available": false,
+    "reason": "disabled_by_cli"
+  },
+  "scene_id": "scene_000016",
+  "schema_version": 1,
+  "selective_model_load": {
+    "checkpoint_path": "/Users/stevens/.cache/huggingface/hub/models--google--gemma-4-E2B-it/snapshots/3e22461f65e89153144f8adb70e3b8c2cc9845a7/model.safetensors",
+    "loaded_parameter_keys": [
+      "model.language_model.embed_tokens.weight"
+    ],
+    "mean_compute_dtype": "float32",
+    "query_token_ids": {
+      "book": [
+        3070
+      ],
+      "bowl": [
+        115256
+      ],
+      "cabinet": [
+        230918
+      ],
+      "ceiling": [
+        84675
+      ],
+      "chair": [
+        24438
+      ],
+      "cube": [
+        45601
+      ],
+      "door": [
+        8310
+      ],
+      "floor": [
+        12380
+      ],
+      "floor lamp": [
+        12380,
+        15123
+      ],
+      "picture frame": [
+        12904,
+        5528
+      ],
+      "plant pot": [
+        14081,
+        2197
+      ],
+      "table": [
+        5127
+      ],
+      "wall": [
+        14193
+      ]
+    },
+    "selective_row_read": true,
+    "unique_token_rows_read": 15,
+    "weight_dtype": "bfloat16",
+    "weight_shape": [
+      262144,
+      1536
+    ]
+  },
+  "text_embedding_method": "mean_bare_category_input_token_embeddings",
+  "top_k": 100,
+  "vision_model": "google/gemma-4-E2B-it",
+  "vision_revision": "3e22461f65e89153144f8adb70e3b8c2cc9845a7",
+  "voxel_count": 75893,
+  "voxel_size_m": 0.05
+}

@@ -1,0 +1,42 @@
+{
+  "artifact": "gemma4_v54_fixed_prefix_ple_reader_v5_objective_gradient_smoke",
+  "broad_nll": 2.1328353881835938,
+  "deferred_holdout_accessed": false,
+  "elapsed_seconds": 14.329262375133112,
+  "environmental_text_inputs": [],
+  "final_scenes_accessed": false,
+  "fixed_prefix_shape": [
+    1,
+    258,
+    1536
+  ],
+  "gradient_by_module": {
+    "model.language_model.per_layer_model_projection": {
+      "lora_a": 0.0,
+      "lora_b": 0.7720083594322205,
+      "total_l2": 0.7720083594322205
+    }
+  },
+  "gradient_l2": 0.7720083594322205,
+  "inherited_v4_tail_equivalence_smoke_sha256": "4d76f2f6de14fd5d1e5130d50fded5627418cec83fb5f505d57db49f9244d345",
+  "memory": {
+    "mps_current_allocated_bytes": 254578688,
+    "mps_driver_allocated_bytes": 11498586112,
+    "peak_process_rss_bytes": 7768227840
+  },
+  "pair_margins": [
+    0.09339237213134766,
+    0.8716721534729004
+  ],
+  "pair_side_losses": [
+    1.2853026390075684,
+    0.5850341320037842
+  ],
+  "passed": true,
+  "preregistration_sha256": "7503de97af2d39282ccac3b91566f18bdebd718d81ace56f0cf065bff28db3e6",
+  "question_dependent_scene_retrieval": false,
+  "retention_self_kl": 1.7583897715667263e-06,
+  "schema_version": 1,
+  "status": "passed",
+  "trainable_parameter_count": 41984
+}

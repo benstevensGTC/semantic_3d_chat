@@ -1,0 +1,28 @@
+{
+  "artifact": "v78_historical_held_grounding_posthoc_figure_v1",
+  "figure": {
+    "caption": "V78 historical-held grounding candidate versus matched controls. The paired-wrong-scene aggregate is nearly unchanged (0.534 m mean error and 92.6% within 1 m) because many rows do not move their target; only the 10 changed-target sides show 90% correct-scene preference. Position/question shuffles and zero scene are the stronger controls. This is internal diagnostic evidence only.",
+    "path": "reports/gemma4/figures/v78_grounding_internal_held_controls.png",
+    "sha256": "f189ca4615db15e05e2238eefa3326ca23681f0f3d3994eaea989636dc0441c0"
+  },
+  "schema_version": 1,
+  "scope": {
+    "historical_internal_held_only": true,
+    "model_loaded": false,
+    "new_evaluation": false,
+    "official_validation": false,
+    "post_hoc_visualization_only": true,
+    "predictions_or_references_loaded": false,
+    "promotion_evidence": false,
+    "qa_or_oracle_loaded": false,
+    "runtime_evidence": false,
+    "runtime_promotion_authorized": false,
+    "source_file_count": 1,
+    "unopened_split_loaded": false
+  },
+  "source": {
+    "artifact": "v78_historical_training_grounding_repair_report_v1",
+    "path": "reports/gemma4/metrics/v78_grounding_sidecar_internal_held.json",
+    "sha256": "557cc497dd12bd74f45cecd3624e18649ddc548af091ed719c22c7998942b84b"
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "artifact": "gemma4_v54_fixed_prefix_attention_reader_v6_4_terminal",
+  "authenticator_source_sha256": "df1442ebf37e82c5c4c35c60ed4f6b1718965214ed09e4a476314c41832f5082",
+  "authenticator_test_sha256": "00b79cc37bea20785e11bf0389702a49a1bd482e851c80683fff2a9ab1389bf1",
+  "deferred_or_final_consumed": false,
+  "exact_attention_surface_continuation_authorized": false,
+  "internal_validation_consumed": false,
+  "oracle_consumed": false,
+  "result": {
+    "audit_clean": true,
+    "checkpoint_absent": true,
+    "failed_checks": [
+      "held_mean_margin_delta_at_least_0_002",
+      "held_mean_margin_softplus_delta_at_most_minus_0_001"
+    ],
+    "held_delta": {
+      "complete_units": 0,
+      "mean_correct_nll": 0.005481903751690886,
+      "mean_margin": -0.016738658150037125,
+      "mean_margin_softplus": 0.011246321101983425,
+      "positive_margin_sides": 1
+    },
+    "passed": true,
+    "result_sha256": "a909c71e10c2cca5757556dd462132a499b09f05576bb11119bf1b7f424f0414",
+    "status": "authenticated_negative_pair_disjoint_screen",
+    "train_delta": {
+      "complete_units": 2,
+      "mean_correct_nll": -0.011187027607645561,
+      "mean_margin": 0.015171501253332331,
+      "mean_margin_softplus": -0.00825457414612174,
+      "positive_margin_sides": 3
+    }
+  },
+  "runtime_checkpoint_exists": false,
+  "runtime_checkpoint_promotion_authorized": false,
+  "schema_version": 1,
+  "status": "failed_pair_disjoint_generalization_no_checkpoint_no_promotion"
+}

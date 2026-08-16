@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 from pathlib import Path
 from typing import Any
 
@@ -14,9 +15,16 @@ PROJECT_ROOT = Path(__file__).resolve().parents[3]
 
 def parser() -> argparse.ArgumentParser:
     result = argparse.ArgumentParser(description=__doc__)
-    result.add_argument("--config", default="configs/default.yaml")
+    result.add_argument("--config")
     result.add_argument("--scene", default="scene_000001")
     result.add_argument("--checkpoint")
+    result.add_argument(
+        "--primary-pointer",
+        help=(
+            "Resolve a promotion-bound runtime config/checkpoint pair. This cannot be "
+            "combined with --config or --checkpoint."
+        ),
+    )
     result.add_argument(
         "--question",
         action="append",
@@ -73,28 +81,35 @@ def _emit_answer(runtime: Any, question: str, chat_log: Path, *, interactive: bo
         print(json.dumps(payload, sort_keys=True, allow_nan=False), flush=True)
 
 
-def main(argv: list[str] | None = None) -> int:
+def _run(argv: list[str] | None = None) -> int:
     args = parser().parse_args(argv)
-    config_path = _rooted(args.config)
     audit_path = _rooted(args.audit_log or "reports/metrics/chat_file_access.json")
     chat_log = _rooted(args.chat_log or "reports/examples/sample_chats.jsonl")
     default_data_root = PROJECT_ROOT / "data"
-    audit = FileAccessAudit(_forbidden_roots(default_data_root))
+    audit = FileAccessAudit(
+        _forbidden_roots(default_data_root),
+        forbidden_component_names=frozenset({"oracle", "qa", "rendered", "features"}),
+        block_forbidden=True,
+    )
     completed = False
     try:
         with audit:
             # Import after activating the process-wide hook so runtime module and
             # model/config reads are represented in the access log.
+            from semantic_3d_chat.chat.launch import resolve_chat_launch
             from semantic_3d_chat.chat.runtime import StaticChatRuntime
             from semantic_3d_chat.config import (
                 artifact_root,
-                default_checkpoint_path,
-                load_config,
                 reports_root,
             )
 
-            audit.record(config_path)
-            config = load_config(config_path)
+            launch = resolve_chat_launch(
+                config_path=args.config,
+                checkpoint=args.checkpoint,
+                primary_pointer=args.primary_pointer,
+                audit=audit,
+            )
+            config = launch.config
             configured_reports = reports_root(config)
             if args.audit_log is None:
                 audit_path = configured_reports / "metrics" / "chat_file_access.json"
@@ -107,16 +122,22 @@ def main(argv: list[str] | None = None) -> int:
             for root in configured_forbidden_roots:
                 if root not in audit.forbidden_roots:
                     audit.forbidden_roots.append(root)
+            launch.verify_scene_map(args.scene, audit=audit)
             runtime = StaticChatRuntime.load(
                 config,
                 args.scene,
-                checkpoint=args.checkpoint or default_checkpoint_path(config),
+                checkpoint=launch.checkpoint_path,
                 audit=audit,
                 local_files_only=True,
             )
-            print(
-                json.dumps(runtime.startup_summary(), sort_keys=True, allow_nan=False), flush=True
+            launch.verify_scene_prefix(
+                args.scene,
+                loaded_scene_id=runtime.scene_id,
+                prefix_sha256=runtime.scene_prefix_hash,
             )
+            startup = runtime.startup_summary()
+            startup["behaviorally_promoted"] = launch.is_production_gemma
+            print(json.dumps(startup, sort_keys=True, allow_nan=False), flush=True)
             if args.question:
                 for question in args.question:
                     _emit_answer(runtime, question, chat_log, interactive=False)
@@ -152,6 +173,14 @@ def main(argv: list[str] | None = None) -> int:
             flush=True,
         )
     return 0
+
+
+def main(argv: list[str] | None = None) -> int:
+    try:
+        return _run(argv)
+    except (OSError, RuntimeError, TypeError, ValueError) as exc:
+        print(f"Chat startup refused: {exc}", file=sys.stderr)
+        return 2
 
 
 # Retain compatibility with console scripts generated before the entry point was

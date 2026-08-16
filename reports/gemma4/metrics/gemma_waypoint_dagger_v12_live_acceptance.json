@@ -1,0 +1,49 @@
+{
+  "abs_winding_area_m2": 4.225864294516746,
+  "action_receipt_alignment_passed": true,
+  "actual_gemma_causal_forward_every_step": true,
+  "cloud_model_used": false,
+  "deterministic_route_planner_used": false,
+  "elapsed_seconds": 26.98900783299905,
+  "every_decision_scene_prefix_unchanged": true,
+  "executed_decision_count": 76,
+  "fallback_used": false,
+  "final_position_xy_m": [
+    -0.5181711010147462,
+    -0.23213674415624247
+  ],
+  "gemma_runtime_binding_sha256": "800110e1545d77c1e374624ab837f6ed82cac54b269bf0359b840030db9e02cf",
+  "instruction": "Do a lap around the room.",
+  "lap_geometry_passed": true,
+  "lap_geometry_thresholds": {
+    "maximum_return_error_m": 0.35,
+    "minimum_abs_winding_area_m2": 0.5,
+    "minimum_path_length_m": 5.0
+  },
+  "local_inference": true,
+  "map_version": 0,
+  "model_action_counts": {
+    "face": 29,
+    "move_to": 46,
+    "stop": 1
+  },
+  "model_decision_count": 76,
+  "model_selected_terminal_stop": true,
+  "navigation_checkpoint_sha256": "95bbc0cd68a73f81dc0bc1d5875993cdcb7b6ccf092d4f13811f005e8ca1e9be",
+  "numeric_action_receipt_count": 63,
+  "passed": true,
+  "path_length_m": 18.65954778832802,
+  "rejected_decision_count": 0,
+  "reply": "Gemma chose and executed 76 decisions from the continuous 3D memory, including its own STOP decision.",
+  "return_error_m": 0.02548106790202575,
+  "runtime_oracle_access_count": 0,
+  "scan_count": 0,
+  "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95",
+  "scene_prefix_unchanged": true,
+  "schema": "semantic_3d_chat.gemma_waypoint_live_acceptance.v2",
+  "signed_winding_area_m2": -4.225864294516746,
+  "substitution_applied": false,
+  "synthetic_stop_applied": false,
+  "trajectory_point_count": 77,
+  "trajectory_source": "complete_model_decisions"
+}

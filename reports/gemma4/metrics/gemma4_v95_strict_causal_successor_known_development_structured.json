@@ -1,0 +1,241 @@
+{
+  "artifact": "gemma4_v95_known_development_structured_score_v1",
+  "bound_memory_inventory_sha256": "b6947d52df27212f9ab9695a646bde43427a1ba685af8c31a8451d0b6c83f2e0",
+  "candidate_fingerprint_sha256": "3c499d0f519766dea3185f4342fa6738776101cf5882cb77f4e43985586c2c1b",
+  "labels_opened_only_by_separate_scorer": true,
+  "memory_manifest_sha256": "d03bb0b0b1da545d2eef40582fc494f3aea0ec6009e41fb72a9e96e270840591",
+  "metrics": {
+    "arms": {
+      "full_interior_permutation": {
+        "accuracy": 0.5879629629629629,
+        "by_answer_type": {
+          "attribute": {
+            "accuracy": 0.1875,
+            "correct": 9,
+            "total": 48
+          },
+          "count": {
+            "accuracy": 1.0,
+            "correct": 42,
+            "total": 42
+          },
+          "metric": {
+            "accuracy": 0.0,
+            "correct": 0,
+            "total": 6
+          },
+          "orientation": {
+            "accuracy": 1.0,
+            "correct": 6,
+            "total": 6
+          },
+          "presence": {
+            "accuracy": 0.7619047619047619,
+            "correct": 32,
+            "total": 42
+          },
+          "spatial_relation": {
+            "accuracy": 0.5416666666666666,
+            "correct": 26,
+            "total": 48
+          },
+          "support": {
+            "accuracy": 0.5,
+            "correct": 12,
+            "total": 24
+          }
+        },
+        "correct": 127,
+        "total": 216
+      },
+      "paired_wrong_scene": {
+        "accuracy": 0.7592592592592593,
+        "by_answer_type": {
+          "attribute": {
+            "accuracy": 0.4583333333333333,
+            "correct": 22,
+            "total": 48
+          },
+          "count": {
+            "accuracy": 0.9523809523809523,
+            "correct": 40,
+            "total": 42
+          },
+          "metric": {
+            "accuracy": 1.0,
+            "correct": 6,
+            "total": 6
+          },
+          "orientation": {
+            "accuracy": 1.0,
+            "correct": 6,
+            "total": 6
+          },
+          "presence": {
+            "accuracy": 0.9285714285714286,
+            "correct": 39,
+            "total": 42
+          },
+          "spatial_relation": {
+            "accuracy": 0.7291666666666666,
+            "correct": 35,
+            "total": 48
+          },
+          "support": {
+            "accuracy": 0.6666666666666666,
+            "correct": 16,
+            "total": 24
+          }
+        },
+        "correct": 164,
+        "total": 216
+      },
+      "primary": {
+        "accuracy": 0.7731481481481481,
+        "by_answer_type": {
+          "attribute": {
+            "accuracy": 0.4583333333333333,
+            "correct": 22,
+            "total": 48
+          },
+          "count": {
+            "accuracy": 0.9523809523809523,
+            "correct": 40,
+            "total": 42
+          },
+          "metric": {
+            "accuracy": 1.0,
+            "correct": 6,
+            "total": 6
+          },
+          "orientation": {
+            "accuracy": 1.0,
+            "correct": 6,
+            "total": 6
+          },
+          "presence": {
+            "accuracy": 0.9285714285714286,
+            "correct": 39,
+            "total": 42
+          },
+          "spatial_relation": {
+            "accuracy": 0.7291666666666666,
+            "correct": 35,
+            "total": 48
+          },
+          "support": {
+            "accuracy": 0.7916666666666666,
+            "correct": 19,
+            "total": 24
+          }
+        },
+        "correct": 167,
+        "total": 216
+      },
+      "zero_payload": {
+        "accuracy": 0.16666666666666666,
+        "by_answer_type": {
+          "attribute": {
+            "accuracy": 0.0,
+            "correct": 0,
+            "total": 48
+          },
+          "count": {
+            "accuracy": 0.0,
+            "correct": 0,
+            "total": 42
+          },
+          "metric": {
+            "accuracy": 0.0,
+            "correct": 0,
+            "total": 6
+          },
+          "orientation": {
+            "accuracy": 0.0,
+            "correct": 0,
+            "total": 6
+          },
+          "presence": {
+            "accuracy": 0.42857142857142855,
+            "correct": 18,
+            "total": 42
+          },
+          "spatial_relation": {
+            "accuracy": 0.3125,
+            "correct": 15,
+            "total": 48
+          },
+          "support": {
+            "accuracy": 0.125,
+            "correct": 3,
+            "total": 24
+          }
+        },
+        "correct": 36,
+        "total": 216
+      }
+    },
+    "comparisons": {
+      "full_interior_permutation": {
+        "accuracy_drop_from_primary": 0.18518518518518523,
+        "prediction_change_count": 92,
+        "prediction_change_rate": 0.42592592592592593
+      },
+      "paired_wrong_scene": {
+        "accuracy_drop_from_primary": 0.01388888888888884,
+        "prediction_change_count": 24,
+        "prediction_change_rate": 0.1111111111111111
+      },
+      "zero_payload": {
+        "accuracy_drop_from_primary": 0.6064814814814815,
+        "prediction_change_count": 187,
+        "prediction_change_rate": 0.8657407407407407
+      }
+    },
+    "counterfactual": {
+      "atomic_scene_pair_count": 3,
+      "by_family": {
+        "book_support": {
+          "complete_units": 1,
+          "correct_sides": 5,
+          "prediction_changed_units": 2,
+          "unit_count": 4
+        },
+        "mirror_lr": {
+          "complete_units": 0,
+          "correct_sides": 4,
+          "prediction_changed_units": 0,
+          "unit_count": 4
+        },
+        "picture_support": {
+          "complete_units": 0,
+          "correct_sides": 4,
+          "prediction_changed_units": 0,
+          "unit_count": 4
+        }
+      },
+      "canonical_complete_units": 1,
+      "canonical_correct_sides": 13,
+      "canonical_prediction_changed_units": 2,
+      "physical_change_families_with_complete_unit": 1,
+      "physical_change_family_count": 3,
+      "side_count": 24,
+      "unit_count": 12
+    }
+  },
+  "prediction_access_sha256": "9654558c630e06117efdf202e7f1535fa275d29eafd58829ec2430d544434602",
+  "prediction_bundle_authenticated_before_labels_opened": true,
+  "prediction_completion_sha256": "9a8b8abf39df112505fc7e446d0119ab8f44f53525aca1dc4bf1e11f81a7ef28",
+  "prediction_provenance_sha256": "1ac1e0dac13059511bfae93618f2d402aba3cdc101abfded15b1bee44826fa5e",
+  "prediction_sha256": "54f0bc10d9e4bc9b4babe59db8012b827b25d89411f9e0ed9fd597971646bb1f",
+  "question_manifest_sha256": "74fcfb181bbf809dd6dc3b07800de728558298149e9d76325870c6b4d665b0a2",
+  "questions_sha256": "e468d851e46ad606c9599ac1a8016ed10fa974f9985dfc3add6250f3403f8b25",
+  "reference_sha256": "30ed9006ed442198b3e2444e0c3cdda73cb77c01e7285f31000709b94bb8acad",
+  "row_count": 216,
+  "row_level_content_serialized": false,
+  "runtime_promotion_authorized": false,
+  "scene_count": 6,
+  "schema_version": 95,
+  "scorer_loaded_model": false,
+  "status": "measured_aggregate_only_not_yet_gated"
+}

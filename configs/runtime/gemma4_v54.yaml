@@ -1,0 +1,188 @@
+runtime:
+  schema_version: 1
+  production: true
+  reference_viewpoint:
+    position_m: [0.0, 0.0, 1.4]
+    yaw_degrees: 0.0
+    pitch_degrees: 0.0
+    scan_view_count: 24
+
+paths:
+  data_root: data
+  reports_root: reports/gemma4
+  maps_root: data_gemma4/maps
+  checkpoints_root: data_gemma4/checkpoints
+
+scene:
+  room_size_m: [6.0, 5.0, 3.0]
+
+vision:
+  backend: gemma4
+  model_id: google/gemma-4-E2B-it
+  revision: 3e22461f65e89153144f8adb70e3b8c2cc9845a7
+
+scene_encoder:
+  architecture_version: signal_preserving_resampler_v3
+  input_voxel_size_m: 0.15
+  block_size_m: 0.25
+  tokens_per_block: 2
+  model_dim: 384
+  global_latents: 256
+  heads: 8
+  block_layers: 1
+  global_layers: 2
+  fourier_bands: 8
+  coverage_temperature: 0.2
+  coverage_scale: 16.0
+  query_identity_scale: 0.05
+  projection_skip_scale: 4.0
+  semantic_skip_scale: 1.0
+  geometry_skip_scale: 0.5
+  block_content_residual_scale: 1.0
+  language_aligned_tail_dim: 1536
+  native_aligned_coverage_scale: 1.0
+  learned_scene_token_scale: 0.25
+  learned_scene_token_rms_target: 0.65
+  global_scene_residual:
+    enabled: true
+    width: 128
+    fourier_bands: 4
+    initialization_seed: 18018
+    expected_initial_state_sha256: f7f6353edb6216029bd155e2baab1b5051c85f297a0e6d6b63210354fe0ff0e0
+    architecture_version: zero_spatial_mean_content_gate_v1
+    gate_temperature: 1.0
+  signed_x_scene_residual:
+    enabled: true
+    architecture_version: signed_x_local_field_v2
+    expected_initial_state_sha256: 3f249307901df75ba07a758a7dc5b02c7c6ff9bbb969987741a106b8d8977ce1
+  dense_alignment:
+    enabled: true
+    dense_dim: 1536
+    aligned_dim: 1536
+    rank: 8
+    alpha: 16.0
+    initialization_seed: 25025
+    expected_initial_state_sha256: bdff604538cfc82ba16ce5a701a573a4a64de486791c6e4ae7c4d5faba094874
+    application_mode: coverage_sidecar
+    sidecar_scale: 0.0
+  dense_sidecar_adapter:
+    enabled: true
+    width: 128
+    fourier_bands: 8
+    max_direct_scale: 0.25
+    initialization_seed: 28028
+    expected_initial_state_sha256: fd8abd78bed2d04ac2f83d70564028285c361729c62591a05e3eddcbb8794d02
+  block_cross_residual:
+    enabled: true
+    attention_dim: 256
+    heads: 4
+    spatial_temperature: 0.2
+    residual_scale: 0.25
+    uniform_floor: 0.01
+    initialization_seed: 35035
+    expected_initial_state_sha256: 72ae7f492f5953e58d809b6782d559dc64669637d5d6a79ae98f3a31296a12cd
+
+language:
+  backend: gemma4
+  model_id: google/gemma-4-E2B-it
+  revision: 3e22461f65e89153144f8adb70e3b8c2cc9845a7
+  dtype: bfloat16
+  scene_prefix_after_bos: true
+  max_question_tokens: 96
+  max_answer_tokens: 32
+  system_prompt: >-
+    You answer using only the continuous 3D scene memory supplied before this
+    conversation. Do not invent objects or relationships unsupported by the scene.
+    If there is not enough evidence, answer unknown.
+  scene_boundary_mode: gemma4_native_image
+  gemma4_native_image_contract:
+    schema_version: 1
+    model_revision: 3e22461f65e89153144f8adb70e3b8c2cc9845a7
+    bos_token_id: 2
+    pad_token_id: 0
+    boi_token_id: 255999
+    image_token_id: 258880
+    eoi_token_id: 258882
+    use_bidirectional_attention: null
+  lora_banks:
+    inherited_v12:
+      trainable: false
+      rank: 4
+      alpha: 8.0
+      dropout: 0.0
+      initialization_algorithm: checkpoint_overwrite
+      initialization_seed: null
+      expected_initial_state_sha256: dec768bed654c8c4e16da0318857543ad54d8f5f68f4d24a9a87cd19ec706594
+      target_modules:
+        - model.language_model.layers.34.self_attn.q_proj
+        - model.language_model.layers.34.self_attn.o_proj
+    extension_v13:
+      trainable: false
+      rank: 8
+      alpha: 16.0
+      dropout: 0.0
+      initialization_algorithm: checkpoint_overwrite
+      initialization_seed: null
+      expected_initial_state_sha256: 4eb90fb9b0bea579d14cfcb0f61ebd5b6d566fd600bd3d5e1bfe5177a39e1b34
+      target_modules:
+        - model.language_model.layers.30.self_attn.q_proj
+        - model.language_model.layers.30.self_attn.o_proj
+        - model.language_model.layers.31.self_attn.q_proj
+        - model.language_model.layers.31.self_attn.o_proj
+        - model.language_model.layers.32.self_attn.q_proj
+        - model.language_model.layers.32.self_attn.o_proj
+        - model.language_model.layers.33.self_attn.q_proj
+        - model.language_model.layers.33.self_attn.o_proj
+    extension_v23_shared_kv:
+      trainable: false
+      rank: 4
+      alpha: 8.0
+      dropout: 0.0
+      initialization_algorithm: checkpoint_overwrite
+      initialization_seed: null
+      expected_initial_state_sha256: 5c9233bd96b381e2f63443f8a739a868a21997b28061d90fb407a46d9de2d4cb
+      target_modules:
+        - model.language_model.layers.13.self_attn.k_proj
+        - model.language_model.layers.13.self_attn.v_proj
+        - model.language_model.layers.14.self_attn.k_proj
+        - model.language_model.layers.14.self_attn.v_proj
+    extension_v24_shared_query:
+      trainable: false
+      rank: 4
+      alpha: 8.0
+      dropout: 0.0
+      initialization_algorithm: checkpoint_overwrite
+      initialization_seed: null
+      expected_initial_state_sha256: 6db2807476506b947bbaf01837490e97c12e57b1906bab671ef7c82ed36d6399
+      target_modules:
+        - model.language_model.layers.28.self_attn.q_proj
+        - model.language_model.layers.29.self_attn.q_proj
+    extension_v28_stage_b_query:
+      trainable: false
+      rank: 4
+      alpha: 8.0
+      dropout: 0.0
+      initialization_algorithm: checkpoint_overwrite
+      initialization_seed: null
+      expected_initial_state_sha256: null
+      target_modules:
+        - model.language_model.layers.13.self_attn.q_proj
+        - model.language_model.layers.14.self_attn.q_proj
+    extension_v30_joint_pair_query:
+      trainable: false
+      rank: 8
+      alpha: 16.0
+      dropout: 0.0
+      initialization_algorithm: checkpoint_overwrite
+      initialization_seed: null
+      expected_initial_state_sha256: 050706c300e6fb0ac8e4cc02e26c565b54a9a89505104302d4ffcedc02124c64
+      target_modules:
+        - model.language_model.layers.18.self_attn.q_proj
+        - model.language_model.layers.19.self_attn.q_proj
+        - model.language_model.layers.20.self_attn.q_proj
+        - model.language_model.layers.21.self_attn.q_proj
+
+training:
+  lora_learning_rate: 0.003
+  lora_weight_decay: 0.0
+  freeze_scene_adapter: true

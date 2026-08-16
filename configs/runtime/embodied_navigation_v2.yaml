@@ -1,0 +1,8 @@
+_base_: embodied_v54.yaml
+
+# Preregistered before the navigation-policy-v2 live run. The v1 origin was
+# only 0.248792 m from the table bounding box, making its unchanged 0.25 m
+# progress requirement mathematically impossible. Moving the numeric robot
+# start back by 0.5 m makes that same criterion feasible without weakening it.
+robot:
+  initial_position_xy_m: [0.0, -0.5]

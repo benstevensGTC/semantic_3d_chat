@@ -1,0 +1,3286 @@
+{
+  "all_138_canonical_rows_evaluated_unchanged": true,
+  "all_738_memory_slots_retained": true,
+  "artifact": "gemma4_v88_scene1_augmented_cpu_preflight_v1",
+  "authenticated_sources": {
+    "configs/experiments/gemma4_v87_scene1_balanced_demo.yaml": "e96be98126b95018d980dc36ede66460555eab728a1b67d8b37d16532ed7ee4a",
+    "configs/runtime/gemma4_v85_strict_multiscene.yaml": "49d9595e6167fe352dc49f1ca363af396fe3d3be91d50cb430721bc74b130575",
+    "data/qa/train.jsonl": "ffa721d57849ade8fdd0811e3e1e62fe807200f710aec780dc4d3dcecd4fb0e0",
+    "data_gemma4/runtime/scene_memories/v81/scene_000001/memory.safetensors": "3427851432d8f2a3609b6205b18b8c0d9a0fcf68d8f3bf0c98c758ac64209ffb",
+    "data_gemma4/runtime/scene_memories/v81/scene_000001/runtime_metadata.json": "9ca43f9216106668afafe65007b1649621036735b512c07e330358bbeb0bcbcc",
+    "gemma_model_blob_sha256_identity": "2db5482b20d746879bb3ef79b5203e9075a2e2b98f54ec7c2f281c1477ddc550",
+    "reports/gemma4/artifacts/v85_strict_runtime_candidate/adapter.safetensors": "163ceb462bafe4b1d38099c07ca32bcc22944ad93917222b019e75634883fd8d",
+    "reports/gemma4/artifacts/v85_strict_runtime_candidate/runtime_metadata.json": "093d43c80722dd00cd3f7347d55451eca1cc45e416f6bda220157f18024ce0bd",
+    "reports/gemma4/artifacts/v86_scene1_demo_final/bridge.safetensors": "3e4db9a621e915da341ba2163b7c541863c067eafc5abc55e53a50f594476015",
+    "reports/gemma4/artifacts/v86_scene1_demo_final/runtime_metadata.json": "ad9534737bbe1cb443960159461f5ec9c78609cb1f2d311d05b245261f6ac54d",
+    "reports/gemma4/artifacts/v87_scene1_balanced_final/bridge.safetensors": "3dc027ec236347b09feeb1052476078e8a577f9df4b65b13a29a41d4b959578f",
+    "reports/gemma4/artifacts/v87_scene1_balanced_final/runtime_metadata.json": "f82bed9eef8f215187730de036a34a50afa6e5ed88bf65e639f5fe3d6b11c136",
+    "reports/gemma4/metrics/gemma4_v87_scene1_balanced_cpu_preflight.json": "bac616401c7b228293e3ea32c2852095f2b458feb317367e53a6e5c677113e65",
+    "reports/gemma4/metrics/gemma4_v87_scene1_balanced_evaluation.json": "05f1d026c0b7bade5a5d68ef06a10f02b5828e1699850566b827e8099f3c53a5",
+    "reports/gemma4/metrics/gemma4_v87_scene1_balanced_preregistration.json": "e436d9c64b53fe5149a2477a85e20d669fa21daab84218e06f0d043fc58d35f6",
+    "reports/gemma4/metrics/gemma4_v87_scene1_balanced_training.json": "791bc7bd8aba05ec3cd4dec571794a740494fadbc111df7092a1aa9fbd4f7703",
+    "reports/gemma4/predictions/gemma4_v87_scene1_balanced_evaluation.json": "588fd19952f8f5d4ed42e26b9b377dfb008d8e92466ccce2567282263db3ad23",
+    "src/semantic_3d_chat/evaluation/evaluate_v88_scene1_augmented.py": "7143a4bc291628ae1b1c6ef8577bf416dbf6a7acbdbdd6130e60d292f50619cd",
+    "src/semantic_3d_chat/evaluation/v88_scene1_augmented_preflight.py": "2e18557d5b921c6323a5dd15804f5ee3956abde3e1469a1da86993901585e8fb",
+    "src/semantic_3d_chat/training/train_v88_scene1_augmented.py": "854ff8abd8d041feb27fdb62acc3e1ebf47895e459530ec74fd12beacdb397f1"
+  },
+  "config_sha256": "c9812271b5834f605fc7158b0fdcf5c6eab269efbc1e8fa0b5aec62c7e9b20fb",
+  "deferred_final_loaded": false,
+  "development_known_smoke_trained": true,
+  "fixed_final_checkpoint_selection": "fixed_final_update_188",
+  "fixed_final_optimizer_updates": 188,
+  "full_gemma_model_loaded": false,
+  "held_out_smoke_claim": false,
+  "lora_preflight": {
+    "bank_name": "v88_scene1_augmented_bridge",
+    "base_projection_weight_shape": [
+      2048,
+      1536
+    ],
+    "exact_zero_output_at_initialization": true,
+    "full_gemma_model_loaded": false,
+    "initial_state_sha256": "3fc2b7aef649ec784c2f346c4d999d190cb1d676e54773b05647e675243139bc",
+    "lora_a_shape": [
+      16,
+      1536
+    ],
+    "lora_b_nonzero_count": 0,
+    "lora_b_shape": [
+      2048,
+      16
+    ],
+    "parameter_count": 57344,
+    "target_modules": [
+      "model.language_model.layers.27.self_attn.q_proj"
+    ]
+  },
+  "new_v88_behavior_scored": false,
+  "official_test_loaded": false,
+  "official_validation_loaded": false,
+  "optimizer_constructed": false,
+  "optimizer_updates": 0,
+  "oracle_loaded": false,
+  "parent_v87_evidence": {
+    "parent_v87_attribute_correct": 7,
+    "parent_v87_attribute_total": 18,
+    "parent_v87_canonical_accuracy": 0.7463768115942029,
+    "parent_v87_canonical_correct": 103,
+    "parent_v87_canonical_total": 138,
+    "parent_v87_development_known_smoke_correct": 0,
+    "parent_v87_development_known_smoke_total": 3,
+    "parent_v87_mutated": false,
+    "parent_v87_optimizer_updates": 184,
+    "parent_v87_presence_correct": 22,
+    "parent_v87_presence_total": 22,
+    "parent_v87_runtime_promoted": false,
+    "parent_v87_spatial_relation_correct": 63,
+    "parent_v87_spatial_relation_total": 86,
+    "parent_v87_state_sha256": "618c03e102d9a9eb98d405d5a040cd8285194539b5a4043d34f16356ac08769e"
+  },
+  "passed": true,
+  "preregistration_sha256": "765db3b7420d6bf8b1c4a9122ca211497ab9985ca8a85ae7bd524ca523c0657d",
+  "protocol_preflight": {
+    "answers_available_to_training_only": true,
+    "appearances_each_schedule_item": 4,
+    "augmentation_uses_training_metadata_only": true,
+    "augmented_row_inventory": [
+      {
+        "answer": "above",
+        "answer_class": "answer_88c7f08d0be5407e361c",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the floor lamp above or below the cabinet?",
+        "schedule_id": "q_000000",
+        "source_question_id": "q_000000"
+      },
+      {
+        "answer": "yes",
+        "answer_class": "answer_8a798890fe93817163b1",
+        "answer_type": "presence",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Can you find a chair?",
+        "schedule_id": "q_000001",
+        "source_question_id": "q_000001"
+      },
+      {
+        "answer": "in front",
+        "answer_class": "answer_b31420793ee136a0ece4",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the picture frame in front of or behind the floor lamp?",
+        "schedule_id": "q_000002",
+        "source_question_id": "q_000002"
+      },
+      {
+        "answer": "no",
+        "answer_class": "answer_9390298f3fb0c5b16049",
+        "answer_type": "presence",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is there a television in the room?",
+        "schedule_id": "q_000003",
+        "source_question_id": "q_000003"
+      },
+      {
+        "answer": "above",
+        "answer_class": "answer_88c7f08d0be5407e361c",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the picture frame above or below the bowl?",
+        "schedule_id": "q_000004",
+        "source_question_id": "q_000004"
+      },
+      {
+        "answer": "terracotta",
+        "answer_class": "answer_9cb4bb5e93df46436db4",
+        "answer_type": "attribute",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Tell me the plant pot's color.",
+        "schedule_id": "q_000005",
+        "source_question_id": "q_000005"
+      },
+      {
+        "answer": "right",
+        "answer_class": "answer_27042f4e6eca7d0b2a7e",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the table left or right of the picture frame?",
+        "schedule_id": "q_000006",
+        "source_question_id": "q_000006"
+      },
+      {
+        "answer": "wood",
+        "answer_class": "answer_99f7855eb789dfecf9ea",
+        "answer_type": "attribute",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "What color is the table?",
+        "schedule_id": "q_000007",
+        "source_question_id": "q_000007"
+      },
+      {
+        "answer": "in front",
+        "answer_class": "answer_b31420793ee136a0ece4",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the floor lamp in front of or behind the cube?",
+        "schedule_id": "q_000008",
+        "source_question_id": "q_000008"
+      },
+      {
+        "answer": "green",
+        "answer_class": "answer_ba4788b226aa8dc2e6dc",
+        "answer_type": "attribute",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "What color is the book?",
+        "schedule_id": "q_000009",
+        "source_question_id": "q_000009"
+      },
+      {
+        "answer": "left",
+        "answer_class": "answer_360f84035942243c6a36",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the picture frame left or right of the cabinet?",
+        "schedule_id": "q_000010",
+        "source_question_id": "q_000010"
+      },
+      {
+        "answer": "yellow",
+        "answer_class": "answer_c685a2c9bab235ccdd2a",
+        "answer_type": "attribute",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Tell me the picture frame's color.",
+        "schedule_id": "q_000011",
+        "source_question_id": "q_000011"
+      },
+      {
+        "answer": "below",
+        "answer_class": "answer_8ada24bf6bf313927389",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the table above or below the book?",
+        "schedule_id": "q_000012",
+        "source_question_id": "q_000012"
+      },
+      {
+        "answer": "left",
+        "answer_class": "answer_360f84035942243c6a36",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the table left or right of the book?",
+        "schedule_id": "q_000013",
+        "source_question_id": "q_000013"
+      },
+      {
+        "answer": "right",
+        "answer_class": "answer_27042f4e6eca7d0b2a7e",
+        "answer_type": "spatial_relation",
+        "causal_margin": true,
+        "kind": "canonical",
+        "question": "Is the chair left or right of the bowl?",
+        "schedule_id": "q_000014",
+        "source_question_id": "q_000014"
+      },
+      {
+        "answer": "no",
+        "answer_class": "answer_9390298f3fb0c5b16049",
+        "answer_type": "presence",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is there a sofa in the room?",
+        "schedule_id": "q_000015",
+        "source_question_id": "q_000015"
+      },
+      {
+        "answer": "behind",
+        "answer_class": "answer_b1b886ce5f5750a00ae3",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the table in front of or behind the floor lamp?",
+        "schedule_id": "q_000016",
+        "source_question_id": "q_000016"
+      },
+      {
+        "answer": "1",
+        "answer_class": "answer_6b86b273ff34fce19d6b",
+        "answer_type": "count",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "How many chairs are present?",
+        "schedule_id": "q_000017",
+        "source_question_id": "q_000017"
+      },
+      {
+        "answer": "left",
+        "answer_class": "answer_360f84035942243c6a36",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the floor lamp left or right of the book?",
+        "schedule_id": "q_000018",
+        "source_question_id": "q_000018"
+      },
+      {
+        "answer": "blue",
+        "answer_class": "answer_16477688c0e00699c6cf",
+        "answer_type": "attribute",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "What color is the chair?",
+        "schedule_id": "q_000019",
+        "source_question_id": "q_000019"
+      },
+      {
+        "answer": "behind",
+        "answer_class": "answer_b1b886ce5f5750a00ae3",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the cabinet in front of or behind the plant pot?",
+        "schedule_id": "q_000020",
+        "source_question_id": "q_000020"
+      },
+      {
+        "answer": "1",
+        "answer_class": "answer_6b86b273ff34fce19d6b",
+        "answer_type": "count",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "How many plant pots are present?",
+        "schedule_id": "q_000021",
+        "source_question_id": "q_000021"
+      },
+      {
+        "answer": "left",
+        "answer_class": "answer_360f84035942243c6a36",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the book left or right of the cabinet?",
+        "schedule_id": "q_000022",
+        "source_question_id": "q_000022"
+      },
+      {
+        "answer": "above",
+        "answer_class": "answer_88c7f08d0be5407e361c",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the picture frame above or below the book?",
+        "schedule_id": "q_000023",
+        "source_question_id": "q_000023"
+      },
+      {
+        "answer": "left",
+        "answer_class": "answer_360f84035942243c6a36",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the chair left or right of the book?",
+        "schedule_id": "q_000024",
+        "source_question_id": "q_000024"
+      },
+      {
+        "answer": "yes",
+        "answer_class": "answer_8a798890fe93817163b1",
+        "answer_type": "presence",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Can you find a bowl?",
+        "schedule_id": "q_000025",
+        "source_question_id": "q_000025"
+      },
+      {
+        "answer": "in front",
+        "answer_class": "answer_b31420793ee136a0ece4",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the floor lamp in front of or behind the cabinet?",
+        "schedule_id": "q_000026",
+        "source_question_id": "q_000026"
+      },
+      {
+        "answer": "cream",
+        "answer_class": "answer_f3a22c1ce8e0a5a96393",
+        "answer_type": "attribute",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Tell me the floor lamp's color.",
+        "schedule_id": "q_000027",
+        "source_question_id": "q_000027"
+      },
+      {
+        "answer": "above",
+        "answer_class": "answer_88c7f08d0be5407e361c",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the chair above or below the bowl?",
+        "schedule_id": "q_000028",
+        "source_question_id": "q_000028"
+      },
+      {
+        "answer": "right",
+        "answer_class": "answer_27042f4e6eca7d0b2a7e",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the table left or right of the floor lamp?",
+        "schedule_id": "q_000029",
+        "source_question_id": "q_000029"
+      },
+      {
+        "answer": "in front",
+        "answer_class": "answer_b31420793ee136a0ece4",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the bowl in front of or behind the cabinet?",
+        "schedule_id": "q_000030",
+        "source_question_id": "q_000030"
+      },
+      {
+        "answer": "behind",
+        "answer_class": "answer_b1b886ce5f5750a00ae3",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the table in front of or behind the picture frame?",
+        "schedule_id": "q_000031",
+        "source_question_id": "q_000031"
+      },
+      {
+        "answer": "below",
+        "answer_class": "answer_8ada24bf6bf313927389",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the table above or below the cube?",
+        "schedule_id": "q_000032",
+        "source_question_id": "q_000032"
+      },
+      {
+        "answer": "below",
+        "answer_class": "answer_8ada24bf6bf313927389",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the bowl above or below the plant pot?",
+        "schedule_id": "q_000033",
+        "source_question_id": "q_000033"
+      },
+      {
+        "answer": "behind",
+        "answer_class": "answer_b1b886ce5f5750a00ae3",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the bowl in front of or behind the plant pot?",
+        "schedule_id": "q_000034",
+        "source_question_id": "q_000034"
+      },
+      {
+        "answer": "left",
+        "answer_class": "answer_360f84035942243c6a36",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the chair left or right of the cube?",
+        "schedule_id": "q_000035",
+        "source_question_id": "q_000035"
+      },
+      {
+        "answer": "above",
+        "answer_class": "answer_88c7f08d0be5407e361c",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the picture frame above or below the plant pot?",
+        "schedule_id": "q_000036",
+        "source_question_id": "q_000036"
+      },
+      {
+        "answer": "right",
+        "answer_class": "answer_27042f4e6eca7d0b2a7e",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the chair left or right of the floor lamp?",
+        "schedule_id": "q_000037",
+        "source_question_id": "q_000037"
+      },
+      {
+        "answer": "in front",
+        "answer_class": "answer_b31420793ee136a0ece4",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the picture frame in front of or behind the bowl?",
+        "schedule_id": "q_000038",
+        "source_question_id": "q_000038"
+      },
+      {
+        "answer": "left",
+        "answer_class": "answer_360f84035942243c6a36",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the floor lamp left or right of the plant pot?",
+        "schedule_id": "q_000039",
+        "source_question_id": "q_000039"
+      },
+      {
+        "answer": "yes",
+        "answer_class": "answer_8a798890fe93817163b1",
+        "answer_type": "presence",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Can you find a plant pot?",
+        "schedule_id": "q_000040",
+        "source_question_id": "q_000040"
+      },
+      {
+        "answer": "yes",
+        "answer_class": "answer_8a798890fe93817163b1",
+        "answer_type": "presence",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Can you find a cabinet?",
+        "schedule_id": "q_000041",
+        "source_question_id": "q_000041"
+      },
+      {
+        "answer": "1",
+        "answer_class": "answer_6b86b273ff34fce19d6b",
+        "answer_type": "count",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "How many books are present?",
+        "schedule_id": "q_000042",
+        "source_question_id": "q_000042"
+      },
+      {
+        "answer": "behind",
+        "answer_class": "answer_b1b886ce5f5750a00ae3",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the chair in front of or behind the plant pot?",
+        "schedule_id": "q_000043",
+        "source_question_id": "q_000043"
+      },
+      {
+        "answer": "wood",
+        "answer_class": "answer_99f7855eb789dfecf9ea",
+        "answer_type": "attribute",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Tell me the table's color.",
+        "schedule_id": "q_000044",
+        "source_question_id": "q_000044"
+      },
+      {
+        "answer": "in front",
+        "answer_class": "answer_b31420793ee136a0ece4",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the table in front of or behind the cabinet?",
+        "schedule_id": "q_000045",
+        "source_question_id": "q_000045"
+      },
+      {
+        "answer": "behind",
+        "answer_class": "answer_b1b886ce5f5750a00ae3",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the chair in front of or behind the floor lamp?",
+        "schedule_id": "q_000046",
+        "source_question_id": "q_000046"
+      },
+      {
+        "answer": "yes",
+        "answer_class": "answer_8a798890fe93817163b1",
+        "answer_type": "presence",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Can you find a book?",
+        "schedule_id": "q_000047",
+        "source_question_id": "q_000047"
+      },
+      {
+        "answer": "left",
+        "answer_class": "answer_360f84035942243c6a36",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the book left or right of the plant pot?",
+        "schedule_id": "q_000048",
+        "source_question_id": "q_000048"
+      },
+      {
+        "answer": "left",
+        "answer_class": "answer_360f84035942243c6a36",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the floor lamp left or right of the cube?",
+        "schedule_id": "q_000049",
+        "source_question_id": "q_000049"
+      },
+      {
+        "answer": "in front",
+        "answer_class": "answer_b31420793ee136a0ece4",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the table in front of or behind the bowl?",
+        "schedule_id": "q_000050",
+        "source_question_id": "q_000050"
+      },
+      {
+        "answer": "left",
+        "answer_class": "answer_360f84035942243c6a36",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the cube left or right of the cabinet?",
+        "schedule_id": "q_000051",
+        "source_question_id": "q_000051"
+      },
+      {
+        "answer": "terracotta",
+        "answer_class": "answer_9cb4bb5e93df46436db4",
+        "answer_type": "attribute",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "What color is the plant pot?",
+        "schedule_id": "q_000052",
+        "source_question_id": "q_000052"
+      },
+      {
+        "answer": "yes",
+        "answer_class": "answer_8a798890fe93817163b1",
+        "answer_type": "presence",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is there a cube in the room?",
+        "schedule_id": "q_000053",
+        "source_question_id": "q_000053"
+      },
+      {
+        "answer": "below",
+        "answer_class": "answer_8ada24bf6bf313927389",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the chair above or below the floor lamp?",
+        "schedule_id": "q_000054",
+        "source_question_id": "q_000054"
+      },
+      {
+        "answer": "wood",
+        "answer_class": "answer_99f7855eb789dfecf9ea",
+        "answer_type": "attribute",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Tell me the cabinet's color.",
+        "schedule_id": "q_000055",
+        "source_question_id": "q_000055"
+      },
+      {
+        "answer": "behind",
+        "answer_class": "answer_b1b886ce5f5750a00ae3",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the cube in front of or behind the plant pot?",
+        "schedule_id": "q_000056",
+        "source_question_id": "q_000056"
+      },
+      {
+        "answer": "1",
+        "answer_class": "answer_6b86b273ff34fce19d6b",
+        "answer_type": "count",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "How many tables are present?",
+        "schedule_id": "q_000057",
+        "source_question_id": "q_000057"
+      },
+      {
+        "answer": "right",
+        "answer_class": "answer_27042f4e6eca7d0b2a7e",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the table left or right of the cube?",
+        "schedule_id": "q_000058",
+        "source_question_id": "q_000058"
+      },
+      {
+        "answer": "in front",
+        "answer_class": "answer_b31420793ee136a0ece4",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the chair in front of or behind the cabinet?",
+        "schedule_id": "q_000059",
+        "source_question_id": "q_000059"
+      },
+      {
+        "answer": "behind",
+        "answer_class": "answer_b1b886ce5f5750a00ae3",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the bowl in front of or behind the floor lamp?",
+        "schedule_id": "q_000060",
+        "source_question_id": "q_000060"
+      },
+      {
+        "answer": "right",
+        "answer_class": "answer_27042f4e6eca7d0b2a7e",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the bowl left or right of the floor lamp?",
+        "schedule_id": "q_000061",
+        "source_question_id": "q_000061"
+      },
+      {
+        "answer": "above",
+        "answer_class": "answer_88c7f08d0be5407e361c",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the picture frame above or below the cabinet?",
+        "schedule_id": "q_000062",
+        "source_question_id": "q_000062"
+      },
+      {
+        "answer": "below",
+        "answer_class": "answer_8ada24bf6bf313927389",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the bowl above or below the cube?",
+        "schedule_id": "q_000063",
+        "source_question_id": "q_000063"
+      },
+      {
+        "answer": "above",
+        "answer_class": "answer_88c7f08d0be5407e361c",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the floor lamp above or below the plant pot?",
+        "schedule_id": "q_000064",
+        "source_question_id": "q_000064"
+      },
+      {
+        "answer": "in front",
+        "answer_class": "answer_b31420793ee136a0ece4",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the chair in front of or behind the bowl?",
+        "schedule_id": "q_000065",
+        "source_question_id": "q_000065"
+      },
+      {
+        "answer": "below",
+        "answer_class": "answer_8ada24bf6bf313927389",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the bowl above or below the cabinet?",
+        "schedule_id": "q_000066",
+        "source_question_id": "q_000066"
+      },
+      {
+        "answer": "left",
+        "answer_class": "answer_360f84035942243c6a36",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the picture frame left or right of the book?",
+        "schedule_id": "q_000067",
+        "source_question_id": "q_000067"
+      },
+      {
+        "answer": "right",
+        "answer_class": "answer_27042f4e6eca7d0b2a7e",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the picture frame left or right of the bowl?",
+        "schedule_id": "q_000068",
+        "source_question_id": "q_000068"
+      },
+      {
+        "answer": "left",
+        "answer_class": "answer_360f84035942243c6a36",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the table left or right of the plant pot?",
+        "schedule_id": "q_000069",
+        "source_question_id": "q_000069"
+      },
+      {
+        "answer": "in front",
+        "answer_class": "answer_b31420793ee136a0ece4",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the book in front of or behind the cabinet?",
+        "schedule_id": "q_000070",
+        "source_question_id": "q_000070"
+      },
+      {
+        "answer": "bowl cabinet chair floor lamp plant pot table",
+        "answer_class": "answer_14027b70aebc53a5babc",
+        "answer_type": "support",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "What is on the floor?",
+        "schedule_id": "q_000071",
+        "source_question_id": "q_000071"
+      },
+      {
+        "answer": "in front",
+        "answer_class": "answer_b31420793ee136a0ece4",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the picture frame in front of or behind the cube?",
+        "schedule_id": "q_000072",
+        "source_question_id": "q_000072"
+      },
+      {
+        "answer": "left",
+        "answer_class": "answer_360f84035942243c6a36",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the picture frame left or right of the cube?",
+        "schedule_id": "q_000073",
+        "source_question_id": "q_000073"
+      },
+      {
+        "answer": "1",
+        "answer_class": "answer_6b86b273ff34fce19d6b",
+        "answer_type": "count",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "How many cabinets are present?",
+        "schedule_id": "q_000074",
+        "source_question_id": "q_000074"
+      },
+      {
+        "answer": "red",
+        "answer_class": "answer_b1f51a511f1da0cd348b",
+        "answer_type": "attribute",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Tell me the cube's color.",
+        "schedule_id": "q_000075",
+        "source_question_id": "q_000075"
+      },
+      {
+        "answer": "in front",
+        "answer_class": "answer_b31420793ee136a0ece4",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the floor lamp in front of or behind the book?",
+        "schedule_id": "q_000076",
+        "source_question_id": "q_000076"
+      },
+      {
+        "answer": "above",
+        "answer_class": "answer_88c7f08d0be5407e361c",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the picture frame above or below the floor lamp?",
+        "schedule_id": "q_000077",
+        "source_question_id": "q_000077"
+      },
+      {
+        "answer": "left",
+        "answer_class": "answer_360f84035942243c6a36",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the picture frame left or right of the plant pot?",
+        "schedule_id": "q_000078",
+        "source_question_id": "q_000078"
+      },
+      {
+        "answer": "left",
+        "answer_class": "answer_360f84035942243c6a36",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the floor lamp left or right of the cabinet?",
+        "schedule_id": "q_000079",
+        "source_question_id": "q_000079"
+      },
+      {
+        "answer": "yes",
+        "answer_class": "answer_8a798890fe93817163b1",
+        "answer_type": "presence",
+        "causal_margin": true,
+        "kind": "canonical",
+        "question": "Is there a chair in the room?",
+        "schedule_id": "q_000080",
+        "source_question_id": "q_000080"
+      },
+      {
+        "answer": "1",
+        "answer_class": "answer_6b86b273ff34fce19d6b",
+        "answer_type": "count",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "How many picture frames are present?",
+        "schedule_id": "q_000081",
+        "source_question_id": "q_000081"
+      },
+      {
+        "answer": "left",
+        "answer_class": "answer_360f84035942243c6a36",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the chair left or right of the plant pot?",
+        "schedule_id": "q_000082",
+        "source_question_id": "q_000082"
+      },
+      {
+        "answer": "below",
+        "answer_class": "answer_8ada24bf6bf313927389",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the chair above or below the picture frame?",
+        "schedule_id": "q_000083",
+        "source_question_id": "q_000083"
+      },
+      {
+        "answer": "below",
+        "answer_class": "answer_8ada24bf6bf313927389",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the bowl above or below the book?",
+        "schedule_id": "q_000084",
+        "source_question_id": "q_000084"
+      },
+      {
+        "answer": "yes",
+        "answer_class": "answer_8a798890fe93817163b1",
+        "answer_type": "presence",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Can you find a cube?",
+        "schedule_id": "q_000085",
+        "source_question_id": "q_000085"
+      },
+      {
+        "answer": "cube",
+        "answer_class": "answer_4f3c4172a4fe308cebc8",
+        "answer_type": "metric",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Which object is closest to the camera?",
+        "schedule_id": "q_000086",
+        "source_question_id": "q_000086"
+      },
+      {
+        "answer": "in front",
+        "answer_class": "answer_b31420793ee136a0ece4",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the picture frame in front of or behind the cabinet?",
+        "schedule_id": "q_000087",
+        "source_question_id": "q_000087"
+      },
+      {
+        "answer": "below",
+        "answer_class": "answer_8ada24bf6bf313927389",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the table above or below the floor lamp?",
+        "schedule_id": "q_000088",
+        "source_question_id": "q_000088"
+      },
+      {
+        "answer": "left",
+        "answer_class": "answer_360f84035942243c6a36",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the bowl left or right of the cabinet?",
+        "schedule_id": "q_000089",
+        "source_question_id": "q_000089"
+      },
+      {
+        "answer": "cream",
+        "answer_class": "answer_f3a22c1ce8e0a5a96393",
+        "answer_type": "attribute",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "What color is the floor lamp?",
+        "schedule_id": "q_000090",
+        "source_question_id": "q_000090"
+      },
+      {
+        "answer": "yes",
+        "answer_class": "answer_8a798890fe93817163b1",
+        "answer_type": "presence",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is there a book in the room?",
+        "schedule_id": "q_000091",
+        "source_question_id": "q_000091"
+      },
+      {
+        "answer": "yes",
+        "answer_class": "answer_8a798890fe93817163b1",
+        "answer_type": "presence",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is there a cabinet in the room?",
+        "schedule_id": "q_000092",
+        "source_question_id": "q_000092"
+      },
+      {
+        "answer": "green",
+        "answer_class": "answer_ba4788b226aa8dc2e6dc",
+        "answer_type": "attribute",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Tell me the book's color.",
+        "schedule_id": "q_000093",
+        "source_question_id": "q_000093"
+      },
+      {
+        "answer": "right",
+        "answer_class": "answer_27042f4e6eca7d0b2a7e",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the picture frame left or right of the floor lamp?",
+        "schedule_id": "q_000094",
+        "source_question_id": "q_000094"
+      },
+      {
+        "answer": "red",
+        "answer_class": "answer_b1f51a511f1da0cd348b",
+        "answer_type": "attribute",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Tell me the bowl's color.",
+        "schedule_id": "q_000095",
+        "source_question_id": "q_000095"
+      },
+      {
+        "answer": "left",
+        "answer_class": "answer_360f84035942243c6a36",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the bowl left or right of the book?",
+        "schedule_id": "q_000096",
+        "source_question_id": "q_000096"
+      },
+      {
+        "answer": "below",
+        "answer_class": "answer_8ada24bf6bf313927389",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the bowl above or below the floor lamp?",
+        "schedule_id": "q_000097",
+        "source_question_id": "q_000097"
+      },
+      {
+        "answer": "above",
+        "answer_class": "answer_88c7f08d0be5407e361c",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the book above or below the cabinet?",
+        "schedule_id": "q_000098",
+        "source_question_id": "q_000098"
+      },
+      {
+        "answer": "no",
+        "answer_class": "answer_9390298f3fb0c5b16049",
+        "answer_type": "presence",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is there a sink in the room?",
+        "schedule_id": "q_000099",
+        "source_question_id": "q_000099"
+      },
+      {
+        "answer": "left",
+        "answer_class": "answer_360f84035942243c6a36",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the cube left or right of the book?",
+        "schedule_id": "q_000100",
+        "source_question_id": "q_000100"
+      },
+      {
+        "answer": "behind",
+        "answer_class": "answer_b1b886ce5f5750a00ae3",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the chair in front of or behind the picture frame?",
+        "schedule_id": "q_000101",
+        "source_question_id": "q_000101"
+      },
+      {
+        "answer": "left",
+        "answer_class": "answer_360f84035942243c6a36",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the table left or right of the cabinet?",
+        "schedule_id": "q_000102",
+        "source_question_id": "q_000102"
+      },
+      {
+        "answer": "yes",
+        "answer_class": "answer_8a798890fe93817163b1",
+        "answer_type": "presence",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Can you find a picture frame?",
+        "schedule_id": "q_000103",
+        "source_question_id": "q_000103"
+      },
+      {
+        "answer": "yes",
+        "answer_class": "answer_8a798890fe93817163b1",
+        "answer_type": "presence",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Can you find a table?",
+        "schedule_id": "q_000104",
+        "source_question_id": "q_000104"
+      },
+      {
+        "answer": "behind",
+        "answer_class": "answer_b1b886ce5f5750a00ae3",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the bowl in front of or behind the book?",
+        "schedule_id": "q_000105",
+        "source_question_id": "q_000105"
+      },
+      {
+        "answer": "1",
+        "answer_class": "answer_6b86b273ff34fce19d6b",
+        "answer_type": "count",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "How many floor lamps are present?",
+        "schedule_id": "q_000106",
+        "source_question_id": "q_000106"
+      },
+      {
+        "answer": "behind",
+        "answer_class": "answer_b1b886ce5f5750a00ae3",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the bowl in front of or behind the cube?",
+        "schedule_id": "q_000107",
+        "source_question_id": "q_000107"
+      },
+      {
+        "answer": "red",
+        "answer_class": "answer_b1f51a511f1da0cd348b",
+        "answer_type": "attribute",
+        "causal_margin": true,
+        "kind": "canonical",
+        "question": "What color is the bowl?",
+        "schedule_id": "q_000108",
+        "source_question_id": "q_000108"
+      },
+      {
+        "answer": "left",
+        "answer_class": "answer_360f84035942243c6a36",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the chair left or right of the cabinet?",
+        "schedule_id": "q_000109",
+        "source_question_id": "q_000109"
+      },
+      {
+        "answer": "yes",
+        "answer_class": "answer_8a798890fe93817163b1",
+        "answer_type": "presence",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Can you find a floor lamp?",
+        "schedule_id": "q_000110",
+        "source_question_id": "q_000110"
+      },
+      {
+        "answer": "right",
+        "answer_class": "answer_27042f4e6eca7d0b2a7e",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the table left or right of the bowl?",
+        "schedule_id": "q_000111",
+        "source_question_id": "q_000111"
+      },
+      {
+        "answer": "yellow",
+        "answer_class": "answer_c685a2c9bab235ccdd2a",
+        "answer_type": "attribute",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "What color is the picture frame?",
+        "schedule_id": "q_000112",
+        "source_question_id": "q_000112"
+      },
+      {
+        "answer": "yes",
+        "answer_class": "answer_8a798890fe93817163b1",
+        "answer_type": "presence",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is there a plant pot in the room?",
+        "schedule_id": "q_000113",
+        "source_question_id": "q_000113"
+      },
+      {
+        "answer": "left",
+        "answer_class": "answer_360f84035942243c6a36",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the bowl left or right of the plant pot?",
+        "schedule_id": "q_000114",
+        "source_question_id": "q_000114"
+      },
+      {
+        "answer": "behind",
+        "answer_class": "answer_b1b886ce5f5750a00ae3",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the table in front of or behind the plant pot?",
+        "schedule_id": "q_000115",
+        "source_question_id": "q_000115"
+      },
+      {
+        "answer": "1",
+        "answer_class": "answer_6b86b273ff34fce19d6b",
+        "answer_type": "count",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "How many cubes are present?",
+        "schedule_id": "q_000116",
+        "source_question_id": "q_000116"
+      },
+      {
+        "answer": "yes",
+        "answer_class": "answer_8a798890fe93817163b1",
+        "answer_type": "presence",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is there a bowl in the room?",
+        "schedule_id": "q_000117",
+        "source_question_id": "q_000117"
+      },
+      {
+        "answer": "left",
+        "answer_class": "answer_360f84035942243c6a36",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the bowl left or right of the cube?",
+        "schedule_id": "q_000118",
+        "source_question_id": "q_000118"
+      },
+      {
+        "answer": "left",
+        "answer_class": "answer_360f84035942243c6a36",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the chair left or right of the picture frame?",
+        "schedule_id": "q_000119",
+        "source_question_id": "q_000119"
+      },
+      {
+        "answer": "yes",
+        "answer_class": "answer_8a798890fe93817163b1",
+        "answer_type": "presence",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is there a table in the room?",
+        "schedule_id": "q_000120",
+        "source_question_id": "q_000120"
+      },
+      {
+        "answer": "blue",
+        "answer_class": "answer_16477688c0e00699c6cf",
+        "answer_type": "attribute",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Tell me the chair's color.",
+        "schedule_id": "q_000121",
+        "source_question_id": "q_000121"
+      },
+      {
+        "answer": "in front",
+        "answer_class": "answer_b31420793ee136a0ece4",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the cube in front of or behind the cabinet?",
+        "schedule_id": "q_000122",
+        "source_question_id": "q_000122"
+      },
+      {
+        "answer": "no",
+        "answer_class": "answer_9390298f3fb0c5b16049",
+        "answer_type": "presence",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is there a bed in the room?",
+        "schedule_id": "q_000123",
+        "source_question_id": "q_000123"
+      },
+      {
+        "answer": "wood",
+        "answer_class": "answer_99f7855eb789dfecf9ea",
+        "answer_type": "attribute",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "What color is the cabinet?",
+        "schedule_id": "q_000124",
+        "source_question_id": "q_000124"
+      },
+      {
+        "answer": "book cube",
+        "answer_class": "answer_d8b4e5e8ec6414d18910",
+        "answer_type": "support",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "What is on the table?",
+        "schedule_id": "q_000125",
+        "source_question_id": "q_000125"
+      },
+      {
+        "answer": "left",
+        "answer_class": "answer_360f84035942243c6a36",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the cube left or right of the plant pot?",
+        "schedule_id": "q_000126",
+        "source_question_id": "q_000126"
+      },
+      {
+        "answer": "right",
+        "answer_class": "answer_27042f4e6eca7d0b2a7e",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the table left or right of the chair?",
+        "schedule_id": "q_000127",
+        "source_question_id": "q_000127"
+      },
+      {
+        "answer": "in front",
+        "answer_class": "answer_b31420793ee136a0ece4",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the picture frame in front of or behind the book?",
+        "schedule_id": "q_000128",
+        "source_question_id": "q_000128"
+      },
+      {
+        "answer": "above",
+        "answer_class": "answer_88c7f08d0be5407e361c",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the picture frame above or below the cube?",
+        "schedule_id": "q_000129",
+        "source_question_id": "q_000129"
+      },
+      {
+        "answer": "below",
+        "answer_class": "answer_8ada24bf6bf313927389",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the table above or below the picture frame?",
+        "schedule_id": "q_000130",
+        "source_question_id": "q_000130"
+      },
+      {
+        "answer": "yes",
+        "answer_class": "answer_8a798890fe93817163b1",
+        "answer_type": "presence",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is there a picture frame in the room?",
+        "schedule_id": "q_000131",
+        "source_question_id": "q_000131"
+      },
+      {
+        "answer": "behind",
+        "answer_class": "answer_b1b886ce5f5750a00ae3",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the book in front of or behind the plant pot?",
+        "schedule_id": "q_000132",
+        "source_question_id": "q_000132"
+      },
+      {
+        "answer": "above",
+        "answer_class": "answer_88c7f08d0be5407e361c",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the cube above or below the cabinet?",
+        "schedule_id": "q_000133",
+        "source_question_id": "q_000133"
+      },
+      {
+        "answer": "yes",
+        "answer_class": "answer_8a798890fe93817163b1",
+        "answer_type": "presence",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is there a floor lamp in the room?",
+        "schedule_id": "q_000134",
+        "source_question_id": "q_000134"
+      },
+      {
+        "answer": "1",
+        "answer_class": "answer_6b86b273ff34fce19d6b",
+        "answer_type": "count",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "How many bowls are present?",
+        "schedule_id": "q_000135",
+        "source_question_id": "q_000135"
+      },
+      {
+        "answer": "in front",
+        "answer_class": "answer_b31420793ee136a0ece4",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "Is the picture frame in front of or behind the plant pot?",
+        "schedule_id": "q_000136",
+        "source_question_id": "q_000136"
+      },
+      {
+        "answer": "red",
+        "answer_class": "answer_b1f51a511f1da0cd348b",
+        "answer_type": "attribute",
+        "causal_margin": false,
+        "kind": "canonical",
+        "question": "What color is the cube?",
+        "schedule_id": "q_000137",
+        "source_question_id": "q_000137"
+      },
+      {
+        "answer": "in front",
+        "answer_class": "answer_b31420793ee136a0ece4",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "hard_error_replay",
+        "question": "Is the picture frame in front of or behind the floor lamp?",
+        "schedule_id": "v88_hard_q_000002",
+        "source_question_id": "q_000002"
+      },
+      {
+        "answer": "terracotta",
+        "answer_class": "answer_9cb4bb5e93df46436db4",
+        "answer_type": "attribute",
+        "causal_margin": false,
+        "kind": "hard_error_replay",
+        "question": "Tell me the plant pot's color.",
+        "schedule_id": "v88_hard_q_000005",
+        "source_question_id": "q_000005"
+      },
+      {
+        "answer": "in front",
+        "answer_class": "answer_b31420793ee136a0ece4",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "hard_error_replay",
+        "question": "Is the floor lamp in front of or behind the cube?",
+        "schedule_id": "v88_hard_q_000008",
+        "source_question_id": "q_000008"
+      },
+      {
+        "answer": "green",
+        "answer_class": "answer_ba4788b226aa8dc2e6dc",
+        "answer_type": "attribute",
+        "causal_margin": false,
+        "kind": "hard_error_replay",
+        "question": "What color is the book?",
+        "schedule_id": "v88_hard_q_000009",
+        "source_question_id": "q_000009"
+      },
+      {
+        "answer": "left",
+        "answer_class": "answer_360f84035942243c6a36",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "hard_error_replay",
+        "question": "Is the picture frame left or right of the cabinet?",
+        "schedule_id": "v88_hard_q_000010",
+        "source_question_id": "q_000010"
+      },
+      {
+        "answer": "yellow",
+        "answer_class": "answer_c685a2c9bab235ccdd2a",
+        "answer_type": "attribute",
+        "causal_margin": false,
+        "kind": "hard_error_replay",
+        "question": "Tell me the picture frame's color.",
+        "schedule_id": "v88_hard_q_000011",
+        "source_question_id": "q_000011"
+      },
+      {
+        "answer": "below",
+        "answer_class": "answer_8ada24bf6bf313927389",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "hard_error_replay",
+        "question": "Is the table above or below the book?",
+        "schedule_id": "v88_hard_q_000012",
+        "source_question_id": "q_000012"
+      },
+      {
+        "answer": "right",
+        "answer_class": "answer_27042f4e6eca7d0b2a7e",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "hard_error_replay",
+        "question": "Is the chair left or right of the bowl?",
+        "schedule_id": "v88_hard_q_000014",
+        "source_question_id": "q_000014"
+      },
+      {
+        "answer": "blue",
+        "answer_class": "answer_16477688c0e00699c6cf",
+        "answer_type": "attribute",
+        "causal_margin": false,
+        "kind": "hard_error_replay",
+        "question": "What color is the chair?",
+        "schedule_id": "v88_hard_q_000019",
+        "source_question_id": "q_000019"
+      },
+      {
+        "answer": "cream",
+        "answer_class": "answer_f3a22c1ce8e0a5a96393",
+        "answer_type": "attribute",
+        "causal_margin": false,
+        "kind": "hard_error_replay",
+        "question": "Tell me the floor lamp's color.",
+        "schedule_id": "v88_hard_q_000027",
+        "source_question_id": "q_000027"
+      },
+      {
+        "answer": "left",
+        "answer_class": "answer_360f84035942243c6a36",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "hard_error_replay",
+        "question": "Is the book left or right of the plant pot?",
+        "schedule_id": "v88_hard_q_000048",
+        "source_question_id": "q_000048"
+      },
+      {
+        "answer": "left",
+        "answer_class": "answer_360f84035942243c6a36",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "hard_error_replay",
+        "question": "Is the floor lamp left or right of the cube?",
+        "schedule_id": "v88_hard_q_000049",
+        "source_question_id": "q_000049"
+      },
+      {
+        "answer": "in front",
+        "answer_class": "answer_b31420793ee136a0ece4",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "hard_error_replay",
+        "question": "Is the table in front of or behind the bowl?",
+        "schedule_id": "v88_hard_q_000050",
+        "source_question_id": "q_000050"
+      },
+      {
+        "answer": "terracotta",
+        "answer_class": "answer_9cb4bb5e93df46436db4",
+        "answer_type": "attribute",
+        "causal_margin": false,
+        "kind": "hard_error_replay",
+        "question": "What color is the plant pot?",
+        "schedule_id": "v88_hard_q_000052",
+        "source_question_id": "q_000052"
+      },
+      {
+        "answer": "in front",
+        "answer_class": "answer_b31420793ee136a0ece4",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "hard_error_replay",
+        "question": "Is the chair in front of or behind the bowl?",
+        "schedule_id": "v88_hard_q_000065",
+        "source_question_id": "q_000065"
+      },
+      {
+        "answer": "left",
+        "answer_class": "answer_360f84035942243c6a36",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "hard_error_replay",
+        "question": "Is the picture frame left or right of the book?",
+        "schedule_id": "v88_hard_q_000067",
+        "source_question_id": "q_000067"
+      },
+      {
+        "answer": "left",
+        "answer_class": "answer_360f84035942243c6a36",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "hard_error_replay",
+        "question": "Is the table left or right of the plant pot?",
+        "schedule_id": "v88_hard_q_000069",
+        "source_question_id": "q_000069"
+      },
+      {
+        "answer": "bowl cabinet chair floor lamp plant pot table",
+        "answer_class": "answer_14027b70aebc53a5babc",
+        "answer_type": "support",
+        "causal_margin": false,
+        "kind": "hard_error_replay",
+        "question": "What is on the floor?",
+        "schedule_id": "v88_hard_q_000071",
+        "source_question_id": "q_000071"
+      },
+      {
+        "answer": "left",
+        "answer_class": "answer_360f84035942243c6a36",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "hard_error_replay",
+        "question": "Is the picture frame left or right of the cube?",
+        "schedule_id": "v88_hard_q_000073",
+        "source_question_id": "q_000073"
+      },
+      {
+        "answer": "above",
+        "answer_class": "answer_88c7f08d0be5407e361c",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "hard_error_replay",
+        "question": "Is the picture frame above or below the floor lamp?",
+        "schedule_id": "v88_hard_q_000077",
+        "source_question_id": "q_000077"
+      },
+      {
+        "answer": "left",
+        "answer_class": "answer_360f84035942243c6a36",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "hard_error_replay",
+        "question": "Is the picture frame left or right of the plant pot?",
+        "schedule_id": "v88_hard_q_000078",
+        "source_question_id": "q_000078"
+      },
+      {
+        "answer": "below",
+        "answer_class": "answer_8ada24bf6bf313927389",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "hard_error_replay",
+        "question": "Is the chair above or below the picture frame?",
+        "schedule_id": "v88_hard_q_000083",
+        "source_question_id": "q_000083"
+      },
+      {
+        "answer": "left",
+        "answer_class": "answer_360f84035942243c6a36",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "hard_error_replay",
+        "question": "Is the bowl left or right of the cabinet?",
+        "schedule_id": "v88_hard_q_000089",
+        "source_question_id": "q_000089"
+      },
+      {
+        "answer": "cream",
+        "answer_class": "answer_f3a22c1ce8e0a5a96393",
+        "answer_type": "attribute",
+        "causal_margin": false,
+        "kind": "hard_error_replay",
+        "question": "What color is the floor lamp?",
+        "schedule_id": "v88_hard_q_000090",
+        "source_question_id": "q_000090"
+      },
+      {
+        "answer": "red",
+        "answer_class": "answer_b1f51a511f1da0cd348b",
+        "answer_type": "attribute",
+        "causal_margin": false,
+        "kind": "hard_error_replay",
+        "question": "Tell me the bowl's color.",
+        "schedule_id": "v88_hard_q_000095",
+        "source_question_id": "q_000095"
+      },
+      {
+        "answer": "left",
+        "answer_class": "answer_360f84035942243c6a36",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "hard_error_replay",
+        "question": "Is the cube left or right of the book?",
+        "schedule_id": "v88_hard_q_000100",
+        "source_question_id": "q_000100"
+      },
+      {
+        "answer": "left",
+        "answer_class": "answer_360f84035942243c6a36",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "hard_error_replay",
+        "question": "Is the table left or right of the cabinet?",
+        "schedule_id": "v88_hard_q_000102",
+        "source_question_id": "q_000102"
+      },
+      {
+        "answer": "behind",
+        "answer_class": "answer_b1b886ce5f5750a00ae3",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "hard_error_replay",
+        "question": "Is the bowl in front of or behind the book?",
+        "schedule_id": "v88_hard_q_000105",
+        "source_question_id": "q_000105"
+      },
+      {
+        "answer": "behind",
+        "answer_class": "answer_b1b886ce5f5750a00ae3",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "hard_error_replay",
+        "question": "Is the bowl in front of or behind the cube?",
+        "schedule_id": "v88_hard_q_000107",
+        "source_question_id": "q_000107"
+      },
+      {
+        "answer": "red",
+        "answer_class": "answer_b1f51a511f1da0cd348b",
+        "answer_type": "attribute",
+        "causal_margin": false,
+        "kind": "hard_error_replay",
+        "question": "What color is the bowl?",
+        "schedule_id": "v88_hard_q_000108",
+        "source_question_id": "q_000108"
+      },
+      {
+        "answer": "left",
+        "answer_class": "answer_360f84035942243c6a36",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "hard_error_replay",
+        "question": "Is the bowl left or right of the plant pot?",
+        "schedule_id": "v88_hard_q_000114",
+        "source_question_id": "q_000114"
+      },
+      {
+        "answer": "left",
+        "answer_class": "answer_360f84035942243c6a36",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "hard_error_replay",
+        "question": "Is the bowl left or right of the cube?",
+        "schedule_id": "v88_hard_q_000118",
+        "source_question_id": "q_000118"
+      },
+      {
+        "answer": "blue",
+        "answer_class": "answer_16477688c0e00699c6cf",
+        "answer_type": "attribute",
+        "causal_margin": false,
+        "kind": "hard_error_replay",
+        "question": "Tell me the chair's color.",
+        "schedule_id": "v88_hard_q_000121",
+        "source_question_id": "q_000121"
+      },
+      {
+        "answer": "left",
+        "answer_class": "answer_360f84035942243c6a36",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "hard_error_replay",
+        "question": "Is the cube left or right of the plant pot?",
+        "schedule_id": "v88_hard_q_000126",
+        "source_question_id": "q_000126"
+      },
+      {
+        "answer": "red",
+        "answer_class": "answer_b1f51a511f1da0cd348b",
+        "answer_type": "attribute",
+        "causal_margin": false,
+        "kind": "hard_error_replay",
+        "question": "What color is the cube?",
+        "schedule_id": "v88_hard_q_000137",
+        "source_question_id": "q_000137"
+      },
+      {
+        "answer": "below",
+        "answer_class": "answer_8ada24bf6bf313927389",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the cabinet above or below the floor lamp?",
+        "schedule_id": "v88_inverse_q_000000",
+        "source_question_id": "q_000000"
+      },
+      {
+        "answer": "behind",
+        "answer_class": "answer_b1b886ce5f5750a00ae3",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the floor lamp in front of or behind the picture frame?",
+        "schedule_id": "v88_inverse_q_000002",
+        "source_question_id": "q_000002"
+      },
+      {
+        "answer": "below",
+        "answer_class": "answer_8ada24bf6bf313927389",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the bowl above or below the picture frame?",
+        "schedule_id": "v88_inverse_q_000004",
+        "source_question_id": "q_000004"
+      },
+      {
+        "answer": "left",
+        "answer_class": "answer_360f84035942243c6a36",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the picture frame left or right of the table?",
+        "schedule_id": "v88_inverse_q_000006",
+        "source_question_id": "q_000006"
+      },
+      {
+        "answer": "behind",
+        "answer_class": "answer_b1b886ce5f5750a00ae3",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the cube in front of or behind the floor lamp?",
+        "schedule_id": "v88_inverse_q_000008",
+        "source_question_id": "q_000008"
+      },
+      {
+        "answer": "right",
+        "answer_class": "answer_27042f4e6eca7d0b2a7e",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the cabinet left or right of the picture frame?",
+        "schedule_id": "v88_inverse_q_000010",
+        "source_question_id": "q_000010"
+      },
+      {
+        "answer": "above",
+        "answer_class": "answer_88c7f08d0be5407e361c",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the book above or below the table?",
+        "schedule_id": "v88_inverse_q_000012",
+        "source_question_id": "q_000012"
+      },
+      {
+        "answer": "right",
+        "answer_class": "answer_27042f4e6eca7d0b2a7e",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the book left or right of the table?",
+        "schedule_id": "v88_inverse_q_000013",
+        "source_question_id": "q_000013"
+      },
+      {
+        "answer": "left",
+        "answer_class": "answer_360f84035942243c6a36",
+        "answer_type": "spatial_relation",
+        "causal_margin": true,
+        "kind": "inverse_spatial",
+        "question": "Is the bowl left or right of the chair?",
+        "schedule_id": "v88_inverse_q_000014",
+        "source_question_id": "q_000014"
+      },
+      {
+        "answer": "in front",
+        "answer_class": "answer_b31420793ee136a0ece4",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the floor lamp in front of or behind the table?",
+        "schedule_id": "v88_inverse_q_000016",
+        "source_question_id": "q_000016"
+      },
+      {
+        "answer": "right",
+        "answer_class": "answer_27042f4e6eca7d0b2a7e",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the book left or right of the floor lamp?",
+        "schedule_id": "v88_inverse_q_000018",
+        "source_question_id": "q_000018"
+      },
+      {
+        "answer": "in front",
+        "answer_class": "answer_b31420793ee136a0ece4",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the plant pot in front of or behind the cabinet?",
+        "schedule_id": "v88_inverse_q_000020",
+        "source_question_id": "q_000020"
+      },
+      {
+        "answer": "right",
+        "answer_class": "answer_27042f4e6eca7d0b2a7e",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the cabinet left or right of the book?",
+        "schedule_id": "v88_inverse_q_000022",
+        "source_question_id": "q_000022"
+      },
+      {
+        "answer": "below",
+        "answer_class": "answer_8ada24bf6bf313927389",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the book above or below the picture frame?",
+        "schedule_id": "v88_inverse_q_000023",
+        "source_question_id": "q_000023"
+      },
+      {
+        "answer": "right",
+        "answer_class": "answer_27042f4e6eca7d0b2a7e",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the book left or right of the chair?",
+        "schedule_id": "v88_inverse_q_000024",
+        "source_question_id": "q_000024"
+      },
+      {
+        "answer": "behind",
+        "answer_class": "answer_b1b886ce5f5750a00ae3",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the cabinet in front of or behind the floor lamp?",
+        "schedule_id": "v88_inverse_q_000026",
+        "source_question_id": "q_000026"
+      },
+      {
+        "answer": "below",
+        "answer_class": "answer_8ada24bf6bf313927389",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the bowl above or below the chair?",
+        "schedule_id": "v88_inverse_q_000028",
+        "source_question_id": "q_000028"
+      },
+      {
+        "answer": "left",
+        "answer_class": "answer_360f84035942243c6a36",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the floor lamp left or right of the table?",
+        "schedule_id": "v88_inverse_q_000029",
+        "source_question_id": "q_000029"
+      },
+      {
+        "answer": "behind",
+        "answer_class": "answer_b1b886ce5f5750a00ae3",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the cabinet in front of or behind the bowl?",
+        "schedule_id": "v88_inverse_q_000030",
+        "source_question_id": "q_000030"
+      },
+      {
+        "answer": "in front",
+        "answer_class": "answer_b31420793ee136a0ece4",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the picture frame in front of or behind the table?",
+        "schedule_id": "v88_inverse_q_000031",
+        "source_question_id": "q_000031"
+      },
+      {
+        "answer": "above",
+        "answer_class": "answer_88c7f08d0be5407e361c",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the cube above or below the table?",
+        "schedule_id": "v88_inverse_q_000032",
+        "source_question_id": "q_000032"
+      },
+      {
+        "answer": "above",
+        "answer_class": "answer_88c7f08d0be5407e361c",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the plant pot above or below the bowl?",
+        "schedule_id": "v88_inverse_q_000033",
+        "source_question_id": "q_000033"
+      },
+      {
+        "answer": "in front",
+        "answer_class": "answer_b31420793ee136a0ece4",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the plant pot in front of or behind the bowl?",
+        "schedule_id": "v88_inverse_q_000034",
+        "source_question_id": "q_000034"
+      },
+      {
+        "answer": "right",
+        "answer_class": "answer_27042f4e6eca7d0b2a7e",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the cube left or right of the chair?",
+        "schedule_id": "v88_inverse_q_000035",
+        "source_question_id": "q_000035"
+      },
+      {
+        "answer": "below",
+        "answer_class": "answer_8ada24bf6bf313927389",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the plant pot above or below the picture frame?",
+        "schedule_id": "v88_inverse_q_000036",
+        "source_question_id": "q_000036"
+      },
+      {
+        "answer": "left",
+        "answer_class": "answer_360f84035942243c6a36",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the floor lamp left or right of the chair?",
+        "schedule_id": "v88_inverse_q_000037",
+        "source_question_id": "q_000037"
+      },
+      {
+        "answer": "behind",
+        "answer_class": "answer_b1b886ce5f5750a00ae3",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the bowl in front of or behind the picture frame?",
+        "schedule_id": "v88_inverse_q_000038",
+        "source_question_id": "q_000038"
+      },
+      {
+        "answer": "right",
+        "answer_class": "answer_27042f4e6eca7d0b2a7e",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the plant pot left or right of the floor lamp?",
+        "schedule_id": "v88_inverse_q_000039",
+        "source_question_id": "q_000039"
+      },
+      {
+        "answer": "in front",
+        "answer_class": "answer_b31420793ee136a0ece4",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the plant pot in front of or behind the chair?",
+        "schedule_id": "v88_inverse_q_000043",
+        "source_question_id": "q_000043"
+      },
+      {
+        "answer": "behind",
+        "answer_class": "answer_b1b886ce5f5750a00ae3",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the cabinet in front of or behind the table?",
+        "schedule_id": "v88_inverse_q_000045",
+        "source_question_id": "q_000045"
+      },
+      {
+        "answer": "in front",
+        "answer_class": "answer_b31420793ee136a0ece4",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the floor lamp in front of or behind the chair?",
+        "schedule_id": "v88_inverse_q_000046",
+        "source_question_id": "q_000046"
+      },
+      {
+        "answer": "right",
+        "answer_class": "answer_27042f4e6eca7d0b2a7e",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the plant pot left or right of the book?",
+        "schedule_id": "v88_inverse_q_000048",
+        "source_question_id": "q_000048"
+      },
+      {
+        "answer": "right",
+        "answer_class": "answer_27042f4e6eca7d0b2a7e",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the cube left or right of the floor lamp?",
+        "schedule_id": "v88_inverse_q_000049",
+        "source_question_id": "q_000049"
+      },
+      {
+        "answer": "behind",
+        "answer_class": "answer_b1b886ce5f5750a00ae3",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the bowl in front of or behind the table?",
+        "schedule_id": "v88_inverse_q_000050",
+        "source_question_id": "q_000050"
+      },
+      {
+        "answer": "right",
+        "answer_class": "answer_27042f4e6eca7d0b2a7e",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the cabinet left or right of the cube?",
+        "schedule_id": "v88_inverse_q_000051",
+        "source_question_id": "q_000051"
+      },
+      {
+        "answer": "above",
+        "answer_class": "answer_88c7f08d0be5407e361c",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the floor lamp above or below the chair?",
+        "schedule_id": "v88_inverse_q_000054",
+        "source_question_id": "q_000054"
+      },
+      {
+        "answer": "in front",
+        "answer_class": "answer_b31420793ee136a0ece4",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the plant pot in front of or behind the cube?",
+        "schedule_id": "v88_inverse_q_000056",
+        "source_question_id": "q_000056"
+      },
+      {
+        "answer": "left",
+        "answer_class": "answer_360f84035942243c6a36",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the cube left or right of the table?",
+        "schedule_id": "v88_inverse_q_000058",
+        "source_question_id": "q_000058"
+      },
+      {
+        "answer": "behind",
+        "answer_class": "answer_b1b886ce5f5750a00ae3",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the cabinet in front of or behind the chair?",
+        "schedule_id": "v88_inverse_q_000059",
+        "source_question_id": "q_000059"
+      },
+      {
+        "answer": "in front",
+        "answer_class": "answer_b31420793ee136a0ece4",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the floor lamp in front of or behind the bowl?",
+        "schedule_id": "v88_inverse_q_000060",
+        "source_question_id": "q_000060"
+      },
+      {
+        "answer": "left",
+        "answer_class": "answer_360f84035942243c6a36",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the floor lamp left or right of the bowl?",
+        "schedule_id": "v88_inverse_q_000061",
+        "source_question_id": "q_000061"
+      },
+      {
+        "answer": "below",
+        "answer_class": "answer_8ada24bf6bf313927389",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the cabinet above or below the picture frame?",
+        "schedule_id": "v88_inverse_q_000062",
+        "source_question_id": "q_000062"
+      },
+      {
+        "answer": "above",
+        "answer_class": "answer_88c7f08d0be5407e361c",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the cube above or below the bowl?",
+        "schedule_id": "v88_inverse_q_000063",
+        "source_question_id": "q_000063"
+      },
+      {
+        "answer": "below",
+        "answer_class": "answer_8ada24bf6bf313927389",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the plant pot above or below the floor lamp?",
+        "schedule_id": "v88_inverse_q_000064",
+        "source_question_id": "q_000064"
+      },
+      {
+        "answer": "behind",
+        "answer_class": "answer_b1b886ce5f5750a00ae3",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the bowl in front of or behind the chair?",
+        "schedule_id": "v88_inverse_q_000065",
+        "source_question_id": "q_000065"
+      },
+      {
+        "answer": "above",
+        "answer_class": "answer_88c7f08d0be5407e361c",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the cabinet above or below the bowl?",
+        "schedule_id": "v88_inverse_q_000066",
+        "source_question_id": "q_000066"
+      },
+      {
+        "answer": "right",
+        "answer_class": "answer_27042f4e6eca7d0b2a7e",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the book left or right of the picture frame?",
+        "schedule_id": "v88_inverse_q_000067",
+        "source_question_id": "q_000067"
+      },
+      {
+        "answer": "left",
+        "answer_class": "answer_360f84035942243c6a36",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the bowl left or right of the picture frame?",
+        "schedule_id": "v88_inverse_q_000068",
+        "source_question_id": "q_000068"
+      },
+      {
+        "answer": "right",
+        "answer_class": "answer_27042f4e6eca7d0b2a7e",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the plant pot left or right of the table?",
+        "schedule_id": "v88_inverse_q_000069",
+        "source_question_id": "q_000069"
+      },
+      {
+        "answer": "behind",
+        "answer_class": "answer_b1b886ce5f5750a00ae3",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the cabinet in front of or behind the book?",
+        "schedule_id": "v88_inverse_q_000070",
+        "source_question_id": "q_000070"
+      },
+      {
+        "answer": "behind",
+        "answer_class": "answer_b1b886ce5f5750a00ae3",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the cube in front of or behind the picture frame?",
+        "schedule_id": "v88_inverse_q_000072",
+        "source_question_id": "q_000072"
+      },
+      {
+        "answer": "right",
+        "answer_class": "answer_27042f4e6eca7d0b2a7e",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the cube left or right of the picture frame?",
+        "schedule_id": "v88_inverse_q_000073",
+        "source_question_id": "q_000073"
+      },
+      {
+        "answer": "behind",
+        "answer_class": "answer_b1b886ce5f5750a00ae3",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the book in front of or behind the floor lamp?",
+        "schedule_id": "v88_inverse_q_000076",
+        "source_question_id": "q_000076"
+      },
+      {
+        "answer": "below",
+        "answer_class": "answer_8ada24bf6bf313927389",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the floor lamp above or below the picture frame?",
+        "schedule_id": "v88_inverse_q_000077",
+        "source_question_id": "q_000077"
+      },
+      {
+        "answer": "right",
+        "answer_class": "answer_27042f4e6eca7d0b2a7e",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the plant pot left or right of the picture frame?",
+        "schedule_id": "v88_inverse_q_000078",
+        "source_question_id": "q_000078"
+      },
+      {
+        "answer": "right",
+        "answer_class": "answer_27042f4e6eca7d0b2a7e",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the cabinet left or right of the floor lamp?",
+        "schedule_id": "v88_inverse_q_000079",
+        "source_question_id": "q_000079"
+      },
+      {
+        "answer": "right",
+        "answer_class": "answer_27042f4e6eca7d0b2a7e",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the plant pot left or right of the chair?",
+        "schedule_id": "v88_inverse_q_000082",
+        "source_question_id": "q_000082"
+      },
+      {
+        "answer": "above",
+        "answer_class": "answer_88c7f08d0be5407e361c",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the picture frame above or below the chair?",
+        "schedule_id": "v88_inverse_q_000083",
+        "source_question_id": "q_000083"
+      },
+      {
+        "answer": "above",
+        "answer_class": "answer_88c7f08d0be5407e361c",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the book above or below the bowl?",
+        "schedule_id": "v88_inverse_q_000084",
+        "source_question_id": "q_000084"
+      },
+      {
+        "answer": "behind",
+        "answer_class": "answer_b1b886ce5f5750a00ae3",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the cabinet in front of or behind the picture frame?",
+        "schedule_id": "v88_inverse_q_000087",
+        "source_question_id": "q_000087"
+      },
+      {
+        "answer": "above",
+        "answer_class": "answer_88c7f08d0be5407e361c",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the floor lamp above or below the table?",
+        "schedule_id": "v88_inverse_q_000088",
+        "source_question_id": "q_000088"
+      },
+      {
+        "answer": "right",
+        "answer_class": "answer_27042f4e6eca7d0b2a7e",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the cabinet left or right of the bowl?",
+        "schedule_id": "v88_inverse_q_000089",
+        "source_question_id": "q_000089"
+      },
+      {
+        "answer": "left",
+        "answer_class": "answer_360f84035942243c6a36",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the floor lamp left or right of the picture frame?",
+        "schedule_id": "v88_inverse_q_000094",
+        "source_question_id": "q_000094"
+      },
+      {
+        "answer": "right",
+        "answer_class": "answer_27042f4e6eca7d0b2a7e",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the book left or right of the bowl?",
+        "schedule_id": "v88_inverse_q_000096",
+        "source_question_id": "q_000096"
+      },
+      {
+        "answer": "above",
+        "answer_class": "answer_88c7f08d0be5407e361c",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the floor lamp above or below the bowl?",
+        "schedule_id": "v88_inverse_q_000097",
+        "source_question_id": "q_000097"
+      },
+      {
+        "answer": "below",
+        "answer_class": "answer_8ada24bf6bf313927389",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the cabinet above or below the book?",
+        "schedule_id": "v88_inverse_q_000098",
+        "source_question_id": "q_000098"
+      },
+      {
+        "answer": "right",
+        "answer_class": "answer_27042f4e6eca7d0b2a7e",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the book left or right of the cube?",
+        "schedule_id": "v88_inverse_q_000100",
+        "source_question_id": "q_000100"
+      },
+      {
+        "answer": "in front",
+        "answer_class": "answer_b31420793ee136a0ece4",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the picture frame in front of or behind the chair?",
+        "schedule_id": "v88_inverse_q_000101",
+        "source_question_id": "q_000101"
+      },
+      {
+        "answer": "right",
+        "answer_class": "answer_27042f4e6eca7d0b2a7e",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the cabinet left or right of the table?",
+        "schedule_id": "v88_inverse_q_000102",
+        "source_question_id": "q_000102"
+      },
+      {
+        "answer": "in front",
+        "answer_class": "answer_b31420793ee136a0ece4",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the book in front of or behind the bowl?",
+        "schedule_id": "v88_inverse_q_000105",
+        "source_question_id": "q_000105"
+      },
+      {
+        "answer": "in front",
+        "answer_class": "answer_b31420793ee136a0ece4",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the cube in front of or behind the bowl?",
+        "schedule_id": "v88_inverse_q_000107",
+        "source_question_id": "q_000107"
+      },
+      {
+        "answer": "right",
+        "answer_class": "answer_27042f4e6eca7d0b2a7e",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the cabinet left or right of the chair?",
+        "schedule_id": "v88_inverse_q_000109",
+        "source_question_id": "q_000109"
+      },
+      {
+        "answer": "left",
+        "answer_class": "answer_360f84035942243c6a36",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the bowl left or right of the table?",
+        "schedule_id": "v88_inverse_q_000111",
+        "source_question_id": "q_000111"
+      },
+      {
+        "answer": "right",
+        "answer_class": "answer_27042f4e6eca7d0b2a7e",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the plant pot left or right of the bowl?",
+        "schedule_id": "v88_inverse_q_000114",
+        "source_question_id": "q_000114"
+      },
+      {
+        "answer": "in front",
+        "answer_class": "answer_b31420793ee136a0ece4",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the plant pot in front of or behind the table?",
+        "schedule_id": "v88_inverse_q_000115",
+        "source_question_id": "q_000115"
+      },
+      {
+        "answer": "right",
+        "answer_class": "answer_27042f4e6eca7d0b2a7e",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the cube left or right of the bowl?",
+        "schedule_id": "v88_inverse_q_000118",
+        "source_question_id": "q_000118"
+      },
+      {
+        "answer": "right",
+        "answer_class": "answer_27042f4e6eca7d0b2a7e",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the picture frame left or right of the chair?",
+        "schedule_id": "v88_inverse_q_000119",
+        "source_question_id": "q_000119"
+      },
+      {
+        "answer": "behind",
+        "answer_class": "answer_b1b886ce5f5750a00ae3",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the cabinet in front of or behind the cube?",
+        "schedule_id": "v88_inverse_q_000122",
+        "source_question_id": "q_000122"
+      },
+      {
+        "answer": "right",
+        "answer_class": "answer_27042f4e6eca7d0b2a7e",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the plant pot left or right of the cube?",
+        "schedule_id": "v88_inverse_q_000126",
+        "source_question_id": "q_000126"
+      },
+      {
+        "answer": "left",
+        "answer_class": "answer_360f84035942243c6a36",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the chair left or right of the table?",
+        "schedule_id": "v88_inverse_q_000127",
+        "source_question_id": "q_000127"
+      },
+      {
+        "answer": "behind",
+        "answer_class": "answer_b1b886ce5f5750a00ae3",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the book in front of or behind the picture frame?",
+        "schedule_id": "v88_inverse_q_000128",
+        "source_question_id": "q_000128"
+      },
+      {
+        "answer": "below",
+        "answer_class": "answer_8ada24bf6bf313927389",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the cube above or below the picture frame?",
+        "schedule_id": "v88_inverse_q_000129",
+        "source_question_id": "q_000129"
+      },
+      {
+        "answer": "above",
+        "answer_class": "answer_88c7f08d0be5407e361c",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the picture frame above or below the table?",
+        "schedule_id": "v88_inverse_q_000130",
+        "source_question_id": "q_000130"
+      },
+      {
+        "answer": "in front",
+        "answer_class": "answer_b31420793ee136a0ece4",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the plant pot in front of or behind the book?",
+        "schedule_id": "v88_inverse_q_000132",
+        "source_question_id": "q_000132"
+      },
+      {
+        "answer": "below",
+        "answer_class": "answer_8ada24bf6bf313927389",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the cabinet above or below the cube?",
+        "schedule_id": "v88_inverse_q_000133",
+        "source_question_id": "q_000133"
+      },
+      {
+        "answer": "behind",
+        "answer_class": "answer_b1b886ce5f5750a00ae3",
+        "answer_type": "spatial_relation",
+        "causal_margin": false,
+        "kind": "inverse_spatial",
+        "question": "Is the plant pot in front of or behind the picture frame?",
+        "schedule_id": "v88_inverse_q_000136",
+        "source_question_id": "q_000136"
+      },
+      {
+        "answer": "green",
+        "answer_class": "answer_ba4788b226aa8dc2e6dc",
+        "answer_type": "attribute",
+        "causal_margin": false,
+        "kind": "alternate_attribute",
+        "question": "Which color is the book?",
+        "schedule_id": "v88_attribute_alt_00",
+        "source_question_id": "q_000009"
+      },
+      {
+        "answer": "red",
+        "answer_class": "answer_b1f51a511f1da0cd348b",
+        "answer_type": "attribute",
+        "causal_margin": false,
+        "kind": "alternate_attribute",
+        "question": "Which color is the bowl?",
+        "schedule_id": "v88_attribute_alt_01",
+        "source_question_id": "q_000095"
+      },
+      {
+        "answer": "wood",
+        "answer_class": "answer_99f7855eb789dfecf9ea",
+        "answer_type": "attribute",
+        "causal_margin": false,
+        "kind": "alternate_attribute",
+        "question": "Which color is the cabinet?",
+        "schedule_id": "v88_attribute_alt_02",
+        "source_question_id": "q_000055"
+      },
+      {
+        "answer": "blue",
+        "answer_class": "answer_16477688c0e00699c6cf",
+        "answer_type": "attribute",
+        "causal_margin": false,
+        "kind": "alternate_attribute",
+        "question": "Which color is the chair?",
+        "schedule_id": "v88_attribute_alt_03",
+        "source_question_id": "q_000019"
+      },
+      {
+        "answer": "red",
+        "answer_class": "answer_b1f51a511f1da0cd348b",
+        "answer_type": "attribute",
+        "causal_margin": false,
+        "kind": "alternate_attribute",
+        "question": "Which color is the cube?",
+        "schedule_id": "v88_attribute_alt_04",
+        "source_question_id": "q_000075"
+      },
+      {
+        "answer": "cream",
+        "answer_class": "answer_f3a22c1ce8e0a5a96393",
+        "answer_type": "attribute",
+        "causal_margin": false,
+        "kind": "alternate_attribute",
+        "question": "Which color is the floor lamp?",
+        "schedule_id": "v88_attribute_alt_05",
+        "source_question_id": "q_000027"
+      },
+      {
+        "answer": "yellow",
+        "answer_class": "answer_c685a2c9bab235ccdd2a",
+        "answer_type": "attribute",
+        "causal_margin": false,
+        "kind": "alternate_attribute",
+        "question": "Which color is the picture frame?",
+        "schedule_id": "v88_attribute_alt_06",
+        "source_question_id": "q_000011"
+      },
+      {
+        "answer": "terracotta",
+        "answer_class": "answer_9cb4bb5e93df46436db4",
+        "answer_type": "attribute",
+        "causal_margin": false,
+        "kind": "alternate_attribute",
+        "question": "Which color is the plant pot?",
+        "schedule_id": "v88_attribute_alt_07",
+        "source_question_id": "q_000005"
+      },
+      {
+        "answer": "wood",
+        "answer_class": "answer_99f7855eb789dfecf9ea",
+        "answer_type": "attribute",
+        "causal_margin": false,
+        "kind": "alternate_attribute",
+        "question": "Which color is the table?",
+        "schedule_id": "v88_attribute_alt_08",
+        "source_question_id": "q_000007"
+      },
+      {
+        "answer": "no",
+        "answer_class": "answer_9390298f3fb0c5b16049",
+        "answer_type": "presence",
+        "causal_margin": false,
+        "kind": "alternate_presence",
+        "question": "Is a bed present?",
+        "schedule_id": "v88_presence_alt_00",
+        "source_question_id": "q_000123"
+      },
+      {
+        "answer": "yes",
+        "answer_class": "answer_8a798890fe93817163b1",
+        "answer_type": "presence",
+        "causal_margin": false,
+        "kind": "alternate_presence",
+        "question": "Is a book present?",
+        "schedule_id": "v88_presence_alt_01",
+        "source_question_id": "q_000047"
+      },
+      {
+        "answer": "yes",
+        "answer_class": "answer_8a798890fe93817163b1",
+        "answer_type": "presence",
+        "causal_margin": false,
+        "kind": "alternate_presence",
+        "question": "Is a bowl present?",
+        "schedule_id": "v88_presence_alt_02",
+        "source_question_id": "q_000025"
+      },
+      {
+        "answer": "yes",
+        "answer_class": "answer_8a798890fe93817163b1",
+        "answer_type": "presence",
+        "causal_margin": false,
+        "kind": "alternate_presence",
+        "question": "Is a cabinet present?",
+        "schedule_id": "v88_presence_alt_03",
+        "source_question_id": "q_000041"
+      },
+      {
+        "answer": "yes",
+        "answer_class": "answer_8a798890fe93817163b1",
+        "answer_type": "presence",
+        "causal_margin": false,
+        "kind": "alternate_presence",
+        "question": "Is a chair present?",
+        "schedule_id": "v88_presence_alt_04",
+        "source_question_id": "q_000001"
+      },
+      {
+        "answer": "yes",
+        "answer_class": "answer_8a798890fe93817163b1",
+        "answer_type": "presence",
+        "causal_margin": false,
+        "kind": "alternate_presence",
+        "question": "Is a cube present?",
+        "schedule_id": "v88_presence_alt_05",
+        "source_question_id": "q_000053"
+      },
+      {
+        "answer": "yes",
+        "answer_class": "answer_8a798890fe93817163b1",
+        "answer_type": "presence",
+        "causal_margin": false,
+        "kind": "alternate_presence",
+        "question": "Is a floor lamp present?",
+        "schedule_id": "v88_presence_alt_06",
+        "source_question_id": "q_000110"
+      },
+      {
+        "answer": "yes",
+        "answer_class": "answer_8a798890fe93817163b1",
+        "answer_type": "presence",
+        "causal_margin": false,
+        "kind": "alternate_presence",
+        "question": "Is a picture frame present?",
+        "schedule_id": "v88_presence_alt_07",
+        "source_question_id": "q_000103"
+      },
+      {
+        "answer": "yes",
+        "answer_class": "answer_8a798890fe93817163b1",
+        "answer_type": "presence",
+        "causal_margin": false,
+        "kind": "alternate_presence",
+        "question": "Is a plant pot present?",
+        "schedule_id": "v88_presence_alt_08",
+        "source_question_id": "q_000040"
+      },
+      {
+        "answer": "no",
+        "answer_class": "answer_9390298f3fb0c5b16049",
+        "answer_type": "presence",
+        "causal_margin": false,
+        "kind": "alternate_presence",
+        "question": "Is a sink present?",
+        "schedule_id": "v88_presence_alt_09",
+        "source_question_id": "q_000099"
+      },
+      {
+        "answer": "no",
+        "answer_class": "answer_9390298f3fb0c5b16049",
+        "answer_type": "presence",
+        "causal_margin": false,
+        "kind": "alternate_presence",
+        "question": "Is a sofa present?",
+        "schedule_id": "v88_presence_alt_10",
+        "source_question_id": "q_000015"
+      },
+      {
+        "answer": "yes",
+        "answer_class": "answer_8a798890fe93817163b1",
+        "answer_type": "presence",
+        "causal_margin": false,
+        "kind": "alternate_presence",
+        "question": "Is a table present?",
+        "schedule_id": "v88_presence_alt_11",
+        "source_question_id": "q_000104"
+      },
+      {
+        "answer": "no",
+        "answer_class": "answer_9390298f3fb0c5b16049",
+        "answer_type": "presence",
+        "causal_margin": false,
+        "kind": "alternate_presence",
+        "question": "Is a television present?",
+        "schedule_id": "v88_presence_alt_12",
+        "source_question_id": "q_000003"
+      },
+      {
+        "answer": "yes",
+        "answer_class": "answer_8a798890fe93817163b1",
+        "answer_type": "presence",
+        "causal_margin": true,
+        "kind": "development_known_smoke",
+        "question": "Is there a chair?",
+        "schedule_id": "v88_smoke_chair",
+        "source_question_id": "q_000080"
+      }
+    ],
+    "augmented_row_inventory_sha256": "274643e403f4a93c33a0b3320c72e768a24809a2634b2937ae517267d43af72d",
+    "canonical_row_count": 138,
+    "causal_margin_rows_total": 20,
+    "causal_schedule_ids": [
+      "q_000014",
+      "q_000080",
+      "q_000108",
+      "v88_inverse_q_000014",
+      "v88_smoke_chair"
+    ],
+    "development_known_smoke": {
+      "canonical_dedup_schedule_id": "q_000108",
+      "held_out": false,
+      "inverse_dedup_schedule_id": "v88_inverse_q_000014",
+      "new_rows_after_deduplication": 1,
+      "new_schedule_id": "v88_smoke_chair",
+      "three_questions_represented": true,
+      "trained": true
+    },
+    "first_schedule_keys": [
+      [
+        0,
+        "v88_attribute_alt_07"
+      ],
+      [
+        0,
+        "v88_presence_alt_02"
+      ],
+      [
+        0,
+        "q_000125"
+      ]
+    ],
+    "fixed_memory_dtype": "torch.bfloat16",
+    "fixed_memory_prefix_sha256": "a428f5147c815839ae7315a0adab952ab210814fb21dcdc5bf13b167f28a6e37",
+    "fixed_memory_shape": [
+      1,
+      738,
+      1536
+    ],
+    "full_gemma_model_loaded": false,
+    "last_schedule_keys": [
+      [
+        3,
+        "q_000028"
+      ],
+      [
+        3,
+        "q_000032"
+      ],
+      [
+        3,
+        "v88_presence_alt_11"
+      ]
+    ],
+    "memory_compiled_before_question": true,
+    "optimizer_updates": 188,
+    "parent_v87_error_count": 35,
+    "parent_v87_error_inventory": [
+      {
+        "answer_type": "spatial_relation",
+        "canonical_prediction": "behind",
+        "correct_mean_nll": 0.329230397939682,
+        "prediction": "behind",
+        "question_id": "q_000002",
+        "reference_answer": "in front"
+      },
+      {
+        "answer_type": "attribute",
+        "canonical_prediction": "wood",
+        "correct_mean_nll": 0.6736579537391663,
+        "prediction": "wood",
+        "question_id": "q_000005",
+        "reference_answer": "terracotta"
+      },
+      {
+        "answer_type": "spatial_relation",
+        "canonical_prediction": "behind",
+        "correct_mean_nll": 0.25516146421432495,
+        "prediction": "behind",
+        "question_id": "q_000008",
+        "reference_answer": "in front"
+      },
+      {
+        "answer_type": "attribute",
+        "canonical_prediction": "wood",
+        "correct_mean_nll": 0.8477991223335266,
+        "prediction": "wood",
+        "question_id": "q_000009",
+        "reference_answer": "green"
+      },
+      {
+        "answer_type": "spatial_relation",
+        "canonical_prediction": "right",
+        "correct_mean_nll": 0.5692252516746521,
+        "prediction": "right",
+        "question_id": "q_000010",
+        "reference_answer": "left"
+      },
+      {
+        "answer_type": "attribute",
+        "canonical_prediction": "wood",
+        "correct_mean_nll": 1.2855892181396484,
+        "prediction": "wood",
+        "question_id": "q_000011",
+        "reference_answer": "yellow"
+      },
+      {
+        "answer_type": "spatial_relation",
+        "canonical_prediction": "above",
+        "correct_mean_nll": 0.3800438344478607,
+        "prediction": "above",
+        "question_id": "q_000012",
+        "reference_answer": "below"
+      },
+      {
+        "answer_type": "spatial_relation",
+        "canonical_prediction": "left",
+        "correct_mean_nll": 0.8254916667938232,
+        "prediction": "left",
+        "question_id": "q_000014",
+        "reference_answer": "right"
+      },
+      {
+        "answer_type": "attribute",
+        "canonical_prediction": "wood",
+        "correct_mean_nll": 1.0576590299606323,
+        "prediction": "wood",
+        "question_id": "q_000019",
+        "reference_answer": "blue"
+      },
+      {
+        "answer_type": "attribute",
+        "canonical_prediction": "wood",
+        "correct_mean_nll": 0.9194657802581787,
+        "prediction": "wood",
+        "question_id": "q_000027",
+        "reference_answer": "cream"
+      },
+      {
+        "answer_type": "spatial_relation",
+        "canonical_prediction": "right",
+        "correct_mean_nll": 0.34710755944252014,
+        "prediction": "right",
+        "question_id": "q_000048",
+        "reference_answer": "left"
+      },
+      {
+        "answer_type": "spatial_relation",
+        "canonical_prediction": "right",
+        "correct_mean_nll": 0.4141765832901001,
+        "prediction": "right",
+        "question_id": "q_000049",
+        "reference_answer": "left"
+      },
+      {
+        "answer_type": "spatial_relation",
+        "canonical_prediction": "behind",
+        "correct_mean_nll": 0.2559087872505188,
+        "prediction": "behind",
+        "question_id": "q_000050",
+        "reference_answer": "in front"
+      },
+      {
+        "answer_type": "attribute",
+        "canonical_prediction": "wood",
+        "correct_mean_nll": 0.7666597366333008,
+        "prediction": "wood",
+        "question_id": "q_000052",
+        "reference_answer": "terracotta"
+      },
+      {
+        "answer_type": "spatial_relation",
+        "canonical_prediction": "behind",
+        "correct_mean_nll": 0.2548781633377075,
+        "prediction": "behind",
+        "question_id": "q_000065",
+        "reference_answer": "in front"
+      },
+      {
+        "answer_type": "spatial_relation",
+        "canonical_prediction": "right",
+        "correct_mean_nll": 0.34704849123954773,
+        "prediction": "right",
+        "question_id": "q_000067",
+        "reference_answer": "left"
+      },
+      {
+        "answer_type": "spatial_relation",
+        "canonical_prediction": "right",
+        "correct_mean_nll": 0.5272992849349976,
+        "prediction": "right",
+        "question_id": "q_000069",
+        "reference_answer": "left"
+      },
+      {
+        "answer_type": "support",
+        "canonical_prediction": [
+          "book cube"
+        ],
+        "correct_mean_nll": 2.5284204483032227,
+        "prediction": "book cube",
+        "question_id": "q_000071",
+        "reference_answer": "bowl cabinet chair floor lamp plant pot table"
+      },
+      {
+        "answer_type": "spatial_relation",
+        "canonical_prediction": "right",
+        "correct_mean_nll": 0.7040184140205383,
+        "prediction": "right",
+        "question_id": "q_000073",
+        "reference_answer": "left"
+      },
+      {
+        "answer_type": "spatial_relation",
+        "canonical_prediction": "below",
+        "correct_mean_nll": 0.414339542388916,
+        "prediction": "below",
+        "question_id": "q_000077",
+        "reference_answer": "above"
+      },
+      {
+        "answer_type": "spatial_relation",
+        "canonical_prediction": "right",
+        "correct_mean_nll": 0.6123062968254089,
+        "prediction": "right",
+        "question_id": "q_000078",
+        "reference_answer": "left"
+      },
+      {
+        "answer_type": "spatial_relation",
+        "canonical_prediction": "above",
+        "correct_mean_nll": 0.37936931848526,
+        "prediction": "above",
+        "question_id": "q_000083",
+        "reference_answer": "below"
+      },
+      {
+        "answer_type": "spatial_relation",
+        "canonical_prediction": "right",
+        "correct_mean_nll": 0.3471275568008423,
+        "prediction": "right",
+        "question_id": "q_000089",
+        "reference_answer": "left"
+      },
+      {
+        "answer_type": "attribute",
+        "canonical_prediction": "wood",
+        "correct_mean_nll": 1.2818866968154907,
+        "prediction": "wood",
+        "question_id": "q_000090",
+        "reference_answer": "cream"
+      },
+      {
+        "answer_type": "attribute",
+        "canonical_prediction": "wood",
+        "correct_mean_nll": 0.8944555521011353,
+        "prediction": "wood",
+        "question_id": "q_000095",
+        "reference_answer": "red"
+      },
+      {
+        "answer_type": "spatial_relation",
+        "canonical_prediction": "right",
+        "correct_mean_nll": 0.3473837375640869,
+        "prediction": "right",
+        "question_id": "q_000100",
+        "reference_answer": "left"
+      },
+      {
+        "answer_type": "spatial_relation",
+        "canonical_prediction": "right",
+        "correct_mean_nll": 0.34704405069351196,
+        "prediction": "right",
+        "question_id": "q_000102",
+        "reference_answer": "left"
+      },
+      {
+        "answer_type": "spatial_relation",
+        "canonical_prediction": "in front",
+        "correct_mean_nll": 0.3499450981616974,
+        "prediction": "in front",
+        "question_id": "q_000105",
+        "reference_answer": "behind"
+      },
+      {
+        "answer_type": "spatial_relation",
+        "canonical_prediction": "in front",
+        "correct_mean_nll": 0.35081014037132263,
+        "prediction": "in front",
+        "question_id": "q_000107",
+        "reference_answer": "behind"
+      },
+      {
+        "answer_type": "attribute",
+        "canonical_prediction": "wood",
+        "correct_mean_nll": 0.9807496070861816,
+        "prediction": "wood",
+        "question_id": "q_000108",
+        "reference_answer": "red"
+      },
+      {
+        "answer_type": "spatial_relation",
+        "canonical_prediction": "right",
+        "correct_mean_nll": 0.37936991453170776,
+        "prediction": "right",
+        "question_id": "q_000114",
+        "reference_answer": "left"
+      },
+      {
+        "answer_type": "spatial_relation",
+        "canonical_prediction": "right",
+        "correct_mean_nll": 0.4136568009853363,
+        "prediction": "right",
+        "question_id": "q_000118",
+        "reference_answer": "left"
+      },
+      {
+        "answer_type": "attribute",
+        "canonical_prediction": "wood",
+        "correct_mean_nll": 1.1632509231567383,
+        "prediction": "wood",
+        "question_id": "q_000121",
+        "reference_answer": "blue"
+      },
+      {
+        "answer_type": "spatial_relation",
+        "canonical_prediction": "right",
+        "correct_mean_nll": 0.5275822281837463,
+        "prediction": "right",
+        "question_id": "q_000126",
+        "reference_answer": "left"
+      },
+      {
+        "answer_type": "attribute",
+        "canonical_prediction": "wood",
+        "correct_mean_nll": 0.8944478034973145,
+        "prediction": "wood",
+        "question_id": "q_000137",
+        "reference_answer": "red"
+      }
+    ],
+    "parent_v87_error_inventory_sha256": "f6b4d4bf91745d73fac33e60746c943ceb9e574b2abcd8e289bfa22f0358e5a3",
+    "parent_v87_error_type_counts": {
+      "attribute": 11,
+      "spatial_relation": 23,
+      "support": 1
+    },
+    "questions_tokenized": false,
+    "row_order_sha256": "3e417cd7f2cb77140c9405c641978f10487674f1af1569401336ef63e7d9689f",
+    "rows_each_epoch": 282,
+    "runtime_serializes_augmentation_or_error_inventory": false,
+    "runtime_serializes_questions_or_answers": false,
+    "schedule_rows": 1128,
+    "training_kind_counts": {
+      "alternate_attribute": 9,
+      "alternate_presence": 13,
+      "canonical": 138,
+      "development_known_smoke": 1,
+      "hard_error_replay": 35,
+      "inverse_spatial": 86
+    },
+    "training_rows_per_epoch": 282,
+    "zero_payload_nonzero_scalar_count": 0,
+    "zero_payload_prefix_sha256": "c455ed77bf3fe841a4e360e89c036ffb4e8cdb8935c97d767f556d25a9f790d8",
+    "zero_payload_preserves_native_boi": true,
+    "zero_payload_preserves_native_eoi": true,
+    "zero_payload_token_count": 736
+  },
+  "question_conditioned_environmental_readout": false,
+  "question_derived_environmental_tokens": 0,
+  "runtime_candidate_will_serialize_augmentation_inventory": false,
+  "runtime_candidate_will_serialize_error_inventory": false,
+  "runtime_candidate_will_serialize_training_rows": false,
+  "runtime_promotion_authorized": false,
+  "same_fixed_memory_compiled_before_questions": true,
+  "schema_version": 88,
+  "status": "passed"
+}

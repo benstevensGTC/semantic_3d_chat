@@ -1,0 +1,10 @@
+_base_: navigation_policy_v4.yaml
+
+# Mechanical recovery only: all original V4 training values remain inherited.
+# V4.1 changes empty targeted/targetless metric subgroups from NaN to finite
+# 0.0, exactly matching the established V3 evaluator convention.
+navigation_policy_v4:
+  protocol_version: v4.1
+  incident: reports/gemma4/metrics/navigation_policy_v4_training_incident.json
+  preregistration: reports/gemma4/metrics/navigation_policy_v4_1_preregistration.json
+  checkpoint_output: data_gemma4/checkpoints/navigation_policy_v4_1

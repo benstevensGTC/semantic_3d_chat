@@ -1,0 +1,209 @@
+v89:
+  schema_version: 89
+  artifact: gemma4_v89_scene1_retention_direct_memory_overfit_v1
+  status: preregistered_before_full_model_load
+  seed: 890089
+
+  sources:
+    runtime_config: configs/runtime/gemma4_v85_strict_multiscene.yaml
+    runtime_config_sha256: 49d9595e6167fe352dc49f1ca363af396fe3d3be91d50cb430721bc74b130575
+    scene1_qa: data/qa/train.jsonl
+    scene1_qa_sha256: ffa721d57849ade8fdd0811e3e1e62fe807200f710aec780dc4d3dcecd4fb0e0
+    scene1_memory: data_gemma4/runtime/scene_memories/v81/scene_000001
+    scene1_memory_tensor_sha256: 3427851432d8f2a3609b6205b18b8c0d9a0fcf68d8f3bf0c98c758ac64209ffb
+    scene1_memory_metadata_sha256: 9ca43f9216106668afafe65007b1649621036735b512c07e330358bbeb0bcbcc
+    frozen_v85_checkpoint: reports/gemma4/artifacts/v85_strict_runtime_candidate
+    frozen_v85_adapter_sha256: 163ceb462bafe4b1d38099c07ca32bcc22944ad93917222b019e75634883fd8d
+    frozen_v85_metadata_sha256: 093d43c80722dd00cd3f7347d55451eca1cc45e416f6bda220157f18024ce0bd
+    parent_v86_checkpoint: reports/gemma4/artifacts/v86_scene1_demo_final
+    parent_v86_bridge_sha256: 3e4db9a621e915da341ba2163b7c541863c067eafc5abc55e53a50f594476015
+    parent_v86_metadata_sha256: ad9534737bbe1cb443960159461f5ec9c78609cb1f2d311d05b245261f6ac54d
+    parent_v87_checkpoint: reports/gemma4/artifacts/v87_scene1_balanced_final
+    parent_v87_bridge_sha256: 3dc027ec236347b09feeb1052476078e8a577f9df4b65b13a29a41d4b959578f
+    parent_v87_metadata_sha256: f82bed9eef8f215187730de036a34a50afa6e5ed88bf65e639f5fe3d6b11c136
+    parent_v87_predictions: reports/gemma4/predictions/gemma4_v87_scene1_balanced_evaluation.json
+    parent_v87_predictions_sha256: 588fd19952f8f5d4ed42e26b9b377dfb008d8e92466ccce2567282263db3ad23
+    parent_v88_config: configs/experiments/gemma4_v88_scene1_augmented_demo.yaml
+    parent_v88_config_sha256: c9812271b5834f605fc7158b0fdcf5c6eab269efbc1e8fa0b5aec62c7e9b20fb
+    parent_v88_preregistration: reports/gemma4/metrics/gemma4_v88_scene1_augmented_preregistration.json
+    parent_v88_preregistration_sha256: 765db3b7420d6bf8b1c4a9122ca211497ab9985ca8a85ae7bd524ca523c0657d
+    parent_v88_cpu_preflight: reports/gemma4/metrics/gemma4_v88_scene1_augmented_cpu_preflight.json
+    parent_v88_cpu_preflight_sha256: 0d352bc80c6537351ccd1d5cea83d029eff12af14757a8ff1e7ac5ceea1d4fd5
+    parent_v88_training_report: reports/gemma4/metrics/gemma4_v88_scene1_augmented_training.json
+    parent_v88_training_report_sha256: d356e641d84de01aa89484f5ec4b7034b3dadc3719a9a2488696537ad5b05d43
+    parent_v88_checkpoint: reports/gemma4/artifacts/v88_scene1_augmented_final
+    parent_v88_bridge_sha256: 95d4aaf9c42cbf796dc047b3e622cf92247c898987ab159570944861ef698cf1
+    parent_v88_metadata_sha256: 670ef58de0ac3b9d1e9a141292ffea900848cc512b77fc12c69d9def706d3d41
+    parent_v88_predictions: reports/gemma4/predictions/gemma4_v88_scene1_augmented_evaluation.json
+    parent_v88_predictions_sha256: a7c815fde05383aa2f4aa07ec0127ab7950470d91b1f34f5b171e5f688850f56
+    parent_v88_evaluation: reports/gemma4/metrics/gemma4_v88_scene1_augmented_evaluation.json
+    parent_v88_evaluation_sha256: 40b4c591d84a3b1ae99c301d017e9c6212308203a319e3c511f22583e5a78641
+    preflight_source: src/semantic_3d_chat/evaluation/v89_scene1_retention_preflight.py
+    preflight_source_sha256: c64d63309676fae32df10f38debaa0131409347822c1f5578690a09b0c345e29
+    training_source: src/semantic_3d_chat/training/train_v89_scene1_retention.py
+    training_source_sha256: 51e13fbd1109f4f28d2775fa0c03868be8e4ea50590a8e854b9c4fa436c55c07
+    evaluation_source: src/semantic_3d_chat/evaluation/evaluate_v89_scene1_retention.py
+    evaluation_source_sha256: de2ba05a30e7a3d3a1bc77e2b6a30f1c2c8240c4729b5a5f4dfdb1f9dcd00c1d
+    model_id: google/gemma-4-E2B-it
+    model_revision: 3e22461f65e89153144f8adb70e3b8c2cc9845a7
+    model_blob_sha256_identity: 2db5482b20d746879bb3ef79b5203e9075a2e2b98f54ec7c2f281c1477ddc550
+
+  strict_input_contract:
+    shape: [1, 738, 1536]
+    native_boi_retained: true
+    native_eoi_retained: true
+    payload_tokens: 736
+    compiled_before_question: true
+    reused_byte_identically_across_questions: true
+    supplied_directly_to_native_gemma_image_prefix: true
+    all_memory_slots_retained: true
+    question_derived_environmental_tokens: 0
+    question_conditioned_environmental_readout: false
+    question_dependent_scene_processing: false
+    question_dependent_retrieval: false
+    semantic_or_spatial_top_k_selection: false
+    control_tokens: 0
+    environmental_text_inputs: []
+
+  dataset:
+    scene_id: scene_000001
+    canonical_row_count: 138
+    canonical_row_inventory_sha256: 9919ff1bee4611dce4132d79fa50f6f6b4ace567a6df780a2e0e21bd88237a8e
+    parent_v87_to_v88_transition_counts:
+      retained_correct: 83
+      recovered: 24
+      regressed: 20
+      retained_wrong: 11
+    parent_v87_to_v88_transition_inventory_sha256: a3d307e564030d2224234600fe64e1b6b7b36446dca9d1b8dff09810d6a0abdf
+    parent_v88_error_count: 31
+    parent_v88_error_type_counts:
+      attribute: 7
+      presence: 1
+      spatial_relation: 22
+      support: 1
+    parent_v88_error_inventory_sha256: a04f3e387ca92941a7d1cce0f5b6bfe626bf4c3254626558224af3f8ac35ef6b
+    parent_v88_correct_anchor_count: 107
+    parent_v88_correct_anchor_inventory_sha256: 8cfcd55f9daa890e171767485549c087378a97b088f719af7105890225965d0f
+    canonical_rows_per_epoch: 138
+    hard_error_replay_copies: 2
+    hard_error_replay_rows_per_epoch: 62
+    correct_anchor_replay_rows_per_epoch: 107
+    development_smoke_rows_per_epoch: 3
+    total_rows_per_epoch: 310
+    training_row_inventory_sha256: b3fc51dc3614fea7f338e4f6d987924e81e4c31ff945bb662b0defb43460bfdf
+    error_total_exposures_per_epoch: 3
+    correct_total_exposures_per_epoch: 2
+    selection_uses_training_metadata_only: true
+    answer_metadata_training_only: true
+    runtime_serializes_questions_or_answers: false
+    runtime_serializes_training_inventory: false
+    runtime_serializes_error_inventory: false
+    runtime_serializes_anchor_inventory: false
+
+  frozen_stack:
+    base_gemma_frozen: true
+    v54_bank_count: 6
+    v85_bank_name: v85_strict_multiscene_bridge
+    v85_bank_state_sha256: f31b8f99f77f1b7b92dafd74220e5e12ccfa35cbc8630a6d7640f2fe1f93c581
+    v86_bank_name: v86_scene1_demo_bridge
+    v86_bank_target_module: model.language_model.layers.34.mlp.up_proj
+    v86_bank_state_sha256: 8b6bd801716132c8aac50c6288b9ba588417dc5e6a7c2c15dd9515892f714260
+    v87_bank_name: v87_scene1_balanced_bridge
+    v87_bank_target_module: model.language_model.layers.34.mlp.gate_proj
+    v87_bank_state_sha256: 618c03e102d9a9eb98d405d5a040cd8285194539b5a4043d34f16356ac08769e
+    v88_bank_name: v88_scene1_augmented_bridge
+    v88_bank_target_module: model.language_model.layers.27.self_attn.q_proj
+    v88_bank_state_sha256: ff311624150056c67ad1c0a06752a77af2de89878778049ae886aa59db3376aa
+    total_frozen_bank_count: 10
+    merged_weights: false
+
+  bridge:
+    bank_name: v89_scene1_retention_bridge
+    target_module: model.language_model.layers.27.self_attn.o_proj
+    target_layer_type: sliding_attention
+    target_in_features: 2048
+    target_out_features: 1536
+    rank: 8
+    alpha: 16.0
+    dropout: 0.0
+    trainable_parameter_count: 28672
+    initialization_algorithm: cpu_kaiming_uniform_a_exact_zero_b
+    initialization_seed: 890089
+    expected_initial_state_sha256: 5686d458589b7b39599eb9e865d08ef709a43e7ca36b7496d212b1f7581dc83d
+    disjoint_from_all_frozen_banks: true
+
+  training:
+    optimizer: AdamW
+    epochs: 3
+    rows_per_epoch: 310
+    microbatch_size: 1
+    gradient_accumulation_rows: 6
+    optimizer_updates: 155
+    row_order: deterministic_allrow_seeded_shuffle
+    row_order_seed: 890089
+    row_order_sha256: d427fcd5fbbee51158d949d595ea8e33d3c4ae34d948d61ddec36de8e8e2c63b
+    learning_rate: 0.00025
+    weight_decay: 0.0
+    gradient_clip_norm: 1.0
+    answer_ce_weight: 1.0
+    class_weighting: none
+    zero_payload_margin_weight: 1.0
+    zero_payload_target_margin_nll: 0.5
+    canonical_causal_question_ids: [q_000080, q_000108, q_000014]
+    development_smoke_causal_schedule_ids: [v89_smoke_00, v89_smoke_01, v89_smoke_02]
+    zero_payload_preserves_native_boi_eoi: true
+    zero_payload_zeros_exactly_736_interior_tokens: true
+    causal_rows_per_epoch: 6
+    total_causal_margin_rows: 18
+    checkpoint_selection: fixed_final_update_155
+    intermediate_behavior_selection: false
+
+  gates:
+    all_scene1_canonical_accuracy_minimum: 0.80
+    attribute_accuracy_minimum: 0.50
+    presence_accuracy_minimum: 0.75
+    spatial_relation_accuracy_minimum: 0.60
+    exact_training_row_count_required: 138
+    live_smoke_questions:
+      - question: Is there a chair?
+        expected: "yes"
+      - question: What color is the bowl?
+        expected: red
+      - question: Is the bowl left or right of the chair?
+        expected: left
+    live_smoke_required_correct: 3
+    live_smoke_total: 3
+    live_smoke_is_development_known_and_trained: true
+    live_smoke_is_held_out: false
+    causal_correct_memory_mean_nll_below_zero_payload: true
+    causal_prediction_change_minimum: 1
+    exact_prefix_hash_invariance_required: true
+    exact_total_environment_input_invariance_required: true
+    oracle_physically_unavailable_during_runtime_required: true
+    forbidden_runtime_read_count_maximum: 0
+    runtime_promotion_only_after_all_gates: true
+
+  outputs:
+    preregistration: reports/gemma4/metrics/gemma4_v89_scene1_retention_preregistration.json
+    cpu_preflight: reports/gemma4/metrics/gemma4_v89_scene1_retention_cpu_preflight.json
+    work_root: data_gemma4/checkpoints/v89_scene1_retention_work
+    fixed_final_candidate: reports/gemma4/artifacts/v89_scene1_retention_final
+    training_report: reports/gemma4/metrics/gemma4_v89_scene1_retention_training.json
+    evaluation_predictions: reports/gemma4/predictions/gemma4_v89_scene1_retention_evaluation.json
+    evaluation_report: reports/gemma4/metrics/gemma4_v89_scene1_retention_evaluation.json
+    runtime_candidate: reports/gemma4/artifacts/v89_scene1_retention_runtime
+    runtime_smoke_report: reports/gemma4/metrics/gemma4_v89_scene1_retention_runtime_smoke.json
+
+  scope:
+    post_v88_training_set_development: true
+    single_scene_overfit_demonstration: true
+    retention_aware_error_correction: true
+    development_known_smoke: true
+    local_inference_only: true
+    cloud_inference: false
+    held_out_generalization_claim: false
+    official_validation_loaded: false
+    official_test_loaded: false
+    deferred_final_loaded: false
+    oracle_loaded_during_training: false
+    runtime_promotion_authorized: false

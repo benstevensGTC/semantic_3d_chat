@@ -1,0 +1,97 @@
+{
+  "checkpoint_weights_sha256": "0787a258f1d41d14e565cc2ae150e7779de24e3d357298d3f83dccfb21c1a597",
+  "dataset_sha256": "1ff19710cd2f538a2189d3846e7cb0814624c8865b48747d712ff0b2cf5e661a",
+  "environmental_text_inputs_at_runtime": [],
+  "oracle_inputs_used_by_runtime": false,
+  "schema": "semantic_3d_chat.navigation_policy_offline_evaluation.v1",
+  "train": {
+    "action_accuracy": 0.9126190543174744,
+    "argument_mae": 0.17114987969398499,
+    "by_family": {
+      "approach": {
+        "action_accuracy": 0.9008875489234924,
+        "sample_count": 676
+      },
+      "collision_recovery": {
+        "action_accuracy": 1.0,
+        "sample_count": 112
+      },
+      "face": {
+        "action_accuracy": 0.9107142686843872,
+        "sample_count": 392
+      },
+      "left_right": {
+        "action_accuracy": 0.9438775777816772,
+        "sample_count": 392
+      },
+      "obstacle": {
+        "action_accuracy": 0.8886256217956543,
+        "sample_count": 844
+      },
+      "stop": {
+        "action_accuracy": 1.0,
+        "sample_count": 408
+      },
+      "update_after_scan": {
+        "action_accuracy": 0.8917151093482971,
+        "sample_count": 1376
+      }
+    },
+    "predicted_action_counts": {
+      "move_backward": 102,
+      "move_forward": 1592,
+      "scan": 112,
+      "stop": 869,
+      "turn": 1525
+    },
+    "sample_count": 4200,
+    "scene_count": 14,
+    "stop_recall": 0.9018265008926392,
+    "turn_sign_accuracy": 0.8781887888908386
+  },
+  "validation": {
+    "action_accuracy": 0.8298059701919556,
+    "argument_mae": 0.3123275339603424,
+    "by_family": {
+      "approach": {
+        "action_accuracy": 0.7254902124404907,
+        "sample_count": 408
+      },
+      "collision_recovery": {
+        "action_accuracy": 1.0,
+        "sample_count": 64
+      },
+      "face": {
+        "action_accuracy": 0.8348214030265808,
+        "sample_count": 224
+      },
+      "left_right": {
+        "action_accuracy": 0.84375,
+        "sample_count": 224
+      },
+      "obstacle": {
+        "action_accuracy": 0.8353174328804016,
+        "sample_count": 504
+      },
+      "stop": {
+        "action_accuracy": 1.0,
+        "sample_count": 220
+      },
+      "update_after_scan": {
+        "action_accuracy": 0.8092948794364929,
+        "sample_count": 624
+      }
+    },
+    "predicted_action_counts": {
+      "move_backward": 55,
+      "move_forward": 694,
+      "scan": 61,
+      "stop": 520,
+      "turn": 938
+    },
+    "sample_count": 2268,
+    "scene_count": 8,
+    "stop_recall": 0.8421052694320679,
+    "turn_sign_accuracy": 0.7581018805503845
+  }
+}

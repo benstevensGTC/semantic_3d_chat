@@ -1,0 +1,49 @@
+_base_: gemma4_color_mirror_dense_alignment_v26.yaml
+
+# V26 proved that the calibrated all-voxel residual contains useful held-out
+# semantics but also proved that replacing V24's native aligned tail destroys
+# the established decoder interface.  V27 leaves V24's complete semantic path
+# unchanged and spatially pools the frozen calibrated residual as a bounded,
+# question-independent auxiliary contribution to all 256 scene latents.
+scene_encoder:
+  dense_alignment:
+    application_mode: coverage_sidecar
+    sidecar_scale: 0.10
+
+training:
+  output_namespace: gemma4_v27_dense_sidecar
+  extension_output_namespace: gemma4_v27_dense_sidecar_extension
+
+v26_screen: null
+
+v27_screen:
+  schema_version: 1
+  role: frozen_v24_with_bounded_calibrated_coverage_sidecar
+  base_checkpoint: data_gemma4/checkpoints/gemma4_v24_shared_query/epoch_001
+  base_adapter_sha256: 45e0c5affa9cf556e29bab5de418dffb867817b703c848bc6828255347748d31
+  calibrated_bridge: reports/gemma4/artifacts/v26_dense_alignment_bridge.safetensors
+  calibrated_bridge_sha256: 3340c453ded5152775e34e6e40ccb7e97dda1d7201e7321ff15c408edf92a83a
+  calibrated_state_sha256: 5c8721fd1ff789b7a8a55e82f31fd7faae54b8114616d3a29efd8605190bad6e
+  selected_sidecar_scale: 0.10
+  no_step_requires:
+    color_full_vocab_sides: 12
+    color_full_vocab_units: 6
+    mirror_minimum_full_vocab_sides: 10
+    mirror_minimum_full_vocab_units: 4
+    no_new_negative_sides: true
+    maximum_relative_prefix_rms_drift: 0.10
+    minimum_prefix_cosine: 0.995
+  semantic_validation_requires:
+    minimum_precision_at_100: 0.10
+    positive_region_margin: true
+    positive_query_margin: true
+    maximum_mirror_centroid_error_m: 0.15
+
+experiment:
+  role: bounded_calibrated_all_voxel_sidecar_falsifier_v27
+  question_dependent_scene_processing: false
+  question_dependent_retrieval: false
+  runtime_oracle_access: false
+  runtime_category_strings: false
+  runtime_text_prototypes: false
+  base_semantic_path_modified: false

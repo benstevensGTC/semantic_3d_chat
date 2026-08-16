@@ -1,0 +1,1059 @@
+{
+  "arbitrary_continuation_authorized": false,
+  "artifact": "v37_update16_terminal_gate",
+  "audit_method": "recursive_config_exact_v36_terminal_source_v37_metadata_runtime_optimizer_manifest_and_tensor_bytes_only",
+  "chat_promotion_authorized": false,
+  "checkpoint_root": "data_gemma4/checkpoints/gemma4_v37_diverse28_scene_ingress_kv",
+  "conditional_successor_authorization": {
+    "all_four_query_lora_b_tensors_nonzero": true,
+    "all_occupied_blocks_processed": true,
+    "all_other_followup_architectures_authorized": false,
+    "authorized": true,
+    "authorized_existing_lora_alpha": 16.0,
+    "authorized_existing_lora_bank": "extension_v30_joint_pair_query",
+    "authorized_existing_lora_dropout": 0.0,
+    "authorized_existing_lora_parameter_count": 131072,
+    "authorized_existing_lora_parameter_shapes": {
+      "layer18_q_proj": {
+        "lora_a": [
+          8,
+          1536
+        ],
+        "lora_b": [
+          2048,
+          8
+        ]
+      },
+      "layer19_q_proj": {
+        "lora_a": [
+          8,
+          1536
+        ],
+        "lora_b": [
+          4096,
+          8
+        ]
+      },
+      "layer20_q_proj": {
+        "lora_a": [
+          8,
+          1536
+        ],
+        "lora_b": [
+          2048,
+          8
+        ]
+      },
+      "layer21_q_proj": {
+        "lora_a": [
+          8,
+          1536
+        ],
+        "lora_b": [
+          2048,
+          8
+        ]
+      }
+    },
+    "authorized_existing_lora_rank": 8,
+    "authorized_existing_lora_target_language_layers": [
+      18,
+      19,
+      20,
+      21
+    ],
+    "authorized_existing_lora_target_module_paths": [
+      "model.language_model.layers.18.self_attn.q_proj",
+      "model.language_model.layers.19.self_attn.q_proj",
+      "model.language_model.layers.20.self_attn.q_proj",
+      "model.language_model.layers.21.self_attn.q_proj"
+    ],
+    "authorized_existing_lora_tensor_count": 8,
+    "chat_promotion_authorized": false,
+    "existing_query_bank_is_learned_not_zero_output": true,
+    "existing_query_bank_reinitialization_authorized": false,
+    "final_test_access_authorized": false,
+    "fresh_adamw_required": true,
+    "frozen_surface": {
+      "all_nonquery_adapter_state_sha256": "fe39da221505c1968030c67aacb4e99f1a179e05a97d2906d416afe5fef5ed78",
+      "all_nonquery_adapter_tensor_count": 171,
+      "block_cross_residual_frozen": true,
+      "block_cross_residual_state_sha256": "92652fd2dbde2406227503f50717b2031baa1bcbc050902a379ddb9ddb52764f",
+      "composer_frozen": true,
+      "every_other_tensor_and_buffer_frozen": true,
+      "gemma_base_frozen": true,
+      "v23_shared_kv_bank_state_sha256": "5c9233bd96b381e2f63443f8a739a868a21997b28061d90fb407a46d9de2d4cb",
+      "v23_shared_kv_frozen": true,
+      "v33_scene_stack_frozen": true
+    },
+    "gate_artifact_requirements": {
+      "gate_optimizer_steps": [
+        0,
+        8,
+        16,
+        41
+      ],
+      "per_unit_correct_answer_nll_must_be_persisted": true,
+      "per_unit_pair_id_and_question_key_must_be_persisted": true,
+      "per_unit_rank_nll_must_be_persisted": true,
+      "per_unit_side_and_cross_prefix_correctness_must_be_persisted": true
+    },
+    "gradient_clip_norm": 1.0,
+    "learning_rate": 2e-05,
+    "new_lora_bank_authorized": false,
+    "new_scene_encoder_module_authorized": false,
+    "new_scene_tokens_authorized": false,
+    "objective": {
+      "additional_terms_authorized": false,
+      "broad_answer_nll_weight": 0.5,
+      "cross_prefix_maintenance_margin": 0.1,
+      "cross_prefix_maintenance_weight": 1.0,
+      "pair_correct_answer_nll_weight": 1.0,
+      "side_hinge_margin": 0.5,
+      "side_hinge_weight": 8.0
+    },
+    "optimizer": {
+      "fresh_state_required": true,
+      "gradient_clip_norm": 1.0,
+      "learning_rate": 2e-05,
+      "type": "AdamW",
+      "v36_optimizer_state_may_be_loaded": false,
+      "v37_optimizer_state_may_be_loaded": false,
+      "weight_decay": 0.0
+    },
+    "oracle_access_authorized": false,
+    "question_dependent_retrieval": false,
+    "scene_prefix_built_before_questions": true,
+    "schedule": {
+      "canonical_25_unit_cycle_steps_17_through_41": [
+        {
+          "pair_id": "pair_000005",
+          "question_key": "cfq_a578dc166be9a217"
+        },
+        {
+          "pair_id": "pair_000006",
+          "question_key": "cfq_0a79d507273195ef"
+        },
+        {
+          "pair_id": "pair_000006",
+          "question_key": "cfq_5c84a2c27d2be251"
+        },
+        {
+          "pair_id": "pair_000006",
+          "question_key": "cfq_8e9855d51fa91bfb"
+        },
+        {
+          "pair_id": "pair_000006",
+          "question_key": "cfq_f1e8f24afac4339b"
+        },
+        {
+          "pair_id": "pair_000007",
+          "question_key": "cfq_736067b51ce93c49"
+        },
+        {
+          "pair_id": "pair_000007",
+          "question_key": "cfq_997610c185204121"
+        },
+        {
+          "pair_id": "pair_000007",
+          "question_key": "cfq_bd500364dac52b59"
+        },
+        {
+          "pair_id": "pair_000007",
+          "question_key": "cfq_f004e89a2284b94a"
+        },
+        {
+          "pair_id": "pair_000008",
+          "question_key": "cfq_39808de4310f3388"
+        },
+        {
+          "pair_id": "pair_000015",
+          "question_key": "cfq_13b1138d14c52a7c"
+        },
+        {
+          "pair_id": "pair_000015",
+          "question_key": "cfq_163eb92339ad35a5"
+        },
+        {
+          "pair_id": "pair_000015",
+          "question_key": "cfq_a1c673a1197a0961"
+        },
+        {
+          "pair_id": "pair_000015",
+          "question_key": "cfq_ac7ac024c40aaddc"
+        },
+        {
+          "pair_id": "pair_000016",
+          "question_key": "cfq_699675ceeaf65406"
+        },
+        {
+          "pair_id": "pair_000016",
+          "question_key": "cfq_9152e66b248e4692"
+        },
+        {
+          "pair_id": "pair_000016",
+          "question_key": "cfq_e08b96268b3c2a10"
+        },
+        {
+          "pair_id": "pair_000016",
+          "question_key": "cfq_efba0c82a7336161"
+        },
+        {
+          "pair_id": "pair_000017",
+          "question_key": "cfq_1c8b8cd72fcde904"
+        },
+        {
+          "pair_id": "pair_000017",
+          "question_key": "cfq_66aab89cee5bef49"
+        },
+        {
+          "pair_id": "pair_000017",
+          "question_key": "cfq_d469c4ac156ac42d"
+        },
+        {
+          "pair_id": "pair_000017",
+          "question_key": "cfq_fa3601dfffa80a0e"
+        },
+        {
+          "pair_id": "pair_000018",
+          "question_key": "cfq_90b3d9852a93ce2a"
+        },
+        {
+          "pair_id": "pair_000018",
+          "question_key": "cfq_b2c2e9aec9f883bc"
+        },
+        {
+          "pair_id": "pair_000018",
+          "question_key": "cfq_f58d3fc750290b0f"
+        }
+      ],
+      "continuation_past_update_41_authorized": false,
+      "exact_pair_schedule": [
+        {
+          "optimizer_step": 1,
+          "pair_id": "pair_000015",
+          "question_key": "cfq_13b1138d14c52a7c"
+        },
+        {
+          "optimizer_step": 2,
+          "pair_id": "pair_000017",
+          "question_key": "cfq_1c8b8cd72fcde904"
+        },
+        {
+          "optimizer_step": 3,
+          "pair_id": "pair_000015",
+          "question_key": "cfq_163eb92339ad35a5"
+        },
+        {
+          "optimizer_step": 4,
+          "pair_id": "pair_000017",
+          "question_key": "cfq_66aab89cee5bef49"
+        },
+        {
+          "optimizer_step": 5,
+          "pair_id": "pair_000015",
+          "question_key": "cfq_a1c673a1197a0961"
+        },
+        {
+          "optimizer_step": 6,
+          "pair_id": "pair_000017",
+          "question_key": "cfq_d469c4ac156ac42d"
+        },
+        {
+          "optimizer_step": 7,
+          "pair_id": "pair_000015",
+          "question_key": "cfq_ac7ac024c40aaddc"
+        },
+        {
+          "optimizer_step": 8,
+          "pair_id": "pair_000017",
+          "question_key": "cfq_fa3601dfffa80a0e"
+        },
+        {
+          "optimizer_step": 9,
+          "pair_id": "pair_000015",
+          "question_key": "cfq_13b1138d14c52a7c"
+        },
+        {
+          "optimizer_step": 10,
+          "pair_id": "pair_000017",
+          "question_key": "cfq_1c8b8cd72fcde904"
+        },
+        {
+          "optimizer_step": 11,
+          "pair_id": "pair_000015",
+          "question_key": "cfq_163eb92339ad35a5"
+        },
+        {
+          "optimizer_step": 12,
+          "pair_id": "pair_000017",
+          "question_key": "cfq_66aab89cee5bef49"
+        },
+        {
+          "optimizer_step": 13,
+          "pair_id": "pair_000015",
+          "question_key": "cfq_a1c673a1197a0961"
+        },
+        {
+          "optimizer_step": 14,
+          "pair_id": "pair_000017",
+          "question_key": "cfq_d469c4ac156ac42d"
+        },
+        {
+          "optimizer_step": 15,
+          "pair_id": "pair_000015",
+          "question_key": "cfq_ac7ac024c40aaddc"
+        },
+        {
+          "optimizer_step": 16,
+          "pair_id": "pair_000017",
+          "question_key": "cfq_fa3601dfffa80a0e"
+        },
+        {
+          "optimizer_step": 17,
+          "pair_id": "pair_000005",
+          "question_key": "cfq_a578dc166be9a217"
+        },
+        {
+          "optimizer_step": 18,
+          "pair_id": "pair_000006",
+          "question_key": "cfq_0a79d507273195ef"
+        },
+        {
+          "optimizer_step": 19,
+          "pair_id": "pair_000006",
+          "question_key": "cfq_5c84a2c27d2be251"
+        },
+        {
+          "optimizer_step": 20,
+          "pair_id": "pair_000006",
+          "question_key": "cfq_8e9855d51fa91bfb"
+        },
+        {
+          "optimizer_step": 21,
+          "pair_id": "pair_000006",
+          "question_key": "cfq_f1e8f24afac4339b"
+        },
+        {
+          "optimizer_step": 22,
+          "pair_id": "pair_000007",
+          "question_key": "cfq_736067b51ce93c49"
+        },
+        {
+          "optimizer_step": 23,
+          "pair_id": "pair_000007",
+          "question_key": "cfq_997610c185204121"
+        },
+        {
+          "optimizer_step": 24,
+          "pair_id": "pair_000007",
+          "question_key": "cfq_bd500364dac52b59"
+        },
+        {
+          "optimizer_step": 25,
+          "pair_id": "pair_000007",
+          "question_key": "cfq_f004e89a2284b94a"
+        },
+        {
+          "optimizer_step": 26,
+          "pair_id": "pair_000008",
+          "question_key": "cfq_39808de4310f3388"
+        },
+        {
+          "optimizer_step": 27,
+          "pair_id": "pair_000015",
+          "question_key": "cfq_13b1138d14c52a7c"
+        },
+        {
+          "optimizer_step": 28,
+          "pair_id": "pair_000015",
+          "question_key": "cfq_163eb92339ad35a5"
+        },
+        {
+          "optimizer_step": 29,
+          "pair_id": "pair_000015",
+          "question_key": "cfq_a1c673a1197a0961"
+        },
+        {
+          "optimizer_step": 30,
+          "pair_id": "pair_000015",
+          "question_key": "cfq_ac7ac024c40aaddc"
+        },
+        {
+          "optimizer_step": 31,
+          "pair_id": "pair_000016",
+          "question_key": "cfq_699675ceeaf65406"
+        },
+        {
+          "optimizer_step": 32,
+          "pair_id": "pair_000016",
+          "question_key": "cfq_9152e66b248e4692"
+        },
+        {
+          "optimizer_step": 33,
+          "pair_id": "pair_000016",
+          "question_key": "cfq_e08b96268b3c2a10"
+        },
+        {
+          "optimizer_step": 34,
+          "pair_id": "pair_000016",
+          "question_key": "cfq_efba0c82a7336161"
+        },
+        {
+          "optimizer_step": 35,
+          "pair_id": "pair_000017",
+          "question_key": "cfq_1c8b8cd72fcde904"
+        },
+        {
+          "optimizer_step": 36,
+          "pair_id": "pair_000017",
+          "question_key": "cfq_66aab89cee5bef49"
+        },
+        {
+          "optimizer_step": 37,
+          "pair_id": "pair_000017",
+          "question_key": "cfq_d469c4ac156ac42d"
+        },
+        {
+          "optimizer_step": 38,
+          "pair_id": "pair_000017",
+          "question_key": "cfq_fa3601dfffa80a0e"
+        },
+        {
+          "optimizer_step": 39,
+          "pair_id": "pair_000018",
+          "question_key": "cfq_90b3d9852a93ce2a"
+        },
+        {
+          "optimizer_step": 40,
+          "pair_id": "pair_000018",
+          "question_key": "cfq_b2c2e9aec9f883bc"
+        },
+        {
+          "optimizer_step": 41,
+          "pair_id": "pair_000018",
+          "question_key": "cfq_f58d3fc750290b0f"
+        }
+      ],
+      "exact_pair_schedule_sha256": "4e26160c9a36e20ac894ff5e26604e6fad985ff5c84211282fd9807c9e738b3f",
+      "full_pair_and_broad_schedule_sha256_must_be_pinned_before_training": true,
+      "one_deterministic_unchanged_broad_row_per_update": true,
+      "priority_book_picture_units_steps_1_through_8": [
+        {
+          "pair_id": "pair_000015",
+          "question_key": "cfq_13b1138d14c52a7c"
+        },
+        {
+          "pair_id": "pair_000017",
+          "question_key": "cfq_1c8b8cd72fcde904"
+        },
+        {
+          "pair_id": "pair_000015",
+          "question_key": "cfq_163eb92339ad35a5"
+        },
+        {
+          "pair_id": "pair_000017",
+          "question_key": "cfq_66aab89cee5bef49"
+        },
+        {
+          "pair_id": "pair_000015",
+          "question_key": "cfq_a1c673a1197a0961"
+        },
+        {
+          "pair_id": "pair_000017",
+          "question_key": "cfq_d469c4ac156ac42d"
+        },
+        {
+          "pair_id": "pair_000015",
+          "question_key": "cfq_ac7ac024c40aaddc"
+        },
+        {
+          "pair_id": "pair_000017",
+          "question_key": "cfq_fa3601dfffa80a0e"
+        }
+      ],
+      "saved_optimizer_steps": [
+        0,
+        8,
+        16,
+        24,
+        32,
+        40,
+        41
+      ],
+      "steps_9_through_16_repeat_steps_1_through_8_exactly": true,
+      "true_optimizer_step_count": 41
+    },
+    "scope": "deterministic_v23_k_only_hybrid_then_train_existing_v30_query_only",
+    "source_checkpoint": "data_gemma4/checkpoints/gemma4_v37_diverse28_scene_ingress_kv/update_016",
+    "source_file_sha256": {
+      "adapter.safetensors": "5b897221fb448be75caf330c6ab81a39d424ecaa7d0e0307f264f3c58c7659fa",
+      "metadata.json": "f696eeb75d08471e8676613ef6a440852df62113d90393ad705d6c85b9985ecc",
+      "optimizer.pt": "551dda55c9aba84dbd4ac2238fa489a8451f8ad10e091853f3e758f3cbe32ed3",
+      "optimizer_audit.json": "d52170ab9983eeb44a3c264830f9507baab2abc2cc0ecf0ef55f7cf82ef3cc89",
+      "runtime_metadata.json": "8b3f70743aa8226549e65d0d5a08882cc311b61bda07eb2ba2d49454267897de"
+    },
+    "source_full_tensor_state_sha256": "801f80f6fd6a27e7cb815677824fb855c491272d65b81ba464c95200ebd570b9",
+    "stage": "v38_query_recovery",
+    "successor": "v38_query_recovery",
+    "trainable_surface": {
+      "bank": "extension_v30_joint_pair_query",
+      "parameter_count": 131072,
+      "source_state_sha256": "050706c300e6fb0ac8e4cc02e26c565b54a9a89505104302d4ffcedc02124c64",
+      "state_must_change": true,
+      "tensor_count": 8
+    },
+    "update16_gate": {
+      "book_or_picture_teacher_complete_minimum": 1,
+      "broad_train_nll_maximum_increase_from_update_zero": 0.02,
+      "complete_physical_pair_coverage_minimum": 5,
+      "frozen_state_must_remain_exact": true,
+      "priority_teacher_deficit_delta_from_update_zero_maximum": -3.12,
+      "priority_teacher_deficit_improvement_from_update_zero_minimum": 3.12,
+      "require_update8_gate_passed": true,
+      "teacher_complete_units_minimum": 10,
+      "teacher_cross_prefix_complete_units_minimum": 17,
+      "teacher_positive_sides_minimum": 35
+    },
+    "update41_gate": {
+      "book_teacher_complete_minimum": 1,
+      "broad_greedy_exact_correct_minimum": 23,
+      "broad_greedy_exact_total": 48,
+      "broad_train_nll_maximum_increase_from_update_zero": 0.02,
+      "complete_physical_pair_coverage_minimum": 6,
+      "frozen_state_must_remain_exact": true,
+      "mirror_teacher_complete_minimum": 2,
+      "picture_teacher_complete_minimum": 1,
+      "priority_teacher_deficit_delta_from_update_zero_maximum": -6.24,
+      "priority_teacher_deficit_improvement_from_update_zero_minimum": 6.24,
+      "require_update16_gate_passed": true,
+      "teacher_complete_units_minimum": 12,
+      "teacher_cross_prefix_complete_units_minimum": 18,
+      "teacher_positive_sides_minimum": 37,
+      "train_greedy_complete_each_priority_family_minimum": 1,
+      "train_greedy_complete_units_minimum": 6
+    },
+    "update8_gate": {
+      "broad_train_nll_maximum_increase_from_update_zero": 0.02,
+      "frozen_state_must_remain_exact": true,
+      "priority_teacher_deficit_delta_from_update_zero_maximum": -0.5,
+      "priority_teacher_deficit_improvement_from_update_zero_minimum": 0.5,
+      "teacher_complete_units_minimum": 9,
+      "teacher_cross_prefix_complete_units_minimum": 17,
+      "teacher_positive_sides_minimum": 34
+    },
+    "update_zero_initialization": {
+      "differs_from_v36_u16_only_tensor_names": [
+        "lora_banks.extension_v23_shared_kv.adapters.0.lora_a",
+        "lora_banks.extension_v23_shared_kv.adapters.0.lora_b",
+        "lora_banks.extension_v23_shared_kv.adapters.2.lora_a",
+        "lora_banks.extension_v23_shared_kv.adapters.2.lora_b"
+      ],
+      "differs_from_v37_u16_only_tensor_names": [
+        "lora_banks.extension_v23_shared_kv.adapters.1.lora_a",
+        "lora_banks.extension_v23_shared_kv.adapters.1.lora_b",
+        "lora_banks.extension_v23_shared_kv.adapters.3.lora_a",
+        "lora_banks.extension_v23_shared_kv.adapters.3.lora_b"
+      ],
+      "donor_checkpoint": "data_gemma4/checkpoints/gemma4_v36_diverse28_joint_block_cross/update_016",
+      "donor_full_tensor_state_sha256": "e9b6d1362d58f34aede04817b0c8d81320c616dcd4b64e9c0d3bbe56b5835dd7",
+      "hybrid_block_core_state_sha256": "92652fd2dbde2406227503f50717b2031baa1bcbc050902a379ddb9ddb52764f",
+      "hybrid_frozen_excluding_v30_query_state_sha256": "fe39da221505c1968030c67aacb4e99f1a179e05a97d2906d416afe5fef5ed78",
+      "hybrid_full_tensor_state_sha256": "7b951c6d7ae4f7b50603159f0bc4dfb4d50b5b40f9325134d78d1de1dae87fc0",
+      "hybrid_materialization_and_hash_verification_before_optimizer": true,
+      "hybrid_tensor_count": 179,
+      "hybrid_v23_bank_state_sha256": "5c9233bd96b381e2f63443f8a739a868a21997b28061d90fb407a46d9de2d4cb",
+      "hybrid_v30_query_bank_state_sha256": "050706c300e6fb0ac8e4cc02e26c565b54a9a89505104302d4ffcedc02124c64",
+      "primary_source_checkpoint": "data_gemma4/checkpoints/gemma4_v37_diverse28_scene_ingress_kv/update_016",
+      "primary_source_full_tensor_state_sha256": "801f80f6fd6a27e7cb815677824fb855c491272d65b81ba464c95200ebd570b9",
+      "restore_exact_v36_u16_v23_v_tensor_names": [
+        "lora_banks.extension_v23_shared_kv.adapters.1.lora_a",
+        "lora_banks.extension_v23_shared_kv.adapters.1.lora_b",
+        "lora_banks.extension_v23_shared_kv.adapters.3.lora_a",
+        "lora_banks.extension_v23_shared_kv.adapters.3.lora_b"
+      ],
+      "retain_exact_v37_u16_v23_k_tensor_names": [
+        "lora_banks.extension_v23_shared_kv.adapters.0.lora_a",
+        "lora_banks.extension_v23_shared_kv.adapters.0.lora_b",
+        "lora_banks.extension_v23_shared_kv.adapters.2.lora_a",
+        "lora_banks.extension_v23_shared_kv.adapters.2.lora_b"
+      ],
+      "scope": "v23_k_only_hybrid_from_exact_v36_and_v37",
+      "source_v36_or_v37_optimizer_state_may_be_loaded": false,
+      "v23_k_only_rollback_from_v36_u16": true
+    },
+    "update_zero_train_only_baseline": {
+      "all_25_unit_teacher_metrics_must_be_persisted": true,
+      "broad_greedy_source_correct": 23,
+      "broad_greedy_source_total": 48,
+      "broad_train_nll_must_be_persisted": true,
+      "inherited_v37_pair_metrics_may_be_used_as_hybrid_baseline": false,
+      "must_be_recomputed_from_exact_hybrid_before_optimizer_step_1": true,
+      "priority_teacher_deficit_must_be_persisted": true,
+      "training_scenes_only": true,
+      "validation_qa_loaded": false
+    },
+    "v36_optimizer_state_may_be_loaded": false,
+    "v37_optimizer_state_may_be_loaded": false,
+    "validation_qa_or_model_selection_before_complete_update41": false,
+    "weight_decay": 0.0
+  },
+  "conditional_v38_authorized": true,
+  "config_provenance": {
+    "normalized_config_hash": "7f865546146d",
+    "recursive_chain": [
+      {
+        "path": "configs/experiments/gemma4_diverse28_scene_ingress_kv_v37.yaml",
+        "sha256": "38b0ee5a0921d77c909b31a6cad3834f2527589ef43e6c3671d02ae7731fa098"
+      },
+      {
+        "path": "configs/experiments/gemma4_diverse28_joint_block_cross_v36.yaml",
+        "sha256": "d684da6451b54de3c17af9a7bd5bc2bf6756ecc064cbe54c5e19d53f82f326a1"
+      },
+      {
+        "path": "configs/experiments/gemma4_diverse28_block_cross_v35.yaml",
+        "sha256": "c8ddd808b2f338b9d61bcdadacbb0f679a0283d5e28a923fd25a6eab1a221485"
+      },
+      {
+        "path": "configs/experiments/gemma4_diverse28_environmental_sidecar_v33.yaml",
+        "sha256": "e920d28da8ab0abc3c0ab2c4ad812a2743d1894b769c6302097ac41c31da3905"
+      },
+      {
+        "path": "configs/experiments/gemma4_diverse28_joint_pair_v31.yaml",
+        "sha256": "f171d6c60537824e2921963f51ca0a8811432759951968b082eeb4f0f1f89dd1"
+      },
+      {
+        "path": "configs/experiments/gemma4_diverse20_joint_pair_v30.yaml",
+        "sha256": "ba24f127bc58944d3b7d7ed38ff6a4564009c6c5034744a1ef3082ac5c29215b"
+      },
+      {
+        "path": "configs/experiments/gemma4_diverse20_post_stack_decoder_stage_b_v29.yaml",
+        "sha256": "cf3f432bf911647aef23ccaad07b137d7055be4de720189a13128a55810f5528"
+      },
+      {
+        "path": "configs/experiments/gemma4_color_mirror_post_stack_decoder_stage_b_v28.yaml",
+        "sha256": "6bf3e3b9ba4be8449f3dff55a45275ae678c6db8a0b3aa31c22899c49b002150"
+      },
+      {
+        "path": "configs/experiments/gemma4_color_mirror_post_stack_sidecar_v28.yaml",
+        "sha256": "bcf7fa994b8680dd4d50fc6f7583dfde8d478c78d690e06c23d6444a50f9d396"
+      },
+      {
+        "path": "configs/experiments/gemma4_color_mirror_dense_sidecar_v27.yaml",
+        "sha256": "4686151447ed731ec26aa5cd58550abd35d0de7460f02a45e50c4a607262ddbb"
+      },
+      {
+        "path": "configs/experiments/gemma4_color_mirror_dense_alignment_v26.yaml",
+        "sha256": "bcc7512a89076bbc345349ea439dc3d2c78b118e1026a7fe7ca8d14b40aa8268"
+      },
+      {
+        "path": "configs/experiments/gemma4_color_mirror_dense_alignment_v25.yaml",
+        "sha256": "e76bf1f6b21fa34908766cb576c7c22a5aded157edf204907494798e2f33d1c2"
+      },
+      {
+        "path": "configs/experiments/gemma4_color_mirror_shared_query_v24.yaml",
+        "sha256": "fd2c83007da11e0352f37310c18123821758cd55382b31a7d1befc118a7d81e2"
+      },
+      {
+        "path": "configs/experiments/gemma4_color_mirror_shared_kv_v23.yaml",
+        "sha256": "d8df78fa62bd271adedfea7b7327153f3fa35cbaa1eaf8e50051c4aba068615c"
+      },
+      {
+        "path": "configs/experiments/gemma4_color_mirror_signed_x_local_field_phase_aware_v21.yaml",
+        "sha256": "62e35c53d73d434d69301c55d95c80074073c85a89048396e80a6e79c0e6e42f"
+      },
+      {
+        "path": "configs/experiments/gemma4_color_mirror_centered_content_gate_v18.yaml",
+        "sha256": "0abac4ccdc6f2e4df3100cfc37120bb39214cb1547384b10b8eba34c6b6df00d"
+      },
+      {
+        "path": "configs/experiments/gemma4_color_mirror_global_scene_residual_v16.yaml",
+        "sha256": "07efd41cbe3a460f989463dd829445d3120706abcd8632b173736e2f2e154686"
+      },
+      {
+        "path": "configs/experiments/gemma4_color_mirror_decoder_banks_v14_lr2e3.yaml",
+        "sha256": "1149afacf90d061e80b4d4cec3a2a423181bc1f0352c5359fd9e0e8ec45e2243"
+      },
+      {
+        "path": "configs/experiments/gemma4_color_mirror_decoder_banks_v14_lr_sweep.yaml",
+        "sha256": "1470e43c309b4ad7af64f99caf2caf5ba3f260f182e2d0cc8ec972df7bc87dc9"
+      },
+      {
+        "path": "configs/experiments/gemma4_color_mirror_decoder_banks_v13.yaml",
+        "sha256": "ec3df7bbb8165e2ec4bf70c132005fda46eb4ac5ba24e854359e586074a4d864"
+      },
+      {
+        "path": "configs/experiments/gemma4_color_mirror_spatial_relation_v12.yaml",
+        "sha256": "dd0a96d947dd7683d8cff7fadc5a52003b38c5b7b221fefc820f8220ae2cb87e"
+      },
+      {
+        "path": "configs/experiments/gemma4_color_mirror_full_vocab_v11.yaml",
+        "sha256": "0c9aed6b5cc65d7395bd08024656b5469c4724e4503ac32946e4174b1641ce63"
+      },
+      {
+        "path": "configs/experiments/gemma4_color_mirror_wiring_v10.yaml",
+        "sha256": "21d431e56c38be622da62478eacc3bae7a60cabda00893144295ee445029041f"
+      },
+      {
+        "path": "configs/experiments/gemma4_color_wiring_v9.yaml",
+        "sha256": "ef9f4c7d2fb61dd386de53d3334f7592c7443fc88677f583cc5acda2b325611f"
+      },
+      {
+        "path": "configs/experiments/gemma4_color_wiring_v8.yaml",
+        "sha256": "e3c9728f0e3396939d03227accbd757e30eaa9bb6009f040c22148ad5d09b38f"
+      },
+      {
+        "path": "configs/experiments/gemma4_color_wiring_v7.yaml",
+        "sha256": "50403be8147170a5881974011970a38ff2f4989572323a1d4f542d43d73f3ae3"
+      },
+      {
+        "path": "configs/experiments/gemma4_color_wiring_v6.yaml",
+        "sha256": "21989115ecc206165a0d4cc8eebe862e4c898c0359f4f84e9d5834c46a7513ec"
+      },
+      {
+        "path": "configs/experiments/gemma4_color_wiring_v5.yaml",
+        "sha256": "d6273f0f2bcddeb27a1e4ca3868539aa6baf5973a29890953dce0e262b587c15"
+      },
+      {
+        "path": "configs/experiments/gemma4_color_wiring_v4.yaml",
+        "sha256": "9817eac925847bc7ab2066c510ccd572416834de36b06f068454a66bd4596a47"
+      },
+      {
+        "path": "configs/experiments/gemma4_color_wiring_v3.yaml",
+        "sha256": "f56c9979b045af44788a55587392c11099e11a91c75a792e9bdbb24023bb1b52"
+      },
+      {
+        "path": "configs/experiments/gemma4_color_wiring_v2.yaml",
+        "sha256": "89bc0c27fba903b935b87b7f0c9d11a433825ffd120b605584dc33136d960ccc"
+      },
+      {
+        "path": "configs/experiments/gemma4_color_wiring.yaml",
+        "sha256": "45a0f5dc8f40aa253cc7c5238376241ec7b89c62ee555e87dee89c3443a7730a"
+      },
+      {
+        "path": "configs/experiments/gemma4_pair_gate.yaml",
+        "sha256": "f75036b3cafa6075ad888409cdf6bd35fe4014856fd7dcdc6bc2ecc1a20468dd"
+      },
+      {
+        "path": "configs/gemma4_e2b.yaml",
+        "sha256": "c6b08a97b09771cb52f3d435bcee607a8ed5c7009624ce3a01d42852edd22bd3"
+      },
+      {
+        "path": "configs/default.yaml",
+        "sha256": "2e355ae6057fd1a1ed6f496a5e0b10d629ae4d05498877b43cbdacc63c7b4e23"
+      }
+    ],
+    "recursive_chain_sha256": "067dd4e87cf21c5eded6ed3821c0b266cbfa6600754ef9fd5e21272e675fa93e",
+    "root": "configs/experiments/gemma4_diverse28_scene_ingress_kv_v37.yaml",
+    "root_sha256": "38b0ee5a0921d77c909b31a6cad3834f2527589ef43e6c3671d02ae7731fa098"
+  },
+  "exact_v36_prior_and_source": {
+    "source_checkpoint": "data_gemma4/checkpoints/gemma4_v36_diverse28_joint_block_cross/update_016",
+    "source_file_sha256": {
+      "adapter.safetensors": "6ed86fb51502f7330c75cc48b9be970eb0a933eb19da971a7e04726c419c3be5",
+      "metadata.json": "7e7c257a1e42d20b7f2270a0257969ae006c3c27859e707c18d21b5537a89342",
+      "optimizer.pt": "51a76712d87f24af793a28848d743034b9229d5e1df63d02c81e13efb5f12569",
+      "runtime_metadata.json": "63a27773e5d127c063b762cf110c1ed1d4022908bd9e4b843509dc399fe7f6dc"
+    },
+    "source_optimizer_access": "bytes_hashed_only_not_deserialized",
+    "source_tensor_state_sha256": "e9b6d1362d58f34aede04817b0c8d81320c616dcd4b64e9c0d3bbe56b5835dd7",
+    "terminal_report": {
+      "path": "reports/gemma4/metrics/v36_update16_terminal_gate.json",
+      "sha256": "cb5b1248a4904dc58a685b64e052f980c02771b59eed5578bdbf2865ddbf5877"
+    }
+  },
+  "final_test_access_authorized": false,
+  "final_test_scenes_touched": false,
+  "gemma_loaded": false,
+  "loaded_file_inventory": [
+    "configs/default.yaml",
+    "configs/experiments/gemma4_color_mirror_centered_content_gate_v18.yaml",
+    "configs/experiments/gemma4_color_mirror_decoder_banks_v13.yaml",
+    "configs/experiments/gemma4_color_mirror_decoder_banks_v14_lr2e3.yaml",
+    "configs/experiments/gemma4_color_mirror_decoder_banks_v14_lr_sweep.yaml",
+    "configs/experiments/gemma4_color_mirror_dense_alignment_v25.yaml",
+    "configs/experiments/gemma4_color_mirror_dense_alignment_v26.yaml",
+    "configs/experiments/gemma4_color_mirror_dense_sidecar_v27.yaml",
+    "configs/experiments/gemma4_color_mirror_full_vocab_v11.yaml",
+    "configs/experiments/gemma4_color_mirror_global_scene_residual_v16.yaml",
+    "configs/experiments/gemma4_color_mirror_post_stack_decoder_stage_b_v28.yaml",
+    "configs/experiments/gemma4_color_mirror_post_stack_sidecar_v28.yaml",
+    "configs/experiments/gemma4_color_mirror_shared_kv_v23.yaml",
+    "configs/experiments/gemma4_color_mirror_shared_query_v24.yaml",
+    "configs/experiments/gemma4_color_mirror_signed_x_local_field_phase_aware_v21.yaml",
+    "configs/experiments/gemma4_color_mirror_spatial_relation_v12.yaml",
+    "configs/experiments/gemma4_color_mirror_wiring_v10.yaml",
+    "configs/experiments/gemma4_color_wiring.yaml",
+    "configs/experiments/gemma4_color_wiring_v2.yaml",
+    "configs/experiments/gemma4_color_wiring_v3.yaml",
+    "configs/experiments/gemma4_color_wiring_v4.yaml",
+    "configs/experiments/gemma4_color_wiring_v5.yaml",
+    "configs/experiments/gemma4_color_wiring_v6.yaml",
+    "configs/experiments/gemma4_color_wiring_v7.yaml",
+    "configs/experiments/gemma4_color_wiring_v8.yaml",
+    "configs/experiments/gemma4_color_wiring_v9.yaml",
+    "configs/experiments/gemma4_diverse20_joint_pair_v30.yaml",
+    "configs/experiments/gemma4_diverse20_post_stack_decoder_stage_b_v29.yaml",
+    "configs/experiments/gemma4_diverse28_block_cross_v35.yaml",
+    "configs/experiments/gemma4_diverse28_environmental_sidecar_v33.yaml",
+    "configs/experiments/gemma4_diverse28_joint_block_cross_v36.yaml",
+    "configs/experiments/gemma4_diverse28_joint_pair_v31.yaml",
+    "configs/experiments/gemma4_diverse28_scene_ingress_kv_v37.yaml",
+    "configs/experiments/gemma4_pair_gate.yaml",
+    "configs/gemma4_e2b.yaml",
+    "data_gemma4/checkpoints/gemma4_v36_diverse28_joint_block_cross/update_016/adapter.safetensors",
+    "data_gemma4/checkpoints/gemma4_v36_diverse28_joint_block_cross/update_016/metadata.json",
+    "data_gemma4/checkpoints/gemma4_v36_diverse28_joint_block_cross/update_016/optimizer.pt",
+    "data_gemma4/checkpoints/gemma4_v36_diverse28_joint_block_cross/update_016/runtime_metadata.json",
+    "data_gemma4/checkpoints/gemma4_v37_diverse28_scene_ingress_kv/update_000/adapter.safetensors",
+    "data_gemma4/checkpoints/gemma4_v37_diverse28_scene_ingress_kv/update_000/metadata.json",
+    "data_gemma4/checkpoints/gemma4_v37_diverse28_scene_ingress_kv/update_000/runtime_metadata.json",
+    "data_gemma4/checkpoints/gemma4_v37_diverse28_scene_ingress_kv/update_008/adapter.safetensors",
+    "data_gemma4/checkpoints/gemma4_v37_diverse28_scene_ingress_kv/update_008/metadata.json",
+    "data_gemma4/checkpoints/gemma4_v37_diverse28_scene_ingress_kv/update_008/optimizer.pt",
+    "data_gemma4/checkpoints/gemma4_v37_diverse28_scene_ingress_kv/update_008/optimizer_audit.json",
+    "data_gemma4/checkpoints/gemma4_v37_diverse28_scene_ingress_kv/update_008/runtime_metadata.json",
+    "data_gemma4/checkpoints/gemma4_v37_diverse28_scene_ingress_kv/update_016/adapter.safetensors",
+    "data_gemma4/checkpoints/gemma4_v37_diverse28_scene_ingress_kv/update_016/metadata.json",
+    "data_gemma4/checkpoints/gemma4_v37_diverse28_scene_ingress_kv/update_016/optimizer.pt",
+    "data_gemma4/checkpoints/gemma4_v37_diverse28_scene_ingress_kv/update_016/optimizer_audit.json",
+    "data_gemma4/checkpoints/gemma4_v37_diverse28_scene_ingress_kv/update_016/runtime_metadata.json",
+    "reports/gemma4/metrics/training_selection_gemma4_color_mirror_full_vocab_v11_resume36.json",
+    "reports/gemma4/metrics/v36_update16_terminal_gate.json"
+  ],
+  "no_update_024_or_later": true,
+  "observed_saved_optimizer_steps": [
+    0,
+    8,
+    16
+  ],
+  "only_exact_conditional_successor_authorized": "v38_query_recovery",
+  "optimizer_transition": {
+    "fresh_v37_adam_verified": true,
+    "optimizer_integrity_manifest_verified": true,
+    "saved_optimizer_states": {
+      "16": {
+        "adamw_group_defaults": {
+          "amsgrad": false,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "capturable": false,
+          "decoupled_weight_decay": true,
+          "differentiable": false,
+          "eps": 1e-08,
+          "foreach": null,
+          "fused": null,
+          "lr": 2e-05,
+          "maximize": false,
+          "weight_decay": 0.0
+        },
+        "exact_adamw_group_schema_verified": true,
+        "exact_parameter_order_verified": true,
+        "fresh_v37_adam_verified": true,
+        "group_count": 1,
+        "moment_tensor_count": 16,
+        "optimizer_sha256": "551dda55c9aba84dbd4ac2238fa489a8451f8ad10e091853f3e758f3cbe32ed3",
+        "optimizer_step": 16,
+        "parameter_states_inspected": [
+          "lora_banks.extension_v23_shared_kv.adapters.0.lora_a",
+          "lora_banks.extension_v23_shared_kv.adapters.0.lora_b",
+          "lora_banks.extension_v23_shared_kv.adapters.1.lora_a",
+          "lora_banks.extension_v23_shared_kv.adapters.1.lora_b",
+          "lora_banks.extension_v23_shared_kv.adapters.2.lora_a",
+          "lora_banks.extension_v23_shared_kv.adapters.2.lora_b",
+          "lora_banks.extension_v23_shared_kv.adapters.3.lora_a",
+          "lora_banks.extension_v23_shared_kv.adapters.3.lora_b"
+        ],
+        "self_hash_linkage_verified": true
+      },
+      "8": {
+        "adamw_group_defaults": {
+          "amsgrad": false,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "capturable": false,
+          "decoupled_weight_decay": true,
+          "differentiable": false,
+          "eps": 1e-08,
+          "foreach": null,
+          "fused": null,
+          "lr": 2e-05,
+          "maximize": false,
+          "weight_decay": 0.0
+        },
+        "exact_adamw_group_schema_verified": true,
+        "exact_parameter_order_verified": true,
+        "fresh_v37_adam_verified": true,
+        "group_count": 1,
+        "moment_tensor_count": 16,
+        "optimizer_sha256": "7109aed09ec0293378e31c28f4a3b5b6dc33a30d534ebe17d8b3ad9b57385a52",
+        "optimizer_step": 8,
+        "parameter_states_inspected": [
+          "lora_banks.extension_v23_shared_kv.adapters.0.lora_a",
+          "lora_banks.extension_v23_shared_kv.adapters.0.lora_b",
+          "lora_banks.extension_v23_shared_kv.adapters.1.lora_a",
+          "lora_banks.extension_v23_shared_kv.adapters.1.lora_b",
+          "lora_banks.extension_v23_shared_kv.adapters.2.lora_a",
+          "lora_banks.extension_v23_shared_kv.adapters.2.lora_b",
+          "lora_banks.extension_v23_shared_kv.adapters.3.lora_a",
+          "lora_banks.extension_v23_shared_kv.adapters.3.lora_b"
+        ],
+        "self_hash_linkage_verified": true
+      }
+    },
+    "source_v36_optimizer_access": "bytes_hashed_only_not_deserialized"
+  },
+  "oracle_access_authorized": false,
+  "oracle_loaded": false,
+  "passed": true,
+  "protected_artifact": {
+    "access": "bytes_hashed_only",
+    "path": "reports/gemma4/metrics/training_selection_gemma4_color_mirror_full_vocab_v11_resume36.json",
+    "sha256": "c0086f66edbb8854a7938e09c57535bfd47100adbaf3b3c95eeb4b08014ce2f8",
+    "unchanged": true
+  },
+  "qa_loaded": false,
+  "saved_file_sha256_by_optimizer_step": {
+    "0": {
+      "adapter.safetensors": "6ed86fb51502f7330c75cc48b9be970eb0a933eb19da971a7e04726c419c3be5",
+      "metadata.json": "c649124497006322e8fd4e90ccfe26188ff4617611298db868b3eb10f869e738",
+      "runtime_metadata.json": "9d0da4b2ad0304d4c6aaf00f72077ff2d48031c0e73eacbb045a65875daa4715"
+    },
+    "16": {
+      "adapter.safetensors": "5b897221fb448be75caf330c6ab81a39d424ecaa7d0e0307f264f3c58c7659fa",
+      "metadata.json": "f696eeb75d08471e8676613ef6a440852df62113d90393ad705d6c85b9985ecc",
+      "optimizer.pt": "551dda55c9aba84dbd4ac2238fa489a8451f8ad10e091853f3e758f3cbe32ed3",
+      "optimizer_audit.json": "d52170ab9983eeb44a3c264830f9507baab2abc2cc0ecf0ef55f7cf82ef3cc89",
+      "runtime_metadata.json": "8b3f70743aa8226549e65d0d5a08882cc311b61bda07eb2ba2d49454267897de"
+    },
+    "8": {
+      "adapter.safetensors": "22375edfae04cea6dd99af97f4657e577a9ce27822bb76de3e00aece88a1847f",
+      "metadata.json": "6e009a99efe7162e2456eda091ddb3d373993411baa88aa2a84703746aa21c6a",
+      "optimizer.pt": "7109aed09ec0293378e31c28f4a3b5b6dc33a30d534ebe17d8b3ad9b57385a52",
+      "optimizer_audit.json": "c0ea3decd79a4b46e7b88456bcd08d1504d61b5a5b88b9768d847f04feda6bfb",
+      "runtime_metadata.json": "0d825414ac989f4112c2ef37a30454d9f22438dfe015b93b6373e6a443868ffa"
+    }
+  },
+  "scene_maps_loaded": false,
+  "schema_version": 1,
+  "stopped_at_optimizer_step": 16,
+  "successor_requires_separate_root_diagnosis_and_terminal_authorization": false,
+  "tensor_transition": {
+    "adapter_tensor_count": 179,
+    "all_frozen_complement_tensors_bit_exact_at_every_arm": true,
+    "changed_tensor_names_by_optimizer_step": {
+      "0": [],
+      "16": [
+        "lora_banks.extension_v23_shared_kv.adapters.0.lora_a",
+        "lora_banks.extension_v23_shared_kv.adapters.0.lora_b",
+        "lora_banks.extension_v23_shared_kv.adapters.1.lora_a",
+        "lora_banks.extension_v23_shared_kv.adapters.1.lora_b",
+        "lora_banks.extension_v23_shared_kv.adapters.2.lora_a",
+        "lora_banks.extension_v23_shared_kv.adapters.2.lora_b",
+        "lora_banks.extension_v23_shared_kv.adapters.3.lora_a",
+        "lora_banks.extension_v23_shared_kv.adapters.3.lora_b"
+      ],
+      "8": [
+        "lora_banks.extension_v23_shared_kv.adapters.0.lora_a",
+        "lora_banks.extension_v23_shared_kv.adapters.0.lora_b",
+        "lora_banks.extension_v23_shared_kv.adapters.1.lora_a",
+        "lora_banks.extension_v23_shared_kv.adapters.1.lora_b",
+        "lora_banks.extension_v23_shared_kv.adapters.2.lora_a",
+        "lora_banks.extension_v23_shared_kv.adapters.2.lora_b",
+        "lora_banks.extension_v23_shared_kv.adapters.3.lora_a",
+        "lora_banks.extension_v23_shared_kv.adapters.3.lora_b"
+      ]
+    },
+    "frozen_complement_tensor_count": 171,
+    "learned_v36_core_bit_exact_at_every_arm": true,
+    "learned_v36_query_bank_bit_exact_at_every_arm": true,
+    "source_update_zero_bit_exact_v36_update16": true,
+    "state_sha256_by_optimizer_step": {
+      "0": {
+        "block_core_state_sha256": "92652fd2dbde2406227503f50717b2031baa1bcbc050902a379ddb9ddb52764f",
+        "frozen_complement_state_sha256": "c82b8715aebcb775a6e23cb5cd477520922682b5f41929017f4f91917eafe061",
+        "full_tensor_state_sha256": "e9b6d1362d58f34aede04817b0c8d81320c616dcd4b64e9c0d3bbe56b5835dd7",
+        "query_bank_state_sha256": "050706c300e6fb0ac8e4cc02e26c565b54a9a89505104302d4ffcedc02124c64",
+        "target_bank_state_sha256": "91a9eea577cab5a37e840cdf4007722a398415846af91280713bcb2cda0f045c"
+      },
+      "16": {
+        "block_core_state_sha256": "92652fd2dbde2406227503f50717b2031baa1bcbc050902a379ddb9ddb52764f",
+        "frozen_complement_state_sha256": "c82b8715aebcb775a6e23cb5cd477520922682b5f41929017f4f91917eafe061",
+        "full_tensor_state_sha256": "801f80f6fd6a27e7cb815677824fb855c491272d65b81ba464c95200ebd570b9",
+        "query_bank_state_sha256": "050706c300e6fb0ac8e4cc02e26c565b54a9a89505104302d4ffcedc02124c64",
+        "target_bank_state_sha256": "b48dd9606db0e83e5f6ced40e20124456b9ce2dde8a7713af9e8dddcc52a6eca"
+      },
+      "8": {
+        "block_core_state_sha256": "92652fd2dbde2406227503f50717b2031baa1bcbc050902a379ddb9ddb52764f",
+        "frozen_complement_state_sha256": "c82b8715aebcb775a6e23cb5cd477520922682b5f41929017f4f91917eafe061",
+        "full_tensor_state_sha256": "da60d3af8658cea3d9fa0e1664967f37a288ca8f435a7df135b81cd303cdd67e",
+        "query_bank_state_sha256": "050706c300e6fb0ac8e4cc02e26c565b54a9a89505104302d4ffcedc02124c64",
+        "target_bank_state_sha256": "9be2354f461d5fd03c7b28ac09fc52ac6650569ce4fb47e47d676fd57bc28343"
+      }
+    },
+    "target_bank": "extension_v23_shared_kv",
+    "target_parameter_count": 30720,
+    "target_tensor_count": 8,
+    "update16_changed_exactly_all_eight_target_tensors": true,
+    "update8_changed_exactly_all_eight_target_tensors": true
+  },
+  "update16_gate_evidence": {
+    "checks": {
+      "book_cross_prefix_complete": true,
+      "book_or_picture_teacher_complete": false,
+      "broad_nll_within_absolute_lock": true,
+      "complete_physical_pair_coverage_at_least_5": false,
+      "frozen_complement_state_exact": true,
+      "mean_cross_prefix_margin_at_least_source": false,
+      "mirror_teacher_complete_at_least_2": true,
+      "passed": false,
+      "picture_cross_prefix_complete_at_least_2": true,
+      "scene_prefix_and_block_residual_exact": true,
+      "target_bank_state_changed": true,
+      "teacher_complete_units_at_least_10": false,
+      "teacher_cross_complete_units_at_least_16": true,
+      "teacher_positive_sides_at_least_35": false,
+      "training_scenes_only": true,
+      "validation_qa_loaded": false
+    },
+    "complete_physical_pair_coverage": 4,
+    "complete_units_by_family": {
+      "book_support": 0,
+      "mirror_lr": 2,
+      "picture_support": 0
+    },
+    "cross_prefix_complete_units_by_family": {
+      "book_support": 2,
+      "mirror_lr": 4,
+      "picture_support": 3
+    },
+    "failed_requirements": [
+      "teacher_complete_units_at_least_10",
+      "complete_physical_pair_coverage_at_least_5",
+      "teacher_positive_sides_at_least_35",
+      "mean_cross_prefix_margin_at_least_source",
+      "book_or_picture_teacher_complete"
+    ],
+    "frozen_complement_state_sha256": "c82b8715aebcb775a6e23cb5cd477520922682b5f41929017f4f91917eafe061",
+    "mean_cross_prefix_margin": 1.4349822998046875,
+    "passed": false,
+    "source_broad_train_nll": 2.915099874138832,
+    "source_residual_rms": 0.008839325979351997,
+    "target_bank_state_sha256": "b48dd9606db0e83e5f6ced40e20124456b9ce2dde8a7713af9e8dddcc52a6eca",
+    "teacher_complete_units": 9,
+    "teacher_cross_prefix_complete_units": 18,
+    "teacher_positive_sides": 33,
+    "training_scenes_only": true,
+    "update16_broad_train_nll": 2.9015875508387885,
+    "validation_qa_loaded": false
+  },
+  "v37_chat_promotion_eligible": false,
+  "v37_development_selector_legal": false,
+  "v37_train_only_continuation_gate_passed": false,
+  "validation_model_selection_ran": false,
+  "validation_qa_loaded": false
+}

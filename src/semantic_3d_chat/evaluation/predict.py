@@ -58,6 +58,7 @@ def main(argv: list[str] | None = None) -> int:
         config_path=args.config,
         checkpoint_path=checkpoint,
         references_path=question_manifest.manifest_path,
+        scene_ids=sorted(by_scene),
         split=args.split,
         run_kind="continuous_scene_static",
         condition=(

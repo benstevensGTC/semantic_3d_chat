@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import math
+import os
 import re
 import time
 from collections.abc import Callable, Sequence
@@ -39,11 +40,25 @@ from semantic_3d_chat.language.prefix_injection import (
     scene_prefix_after_bos_contract_mismatch,
     scene_prefix_after_bos_setting,
 )
+from semantic_3d_chat.scene_encoder.block_cross_residual import (
+    BlockCrossResidual,
+    apply_block_cross_residual,
+    block_cross_residual_settings,
+    construct_block_cross_residual,
+    validate_block_cross_residual_state,
+)
 from semantic_3d_chat.scene_encoder.dense_alignment import (
     DenseAlignmentResidual,
     construct_dense_alignment,
     dense_alignment_settings,
     validate_dense_alignment_state,
+)
+from semantic_3d_chat.scene_encoder.dense_sidecar_adapter import (
+    DenseSidecarAdapter,
+    apply_dense_sidecar_adapter,
+    construct_dense_sidecar_adapter,
+    dense_sidecar_adapter_settings,
+    validate_dense_sidecar_adapter_state,
 )
 from semantic_3d_chat.scene_encoder.global_residual import (
     ZERO_SPATIAL_MEAN_CONTENT_GATE_V1,
@@ -102,6 +117,26 @@ _DENSE_ALIGNMENT_TRAINING_ONLY_KEYS = frozenset(
 _DENSE_ALIGNMENT_METADATA_KEYS = (
     _DENSE_ALIGNMENT_RUNTIME_REQUIRED_KEYS | _DENSE_ALIGNMENT_TRAINING_ONLY_KEYS
 )
+_DENSE_SIDECAR_ADAPTER_RUNTIME_REQUIRED_KEYS = frozenset(
+    {
+        "dense_sidecar_adapter",
+        "dense_sidecar_adapter_parameter_count",
+        "dense_sidecar_adapter_initial_state_sha256",
+        "dense_sidecar_adapter_state_sha256",
+        "dense_sidecar_adapter_zero_output_equivalence",
+        "frozen_dense_alignment_state_sha256",
+    }
+)
+_BLOCK_CROSS_RESIDUAL_RUNTIME_REQUIRED_KEYS = frozenset(
+    {
+        "block_cross_residual",
+        "block_cross_residual_parameter_count",
+        "block_cross_residual_initial_state_sha256",
+        "block_cross_residual_state_sha256",
+        "block_cross_residual_zero_output_equivalence",
+        "frozen_block_cross_source_stack_state_sha256",
+    }
+)
 
 
 @dataclass(frozen=True)
@@ -122,7 +157,17 @@ class ChatAnswer:
 
 
 def _guard_runtime_input(path: str | Path, purpose: str) -> Path:
-    resolved = Path(path).expanduser().resolve()
+    candidate = Path(path).expanduser()
+    rooted = candidate if candidate.is_absolute() else PROJECT_ROOT / candidate
+    unresolved = Path(os.path.abspath(rooted))
+    current = Path(unresolved.anchor)
+    for component in unresolved.parts[1:]:
+        current /= component
+        if current.is_symlink():
+            raise ValueError(
+                f"Refusing symbolic-link path component for {purpose}: {current}"
+            )
+    resolved = unresolved.resolve()
     lowered_parts = {part.casefold() for part in resolved.parts}
     forbidden = sorted(lowered_parts & _FORBIDDEN_DATA_DIRECTORIES)
     if forbidden:
@@ -219,6 +264,34 @@ def _validate_signed_x_scene_residual_state(
     return audit
 
 
+def _validate_frozen_block_cross_source_stack(
+    modules: dict[str, torch.nn.Module], expected_state_sha256: object
+) -> str:
+    """Hash every loaded V33 checkpoint module while excluding only V35."""
+
+    if "block_cross_residual" not in modules:
+        raise ValueError("Block-cross checkpoint inventory is missing its residual module")
+    if (
+        not isinstance(expected_state_sha256, str)
+        or re.fullmatch(r"[0-9a-f]{64}", expected_state_sha256) is None
+    ):
+        raise ValueError("Frozen block-cross source-stack digest must be lowercase SHA-256")
+    source_modules = {
+        name: module
+        for name, module in modules.items()
+        if name != "block_cross_residual"
+    }
+    if not source_modules:
+        raise ValueError("Block-cross checkpoint inventory has no frozen source modules")
+    observed = module_collection_state_sha256(source_modules)
+    if observed != expected_state_sha256:
+        raise ValueError(
+            "Frozen block-cross source stack mismatch or tamper detected: "
+            f"checkpoint={expected_state_sha256} runtime={observed}"
+        )
+    return observed
+
+
 def _signed_x_frozen_base_provenance_mismatch(
     metadata: dict[str, Any],
 ) -> dict[str, Any] | None:
@@ -304,6 +377,8 @@ def validate_checkpoint_contract(
     lora_parameter_count: int = 0,
     lora_parameter_counts: dict[str, int] | None = None,
     dense_alignment_parameter_count: int = 0,
+    dense_sidecar_adapter_parameter_count: int = 0,
+    block_cross_residual_parameter_count: int = 0,
 ) -> list[str]:
     """Enforce adapter-shape compatibility while surfacing unrelated config drift."""
 
@@ -325,6 +400,10 @@ def validate_checkpoint_contract(
     signed_x_contract = signed_x_settings.contract()
     dense_settings = dense_alignment_settings(config)
     dense_contract = dense_settings.contract()
+    sidecar_settings = dense_sidecar_adapter_settings(config)
+    sidecar_contract = sidecar_settings.contract()
+    block_cross_settings = block_cross_residual_settings(config)
+    block_cross_contract = block_cross_settings.contract()
     checkpoint_dense_keys = sorted(_DENSE_ALIGNMENT_METADATA_KEYS & metadata.keys())
     if not dense_settings.enabled and checkpoint_dense_keys:
         raise ValueError(
@@ -369,6 +448,12 @@ def validate_checkpoint_contract(
         )
     if dense_settings.enabled:
         required.update(_DENSE_ALIGNMENT_RUNTIME_REQUIRED_KEYS)
+        required.add("question_dependent_scene_processing")
+    if sidecar_settings.enabled:
+        required.update(_DENSE_SIDECAR_ADAPTER_RUNTIME_REQUIRED_KEYS)
+        required.add("question_dependent_scene_processing")
+    if block_cross_settings.enabled:
+        required.update(_BLOCK_CROSS_RESIDUAL_RUNTIME_REQUIRED_KEYS)
         required.add("question_dependent_scene_processing")
     missing = sorted(required - metadata.keys())
     if missing:
@@ -457,6 +542,164 @@ def validate_checkpoint_contract(
             mismatches["all_voxels_transformed"] = {
                 "checkpoint": metadata.get("all_voxels_transformed"),
                 "runtime": True,
+            }
+        if metadata.get("question_dependent_scene_processing") is not False:
+            mismatches["question_dependent_scene_processing"] = {
+                "checkpoint": metadata.get("question_dependent_scene_processing"),
+                "runtime": False,
+            }
+    checkpoint_sidecar_keys = sorted(
+        _DENSE_SIDECAR_ADAPTER_RUNTIME_REQUIRED_KEYS & metadata.keys()
+    )
+    if not sidecar_settings.enabled and checkpoint_sidecar_keys:
+        raise ValueError(
+            "Checkpoint contains dense-sidecar-adapter metadata while the runtime "
+            f"adapter is disabled: {checkpoint_sidecar_keys}"
+        )
+    if sidecar_settings.enabled:
+        if not dense_settings.enabled:
+            mismatches["dense_sidecar_adapter_dense_alignment"] = {
+                "checkpoint": metadata.get("dense_alignment"),
+                "runtime": "enabled frozen coverage sidecar required",
+            }
+        elif (
+            dense_settings.application_mode != "coverage_sidecar"
+            or dense_settings.sidecar_scale != 0.0
+        ):
+            mismatches["dense_sidecar_adapter_routing"] = {
+                "checkpoint": metadata.get("dense_alignment"),
+                "runtime": "coverage_sidecar with sidecar_scale=0.0",
+            }
+        if metadata.get("dense_sidecar_adapter") != sidecar_contract:
+            mismatches["dense_sidecar_adapter"] = {
+                "checkpoint": metadata.get("dense_sidecar_adapter"),
+                "runtime": sidecar_contract,
+            }
+        if (
+            isinstance(dense_sidecar_adapter_parameter_count, bool)
+            or not isinstance(dense_sidecar_adapter_parameter_count, int)
+            or dense_sidecar_adapter_parameter_count < 1
+        ):
+            raise ValueError(
+                "Enabled dense sidecar adapter requires a positive runtime parameter count"
+            )
+        if metadata.get("dense_sidecar_adapter_parameter_count") != (
+            dense_sidecar_adapter_parameter_count
+        ):
+            mismatches["dense_sidecar_adapter_parameter_count"] = {
+                "checkpoint": metadata.get("dense_sidecar_adapter_parameter_count"),
+                "runtime": dense_sidecar_adapter_parameter_count,
+            }
+        if metadata.get("dense_sidecar_adapter_initial_state_sha256") != (
+            sidecar_settings.expected_initial_state_sha256
+        ):
+            mismatches["dense_sidecar_adapter_initial_state_sha256"] = {
+                "checkpoint": metadata.get("dense_sidecar_adapter_initial_state_sha256"),
+                "runtime": sidecar_settings.expected_initial_state_sha256,
+            }
+        sidecar_state_hash = metadata.get("dense_sidecar_adapter_state_sha256")
+        if (
+            not isinstance(sidecar_state_hash, str)
+            or re.fullmatch(r"[0-9a-f]{64}", sidecar_state_hash) is None
+        ):
+            mismatches["dense_sidecar_adapter_state_sha256"] = {
+                "checkpoint": sidecar_state_hash,
+                "runtime": "<required-lowercase-sha256>",
+            }
+        if metadata.get("frozen_dense_alignment_state_sha256") != metadata.get(
+            "dense_alignment_state_sha256"
+        ):
+            mismatches["frozen_dense_alignment_state_sha256"] = {
+                "checkpoint": metadata.get("frozen_dense_alignment_state_sha256"),
+                "runtime": metadata.get("dense_alignment_state_sha256"),
+            }
+        equivalence = metadata.get("dense_sidecar_adapter_zero_output_equivalence")
+        required_equivalence = {
+            "verified": True,
+            "base": "loaded_v24_post_signed_x_scene_tokens",
+            "question_dependent_scene_processing": False,
+            "all_scene_slots_accounted": True,
+            "all_voxels_covered": True,
+            "application_order": "after_global_and_signed_x_before_prefix_composer",
+        }
+        if not isinstance(equivalence, dict) or any(
+            equivalence.get(key) != value for key, value in required_equivalence.items()
+        ):
+            mismatches["dense_sidecar_adapter_zero_output_equivalence"] = {
+                "checkpoint": equivalence,
+                "runtime": required_equivalence,
+            }
+    checkpoint_block_cross_keys = sorted(
+        _BLOCK_CROSS_RESIDUAL_RUNTIME_REQUIRED_KEYS & metadata.keys()
+    )
+    if not block_cross_settings.enabled and checkpoint_block_cross_keys:
+        raise ValueError(
+            "Checkpoint contains block-cross-residual metadata while the runtime "
+            f"residual is disabled: {checkpoint_block_cross_keys}"
+        )
+    if block_cross_settings.enabled:
+        if not sidecar_settings.enabled:
+            mismatches["block_cross_residual_source_stack"] = {
+                "checkpoint": metadata.get("dense_sidecar_adapter"),
+                "runtime": "enabled frozen V33 dense sidecar required",
+            }
+        if metadata.get("block_cross_residual") != block_cross_contract:
+            mismatches["block_cross_residual"] = {
+                "checkpoint": metadata.get("block_cross_residual"),
+                "runtime": block_cross_contract,
+            }
+        if (
+            isinstance(block_cross_residual_parameter_count, bool)
+            or not isinstance(block_cross_residual_parameter_count, int)
+            or block_cross_residual_parameter_count < 1
+        ):
+            raise ValueError(
+                "Enabled block cross residual requires a positive runtime parameter count"
+            )
+        if metadata.get("block_cross_residual_parameter_count") != (
+            block_cross_residual_parameter_count
+        ):
+            mismatches["block_cross_residual_parameter_count"] = {
+                "checkpoint": metadata.get("block_cross_residual_parameter_count"),
+                "runtime": block_cross_residual_parameter_count,
+            }
+        if metadata.get("block_cross_residual_initial_state_sha256") != (
+            block_cross_settings.expected_initial_state_sha256
+        ):
+            mismatches["block_cross_residual_initial_state_sha256"] = {
+                "checkpoint": metadata.get("block_cross_residual_initial_state_sha256"),
+                "runtime": block_cross_settings.expected_initial_state_sha256,
+            }
+        for field in (
+            "block_cross_residual_state_sha256",
+            "frozen_block_cross_source_stack_state_sha256",
+        ):
+            state_hash = metadata.get(field)
+            if (
+                not isinstance(state_hash, str)
+                or re.fullmatch(r"[0-9a-f]{64}", state_hash) is None
+            ):
+                mismatches[field] = {
+                    "checkpoint": state_hash,
+                    "runtime": "<required-lowercase-sha256>",
+                }
+        block_cross_equivalence = metadata.get(
+            "block_cross_residual_zero_output_equivalence"
+        )
+        required_block_cross_equivalence = {
+            "verified": True,
+            "base": "exact_v33_update64_post_sidecar_scene_tokens",
+            "application_order": "after_v33_dense_sidecar_before_prefix_composer",
+            "all_scene_slots_accounted": True,
+            "all_occupied_block_tokens_accounted": True,
+            "normalized_block_positions_used": True,
+            "all_voxels_covered": True,
+            "question_dependent_scene_processing": False,
+        }
+        if block_cross_equivalence != required_block_cross_equivalence:
+            mismatches["block_cross_residual_zero_output_equivalence"] = {
+                "checkpoint": block_cross_equivalence,
+                "runtime": required_block_cross_equivalence,
             }
         if metadata.get("question_dependent_scene_processing") is not False:
             mismatches["question_dependent_scene_processing"] = {
@@ -626,6 +869,8 @@ class StaticChatRuntime:
         map_data: MapTensorData,
         scene_model: SceneTokenizer,
         dense_aligner: DenseAlignmentResidual | None = None,
+        dense_sidecar_adapter: DenseSidecarAdapter | None = None,
+        block_cross_residual: BlockCrossResidual | None = None,
         global_scene_residual: GlobalSceneResidual | None = None,
         signed_x_scene_residual: SignedXSceneResidual | None = None,
         composer: ContinuousPrefixComposer,
@@ -683,6 +928,80 @@ class StaticChatRuntime:
                 raise ValueError("Dense-alignment checkpoint must transform all voxels")
             if self.checkpoint_metadata.get("question_dependent_scene_processing") is not False:
                 raise ValueError("Dense alignment must remain question-independent")
+        sidecar_settings = dense_sidecar_adapter_settings(config)
+        if sidecar_settings.enabled != (dense_sidecar_adapter is not None):
+            raise ValueError(
+                "Runtime dense-sidecar-adapter construction does not match configured state"
+            )
+        self.dense_sidecar_adapter = (
+            None if dense_sidecar_adapter is None else dense_sidecar_adapter.eval()
+        )
+        if self.dense_sidecar_adapter is not None:
+            if self.dense_aligner is None:
+                raise ValueError("Dense sidecar adapter requires a frozen dense aligner")
+            if (
+                self.dense_aligner.application_mode != "coverage_sidecar"
+                or self.dense_aligner.sidecar_scale != 0.0
+            ):
+                raise ValueError(
+                    "Dense sidecar adapter requires coverage_sidecar routing at zero scale"
+                )
+            validate_dense_sidecar_adapter_state(
+                self.dense_sidecar_adapter,
+                expected_parameter_count=self.checkpoint_metadata.get(
+                    "dense_sidecar_adapter_parameter_count"
+                ),
+                expected_state_sha256=self.checkpoint_metadata.get(
+                    "dense_sidecar_adapter_state_sha256"
+                ),
+                context="runtime device initialization",
+            )
+        block_cross_settings = block_cross_residual_settings(config)
+        if block_cross_settings.enabled != (block_cross_residual is not None):
+            raise ValueError(
+                "Runtime block-cross-residual construction does not match configured state"
+            )
+        self.block_cross_residual = (
+            None if block_cross_residual is None else block_cross_residual.eval()
+        )
+        if self.block_cross_residual is not None:
+            if self.dense_sidecar_adapter is None:
+                raise ValueError(
+                    "Block cross residual requires the frozen V33 dense sidecar"
+                )
+            missing_block_cross_metadata = sorted(
+                (_BLOCK_CROSS_RESIDUAL_RUNTIME_REQUIRED_KEYS | {
+                    "question_dependent_scene_processing"
+                })
+                - self.checkpoint_metadata.keys()
+            )
+            if missing_block_cross_metadata:
+                raise ValueError(
+                    "Runtime block-cross-residual metadata is incomplete: "
+                    f"{missing_block_cross_metadata}"
+                )
+            if self.checkpoint_metadata.get("block_cross_residual") != (
+                block_cross_settings.contract()
+            ):
+                raise ValueError("Runtime block-cross-residual checkpoint contract mismatch")
+            if self.checkpoint_metadata.get(
+                "block_cross_residual_initial_state_sha256"
+            ) != block_cross_settings.expected_initial_state_sha256:
+                raise ValueError(
+                    "Runtime block-cross-residual initial-state contract mismatch"
+                )
+            validate_block_cross_residual_state(
+                self.block_cross_residual,
+                expected_parameter_count=self.checkpoint_metadata.get(
+                    "block_cross_residual_parameter_count"
+                ),
+                expected_state_sha256=self.checkpoint_metadata.get(
+                    "block_cross_residual_state_sha256"
+                ),
+                context="runtime device initialization",
+            )
+            if self.checkpoint_metadata.get("question_dependent_scene_processing") is not False:
+                raise ValueError("Block cross residual must remain question-independent")
         self.global_scene_residual = (
             None if global_scene_residual is None else global_scene_residual.eval()
         )
@@ -735,6 +1054,11 @@ class StaticChatRuntime:
         started = time.perf_counter()
         with torch.inference_mode():
             self.core_scene_output = self._encode_complete_scene()
+            self.block_cross_input_attestation = (
+                None
+                if self.block_cross_residual is None
+                else self._attest_complete_block_cross_inputs(self.core_scene_output)
+            )
             centered_content = (
                 None
                 if self.signed_x_scene_residual is None
@@ -746,7 +1070,7 @@ class StaticChatRuntime:
             self.global_scene_output = apply_global_scene_residual(
                 self.core_scene_output, self.global_scene_residual
             )
-            self.scene_output = (
+            self.base_scene_output = (
                 self.global_scene_output
                 if self.signed_x_scene_residual is None
                 else apply_signed_x_scene_residual(
@@ -755,6 +1079,47 @@ class StaticChatRuntime:
                     centered_content,
                 )
             )
+            # The calibrated field is fused only after the complete immutable
+            # V24 scene/global/signed-X stack.  At zero initialization this is
+            # an exact identity, not a small perturbation.
+            self.sidecar_scene_output = apply_dense_sidecar_adapter(
+                self.base_scene_output,
+                self.dense_sidecar_adapter,
+            )
+            self.scene_output = apply_block_cross_residual(
+                self.sidecar_scene_output,
+                self.block_cross_residual,
+            )
+            if (
+                self.block_cross_residual is not None
+                and self.scene_output.block_tokens is not self.core_scene_output.block_tokens
+            ):
+                raise RuntimeError(
+                    "Block cross residual replaced or selected the complete block-token field"
+                )
+            if self.block_cross_residual is not None:
+                processed_block_tokens = int(
+                    self.scene_output.audit[
+                        "block_cross_residual_processed_block_tokens"
+                    ]
+                    .detach()
+                    .cpu()
+                    .item()
+                )
+                expected_block_tokens = int(
+                    self.block_cross_input_attestation["block_token_count"]
+                )
+                if processed_block_tokens != expected_block_tokens:
+                    raise RuntimeError(
+                        "Block cross residual did not process its complete input: "
+                        f"processed={processed_block_tokens} expected={expected_block_tokens}"
+                    )
+                self.block_cross_input_attestation.update(
+                    {
+                        "residual_processed_every_block_token": True,
+                        "residual_question_inputs_used": False,
+                    }
+                )
             model_dtype = next(self.language.model.parameters()).dtype
             lm_scene_tokens = self.scene_output.scene_tokens.to(dtype=model_dtype)
             self.scene_prefix = self.composer.scene_prefix(lm_scene_tokens).detach()
@@ -828,6 +1193,7 @@ class StaticChatRuntime:
             freeze=True,
             local_files_only=local_files_only,
             backend=str(config["language"].get("backend", "auto")),
+            file_recorder=(None if audit is None else audit.record),
         )
         configured_boundary_mode = scene_boundary_mode_setting(config)
         configured_native_contract = native_gemma4_image_contract_setting(config)
@@ -839,6 +1205,48 @@ class StaticChatRuntime:
             )
         configured_lora = lora_banks_settings(config)
         lora_installation = install_lora_banks(language.model, configured_lora)
+        dense_sidecar_adapter = construct_dense_sidecar_adapter(
+            config,
+            scene_dim=language.hidden_size,
+            latent_count=int(config["scene_encoder"]["global_latents"]),
+        )
+        if dense_sidecar_adapter is not None:
+            initial_sidecar_audit = validate_dense_sidecar_adapter_state(
+                dense_sidecar_adapter,
+                context="runtime deterministic construction",
+            )
+            expected_initial_sidecar_hash = dense_sidecar_adapter_settings(
+                config
+            ).expected_initial_state_sha256
+            if initial_sidecar_audit["state_sha256"] != expected_initial_sidecar_hash:
+                raise ValueError(
+                    "Dense-sidecar-adapter deterministic initial-state mismatch: "
+                    f"configured={expected_initial_sidecar_hash} "
+                    f"runtime={initial_sidecar_audit['state_sha256']}"
+                )
+        block_cross_residual = construct_block_cross_residual(
+            config,
+            scene_dim=language.hidden_size,
+            block_dim=int(config["scene_encoder"]["model_dim"]),
+            latent_count=int(config["scene_encoder"]["global_latents"]),
+        )
+        if block_cross_residual is not None:
+            initial_block_cross_audit = validate_block_cross_residual_state(
+                block_cross_residual,
+                context="runtime deterministic construction",
+            )
+            expected_initial_block_cross_hash = block_cross_residual_settings(
+                config
+            ).expected_initial_state_sha256
+            if (
+                initial_block_cross_audit["state_sha256"]
+                != expected_initial_block_cross_hash
+            ):
+                raise ValueError(
+                    "Block-cross-residual deterministic initial-state mismatch: "
+                    f"configured={expected_initial_block_cross_hash} "
+                    f"runtime={initial_block_cross_audit['state_sha256']}"
+                )
         checkpoint_backend = metadata.get("language_backend")
         if checkpoint_backend is not None and checkpoint_backend != language.backend_name:
             raise ValueError(
@@ -858,6 +1266,16 @@ class StaticChatRuntime:
             ),
             dense_alignment_parameter_count=(
                 0 if dense_aligner is None else dense_aligner.parameter_count
+            ),
+            dense_sidecar_adapter_parameter_count=(
+                0
+                if dense_sidecar_adapter is None
+                else dense_sidecar_adapter.parameter_count
+            ),
+            block_cross_residual_parameter_count=(
+                0
+                if block_cross_residual is None
+                else block_cross_residual.parameter_count
             ),
         )
         scene_model = construct_scene_tokenizer(config, map_data.feature_dim, language.hidden_size)
@@ -927,12 +1345,16 @@ class StaticChatRuntime:
         checkpoint_modules = dict(scene_checkpoint_modules)
         if dense_aligner is not None:
             checkpoint_modules["dense_aligner"] = dense_aligner
+        if dense_sidecar_adapter is not None:
+            checkpoint_modules["dense_sidecar_adapter"] = dense_sidecar_adapter
         if global_scene_residual is not None:
             checkpoint_modules["global_scene_residual"] = global_scene_residual
         if signed_x_scene_residual is not None:
             checkpoint_modules["signed_x_scene_residual"] = signed_x_scene_residual
         if lora_installation is not None:
             checkpoint_modules.update(lora_installation.state_modules())
+        if block_cross_residual is not None:
+            checkpoint_modules["block_cross_residual"] = block_cross_residual
         loaded_metadata = load_adapter_checkpoint(
             checkpoint_path,
             checkpoint_modules,
@@ -966,6 +1388,32 @@ class StaticChatRuntime:
                     f"checkpoint={expected_dense_state_hash} "
                     f"runtime={dense_loaded_audit['state_sha256']}"
                 )
+        if dense_sidecar_adapter is not None:
+            validate_dense_sidecar_adapter_state(
+                dense_sidecar_adapter,
+                expected_parameter_count=metadata.get(
+                    "dense_sidecar_adapter_parameter_count"
+                ),
+                expected_state_sha256=metadata.get(
+                    "dense_sidecar_adapter_state_sha256"
+                ),
+                context="runtime checkpoint load",
+            )
+        if block_cross_residual is not None:
+            validate_block_cross_residual_state(
+                block_cross_residual,
+                expected_parameter_count=metadata.get(
+                    "block_cross_residual_parameter_count"
+                ),
+                expected_state_sha256=metadata.get(
+                    "block_cross_residual_state_sha256"
+                ),
+                context="runtime checkpoint load",
+            )
+            _validate_frozen_block_cross_source_stack(
+                checkpoint_modules,
+                metadata.get("frozen_block_cross_source_stack_state_sha256"),
+            )
         observed_residual_hash = None
         if global_scene_residual is not None:
             _validate_global_scene_residual_state(
@@ -1007,6 +1455,10 @@ class StaticChatRuntime:
         scene_model = scene_model.to(device)
         if dense_aligner is not None:
             dense_aligner = dense_aligner.to(device)
+        if dense_sidecar_adapter is not None:
+            dense_sidecar_adapter = dense_sidecar_adapter.to(device)
+        if block_cross_residual is not None:
+            block_cross_residual = block_cross_residual.to(device)
         if global_scene_residual is not None:
             global_scene_residual = global_scene_residual.to(device)
         if signed_x_scene_residual is not None:
@@ -1023,6 +1475,8 @@ class StaticChatRuntime:
             map_data=map_data,
             scene_model=scene_model,
             dense_aligner=dense_aligner,
+            dense_sidecar_adapter=dense_sidecar_adapter,
+            block_cross_residual=block_cross_residual,
             global_scene_residual=global_scene_residual,
             signed_x_scene_residual=signed_x_scene_residual,
             composer=composer,
@@ -1034,8 +1488,12 @@ class StaticChatRuntime:
     def _encode_complete_scene(self) -> SceneTokenizerOutput:
         data = self.map_data
         semantic = data.semantic
+        aligned_sidecar = None
+        aligned_sidecar_scale = 0.0
         if self.dense_aligner is not None:
-            semantic = self.dense_aligner(semantic)
+            semantic, aligned_sidecar, aligned_sidecar_scale = self.dense_aligner.scene_inputs(
+                semantic
+            )
             if semantic.shape != data.semantic.shape:
                 raise RuntimeError(
                     "Dense alignment changed the complete semantic-map shape: "
@@ -1046,7 +1504,7 @@ class StaticChatRuntime:
             self.dense_alignment_transformed_voxels = int(semantic.shape[0])
         else:
             self.dense_alignment_transformed_voxels = 0
-        output = self.scene_model(
+        scene_arguments = (
             semantic,
             data.xyz,
             data.rgb,
@@ -1056,12 +1514,161 @@ class StaticChatRuntime:
             data.room_min,
             data.room_max,
         )
+        output = (
+            self.scene_model(*scene_arguments)
+            if aligned_sidecar is None
+            else self.scene_model(
+                *scene_arguments,
+                aligned_sidecar=aligned_sidecar,
+                aligned_sidecar_scale=aligned_sidecar_scale,
+            )
+        )
         processed = int(output.audit["processed_voxels"].detach().cpu().item())
         if processed != data.voxel_count:
             raise RuntimeError(
                 f"Incomplete full-scene encoding: processed {processed}/{data.voxel_count} voxels"
             )
         return output
+
+    def _attest_complete_block_cross_inputs(self, output: SceneTokenizerOutput) -> dict[str, Any]:
+        """Prove the post-stack residual receives every occupied block token."""
+
+        block_tokens = output.block_tokens
+        positions = output.audit.get("block_token_positions_normalized")
+        block_indices = output.audit.get("block_indices")
+        voxel_counts = output.audit.get("voxel_counts")
+        voxel_to_block = output.audit.get("voxel_to_block")
+        if block_tokens.ndim != 2 or block_tokens.shape[0] < 1:
+            raise RuntimeError("Block cross residual requires nonempty complete block tokens")
+        if not isinstance(positions, torch.Tensor) or positions.shape != (
+            block_tokens.shape[0],
+            3,
+        ):
+            raise RuntimeError(
+                "Block cross residual requires one normalized XYZ position per block token"
+            )
+        if not torch.is_floating_point(positions):
+            raise RuntimeError("Block cross residual positions must be floating point")
+        if (
+            not isinstance(block_indices, torch.Tensor)
+            or block_indices.ndim != 2
+            or block_indices.shape[1] != 3
+            or block_indices.dtype != torch.int64
+        ):
+            raise RuntimeError("Block cross residual requires exact occupied block indices")
+        if (
+            not isinstance(voxel_counts, torch.Tensor)
+            or voxel_counts.ndim != 1
+            or voxel_counts.dtype != torch.int64
+        ):
+            raise RuntimeError("Block cross residual requires occupied-block voxel counts")
+        if (
+            not isinstance(voxel_to_block, torch.Tensor)
+            or voxel_to_block.shape != (self.map_data.voxel_count,)
+            or voxel_to_block.dtype != torch.int64
+        ):
+            raise RuntimeError("Block cross residual requires one block assignment per voxel")
+        occupied_blocks = int(voxel_counts.numel())
+        if block_indices.shape[0] != occupied_blocks:
+            raise RuntimeError(
+                "Block cross residual block indices and voxel counts disagree: "
+                f"indices={block_indices.shape[0]} counts={occupied_blocks}"
+            )
+        expected_tokens = occupied_blocks * int(self.config["scene_encoder"]["tokens_per_block"])
+        if int(block_tokens.shape[0]) != expected_tokens:
+            raise RuntimeError(
+                "Block cross residual did not receive every token from every occupied block: "
+                f"observed={block_tokens.shape[0]} expected={expected_tokens}"
+            )
+        accounted_voxels = int(voxel_counts.detach().sum().cpu().item())
+        if accounted_voxels != self.map_data.voxel_count:
+            raise RuntimeError(
+                "Block cross residual source omitted occupied voxels: "
+                f"accounted={accounted_voxels} expected={self.map_data.voxel_count}"
+            )
+        if not torch.isfinite(block_tokens).all() or not torch.isfinite(positions).all():
+            raise RuntimeError("Block cross residual inputs contain NaN or infinity")
+
+        block_size_m = self.config["scene_encoder"].get("block_size_m")
+        if (
+            isinstance(block_size_m, bool)
+            or not isinstance(block_size_m, (int, float))
+            or not math.isfinite(float(block_size_m))
+            or float(block_size_m) <= 0.0
+        ):
+            raise RuntimeError("Block cross residual requires a finite positive block size")
+
+        # Recompute the complete occupancy contract from the immutable map using
+        # exactly the CPU grouping used by SpatialBlockEncoder.  This proves the
+        # audited ordering, counts, and inverse assignment instead of trusting
+        # cardinality alone.
+        xyz_cpu = self.map_data.xyz.detach().cpu()
+        room_min_cpu = self.map_data.room_min.detach().cpu()
+        integer_blocks_cpu = torch.floor((xyz_cpu - room_min_cpu) / float(block_size_m)).to(
+            torch.int64
+        )
+        (
+            expected_indices_cpu,
+            expected_inverse_cpu,
+            expected_counts_cpu,
+        ) = torch.unique(
+            integer_blocks_cpu,
+            dim=0,
+            sorted=True,
+            return_inverse=True,
+            return_counts=True,
+        )
+        if not torch.equal(block_indices.detach().cpu(), expected_indices_cpu):
+            raise RuntimeError(
+                "Block cross residual occupied block indices do not match the complete map"
+            )
+        if not torch.equal(voxel_counts.detach().cpu(), expected_counts_cpu):
+            raise RuntimeError(
+                "Block cross residual occupied block counts do not match the complete map"
+            )
+        if not torch.equal(voxel_to_block.detach().cpu(), expected_inverse_cpu):
+            raise RuntimeError(
+                "Block cross residual voxel-to-block assignments do not match the complete map"
+            )
+
+        # A fused surface voxel may sit just outside the nominal room volume.
+        # Its occupied block center can therefore be slightly outside [-1, 1]
+        # while still being the exact affine room-coordinate normalization used
+        # during training.  Reconstruct that tensor exactly; a fixed magnitude
+        # cutoff would reject valid wall/floor/ceiling blocks and would not prove
+        # that the positions correspond to the map.
+        room_min = self.map_data.room_min.to(device=positions.device)
+        room_max = self.map_data.room_max.to(device=positions.device)
+        extent = room_max - room_min
+        if room_min.shape != (3,) or room_max.shape != (3,) or not torch.all(extent > 0):
+            raise RuntimeError("Block cross residual requires valid room bounds")
+        centers_m = (
+            room_min
+            + (block_indices.to(device=positions.device).float() + 0.5) * float(block_size_m)
+        )
+        normalized_centers = ((centers_m - room_min) / extent).mul(2).sub(1)
+        expected_positions = normalized_centers.repeat_interleave(
+            int(self.config["scene_encoder"]["tokens_per_block"]), dim=0
+        )
+        if positions.dtype != expected_positions.dtype or not torch.equal(
+            positions, expected_positions
+        ):
+            raise RuntimeError(
+                "Block cross residual positions do not match normalized occupied-block centers"
+            )
+        return {
+            "all_scene_slots_accounted": True,
+            "all_occupied_block_tokens_accounted": True,
+            "occupied_block_indices_match_map": True,
+            "voxel_to_block_assignments_match_map": True,
+            "block_positions_match_normalized_centers": True,
+            "normalized_block_positions_used": True,
+            "all_voxels_covered": True,
+            "occupied_blocks": occupied_blocks,
+            "block_token_count": int(block_tokens.shape[0]),
+            "voxel_count": accounted_voxels,
+            "question_dependent_scene_processing": False,
+        }
 
     @property
     def questions_answered(self) -> int:
@@ -1096,6 +1703,12 @@ class StaticChatRuntime:
             "device": str(self.language.device),
             "prefix_build_seconds": self.prefix_build_seconds,
             "question_dependent_scene_processing": False,
+            "scene_prefix_computed_before_question": self._questions_answered == 0,
+            "strict_fixed_environment_embedding_input": True,
+            "environment_conditioned_input_sha256": self.scene_prefix_hash,
+            "question_conditioned_scene_readout_tokens": False,
+            "question_dependent_scene_retrieval": False,
+            "environmental_text_inputs": [],
             "global_scene_residual": self.checkpoint_metadata.get(
                 "global_scene_residual", {"schema_version": 1, "enabled": False}
             ),
@@ -1131,6 +1744,73 @@ class StaticChatRuntime:
                     "dense_alignment_transformed_voxels": (self.dense_alignment_transformed_voxels),
                     "all_voxels_transformed": (
                         self.dense_alignment_transformed_voxels == self.map_data.voxel_count
+                    ),
+                }
+            )
+        if self.dense_sidecar_adapter is not None:
+            summary.update(
+                {
+                    "dense_sidecar_adapter": self.checkpoint_metadata[
+                        "dense_sidecar_adapter"
+                    ],
+                    "dense_sidecar_adapter_parameter_count": (
+                        self.dense_sidecar_adapter.parameter_count
+                    ),
+                    "dense_sidecar_adapter_state_sha256": (
+                        self.dense_sidecar_adapter.state_sha256()
+                    ),
+                    "dense_sidecar_adapter_delta_rms": float(
+                        self.scene_output.audit[
+                            "dense_sidecar_adapter_delta_rms"
+                        ].detach().cpu()
+                    ),
+                    "dense_sidecar_application_order": (
+                        "after_global_and_signed_x_before_prefix_composer"
+                    ),
+                }
+            )
+        if self.block_cross_residual is not None:
+            summary.update(
+                {
+                    "block_cross_residual": self.checkpoint_metadata[
+                        "block_cross_residual"
+                    ],
+                    "block_cross_residual_parameter_count": (
+                        self.block_cross_residual.parameter_count
+                    ),
+                    "block_cross_residual_initial_state_sha256": (
+                        self.checkpoint_metadata[
+                            "block_cross_residual_initial_state_sha256"
+                        ]
+                    ),
+                    "block_cross_residual_state_sha256": (
+                        self.block_cross_residual.state_sha256()
+                    ),
+                    "block_cross_residual_zero_output_equivalence": (
+                        self.checkpoint_metadata[
+                            "block_cross_residual_zero_output_equivalence"
+                        ]
+                    ),
+                    "frozen_block_cross_source_stack_state_sha256": (
+                        self.checkpoint_metadata[
+                            "frozen_block_cross_source_stack_state_sha256"
+                        ]
+                    ),
+                    "block_cross_input_attestation": (
+                        self.block_cross_input_attestation
+                    ),
+                    "block_cross_residual_delta_rms": float(
+                        self.scene_output.audit[
+                            "block_cross_residual_delta_rms"
+                        ].detach().cpu()
+                    ),
+                    "block_cross_residual_attention_minimum": float(
+                        self.scene_output.audit[
+                            "block_cross_residual_attention_min_weight"
+                        ].detach().cpu()
+                    ),
+                    "block_cross_application_order": (
+                        "after_v33_dense_sidecar_before_prefix_composer"
                     ),
                 }
             )

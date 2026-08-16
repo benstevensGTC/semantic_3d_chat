@@ -1,0 +1,759 @@
+{
+  "after": {
+    "answer_nll": {
+      "maximum": 18.175460815429688,
+      "mean": 3.855855609222393,
+      "minimum": 0.00017152231885120273,
+      "row_count": 18
+    },
+    "behavior": {
+      "accuracy": 0.6111111111111112,
+      "complete_units": 3,
+      "correct_sides": 11,
+      "mean_control_rms": 0.0636899471282959,
+      "prediction_change_units": 9,
+      "records": [
+        {
+          "answer_type": "spatial_relation",
+          "change_type": "book_support",
+          "control_rms": 0.05200459808111191,
+          "correct": true,
+          "pair_id": "pair_000015",
+          "prediction": "below",
+          "question_id": "q_000050",
+          "question_key": "cfq_ac7ac024c40aaddc",
+          "reference": "below",
+          "scene_id": "scene_000031"
+        },
+        {
+          "answer_type": "spatial_relation",
+          "change_type": "book_support",
+          "control_rms": 0.06324156373739243,
+          "correct": false,
+          "pair_id": "pair_000015",
+          "prediction": "\"table\" and \"book\" are not present in the scene.",
+          "question_id": "q_000069",
+          "question_key": "cfq_ac7ac024c40aaddc",
+          "reference": "above",
+          "scene_id": "scene_000032"
+        },
+        {
+          "answer_type": "orientation",
+          "change_type": "chair_orientation",
+          "control_rms": 0.1275312602519989,
+          "correct": true,
+          "pair_id": "pair_000005",
+          "prediction": "upright",
+          "question_id": "q_000069",
+          "question_key": "cfq_a578dc166be9a217",
+          "reference": "upright",
+          "scene_id": "scene_000011"
+        },
+        {
+          "answer_type": "orientation",
+          "change_type": "chair_orientation",
+          "control_rms": 0.04849596321582794,
+          "correct": true,
+          "pair_id": "pair_000005",
+          "prediction": "upside down",
+          "question_id": "q_000030",
+          "question_key": "cfq_a578dc166be9a217",
+          "reference": "upside down",
+          "scene_id": "scene_000012"
+        },
+        {
+          "answer_type": "attribute",
+          "change_type": "color_swap",
+          "control_rms": 0.051958516240119934,
+          "correct": true,
+          "pair_id": "pair_000007",
+          "prediction": "yellow",
+          "question_id": "q_000068",
+          "question_key": "cfq_f004e89a2284b94a",
+          "reference": "yellow",
+          "scene_id": "scene_000015"
+        },
+        {
+          "answer_type": "attribute",
+          "change_type": "color_swap",
+          "control_rms": 0.0473957434296608,
+          "correct": false,
+          "pair_id": "pair_000007",
+          "prediction": "round",
+          "question_id": "q_000125",
+          "question_key": "cfq_f004e89a2284b94a",
+          "reference": "green",
+          "scene_id": "scene_000016"
+        },
+        {
+          "answer_type": "spatial_relation",
+          "change_type": "cube_support",
+          "control_rms": 0.06274616718292236,
+          "correct": true,
+          "pair_id": "pair_000026",
+          "prediction": "below",
+          "question_id": "q_000029",
+          "question_key": "cfq_c482df06c040c2b2",
+          "reference": "below",
+          "scene_id": "scene_000053"
+        },
+        {
+          "answer_type": "spatial_relation",
+          "change_type": "cube_support",
+          "control_rms": 0.06618884205818176,
+          "correct": false,
+          "pair_id": "pair_000026",
+          "prediction": "toilette",
+          "question_id": "q_000116",
+          "question_key": "cfq_c482df06c040c2b2",
+          "reference": "above",
+          "scene_id": "scene_000054"
+        },
+        {
+          "answer_type": "spatial_relation",
+          "change_type": "mirror_lr",
+          "control_rms": 0.07744017243385315,
+          "correct": false,
+          "pair_id": "pair_000016",
+          "prediction": "unknown",
+          "question_id": "q_000140",
+          "question_key": "cfq_efba0c82a7336161",
+          "reference": "left",
+          "scene_id": "scene_000033"
+        },
+        {
+          "answer_type": "spatial_relation",
+          "change_type": "mirror_lr",
+          "control_rms": 0.05626274645328522,
+          "correct": true,
+          "pair_id": "pair_000016",
+          "prediction": "right",
+          "question_id": "q_000056",
+          "question_key": "cfq_efba0c82a7336161",
+          "reference": "right",
+          "scene_id": "scene_000034"
+        },
+        {
+          "answer_type": "count",
+          "change_type": "object_count",
+          "control_rms": 0.07866563647985458,
+          "correct": false,
+          "pair_id": "pair_000008",
+          "prediction": "unknown",
+          "question_id": "q_000142",
+          "question_key": "cfq_39808de4310f3388",
+          "reference": "1",
+          "scene_id": "scene_000017"
+        },
+        {
+          "answer_type": "count",
+          "change_type": "object_count",
+          "control_rms": 0.05153632164001465,
+          "correct": true,
+          "pair_id": "pair_000008",
+          "prediction": "2",
+          "question_id": "q_000028",
+          "question_key": "cfq_39808de4310f3388",
+          "reference": "2",
+          "scene_id": "scene_000018"
+        },
+        {
+          "answer_type": "spatial_relation",
+          "change_type": "object_relocation",
+          "control_rms": 0.05710047855973244,
+          "correct": true,
+          "pair_id": "pair_000006",
+          "prediction": "right",
+          "question_id": "q_000033",
+          "question_key": "cfq_0a79d507273195ef",
+          "reference": "right",
+          "scene_id": "scene_000013"
+        },
+        {
+          "answer_type": "spatial_relation",
+          "change_type": "object_relocation",
+          "control_rms": 0.043469756841659546,
+          "correct": true,
+          "pair_id": "pair_000006",
+          "prediction": "Ape is left of the bowl.",
+          "question_id": "q_000124",
+          "question_key": "cfq_0a79d507273195ef",
+          "reference": "left",
+          "scene_id": "scene_000014"
+        },
+        {
+          "answer_type": "count",
+          "change_type": "object_removal",
+          "control_rms": 0.08772428333759308,
+          "correct": true,
+          "pair_id": "pair_000018",
+          "prediction": "1",
+          "question_id": "q_000057",
+          "question_key": "cfq_90b3d9852a93ce2a",
+          "reference": "1",
+          "scene_id": "scene_000037"
+        },
+        {
+          "answer_type": "count",
+          "change_type": "object_removal",
+          "control_rms": 0.05441366508603096,
+          "correct": true,
+          "pair_id": "pair_000018",
+          "prediction": "0",
+          "question_id": "q_000064",
+          "question_key": "cfq_90b3d9852a93ce2a",
+          "reference": "0",
+          "scene_id": "scene_000038"
+        },
+        {
+          "answer_type": "spatial_relation",
+          "change_type": "picture_support",
+          "control_rms": 0.06212376058101654,
+          "correct": false,
+          "pair_id": "pair_000017",
+          "prediction": "PropertyChanged",
+          "question_id": "q_000034",
+          "question_key": "cfq_fa3601dfffa80a0e",
+          "reference": "above",
+          "scene_id": "scene_000035"
+        },
+        {
+          "answer_type": "spatial_relation",
+          "change_type": "picture_support",
+          "control_rms": 0.05811957269906998,
+          "correct": false,
+          "pair_id": "pair_000017",
+          "prediction": "left",
+          "question_id": "q_000011",
+          "question_key": "cfq_fa3601dfffa80a0e",
+          "reference": "below",
+          "scene_id": "scene_000036"
+        }
+      ],
+      "side_count": 18,
+      "unit_count": 9
+    }
+  },
+  "answer_nll_mean_delta": -2.7547767640046206,
+  "artifact": "v74_historical_train_gemma_nll_screen_v1",
+  "base_freeze_audit": {
+    "all_parameters_frozen": true,
+    "parameter_count": 5118259098
+  },
+  "before": {
+    "answer_nll": {
+      "maximum": 21.08637237548828,
+      "mean": 6.610632373227014,
+      "minimum": 0.22413894534111023,
+      "row_count": 18
+    },
+    "behavior": {
+      "accuracy": 0.1111111111111111,
+      "complete_units": 0,
+      "correct_sides": 2,
+      "mean_control_rms": 0.061566813952393,
+      "prediction_change_units": 9,
+      "records": [
+        {
+          "answer_type": "spatial_relation",
+          "change_type": "book_support",
+          "control_rms": 0.046005841344594955,
+          "correct": false,
+          "pair_id": "pair_000015",
+          "prediction": "unknown",
+          "question_id": "q_000050",
+          "question_key": "cfq_ac7ac024c40aaddc",
+          "reference": "below",
+          "scene_id": "scene_000031"
+        },
+        {
+          "answer_type": "spatial_relation",
+          "change_type": "book_support",
+          "control_rms": 0.06353136152029037,
+          "correct": false,
+          "pair_id": "pair_000015",
+          "prediction": "socialism",
+          "question_id": "q_000069",
+          "question_key": "cfq_ac7ac024c40aaddc",
+          "reference": "above",
+          "scene_id": "scene_000032"
+        },
+        {
+          "answer_type": "orientation",
+          "change_type": "chair_orientation",
+          "control_rms": 0.12370413541793823,
+          "correct": true,
+          "pair_id": "pair_000005",
+          "prediction": "upright",
+          "question_id": "q_000069",
+          "question_key": "cfq_a578dc166be9a217",
+          "reference": "upright",
+          "scene_id": "scene_000011"
+        },
+        {
+          "answer_type": "orientation",
+          "change_type": "chair_orientation",
+          "control_rms": 0.04585083946585655,
+          "correct": false,
+          "pair_id": "pair_000005",
+          "prediction": "unknown",
+          "question_id": "q_000030",
+          "question_key": "cfq_a578dc166be9a217",
+          "reference": "upside down",
+          "scene_id": "scene_000012"
+        },
+        {
+          "answer_type": "attribute",
+          "change_type": "color_swap",
+          "control_rms": 0.05201755091547966,
+          "correct": false,
+          "pair_id": "pair_000007",
+          "prediction": ":blue",
+          "question_id": "q_000068",
+          "question_key": "cfq_f004e89a2284b94a",
+          "reference": "yellow",
+          "scene_id": "scene_000015"
+        },
+        {
+          "answer_type": "attribute",
+          "change_type": "color_swap",
+          "control_rms": 0.04473509266972542,
+          "correct": false,
+          "pair_id": "pair_000007",
+          "prediction": "unknown",
+          "question_id": "q_000125",
+          "question_key": "cfq_f004e89a2284b94a",
+          "reference": "green",
+          "scene_id": "scene_000016"
+        },
+        {
+          "answer_type": "spatial_relation",
+          "change_type": "cube_support",
+          "control_rms": 0.05774083361029625,
+          "correct": false,
+          "pair_id": "pair_000026",
+          "prediction": "unknown",
+          "question_id": "q_000029",
+          "question_key": "cfq_c482df06c040c2b2",
+          "reference": "below",
+          "scene_id": "scene_000053"
+        },
+        {
+          "answer_type": "spatial_relation",
+          "change_type": "cube_support",
+          "control_rms": 0.06742548942565918,
+          "correct": false,
+          "pair_id": "pair_000026",
+          "prediction": "Irrelevant",
+          "question_id": "q_000116",
+          "question_key": "cfq_c482df06c040c2b2",
+          "reference": "above",
+          "scene_id": "scene_000054"
+        },
+        {
+          "answer_type": "spatial_relation",
+          "change_type": "mirror_lr",
+          "control_rms": 0.07813447713851929,
+          "correct": false,
+          "pair_id": "pair_000016",
+          "prediction": "paymentRequest",
+          "question_id": "q_000140",
+          "question_key": "cfq_efba0c82a7336161",
+          "reference": "left",
+          "scene_id": "scene_000033"
+        },
+        {
+          "answer_type": "spatial_relation",
+          "change_type": "mirror_lr",
+          "control_rms": 0.05019352212548256,
+          "correct": false,
+          "pair_id": "pair_000016",
+          "prediction": "unknown",
+          "question_id": "q_000056",
+          "question_key": "cfq_efba0c82a7336161",
+          "reference": "right",
+          "scene_id": "scene_000034"
+        },
+        {
+          "answer_type": "count",
+          "change_type": "object_count",
+          "control_rms": 0.07074864953756332,
+          "correct": false,
+          "pair_id": "pair_000008",
+          "prediction": "o",
+          "question_id": "q_000142",
+          "question_key": "cfq_39808de4310f3388",
+          "reference": "1",
+          "scene_id": "scene_000017"
+        },
+        {
+          "answer_type": "count",
+          "change_type": "object_count",
+          "control_rms": 0.04538891837000847,
+          "correct": false,
+          "pair_id": "pair_000008",
+          "prediction": "thought\nHere's a thinking process to arrive at the answer:\n\n1.  **Analyze the Request:** The user is asking \"How many chairs are",
+          "question_id": "q_000028",
+          "question_key": "cfq_39808de4310f3388",
+          "reference": "2",
+          "scene_id": "scene_000018"
+        },
+        {
+          "answer_type": "spatial_relation",
+          "change_type": "object_relocation",
+          "control_rms": 0.05133533105254173,
+          "correct": false,
+          "pair_id": "pair_000006",
+          "prediction": "unknown",
+          "question_id": "q_000033",
+          "question_key": "cfq_0a79d507273195ef",
+          "reference": "right",
+          "scene_id": "scene_000013"
+        },
+        {
+          "answer_type": "spatial_relation",
+          "change_type": "object_relocation",
+          "control_rms": 0.05552295595407486,
+          "correct": false,
+          "pair_id": "pair_000006",
+          "prediction": "FileManager",
+          "question_id": "q_000124",
+          "question_key": "cfq_0a79d507273195ef",
+          "reference": "left",
+          "scene_id": "scene_000014"
+        },
+        {
+          "answer_type": "count",
+          "change_type": "object_removal",
+          "control_rms": 0.08428403735160828,
+          "correct": false,
+          "pair_id": "pair_000018",
+          "prediction": "unknown",
+          "question_id": "q_000057",
+          "question_key": "cfq_90b3d9852a93ce2a",
+          "reference": "1",
+          "scene_id": "scene_000037"
+        },
+        {
+          "answer_type": "count",
+          "change_type": "object_removal",
+          "control_rms": 0.05434439703822136,
+          "correct": true,
+          "pair_id": "pair_000018",
+          "prediction": "0",
+          "question_id": "q_000064",
+          "question_key": "cfq_90b3d9852a93ce2a",
+          "reference": "0",
+          "scene_id": "scene_000038"
+        },
+        {
+          "answer_type": "spatial_relation",
+          "change_type": "picture_support",
+          "control_rms": 0.06115631014108658,
+          "correct": false,
+          "pair_id": "pair_000017",
+          "prediction": "Eg",
+          "question_id": "q_000034",
+          "question_key": "cfq_fa3601dfffa80a0e",
+          "reference": "above",
+          "scene_id": "scene_000035"
+        },
+        {
+          "answer_type": "spatial_relation",
+          "change_type": "picture_support",
+          "control_rms": 0.05608290806412697,
+          "correct": false,
+          "pair_id": "pair_000017",
+          "prediction": "unknown",
+          "question_id": "q_000011",
+          "question_key": "cfq_fa3601dfffa80a0e",
+          "reference": "below",
+          "scene_id": "scene_000036"
+        }
+      ],
+      "side_count": 18,
+      "unit_count": 9
+    }
+  },
+  "checkpoint_published": false,
+  "cycles": 3,
+  "deferred_final_loaded": false,
+  "device": "mps",
+  "diagnostic_candidate": {
+    "metadata": {
+      "answer_codebook_serialized": "false",
+      "artifact": "v74_historical_train_gemma_nll_diagnostic_v1",
+      "environmental_text_inputs": "0",
+      "held_optimization_rows": "0",
+      "historical_train_pairs_only": "true",
+      "numeric_gate_passed": "unverified_after_gemma_nll",
+      "official_test_loaded": "false",
+      "official_validation_loaded": "false",
+      "optimizer_steps": "54",
+      "oracle_loaded": "false",
+      "runtime_promotion_forbidden_until_gemma_gate": "true",
+      "source_candidate_sha256": "bf48a8ea852e2c59b070aed1eecc023e4cae66efa2fd76d739f240680cc654b3",
+      "train_behavior_improved": "true",
+      "training_pool_only": "true"
+    },
+    "path": "reports/gemma4/artifacts/v74_gemma_nll_historical_train_diagnostic.safetensors",
+    "sha256": "1ffaffef443a1bf14c98d59bd260c519e140ade0975b298f9fd6790a822e6cbf",
+    "size_bytes": 6325240
+  },
+  "elapsed_training_seconds": 163.9217929581646,
+  "exclusive_trainable_audit": {
+    "base_parameter_count": 5104807456,
+    "base_trainable_parameter_count": 0,
+    "only_v74_trainable": true,
+    "v74_parameter_count": 1409024,
+    "v74_trainable_parameter_count": 1409024
+  },
+  "fit_history": [
+    {
+      "answer_nll": 1.0829886198043823,
+      "optimizer_steps": 54,
+      "preclip_gradient_norm": 188.17742919921875,
+      "question_id": "q_000030",
+      "scene_id": "scene_000012",
+      "step": 1
+    },
+    {
+      "answer_nll": 0.2731405794620514,
+      "optimizer_steps": 54,
+      "preclip_gradient_norm": 835.494384765625,
+      "question_id": "q_000064",
+      "scene_id": "scene_000038",
+      "step": 9
+    },
+    {
+      "answer_nll": 19.753318786621094,
+      "optimizer_steps": 54,
+      "preclip_gradient_norm": 17678.169921875,
+      "question_id": "q_000034",
+      "scene_id": "scene_000035",
+      "step": 18
+    },
+    {
+      "answer_nll": 7.721949577331543,
+      "optimizer_steps": 54,
+      "preclip_gradient_norm": 1416.4853515625,
+      "question_id": "q_000140",
+      "scene_id": "scene_000033",
+      "step": 27
+    },
+    {
+      "answer_nll": 16.99177360534668,
+      "optimizer_steps": 54,
+      "preclip_gradient_norm": 1195.9317626953125,
+      "question_id": "q_000069",
+      "scene_id": "scene_000032",
+      "step": 36
+    },
+    {
+      "answer_nll": 0.06305598467588425,
+      "optimizer_steps": 54,
+      "preclip_gradient_norm": 5.502912521362305,
+      "question_id": "q_000069",
+      "scene_id": "scene_000011",
+      "step": 45
+    },
+    {
+      "answer_nll": 5.799703121185303,
+      "optimizer_steps": 54,
+      "preclip_gradient_norm": 1157.4615478515625,
+      "question_id": "q_000140",
+      "scene_id": "scene_000033",
+      "step": 54
+    }
+  ],
+  "gradient_clip_norm": 1.0,
+  "held_optimization_rows": 0,
+  "held_smoke_authorized": true,
+  "learning_rate": 1e-05,
+  "official_test_loaded": false,
+  "official_validation_loaded": false,
+  "optimizer_steps": 54,
+  "oracle_loaded": false,
+  "prefix_manifest_base_checkpoint_sha256": "3e128b40c1b73bb32750285679cda6b1bea364e67465e986a94a81dfc95e81e8",
+  "runtime_promotion_authorized": false,
+  "seed": 740176,
+  "selection": {
+    "algorithm": "sha256_minimum_changed_unit_per_historical_train_family",
+    "families": {
+      "book_support": 1,
+      "chair_orientation": 1,
+      "color_swap": 1,
+      "cube_support": 1,
+      "mirror_lr": 1,
+      "object_count": 1,
+      "object_relocation": 1,
+      "object_removal": 1,
+      "picture_support": 1
+    },
+    "family_count": 9,
+    "salt": "semantic_3d_chat.v74.gemma_nll.balanced.v1",
+    "side_count": 18,
+    "units": [
+      {
+        "change_type": "book_support",
+        "pair_id": "pair_000015",
+        "question_key": "cfq_ac7ac024c40aaddc",
+        "selection_sha256": "0520a8591bec229657b4c89d83f5f7b674f7f4183f15461ed339efc03d3dd5ca",
+        "side_keys": [
+          [
+            "scene_000031",
+            "q_000050"
+          ],
+          [
+            "scene_000032",
+            "q_000069"
+          ]
+        ]
+      },
+      {
+        "change_type": "chair_orientation",
+        "pair_id": "pair_000005",
+        "question_key": "cfq_a578dc166be9a217",
+        "selection_sha256": "76d6330b6073f0fd7dd6ff7f2a4e1540ad9c54db7d9fabe4fd2c94952aa94a55",
+        "side_keys": [
+          [
+            "scene_000011",
+            "q_000069"
+          ],
+          [
+            "scene_000012",
+            "q_000030"
+          ]
+        ]
+      },
+      {
+        "change_type": "color_swap",
+        "pair_id": "pair_000007",
+        "question_key": "cfq_f004e89a2284b94a",
+        "selection_sha256": "4286b092636f2d803640cc68934e3a20f74b4a757fe7e1476e506885dc211190",
+        "side_keys": [
+          [
+            "scene_000015",
+            "q_000068"
+          ],
+          [
+            "scene_000016",
+            "q_000125"
+          ]
+        ]
+      },
+      {
+        "change_type": "cube_support",
+        "pair_id": "pair_000026",
+        "question_key": "cfq_c482df06c040c2b2",
+        "selection_sha256": "2c1121eca67932180a305f764d6946f60e7d7298527744795586e810681e6796",
+        "side_keys": [
+          [
+            "scene_000053",
+            "q_000029"
+          ],
+          [
+            "scene_000054",
+            "q_000116"
+          ]
+        ]
+      },
+      {
+        "change_type": "mirror_lr",
+        "pair_id": "pair_000016",
+        "question_key": "cfq_efba0c82a7336161",
+        "selection_sha256": "1512ebcf24f65dca831dda741eb30ac02af9dcf361b35c269df017d931cd9ee8",
+        "side_keys": [
+          [
+            "scene_000033",
+            "q_000140"
+          ],
+          [
+            "scene_000034",
+            "q_000056"
+          ]
+        ]
+      },
+      {
+        "change_type": "object_count",
+        "pair_id": "pair_000008",
+        "question_key": "cfq_39808de4310f3388",
+        "selection_sha256": "4e03266f5b6144be26299509537cc0c88e46838d402b2651c8b8a60b7133be29",
+        "side_keys": [
+          [
+            "scene_000017",
+            "q_000142"
+          ],
+          [
+            "scene_000018",
+            "q_000028"
+          ]
+        ]
+      },
+      {
+        "change_type": "object_relocation",
+        "pair_id": "pair_000006",
+        "question_key": "cfq_0a79d507273195ef",
+        "selection_sha256": "385f88d05fec7bc8af927bbd7a77eb2bfb49cad798650a9fe9f0c54a20d42cd1",
+        "side_keys": [
+          [
+            "scene_000013",
+            "q_000033"
+          ],
+          [
+            "scene_000014",
+            "q_000124"
+          ]
+        ]
+      },
+      {
+        "change_type": "object_removal",
+        "pair_id": "pair_000018",
+        "question_key": "cfq_90b3d9852a93ce2a",
+        "selection_sha256": "25dd6053806aad2706edd73167ea99b1153812dac85f9a0bd23cd960627e6d2e",
+        "side_keys": [
+          [
+            "scene_000037",
+            "q_000057"
+          ],
+          [
+            "scene_000038",
+            "q_000064"
+          ]
+        ]
+      },
+      {
+        "change_type": "picture_support",
+        "pair_id": "pair_000017",
+        "question_key": "cfq_fa3601dfffa80a0e",
+        "selection_sha256": "0dce83d0905a661ccb6f095218018b0ba22ddfbffbacf5feb9cc16fddceb4a1a",
+        "side_keys": [
+          [
+            "scene_000035",
+            "q_000034"
+          ],
+          [
+            "scene_000036",
+            "q_000011"
+          ]
+        ]
+      }
+    ]
+  },
+  "source_candidate": {
+    "metadata": {
+      "answer_codebook_serialized": "false",
+      "artifact": "v74_verified_teacher_dense_reader_candidate_v1",
+      "environmental_text_inputs": "0",
+      "numeric_gate_passed": "true",
+      "runtime_promotion_forbidden_until_gemma_gate": "true",
+      "training_pool_only": "true"
+    },
+    "path": "reports/gemma4/artifacts/v74_teacher_unclipped_p4_passed_diagnostic.safetensors",
+    "sha256": "bf48a8ea852e2c59b070aed1eecc023e4cae66efa2fd76d739f240680cc654b3"
+  },
+  "train_behavior_improved": true,
+  "train_complete_unit_gain": 3,
+  "train_exact_side_gain": 9,
+  "weight_decay": 0.0001
+}

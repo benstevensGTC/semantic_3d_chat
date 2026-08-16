@@ -1,0 +1,801 @@
+{
+  "artifact": "gemma4_v54_fixed_prefix_decoder_reader_v6_1_real_mps_smoke",
+  "attempt_sha256": "ec462122b737cda9bd111afa2a66f187039711e3f211ea3901f2eaa15986e53a",
+  "authorization_sha256": "4456ebd11d8cbb154236aa6962bfc5875499580ab326068b1b9581f2127e4b33",
+  "checkpoint_published": false,
+  "deferred_or_final_qa_accessed": false,
+  "elapsed_seconds": 16.74674941599369,
+  "failure_message": "V6.1 first-schedule objective or gradient equivalence failed",
+  "failure_metrics": {
+    "gradient_equivalence": {
+      "contract_version": "v6.1_first_schedule_clean_backward_equivalence_1",
+      "gradient_comparisons": {
+        "aggregate": {
+          "cosine_similarity": 0.9998925988237569,
+          "coverage_exact": true,
+          "full_coverage": [
+            "model.language_model.layers.32.mlp.down_proj",
+            "model.language_model.layers.33.mlp.down_proj"
+          ],
+          "full_lora_a_exact_zero": true,
+          "full_lora_a_gradient_l2_by_target": {
+            "model.language_model.layers.32.mlp.down_proj": 0.0,
+            "model.language_model.layers.33.mlp.down_proj": 0.0
+          },
+          "full_lora_b_gradient_l2_by_target": {
+            "model.language_model.layers.32.mlp.down_proj": 0.3117214751106184,
+            "model.language_model.layers.33.mlp.down_proj": 0.3984774788156525
+          },
+          "full_norm": 0.5059195382354968,
+          "norm_ratio": 1.0000920072812416,
+          "passed": false,
+          "relative_l2": 0.014655751591121162,
+          "sufficient_statistics": {
+            "difference_sum_squares": 5.4986871003779753e-05,
+            "element_count": 110592,
+            "full_sum_squares": 0.25595457916841835,
+            "full_tail_dot": 0.2559506365012376,
+            "full_vector_sha256": "291236525dc0259f0e3b1c7c3f903b13950ffc824f17e0bfed9a70fb18eae234",
+            "tail_sum_squares": 0.25600168070506213,
+            "tail_vector_sha256": "036371952c38beb313c03470fc8132c5ba1464043d2a455b59f574216f1872e6"
+          },
+          "tail_coverage": [
+            "model.language_model.layers.32.mlp.down_proj",
+            "model.language_model.layers.33.mlp.down_proj"
+          ],
+          "tail_lora_a_exact_zero": true,
+          "tail_lora_a_gradient_l2_by_target": {
+            "model.language_model.layers.32.mlp.down_proj": 0.0,
+            "model.language_model.layers.33.mlp.down_proj": 0.0
+          },
+          "tail_lora_b_gradient_l2_by_target": {
+            "model.language_model.layers.32.mlp.down_proj": 0.3117384606864848,
+            "model.language_model.layers.33.mlp.down_proj": 0.39852329020257077
+          },
+          "tail_norm": 0.5059660865167369
+        },
+        "broad": {
+          "cosine_similarity": 0.9999951691075942,
+          "coverage_exact": true,
+          "full_coverage": [
+            "model.language_model.layers.32.mlp.down_proj",
+            "model.language_model.layers.33.mlp.down_proj"
+          ],
+          "full_lora_a_exact_zero": true,
+          "full_lora_a_gradient_l2_by_target": {
+            "model.language_model.layers.32.mlp.down_proj": 0.0,
+            "model.language_model.layers.33.mlp.down_proj": 0.0
+          },
+          "full_lora_b_gradient_l2_by_target": {
+            "model.language_model.layers.32.mlp.down_proj": 0.4083734204110435,
+            "model.language_model.layers.33.mlp.down_proj": 0.6545517152557807
+          },
+          "full_norm": 0.7714964669021513,
+          "norm_ratio": 1.000059878772013,
+          "passed": true,
+          "relative_l2": 0.0031088247513568093,
+          "sufficient_statistics": {
+            "difference_sum_squares": 5.753238439737646e-06,
+            "element_count": 110592,
+            "full_sum_squares": 0.5952067984425023,
+            "full_tail_dot": 0.5952395631425101,
+            "full_vector_sha256": "2836f9075c04cb60c24d5c222ab62822bc10649104c7fda6e44108d553d07d63",
+            "tail_sum_squares": 0.5952780810809659,
+            "tail_vector_sha256": "e02f099920b2ab17c8a6bca2bf7d149312962dcc37ab3b095123a59830b8c625"
+          },
+          "tail_coverage": [
+            "model.language_model.layers.32.mlp.down_proj",
+            "model.language_model.layers.33.mlp.down_proj"
+          ],
+          "tail_lora_a_exact_zero": true,
+          "tail_lora_a_gradient_l2_by_target": {
+            "model.language_model.layers.32.mlp.down_proj": 0.0,
+            "model.language_model.layers.33.mlp.down_proj": 0.0
+          },
+          "tail_lora_b_gradient_l2_by_target": {
+            "model.language_model.layers.32.mlp.down_proj": 0.40835997154439346,
+            "model.language_model.layers.33.mlp.down_proj": 0.654614554315153
+          },
+          "tail_norm": 0.7715426631632019
+        },
+        "correct": {
+          "cosine_similarity": 0.9999908361699059,
+          "coverage_exact": true,
+          "full_coverage": [
+            "model.language_model.layers.32.mlp.down_proj",
+            "model.language_model.layers.33.mlp.down_proj"
+          ],
+          "full_lora_a_exact_zero": true,
+          "full_lora_a_gradient_l2_by_target": {
+            "model.language_model.layers.32.mlp.down_proj": 0.0,
+            "model.language_model.layers.33.mlp.down_proj": 0.0
+          },
+          "full_lora_b_gradient_l2_by_target": {
+            "model.language_model.layers.32.mlp.down_proj": 0.20665836669173968,
+            "model.language_model.layers.33.mlp.down_proj": 0.217105712797137
+          },
+          "full_norm": 0.29973750358080103,
+          "norm_ratio": 1.000192931407657,
+          "passed": true,
+          "relative_l2": 0.004285012607553952,
+          "sufficient_statistics": {
+            "difference_sum_squares": 1.6502659609267217e-06,
+            "element_count": 110592,
+            "full_sum_squares": 0.08984257105285072,
+            "full_tail_dot": 0.0898590810456543,
+            "full_vector_sha256": "fb94ca018b494dad89a0a3d09915ef72692a4163794ec5986659c9a5aafaad23",
+            "tail_sum_squares": 0.08987724130441982,
+            "tail_vector_sha256": "ca52c01a51a3a8b3e65414fdeab23f64564e978519b73da0b2225920accbbacc"
+          },
+          "tail_coverage": [
+            "model.language_model.layers.32.mlp.down_proj",
+            "model.language_model.layers.33.mlp.down_proj"
+          ],
+          "tail_lora_a_exact_zero": true,
+          "tail_lora_a_gradient_l2_by_target": {
+            "model.language_model.layers.32.mlp.down_proj": 0.0,
+            "model.language_model.layers.33.mlp.down_proj": 0.0
+          },
+          "tail_lora_b_gradient_l2_by_target": {
+            "model.language_model.layers.32.mlp.down_proj": 0.20666916524807052,
+            "model.language_model.layers.33.mlp.down_proj": 0.21717526894212721
+          },
+          "tail_norm": 0.29979533235929445
+        },
+        "wrong": {
+          "cosine_similarity": 0.9999929066005558,
+          "coverage_exact": true,
+          "full_coverage": [
+            "model.language_model.layers.32.mlp.down_proj",
+            "model.language_model.layers.33.mlp.down_proj"
+          ],
+          "full_lora_a_exact_zero": true,
+          "full_lora_a_gradient_l2_by_target": {
+            "model.language_model.layers.32.mlp.down_proj": 0.0,
+            "model.language_model.layers.33.mlp.down_proj": 0.0
+          },
+          "full_lora_b_gradient_l2_by_target": {
+            "model.language_model.layers.32.mlp.down_proj": 0.19944807235295622,
+            "model.language_model.layers.33.mlp.down_proj": 0.2273558576068165
+          },
+          "full_norm": 0.3024404396793545,
+          "norm_ratio": 1.0000199601443491,
+          "passed": true,
+          "relative_l2": 0.003766552017984187,
+          "sufficient_statistics": {
+            "difference_sum_squares": 1.297731952178375e-06,
+            "element_count": 110592,
+            "full_sum_squares": 0.09147021955344128,
+            "full_tail_dot": 0.09147139646447185,
+            "full_vector_sha256": "a9cf2f93ea9a95732953e7156af1ad7d13efc6cbbd8efd7ffb7b945e3f7dda56",
+            "tail_sum_squares": 0.09147387110745556,
+            "tail_vector_sha256": "e0a4d95d8ff6eb72074845912bcd84a34c72f82ca3a62e8d2150c22c44aaab49"
+          },
+          "tail_coverage": [
+            "model.language_model.layers.32.mlp.down_proj",
+            "model.language_model.layers.33.mlp.down_proj"
+          ],
+          "tail_lora_a_exact_zero": true,
+          "tail_lora_a_gradient_l2_by_target": {
+            "model.language_model.layers.32.mlp.down_proj": 0.0,
+            "model.language_model.layers.33.mlp.down_proj": 0.0
+          },
+          "tail_lora_b_gradient_l2_by_target": {
+            "model.language_model.layers.32.mlp.down_proj": 0.19944981298648354,
+            "model.language_model.layers.33.mlp.down_proj": 0.22736236101675236
+          },
+          "tail_norm": 0.30244647643418754
+        }
+      },
+      "objective_values": {
+        "broad_nll_abs_difference": 0.0,
+        "composite_abs_difference": 2.682209014892578e-07,
+        "correct_nll_abs_difference": 5.960464477539063e-08,
+        "full_broad_nll": 2.2231123447418213,
+        "full_composite": 3.2673308551311493,
+        "full_correct_nll": 0.5108434557914734,
+        "full_hinge_active": true,
+        "full_margin": 0.02491176128387451,
+        "full_wrong_nll": 0.5357552170753479,
+        "margin_abs_difference": 5.960464477539063e-08,
+        "tail_broad_nll": 2.2231123447418213,
+        "tail_composite": 3.267331123352051,
+        "tail_correct_nll": 0.5108435153961182,
+        "tail_hinge_active": true,
+        "tail_margin": 0.024911701679229736,
+        "tail_wrong_nll": 0.5357552170753479,
+        "wrong_nll_abs_difference": 0.0
+      },
+      "passed": false,
+      "retention_gradient": {
+        "lora_a_exact_zero": true,
+        "lora_b_gradient_l2_by_target": {
+          "model.language_model.layers.32.mlp.down_proj": 4.289746467094455e-07,
+          "model.language_model.layers.33.mlp.down_proj": 1.1140211803884358e-06
+        },
+        "measured_from_freshly_zeroed_gradients": true
+      },
+      "retention_self_kl": 2.395177034486551e-08,
+      "thresholds": {
+        "branch_nll_abs": 1e-06,
+        "composite_abs": 5e-06,
+        "contract_version": "v6.1_first_schedule_clean_backward_equivalence_1",
+        "gradient_cosine_min": 0.99999,
+        "gradient_coverage_exact": true,
+        "gradient_norm_ratio_max": 1.005,
+        "gradient_norm_ratio_min": 0.995,
+        "gradient_relative_l2_max": 0.005,
+        "lora_a_exact_zero": true,
+        "margin_abs": 2e-06,
+        "retention_self_kl_abs_max": 1e-05
+      }
+    },
+    "objective_equivalence": {
+      "common_shape_reprojection": {
+        "logits_exact": true,
+        "nll_exact": true,
+        "reference_logits_sha256": "b92e9f42a40afb735ce1795bb4ed1d15a81ab6119c04a543e4e33e8848e826d4",
+        "reference_per_token_nll": [
+          0.4039618968963623,
+          -0.0,
+          1.1284470558166504
+        ],
+        "selected_logits_sha256": "b92e9f42a40afb735ce1795bb4ed1d15a81ab6119c04a543e4e33e8848e826d4",
+        "selected_per_token_nll": [
+          0.4039618968963623,
+          -0.0,
+          1.1284470558166504
+        ],
+        "shape": [
+          1,
+          3,
+          262144
+        ]
+      },
+      "contract_version": "v6.1_bounded_numerical_objective_gradient_equivalence_1",
+      "distribution": {
+        "js_divergence_by_token": [
+          1.1836771531210696e-12,
+          3.150518355230221e-18,
+          1.63732948148244e-11
+        ],
+        "maximum_js_divergence": 1.63732948148244e-11,
+        "softmax_ce_gradient_cosine_similarity": 1.0,
+        "softmax_ce_gradient_max_abs_difference": 1.9659949061817185e-09
+      },
+      "hf_loss_manual_ce": {
+        "absolute_difference": 5.960464477539063e-08,
+        "hf_batch1_loss": 0.5108029246330261,
+        "manual_full_fp32_ce": 0.5108029842376709,
+        "passed": true
+      },
+      "hidden_identity": {
+        "accessible": true,
+        "entire_exact": true,
+        "entire_shape": [
+          1,
+          320,
+          1536
+        ],
+        "hook_module": "model.language_model.norm",
+        "reference_entire_sha256": "bb0e951907e8a3b10ce85e6de0b8392fbd14b3eb5c72a8b40882e045705279ce",
+        "reference_selected_sha256": "ae959c7f0c93f59e0ec6864cea1215e4eb42232e6aede306f932ed020f6f0f78",
+        "selected_entire_sha256": "bb0e951907e8a3b10ce85e6de0b8392fbd14b3eb5c72a8b40882e045705279ce",
+        "selected_exact": true,
+        "selected_selected_sha256": "ae959c7f0c93f59e0ec6864cea1215e4eb42232e6aede306f932ed020f6f0f78",
+        "selected_shape": [
+          1,
+          3,
+          1536
+        ]
+      },
+      "index_identity": {
+        "causal_positions": [
+          316,
+          317,
+          318
+        ],
+        "causal_positions_exact": true,
+        "label_positions": [
+          317,
+          318,
+          319
+        ],
+        "label_positions_exact": true,
+        "reference_causal_positions_sha256": "ae8660bed773c03ee0bef1a424e513e0f19ae3f408f848eaa81571649b33e33d",
+        "reference_label_positions_sha256": "4ac68fa1914be9b018aaed8ba62ce5f5192e5a462cb5681749db60b0af5e7dcc",
+        "reference_targets_sha256": "e538a5288dc596137fa00994122d2e8c4d2b4c09b9e6e07df064fb7fdb86c970",
+        "selected_causal_positions_sha256": "ae8660bed773c03ee0bef1a424e513e0f19ae3f408f848eaa81571649b33e33d",
+        "selected_label_positions_sha256": "4ac68fa1914be9b018aaed8ba62ce5f5192e5a462cb5681749db60b0af5e7dcc",
+        "selected_targets_sha256": "e538a5288dc596137fa00994122d2e8c4d2b4c09b9e6e07df064fb7fdb86c970",
+        "target_token_ids": [
+          1048,
+          898,
+          1
+        ],
+        "targets_exact": true
+      },
+      "nll": {
+        "max_abs_difference": 0.0,
+        "mean_absolute_difference": 0.0,
+        "reference_mean": 0.5108029842376709,
+        "reference_per_token": [
+          0.4039618968963623,
+          -0.0,
+          1.1284470558166504
+        ],
+        "selected_mean": 0.5108029842376709,
+        "selected_per_token": [
+          0.4039618968963623,
+          -0.0,
+          1.1284470558166504
+        ]
+      },
+      "passed": true,
+      "predictions_and_ranks": {
+        "maximum_crossed_reference_target_gap_by_token": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "minimum_top5_overlap_fraction": 1.0,
+        "per_token_max_vocabulary_abs_logit_difference": [
+          0.125,
+          0.125,
+          0.0625
+        ],
+        "per_token_rank_tie_bands": [
+          0.25,
+          0.25,
+          0.125
+        ],
+        "reference_strict_above_band_ranks": [
+          1,
+          1,
+          2
+        ],
+        "reference_target_ranks": [
+          1,
+          1,
+          2
+        ],
+        "reference_target_top10_membership": [
+          true,
+          true,
+          true
+        ],
+        "reference_top1_token_ids": [
+          1048,
+          898,
+          106
+        ],
+        "selected_strict_above_band_ranks": [
+          1,
+          1,
+          2
+        ],
+        "selected_target_ranks": [
+          1,
+          1,
+          2
+        ],
+        "selected_target_top10_membership": [
+          true,
+          true,
+          true
+        ],
+        "selected_top1_token_ids": [
+          1048,
+          898,
+          106
+        ],
+        "strict_above_band_rank_exact": true,
+        "target_rank_changes_confined_to_tie_band": true,
+        "target_top10_membership_exact": true,
+        "top1_exact": true,
+        "top5_overlap_fraction_by_token": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "prepared_identity": {
+        "all_exact": true,
+        "fields": {
+          "attention_mask": {
+            "dtype": "torch.int64",
+            "exact": true,
+            "reference_sha256": "78e92749862f36b770ca92b6d5d07d8065b6d3745c70f065c04723cb71f1bd3b",
+            "selected_sha256": "78e92749862f36b770ca92b6d5d07d8065b6d3745c70f065c04723cb71f1bd3b",
+            "shape": [
+              1,
+              320
+            ]
+          },
+          "inputs_embeds": {
+            "dtype": "torch.bfloat16",
+            "exact": true,
+            "reference_sha256": "30ed6f55e48fbbc7f9bd42588af663155bc9bc2c18ac39c0adba9046189a9bdd",
+            "selected_sha256": "30ed6f55e48fbbc7f9bd42588af663155bc9bc2c18ac39c0adba9046189a9bdd",
+            "shape": [
+              1,
+              320,
+              1536
+            ]
+          },
+          "labels": {
+            "dtype": "torch.int64",
+            "exact": true,
+            "reference_sha256": "11b85571562b65efc827da3c0d2e7792b7b685f46f22b0eee89cd7fde8634f1d",
+            "selected_sha256": "11b85571562b65efc827da3c0d2e7792b7b685f46f22b0eee89cd7fde8634f1d",
+            "shape": [
+              1,
+              320
+            ]
+          },
+          "mm_token_type_ids": {
+            "dtype": "torch.int64",
+            "exact": true,
+            "reference_sha256": "b5e0e5be694f353950b9f997944c8b34ed0b7642bbaaf95edbcbdd2d001260a3",
+            "selected_sha256": "b5e0e5be694f353950b9f997944c8b34ed0b7642bbaaf95edbcbdd2d001260a3",
+            "shape": [
+              1,
+              320
+            ]
+          },
+          "per_layer_inputs": {
+            "dtype": "torch.bfloat16",
+            "exact": true,
+            "reference_sha256": "eb5f4db65ae701770a9ac1183e4be6de15ce8b9a3917897e0343829b5ffb7c36",
+            "selected_sha256": "eb5f4db65ae701770a9ac1183e4be6de15ce8b9a3917897e0343829b5ffb7c36",
+            "shape": [
+              1,
+              320,
+              35,
+              256
+            ]
+          }
+        }
+      },
+      "raw_postsoftcap_logits": {
+        "byte_exact": false,
+        "max_abs_difference": 0.125,
+        "mean_abs_difference": 2.188108737755101e-06,
+        "minimum_per_token_cosine_similarity": 0.9999999984933585,
+        "per_token_cosine_similarity": [
+          0.9999999984933585,
+          0.9999999999172193,
+          0.9999999989618784
+        ],
+        "reference_shape": [
+          1,
+          3,
+          262144
+        ],
+        "rms_difference": 0.0003781102763499204,
+        "selected_shape": [
+          1,
+          3,
+          262144
+        ],
+        "sufficient_statistics": {
+          "per_token": [
+            {
+              "difference_max_abs": 0.125,
+              "difference_sum_abs": 0.6582987308502197,
+              "difference_sum_squares": 0.03430912343861792,
+              "reference_selected_dot": 11385408.115479877,
+              "reference_sum_squares": 11385412.485821676,
+              "selected_sum_squares": 11385403.779447202,
+              "vocabulary_count": 262144
+            },
+            {
+              "difference_max_abs": 0.125,
+              "difference_sum_abs": 0.25,
+              "difference_sum_squares": 0.03125,
+              "reference_selected_dot": 188751871.95703125,
+              "reference_sum_squares": 188751872.06640625,
+              "selected_sum_squares": 188751871.87890625,
+              "vocabulary_count": 262144
+            },
+            {
+              "difference_max_abs": 0.0625,
+              "difference_sum_abs": 0.8125,
+              "difference_sum_squares": 0.046875,
+              "reference_selected_dot": 22576762.561135728,
+              "reference_sum_squares": 22576764.442971665,
+              "selected_sum_squares": 22576760.72617479,
+              "vocabulary_count": 262144
+            }
+          ],
+          "reference_logits_sha256": "e70b3e6d56723bd0ae91a25a5a82f7554316669fe7a4d76812801b87c8bef86f",
+          "selected_logits_sha256": "444c8a90e76069207546e2fd1b50564a3635fb6fe69fc9685e1ca9383a23527f"
+        }
+      },
+      "thresholds": {
+        "bf16_unit_roundoff": 0.0078125,
+        "causal_positions_exact": true,
+        "common_shape_reprojection_logits_exact": true,
+        "common_shape_reprojection_nll_exact": true,
+        "contract_version": "v6.1_bounded_numerical_objective_gradient_equivalence_1",
+        "entire_final_hidden_states_exact": true,
+        "hf_loss_vs_manual_full_fp32_ce_abs": 1e-06,
+        "js_divergence_max": 1e-06,
+        "label_positions_exact": true,
+        "mean_nll_abs": 1e-06,
+        "per_token_nll_max_abs": 2e-05,
+        "prepared_inputs_exact": true,
+        "rank_delta_logit_bound": 0.25,
+        "rank_tie_band_multiplier": 2.0,
+        "raw_logits_max_abs": 0.25,
+        "raw_logits_mean_abs": 0.002,
+        "raw_logits_per_token_cosine_min": 0.99999,
+        "raw_logits_rms": 0.01,
+        "selected_hidden_states_exact_when_accessible": true,
+        "softmax_ce_gradient_cosine_min": 0.99999,
+        "softmax_ce_gradient_max_abs": 0.001,
+        "target_membership_top_k": 10,
+        "targets_exact": true,
+        "top1_predictions_exact": true,
+        "top_k": 5,
+        "top_k_minimum_overlap_fraction": 0.8
+      },
+      "token_count": 3,
+      "vocabulary_size": 262144
+    }
+  },
+  "failure_stage": "gradient_equivalence",
+  "failure_type": "V61GateFailure",
+  "file_access_audit_active_for_entire_execution": true,
+  "forbidden_file_accesses": [],
+  "loaded_file_count": 240,
+  "loaded_file_inventory_sha256": "f19e9603881f280badb8b2c4cec570780f6b97164c2f1ee71a30925cb2437770",
+  "loaded_files": [
+    "/Users/stevens/.cache/huggingface/hub/models--google--gemma-4-E2B-it/blobs/2db5482b20d746879bb3ef79b5203e9075a2e2b98f54ec7c2f281c1477ddc550",
+    "/Users/stevens/.cache/huggingface/hub/models--google--gemma-4-E2B-it/blobs/6068e357379d36f823c377e30efb101fa2c67fe4",
+    "/Users/stevens/.cache/huggingface/hub/models--google--gemma-4-E2B-it/blobs/923b5e9405e7d319572b0c1b1a89291512262aa3",
+    "/Users/stevens/.cache/huggingface/hub/models--google--gemma-4-E2B-it/blobs/cc8d3a0ce36466ccc1278bf987df5f71db1719b9ca6b4118264f45cb627bfe0f",
+    "/Users/stevens/.cache/huggingface/hub/models--google--gemma-4-E2B-it/blobs/e605bb4523b1462ea9d9a3810b9e3ecf7ab7b1f6",
+    "/Users/stevens/.cache/huggingface/hub/models--google--gemma-4-E2B-it/blobs/fbe3b59b625cd1b8850ea592d4203df6ec04684b",
+    "/Users/stevens/.cache/huggingface/hub/models--google--gemma-4-E2B-it/refs/main",
+    "/Users/stevens/.cache/huggingface/hub/models--google--gemma-4-E2B-it/trees/3e22461f65e89153144f8adb70e3b8c2cc9845a7.json",
+    "/Users/stevens/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/encodings/__pycache__/cp437.cpython-312.pyc",
+    "/Users/stevens/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/encodings/__pycache__/unicode_escape.cpython-312.pyc",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/numpy-2.5.1.dist-info/METADATA",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/safetensors-0.8.0.dist-info/METADATA",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/torch-2.13.0.dist-info/METADATA",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/torch/_compile.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/torch/_dynamo/eval_frame.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/torch/cuda/random.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/torch/mtia/__init__.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/torch/random.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/torch/xpu/__init__.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/torch/xpu/random.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/torchvision-0.28.0.dist-info/METADATA",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/torchvision/transforms/v2/__pycache__/__init__.cpython-312.pyc",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/torchvision/transforms/v2/__pycache__/_augment.cpython-312.pyc",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/torchvision/transforms/v2/__pycache__/_auto_augment.cpython-312.pyc",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/torchvision/transforms/v2/__pycache__/_color.cpython-312.pyc",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/torchvision/transforms/v2/__pycache__/_container.cpython-312.pyc",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/torchvision/transforms/v2/__pycache__/_deprecated.cpython-312.pyc",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/torchvision/transforms/v2/__pycache__/_geometry.cpython-312.pyc",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/torchvision/transforms/v2/__pycache__/_meta.cpython-312.pyc",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/torchvision/transforms/v2/__pycache__/_misc.cpython-312.pyc",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/torchvision/transforms/v2/__pycache__/_temporal.cpython-312.pyc",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/torchvision/transforms/v2/__pycache__/_transform.cpython-312.pyc",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/torchvision/transforms/v2/__pycache__/_type_conversion.cpython-312.pyc",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/torchvision/transforms/v2/__pycache__/_utils.cpython-312.pyc",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/torchvision/transforms/v2/functional/__pycache__/__init__.cpython-312.pyc",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/torchvision/transforms/v2/functional/__pycache__/_augment.cpython-312.pyc",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/torchvision/transforms/v2/functional/__pycache__/_color.cpython-312.pyc",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/torchvision/transforms/v2/functional/__pycache__/_deprecated.cpython-312.pyc",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/torchvision/transforms/v2/functional/__pycache__/_geometry.cpython-312.pyc",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/torchvision/transforms/v2/functional/__pycache__/_meta.cpython-312.pyc",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/torchvision/transforms/v2/functional/__pycache__/_misc.cpython-312.pyc",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/torchvision/transforms/v2/functional/__pycache__/_temporal.cpython-312.pyc",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/torchvision/transforms/v2/functional/__pycache__/_type_conversion.cpython-312.pyc",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/torchvision/transforms/v2/functional/__pycache__/_utils.cpython-312.pyc",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/torchvision/tv_tensors/__pycache__/__init__.cpython-312.pyc",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/torchvision/tv_tensors/__pycache__/_bounding_boxes.cpython-312.pyc",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/torchvision/tv_tensors/__pycache__/_image.cpython-312.pyc",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/torchvision/tv_tensors/__pycache__/_keypoints.cpython-312.pyc",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/torchvision/tv_tensors/__pycache__/_mask.cpython-312.pyc",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/torchvision/tv_tensors/__pycache__/_torch_function_helpers.cpython-312.pyc",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/torchvision/tv_tensors/__pycache__/_tv_tensor.cpython-312.pyc",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/torchvision/tv_tensors/__pycache__/_video.cpython-312.pyc",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/transformers-5.14.1.dist-info/METADATA",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/transformers/__pycache__/__init__.cpython-312.pyc",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/transformers/__pycache__/audio_utils.cpython-312.pyc",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/transformers/__pycache__/feature_extraction_utils.cpython-312.pyc",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/transformers/__pycache__/image_processing_backends.cpython-312.pyc",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/transformers/__pycache__/image_processing_base.cpython-312.pyc",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/transformers/__pycache__/image_processing_utils.cpython-312.pyc",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/transformers/__pycache__/modeling_layers.cpython-312.pyc",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/transformers/__pycache__/modeling_outputs.cpython-312.pyc",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/transformers/__pycache__/processing_utils.cpython-312.pyc",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/transformers/__pycache__/video_processing_utils.cpython-312.pyc",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/transformers/__pycache__/video_utils.cpython-312.pyc",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/transformers/loss/loss_utils.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/transformers/models/auto/__pycache__/feature_extraction_auto.cpython-312.pyc",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/transformers/models/auto/__pycache__/image_processing_auto.cpython-312.pyc",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/transformers/models/auto/__pycache__/processing_auto.cpython-312.pyc",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/transformers/models/auto/__pycache__/video_processing_auto.cpython-312.pyc",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/transformers/models/diffusion_gemma/__pycache__/__init__.cpython-312.pyc",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/transformers/models/diffusion_gemma/configuration_diffusion_gemma.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/transformers/models/diffusion_gemma/generation_diffusion_gemma.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/transformers/models/diffusion_gemma/modeling_diffusion_gemma.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/transformers/models/gemma/__pycache__/__init__.cpython-312.pyc",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/transformers/models/gemma/__pycache__/tokenization_gemma.cpython-312.pyc",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/transformers/models/gemma/configuration_gemma.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/transformers/models/gemma/modeling_gemma.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/transformers/models/gemma/tokenization_gemma.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/transformers/models/gemma4/__pycache__/__init__.cpython-312.pyc",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/transformers/models/gemma4/__pycache__/configuration_gemma4.cpython-312.pyc",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/transformers/models/gemma4/__pycache__/modeling_gemma4.cpython-312.pyc",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/transformers/models/gemma4/configuration_gemma4.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/transformers/models/gemma4/feature_extraction_gemma4.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/transformers/models/gemma4/image_processing_gemma4.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/transformers/models/gemma4/image_processing_pil_gemma4.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/transformers/models/gemma4/modeling_gemma4.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/transformers/models/gemma4/processing_gemma4.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/transformers/models/gemma4/video_processing_gemma4.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/.venv-gemma4/lib/python3.12/site-packages/transformers/utils/__pycache__/type_validators.cpython-312.pyc",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/configs/experiments/gemma4_v54_fixed_prefix_decoder_reader_v6.yaml",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/configs/experiments/gemma4_v54_fixed_prefix_ple_reader_v1.yaml",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/configs/experiments/gemma4_v54_fixed_prefix_ple_reader_v1_retention.json",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/configs/runtime/gemma4_v54.yaml",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/checkpoints/gemma4_v54_semantic_greedy_gate/update_000/adapter.safetensors",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/checkpoints/gemma4_v54_semantic_greedy_gate/update_000/metadata.json",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/checkpoints/gemma4_v54_semantic_greedy_gate/update_000/runtime_metadata.json",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/maps/scene_000011/voxel_map.npz",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/scene_tokens/v56_question_control_full_prefixes/manifest.json",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000011.safetensors",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000012.safetensors",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000013.safetensors",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000014.safetensors",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000015.safetensors",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000016.safetensors",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000017.safetensors",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000018.safetensors",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000019.safetensors",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000020.safetensors",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000021.safetensors",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000022.safetensors",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000023.safetensors",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000024.safetensors",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000031.safetensors",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000032.safetensors",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000033.safetensors",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000034.safetensors",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000035.safetensors",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000036.safetensors",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000037.safetensors",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000038.safetensors",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000039.safetensors",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000040.safetensors",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000041.safetensors",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000042.safetensors",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000043.safetensors",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000044.safetensors",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000045.safetensors",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000046.safetensors",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000047.safetensors",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000048.safetensors",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000049.safetensors",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000050.safetensors",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000051.safetensors",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000052.safetensors",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000053.safetensors",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000054.safetensors",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000055.safetensors",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/scene_tokens/v56_question_control_full_prefixes/scene_000056.safetensors",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/training/v62_pair_disjoint/train.jsonl",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/pyproject.toml",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/gemma4/metrics/gemma4_v54_fixed_prefix_decoder_reader_v6_1_mps_smoke_release.json",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/gemma4/metrics/gemma4_v54_fixed_prefix_decoder_reader_v6_mps_smoke.json",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/gemma4/metrics/gemma4_v54_fixed_prefix_decoder_reader_v6_mps_smoke_attempt.json",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/gemma4/metrics/gemma4_v54_fixed_prefix_decoder_reader_v6_mps_smoke_release.json",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/gemma4/metrics/gemma4_v54_fixed_prefix_decoder_reader_v6_preregistration.json",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/gemma4/metrics/gemma4_v54_fixed_prefix_ple_reader_v5_preregistration.json",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/gemma4/metrics/gemma4_v54_fixed_prefix_ple_reader_v5_result.json",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/gemma4/metrics/gemma4_v54_fixed_prefix_ple_reader_v5_smoke.json",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/gemma4/predictions/v62_v54_no_control_internal_validation.jsonl",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/gemma4/questions/v62_internal_validation.json",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/gemma4/scorer_only/v62_internal_validation_references.json",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/requirements-gemma4-probe.txt",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/scripts/run_gemma4_v54_fixed_prefix_decoder_reader_v6.sh",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/scripts/run_gemma4_v54_fixed_prefix_decoder_reader_v6_1.sh",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/scripts/run_gemma4_v54_fixed_prefix_ple_reader.sh",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/__init__.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/chat/__init__.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/chat/file_audit.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/chat/runtime.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/chat/runtime_config.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/config.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/coordinates.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/data/__init__.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/data/dataset.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/device.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/evaluation/__init__.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/evaluation/candidate_gate_detail.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/evaluation/fixed_prefix_decoder_reader_v6_1_release.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/evaluation/fixed_prefix_decoder_reader_v6_preregistration.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/evaluation/fixed_prefix_decoder_reader_v6_release.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/evaluation/fixed_prefix_ple_v54_preregistration.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/evaluation/gemma4_semantic_sanity.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/evaluation/gemma4_tool_decoder_preregistration_v2.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/evaluation/metrics.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/evaluation/semantic_sanity.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/evaluation/v55_development_score.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/language/__init__.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/language/__pycache__/gemma4_backend.cpython-312.pyc",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/language/fixed_prefix_decoder_reader_v6.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/language/gemma4_answer_tail.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/language/gemma4_backend.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/language/gemma4_tool_decoder_v1.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/language/gemma4_tool_decoder_v2.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/language/generation.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/language/local_lm.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/language/lora.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/language/prefix_injection.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/mapping/__init__.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/mapping/depth_projection.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/mapping/fusion.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/mapping/semantic_codec.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/mapping/voxel_map.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/rendering_io.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/robot/__init__.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/robot/collision.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/robot/llm_tool_policy.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/robot/navigation_policy.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/robot/runtime_refresh.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/robot/semantic_mapping.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/robot/simulator.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/robot/state_checkpoint.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/robot/state_encoder.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/robot/tools.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/scene_encoder/__init__.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/scene_encoder/block_cross_residual.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/scene_encoder/dense_alignment.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/scene_encoder/dense_sidecar_adapter.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/scene_encoder/global_residual.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/scene_encoder/map_io.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/scene_encoder/perceiver.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/scene_encoder/point_tokens.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/scene_encoder/projector.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/scene_encoder/signed_x_dispatch.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/scene_encoder/spatial_blocks.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/training/__init__.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/training/checkpointing.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/training/dense_alignment_calibration.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/training/dense_alignment_supervision.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/training/losses.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/training/pair_curriculum.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/training/smoke_fixed_prefix_decoder_reader_v6.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/training/smoke_fixed_prefix_decoder_reader_v6_1.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/training/source_provenance.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/training/train_adapter.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/training/train_fixed_prefix_ple_v54.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/training/train_fixed_prefix_ple_v54_v4.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/training/train_fixed_prefix_ple_v54_v5.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/vision/__init__.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/vision/encoder.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/vision/gemma4_encoder.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/vision/gemma4_probe.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/vision/model_registry.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/vision/patch_features.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/tests/test_fixed_prefix_decoder_reader_v6.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/tests/test_fixed_prefix_decoder_reader_v6_1_release.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/tests/test_fixed_prefix_decoder_reader_v6_release.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/tests/test_fixed_prefix_ple_v54.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/tests/test_smoke_fixed_prefix_decoder_reader_v6.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/tests/test_smoke_fixed_prefix_decoder_reader_v6_1.py",
+    "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/uv.lock"
+  ],
+  "optimizer_constructed": false,
+  "optimizer_steps": 0,
+  "passed": false,
+  "schema_version": 1,
+  "status": "failed_terminal_attempt_consumed",
+  "training_executed": false
+}

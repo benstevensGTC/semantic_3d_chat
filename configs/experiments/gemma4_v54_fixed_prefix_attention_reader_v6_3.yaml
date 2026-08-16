@@ -1,0 +1,66 @@
+experiment:
+  schema_version: 1
+  artifact: gemma4_v54_fixed_prefix_attention_reader_v6_3
+  mode: train_only_bounded_pilot
+  base_runtime_config: configs/runtime/gemma4_v54.yaml
+  base_checkpoint: data_gemma4/checkpoints/gemma4_v54_semantic_greedy_gate/update_000
+  prefix_cache: data_gemma4/scene_tokens/v56_question_control_full_prefixes
+  train_qa: data_gemma4/training/v62_pair_disjoint/train.jsonl
+  retention_corpus: configs/experiments/gemma4_v54_fixed_prefix_ple_reader_v1_retention.json
+  validation_inputs_authorized: false
+  deferred_or_final_inputs_authorized: false
+  oracle_inputs_authorized: false
+  runtime_checkpoint_publication_authorized: false
+
+attention_reader:
+  architecture: outer_additive_fp32_rank4_residual_v1
+  exact_targets:
+    - model.language_model.layers.13.self_attn.k_proj
+    - model.language_model.layers.13.self_attn.v_proj
+    - model.language_model.layers.14.self_attn.k_proj
+    - model.language_model.layers.14.self_attn.v_proj
+  wraps_frozen_v54_modules_without_merge: true
+  rank: 4
+  alpha: 8.0
+  dropout: 0.0
+  dtype: float32
+  initialization_seed: 720063
+  output_factor_initialization: exact_zero
+  trainable_parameter_count: 30720
+  base_model_frozen: true
+  inherited_v54_banks_frozen: true
+  v6_2_down_projection_not_installed: true
+
+objective:
+  unit: symmetric_two_scene_by_two_answer
+  canonical_question_shared_across_all_four_cells: true
+  sides_per_pair_unit: 2
+  wrong_minus_correct_margin_target_nats_per_token: 0.5
+  margin_loss: softplus_target_minus_wrong_minus_correct
+  correct_answer_ce_weight: 0.1
+  pair_units_balanced_equally: true
+  retention_kl_weight: 0.25
+  answer_suffix_only: true
+  full_huggingface_forward: true
+
+gradient_screen:
+  optimizer_constructed: false
+  optimizer_steps: 0
+  pair_units: 2
+  required_exact_zero_answer_logit_equivalence: true
+  required_nonzero_output_factor_gradient_on_all_targets: true
+  required_unchanged_adapter_state_hash: true
+
+pilot:
+  optimizer: adamw
+  learning_rate: 0.00002
+  weight_decay: 0.0
+  updates: 8
+  pair_units_per_update: 5
+  total_pair_units: 40
+  every_pair_unit_consumed_exactly_once: true
+  gradient_clip_l2: 0.5
+  retention_examples: 8
+  retention_cycle: one_distinct_example_per_update
+  checkpoint_publication: false
+  model_selection: none_train_measurement_only

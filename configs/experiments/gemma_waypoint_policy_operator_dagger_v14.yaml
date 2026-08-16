@@ -1,0 +1,103 @@
+_base_: gemma_waypoint_policy_operator_dagger_v13.yaml
+
+# V14 preserves every V4--V13 row and appends one authenticated training-only
+# continuation from the sealed V13 chair-approach episode. Gemma's first five
+# live decisions were accepted, but its D6 STOP was premature: bbox standoff
+# passed while center progress missed the required threshold by 4.61 cm. The
+# offline geometry expert labels FACE -> MOVE_TO -> STOP from that exact state.
+# Runtime still has no oracle, target lookup, planner, fallback, substitution,
+# or deterministic STOP; Gemma must choose every action and numeric parameter.
+gemma_waypoint_traces:
+  profiles:
+    operator:
+      # YAML list overrides replace inherited lists. Repeat the V11 and V12
+      # sources before appending V13; V10 remains the inherited primary source.
+      additional_live_object_goal_dagger_augmentations:
+        - enabled: true
+          runtime_report_path: reports/gemma4/metrics/gemma_waypoint_dagger_v11_approach_chair_runtime.json
+          runtime_report_sha256: a853478a05e07ef5e1b8acec14f014fec41172dcf676ac8eeb8a30e46ee52aad
+          score_report_path: reports/gemma4/metrics/gemma_waypoint_dagger_v11_approach_chair_score.json
+          score_report_sha256: a757800363e06789665504bfc91d91f427fd1f8c95ef12720d86eeb6f7ab31d5
+          scene_id: scene_000001
+          goal_id: approach_chair
+          instruction: Move close to the chair, then stop.
+          initial_pose_xy_yaw: [-0.5, -0.25, -90.0]
+          checkpoint_sha256: dcc8eb080c2a418d2ae1b6de8fc4665387ccf90f56f2add3bb1873a998606368
+          scene_prefix_sha256: 52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95
+          correction_decision_step: 7
+          observed_model_action: move_to
+          observed_action_accepted: false
+          expected_pose_xy_yaw: [-1.3479610430683904, -0.01765689076636459, 67.99934768676758]
+          expected_input_sha256: e3fefe1dd9d1cd43364715ee9f4b4e25ce3ea72028abab6ac23ef597840fd190
+          expected_expert_first_action: STOP
+          stop_position_neighborhood_offsets_m:
+            - [-0.015, 0.0]
+            - [0.015, 0.0]
+            - [0.0, -0.015]
+            - [0.0, 0.005]
+          target_category: chair
+          target_instance_id: i_000101
+          maximum_total_decisions: 32
+          minimum_center_progress_m: 0.25
+          maximum_bbox_standoff_m: 0.60
+        - enabled: true
+          runtime_report_path: reports/gemma4/metrics/gemma_waypoint_dagger_v12_approach_chair_runtime.json
+          runtime_report_sha256: a9d4069ce16ac4863260f6537db49c00828cdec95921c5c5b31bea217488d9de
+          score_report_path: reports/gemma4/metrics/gemma_waypoint_dagger_v12_approach_chair_score.json
+          score_report_sha256: cb714a7b64f9c7f39fd8e2f8b7552019946f6f6d60294b2a55ce70129bed3e17
+          scene_id: scene_000001
+          goal_id: approach_chair
+          instruction: Move close to the chair, then stop.
+          initial_pose_xy_yaw: [-0.5, -0.25, -90.0]
+          checkpoint_sha256: 95bbc0cd68a73f81dc0bc1d5875993cdcb7b6ccf092d4f13811f005e8ca1e9be
+          scene_prefix_sha256: 52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95
+          correction_decision_step: 2
+          observed_model_action: move_to
+          observed_action_accepted: true
+          expected_pose_xy_yaw: [-0.5, -0.25, -52.9210205078125]
+          expected_input_sha256: f690c67f625b2165c32a8f8634aa9e69f91332045c8a23a4d33ece25aeadccec
+          expected_expert_first_action: FACE
+          target_category: chair
+          target_instance_id: i_000101
+          maximum_total_decisions: 32
+          minimum_center_progress_m: 0.25
+          maximum_bbox_standoff_m: 0.60
+        - enabled: true
+          runtime_report_path: reports/gemma4/metrics/gemma_waypoint_dagger_v13_approach_chair_runtime.json
+          runtime_report_sha256: 2fb6fb805094205d10a98967ef50ed801d85a9eac48e28f4b66b76468d28bf50
+          score_report_path: reports/gemma4/metrics/gemma_waypoint_dagger_v13_approach_chair_score.json
+          score_report_sha256: da3bc1ae9d61d5b48db8f38eb2fa41fb26635e853283575140ea8d08a85d4c54
+          scene_id: scene_000001
+          goal_id: approach_chair
+          instruction: Move close to the chair, then stop.
+          initial_pose_xy_yaw: [-0.5, -0.25, -90.0]
+          checkpoint_sha256: 2a56e655fcb77f7e261f3b45d271ac5a3c97106c66359c6a9104ed00b74b16f3
+          scene_prefix_sha256: 52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95
+          correction_decision_step: 6
+          observed_model_action: stop
+          observed_action_accepted: true
+          expected_pose_xy_yaw: [-0.458561488760024, 0.14776059329035243, 66.31795501708984]
+          expected_input_sha256: 46d272f5fe3cba7f1c924283eeffb0fe0ef989f37833950a4c069b2dd62fd979
+          expected_expert_first_action: FACE
+          # Training-only override: the default 0.60 m ring left just 1.93 mm
+          # clearance in the expert-padded map. This 0.76 m exact-bearing goal
+          # preserves a conservative safety margin without entering runtime.
+          offline_expert_standoff_m: 0.76
+          target_category: chair
+          target_instance_id: i_000101
+          maximum_total_decisions: 32
+          minimum_center_progress_m: 0.25
+          maximum_bbox_standoff_m: 0.60
+
+gemma_waypoint_policy:
+  trace_dataset: data_gemma4/training/gemma_waypoint_policy_v2_operator_dagger_v14
+  hidden_cache: data_gemma4/training/gemma_waypoint_policy_v2_operator_dagger_v14_runtime_aligned_hidden_branch_refit_v1
+  checkpoint_output: data_gemma4/checkpoints/gemma_waypoint_policy_v2_operator_dagger_v14_runtime_aligned
+  # Warm-start the sealed V13 policy and authenticate every one of its 7,112
+  # training rows. Only the three D6 continuation rows are new in V14.
+  retention_reference_checkpoint: data_gemma4/checkpoints/gemma_waypoint_policy_v2_operator_dagger_v13_runtime_aligned
+  retention_reference_trace_dataset: data_gemma4/training/gemma_waypoint_policy_v2_operator_dagger_v13
+  # One new FACE target is sufficient to repair the premature STOP branch.
+  # Keep the sealed V13 headings tighter than the inherited weight did; the
+  # hard 1-degree drift gate remains unchanged.
+  retention_heading_weight: 64.0

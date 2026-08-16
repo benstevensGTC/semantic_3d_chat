@@ -6,7 +6,11 @@ from pathlib import Path
 import pytest
 
 from scripts.generate_scene_batch import (
+    _generate_command,
     _render_command,
+    _require_generation_artifacts,
+    _require_render_artifacts,
+    _select_plans,
     _write_batch_oracle_manifest,
 )
 from semantic_3d_chat.config import load_config
@@ -34,6 +38,92 @@ def test_render_command_receives_no_counterfactual_semantics() -> None:
     assert "pair_000001" not in serialized
     assert "swap_red_blue" not in serialized
     assert "i_000" not in serialized
+
+
+def test_diverse_generation_command_carries_oracle_controls_only() -> None:
+    config = load_config("configs/experiments/diverse20.yaml")
+    plan = batch_scene_plans(config)[0]
+    command = _generate_command(
+        "/opt/local/bin/blender",
+        Path("/project/configs/default.yaml"),
+        plan,
+    )
+
+    assert command[command.index("--plan-version") + 1] == "2"
+    assert command[command.index("--chair-orientation") + 1] == "upright"
+    assert command[command.index("--bowl-placement") + 1] == "floor_left"
+    assert command[command.index("--pair-id") + 1] == "pair_000005"
+
+    render_command = _render_command(
+        "/opt/local/bin/blender",
+        Path("/project/configs/default.yaml"),
+        Path("/project/data"),
+        plan,
+    )
+    assert "--plan-version" not in render_command
+    assert "chair_orientation" not in " ".join(render_command)
+    assert "pair_000005" not in " ".join(render_command)
+
+
+def test_blender_zero_exit_cannot_mask_missing_generation_artifacts(
+    tmp_path: Path,
+) -> None:
+    config = load_config("configs/experiments/diverse20.yaml")
+    plan = batch_scene_plans(config)[0]
+
+    with pytest.raises(RuntimeError, match="did not produce a validated scene"):
+        _require_generation_artifacts(
+            tmp_path / "scene.blend",
+            tmp_path / "oracle.json",
+            plan,
+        )
+
+
+def test_blender_zero_exit_cannot_mask_missing_render_artifacts(tmp_path: Path) -> None:
+    config = load_config("configs/experiments/diverse20.yaml")
+    plan = batch_scene_plans(config)[0]
+
+    with pytest.raises(RuntimeError, match="validated RGB-D artifacts"):
+        _require_render_artifacts(
+            tmp_path / "manifest.json",
+            tmp_path / "visibility.json",
+            plan,
+            visibility_required=True,
+        )
+
+
+def test_diverse_batch_defaults_to_14_development_scenes_and_locks_final_test() -> None:
+    config = load_config("configs/experiments/diverse20.yaml")
+    plans = batch_scene_plans(config)
+
+    development = _select_plans(
+        config,
+        plans,
+        requested_scenes=None,
+        requested_splits=None,
+        include_deferred=False,
+    )
+    assert [plan.scene_id for plan in development] == [
+        f"scene_{index:06d}" for index in range(11, 25)
+    ]
+    with pytest.raises(ValueError, match="Deferred test scenes"):
+        _select_plans(
+            config,
+            plans,
+            requested_scenes=["scene_000025"],
+            requested_splits=None,
+            include_deferred=False,
+        )
+    final_test = _select_plans(
+        config,
+        plans,
+        requested_scenes=None,
+        requested_splits=["test"],
+        include_deferred=True,
+    )
+    assert [plan.scene_id for plan in final_test] == [
+        f"scene_{index:06d}" for index in range(25, 31)
+    ]
 
 
 def test_batch_oracle_manifest_is_full_and_oracle_side(tmp_path: Path) -> None:

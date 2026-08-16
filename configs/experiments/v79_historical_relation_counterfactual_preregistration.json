@@ -1,0 +1,150 @@
+{
+  "artifact": "v79_historical_relation_counterfactual_preregistration_v1",
+  "created_date": "2026-08-13",
+  "hypothesis": "A single exhaustive pass over historical spatial-relation rows, with paired-answer and matched wrong-scene margins, improves scene-disjoint relation behavior beyond both V75 and V77 without sacrificing broad held behavior.",
+  "sources": {
+    "v75_initial_candidate": {
+      "path": "reports/gemma4/artifacts/v75_gemma_nll_balanced_train_diagnostic.safetensors",
+      "sha256": "d01275538489b3493a8e1ff080109d1db46832be6ca2a26f6d89d161c597188a"
+    },
+    "v77_screen_baseline": {
+      "path": "reports/gemma4/artifacts/v77_v75_r72_historical_repair_diagnostic.safetensors",
+      "sha256": "64cecd2e900ffd1763ce04b3ed51b20da8daa147830f402c5d5a561d50437256"
+    },
+    "v73_split_config": {
+      "path": "configs/experiments/gemma4_v73_fullscene_controller.yaml",
+      "sha256": "d208f28380e3f1810a688be8ea8a263831b6a741f7f90e667795637f39d841f1"
+    },
+    "historical_qa": {
+      "path": "data_diverse52/qa/train.jsonl",
+      "sha256": "01721bf904b1ab0b65ce8acac6e366287040873cda1356da6c70c4981abe7619"
+    },
+    "prefix_manifest": {
+      "path": "data_gemma4/scene_tokens/v56_question_control_full_prefixes/manifest.json",
+      "sha256": "5a288a7fef65a957ba7b20132c63380cfadc7edbc37b32c1885037f939b9db61"
+    },
+    "runtime_config": {
+      "path": "configs/runtime/gemma4_v54.yaml",
+      "sha256": "891c58faaaa5fcd2ed76c7e3871f14c5d8c5ae2e05d9fa4ddd5193773d40e56b"
+    },
+    "base_checkpoint_sha256": "3e128b40c1b73bb32750285679cda6b1bea364e67465e986a94a81dfc95e81e8",
+    "historical_internal_reports": {
+      "v75_correct_full_sha256": "4b858b90a63c6a866a033604fe3232729de966dbb61ba636449a914b1e4c366b",
+      "v75_wrong_full_sha256": "af33a1cb438ef01b0ecd4f959aaad05e298ce22496d79f5c2281119e81e369d4",
+      "v77_correct_full_sha256": "8f6da2742635ff379af9d3502d013224b558c0c4dbbfff0c508536c871b9454b"
+    }
+  },
+  "scope": {
+    "historical_training_pool_only": true,
+    "train_pair_count": 12,
+    "train_scene_count": 24,
+    "internal_held_pair_count": 8,
+    "internal_held_scene_count": 16,
+    "train_held_scene_overlap": 0,
+    "official_validation_loaded": false,
+    "official_test_loaded": false,
+    "deferred_final_loaded": false,
+    "oracle_loaded": false,
+    "runtime_publication_authorized": false
+  },
+  "optimization": {
+    "initial_controller": "exact_v75_d012",
+    "controller_architecture": "v75",
+    "trainable_surface": "controller_only",
+    "row_filter": {
+      "answer_type": "spatial_relation",
+      "expected_rows": 120,
+      "expected_changed_sides": 48,
+      "expected_stable_rows": 72,
+      "exhaustive_within_filter": true
+    },
+    "cycles": 1,
+    "row_updates": 120,
+    "gradient_accumulation_rows": 8,
+    "optimizer_steps": 15,
+    "seed": 790179,
+    "optimizer": {
+      "name": "AdamW",
+      "learning_rate": 0.000001,
+      "weight_decay": 0.0001,
+      "gradient_clip_norm": 1.0
+    },
+    "loss": {
+      "answer_nll_weight": 1.0,
+      "same_type_negative_margin_weight": 0.15,
+      "same_type_negative_margin": 0.5,
+      "paired_answer_margin_weight": 0.5,
+      "paired_answer_margin": 0.5,
+      "paired_answer_margin_expected_change_only": true,
+      "wrong_scene_answer_margin_weight": 0.75,
+      "wrong_scene_answer_margin": 0.25,
+      "wrong_scene_answer_margin_expected_change_only": true,
+      "source_output_anchor_weight": 0.05,
+      "source_weight_anchor_weight": 0.01
+    },
+    "measurement_rows": 24,
+    "candidate_output": "reports/gemma4/artifacts/v79_v75_relation_counterfactual_diagnostic.safetensors",
+    "training_report_output": "reports/gemma4/metrics/v79_relation_counterfactual_training.json"
+  },
+  "screen": {
+    "rows": "all_internal_held_changed_spatial_relation_sides",
+    "expected_rows": 28,
+    "expected_units": 14,
+    "models": [
+      "v75",
+      "v77",
+      "v79"
+    ],
+    "arms": [
+      "correct_scene",
+      "paired_wrong_scene"
+    ],
+    "pass_conditions": {
+      "correct_count_strictly_above_each_baseline": true,
+      "correct_minus_wrong_count_at_least_best_baseline": true,
+      "prediction_changing_units_at_least_best_baseline": true
+    },
+    "output": "reports/gemma4/metrics/v79_relation_counterfactual_screen.json"
+  },
+  "conditional_full_evaluation": {
+    "run_only_if_screen_passes": true,
+    "rows": "all_384_internal_held_rows",
+    "arms": [
+      "correct_scene",
+      "paired_wrong_scene"
+    ],
+    "required_breakdowns": [
+      "answer_type",
+      "change_type",
+      "expected_change"
+    ],
+    "historical_reference_counts": {
+      "v75_correct": 295,
+      "v75_wrong": 278,
+      "v75_prediction_changing_units": 33,
+      "v75_spatial_relation_correct": 50,
+      "v77_correct": 299,
+      "v77_prediction_changing_units": 35,
+      "v77_spatial_relation_correct": 52
+    },
+    "advancement_conditions": {
+      "correct_count_minimum": 300,
+      "spatial_relation_correct_minimum": 53,
+      "correct_minus_wrong_count_minimum": 18,
+      "prediction_changing_units_minimum": 35,
+      "maximum_answer_type_correct_drop_from_v75": 2
+    },
+    "output": "reports/gemma4/metrics/v79_relation_counterfactual_full.json"
+  },
+  "artifact_policy": {
+    "candidate_is_diagnostic_only": true,
+    "candidate_contains_numeric_controller_tensors_only": true,
+    "answer_codebook_serialized": false,
+    "category_codebook_serialized": false,
+    "questions_answers_or_labels_serialized": false,
+    "v75_mutation_allowed": false,
+    "v77_mutation_allowed": false,
+    "runtime_promotion_allowed": false,
+    "no_post_screen_hyperparameter_tuning": true
+  }
+}

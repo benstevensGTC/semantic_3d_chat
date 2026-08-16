@@ -1,0 +1,85 @@
+{
+  "artifact": "v34_update32_terminal_gate",
+  "audit_method": "checkpoint_metadata_optimizer_and_tensors_only",
+  "checkpoint_root": "data_gemma4/checkpoints/gemma4_v34_diverse28_base_surface",
+  "conditional_authorization": {
+    "all_other_followup_architectures_authorized": false,
+    "authorized": true,
+    "chat_promotion_authorized": false,
+    "final_test_access_authorized": false,
+    "scope": "exact_zero_block_token_cross_residual_only",
+    "stage": "v35_block_cross_residual"
+  },
+  "conditional_v35_block_cross_residual_authorized": true,
+  "config": {
+    "path": "configs/experiments/gemma4_diverse28_base_surface_v34.yaml",
+    "sha256": "631d5cee0253efef9060d66bcb66941f3fbcfdae7c38039b80cb88db2d737695"
+  },
+  "final_test_scenes_touched": false,
+  "gemma_loaded": false,
+  "no_update_040_or_later": true,
+  "observed_saved_optimizer_steps": [
+    0,
+    8,
+    16,
+    24,
+    32
+  ],
+  "oracle_loaded": false,
+  "passed": true,
+  "qa_loaded": false,
+  "scene_maps_loaded": false,
+  "schedule_sha256": "48acbf99526e79947166d8b33fcf2c0e4f02982ec55fceb594fb11d091ff4b83",
+  "schema_version": 1,
+  "separation_reference_sha256": "c4a444d924ebf6f4591506c4f7dadbf701e6f234c730ec7c9f63c04c236c2e7e",
+  "stopped_at_optimizer_step": 32,
+  "tensor_transition": {
+    "all_inherited_tensors_frozen_at_every_saved_arm": true,
+    "changed_parameter_count": 199808,
+    "changed_tensor_count": 4,
+    "changed_tensor_names": [
+      "dense_sidecar_adapter.base_norm.bias",
+      "dense_sidecar_adapter.base_norm.weight",
+      "dense_sidecar_adapter.base_projection.bias",
+      "dense_sidecar_adapter.base_projection.weight"
+    ],
+    "frozen_tensor_count": 164,
+    "terminal_frozen_tensor_state_sha256": "fc47169bdb900ba94ff2c74a24f15ad564849107a9cd0f4c375af2051433ab7b",
+    "terminal_full_tensor_state_sha256": "7a105762b7c8c04155e5ca34c5c9b30137bcb36571594c68cfef77af5149393c"
+  },
+  "true_optimizer_steps_completed": 32,
+  "update32_checkpoint": "data_gemma4/checkpoints/gemma4_v34_diverse28_base_surface/update_032",
+  "update32_file_sha256": {
+    "adapter.safetensors": "480a1051c45fce21741ded4d4f41bf915df2c79bb4d70536f3dcf994f6f25131",
+    "metadata.json": "14ba328ab9ac1010b75e40123643e3497c59b2bc1c59bfbe307d05a58cea7719",
+    "optimizer.pt": "cc1e8a990ddfc2392fc97650b31ed42081ea09dfd65b9b0af73588cd8e761b46",
+    "runtime_metadata.json": "2503d2c6b31e3151bddb34b9a8681b45ecd58ad62b6fccaebe1785e46c6ee5fe"
+  },
+  "update32_gate_evidence": {
+    "changed_selectivity_over_1_02_count": 0,
+    "changed_selectivity_ratio_geometric_mean": 1.00003981590271,
+    "checks": {
+      "at_least_6_of_8_changed_pairs_over_1_02": false,
+      "changed_selectivity_geometric_mean_at_least_1_02": false,
+      "no_physical_pair_selectivity_below_0_98": true,
+      "passed": false,
+      "training_scenes_only": true,
+      "unrelated_median_two_sided_within_1_02": true,
+      "unrelated_p90_abs_log_within_log_1_02": true
+    },
+    "passed": false,
+    "required_changed_pair_coverage": 6,
+    "required_selectivity_ratio": 1.02,
+    "training_scenes_only": true
+  },
+  "v33_source": {
+    "checkpoint": "data_gemma4/checkpoints/gemma4_v33_diverse28_environmental_sidecar/update_064",
+    "optimizer_step": 64
+  },
+  "v33_terminal_gate": {
+    "path": "reports/gemma4/metrics/v33_update64_terminal_gate.json",
+    "sha256": "703525975c7a03a9b995c6f950dda92ed2945bd1857008196a1086e2a6c19a49"
+  },
+  "v34_chat_promotion_eligible": false,
+  "v34_development_selection_passed": false
+}

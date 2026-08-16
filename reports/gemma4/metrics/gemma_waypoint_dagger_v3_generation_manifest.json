@@ -1,0 +1,166 @@
+{
+  "absolute_heading_targets": true,
+  "absolute_world_xy_targets": true,
+  "action_names": [
+    "MOVE_TO",
+    "FACE",
+    "STOP"
+  ],
+  "action_sample_counts": {
+    "FACE": 2969,
+    "MOVE_TO": 4478,
+    "STOP": 154
+  },
+  "all_between_waypoints_model_supervised": true,
+  "all_lap_waypoints_model_supervised": true,
+  "all_object_face_and_approach_steps_model_supervised": true,
+  "both_lap_winding_directions": true,
+  "checkpoint_contains_object_labels": false,
+  "checkpoint_contains_trace_rows": false,
+  "dataset_sha256": "1b282f352260b79c03aa4699c25daed7706095a91fd381c4562f0df63611bf56",
+  "effective_settings_sha256": "dac79b8d8067553bde89ad42d86170911b5b4931326382de97344d139eb5f834",
+  "environmental_text_training_only": true,
+  "episode_count": 190,
+  "expert_planners_available_at_runtime": false,
+  "expert_turn_margin_degrees": 5.0,
+  "family_sample_counts": {
+    "approach": 139,
+    "between": 74,
+    "face": 38,
+    "lap": 2056,
+    "lap_execution_drift": 1046,
+    "lap_recovery": 4248
+  },
+  "history_feature_dim": 12,
+  "history_length": 16,
+  "lap_execution_drift_augmentation_enabled": true,
+  "lap_execution_drift_episode_count": 36,
+  "lap_execution_drift_nominal_initial_yaws_only": true,
+  "lap_execution_drift_post_face_rows_only": true,
+  "lap_execution_drift_sample_count": 1046,
+  "lap_execution_drift_train_split_only": true,
+  "lap_execution_drift_transition_aligned_histories": true,
+  "lap_execution_drift_turn_magnitude_profiles_degrees": [
+    [
+      40.0,
+      39.9959716796875,
+      39.999839782714844
+    ],
+    [
+      39.99665451049805,
+      39.56814193725586,
+      39.72727966308594
+    ],
+    [
+      39.99933333333333
+    ],
+    [
+      39.998333333333335
+    ],
+    [
+      39.99666666666667
+    ],
+    [
+      39.983333333333334
+    ],
+    [
+      39.96666666666667
+    ],
+    [
+      39.916666666666664
+    ],
+    [
+      39.833333333333336
+    ]
+  ],
+  "lap_face_actions_fixed_magnitude": true,
+  "lap_fixed_face_step_degrees": 40.0,
+  "lap_recovery_augmentation_enabled": true,
+  "lap_recovery_correct_stop_supervised": true,
+  "lap_recovery_episode_count": 96,
+  "lap_recovery_full_post_recovery_continuation": true,
+  "lap_recovery_nominal_initial_yaws_only": true,
+  "lap_recovery_rejection_streak_lengths": [
+    1,
+    4,
+    8,
+    16
+  ],
+  "lap_recovery_sample_count": 4248,
+  "lap_recovery_train_split_only": true,
+  "lap_residual_face_actions_omitted": true,
+  "map_source_sha256": {
+    "scene_000001": "f17c295223b040615e69cb2b986235a4b28f8156565fe37feaaaa1f52607651c",
+    "scene_000031": "a707ee29f6e39fac004cc18b33dcfefbc6a28b6824e036c02fa304128892c8fb",
+    "scene_000032": "70b94ea60748e3a50845fc8bebe43cc32927955a97135d7a892b2f7c0bf3ca71"
+  },
+  "max_face_step_degrees": 40.0,
+  "max_waypoint_step_m": 0.5,
+  "offline_dagger_recovery_labels_only": true,
+  "offline_numeric_expert_planners_only": true,
+  "oracle_inputs_at_runtime": false,
+  "oracle_inputs_used_for_training_only": true,
+  "oracle_source_sha256": {
+    "scene_000001": "d3b7f56a810ac606964e8218b3150ad0f652edd4c0f139d1d7b8e3cf1882d78c",
+    "scene_000031": "52e2fdfb35faf9231a2c0600cc9471ab5c1b9f16ca9791a48d6014eb7159f7ac",
+    "scene_000032": "a09019da4a9695325d9705f06ec2be19cd08926bf9f81608db24ad877a947ad6"
+  },
+  "policy_selects_all_headings_and_waypoints_at_runtime": true,
+  "profile": "operator",
+  "runtime_compatible": false,
+  "runtime_max_face_step_degrees": 45.0,
+  "runtime_must_block_parent_tree": true,
+  "runtime_preprogrammed_lap_function": false,
+  "runtime_recovery_planner_available": false,
+  "sample_count": 7601,
+  "scene_splits_disjoint": true,
+  "schema": "semantic_3d_chat.gemma_waypoint_trace_dataset.v1",
+  "semantic_training_metadata": true,
+  "source_action_conversion_counts": {
+    "excluded_by_profile": 584
+  },
+  "source_converted_episode_count": 0,
+  "source_rows_included": false,
+  "source_trace_dataset_sha256": "d8d97ac248a5821eb971301efb742c25c996627bae22d6417c02755e61d50f9d",
+  "source_trace_manifest_sha256": "005756918c54fbffbb7c6db45e2170174d85f87f278e755e538418d6eb880243",
+  "source_trace_rows_sha256": "72434178ff1cf23c2dfeb98d52cb7b4c443fcc8715c1dd4ee883d87ae127e7ad",
+  "state_feature_dim": 18,
+  "synthetic_expert_episode_count": 190,
+  "synthetic_family_episode_counts": {
+    "approach": 12,
+    "between": 6,
+    "face": 12,
+    "lap": 28,
+    "lap_execution_drift": 36,
+    "lap_recovery": 96
+  },
+  "synthetic_variant_episode_counts": {
+    "approach_object": 12,
+    "between_objects": 6,
+    "face_object": 12,
+    "lap_clockwise": 14,
+    "lap_clockwise_dagger_recovery": 48,
+    "lap_clockwise_execution_drift": 18,
+    "lap_counterclockwise": 14,
+    "lap_counterclockwise_dagger_recovery": 48,
+    "lap_counterclockwise_execution_drift": 18
+  },
+  "traces_sha256": "867611422d061491733a49beceb7829574b6676def602fac28a83bb6d0bfd313",
+  "train_scene_count": 1,
+  "train_scene_ids": [
+    "scene_000001"
+  ],
+  "training_initial_yaw_jitter_degrees": [
+    -1.0,
+    -0.5,
+    0.0,
+    0.5,
+    1.0
+  ],
+  "training_initial_yaw_jitter_train_split_only": true,
+  "validation_scene_count": 2,
+  "validation_scene_ids": [
+    "scene_000031",
+    "scene_000032"
+  ]
+}

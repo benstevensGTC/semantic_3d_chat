@@ -1,0 +1,358 @@
+{
+  "artifact": "v35_update32_terminal_gate",
+  "audit_method": "config_prior_report_checkpoint_metadata_optimizer_and_tensors_only",
+  "checkpoint_root": "data_gemma4/checkpoints/gemma4_v35_diverse28_block_cross",
+  "conditional_authorization": {
+    "all_non_authorized_inherited_v33_tensors_frozen": true,
+    "all_other_followup_architectures_authorized": false,
+    "all_other_preexisting_lora_banks_frozen": true,
+    "authorized": true,
+    "authorized_existing_lora_alpha": 16.0,
+    "authorized_existing_lora_bank": "extension_v30_joint_pair_query",
+    "authorized_existing_lora_dropout": 0.0,
+    "authorized_existing_lora_output_matrices_are_exact_zero": true,
+    "authorized_existing_lora_parameter_count": 131072,
+    "authorized_existing_lora_rank": 8,
+    "authorized_existing_lora_state_sha256": "2b1d89fbb9189ac551bf12905cf94036ebaa84696449b31c2b37b69d478fb70d",
+    "authorized_existing_lora_target_language_layers": [
+      18,
+      19,
+      20,
+      21
+    ],
+    "authorized_existing_lora_target_module_suffixes": [
+      "self_attn.q_proj"
+    ],
+    "chat_promotion_authorized": false,
+    "final_test_access_authorized": false,
+    "fresh_adam_state_required": true,
+    "new_lora_bank_authorized": false,
+    "optimizer_updates_1_through_8": "authorized_existing_lora_bank_only",
+    "optimizer_updates_9_through_100": "authorized_existing_lora_bank_plus_v35_block_cross_matrices",
+    "scope": "exact_v35_update32_block_cross_plus_existing_exact_zero_extension_v30_joint_pair_query_joint_only",
+    "source_checkpoint": "data_gemma4/checkpoints/gemma4_v35_diverse28_block_cross/update_032",
+    "stage": "v36_joint_block_cross_upper_lora",
+    "v35_block_cross_matrices_may_continue_training": true
+  },
+  "conditional_v36_joint_upper_lora_authorized": true,
+  "config": {
+    "path": "configs/experiments/gemma4_diverse28_block_cross_v35.yaml",
+    "sha256": "c8ddd808b2f338b9d61bcdadacbb0f679a0283d5e28a923fd25a6eab1a221485"
+  },
+  "configured_bounded_optimizer_horizon": 100,
+  "final_test_scenes_touched": false,
+  "gemma_loaded": false,
+  "loaded_file_inventory": [
+    "configs/experiments/gemma4_diverse28_block_cross_v35.yaml",
+    "reports/gemma4/metrics/v34_update32_terminal_gate.json",
+    "data_gemma4/checkpoints/gemma4_v35_diverse28_block_cross/update_000/adapter.safetensors",
+    "data_gemma4/checkpoints/gemma4_v35_diverse28_block_cross/update_000/metadata.json",
+    "data_gemma4/checkpoints/gemma4_v35_diverse28_block_cross/update_000/runtime_metadata.json",
+    "data_gemma4/checkpoints/gemma4_v35_diverse28_block_cross/update_008/adapter.safetensors",
+    "data_gemma4/checkpoints/gemma4_v35_diverse28_block_cross/update_008/metadata.json",
+    "data_gemma4/checkpoints/gemma4_v35_diverse28_block_cross/update_008/runtime_metadata.json",
+    "data_gemma4/checkpoints/gemma4_v35_diverse28_block_cross/update_008/optimizer.pt",
+    "data_gemma4/checkpoints/gemma4_v35_diverse28_block_cross/update_016/adapter.safetensors",
+    "data_gemma4/checkpoints/gemma4_v35_diverse28_block_cross/update_016/metadata.json",
+    "data_gemma4/checkpoints/gemma4_v35_diverse28_block_cross/update_016/runtime_metadata.json",
+    "data_gemma4/checkpoints/gemma4_v35_diverse28_block_cross/update_016/optimizer.pt",
+    "data_gemma4/checkpoints/gemma4_v35_diverse28_block_cross/update_024/adapter.safetensors",
+    "data_gemma4/checkpoints/gemma4_v35_diverse28_block_cross/update_024/metadata.json",
+    "data_gemma4/checkpoints/gemma4_v35_diverse28_block_cross/update_024/runtime_metadata.json",
+    "data_gemma4/checkpoints/gemma4_v35_diverse28_block_cross/update_024/optimizer.pt",
+    "data_gemma4/checkpoints/gemma4_v35_diverse28_block_cross/update_032/adapter.safetensors",
+    "data_gemma4/checkpoints/gemma4_v35_diverse28_block_cross/update_032/metadata.json",
+    "data_gemma4/checkpoints/gemma4_v35_diverse28_block_cross/update_032/runtime_metadata.json",
+    "data_gemma4/checkpoints/gemma4_v35_diverse28_block_cross/update_032/optimizer.pt"
+  ],
+  "loaded_files_confined_to_declared_report_only_inputs": true,
+  "no_update_040_or_later": true,
+  "observed_saved_optimizer_steps": [
+    0,
+    8,
+    16,
+    24,
+    32
+  ],
+  "optimizer_transition": {
+    "all_saved_adam_states_exact_and_finite": true,
+    "qkv_started_at_optimizer_step_two": true,
+    "saved_optimizer_states": {
+      "16": {
+        "all_moments_finite": true,
+        "fresh_staged_adam_progression_verified": true,
+        "group_parameter_ids": {
+          "block_cross_residual.output": [
+            3
+          ],
+          "block_cross_residual.qkv": [
+            0,
+            1,
+            2
+          ]
+        },
+        "optimizer_step": 16,
+        "output_adam_step": 16,
+        "parameter_state_count": 4,
+        "parameter_steps_by_optimizer_id": {
+          "0": 15,
+          "1": 15,
+          "2": 15,
+          "3": 16
+        },
+        "qkv_adam_step": 15
+      },
+      "24": {
+        "all_moments_finite": true,
+        "fresh_staged_adam_progression_verified": true,
+        "group_parameter_ids": {
+          "block_cross_residual.output": [
+            3
+          ],
+          "block_cross_residual.qkv": [
+            0,
+            1,
+            2
+          ]
+        },
+        "optimizer_step": 24,
+        "output_adam_step": 24,
+        "parameter_state_count": 4,
+        "parameter_steps_by_optimizer_id": {
+          "0": 23,
+          "1": 23,
+          "2": 23,
+          "3": 24
+        },
+        "qkv_adam_step": 23
+      },
+      "32": {
+        "all_moments_finite": true,
+        "fresh_staged_adam_progression_verified": true,
+        "group_parameter_ids": {
+          "block_cross_residual.output": [
+            3
+          ],
+          "block_cross_residual.qkv": [
+            0,
+            1,
+            2
+          ]
+        },
+        "optimizer_step": 32,
+        "output_adam_step": 32,
+        "parameter_state_count": 4,
+        "parameter_steps_by_optimizer_id": {
+          "0": 31,
+          "1": 31,
+          "2": 31,
+          "3": 32
+        },
+        "qkv_adam_step": 31
+      },
+      "8": {
+        "all_moments_finite": true,
+        "fresh_staged_adam_progression_verified": true,
+        "group_parameter_ids": {
+          "block_cross_residual.output": [
+            3
+          ],
+          "block_cross_residual.qkv": [
+            0,
+            1,
+            2
+          ]
+        },
+        "optimizer_step": 8,
+        "output_adam_step": 8,
+        "parameter_state_count": 4,
+        "parameter_steps_by_optimizer_id": {
+          "0": 7,
+          "1": 7,
+          "2": 7,
+          "3": 8
+        },
+        "qkv_adam_step": 7
+      }
+    },
+    "step_one_output_only_progression_proven": true
+  },
+  "oracle_loaded": false,
+  "passed": true,
+  "qa_loaded": false,
+  "saved_file_sha256_by_optimizer_step": {
+    "0": {
+      "adapter.safetensors": "4da2df2f718afddc3bb39adc3bb3cebb3292f6abd8cef86c1fd1f7fff1be9be5",
+      "metadata.json": "9810f704e1140a18a2598a1f17deebfec5c6a43ac97e55a214800530f087c52f",
+      "runtime_metadata.json": "8bc140c07c4cc3a3f5e22a3ea3cca3c0a468870efbb3ff712beb3d3cacb32839"
+    },
+    "16": {
+      "adapter.safetensors": "fcf74a3dbad63369decd8d69dcb10fdfd5d3eb9f46a08af6dc470f929e4ec7f7",
+      "metadata.json": "8eaa911a49406c9e84012d5b6a739a9180a83bd270de4872e9fb73e08a3cbb90",
+      "optimizer.pt": "09c03220278a276764e82dc45aeffc2ce73414177803fd63bcf4ed216215c322",
+      "runtime_metadata.json": "2d6f1427484474f16e1a180dac502a56531d3818701e13c702f79ca8e197a50f"
+    },
+    "24": {
+      "adapter.safetensors": "62b835cb28fbc163e01dabcd120ea5baf3661636a0faa19762d2122df746cc70",
+      "metadata.json": "659a7e44a114d6cdc1b2777807dc3d49648a54e8ed04aa6947e328d8a5ad3738",
+      "optimizer.pt": "149ca677079d992ade558f8e1c9a673c69c9269be327c578893b46cffa224eb1",
+      "runtime_metadata.json": "d9905ffc4b1ab5e8422c6da07a2eac4c5ae3c148ec463bba1ea30f1bd1493cf9"
+    },
+    "32": {
+      "adapter.safetensors": "4ecd5d9a38f4610387f96d36fca6111d2e248d206fd029e471cce0b1114afda0",
+      "metadata.json": "0f106ecf5dccbe49ae1a15977d45610b560042d7f21a7b0b7ea0bf4ebea6af77",
+      "optimizer.pt": "add72932ce8cd8b58260068472ba0b2486d7011c283b4ce6785ae0f99b12b497",
+      "runtime_metadata.json": "fc06bd605b101ef9a64bf5e38cc83e91cdb8a9a37f8825e6e89c0e6a2ebfd7f1"
+    },
+    "8": {
+      "adapter.safetensors": "e07e05e83e83b6bb32e30eef866f8eec3c8f98e54fc75e84da5a2177ff90fc32",
+      "metadata.json": "636224808dd308a5106c051fd17705f0ffa5a7bcef30bdb5b6af46b657f2ffe5",
+      "optimizer.pt": "541f57ea350828710a3504e404302bbd43b41bf8a8923e954650a7fd739b2311",
+      "runtime_metadata.json": "e01e352192692810af34294519741b5bc62da78d1da099cffdbac16faf5e967b"
+    }
+  },
+  "scene_maps_loaded": false,
+  "schedule_sha256": "ba32db43173248987fb517069fafb961dc155f16a933822180a49110a6810ada",
+  "schema_version": 1,
+  "separation_reference_sha256": "b376a53e744088bba62cceb3e956e0bcf5e81bca2becdefb38f67edb24bc5130",
+  "stopped_at_optimizer_step": 32,
+  "tensor_transition": {
+    "all_inherited_v33_tensors_bit_exact_at_every_saved_arm": true,
+    "all_persistent_block_core_buffers_bit_exact_at_every_saved_arm": true,
+    "authorized_changed_tensor_names": [
+      "block_cross_residual.w_k",
+      "block_cross_residual.w_o",
+      "block_cross_residual.w_q",
+      "block_cross_residual.w_v"
+    ],
+    "authorized_v36_lora_source": {
+      "all_output_matrices_exact_zero": true,
+      "alpha": 16.0,
+      "bank": "extension_v30_joint_pair_query",
+      "parameter_count": 131072,
+      "rank": 8,
+      "state_sha256": "2b1d89fbb9189ac551bf12905cf94036ebaa84696449b31c2b37b69d478fb70d",
+      "target_language_layers": [
+        18,
+        19,
+        20,
+        21
+      ],
+      "target_module_suffixes": [
+        "self_attn.q_proj"
+      ],
+      "tensor_count": 8
+    },
+    "changed_tensor_names_by_optimizer_step": {
+      "0": [],
+      "16": [
+        "block_cross_residual.w_k",
+        "block_cross_residual.w_o",
+        "block_cross_residual.w_q",
+        "block_cross_residual.w_v"
+      ],
+      "24": [
+        "block_cross_residual.w_k",
+        "block_cross_residual.w_o",
+        "block_cross_residual.w_q",
+        "block_cross_residual.w_v"
+      ],
+      "32": [
+        "block_cross_residual.w_k",
+        "block_cross_residual.w_o",
+        "block_cross_residual.w_q",
+        "block_cross_residual.w_v"
+      ],
+      "8": [
+        "block_cross_residual.w_k",
+        "block_cross_residual.w_o",
+        "block_cross_residual.w_q",
+        "block_cross_residual.w_v"
+      ]
+    },
+    "core_state_sha256_by_optimizer_step": {
+      "0": "72ae7f492f5953e58d809b6782d559dc64669637d5d6a79ae98f3a31296a12cd",
+      "16": "bf20b34fb7176f6a50a71cf1e61e397d9c9bea7549a23c31f2743b3ffb357b71",
+      "24": "b367f8c5b541f046edb489b805064e7ccc96e981b8dd06c33d2b182d65f3419e",
+      "32": "75af995833d9387e3eb01fb022eaade7327e44960466671123a51aa43afa4cf3",
+      "8": "a27ecb3e01493db9dfd481e58637388fd2a18877198319762423ada8d04410ee"
+    },
+    "inherited_v33_tensor_count": 168,
+    "inherited_v33_tensor_state_sha256": "cb7bb3b48ace60212ee5c7f326839bf2ddd993810417de45c9a9cbc666313fe6",
+    "only_declared_block_core_matrices_changed": true,
+    "persistent_block_core_buffer_count": 7,
+    "persistent_block_core_buffer_element_count": 779,
+    "persistent_block_core_buffer_names": [
+      "architecture_dimensions",
+      "architecture_marker",
+      "initialization_seed_state",
+      "latent_anchors",
+      "residual_scale",
+      "spatial_temperature",
+      "uniform_floor"
+    ],
+    "persistent_block_core_state_sha256": "9533fb741e9bb14498be50a17b76e4139900b6754b1eadae8c47df6b4f0c2c31",
+    "terminal_changed_parameter_count": 983040,
+    "terminal_changed_tensor_count": 4,
+    "terminal_changed_tensor_names": [
+      "block_cross_residual.w_k",
+      "block_cross_residual.w_o",
+      "block_cross_residual.w_q",
+      "block_cross_residual.w_v"
+    ]
+  },
+  "true_optimizer_steps_completed": 32,
+  "update32_gate_evidence": {
+    "baseline_complete_units": 8,
+    "baseline_cross_prefix_complete_units": 16,
+    "baseline_mean_margin": 1.2638574838638306,
+    "changed_selectivity_over_1_02_count": 0,
+    "changed_selectivity_ratio_geometric_mean": 1.000036597251892,
+    "changed_selectivity_ratio_minimum": 0.9998766779899597,
+    "changed_selectivity_ratios_by_pair": {
+      "pair_000005": 1.0000895261764526,
+      "pair_000006": 1.0000594854354858,
+      "pair_000007": 0.9998957514762878,
+      "pair_000008": 1.0001171827316284,
+      "pair_000015": 1.0002259016036987,
+      "pair_000016": 0.9999871850013733,
+      "pair_000017": 0.9998766779899597,
+      "pair_000018": 1.0000414848327637
+    },
+    "checks": {
+      "at_least_6_of_8_changed_pairs_over_1_02": false,
+      "changed_selectivity_geometric_mean_at_least_1_02": false,
+      "no_physical_pair_selectivity_below_0_98": true,
+      "passed": false,
+      "residual_rms_at_most_0_10": true,
+      "train_complete_count_strictly_improved": true,
+      "train_mean_margin_strictly_improved": true,
+      "training_scenes_only": true,
+      "unrelated_median_two_sided_within_1_02": true,
+      "unrelated_p90_abs_log_within_log_1_02": true
+    },
+    "complete_units_by_family_at_update32": {
+      "book_support": 0,
+      "mirror_lr": 2,
+      "picture_support": 0
+    },
+    "passed": false,
+    "required_changed_pair_coverage": 6,
+    "required_selectivity_ratio": 1.02,
+    "residual_rms": 0.0049283793196082115,
+    "terminal_complete_units": 9,
+    "terminal_cross_prefix_complete_units": 15,
+    "terminal_mean_margin": 1.32265043258667,
+    "training_scenes_only": true,
+    "unrelated_abs_log_ratio_p90": 0.00010669205221347511,
+    "unrelated_ratio_median": 0.9999830722808838
+  },
+  "v33_source_tensor_state_sha256": "cb7bb3b48ace60212ee5c7f326839bf2ddd993810417de45c9a9cbc666313fe6",
+  "v34_terminal_gate": {
+    "path": "reports/gemma4/metrics/v34_update32_terminal_gate.json",
+    "sha256": "b0833a72ba5bc507178fa07cacc8cbef798fce4de94a5f85f2e402aafb46679f"
+  },
+  "v35_chat_promotion_eligible": false,
+  "v35_development_selection_passed": false,
+  "v35_development_selection_ran": false
+}

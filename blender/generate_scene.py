@@ -20,8 +20,12 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from semantic_3d_chat.data.scene_variants import (
+    BOOK_PLACEMENTS,
+    BOWL_PLACEMENTS,
+    CHAIR_ORIENTATIONS,
     COLOR_VARIANTS,
     LAYOUT_VARIANTS,
+    PICTURE_PLACEMENTS,
     ScenePlan,
     derive_scene_seed,
     validate_oracle_geometry,
@@ -75,6 +79,12 @@ def parser() -> argparse.ArgumentParser:
     result.add_argument("--color-variant", choices=sorted(COLOR_VARIANTS))
     result.add_argument("--layout-variant", choices=sorted(LAYOUT_VARIANTS))
     result.add_argument("--remove-instance", action="append")
+    result.add_argument("--plan-version", type=int)
+    result.add_argument("--chair-count", type=int)
+    result.add_argument("--chair-orientation", choices=sorted(CHAIR_ORIENTATIONS))
+    result.add_argument("--picture-placement", choices=sorted(PICTURE_PLACEMENTS))
+    result.add_argument("--bowl-placement", choices=sorted(BOWL_PLACEMENTS))
+    result.add_argument("--book-placement", choices=sorted(BOOK_PLACEMENTS))
     result.add_argument("--pair-id")
     result.add_argument("--paired-scene")
     result.add_argument("--change-type")
@@ -99,7 +109,16 @@ class RoomBuilder:
         self.instances: list[dict[str, Any]] = []
         self.relationships: list[dict[str, str]] = []
 
-    def _xy(self, x: float, y: float, *, amount: float = 1.0) -> tuple[float, float]:
+    def _xy(
+        self,
+        x: float,
+        y: float,
+        *,
+        amount: float = 1.0,
+        wide_xy: tuple[float, float] | None = None,
+    ) -> tuple[float, float]:
+        if self.plan.wide_layout and wide_xy is not None:
+            x, y = wide_xy
         magnitude = self.jitter * amount
         resolved_x = x + self.rng.uniform(-magnitude, magnitude)
         resolved_y = y + self.rng.uniform(-magnitude, magnitude)
@@ -225,7 +244,7 @@ class RoomBuilder:
         self._relationship("i_000010", "mounted_on", "i_000005")
 
     def build_table(self) -> tuple[float, float]:
-        x, y = self._xy(0.85, 0.70)
+        x, y = self._xy(0.85, 0.70, wide_xy=(0.35, 0.95))
         parts = [add_box("pending", (x, y, 0.76), (1.42, 0.82, 0.10), self.materials["wood"])]
         for dx in (-0.60, 0.60):
             for dy in (-0.30, 0.30):
@@ -249,32 +268,56 @@ class RoomBuilder:
         return x, y
 
     def build_chair(self) -> tuple[float, float]:
-        x, y = self._xy(-1.20, 0.48)
-        if self.plan.removes("i_000101"):
+        x, y = self._xy(-1.20, 0.48, wide_xy=(-1.82, 0.18))
+        if self.plan.removes("i_000101") or self.plan.chair_count == 0:
             return x, y
-        parts = [
-            add_box("pending", (x, y, 0.48), (0.54, 0.54, 0.09), self.materials["blue"]),
-            add_box("pending", (x, y + 0.235, 0.88), (0.54, 0.075, 0.76), self.materials["blue"]),
-        ]
-        for dx in (-0.21, 0.21):
-            for dy in (-0.21, 0.21):
-                parts.append(
-                    add_box(
-                        "pending",
-                        (x + dx, y + dy, 0.235),
-                        (0.075, 0.075, 0.47),
-                        self.materials["charcoal"],
+
+        def add_chair(instance_id: str, chair_x: float, chair_y: float) -> None:
+            parts = [
+                add_box(
+                    "pending",
+                    (chair_x, chair_y, 0.48),
+                    (0.54, 0.54, 0.09),
+                    self.materials["blue"],
+                ),
+                add_box(
+                    "pending",
+                    (chair_x, chair_y + 0.235, 0.88),
+                    (0.54, 0.075, 0.76),
+                    self.materials["blue"],
+                ),
+            ]
+            for dx in (-0.21, 0.21):
+                for dy in (-0.21, 0.21):
+                    parts.append(
+                        add_box(
+                            "pending",
+                            (chair_x + dx, chair_y + dy, 0.235),
+                            (0.075, 0.075, 0.47),
+                            self.materials["charcoal"],
+                        )
                     )
-                )
-        self._add_instance(
-            instance_id="i_000101",
-            kind="object",
-            category="chair",
-            color_name="blue",
-            parts=parts,
-            support_surface="i_000001",
-        )
-        self._relationship("i_000101", "on", "i_000001")
+            rotation = (0.0, 0.0, 0.0)
+            if self.plan.chair_orientation == "upside_down":
+                for part in parts:
+                    part.location.z = 1.26 - float(part.location.z)
+                    part.rotation_euler.x += math.pi
+                rotation = (180.0, 0.0, 0.0)
+            self._add_instance(
+                instance_id=instance_id,
+                kind="object",
+                category="chair",
+                color_name="blue",
+                parts=parts,
+                support_surface="i_000001",
+                rotation_euler_degrees=rotation,
+            )
+            self._relationship(instance_id, "on", "i_000001")
+
+        add_chair("i_000101", x, y)
+        if self.plan.chair_count == 2:
+            second_x = self.plan.mirror_x(-0.30 if not self.plan.wide_layout else -0.55)
+            add_chair("i_000109", second_x, -1.72)
         return x, y
 
     def build_picture_frame(self) -> None:
@@ -282,58 +325,109 @@ class RoomBuilder:
             return
         width, depth, _ = self.room_size
         del width
-        x = self.plan.mirror_x(-0.45)
-        y = depth / 2 - 0.028
-        z = 1.72
         border = self.materials["dark_wood"]
-        parts = [
-            add_box("pending", (x, y, z), (0.88, 0.045, 0.58), self.materials["yellow"]),
-            add_box(
-                "pending",
-                (self.plan.offset_x(x, -0.49), y - 0.025, z),
-                (0.10, 0.09, 0.78),
-                border,
-            ),
-            add_box(
-                "pending",
-                (self.plan.offset_x(x, 0.49), y - 0.025, z),
-                (0.10, 0.09, 0.78),
-                border,
-            ),
-            add_box("pending", (x, y - 0.025, z - 0.34), (1.08, 0.09, 0.10), border),
-            add_box("pending", (x, y - 0.025, z + 0.34), (1.08, 0.09, 0.10), border),
-        ]
+        if self.plan.picture_placement == "wall":
+            x = self.plan.mirror_x(0.35 if self.plan.wide_layout else -0.45)
+            y = depth / 2 - 0.028
+            z = 1.72
+            parts = [
+                add_box(
+                    "pending", (x, y, z), (0.88, 0.045, 0.58), self.materials["yellow"]
+                ),
+                add_box(
+                    "pending",
+                    (self.plan.offset_x(x, -0.49), y - 0.025, z),
+                    (0.10, 0.09, 0.78),
+                    border,
+                ),
+                add_box(
+                    "pending",
+                    (self.plan.offset_x(x, 0.49), y - 0.025, z),
+                    (0.10, 0.09, 0.78),
+                    border,
+                ),
+                add_box("pending", (x, y - 0.025, z - 0.34), (1.08, 0.09, 0.10), border),
+                add_box("pending", (x, y - 0.025, z + 0.34), (1.08, 0.09, 0.10), border),
+            ]
+            support_surface = "i_000004"
+            predicate = "mounted_on"
+            rotation = (0.0, 0.0, 0.0)
+        else:
+            x = self.plan.mirror_x(-0.55)
+            y = 1.82
+            z = 0.055
+            parts = [
+                add_box(
+                    "pending", (x, y, z), (0.88, 0.58, 0.045), self.materials["yellow"]
+                ),
+                add_box(
+                    "pending", (self.plan.offset_x(x, -0.49), y, z + 0.025),
+                    (0.10, 0.78, 0.09), border
+                ),
+                add_box(
+                    "pending", (self.plan.offset_x(x, 0.49), y, z + 0.025),
+                    (0.10, 0.78, 0.09), border
+                ),
+                add_box("pending", (x, y - 0.34, z + 0.025), (1.08, 0.10, 0.09), border),
+                add_box("pending", (x, y + 0.34, z + 0.025), (1.08, 0.10, 0.09), border),
+            ]
+            support_surface = "i_000001"
+            predicate = "on"
+            rotation = (90.0, 0.0, 0.0)
         self._add_instance(
             instance_id="i_000102",
             kind="object",
             category="picture frame",
             color_name="yellow",
             parts=parts,
-            support_surface="i_000004",
+            support_surface=support_surface,
+            rotation_euler_degrees=rotation,
         )
-        self._relationship("i_000102", "mounted_on", "i_000004")
+        self._relationship("i_000102", predicate, support_surface)
 
-    def build_bowl(self) -> tuple[float, float]:
-        x, y = self._xy(-1.46, -1.18, amount=0.6)
+    def build_bowl(self, table_xy: tuple[float, float]) -> tuple[float, float]:
+        placement_xy = {
+            "floor_left": (-1.46, -1.18),
+            "floor_right": (1.30, -1.55),
+            "table": (table_xy[0], table_xy[1] + 0.15),
+        }[self.plan.bowl_placement]
+        wide_xy = {
+            "floor_left": (-2.05, -1.55),
+            "floor_right": (1.35, -1.65),
+            "table": (table_xy[0], table_xy[1] + 0.15),
+        }[self.plan.bowl_placement]
+        if self.plan.bowl_placement == "table":
+            # ``table_xy`` is already in canonical world coordinates, including
+            # mirroring. Consume the same two deterministic jitter draws without
+            # reflecting that resolved anchor a second time.
+            magnitude = self.jitter * 0.6
+            x = placement_xy[0] + self.rng.uniform(-magnitude, magnitude)
+            y = placement_xy[1] + self.rng.uniform(-magnitude, magnitude)
+        else:
+            x, y = self._xy(*placement_xy, amount=0.6, wide_xy=wide_xy)
         if self.plan.removes("i_000103"):
             return x, y
+        base_z = 0.81 if self.plan.bowl_placement == "table" else 0.0
         parts = [
-            add_torus("pending", (x, y, 0.115), 0.20, 0.052, self.materials["red"]),
-            add_cylinder("pending", (x, y, 0.035), 0.18, 0.05, self.materials["red"]),
+            add_torus("pending", (x, y, base_z + 0.115), 0.20, 0.052, self.materials["red"]),
+            add_cylinder("pending", (x, y, base_z + 0.035), 0.18, 0.05, self.materials["red"]),
         ]
+        support_surface = (
+            "i_000100" if self.plan.bowl_placement == "table" else "i_000001"
+        )
         self._add_instance(
             instance_id="i_000103",
             kind="object",
             category="bowl",
             color_name="red",
             parts=parts,
-            support_surface="i_000001",
+            support_surface=support_surface,
         )
-        self._relationship("i_000103", "on", "i_000001")
+        self._relationship("i_000103", "on", support_surface)
         return x, y
 
     def build_lamp(self) -> tuple[float, float]:
-        x, y = self._xy(-2.16, 1.45, amount=0.5)
+        x, y = self._xy(-2.16, 1.45, amount=0.5, wide_xy=(-2.42, 1.62))
         if self.plan.removes("i_000104"):
             return x, y
         parts = [
@@ -380,10 +474,24 @@ class RoomBuilder:
                 self._relationship("i_000100", "under", "i_000105")
 
         if not self.plan.removes("i_000106"):
+            if self.plan.book_placement == "under_table":
+                book_center = (
+                    self.plan.offset_x(table_x, 0.34),
+                    table_y - 0.08,
+                    0.035,
+                )
+                book_support = "i_000001"
+            else:
+                book_center = (
+                    self.plan.offset_x(table_x, 0.34),
+                    table_y - 0.08,
+                    0.845,
+                )
+                book_support = "i_000100"
             book_parts = [
                 add_box(
                     "pending",
-                    (self.plan.offset_x(table_x, 0.34), table_y - 0.08, 0.845),
+                    book_center,
                     (0.38, 0.25, 0.07),
                     self.materials["green"],
                     rotation_degrees=(0.0, 0.0, -12.0 if self.plan.mirrored else 12.0),
@@ -396,14 +504,18 @@ class RoomBuilder:
                 category="book",
                 color_name="green",
                 parts=book_parts,
-                support_surface="i_000100",
+                support_surface=book_support,
                 rotation_euler_degrees=book_rotation,
             )
-            self._relationship("i_000106", "on", "i_000100")
-            self._relationship("i_000100", "under", "i_000106")
+            self._relationship("i_000106", "on", book_support)
+            if self.plan.book_placement == "under_table":
+                self._relationship("i_000106", "under", "i_000100")
+                self._relationship("i_000100", "above", "i_000106")
+            else:
+                self._relationship("i_000100", "under", "i_000106")
 
     def build_cabinet(self) -> tuple[float, float]:
-        x, y = self._xy(2.12, -1.22, amount=0.5)
+        x, y = self._xy(2.12, -1.22, amount=0.5, wide_xy=(2.28, -1.55))
         if self.plan.removes("i_000107"):
             return x, y
         parts = [
@@ -430,7 +542,7 @@ class RoomBuilder:
         return x, y
 
     def build_plant(self) -> tuple[float, float]:
-        x, y = self._xy(2.14, 1.57, amount=0.45)
+        x, y = self._xy(2.14, 1.57, amount=0.45, wide_xy=(2.30, 1.65))
         if self.plan.removes("i_000108"):
             return x, y
         parts = [
@@ -527,7 +639,7 @@ class RoomBuilder:
         table_xy = self.build_table()
         self.build_chair()
         self.build_picture_frame()
-        self.build_bowl()
+        self.build_bowl(table_xy)
         self.build_lamp()
         self.build_tabletop_objects(table_xy)
         self.build_cabinet()
@@ -612,6 +724,24 @@ def _scene_plan(config: dict[str, Any], args: argparse.Namespace, scene_id: str)
             or scene_config.get("layout_variant", preset_layout)
         ),
         remove_instance_ids=removals,
+        plan_version=int(args.plan_version or scene_config.get("plan_version", 1)),
+        chair_count=int(
+            args.chair_count
+            if args.chair_count is not None
+            else scene_config.get("chair_count", 1)
+        ),
+        chair_orientation=str(
+            args.chair_orientation or scene_config.get("chair_orientation", "upright")
+        ),
+        picture_placement=str(
+            args.picture_placement or scene_config.get("picture_placement", "wall")
+        ),
+        bowl_placement=str(
+            args.bowl_placement or scene_config.get("bowl_placement", "floor_left")
+        ),
+        book_placement=str(
+            args.book_placement or scene_config.get("book_placement", "table")
+        ),
         pair_id=args.pair_id,
         paired_scene_id=args.paired_scene,
         change_type=args.change_type,

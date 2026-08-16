@@ -1,0 +1,41 @@
+_base_: diverse20.yaml
+
+# PROHIBITED PRIMARY SUBSTITUTE: this is an evaluation-only direct-image VLM
+# control. It deliberately bypasses the persistent depth-projected 3D map and
+# cannot be promoted as evidence for the project's continuous-3D primary path.
+evaluation:
+  baselines:
+    direct_multiview:
+      backend: gemma4
+      model_id: google/gemma-4-E2B-it
+      revision: 3e22461f65e89153144f8adb70e3b8c2cc9845a7
+      license: Apache-2.0
+      dtype: bfloat16
+      # Each diverse20 scan has 24 frames. A smoke limit restricts questions,
+      # never views: every question receives all complete deterministic frames.
+      max_views: 24
+      require_all_manifest_views: true
+      require_local_files_only: true
+      resize_longest_edge: null
+      enable_thinking: false
+      max_answer_tokens: 24
+      # All 24 images and the fixed instruction precede every question. Build
+      # their exact causal decoder KV state once per scene, then clone that
+      # continuous state for each question. This is question-independent and
+      # changes neither image coverage nor greedy decoding semantics.
+      scene_cache: gemma4_decoder_kv_scene_prefix_v1
+      system_prompt: >-
+        This is an evaluation-only direct-image control. Answer the room
+        question using only the complete camera images supplied with it. Reply
+        with only a canonical answer: yes/no, an integer, a color, an object
+        name, upright, upside down, wall, floor, or one of left, right, above,
+        below, in front, behind, on, under, near, far, or unknown.
+
+experiment:
+  role: prohibited_direct_multiview_gemma4_baseline
+  evaluation_only: true
+  primary_path_eligible: false
+  prohibited_primary_substitute: true
+  direct_inputs: [complete_rgb_frames, user_question]
+  excluded_inputs: [depth, oracle_metadata, segmentation, scene_caption]
+  final_test_deferred: true

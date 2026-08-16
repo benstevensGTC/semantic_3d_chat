@@ -1,0 +1,6 @@
+_base_: embodied_live.yaml
+
+# Isolate current hybrid convergence-validation observations from historical
+# learned-only robot maps and scan caches. Semantic base maps stay read-only.
+paths:
+  data_root: data_gemma4/runtime/embodied_hybrid_validation

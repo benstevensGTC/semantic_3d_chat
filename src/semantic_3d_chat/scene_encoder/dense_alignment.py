@@ -24,6 +24,11 @@ from semantic_3d_chat.language.lora import tensor_state_sha256
 
 DENSE_ALIGNMENT_ARCHITECTURE_VERSION = "middle_late_to_aligned_tail_low_rank_v1"
 DENSE_ALIGNMENT_ARCHITECTURE_MARKER = 0x44414C31
+DENSE_ALIGNMENT_REPLACE_TAIL = "replace_tail"
+DENSE_ALIGNMENT_COVERAGE_SIDECAR = "coverage_sidecar"
+_DENSE_ALIGNMENT_APPLICATION_MODES = frozenset(
+    {DENSE_ALIGNMENT_REPLACE_TAIL, DENSE_ALIGNMENT_COVERAGE_SIDECAR}
+)
 
 
 @dataclass(frozen=True)
@@ -37,6 +42,8 @@ class DenseAlignmentSettings:
     alpha: float = 16.0
     initialization_seed: int = 25025
     expected_initial_state_sha256: str | None = None
+    application_mode: str = DENSE_ALIGNMENT_REPLACE_TAIL
+    sidecar_scale: float = 0.0
 
     def __post_init__(self) -> None:
         if not isinstance(self.enabled, bool):
@@ -63,11 +70,23 @@ class DenseAlignmentSettings:
             )
         if self.enabled and expected is None:
             raise ValueError("Enabled dense_alignment requires expected_initial_state_sha256")
+        if self.application_mode not in _DENSE_ALIGNMENT_APPLICATION_MODES:
+            raise ValueError(
+                "dense_alignment.application_mode must be replace_tail or coverage_sidecar"
+            )
+        if isinstance(self.sidecar_scale, bool) or not isinstance(
+            self.sidecar_scale, (int, float)
+        ):
+            raise TypeError("dense_alignment.sidecar_scale must be a finite number")
+        if not math.isfinite(float(self.sidecar_scale)) or float(self.sidecar_scale) < 0.0:
+            raise ValueError("dense_alignment.sidecar_scale must be finite and nonnegative")
+        if self.application_mode == DENSE_ALIGNMENT_REPLACE_TAIL and self.sidecar_scale != 0.0:
+            raise ValueError("replace_tail mode requires dense_alignment.sidecar_scale=0")
 
     def contract(self) -> dict[str, Any]:
         if not self.enabled:
             return {"schema_version": 1, "enabled": False}
-        return {
+        contract = {
             "schema_version": 1,
             "enabled": True,
             "architecture_version": DENSE_ALIGNMENT_ARCHITECTURE_VERSION,
@@ -85,6 +104,19 @@ class DenseAlignmentSettings:
             "spatial_reduction": "none",
             "every_voxel_retained": True,
         }
+        # Preserve the exact historical V25/V26 contract for the default
+        # replacement mode.  The sidecar integration is an explicit new
+        # contract and can therefore never be loaded accidentally by an older
+        # runtime/checkpoint pair.
+        if self.application_mode == DENSE_ALIGNMENT_COVERAGE_SIDECAR:
+            contract.update(
+                {
+                    "application_mode": self.application_mode,
+                    "sidecar_scale": float(self.sidecar_scale),
+                    "base_semantic_path_modified": False,
+                }
+            )
+        return contract
 
 
 def dense_alignment_settings(config: Mapping[str, Any]) -> DenseAlignmentSettings:
@@ -106,6 +138,8 @@ def dense_alignment_settings(config: Mapping[str, Any]) -> DenseAlignmentSetting
         "alpha",
         "initialization_seed",
         "expected_initial_state_sha256",
+        "application_mode",
+        "sidecar_scale",
     }
     unknown = sorted(set(raw) - allowed)
     if unknown:
@@ -118,6 +152,8 @@ def dense_alignment_settings(config: Mapping[str, Any]) -> DenseAlignmentSetting
         alpha=raw.get("alpha", 16.0),
         initialization_seed=raw.get("initialization_seed", 25025),
         expected_initial_state_sha256=raw.get("expected_initial_state_sha256"),
+        application_mode=raw.get("application_mode", DENSE_ALIGNMENT_REPLACE_TAIL),
+        sidecar_scale=raw.get("sidecar_scale", 0.0),
     )
 
 
@@ -136,6 +172,8 @@ def construct_dense_alignment(
         rank=settings.rank,
         alpha=settings.alpha,
         initialization_seed=settings.initialization_seed,
+        application_mode=settings.application_mode,
+        sidecar_scale=settings.sidecar_scale,
     )
 
 
@@ -194,6 +232,8 @@ class DenseAlignmentResidual(nn.Module):
         rank: int = 8,
         alpha: float = 16.0,
         initialization_seed: int = 25025,
+        application_mode: str = DENSE_ALIGNMENT_REPLACE_TAIL,
+        sidecar_scale: float = 0.0,
     ) -> None:
         super().__init__()
         for name, value in {
@@ -213,6 +253,15 @@ class DenseAlignmentResidual(nn.Module):
             raise ValueError("alpha must be a finite positive number")
         if isinstance(initialization_seed, bool) or not isinstance(initialization_seed, int):
             raise TypeError("initialization_seed must be an integer")
+        if application_mode not in _DENSE_ALIGNMENT_APPLICATION_MODES:
+            raise ValueError("application_mode must be replace_tail or coverage_sidecar")
+        if isinstance(sidecar_scale, bool) or not isinstance(sidecar_scale, (int, float)):
+            raise TypeError("sidecar_scale must be a finite number")
+        parsed_sidecar_scale = float(sidecar_scale)
+        if not math.isfinite(parsed_sidecar_scale) or parsed_sidecar_scale < 0.0:
+            raise ValueError("sidecar_scale must be finite and nonnegative")
+        if application_mode == DENSE_ALIGNMENT_REPLACE_TAIL and parsed_sidecar_scale != 0.0:
+            raise ValueError("replace_tail mode requires sidecar_scale=0")
 
         self.semantic_dim = int(semantic_dim)
         self.dense_dim = int(dense_dim)
@@ -222,6 +271,8 @@ class DenseAlignmentResidual(nn.Module):
         self.initialization_seed = int(initialization_seed)
         self.architecture_version = DENSE_ALIGNMENT_ARCHITECTURE_VERSION
         self.layer_norm_eps = 1e-5
+        self.application_mode = application_mode
+        self.sidecar_scale = parsed_sidecar_scale
 
         self.register_buffer(
             "architecture_marker",
@@ -299,7 +350,7 @@ class DenseAlignmentResidual(nn.Module):
                 raise ValueError(f"Dense-alignment {name} contains NaN or infinity")
         if self.scaling.dtype != torch.float32 or not torch.isfinite(self.scaling):
             raise ValueError("Dense-alignment scaling must remain finite float32")
-        return {
+        audit = {
             "architecture_version": self.architecture_version,
             "semantic_dim": self.semantic_dim,
             "dense_dim": self.dense_dim,
@@ -319,6 +370,31 @@ class DenseAlignmentResidual(nn.Module):
             "b_exact_zero": bool(torch.count_nonzero(self.alignment_b).item() == 0),
             "state_sha256": self.state_sha256(),
         }
+        if self.application_mode == DENSE_ALIGNMENT_COVERAGE_SIDECAR:
+            audit.update(
+                {
+                    "application_mode": self.application_mode,
+                    "sidecar_scale": self.sidecar_scale,
+                    "base_semantic_path_modified": False,
+                }
+            )
+        return audit
+
+    def scene_inputs(
+        self, semantic: torch.Tensor
+    ) -> tuple[torch.Tensor, torch.Tensor | None, float]:
+        """Return the base semantic path plus an optional aligned sidecar.
+
+        ``replace_tail`` retains the V25/V26 behavior.  ``coverage_sidecar``
+        leaves the complete semantic tensor untouched and supplies the
+        calibrated residual separately for all-voxel spatial coverage.  This
+        isolates new semantic evidence from a previously validated scene path.
+        """
+
+        if self.application_mode == DENSE_ALIGNMENT_REPLACE_TAIL:
+            return self(semantic), None, 0.0
+        delta = self.residual_delta(semantic).to(dtype=semantic.dtype)
+        return semantic, delta, self.sidecar_scale
 
     def _validate_semantic(self, semantic: torch.Tensor) -> None:
         if not isinstance(semantic, torch.Tensor):
@@ -388,6 +464,8 @@ class DenseAlignmentResidual(nn.Module):
 __all__ = [
     "DENSE_ALIGNMENT_ARCHITECTURE_MARKER",
     "DENSE_ALIGNMENT_ARCHITECTURE_VERSION",
+    "DENSE_ALIGNMENT_COVERAGE_SIDECAR",
+    "DENSE_ALIGNMENT_REPLACE_TAIL",
     "DenseAlignmentResidual",
     "DenseAlignmentSettings",
     "construct_dense_alignment",

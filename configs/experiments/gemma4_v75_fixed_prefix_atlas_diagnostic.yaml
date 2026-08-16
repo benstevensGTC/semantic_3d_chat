@@ -1,0 +1,32 @@
+# Structural diagnostic for compiling the sealed V75 continuous reader before
+# user questions. This does not authorize behavioral promotion or protected-
+# split evaluation.
+v75_fixed_prefix_atlas:
+  schema_version: 1
+  status: structural_mechanism_verified_behavior_not_evaluated
+  compiler: semantic_3d_chat.scene_encoder.fixed_prefix_atlas_v75
+  source_controller: data_gemma4/runtime/checkpoints/gemma4_v75_nll_control_release_v1
+  source_prefix_cache: data_gemma4/scene_tokens/v56_question_control_full_prefixes
+  structural_scene: scene_000011
+  probe_count: 96
+  probe_seed: 8080
+  values_per_probe: 4
+  base_environment_latents: 256
+  atlas_memory_tokens: 480
+  fixed_prefix_tokens: 738
+  language_hidden_size: 1536
+  layout: v2_atlas_then_all_base_latents
+  compile_before_user_question: true
+  retain_compiler_during_chat: false
+  preserve_every_base_scene_tensor_exactly: true
+  process_every_probe: true
+  question_dependent_scene_processing: false
+  question_dependent_retrieval: false
+  semantic_or_spatial_top_k_selection: false
+  runtime_environmental_text_inputs: []
+  behavioral_accuracy_measured: false
+  runtime_promotion_authorized: false
+  official_validation_loaded: false
+  official_test_loaded: false
+  deferred_final_loaded: false
+  output_report: reports/gemma4/metrics/v75_fixed_prefix_atlas_structural_mechanism.json

@@ -1,0 +1,57 @@
+{
+  "all_passed": false,
+  "all_runtime_evidence_validated_before_oracle_open": true,
+  "goal_count": 1,
+  "goals": [
+    {
+      "accepted_decision_count": 6,
+      "checks": {
+        "accepted_gemma_stop": true,
+        "maximum_oracle_bbox_standoff": true,
+        "minimum_oracle_center_progress": false
+      },
+      "elapsed_seconds": 2.8677454580029007,
+      "final_oracle_bbox_standoff_m": 0.5194586510093111,
+      "final_position_xy_m": [
+        -0.458561488760024,
+        0.14776059329035243
+      ],
+      "final_target_center_distance_m": 0.8647313044425892,
+      "goal_id": "approach_chair",
+      "initial_position_xy_m": [
+        -0.5,
+        -0.25
+      ],
+      "initial_target_center_distance_m": 1.068656395845701,
+      "instruction": "Move close to the chair, then stop.",
+      "maximum_bbox_standoff_m": 0.6,
+      "metric": "approach_standoff",
+      "minimum_center_progress_m": 0.25,
+      "model_decision_count": 6,
+      "model_selected_terminal_stop": true,
+      "passed": false,
+      "path_length_m": 0.3999132903373915,
+      "rejected_decision_count": 0,
+      "runtime_file": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/gemma4/metrics/gemma_waypoint_dagger_v13_approach_chair_runtime.json",
+      "runtime_file_sha256": "2fb6fb805094205d10a98967ef50ed801d85a9eac48e28f4b66b76468d28bf50",
+      "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95",
+      "target_category": "chair",
+      "target_center_progress_m": 0.20392509140311177,
+      "target_center_xyz_m": [
+        -1.2374088764190674,
+        0.5234692245721817,
+        0.6299999952316284
+      ],
+      "target_instance_id": "i_000101"
+    }
+  ],
+  "oracle_file": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data/oracle/scene_000001/oracle.json",
+  "oracle_file_sha256": "d3b7f56a810ac606964e8218b3150ad0f652edd4c0f139d1d7b8e3cf1882d78c",
+  "passed_count": 0,
+  "runtime_capture_process_accepts_oracle_arguments": false,
+  "runtime_process_read_oracle": false,
+  "scene_id": "scene_000001",
+  "schema": "semantic_3d_chat.gemma_waypoint_object_oracle_score.v1",
+  "scorer_reads_oracle": true,
+  "status": "evaluation_only_oracle_score"
+}

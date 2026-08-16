@@ -1,0 +1,70 @@
+{
+  "schema": "semantic_3d_chat.llm_navigation_oracle.v1",
+  "benchmark_version": 2,
+  "scene_id": "scene_000001",
+  "task_manifest_sha256": "09cf2424f75a82ecd5bffc2f16c158874a00bf12ea7ce5c5083d2dc2e0f40e91",
+  "inference_config_sha256": "5ee4610104f4d8058a5fd739678f0e400c2181d6875e0e223727bbbef40ccb13",
+  "expected_initial_position_xy_m": [0.0, -0.5],
+  "feasibility_justification": {
+    "approach_initial_target_standoff_m": 0.7000051521053386,
+    "approach_minimum_target_progress_m": 0.25,
+    "approach_progress_feasibility_margin_m": 0.45000515210533865,
+    "criteria_changed_from_v1": false,
+    "prepared_before_v2_inference": true
+  },
+  "tasks": [
+    {
+      "task_id": "nav_000",
+      "family": "face",
+      "target_instance_id": "i_000101",
+      "maximum_heading_error_degrees": 20.0,
+      "maximum_collisions": 0,
+      "require_stopped": true
+    },
+    {
+      "task_id": "nav_001",
+      "family": "approach",
+      "target_instance_id": "i_000100",
+      "maximum_target_standoff_m": 0.85,
+      "minimum_target_progress_m": 0.25,
+      "maximum_collisions": 0,
+      "require_stopped": true
+    },
+    {
+      "task_id": "nav_002",
+      "family": "stop",
+      "minimum_displacement_m": 0.20,
+      "maximum_displacement_m": 0.30,
+      "maximum_collisions": 0,
+      "require_stopped": true
+    },
+    {
+      "task_id": "nav_003",
+      "family": "obstacle",
+      "target_instance_id": "i_000103",
+      "obstacle_instance_id": "i_000101",
+      "maximum_target_standoff_m": 0.85,
+      "minimum_target_progress_m": 0.20,
+      "minimum_obstacle_bbox_clearance_m": 0.25,
+      "maximum_collisions": 0,
+      "require_stopped": true
+    },
+    {
+      "task_id": "nav_004",
+      "family": "left_right",
+      "target_instance_id": "i_000103",
+      "maximum_heading_error_degrees": 20.0,
+      "maximum_collisions": 0,
+      "require_stopped": true
+    },
+    {
+      "task_id": "nav_005",
+      "family": "update_after_scan",
+      "target_instance_id": "i_000104",
+      "maximum_target_standoff_m": 0.85,
+      "minimum_target_progress_m": 0.20,
+      "maximum_collisions": 0,
+      "require_stopped": true
+    }
+  ]
+}

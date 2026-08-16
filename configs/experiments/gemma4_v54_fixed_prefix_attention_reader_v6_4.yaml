@@ -1,0 +1,89 @@
+experiment:
+  schema_version: 1
+  artifact: gemma4_v54_fixed_prefix_attention_reader_v6_4
+  mode: single_pair_disjoint_train_only_confirmation_screen
+  parent_terminal: reports/gemma4/metrics/gemma4_v54_fixed_prefix_attention_reader_v6_3_terminal.json
+  base_runtime_config: configs/runtime/gemma4_v54.yaml
+  base_checkpoint: data_gemma4/checkpoints/gemma4_v54_semantic_greedy_gate/update_000
+  prefix_cache: data_gemma4/scene_tokens/v56_question_control_full_prefixes
+  train_qa: data_gemma4/training/v62_pair_disjoint/train.jsonl
+  retention_corpus: configs/experiments/gemma4_v54_fixed_prefix_ple_reader_v1_retention.json
+  internal_validation_inputs_authorized: false
+  deferred_or_final_inputs_authorized: false
+  oracle_inputs_authorized: false
+  runtime_checkpoint_publication_authorized: false
+  sufficient_for_runtime_promotion: false
+
+pair_disjoint_screen:
+  held_physical_pair_ids:
+    - pair_000010
+    - pair_000015
+    - pair_000017
+  held_scene_ids:
+    - scene_000021
+    - scene_000022
+    - scene_000031
+    - scene_000032
+    - scene_000035
+    - scene_000036
+  held_pair_units: 12
+  held_sides: 24
+  training_pair_units: 28
+  training_scenes: 18
+  physical_pair_and_scene_disjoint: true
+  split_selected_before_model_load: true
+
+attention_reader:
+  inherited_exactly_from_v6_3: true
+  architecture: outer_additive_fp32_rank4_residual_v1
+  exact_targets:
+    - model.language_model.layers.13.self_attn.k_proj
+    - model.language_model.layers.13.self_attn.v_proj
+    - model.language_model.layers.14.self_attn.k_proj
+    - model.language_model.layers.14.self_attn.v_proj
+  rank: 4
+  alpha: 8.0
+  dtype: float32
+  initialization_seed: 720063
+  trainable_parameter_count: 30720
+  inherited_v54_banks_frozen: true
+  v6_2_down_projection_not_installed: true
+
+objective:
+  unit: symmetric_two_scene_by_two_answer
+  wrong_minus_correct_margin_target_nats_per_token: 0.5
+  margin_loss: softplus_target_minus_wrong_minus_correct
+  correct_answer_ce_weight: 0.1
+  retention_kl_weight: 0.25
+  pair_units_balanced_equally: true
+  answer_suffix_only: true
+  full_huggingface_forward: true
+
+optimization:
+  optimizer: adamw
+  learning_rate: 0.00002
+  weight_decay: 0.0
+  epochs: 3
+  updates: 12
+  pair_units_per_update: 7
+  pair_unit_exposures: 84
+  every_training_pair_unit_once_per_epoch: true
+  gradient_clip_l2: 0.5
+  retention_examples: 12
+  checkpoint_publication: false
+  model_selection: none_final_state_train_and_held_measurement_only
+  hard_runtime_seconds: 480
+  maximum_mps_driver_bytes: 23000000000
+
+gates:
+  held_mean_margin_softplus_delta_maximum: -0.001
+  held_mean_margin_delta_minimum: 0.002
+  held_positive_margin_sides_nonworse: true
+  held_complete_units_nonworse: true
+  train_mean_margin_softplus_improves: true
+  retention_mean_kl_maximum: 0.005
+  retention_maximum_kl_maximum: 0.02
+  retention_top1_agreement: 1.0
+  audit_clean: true
+  checkpoint_absent: true
+  promotion_authorized_if_all_pass: false

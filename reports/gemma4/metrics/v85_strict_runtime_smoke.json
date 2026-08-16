@@ -1,0 +1,53 @@
+{
+  "artifact": "gemma4_v85_strict_runtime_smoke_v1",
+  "behavior": [
+    {
+      "expected": "yes",
+      "observed": "no",
+      "passed": false,
+      "question": "Is there a chair?"
+    },
+    {
+      "expected": "red",
+      "observed": "blue",
+      "passed": false,
+      "question": "What color is the bowl?"
+    },
+    {
+      "expected": "right",
+      "observed": "left",
+      "passed": false,
+      "question": "Is the bowl left or right of the chair?"
+    }
+  ],
+  "behavior_assertions_applied_after_chat_process_exit": true,
+  "chat_process_stderr_sha256": "f6e3030aec4b388f0473fedefdf8ba1c4762290962e2eb88ea8048266b3f5fcc",
+  "chat_process_stdout_sha256": "fa1182e916d1f4c95bb5563908f73a101928bbe294b974b550660c3d125a441e",
+  "development_reopened": false,
+  "environment_conditioned_input_hashes": [
+    "a428f5147c815839ae7315a0adab952ab210814fb21dcdc5bf13b167f28a6e37",
+    "a428f5147c815839ae7315a0adab952ab210814fb21dcdc5bf13b167f28a6e37",
+    "a428f5147c815839ae7315a0adab952ab210814fb21dcdc5bf13b167f28a6e37"
+  ],
+  "expected_behavior_not_loaded_by_chat_runtime": true,
+  "gates": {
+    "file_audit_forbidden_read_count_zero": true,
+    "oracle_physically_unavailable": true,
+    "oracle_restored_after_runtime": true,
+    "prefix_and_environment_input_identical": true,
+    "prefix_hash_identical_for_every_question": true,
+    "runtime_process_exit_zero": true,
+    "source_memory_bytes_unchanged": true,
+    "three_behavior_assertions_pass": false,
+    "total_environment_conditioned_input_identical": true
+  },
+  "passed": false,
+  "prefix_hashes": [
+    "a428f5147c815839ae7315a0adab952ab210814fb21dcdc5bf13b167f28a6e37",
+    "a428f5147c815839ae7315a0adab952ab210814fb21dcdc5bf13b167f28a6e37",
+    "a428f5147c815839ae7315a0adab952ab210814fb21dcdc5bf13b167f28a6e37"
+  ],
+  "promotion_authorized": false,
+  "schema_version": 85,
+  "wrong_or_zero_memory_controls_rerun": false
+}

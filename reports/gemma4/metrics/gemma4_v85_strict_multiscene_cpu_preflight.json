@@ -1,0 +1,199 @@
+{
+  "all_memory_slots_retained": true,
+  "all_train_rows_consumed_exactly_once": true,
+  "artifact": "gemma4_v85_strict_multiscene_cpu_preflight_v1",
+  "authenticated_sources": {
+    "configs/experiments/gemma4_v73_fullscene_controller.yaml": "d208f28380e3f1810a688be8ea8a263831b6a741f7f90e667795637f39d841f1",
+    "configs/experiments/gemma4_v84_strict_fixed_memory_bridge.yaml": "7ac74708f0404e6aae84cc3f90dfb82a88acf8ea15b4e6eff2c4c7cf1b07a2f0",
+    "configs/runtime/gemma4_v54.yaml": "891c58faaaa5fcd2ed76c7e3871f14c5d8c5ae2e05d9fa4ddd5193773d40e56b",
+    "data_diverse52/qa/train.jsonl": "01721bf904b1ab0b65ce8acac6e366287040873cda1356da6c70c4981abe7619",
+    "data_gemma4/runtime/checkpoints/gemma4_v54_release_v1/adapter.safetensors": "6c627f0a0d9efb7100489c24cbd4acafe10456b79280a64a85399a21cb541daf",
+    "data_gemma4/runtime/checkpoints/gemma4_v54_release_v1/runtime_metadata.json": "807515461c71b08c08dfbd08a184a653e791413748530fa69402512eca6f6fdd",
+    "gemma_model_blob_sha256_identity": "2db5482b20d746879bb3ef79b5203e9075a2e2b98f54ec7c2f281c1477ddc550",
+    "reports/gemma4/artifacts/v82_strict_dense_reader/development_cache/metadata.json": "58b988b03d33c93110083e22a98f050059e44e8356391a78fb761fd74254d1dd",
+    "reports/gemma4/artifacts/v82_strict_dense_reader/development_cache/training_tensors.safetensors": "71222bdc34fc836015ea4449622491545515222a7df99c321c1bf7a22fa2b659",
+    "reports/gemma4/artifacts/v82_strict_dense_reader/train_cache/metadata.json": "b0e26f2c3e44d868e4f54556f9304d990d0c664d862d1a2a760a714fcdb4a257",
+    "reports/gemma4/artifacts/v82_strict_dense_reader/train_cache/training_tensors.safetensors": "417492a08ac669210b4bdcaf8dafa0122fa0cf7ed6753489e55fd93bee150a2d",
+    "reports/gemma4/metrics/gemma4_v84_strict_bridge_pair_margin_wiring.json": "3405b22a4a1651aef89c5f055e40e1c513998aaef669fab34c4c68d7c5d7b790",
+    "reports/gemma4/metrics/gemma4_v84_strict_bridge_wiring.json": "860d7236aecfa1f0d4aec71e88e7a2b64ff346b3dfbe65dac5858b23fe258ddc",
+    "src/semantic_3d_chat/chat/v83_direct_scene_memory_runtime.py": "988d7b1751c0f6b158675a86781178bc6bb3626bab8cf3643f5ff3b22716dd22",
+    "src/semantic_3d_chat/evaluation/evaluate_v85_strict_multiscene.py": "bfc8e9dc212d33524db4ccb9a4edff00266cb7f1cd1796d748d00dc710ca8a38",
+    "src/semantic_3d_chat/evaluation/v85_strict_multiscene_preflight.py": "5b9892d80fbb12d79a1758c330f2dc51f575ccdabfe514b7d93553697b23bde8",
+    "src/semantic_3d_chat/training/train_v85_strict_multiscene.py": "3090f6ea1a69e9d8fd55c57550421340bd80dc80db281bfc8e60073e1ec2283b"
+  },
+  "config_sha256": "d4f653dc20a7ad129eb9fa92b586c8ca472a49fdb72675cbddb4f03007b4c36d",
+  "deferred_final_loaded": false,
+  "deterministic_resume_preregistered": true,
+  "development_behavior_scored": false,
+  "fixed_final_checkpoint_selection": "fixed_final_update_72",
+  "fixed_final_optimizer_updates": 72,
+  "fixed_memory_compiled_before_questions": true,
+  "full_gemma_model_loaded": false,
+  "lora_preflight": {
+    "bank_name": "v85_strict_multiscene_bridge",
+    "base_projection_shape": [
+      1536,
+      12288
+    ],
+    "exact_zero_output_at_initialization": true,
+    "full_gemma_model_loaded": false,
+    "initial_state_sha256": "1ec186d64cab68a3ea2000968a0ca643e591cc32669c6b1b7138deb365cc5cc1",
+    "parameter_count": 55296,
+    "target_modules": [
+      "model.language_model.layers.34.mlp.down_proj"
+    ]
+  },
+  "official_test_loaded": false,
+  "official_validation_loaded": false,
+  "optimizer_constructed": false,
+  "optimizer_updates": 0,
+  "oracle_loaded": false,
+  "passed": true,
+  "preregistration_sha256": "4af534bc37cd09fe7431042ff6fb75bd734a267380e1fe425c6c87b2cb42afff",
+  "protected_or_sealed_behavior_artifacts_opened": [],
+  "question_conditioned_environmental_readout": false,
+  "question_derived_environmental_tokens": 0,
+  "runtime_promotion_authorized": false,
+  "schema_version": 85,
+  "sealed_historical_16_loaded": false,
+  "split_preflight": {
+    "cache": {
+      "development": {
+        "row_scene_indices_shape": [
+          384
+        ],
+        "scene_memory_dtype": "torch.bfloat16",
+        "scene_memory_shape": [
+          16,
+          738,
+          1536
+        ]
+      },
+      "train": {
+        "row_scene_indices_shape": [
+          576
+        ],
+        "scene_memory_dtype": "torch.bfloat16",
+        "scene_memory_shape": [
+          24,
+          738,
+          1536
+        ]
+      }
+    },
+    "development_answer_frequency_majority_baseline": 0.16145833333333334,
+    "development_answer_text_serialized": false,
+    "development_behavior_scored": false,
+    "development_changed_sides": 52,
+    "development_changed_units": 26,
+    "development_pairs": [
+      "pair_000019",
+      "pair_000020",
+      "pair_000021",
+      "pair_000022",
+      "pair_000023",
+      "pair_000024",
+      "pair_000025",
+      "pair_000027"
+    ],
+    "development_rows": 384,
+    "development_scenes": [
+      "scene_000039",
+      "scene_000040",
+      "scene_000041",
+      "scene_000042",
+      "scene_000043",
+      "scene_000044",
+      "scene_000045",
+      "scene_000046",
+      "scene_000047",
+      "scene_000048",
+      "scene_000049",
+      "scene_000050",
+      "scene_000051",
+      "scene_000052",
+      "scene_000055",
+      "scene_000056"
+    ],
+    "inventory_hashes": {
+      "development_changed_units_sha256": "1a93a96dd7e9790cba06af36e2324162905ef557ff6ac07195a2856529c956e0",
+      "development_inventory_sha256": "ac5b7a56c73ab83c48ecafe596d775be1881dec2d2d475da383acff9ba244798",
+      "train_changed_units_sha256": "ccd99ff1f1523618fe52d43bf65dbb2b232108838004fed832cdff4a57dd140b",
+      "train_inventory_sha256": "496dc5768de50d2062f709aedf1e39fafe814b2df5d03b81f735b4a56be271a6"
+    },
+    "pair_and_scene_disjoint": true,
+    "row_order_first_keys": [
+      [
+        "scene_000054",
+        "q_000116"
+      ],
+      [
+        "scene_000020",
+        "q_000087"
+      ],
+      [
+        "scene_000015",
+        "q_000143"
+      ]
+    ],
+    "row_order_last_keys": [
+      [
+        "scene_000012",
+        "q_000077"
+      ],
+      [
+        "scene_000016",
+        "q_000087"
+      ],
+      [
+        "scene_000011",
+        "q_000083"
+      ]
+    ],
+    "row_order_sha256": "f98a22a06988bc2f7656dcbcd8dcb0024a215b11cc45d622be6c820e2107d2ff",
+    "train_changed_sides": 80,
+    "train_changed_units": 40,
+    "train_pairs": [
+      "pair_000005",
+      "pair_000006",
+      "pair_000007",
+      "pair_000008",
+      "pair_000009",
+      "pair_000010",
+      "pair_000011",
+      "pair_000015",
+      "pair_000016",
+      "pair_000017",
+      "pair_000018",
+      "pair_000026"
+    ],
+    "train_rows": 576,
+    "train_scenes": [
+      "scene_000011",
+      "scene_000012",
+      "scene_000013",
+      "scene_000014",
+      "scene_000015",
+      "scene_000016",
+      "scene_000017",
+      "scene_000018",
+      "scene_000019",
+      "scene_000020",
+      "scene_000021",
+      "scene_000022",
+      "scene_000023",
+      "scene_000024",
+      "scene_000031",
+      "scene_000032",
+      "scene_000033",
+      "scene_000034",
+      "scene_000035",
+      "scene_000036",
+      "scene_000037",
+      "scene_000038",
+      "scene_000053",
+      "scene_000054"
+    ]
+  },
+  "status": "passed"
+}

@@ -1,0 +1,281 @@
+{
+  "answer_text_serialized": false,
+  "arms": [
+    {
+      "checkpoint": "data_gemma4/checkpoints/gemma4_v28_post_stack_sidecar/stage_a/update_000",
+      "checks": {
+        "color_retained": true,
+        "mirror_retained": true,
+        "no_new_negative_sides": true,
+        "prefix_cosine_bounded": true,
+        "prefix_drift_bounded": true,
+        "validation_nll_improved": true
+      },
+      "color_full_vocab_sides": 12,
+      "color_full_vocab_units": 6,
+      "eligible": false,
+      "maximum_relative_prefix_rms_drift": 0.0,
+      "minimum_prefix_cosine": 1.0000004768371582,
+      "mirror_full_vocab_sides": 10,
+      "mirror_full_vocab_units": 4,
+      "new_negative_sides": [],
+      "prefix_drift_by_scene": {
+        "scene_000003": {
+          "coarse_voxel_count": 8391,
+          "cosine": 1.0000005960464478,
+          "relative_rms": 0.0,
+          "source_voxel_count": 74723
+        },
+        "scene_000004": {
+          "coarse_voxel_count": 8391,
+          "cosine": 1.0000004768371582,
+          "relative_rms": 0.0,
+          "source_voxel_count": 74723
+        },
+        "scene_000007": {
+          "coarse_voxel_count": 8386,
+          "cosine": 1.0000004768371582,
+          "relative_rms": 0.0,
+          "source_voxel_count": 74505
+        },
+        "scene_000008": {
+          "coarse_voxel_count": 8378,
+          "cosine": 1.0000004768371582,
+          "relative_rms": 0.0,
+          "source_voxel_count": 74533
+        }
+      },
+      "sidecar_state_sha256": "fd8abd78bed2d04ac2f83d70564028285c361729c62591a05e3eddcbb8794d02",
+      "update": 0,
+      "validation_answer_token_nll": 3.244996824172827
+    },
+    {
+      "checkpoint": "data_gemma4/checkpoints/gemma4_v28_post_stack_sidecar/stage_a/update_001",
+      "checks": {
+        "color_retained": true,
+        "mirror_retained": false,
+        "no_new_negative_sides": false,
+        "prefix_cosine_bounded": true,
+        "prefix_drift_bounded": true,
+        "validation_nll_improved": true
+      },
+      "color_full_vocab_sides": 12,
+      "color_full_vocab_units": 6,
+      "eligible": false,
+      "maximum_relative_prefix_rms_drift": 0.009226541475960614,
+      "minimum_prefix_cosine": 0.9999579787254333,
+      "mirror_full_vocab_sides": 8,
+      "mirror_full_vocab_units": 2,
+      "new_negative_sides": [
+        [
+          "scene_000007",
+          "q_000000"
+        ],
+        [
+          "scene_000007",
+          "q_000114"
+        ]
+      ],
+      "prefix_drift_by_scene": {
+        "scene_000003": {
+          "coarse_voxel_count": 8391,
+          "cosine": 0.9999581575393677,
+          "relative_rms": 0.00920644445104965,
+          "source_voxel_count": 74723
+        },
+        "scene_000004": {
+          "coarse_voxel_count": 8391,
+          "cosine": 0.9999579787254333,
+          "relative_rms": 0.009220750465545163,
+          "source_voxel_count": 74723
+        },
+        "scene_000007": {
+          "coarse_voxel_count": 8386,
+          "cosine": 0.9999586343765259,
+          "relative_rms": 0.009160307603004793,
+          "source_voxel_count": 74505
+        },
+        "scene_000008": {
+          "coarse_voxel_count": 8378,
+          "cosine": 0.9999579787254333,
+          "relative_rms": 0.009226541475960614,
+          "source_voxel_count": 74533
+        }
+      },
+      "sidecar_state_sha256": "3c2e5185047a8497e9afd5f5a13f4a1253132e7631005b9827d44868e47e7820",
+      "update": 1,
+      "validation_answer_token_nll": 3.2199991165445403
+    },
+    {
+      "checkpoint": "data_gemma4/checkpoints/gemma4_v28_post_stack_sidecar/stage_a/update_002",
+      "checks": {
+        "color_retained": true,
+        "mirror_retained": true,
+        "no_new_negative_sides": true,
+        "prefix_cosine_bounded": true,
+        "prefix_drift_bounded": true,
+        "validation_nll_improved": true
+      },
+      "color_full_vocab_sides": 12,
+      "color_full_vocab_units": 6,
+      "eligible": true,
+      "maximum_relative_prefix_rms_drift": 0.015684884318661933,
+      "minimum_prefix_cosine": 0.9998775124549866,
+      "mirror_full_vocab_sides": 10,
+      "mirror_full_vocab_units": 4,
+      "new_negative_sides": [],
+      "prefix_drift_by_scene": {
+        "scene_000003": {
+          "coarse_voxel_count": 8391,
+          "cosine": 0.9998779296875,
+          "relative_rms": 0.01566057625461745,
+          "source_voxel_count": 74723
+        },
+        "scene_000004": {
+          "coarse_voxel_count": 8391,
+          "cosine": 0.9998776912689209,
+          "relative_rms": 0.0156748900198923,
+          "source_voxel_count": 74723
+        },
+        "scene_000007": {
+          "coarse_voxel_count": 8386,
+          "cosine": 0.9998793601989746,
+          "relative_rms": 0.01556569931417473,
+          "source_voxel_count": 74505
+        },
+        "scene_000008": {
+          "coarse_voxel_count": 8378,
+          "cosine": 0.9998775124549866,
+          "relative_rms": 0.015684884318661933,
+          "source_voxel_count": 74533
+        }
+      },
+      "sidecar_state_sha256": "f8c4095dae437c8453ae106b42a4bc6ce8d9f4cf3c41d250811685905e262f4c",
+      "update": 2,
+      "validation_answer_token_nll": 3.1976048939503157
+    },
+    {
+      "checkpoint": "data_gemma4/checkpoints/gemma4_v28_post_stack_sidecar/stage_a/update_003",
+      "checks": {
+        "color_retained": true,
+        "mirror_retained": true,
+        "no_new_negative_sides": true,
+        "prefix_cosine_bounded": true,
+        "prefix_drift_bounded": true,
+        "validation_nll_improved": true
+      },
+      "color_full_vocab_sides": 12,
+      "color_full_vocab_units": 6,
+      "eligible": true,
+      "maximum_relative_prefix_rms_drift": 0.020601518818141824,
+      "minimum_prefix_cosine": 0.9997884035110474,
+      "mirror_full_vocab_sides": 10,
+      "mirror_full_vocab_units": 4,
+      "new_negative_sides": [],
+      "prefix_drift_by_scene": {
+        "scene_000003": {
+          "coarse_voxel_count": 8391,
+          "cosine": 0.9997892379760742,
+          "relative_rms": 0.020555576196821905,
+          "source_voxel_count": 74723
+        },
+        "scene_000004": {
+          "coarse_voxel_count": 8391,
+          "cosine": 0.9997888803482056,
+          "relative_rms": 0.020576338912912464,
+          "source_voxel_count": 74723
+        },
+        "scene_000007": {
+          "coarse_voxel_count": 8386,
+          "cosine": 0.9997915029525757,
+          "relative_rms": 0.020447859822295394,
+          "source_voxel_count": 74505
+        },
+        "scene_000008": {
+          "coarse_voxel_count": 8378,
+          "cosine": 0.9997884035110474,
+          "relative_rms": 0.020601518818141824,
+          "source_voxel_count": 74533
+        }
+      },
+      "sidecar_state_sha256": "0c549a58a46d93a4c1f82f70728ac3e83c12e4159229be2f5017fe88c0444bf3",
+      "update": 3,
+      "validation_answer_token_nll": 3.1640963478730275
+    },
+    {
+      "checkpoint": "data_gemma4/checkpoints/gemma4_v28_post_stack_sidecar/stage_a/update_004",
+      "checks": {
+        "color_retained": true,
+        "mirror_retained": true,
+        "no_new_negative_sides": true,
+        "prefix_cosine_bounded": true,
+        "prefix_drift_bounded": true,
+        "validation_nll_improved": true
+      },
+      "color_full_vocab_sides": 12,
+      "color_full_vocab_units": 6,
+      "eligible": true,
+      "maximum_relative_prefix_rms_drift": 0.025219698098396453,
+      "minimum_prefix_cosine": 0.9996825456619263,
+      "mirror_full_vocab_sides": 10,
+      "mirror_full_vocab_units": 4,
+      "new_negative_sides": [],
+      "prefix_drift_by_scene": {
+        "scene_000003": {
+          "coarse_voxel_count": 8391,
+          "cosine": 0.99968421459198,
+          "relative_rms": 0.025153604047669767,
+          "source_voxel_count": 74723
+        },
+        "scene_000004": {
+          "coarse_voxel_count": 8391,
+          "cosine": 0.9996833801269531,
+          "relative_rms": 0.02518521289019546,
+          "source_voxel_count": 74723
+        },
+        "scene_000007": {
+          "coarse_voxel_count": 8386,
+          "cosine": 0.9996874332427979,
+          "relative_rms": 0.025027997660327945,
+          "source_voxel_count": 74505
+        },
+        "scene_000008": {
+          "coarse_voxel_count": 8378,
+          "cosine": 0.9996825456619263,
+          "relative_rms": 0.025219698098396453,
+          "source_voxel_count": 74533
+        }
+      },
+      "sidecar_state_sha256": "2b5cd4d555543cd2f023e72ea2413a0fc07875c5710bdf0c4516b9dceb848c3d",
+      "update": 4,
+      "validation_answer_token_nll": 3.1398615404963492
+    }
+  ],
+  "artifact": "v28_post_stack_sidecar_stage_a_selection",
+  "baseline_validation_answer_token_nll": 3.244996824172827,
+  "frozen_tensor_sha256": "8f8290389771a7631797abcd339599c9b4ca2f5c84ed94c6431d93b1a71b23ea",
+  "model_load_count": 1,
+  "oracle_loaded": false,
+  "pair_unit_count": 12,
+  "passed": true,
+  "question_dependent_scene_processing": false,
+  "question_text_serialized": false,
+  "requirements": {
+    "color_full_vocab_sides": 12,
+    "maximum_relative_prefix_rms_drift": 0.1,
+    "minimum_prefix_cosine": 0.995,
+    "mirror_full_vocab_sides": 10,
+    "no_new_negative_sides": true,
+    "validation_nll_must_improve": true
+  },
+  "scene_ids": [
+    "scene_000003",
+    "scene_000004",
+    "scene_000007",
+    "scene_000008"
+  ],
+  "schema_version": 1,
+  "selected_checkpoint": "data_gemma4/checkpoints/gemma4_v28_post_stack_sidecar/stage_a/update_004",
+  "selected_update": 4,
+  "training_evaluation_only": true
+}

@@ -7,10 +7,12 @@ import pytest
 from semantic_3d_chat.config import load_config
 from semantic_3d_chat.data.scene_variants import (
     batch_scene_plans,
+    batch_scene_splits,
     derive_scene_seed,
     oracle_control_facts,
     project_oracle_counterfactual,
     validate_oracle_geometry,
+    validate_visibility_evidence,
 )
 
 
@@ -144,6 +146,76 @@ def test_multiscene_plan_has_ten_scenes_and_four_valid_pairs() -> None:
     assert all(len(members) == 2 for members in pairs.values())
     assert all(members[0].seed == members[1].seed for members in pairs.values())
     assert plans[1].seed != plans[0].seed
+
+
+def test_diverse20_plan_is_ten_atomic_pairs_with_8_6_6_splits() -> None:
+    config = load_config("configs/experiments/diverse20.yaml")
+    plans = batch_scene_plans(config)
+    splits = batch_scene_splits(config, plans)
+
+    assert len(plans) == 20
+    assert [plan.scene_id for plan in plans] == [
+        f"scene_{index:06d}" for index in range(11, 31)
+    ]
+    assert splits is not None
+    assert {name: len(scene_ids) for name, scene_ids in splits.items()} == {
+        "train": 8,
+        "validation": 6,
+        "test": 6,
+    }
+    scene_to_split = {
+        scene_id: split_name
+        for split_name, scene_ids in splits.items()
+        for scene_id in scene_ids
+    }
+    pairs: dict[str, list] = {}
+    for plan in plans:
+        assert plan.plan_version == 2
+        pairs.setdefault(str(plan.pair_id), []).append(plan)
+    assert len(pairs) == 10
+    for members in pairs.values():
+        assert len(members) == 2
+        assert members[0].seed == members[1].seed
+        assert scene_to_split[members[0].scene_id] == scene_to_split[members[1].scene_id]
+
+    assert {plan.layout_variant for plan in plans} >= {"base", "wide", "mirror_wide"}
+    assert {plan.color_variant for plan in plans} >= {
+        "base",
+        "swap_green_yellow",
+        "swap_blue_yellow",
+        "rotate_primary",
+    }
+    assert {plan.chair_count for plan in plans} >= {1, 2}
+    assert {plan.chair_orientation for plan in plans} == {"upright", "upside_down"}
+    assert {plan.picture_placement for plan in plans} == {"wall", "floor"}
+    assert {plan.book_placement for plan in plans} == {"table", "under_table"}
+    assert {plan.bowl_placement for plan in plans} == {
+        "floor_left",
+        "floor_right",
+        "table",
+    }
+
+
+def test_visibility_evidence_fails_closed_for_unseen_opaque_object() -> None:
+    evidence = {
+        "schema_version": 1,
+        "scene_id": "scene_000011",
+        "method": "exact_depth_raycast",
+        "minimum_visible_pixels": 1,
+        "expected_instance_ids": ["i_000100", "i_000101"],
+        "visible_pixel_counts": {"i_000100": 94, "i_000101": 12},
+        "all_required_visible": True,
+    }
+    assert validate_visibility_evidence(evidence) == {
+        "i_000100": 94,
+        "i_000101": 12,
+    }
+
+    hidden = copy.deepcopy(evidence)
+    hidden["visible_pixel_counts"]["i_000101"] = 0
+    hidden["all_required_visible"] = False
+    with pytest.raises(ValueError, match="lack actual scan visibility"):
+        validate_visibility_evidence(hidden)
 
 
 def test_color_swap_pair_changes_colors_but_not_geometry_or_presence() -> None:

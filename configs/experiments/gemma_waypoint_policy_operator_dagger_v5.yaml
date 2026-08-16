@@ -1,0 +1,35 @@
+_base_: gemma_waypoint_policy_operator.yaml
+
+# V5 is a fresh, unpromoted training candidate. It preserves the V4 live
+# failure as authenticated train-only DAgger supervision and increases only
+# the offline expert's anonymous-geometry inflation. Runtime collision padding
+# remains 0.035 m; no planner or clearance rule is added to deployment.
+gemma_waypoint_traces:
+  profiles:
+    operator:
+      expert_surface_padding_m: 0.085
+      minimum_runtime_clearance_margin_m: 0.050
+      live_failure_dagger_augmentation:
+        enabled: true
+        report_path: reports/gemma4/metrics/gemma_waypoint_dagger_v4_live_acceptance.json
+        report_sha256: 3ec5458d763cd7d27533e981d309fb2e4ea58da592f6d5f980f6a7cc80c5680f
+        scene_id: scene_000001
+        instruction: Do a lap around the room.
+        initial_pose_xy_yaw: [-0.5, -0.25, -90.0]
+        checkpoint_sha256: b28642f2ccb3ef440ada4636566b5b5e237985ce50d9323196679780d626b2f1
+        scene_prefix_sha256: 52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95
+        first_rejection_step: 22
+        first_rejection_error_code: E_MODEL_COLLISION
+        failed_target_xy_m: [-0.7287023941149449, 0.9172679933801737]
+        failed_target_tolerance_m: 0.000001
+        route_direction: clockwise
+        resume_waypoint_index: 10
+        maximum_total_decisions: 128
+        minimum_path_length_m: 5.0
+        minimum_abs_winding_area_m2: 0.5
+        maximum_return_error_m: 0.35
+
+gemma_waypoint_policy:
+  trace_dataset: data_gemma4/training/gemma_waypoint_policy_v1_operator_dagger_v5
+  hidden_cache: data_gemma4/training/gemma_waypoint_policy_v1_operator_dagger_v5_runtime_aligned_hidden
+  checkpoint_output: data_gemma4/checkpoints/gemma_waypoint_policy_v1_operator_dagger_v5_runtime_aligned

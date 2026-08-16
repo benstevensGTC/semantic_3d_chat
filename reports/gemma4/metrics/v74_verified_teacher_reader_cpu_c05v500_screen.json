@@ -1,0 +1,129 @@
+{
+  "architecture": {
+    "all_latents_receive_positive_weight": true,
+    "bilinear_question_scene_value_interaction": true,
+    "environment_latents": 256,
+    "immutable_full_prefix_retained_separately": true,
+    "minimum_attention_weight": 0.00390625,
+    "model_dimension": 128,
+    "output_basis_rank": 112,
+    "query_count": 4,
+    "question_dependent_retrieval": false,
+    "question_only_output_path_exists": false,
+    "zero_scene_produces_exact_zero_controls": true
+  },
+  "artifact": "v74_verified_teacher_dense_reader_train_pool_screen_v1",
+  "changed_side_ce_weight": 0.5,
+  "checkpoint_published": false,
+  "device": "cpu",
+  "elapsed_seconds": 23.81674062507227,
+  "fit_history": [
+    {
+      "changed_ce": 3.411186933517456,
+      "loss": 11.686094284057617,
+      "pair_softplus": 0.6959062218666077,
+      "preclip_gradient_norm": 20.835128784179688,
+      "row_ce": 3.3572635650634766,
+      "step": 1,
+      "value_loss": 1.1854661703109741
+    },
+    {
+      "changed_ce": 3.5657131671905518,
+      "loss": 71.37590026855469,
+      "pair_softplus": 0.7017666101455688,
+      "preclip_gradient_norm": 40.8856086730957,
+      "row_ce": 3.536813735961914,
+      "step": 2,
+      "value_loss": 13.070892333984375
+    },
+    {
+      "changed_ce": 2.6689162254333496,
+      "loss": 42.08033752441406,
+      "pair_softplus": 0.7688824534416199,
+      "preclip_gradient_norm": 5.543083190917969,
+      "row_ce": 2.8071985244750977,
+      "step": 10,
+      "value_loss": 7.4339599609375
+    },
+    {
+      "changed_ce": 1.729388952255249,
+      "loss": 34.48854064941406,
+      "pair_softplus": 0.7996945977210999,
+      "preclip_gradient_norm": 1.5751404762268066,
+      "row_ce": 1.2321205139160156,
+      "step": 50,
+      "value_loss": 6.318406105041504
+    },
+    {
+      "changed_ce": 1.632507085800171,
+      "loss": 33.77100372314453,
+      "pair_softplus": 0.7359825372695923,
+      "preclip_gradient_norm": 1.24887216091156,
+      "row_ce": 1.1142069101333618,
+      "step": 100,
+      "value_loss": 6.220912456512451
+    },
+    {
+      "changed_ce": 1.4719326496124268,
+      "loss": 33.11930465698242,
+      "pair_softplus": 0.5842591524124146,
+      "preclip_gradient_norm": 2.4583990573883057,
+      "row_ce": 1.0450643301010132,
+      "step": 200,
+      "value_loss": 6.150803089141846
+    },
+    {
+      "changed_ce": 1.17305588722229,
+      "loss": 31.990772247314453,
+      "pair_softplus": 0.3466053605079651,
+      "preclip_gradient_norm": 2.479897975921631,
+      "row_ce": 0.8992943167686462,
+      "step": 600,
+      "value_loss": 6.031668663024902
+    }
+  ],
+  "gates": {
+    "changed_supported_accuracy": true,
+    "complete_class_units": true,
+    "margin": false,
+    "positive_sides": true,
+    "prediction_change_units": false,
+    "supported_accuracy": true,
+    "wrong_scene": true,
+    "zero_scene": true
+  },
+  "held": {
+    "changed_supported_accuracy": 0.68,
+    "complete_class_units": 9,
+    "mean_changed_pair_control_delta_rms": 0.08875169128645212,
+    "mean_correct_over_wrong_scene_margin": 0.20186700224876403,
+    "mean_own_over_opposite_margin": 0.10093350112438201,
+    "positive_own_over_opposite_sides": 34,
+    "prediction_change_units": 9,
+    "supported_accuracy": 0.8590078328981723,
+    "zero_scene_maximum_absolute_control": 0.0
+  },
+  "official_test_loaded": false,
+  "official_validation_loaded": false,
+  "oracle_loaded": false,
+  "pair_weight": 1.0,
+  "passed": false,
+  "prefix_manifest_base_checkpoint_sha256": "3e128b40c1b73bb32750285679cda6b1bea364e67465e986a94a81dfc95e81e8",
+  "seed": 740074,
+  "steps": 600,
+  "teacher_metadata_sha256": "37675c3e421e6c2c38cd9167e9bf7b40cc1ba1f4739d730fe96300bc60ec8c15",
+  "train": {
+    "changed_supported_accuracy": 0.85,
+    "complete_class_units": 28,
+    "mean_changed_pair_control_delta_rms": 0.1747829818727041,
+    "mean_correct_over_wrong_scene_margin": 0.5741388753056527,
+    "mean_own_over_opposite_margin": 0.28706943765282633,
+    "positive_own_over_opposite_sides": 68,
+    "prediction_change_units": 28,
+    "supported_accuracy": 0.9756944444444444,
+    "zero_scene_maximum_absolute_control": 0.0
+  },
+  "value_weight": 5.0,
+  "verified_teacher_class_count": 28,
+  "verified_teacher_count": 143
+}

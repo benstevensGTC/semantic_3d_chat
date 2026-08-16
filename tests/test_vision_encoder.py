@@ -215,6 +215,12 @@ def test_manifest_extraction_writes_fusion_compatible_per_frame_cache_and_reuses
         assert archive["spatial_features"].shape == (14, 14, 2048)
         assert archive["spatial_features"].dtype == np.float16
         assert tuple(archive["component_offsets"].tolist()) == (0, 768, 1536, 2048)
+    feature_manifest = json.loads((output / "manifest.json").read_text(encoding="utf-8"))
+    assert all(frame["vision_encoder_calls"] == 1 for frame in feature_manifest["frames"])
+    assert all(frame["complete_image_encoded"] for frame in feature_manifest["frames"])
+    assert all(
+        frame["manual_crops_or_patch_reencoding"] is False for frame in feature_manifest["frames"]
+    )
 
     second = extract_manifest_features(
         config,

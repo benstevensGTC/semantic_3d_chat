@@ -1,0 +1,128 @@
+{
+  "all_passed": false,
+  "maximum_bbox_standoff_m": 0.6,
+  "minimum_center_progress_m": 0.25,
+  "passed_count": 1,
+  "runtime_environmental_text_inputs": [],
+  "runtime_evidence_validated_before_oracle_open": true,
+  "runtime_process_read_oracle": false,
+  "scene_count": 2,
+  "scenes": [
+    {
+      "checks": {
+        "collision_free": true,
+        "continuous_completion": true,
+        "maximum_oracle_bbox_standoff": true,
+        "minimum_oracle_center_progress": true,
+        "runtime_completed": true,
+        "runtime_contract": true,
+        "stopped": true
+      },
+      "collision": false,
+      "completion_mode": null,
+      "final_oracle_bbox_standoff_m": 0.35259142696607015,
+      "final_oracle_center_distance_m": 0.6504061562294947,
+      "final_xy_m": [
+        -0.6148174685264836,
+        0.335298804793843
+      ],
+      "initial_oracle_center_distance_m": 1.343577596015541,
+      "initial_xy_m": [
+        0.0,
+        0.0
+      ],
+      "map_version": 5,
+      "numeric_translation_m": 0.7003040825966198,
+      "oracle_center_progress_m": 0.6931714397860462,
+      "oracle_file": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data/oracle/scene_000001/oracle.json",
+      "oracle_file_sha256": "d3b7f56a810ac606964e8218b3150ad0f652edd4c0f139d1d7b8e3cf1882d78c",
+      "oracle_instance_id": "i_000101",
+      "oracle_target_category": "chair",
+      "oracle_target_center_xyz_m": [
+        -1.2374088764190674,
+        0.5234692245721817,
+        0.6299999952316284
+      ],
+      "passed": true,
+      "processed_voxels": 8452,
+      "result_path": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/gemma4/metrics/embodied_conversation_hybrid_approach_chair_v2_scene_000001.json",
+      "result_sha256": "ca90eee829497d058c3243695ca97439f6ef33c768f8d3f604b6e947546e8add",
+      "runtime_completed": true,
+      "runtime_environmental_text_inputs": [],
+      "runtime_forbidden_access_count": 0,
+      "safe_collision_limited_completion": false,
+      "scene_id": "scene_000001",
+      "semantic_standoff_completed": true,
+      "semantic_target_distance_m": 0.4819971733403751,
+      "semantic_target_standoff_m": 0.5,
+      "semantic_target_xyz_m": [
+        -1.0145249366760254,
+        0.6046595573425293,
+        0.517512321472168
+      ],
+      "step_count": 6,
+      "stopped": true,
+      "termination_reason": "stop"
+    },
+    {
+      "checks": {
+        "collision_free": false,
+        "continuous_completion": false,
+        "maximum_oracle_bbox_standoff": true,
+        "minimum_oracle_center_progress": true,
+        "runtime_completed": false,
+        "runtime_contract": true,
+        "stopped": false
+      },
+      "collision": true,
+      "completion_mode": null,
+      "final_oracle_bbox_standoff_m": 0.358838234313414,
+      "final_oracle_center_distance_m": 0.6558699230634483,
+      "final_xy_m": [
+        1.218962993256166,
+        0.055838879148176215
+      ],
+      "initial_oracle_center_distance_m": 1.8636058464833394,
+      "initial_xy_m": [
+        0.0,
+        0.0
+      ],
+      "map_version": 5,
+      "numeric_translation_m": 1.2202412709593775,
+      "oracle_center_progress_m": 1.2077359234198912,
+      "oracle_file": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data/oracle/scene_000031/oracle.json",
+      "oracle_file_sha256": "52e2fdfb35faf9231a2c0600cc9471ab5c1b9f16ca9791a48d6014eb7159f7ac",
+      "oracle_instance_id": "i_000101",
+      "oracle_target_category": "chair",
+      "oracle_target_center_xyz_m": [
+        1.8478012084960938,
+        0.24219299107789993,
+        0.6299999952316284
+      ],
+      "passed": false,
+      "processed_voxels": 8760,
+      "result_path": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/gemma4/metrics/embodied_conversation_hybrid_approach_chair_v2_scene_000031.json",
+      "result_sha256": "82ed60eeac3170c7f7fb554319bf897183c7d58aead4beb9f99c7c8611c1fbce",
+      "runtime_completed": false,
+      "runtime_environmental_text_inputs": [],
+      "runtime_forbidden_access_count": 0,
+      "safe_collision_limited_completion": false,
+      "scene_id": "scene_000031",
+      "semantic_standoff_completed": false,
+      "semantic_target_distance_m": 0.8284629977498157,
+      "semantic_target_standoff_m": 0.5,
+      "semantic_target_xyz_m": [
+        2.031057119369507,
+        0.21971099078655243,
+        0.5250000953674316
+      ],
+      "step_count": 6,
+      "stopped": false,
+      "termination_reason": "action_failure"
+    }
+  ],
+  "schema": "semantic_3d_chat.embodied_approach_oracle_score.v1",
+  "scorer_reads_oracle": true,
+  "status": "evaluation_only_oracle_score",
+  "target_category_used_only_by_scorer": "chair"
+}

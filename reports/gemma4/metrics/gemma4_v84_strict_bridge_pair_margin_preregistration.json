@@ -1,0 +1,138 @@
+{
+  "artifact": "gemma4_v84_strict_fixed_memory_pair_margin_preregistration_v1",
+  "authenticated_source_hashes": {
+    "configs/experiments/gemma4_v84_strict_fixed_memory_bridge.yaml": "7ac74708f0404e6aae84cc3f90dfb82a88acf8ea15b4e6eff2c4c7cf1b07a2f0",
+    "configs/runtime/gemma4_v54.yaml": "891c58faaaa5fcd2ed76c7e3871f14c5d8c5ae2e05d9fa4ddd5193773d40e56b",
+    "data_diverse52/qa/train.jsonl": "01721bf904b1ab0b65ce8acac6e366287040873cda1356da6c70c4981abe7619",
+    "data_gemma4/runtime/checkpoints/gemma4_v54_release_v1/adapter.safetensors": "6c627f0a0d9efb7100489c24cbd4acafe10456b79280a64a85399a21cb541daf",
+    "data_gemma4/runtime/checkpoints/gemma4_v54_release_v1/runtime_metadata.json": "807515461c71b08c08dfbd08a184a653e791413748530fa69402512eca6f6fdd",
+    "reports/gemma4/artifacts/v82_strict_dense_reader/train_cache/metadata.json": "b0e26f2c3e44d868e4f54556f9304d990d0c664d862d1a2a760a714fcdb4a257",
+    "reports/gemma4/artifacts/v82_strict_dense_reader/train_cache/training_tensors.safetensors": "417492a08ac669210b4bdcaf8dafa0122fa0cf7ed6753489e55fd93bee150a2d",
+    "reports/gemma4/metrics/gemma4_v84_strict_bridge_wiring.json": "860d7236aecfa1f0d4aec71e88e7a2b64ff346b3dfbe65dac5858b23fe258ddc",
+    "src/semantic_3d_chat/training/train_v84_pair_margin_followup.py": "dbb1febbb09c06866e0d188bd7b680e7c616d54fea6d8eb2f08cef83d9e248d1"
+  },
+  "bridge": {
+    "alpha": 8.0,
+    "bank_name": "v84_strict_fixed_memory_bridge",
+    "base_gemma_frozen": true,
+    "dropout": 0.0,
+    "expected_initial_state_sha256": "1ec186d64cab68a3ea2000968a0ca643e591cc32669c6b1b7138deb365cc5cc1",
+    "inherited_v54_lora_banks_frozen": true,
+    "initialization_seed": 840084,
+    "kind": "fresh_unmerged_fp32_lora_inside_frozen_gemma",
+    "merged_weights": false,
+    "rank": 4,
+    "starts_from_parent_candidate": false,
+    "target_module": "model.language_model.layers.34.mlp.down_proj",
+    "trainable_parameter_count": 55296
+  },
+  "config_path": "configs/experiments/gemma4_v84_strict_fixed_memory_pair_margin.yaml",
+  "config_sha256": "ffe92aca48e7b6638e071047c9f8132154644bcadec6a2e020fd735d99cd2722",
+  "deferred_final_loaded": false,
+  "development_behavior_scored": false,
+  "fixed_behavioral_gates": {
+    "both_final_canonical_greedy_answers_exact": true,
+    "both_final_wrong_minus_correct_nll_strictly_positive": true,
+    "final_canonical_greedy_answers_separate": true,
+    "final_mean_correct_scene_nll_below_initial": true,
+    "memory_hash_invariant": true,
+    "nonzero_finite_gradient_every_update": true,
+    "runtime_promotion_authorized": false
+  },
+  "fixed_training_protocol": {
+    "answers": [
+      "on",
+      "under"
+    ],
+    "checkpoint_selection": "fixed_final_update_32",
+    "correct_scene_answer_ce_weight": 1.0,
+    "gradient_accumulation_rows": 2,
+    "gradient_clip_norm": 1.0,
+    "intermediate_selection": false,
+    "learning_rate": 0.001,
+    "margin_definition": "paired_wrong_scene_answer_nll_minus_correct_scene_answer_nll",
+    "microbatch_size": 1,
+    "optimizer": "AdamW",
+    "optimizer_updates": 32,
+    "selected_question_key": "cfq_5611adccccae59f1",
+    "selected_rows": [
+      [
+        "scene_000019",
+        "q_000130"
+      ],
+      [
+        "scene_000020",
+        "q_000001"
+      ]
+    ],
+    "weight_decay": 0.0,
+    "wrong_scene_margin_weight": 1.0,
+    "wrong_scene_target_margin_nll": 0.5
+  },
+  "full_gemma_model_loaded": false,
+  "official_test_loaded": false,
+  "official_validation_loaded": false,
+  "optimizer_constructed": false,
+  "optimizer_updates": 0,
+  "oracle_loaded": false,
+  "rationale": {
+    "parent_has_nonpositive_correct_vs_wrong_margin": true,
+    "parent_optimizer_updates": 4,
+    "parent_runtime_promoted": false,
+    "parent_same_greedy_prediction_both_scenes": true
+  },
+  "runtime_promotion_authorized": false,
+  "scene_memories": {
+    "all_memory_slots_retained": true,
+    "compiled_before_question_tokenization": true,
+    "hashes": {
+      "scene_000019": "6956932c8d1c4f9e590236089c05935e5628e7bd62ae9ae17e5e8d8a59873fc2",
+      "scene_000020": "97e0077c7d8cd00017d928c1e783f85a556474c179b2b482622ea4faae222c8c"
+    },
+    "shape_each": [
+      1,
+      738,
+      1536
+    ]
+  },
+  "schema_version": "84.1",
+  "sealed_historical_16_loaded": false,
+  "status": "sealed_before_first_followup_model_measurement",
+  "strict_input_contract": {
+    "all_738_memory_slots_retained": true,
+    "compiled_before_question": true,
+    "control_tokens": 0,
+    "environmental_text_inputs": [],
+    "gemma_is_only_question_dependent_consumer": true,
+    "memory_projector_enabled": false,
+    "question_conditioned_environmental_readout": false,
+    "question_dependent_retrieval": false,
+    "question_dependent_scene_processing": false,
+    "question_derived_environmental_tokens": 0,
+    "reused_byte_identically_across_questions": true,
+    "semantic_or_spatial_top_k_selection": false,
+    "shape_per_scene": [
+      1,
+      738,
+      1536
+    ],
+    "supplied_directly_to_native_gemma_image_prefix": true
+  },
+  "training_source_path": "src/semantic_3d_chat/training/train_v84_pair_margin_followup.py",
+  "training_source_sha256": "dbb1febbb09c06866e0d188bd7b680e7c616d54fea6d8eb2f08cef83d9e248d1",
+  "wiring_unit": {
+    "answers_differ": true,
+    "question_sha256": "6814a2d1df181bdc66709937305cd3d652b5c83fb27b0a37dad4ba12b70dc122",
+    "row_inventory": [
+      [
+        "scene_000019",
+        "q_000130"
+      ],
+      [
+        "scene_000020",
+        "q_000001"
+      ]
+    ],
+    "same_question_both_scenes": true
+  }
+}

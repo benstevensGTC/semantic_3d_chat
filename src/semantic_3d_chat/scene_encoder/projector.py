@@ -22,6 +22,10 @@ class SceneTokenizerOutput:
     native_latents: torch.Tensor
     block_tokens: torch.Tensor
     audit: dict[str, torch.Tensor]
+    # Optional all-voxel coverage field kept separate from the established
+    # scene-token path.  A post-stack adapter may consume it after every frozen
+    # base residual has run; it is never selected by the user's question.
+    aligned_sidecar_tokens: torch.Tensor | None = None
 
 
 class NativeAlignedVoxelCoverage(nn.Module):
@@ -168,7 +172,20 @@ class SceneTokenizer(nn.Module):
         observation_count: torch.Tensor,
         room_min: torch.Tensor,
         room_max: torch.Tensor,
+        *,
+        aligned_sidecar: torch.Tensor | None = None,
+        aligned_sidecar_scale: float = 0.0,
     ) -> SceneTokenizerOutput:
+        if not isinstance(aligned_sidecar_scale, (int, float)) or isinstance(
+            aligned_sidecar_scale, bool
+        ):
+            raise TypeError("aligned_sidecar_scale must be a finite number")
+        if not torch.isfinite(torch.tensor(float(aligned_sidecar_scale))):
+            raise ValueError("aligned_sidecar_scale must be finite")
+        if float(aligned_sidecar_scale) < 0.0:
+            raise ValueError("aligned_sidecar_scale cannot be negative")
+        if aligned_sidecar is None and float(aligned_sidecar_scale) != 0.0:
+            raise ValueError("aligned_sidecar_scale requires aligned_sidecar")
         points, _ = self.point_projection(
             semantic, xyz, rgb, normal, confidence, observation_count, room_min, room_max
         )
@@ -185,6 +202,7 @@ class SceneTokenizer(nn.Module):
                 .to(learned_scene_tokens.dtype)
             )
         scene_tokens = self.learned_scene_token_scale * learned_scene_tokens
+        aligned_sidecar_tokens = None
         audit["learned_scene_token_rms"] = (
             learned_scene_tokens.detach().float().square().mean().sqrt()
         )
@@ -203,6 +221,50 @@ class SceneTokenizer(nn.Module):
             audit["native_aligned_token_rms"] = (
                 native_aligned_tokens.detach().float().square().mean().sqrt()
             )
+            if aligned_sidecar is not None:
+                expected_shape = (semantic.shape[0], self.language_aligned_tail_dim)
+                if aligned_sidecar.shape != expected_shape:
+                    raise ValueError(
+                        "aligned_sidecar must have shape "
+                        f"{expected_shape}; got {tuple(aligned_sidecar.shape)}"
+                    )
+                if not torch.is_floating_point(aligned_sidecar) or not torch.isfinite(
+                    aligned_sidecar
+                ).all():
+                    raise ValueError("aligned_sidecar must contain finite floating-point values")
+                sidecar_tokens, sidecar_weights = self.native_aligned_coverage(
+                    aligned_sidecar, xyz, room_min, room_max
+                )
+                # A zero scale is an exact routing mode for the post-stack
+                # adapter.  Skipping the arithmetic (instead of adding
+                # ``0 * sidecar``) guarantees bit-identical base tokens.
+                if float(aligned_sidecar_scale) > 0.0:
+                    scene_tokens = scene_tokens + float(aligned_sidecar_scale) * sidecar_tokens
+                aligned_sidecar_tokens = sidecar_tokens
+                sidecar_total_contribution = sidecar_weights.sum(dim=(0, 1))
+                audit["aligned_sidecar_processed_voxels"] = torch.tensor(
+                    aligned_sidecar.shape[0], device=semantic.device, dtype=torch.long
+                )
+                audit["aligned_sidecar_min_weight"] = sidecar_weights.detach().min()
+                audit["aligned_sidecar_min_voxel_contribution"] = (
+                    sidecar_total_contribution.detach().min()
+                )
+                audit["aligned_sidecar_token_rms"] = (
+                    sidecar_tokens.detach().float().square().mean().sqrt()
+                )
+                audit["aligned_sidecar_scale"] = torch.tensor(
+                    float(aligned_sidecar_scale),
+                    device=semantic.device,
+                    dtype=torch.float32,
+                )
+        elif aligned_sidecar is not None:
+            raise ValueError("aligned_sidecar requires native aligned voxel coverage")
         if not torch.isfinite(scene_tokens).all():
             raise RuntimeError("Scene tokenizer produced NaN or infinity")
-        return SceneTokenizerOutput(scene_tokens, latents, blocks, audit)
+        return SceneTokenizerOutput(
+            scene_tokens,
+            latents,
+            blocks,
+            audit,
+            aligned_sidecar_tokens=aligned_sidecar_tokens,
+        )

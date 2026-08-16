@@ -1,0 +1,97 @@
+{
+  "schema": "semantic_3d_chat.gemma_waypoint_offline_dagger_augmentation.v3",
+  "candidate": "operator_dagger_v7",
+  "generated_at_date": "2026-08-16",
+  "gemma_inference_run_during_generation": false,
+  "runtime_expert_available": false,
+  "offline_numeric_expert_labels_only": true,
+  "config": {
+    "path": "configs/experiments/gemma_waypoint_policy_operator_dagger_v7.yaml",
+    "sha256": "3ec11aa32f45e926d23340795436a64df1dcf8c6a7073e9cfb9359eb5e9d9bb1"
+  },
+  "generator": {
+    "path": "src/semantic_3d_chat/training/gemma_waypoint_trace_generator.py",
+    "generation_sha256": "4238afe638b9f783cc9939fed3f986ab8956d6b2d9e34a5e99529f95eb370d5a",
+    "post_generation_ruff_only_sha256": "15b0dc92b292f23272f4d20ccf7825f81bc2dacbc58c81c92212bee087c2a85f"
+  },
+  "dataset": {
+    "path": "data_gemma4/training/gemma_waypoint_policy_v1_operator_dagger_v7",
+    "manifest_file_sha256": "8b9d8a9b2347e0381c70576e5c378f69a6e977f1d011813e51c19329ea86850b",
+    "dataset_sha256": "3ab3cb1a7239a121cfc4f2f85144dc922f578ec9b493a6053f2fcc260f518cb2",
+    "traces_sha256": "6abb5c4881acd79faff297c9536e5caf5bac20db52fc41c037c26df33ead0fe6",
+    "sample_count": 7398,
+    "train_sample_count": 6687,
+    "validation_sample_count": 711,
+    "scene_splits_disjoint": true,
+    "contradictory_exact_input_label_count": 0
+  },
+  "cumulative_live_failure_sources": [
+    {
+      "source_iteration": "v4",
+      "report_sha256": "3ec5458d763cd7d27533e981d309fb2e4ea58da592f6d5f980f6a7cc80c5680f",
+      "correction_sample_count": 63
+    },
+    {
+      "source_iteration": "v5",
+      "report_sha256": "670fd0eb87f471e084ade548d8f9fa78c961aa926b4d79913bccdcd49ba0adc4",
+      "correction_sample_count": 60
+    },
+    {
+      "source_iteration": "v6",
+      "report_path": "reports/gemma4/metrics/gemma_waypoint_dagger_v6_live_acceptance.json",
+      "report_sha256": "a3ccd49891451d8e5863d90ef89718ed3489a6822abea725f3423dd43902ee97",
+      "checkpoint_sha256": "7366fced7601b726c7e0d03483446aef4e41bc7bd5bcad224176a3c2543f428a",
+      "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95",
+      "post_rejection_correction_sample_count": 32,
+      "pre_divergence_correction_sample_count": 32
+    }
+  ],
+  "post_rejection_branch": {
+    "first_rejection_step": 47,
+    "first_rejection_error_code": "E_MODEL_COLLISION",
+    "first_rejected_target_xy_m": [
+      0.23210880891888863,
+      0.15496964295076576
+    ],
+    "first_recovery_input_sha256": "3553c6e3f7939943bc80d84f49489223f8ca89c92d524200e3b2a48b2f4269f9",
+    "resume_waypoint_index": 25,
+    "continuation_sample_count": 32,
+    "total_decision_count": 79,
+    "path_length_m": 18.65009947774965,
+    "signed_winding_area_m2": -4.216383480827737,
+    "return_error_m": 0.0,
+    "minimum_expert_padded_map_clearance_m": 0.01733888318088672,
+    "minimum_runtime_map_clearance_m": 0.06733888318088671,
+    "model_labeled_stop": true
+  },
+  "pre_divergence_branch": {
+    "branch_id": "pre_d45_move_wp25",
+    "correction_decision_step": 45,
+    "observed_model_action": "face",
+    "expert_first_action": "MOVE_TO",
+    "exact_prefix_transition_count": 44,
+    "first_correction_input_sha256": "6bdaef05a353bdfa6d1ed935cb4c0dbc6f4720200c525c67bc993ea11dd315ad",
+    "first_expert_world_xy_m": [
+      -0.2,
+      -0.15
+    ],
+    "first_expert_robot_delta_m": [
+      -0.17651435787778125,
+      0.2953907047782081
+    ],
+    "continuation_sample_count": 32,
+    "total_decision_count": 76,
+    "path_length_m": 18.65009947774965,
+    "signed_winding_area_m2": -4.216383480827737,
+    "return_error_m": 0.0,
+    "minimum_expert_padded_map_clearance_m": 0.01733888318088672,
+    "direct_first_segment_expert_padded_clearance_m": 0.0536867,
+    "model_labeled_stop": true
+  },
+  "cumulative_live_failure_recovery_sample_count": 155,
+  "live_pre_divergence_sample_count": 32,
+  "all_cumulative_sources_retained": true,
+  "test_command": "PYTHONPATH=src .venv-gemma4/bin/python -m pytest -q tests/test_gemma_waypoint_live_failure_dagger.py tests/test_gemma_waypoint_training.py",
+  "test_result": "24 passed",
+  "cache_command": "PYTHONPATH=src TRANSFORMERS_OFFLINE=1 HF_HUB_OFFLINE=1 .venv-gemma4/bin/python scripts/cache_gemma_waypoint_hidden.py --config configs/experiments/gemma_waypoint_policy_operator_dagger_v7.yaml --reuse-dataset data_gemma4/training/gemma_waypoint_policy_v1_operator_dagger_v6 --reuse-cache data_gemma4/training/gemma_waypoint_policy_v1_operator_dagger_v6_runtime_aligned_hidden --forward-chunk-size 512 --gemma-batch-size 4"
+}

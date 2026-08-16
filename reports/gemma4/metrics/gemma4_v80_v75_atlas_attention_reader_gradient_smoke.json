@@ -1,0 +1,16 @@
+{
+  "artifact": "gemma4_v80_v75_atlas_attention_reader_gradient-smoke_failure_v1",
+  "checkpoint_published": false,
+  "deferred_final_loaded": false,
+  "error": "MPS backend out of memory (MPS allocated: 3.75 GiB, other allocations: 9.57 GiB, max allowed: 13.32 GiB). Tried to allocate 6.26 MiB on shared pool. Use PYTORCH_MPS_HIGH_WATERMARK_RATIO=0.0 to disable upper limit for memory allocations (may cause system failure).",
+  "error_type": "RuntimeError",
+  "official_test_loaded": false,
+  "official_validation_loaded": false,
+  "optimizer_updates_unknown_or_zero": true,
+  "oracle_loaded": false,
+  "passed": false,
+  "phase": "gradient-smoke",
+  "runtime_promotion_authorized": false,
+  "schema_version": 1,
+  "status": "terminal_failure_no_checkpoint"
+}

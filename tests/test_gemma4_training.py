@@ -179,6 +179,11 @@ def test_gemma4_loader_selects_conditional_model_without_real_weights(monkeypatc
     assert captured["model_id"] == "local/tiny-gemma-4"
     assert captured["revision"] == "pinned-revision"
     assert captured["local_files_only"] is True
+    assert captured["tokenizer_kwargs"] == {
+        "revision": "pinned-revision",
+        "local_files_only": True,
+        "extra_special_tokens": {},
+    }
     assert captured["dtype"] is torch.float32
     assert all(not parameter.requires_grad for parameter in tiny_model.parameters())
     assert not tiny_model.training

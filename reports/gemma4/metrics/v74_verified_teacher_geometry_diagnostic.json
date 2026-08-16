@@ -1,0 +1,36 @@
+{
+  "artifact": "v74_verified_teacher_geometry_diagnostic_v1",
+  "basis_rank": 112,
+  "basis_reconstruction_maximum_absolute_error": 6.258487701416016e-06,
+  "basis_reconstruction_relative_mse": 1.3545948217286163e-12,
+  "diagnostic_candidate": {
+    "candidate_path": "reports/gemma4/artifacts/v74_verified_teacher_reader_cpu_c05v05_diagnostic.safetensors",
+    "fraction_output_tokens_at_cap": 0.9965277910232544,
+    "mean_flat_teacher_cosine": 0.8137879371643066,
+    "normalized_teacher_mse": {
+      "maximum": 22.59238052368164,
+      "mean": 7.005820274353027,
+      "median": 3.725292682647705,
+      "minimum": 0.39350900053977966
+    },
+    "output_token_rms": {
+      "maximum": 0.2500000298023224,
+      "mean": 0.24981185793876648,
+      "median": 0.25,
+      "minimum": 0.1540914922952652
+    }
+  },
+  "fraction_teacher_tokens_above_runtime_cap_0_25": 0.0,
+  "official_test_loaded": false,
+  "official_validation_loaded": false,
+  "oracle_loaded": false,
+  "teacher_class_count": 28,
+  "teacher_token_count": 112,
+  "teacher_token_rms": {
+    "maximum": 0.22777356207370758,
+    "mean": 0.10899230092763901,
+    "median": 0.10140133649110794,
+    "minimum": 0.036146022379398346
+  },
+  "training_pool_only": true
+}

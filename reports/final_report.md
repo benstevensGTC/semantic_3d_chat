@@ -1,1023 +1,2337 @@
-# Semantic 3D Chat — First Proof-of-Concept Report
+# Semantic 3D Chat — Current Proof-of-Concept Report
 
-> **PRIMARY-RESULT WARNING — LEGACY REPORT BODY.** The CLIP/Qwen tables and chat
-> evidence preserved below are superseded as the project's primary model path. They
-> remain useful failure/control evidence, but they are not Gemma 4 results and do
-> not establish scene-conditioned understanding. The current primary Gemma 4 E2B
-> path has a working dense 3D map and semantic-localization result. V9 passed its
-> strict teacher-forced full-vocabulary gate and both epoch 30 and epoch 36
-> free-generate all 12 trained color sides exactly, while scoring 0/70 exact mirror
-> sides and 0/8 exact held-out cube-support sides. V10 completed its deterministic
-> weights-only color-plus-mirror continuation but failed: both audited checkpoints
-> regressed to 9/12 exact color sides, learned 0/6 selected mirror units, and scored
-> 0/8 on held-out support. V11 restored 12/12 color sides with a full-vocabulary
-> margin, but reached only 3/12 selected mirror sides, 0/6 complete mirror units,
-> 7/70 all-mirror sides, and 1/8 held-out support sides. V12 preserved 12/12 color
-> sides but reached 0/12 selected mirror sides, 0/70 all-mirror sides, and 0/8
-> held-out support sides even after its ordered spatial auxiliary loss passed its
-> own margin target. V13 passed its decoder-bank integrity, training, checkpoint-
-> reload, and runtime-prefix checks and retained 12/12 trained color sides, but it
-> still reached 0/12 selected mirror sides, 0/70 all-mirror sides, and 0/8 held-out
-> support sides. All 70 mirror outputs were literal `unknown` responses. V14's
-> four-arm learning-rate screen preserved 12/12 color sides in every arm and
-> selected 2e-3 after it reached 5/12 mirror sides at update 4. Its exact resume
-> peaked discretely at epoch 7 with 7/12 mirror sides and 1/6 complete units, but
-> final epoch 12 had 6/12 and 0/6. V14 never passed the complete teacher gate and
-> received no greedy audit or promotion. V15's fixed-prefix shared-K/V screen
-> peaked at 6/12 mirror sides and 0/6 units before color regressed. V16's global
-> scene residual peaked at 11/12 color sides and 5/12 mirror sides. V17 then
-> screened exact `1e-4` and `3e-4` residual restarts; its strict winner was
-> `1e-4` epoch 3 with 12/12 color sides and 6/6 color units, but only 6/12 mirror
-> sides and 0/6 mirror units. V18's centered local-content bridge retained 12/12
-> color sides but reached 5/12 mirror sides and 0/6 units. V19's reflection-odd
-> global moment improved that to 6/12 and 0/6. V20's local-field successor passed
-> its FP32 structural checks but was rejected before any optimizer step because
-> the preregistered BF16 total-norm statistic was confounded by independent
-> quantization phase. V21 replaced only that invalid estimator with phase-aware
-> and exact predicted-update controls; its preflight and first-update match passed,
-> and eight real updates retained color at 12/12 and 6/6 while improving mirror to
-> 8/12 and 2/6. That result plateaued below the unchanged complete 12/12, 6/6
-> teacher gate, so V21 was also denied greedy decoding and promotion. There is no
-> improvement from V22's margin-rebalanced restart: all four updates retained
-> 12/12 color sides and 6/6 units but stayed at 7/12 mirror sides and 1/6 unit.
-> Its selector denied the extension and greedy audit, and no promotion was
-> created. V23 then froze the V21 scene stack and trained only a 30,720-parameter
-> shared-K/V bank. It preserved 12/12 color sides and 6/6 units at every update
-> and peaked at 10/12 mirror sides and 4/6 units at update 2, the strongest
-> teacher-forced mirror result so far. Exact replay authorized its bounded run
-> through update 8, but later updates reached at most 9/12 and 3/6 before
-> regressing to 8/12 and 2/6. The complete gate never passed, so V23 closed
-> without greedy decoding or promotion. The exact closed V22 and V23 results are
-> sealed in `v22_final_summary.json` and `v23_final_summary.json`. There is no
-> accepted Gemma static-chat, Gemma leakage, semantic embodied-agent, or
-> one-command-demo result yet.
+> Status snapshot: **working single-scene static-chat proof; model-only rover
+> passed its bounded one-room live acceptance and is the practical-rover
+> default**. This is not a held-out or project-wide final acceptance claim. The
+> promoted strict V89 runtime
+> is the static-chat default and scored
+> 122/138 (88.41%) on its training-authorized scene-one canonical set; all 11 model
+> gates and all 15 independent runtime gates passed. V75 is retained as a historical
+> question-conditioned comparator: its one-candidate official validation reached
+> 167/216 canonical but failed the spatial-relation gate. V66b completed its preregistered pair-disjoint training gate and failed; the checkpoint was correctly not published.
+> Current schema-7 checkpoint state:
+> `not_published`. V67 screen state: `authenticated_numeric_screen_failed_no_publication`. V68 grid state:
+> `authenticated_all_arm_numeric_grid_failed_no_publication`. V69 grid state: `authenticated_all_arm_numeric_grid_failed_no_publication`. V70 screen state:
+> `authenticated_numeric_screen_failed_no_publication`. V71 screen state: `authenticated_numeric_screen_failed_no_publication`. V72 state:
+> `authenticated_terminal_development_negative_no_checkpoint`. V73--V77 state: `authenticated_v73_v74_rejected_v75_promoted_runtime_leakage_passed_official_validation_spatial_gate_failed_v76_rejected_v77_full_internal_screen_positive_not_promoted`.
+> V79 relation-repair state: `authenticated_historical_scene_disjoint_screen_failed_no_promotion`.
+> V80 atlas-attention-reader state: `authenticated_terminal_gradient_smoke_mps_oom_no_checkpoint_no_optimizer_update`.
+> V81 sealed scene-memory state: `authenticated_experimental_runtime_historical_gate_failed_not_promoted`.
+> V82 learned dense-reader state: `authenticated_historical_development_gate_failed_not_promoted`.
+> V83 strict direct-memory state: `authenticated_strict_direct_behavior_failed_not_promoted`.
+> V84/V84.1 immutable-memory bridge state:
+> `authenticated_v84_nll_wiring_pass_v84_1_two_scene_causal_overfit_passed_not_promoted`.
+> V85 scene-disjoint candidate state:
+> `authenticated_development_gate_passed_runtime_packaging_equivalent_scene1_behavior_failed_not_promoted`.
+> V86 strict single-scene terminal state:
+> `authenticated_single_scene_overfit_model_gate_failed_86_of_138_not_promoted`.
+> V87 balanced single-scene terminal state:
+> `authenticated_balanced_single_scene_model_gates_failed_103_of_138_not_promoted`.
+> V88 augmented development-known terminal state:
+> `authenticated_augmented_single_scene_overall_gate_failed_107_of_138_not_promoted`.
+> V89 retention-aware source/reporting state:
+> `authenticated_runtime_ready_single_scene_122_of_138_promoted`.
+> V94 terminal strong-causal diagnostic state:
+> `terminal_measured_posthoc_diagnostic_non_promotable`.
+> V95 strict causal successor state:
+> `measured_preregistered_gate_not_passed` (gate failed; no promotion or deferred-final
+> unlock; V89 remains default).
+> V96 atomic-pair-repair successor state:
+> `measured_preregistered_gate_not_passed` (174/216 known-development; 19/21 gates;
+> prediction-change and invariant-stability gates failed; no promotion or
+> deferred-final materialization; V89 remains default).
+> Fixed-prefix attention-reader V6.3 state:
+> `authenticated_positive_train_only_pilot_continuation_authorized_no_runtime_promotion`. V6.4 state:
+> `authenticated_failed_pair_disjoint_generalization_no_checkpoint_no_promotion`. Demo package:
+> `authenticated_minimal_two_file_v54_demo_release`. Historical motion/MCP integration:
+> `live_semantic_mcp_and_embodied_conversation_scan_turn_refresh_passed_v75_controller_active`. Historical conversational MCP stdio:
+> `passed_two_scene_live_official_mcp_stdio_integration`. Semantic conversational MCP face run:
+> `authenticated_single_scene_selective_gemma_numeric_v3_official_mcp_face_passed`. Persistent five-turn MCP session:
+> `authenticated_single_scene_five_turn_persistent_mcp_session_passed`. Historical hybrid semantic navigation:
+> `passed_two_scene_hybrid_semantic_face_target_development`. Current model-only
+> rover state: `dagger_v14_live_lap_face_approach_and_isolation_passed_one_scene_default`. V78 held point-cloud replay:
+> `authenticated_historical_internal_held_pointcloud_reproduction_evaluation_only_not_promoted`. Approach V2:
+> `authenticated_two_scene_v2_approach_development_one_of_two_passed`. Approach V3 successor:
+> `authenticated_two_scene_v3_approach_development_two_of_two_passed`. V3 trajectory evidence:
+> `authenticated_runtime_only_v3_approach_trajectory_visualization`. V3.3 development-calibration state:
+> `accepted_development_calibration`. No V72, V6.3, or V6.4 checkpoint exists.
+> V80 produced no checkpoint or optimizer update.
+> V89's exact eleven-bank, two-file strict runtime is promoted as the current
+> scene-one static-chat default. The rover has a separate 258-token,
+> actual-local-Gemma model-only controller contract. Its runtime-aligned waypoint
+> DAgger V14 checkpoint passed fresh lap, face-cube, approach-chair, and
+> oracle-isolation checks and is the current practical-rover default. The older
+> V3/hybrid and DAgger-v1 results are historical controls only. Held-out rover
+> generalization and project-wide final acceptance are not claimed.
 
-Updated from local artifacts on `2026-08-09T19:29:50Z`. This report does not run models and does not infer missing measurements.
+The current static-chat default is the promoted
+strict V89 scene-one runtime at `data_gemma4/runtime/checkpoints/gemma4_v89_strict_scene1_release_v1` (checkpoint
+fingerprint `9408092e589834671c79394260b67198262e4d2a4f1fe01f3f772fed6b4c2b1b`). `make demo`, `make chat`, and
+the explicit `make v89-demo*` targets use this exact eleven-bank, two-file release.
+V75 remains available only as the historical question-conditioned comparator;
+V54 remains the legacy below-acceptance strict comparator.
+
+V94's fixed-final 40-scene successor has a separately
+authenticated **terminal post-hoc** seven-arm diagnostic over 216 questions from
+six scenes. The primary arm scored 143/216
+(66.20%), versus
+85/216
+(39.35%) with the complete scene
+payload zeroed. That 26.85-point
+drop and 138/216
+changed outputs establish real aggregate scene dependence. The stricter binding
+controls remain weak: paired wrong-scene memory fell only
+1.39
+points, while full interior-token permutation had no accuracy drop at all despite
+changing 57
+outputs. Voxel-level XYZ and 3,072D semantic shuffles reduced accuracy by
+5.09
+and 5.56
+points. Removing RGB improved accuracy by
+1.85 points,
+so this run does not show useful incremental RGB dependence. Normals were already
+all zero and viewpoint is not consumed, so neither was fabricated as an ablation.
+The predictor was label-blind; a separate model-free scorer opened labels only
+after prediction authentication and serialized no questions, answers, oracle, or
+NLL. This diagnostic is not preregistered promotion evidence, did not pass V94's
+behavior gate, and supports no release, held-out/generalization, official, or
+final-acceptance claim. Evidence:
+`reports/gemma4/metrics/v94_strong_causal_ablations.json`
+(`37cbabc4333ce804572cceb1c64fff296923ce89a0d6fddaee652e019fbf0bf8`).
+
+V95 then trained one preregistered strict causal
+successor over all 40 training scenes. The fixed-final run consumed 960 rows in
+each of four epochs, made 480 optimizer updates and 5,836 answer-NLL forwards,
+and took 13234.8 s on MPS. Only a fresh
+143,360-parameter unmerged bridge was trainable.
+The exact `[1,738,1536]` continuous memory remained compiled before questions,
+retained all 736 environmental payload tokens, and used no environmental text,
+query-dependent retrieval, or question-conditioned scene processing.
+
+The separately sealed, post-fixed-final **known-development** gate scored the
+primary at 167/216
+(77.31%), zero payload at
+36/216, full interior-token permutation at
+127/216, and paired wrong-scene
+memory at 164/216. Control-minus-primary
+mean answer-NLL gaps were +2.296439 for zero
+payload, +0.616878 for permutation,
+and +0.054092 for paired wrong scenes; the
+changed-side paired-wrong gap was
++0.486824. Counterfactual behavior
+remained below the locked gate: 13/24 correct
+sides, 1/12 complete units, and
+2/12 prediction-changing units.
+The gate therefore **failed**. V95 was not promoted, deferred-final materialization
+remains locked, and V89 remains the static-chat default runtime. This known-development
+negative result is not held-out-final, official, generalization, or final-acceptance
+evidence.
+
+The aggregate evidence is hash bound: training
+`2c7fc3ed47eaee1112c0fa2aadb412bb7b452087f6651957747dd07bfed59263`, structured score
+`3477ebda24cc78e2722aa27e26e3841c5c1b4e316684e1a4ed68a9ffc4d04f84`, NLL score
+`bc46a3e330a04f4b895929759e05ce33d07a9d7766f41943b415f496fce529c3`, final gate
+`9d700e792cd353170ef636733874d1ac5b10d6bb5fdece09f2980298cfd00ef9`, and evidence seal
+`e892516d60413ad24f06c56a0ce2d01410982548b32bcd3b8c340a04da44f346`. The bound config
+is `9115c36b417d03bec935257b42e30597170d5acbf6c4683b5c021a8e4d9bbea2`, preregistration
+`d60df9a9a04843fefbb46e8f2845613e5d887dc4f06665fe015c0aafcc7cf03d`, CPU preflight
+`5ac211be59df4083588a776f4eb7d5a1b8ea38c9d635284b6452e45a5cb549ad`, candidate state
+`53404c733586ebd25caa440f822a4d4af6cc3dbb71bf4f6b6f94af23f3a2492a`, and candidate fingerprint
+`3c499d0f519766dea3185f4342fa6738776101cf5882cb77f4e43985586c2c1b`.
+
+V96 then completed its fixed-final atomic-pair-repair training over the sealed
+training scope: 285 optimizer updates in 7,231.048 seconds. Throughout training
+and evaluation, each scene supplied the same exact `[1,738,1536]` continuous
+memory compiled before user questions, with all 736 environmental payload tokens
+present and no text description, query retrieval, or question-conditioned scene
+tokenization.
+
+Its separately sealed auth-v2 known-development evaluation scored **174/216
+(80.56%)**: attribute 25/48, count 41/42, metric 6/6, orientation 6/6, presence
+40/42, spatial relation 38/48, and support 18/24. The zero-payload,
+full-interior-permutation, and paired-wrong-scene controls scored 36/216, 128/216,
+and 165/216. Their mean answer NLL values were 2.616119, 0.882842, and 0.329378,
+versus 0.277091 for primary. On changed sides, the mean wrong-minus-primary NLL
+margin was +0.470579. Counterfactual scoring reached 16/24 correct sides and 4/12
+complete units, but only 5/12 prediction-changing units. On the 192 invariant
+sides, 24 predictions changed when they should have remained stable.
+
+Exactly 19/21 preregistered gates passed. The two failures were the required
+prediction-changing units (5/12, minimum 7) and the invariant false-change maximum
+(24/192, maximum 20). Therefore V96 was not promoted, no deferred-final scenes
+were generated, and V89 remains the static-chat default. The auth-v2 chain sealed
+the evaluator implementation before question I/O, separately attested the fixed
+candidate before known-development question I/O, bound the local Gemma snapshot,
+adapter topology and states, source closure, continuous memories, predictions,
+and label-isolated scores, and recorded zero protected reads. This is stronger
+sealed known-development evidence than V95, but it is not held-out-final,
+official, generalization, or final-acceptance evidence.
+
+The legacy strict fixed-prefix V54 comparator remains runnable:
+`live_chat_and_oracle_deletion_passed_below_acceptance_behavior`. It computes one complete environment-conditioned
+embedding before questions and reuses it unchanged. This is a proof of mechanism,
+not a behavioral acceptance claim or the current default.
+The strict fixed-prefix CLI is runnable, but its below-gate V54 behavior remains
+a historical mechanism comparator rather than the promoted V89 path.
+
+The legacy strict V54 comparator uses an exact
+two-file inference release at `data_gemma4/runtime/checkpoints/gemma4_v54_release_v1`:
+`adapter.safetensors` and `runtime_metadata.json`. The manifest records no
+environmental text inputs and includes no training metadata. The launchers verify
+or rebuild this package before startup. This is safe packaging of the existing
+below-acceptance V54 mechanism demo, not a new model promotion or an acceptance
+claim. It is not the current static-chat default.
+
+That historical V54 comparator's live three-question run reused exact hash
+`52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95`, audited
+4,955 opened files with zero forbidden
+accesses, and passed while the oracle directory was atomically unavailable and
+then restored.
+The loopback-only browser UI also passes strict preflight and synthetic
+multi-question hash-invariance tests; its audit observed
+938 reads and zero forbidden accesses.
+Its fused-map image is explicitly human-only.
+
+The strict fixed-prefix atlas mechanism is now
+`authenticated_v75_structural_mechanism_behavior_negative_not_promoted`. An executed, hash-pinned structural run used the exact
+sealed V75 controller to compile all 256 base
+scene latents plus all 480 atlas tokens into one
+738-token scene-only input before questions.
+Every base latent, probe, and atlas token was preserved. The run loaded no Gemma
+model, questions, answers, oracle, protected split, or environmental text. This
+removes the stale dependency on rejected V66b, but remains structural evidence
+only at that stage. A subsequent bounded Gemma run measured the behavior on 16
+historical-training-pool rows spanning eight pair- and scene-disjoint physical
+pairs. The fixed atlas scored
+6/16
+(37.50%), exactly tying frozen
+V54 at 6/16 and trailing direct exact V75
+at 9/16. Prediction-changing units
+were 1/8, 1/8, and 2/8 respectively. All 16 738-token prefixes were compiled
+before questions and remained invariant; the predictor audited 119 reads with zero
+forbidden access and never loaded the isolated scorer references. The rows were
+pair- and scene-disjoint but not question-disjoint (12 prompts overlap training),
+so this is bounded historical-internal negative evidence, not official validation.
+The structural compiler works, but supplied no behavioral gain and is not promoted.
+
+Atlas V2 is separately authenticated as
+`authenticated_structural_only_compilation_disabled`. It losslessly relocates all 256 base scene latents
+next to the prompt: for inclusive prompt lengths 57--64, direct exposure from the
+final prompt token in Gemma's 512-token sliding-attention layers changes from
+0/256 base latents in V1 to 256/256 in V2. This is structural local-window
+evidence only; V2 compilation is disabled and behavior remains unmeasured.
+
+The proposed PLE reader is `authenticated_design_only_training_not_authorized`: rank
+4, 41,984 trainable
+parameters. That earlier artifact remains a design-only preregistration. A
+separately gated V54 V1--V5 PLE-reader experiment was subsequently run to terminal
+negative evidence: `authenticated_terminal_negative_no_checkpoint`. It published no checkpoint.
+
+The bounded Gemma tool-decoder V2.2 experiment is likewise terminal:
+`authenticated_terminal_negative_no_runtime_checkpoint`. Its teacher-forced early gate rejected the final
+state before greedy generation and runtime-checkpoint publication.
+
+The fixed-prefix upper-decoder reader V6 is terminal at an earlier stage:
+`authenticated_terminal_smoke_failure_no_training_no_checkpoint`. It failed its single byte-exact full-vs-tail
+real-model smoke before gradients, optimization, training, or checkpoint
+publication.
+
+V6.1 is also terminal: `authenticated_terminal_gradient_equivalence_failure_no_training_no_checkpoint`. It authenticated bounded
+objective equivalence and nonzero branch gradients, but the combined
+first-schedule gradient missed the preregistered cosine and relative-L2 gates.
+No optimizer, training, or checkpoint followed. V6.2's exact full-forward
+successor is terminal at `authenticated_terminal_training_gate_failure_no_checkpoint`. It completed 96 updates
+and improved generic answer NLL, but failed its causal scene-selectivity gate and
+published no checkpoint.
+
+V72 is terminal at `authenticated_terminal_development_negative_no_checkpoint` after its first pair-disjoint development
+fold underperformed its stronger frozen branch. Separately, V6.3 is
+`authenticated_positive_train_only_pilot_continuation_authorized_no_runtime_promotion`: its tiny shared-K/V attention pilot improved
+the locked train-only aggregates, but it is explicitly non-promotable. V6.4 then
+completed the authorized pair-disjoint confirmation and ended at
+`authenticated_failed_pair_disjoint_generalization_no_checkpoint_no_promotion`: training margins improved, while held margin
+and held softplus regressed. This exact attention surface is closed. V75 remains
+the historical question-conditioned comparator; its limitations are the missed
+spatial-relation gate, weak metric grounding, and departure from strict
+identical-total-input invariance through four continuous control tokens. V89 is
+the current strict scene-one static-chat path.
+V81 now provides a runnable, compile/runtime-separated 738-token fixed scene
+memory, but its bounded causal screen failed because the paired wrong-scene arm
+scored 9/16 versus V81's 8/16. It is mechanism evidence, not the accepted strict
+behavioral result.
+V82 learned a dense reader over that fixed memory and reduced its wrong-scene arm
+to 6/16, but the candidate itself remained 8/16 and failed its promotion gate.
+V83 then removed the separate question reader entirely and supplied the immutable
+738x1536 memory directly to Gemma. The structure passed, but behavior regressed to
+6/16 with only 1/8 counterfactual prediction changes, so V83 is not promoted.
+V84's four-update bridge then reduced answer NLL without separating its greedy
+pair. The preregistered V84.1 follow-up did separate `on` from `under` after 32
+updates while preserving the exact immutable 738-token memories and zero
+question-derived environmental tokens. That is a two-scene causal overfit only:
+no development, held-out, official, or oracle evidence was opened, and it is not
+runtime-promoted.
+
+This report is generated from an explicit evidence allowlist by
+`scripts/build_current_report.py`. The builder opens no oracle, QA, scorer-only, or
+deferred-final-scene path. Exact source hashes are in
+`reports/metrics/current_metrics.json`.
 
 ## 1. Research question
 
-Can a local language model answer questions about a synthetic room when the environment reaches it only as continuous, spatially fused visual embeddings and geometry—without a caption, object list, textual scene graph, simulator labels, or question-dependent retrieval?
-
-### Current primary Gemma 4 E2B outcome
-
-The primary representation is 24 complete-image Gemma observations, each retaining
-a 48×48 field of middle 768D, late 768D, and native projected 1536D features
-(3072D float16 total), fused into a 5 cm persistent map and deterministically
-aggregated to 15 cm tokenizer input. Every occupied block feeds the
-question-independent `signal_preserving_resampler_v3`, producing 256 scene
-latents at model dimension 384 before projection to Gemma's 1536D hidden space.
-
-#### v23 frozen-scene shared-K/V bridge: strongest partial result, gate failed
-
-V23 starts from the sealed V21 update-8 adapter, including its 256-token scene
-encoder, global residual, signed-X local field, and two existing decoder banks.
-All of those parameters remain frozen. One exactly zero-output rank-4/alpha-8
-LoRA bank adapts only Gemma's real shared K/V projections at physical layers 13
-and 14: 30,720 trainable FP32 parameters at learning rate `3e-4`. The complete
-scene prefix remains fixed and question-independent; no runtime oracle input,
-textual environment representation, or question-dependent retrieval is added.
-
-The run used clean training source commit `2a8cd07` and clean extension-controller
-commit `39c12a1`. Update 1 matched the predicted tensor and optimizer state. The
-screen selected update 2 and authorized only the preregistered update-8 branch.
-Epochs 3--4 were first replayed in an isolated checkout: adapters, decoded AdamW
-state, metrics, history, and normalized metadata matched exactly. Differing raw
-`torch.save` ZIP bytes were traced to the random temporary archive-root name;
-both raw hashes and the exact decoded-state hashes are retained.
-
-| Update | Color sides / units | Mirror sides / units | Mirror full-vocab mean / min |
-| ---: | ---: | ---: | ---: |
-| 1 | 12/12 / 6/6 | 8/12 / 2/6 | 0.552083 / -0.8125 |
-| **2 (selected)** | **12/12 / 6/6** | **10/12 / 4/6** | **0.572917 / -1.0** |
-| 3 | 12/12 / 6/6 | 9/12 / 3/6 | 0.593750 / -0.8125 |
-| 4 | 12/12 / 6/6 | 9/12 / 3/6 | 0.562500 / -0.9375 |
-| 5 | 12/12 / 6/6 | 9/12 / 3/6 | 0.531250 / -0.8125 |
-| 6 | 12/12 / 6/6 | 9/12 / 3/6 | 0.557292 / -0.75 |
-| 7 | 12/12 / 6/6 | 8/12 / 2/6 | 0.536458 / -0.8125 |
-| 8 | 12/12 / 6/6 | 8/12 / 2/6 | 0.546875 / -0.6875 |
-
-The primary and novel training segments took `159.739822 s` and `217.286478 s`,
-respectively (`377.026300 s` total, excluding the replay control). The experiment
-used 24 supervised training questions and no validation questions; these are
-teacher-forced wiring metrics, not held-out QA. The final decision is
-`conditional_limit_reached_no_greedy_audit`: no greedy generation, held-out
-static QA, promotion, interactive chat, Gemma leakage/oracle-deletion test, or
-semantic embodied-agent evaluation was authorized. Validate the immutable result
-and all retained evidence with
-`PYTHONPATH=src python -m semantic_3d_chat.evaluation.v23_archive_validator`.
-
-#### v9 hardened color gate: exact trained generation, zero control transfer
-
-V9 trained the same 45,056 layer-34 LoRA parameters as v8, but required the
-canonical first answer token to be the unique full-vocabulary top-1 token on every
-side in addition to passing pairwise candidate ranking. The fresh MPS run completed
-36 epochs, 216 decoder microsteps, and 36 optimizer updates in 1,539.387 seconds.
-The pairwise gate was already 12/12 at epoch 22, when the full-vocabulary check was
-only 1/12. The composite gate first passed at epoch 30: 12/12 top-1 sides, 6/6
-complete units, mean target-versus-best-other logit margin 1.500651, and minimum
-margin 0.03125. Epoch 36 remained 12/12 and 6/6 while strengthening those margins
-to mean 2.903809 and minimum 1.0. The exact trace is
-`gemma4/metrics/training_gemma4_color_wiring_v9.json`.
-
-Model-validated greedy decoding produced identical normalized-exact results for
-the stored epoch-30 `best` checkpoint and epoch 36:
-
-| Intervention | Split status | Exact sides | Exact complete units | Changed predictions |
-| --- | --- | ---: | ---: | ---: |
-| Color swap | trained | 12/12 | 6/6 | 6/6 |
-| Mirrored left/right room | not trained by v9 | 0/70 | 0/35 | 0/35 |
-| Cube on/under support | held-out test | 0/8 | 0/4 | 0/4 |
-
-The hardened checkpoint audits are
-`gemma4/metrics/scene_signal_audit_gemma4_color_wiring_v9_best_epoch30.json` and
-`gemma4/metrics/scene_signal_audit_gemma4_color_wiring_v9_epoch036.json`.
-Prediction change is deliberately separate from exact correctness. The structural
-metrics do not support repeating the historical Perceiver-collapse diagnosis for
-v9: native-latent/block-token relative-L2 retention is 0.622951–1.002638 for epoch
-30, and its native-latent mean off-diagonal cosine is 0.917063–0.940826. The
-measured failure is behavioral non-transfer beyond the trained color intervention,
-not disappearance of all scene signal in the resampler.
-
-No `promotion.json` was created. V9 therefore establishes a successful trained
-color-wiring overfit only. It does not establish held-out static QA, interactive
-chat, Gemma prefix invariance, Gemma oracle-deletion/leakage isolation, or
-language-conditioned semantic robot navigation.
-
-#### v10 deterministic color-plus-mirror continuation: failed gate and forgetting
-
-V10 started from v9 epoch 36 as `weights_only_new_curriculum`: it restored
-compatible adapter/scene-prefix weights but reset optimizer state, epoch history,
-and curriculum. The initialization record binds the source v9 checkpoint and
-adapter hash
-`8ecbf84fc8f544d67fe3e65a313023c3808870c5648b913de2839ec525630c90`, and confirms
-that neither optimizer state nor history was loaded. Its audited selection
-contained six complete color units and six complete mirror units, or 24 records
-across four opaque scene IDs. The cap was a deterministic seed hash over opaque
-pair/question keys; it did not inspect question text or answers, and both scene
-sides remained indivisible. Held-out cube support was not trained.
-
-V9 exposed a checkpoint-selection defect: the original full-vocabulary hinge
-reached zero at the first pass, so epoch 30 remained `best` even though epoch 36
-had a much stronger minimum margin. The corrected selector still ranks every
-passing checkpoint above every failure, then ranks passes by negative minimum
-target-versus-best-other margin. Later, more robust passes can now replace a barely
-positive first pass. The run inputs are
-`configs/experiments/gemma4_color_mirror_wiring_v10.yaml` and
-`gemma4/metrics/training_selection_gemma4_color_mirror_wiring_v10.json`.
-
-The MPS run completed 12 epochs, 144 decoder microsteps, and 12 optimizer updates
-in 933.685 seconds. Its strict composite gate never passed. The monitor selected
-epoch 8 as `best`, where the full-vocabulary first-answer check reached only 9/24
-sides and 3/12 complete units; final epoch 12 had the same counts. The final
-minimum target-versus-best-other margin was still -9.75.
-
-Model-validated greedy generation measured:
-
-| Checkpoint and intervention | Training status | Exact sides | Exact complete units | Changed predictions |
-| --- | --- | ---: | ---: | ---: |
-| Best epoch 8 — color swap | selected | 9/12 | 3/6 | 6/6 |
-| Best epoch 8 — mirror subset | selected | 0/12 | 0/6 | 0/6 |
-| Best epoch 8 — all mirror units | selected + unselected | 1/70 | 0/35 | 3/35 |
-| Best epoch 8 — cube support | held-out test | 0/8 | 0/4 | 1/4 |
-| Final epoch 12 — color swap | selected | 9/12 | 3/6 | 6/6 |
-| Final epoch 12 — mirror subset | selected | 0/12 | 0/6 | 0/6 |
-| Final epoch 12 — all mirror units | selected + unselected | 0/70 | 0/35 | 1/35 |
-| Final epoch 12 — cube support | held-out test | 0/8 | 0/4 | 2/4 |
-
-For the 29 unselected mirror units, best epoch 8 scored 1/58 exact sides and
-changed 3/29 predictions; final epoch 12 scored 0/58 and changed 1/29. Prediction
-change is reported separately because changing between two wrong answers is not a
-success. V10 therefore partially forgot v9's previously exact 12/12 color behavior
-without learning any selected mirror unit or any held-out support side. Exact
-artifacts are `gemma4/metrics/training_gemma4_color_mirror_wiring_v10.json`,
-`gemma4/metrics/scene_signal_audit_gemma4_color_mirror_wiring_v10_best_epoch8.json`,
-and `gemma4/metrics/scene_signal_audit_gemma4_color_mirror_wiring_v10_epoch012.json`.
-No `promotion.json` was created.
-
-#### v11 full-vocabulary retry: color restored, mirror still failed
-
-The controlled v11 retry restarted from the same v9 epoch-36 checkpoint with the
-same six color and six mirror units. It retains the candidate-pair hinge and adds
-a differentiable first-answer objective
-`relu(1 - (target_logit - max_non_target_logit))` at weight 2. This directly
-targets v10's observed candidate-versus-full-vocabulary gap using the same decoder
-forward and existing answer supervision. The run completed 12 epochs, 144 decoder
-microsteps, and 12 optimizer updates in 947.428 seconds. Best and final are the
-same epoch-12 adapter, SHA-256
-`eee7b3aa8ce2e7584cfe1fc80d8852d4d645b24c156ccd43369cb4ba7e047e22`.
-
-The strict teacher gate failed: color reached 12/12 candidate sides and 12/12
-full-vocabulary top-1 sides (6/6 complete units), but mirror stayed at 6/12
-candidate sides and 0/6 units, with only 3/12 full-vocabulary sides and 0/6 units.
-Greedy generation confirmed the failure:
-
-| Intervention | Training status | Exact sides | Exact complete units | Changed predictions |
-| --- | --- | ---: | ---: | ---: |
-| Color swap | selected | 12/12 | 6/6 | 6/6 |
-| Mirror subset | selected | 3/12 | 0/6 | 2/6 |
-| Mirror, all units | selected + unselected | 7/70 | 0/35 | 10/35 |
-| Cube support | held-out test | 1/8 | 0/4 | 4/4 |
-
-Strict normalized exact is the promotion metric. Secondary canonical relation
-parsing counts unambiguous verbose answers and reaches 28/70 mirror sides and 5/35
-complete units, but all five complete units are unselected; the selected subset
-remains 0/6. Output decisiveness did improve: V11 substantially reduced the prior
-`unknown` mode. That did not route mirror-prefix differences into the correct
-left/right contrast. The mirror prefix itself remains measurably different across
-scenes (0.358191 relative L2; 98.55% changed elements), so this is not evidence of
-global scene-token collapse. Exact artifacts are
-`gemma4/metrics/training_gemma4_color_mirror_full_vocab_v11.json` and
-`gemma4/metrics/scene_signal_audit_gemma4_color_mirror_full_vocab_v11_epoch012.json`.
-No `promotion.json` was created.
-
-#### v12 ordered-relation retry: auxiliary margin passed, decoder still failed
-
-V12 used
-`configs/experiments/gemma4_color_mirror_spatial_relation_v12.yaml`. The old
-balanced hinge has an exact shared-preference saddle: margins `[d, -d]` yield zero
-gradient while both sides violate the margin. V12 kept the v9 initialization,
-selection, decoder objective, and schedule, and added an ordered
-target-minus-reference objective over dense soft pools of all 256 scene latents.
-The ordered coordinates are training/evaluation-only QA fields. They never enter
-the chat runtime, which retains the same global question-independent prefix.
-
-The auxiliary objective succeeded on its own terms. Its scene-only warmup stopped
-after 21 forward passes and 20 optimizer steps when all 12 eligible mirror sides
-exceeded the configured 0.1 margin (mean 0.246168; minimum 0.116128). The complete
-run then finished 12 epochs, 144 decoder microsteps, and 12 main optimizer updates
-in 1,073.493 seconds (17m 53.493s). The recorded source scope was clean at commit
-`6837426d2f8c943ae08646f17ff521d7df3d29c4`.
-
-The teacher-forced decoder result must be distinguished from the auxiliary loss
-and from actual generation. At both epochs 8 and 12, color reached 12/12 candidate
-sides and 12/12 full-vocabulary first-token sides (6/6 complete units). Mirror
-remained at 6/12 candidate sides and 0/6 units, while its full-vocabulary score was
-0/12 sides and 0/6 units. Thus the spatial objective separated its dense pooled
-representations, but Gemma's next-token distribution did not consume that signal
-as the required relation.
-
-Both model-validated greedy audits measured:
-
-| Checkpoint and intervention | Training status | Exact sides | Exact complete units | Changed predictions |
-| --- | --- | ---: | ---: | ---: |
-| Epoch 8 — color swap | selected | 12/12 | 6/6 | 6/6 |
-| Epoch 8 — mirror subset | selected | 0/12 | 0/6 | 0/6 |
-| Epoch 8 — all mirror units | selected + unselected | 0/70 | 0/35 | 0/35 |
-| Epoch 8 — cube support | held-out test | 0/8 | 0/4 | 0/4 |
-| Final/best epoch 12 — color swap | selected | 12/12 | 6/6 | 6/6 |
-| Final/best epoch 12 — mirror subset | selected | 0/12 | 0/6 | 0/6 |
-| Final/best epoch 12 — all mirror units | selected + unselected | 0/70 | 0/35 | 0/35 |
-| Final/best epoch 12 — cube support | held-out test | 0/8 | 0/4 | 0/4 |
-
-Every one of the 70 mirror outputs was the literal model response `unknown`.
-Neither audit used an answer fallback, observed an empty decode, nor exhausted its
-token budget. Both have zero checkpoint-contract warnings and validate native
-boundary embeddings, BF16 runtime dtype, and model-runtime prefix parity. These
-checks establish a clean execution contract, not behavioral correctness or a
-Gemma oracle-deletion result. Epoch 8's adapter SHA-256 is
-`a4c85c14a214e4e594992e489a784cb4bacb64d3dfda519ad3da18b1595d9f22`;
-final/best epoch 12 is
-`1d46e754873431b11e8dc58066f08f06c17e3bcaa4c47b139358bb0f28ceabb1`.
-
-The exact local artifacts are
-`gemma4/metrics/training_gemma4_color_mirror_spatial_relation_v12.json`,
-`gemma4/metrics/scene_signal_audit_gemma4_color_mirror_spatial_relation_v12_epoch008.json`,
-and
-`gemma4/metrics/scene_signal_audit_gemma4_color_mirror_spatial_relation_v12_best.json`.
-No `promotion.json` was created. The honest diagnosis is narrower than “the scene
-encoder collapsed”: the ordered auxiliary head can discriminate the selected
-regions, while the current shallow shared decoder adaptation fails to turn that
-discrimination into left/right tokens and retreats to `unknown`.
-
-#### v13 frozen-scene decoder banks: execution contract passed, behavior failed
-
-V13 is the bounded decoder-capacity falsifier defined in
-[`../configs/experiments/gemma4_color_mirror_decoder_banks_v13.yaml`](../configs/experiments/gemma4_color_mirror_decoder_banks_v13.yaml).
-Its pre-run probe used the pinned V12 epoch-8 adapter SHA-256
-`a4c85c14a214e4e594992e489a784cb4bacb64d3dfda519ad3da18b1595d9f22`,
-froze the complete scene adapter and inherited rank-4 layer-34 q/o LoRA, and
-installed a disjoint exact-zero-output rank-8 q/o bank in layers 30-33. The new
-bank contains 229,376 parameters. All 12 probed first-answer vocabulary
-distributions were bitwise identical to the bank-free baseline; no optimizer was
-constructed, zero updates occurred, and no protected state changed. The weighted
-candidate-hinge gradients across all six mirror units had cancellation ratio
-0.987037 and cosine 0.948397; the complete decoder objective measured 0.987413 and
-0.949781. This passed the pre-run non-cancellation falsifier but did not predict
-the eventual behavioral outcome. The exact no-update artifact is
-[`gemma4/metrics/mirrored_gradient_probe_v13_epoch008.json`](gemma4/metrics/mirrored_gradient_probe_v13_epoch008.json),
-SHA-256 `59638470edf63a8c8b4a450f3a833a7084c171a4147334366fa5016e709533e6`.
-
-Source commit `990589363b42b2cd3451ec24f7a912ffac8411f6` implements a
-schema-2 named-bank contract while preserving legacy schema-1 checkpoint loading.
-It rejects overlapping bank targets, binds deterministic initialization and
-per-bank compact-state hashes, places only trainable banks in the optimizer, and
-checks frozen state before checkpoint writes and after reload. V13 initializes
-from V12 epoch 8, whose metadata SHA-256 is
-`f097c6477546460440e77a3d225afb55818cb13abf9cbb4a90500f75a879b0f5`.
-The immutable scene state is
-`690bd890bfda024dbb5c7d3c68087b8113bc3b8ee81dd6143c7eb2a884e7245b`;
-the frozen inherited bank is
-`dec768bed654c8c4e16da0318857543ad54d8f5f68f4d24a9a87cd19ec706594`.
-The extension bank uses seed 13008 and begins at
-`b4ec0518e4759dda33fc93c9c1d4c76f52f1024fd5b8b1667ad1b4ef5da198af`;
-after training it is
-`caaf9b13c13b2371463a2cf9d450453f925846b0202bdb0610103b6aa85e435b`.
-The checkpoint contains 274,432 LoRA parameters in total, of which exactly
-229,376 are trainable. Gemma base weights and all scene-adapter weights remain
-outside the optimizer.
-
-A separate one-update smoke run completed 12 microsteps in 44.822 seconds and
-preserved both frozen hashes while changing the extension hash. This smoke is
-training-wiring evidence only; it is not included in behavioral accuracy. Its
-machine-readable training trace is
-[`gemma4/metrics/training_gemma4_color_mirror_decoder_banks_v13_smoke.json`](gemma4/metrics/training_gemma4_color_mirror_decoder_banks_v13_smoke.json).
-Its deterministic selection trace is
-[`gemma4/metrics/training_selection_gemma4_color_mirror_decoder_banks_v13_smoke.json`](gemma4/metrics/training_selection_gemma4_color_mirror_decoder_banks_v13_smoke.json).
-
-The full MPS run completed 12 epochs, 144 decoder microsteps, and 12 optimizer
-updates in 467.248 seconds. Its source provenance is clean at commit `9905893`,
-and it uses the same deterministic 24-record, 12-unit color-plus-mirror selection
-as V10-V12. The discrete teacher-gate counts were unchanged at every measured
-gate (epochs 2, 4, 6, 8, 10, and 12):
-
-| Intervention | Candidate sides | Candidate units | Full-vocabulary sides | Full-vocabulary units |
-| --- | ---: | ---: | ---: | ---: |
-| Color swap | 12/12 | 6/6 | 12/12 | 6/6 |
-| Mirror subset | 6/12 | 0/6 | 0/12 | 0/6 |
-
-The aggregate gate therefore never passed, although mirror margins improved
-measurably: candidate minimum moved from -4.625 at epoch 2 to -4.125 at epoch 12,
-and full-vocabulary mean moved from -19.880209 to -19.231771. Epoch 12 is both
-`best` and final;
-those directories contain byte-identical adapter and metadata files. Adapter
-SHA-256 is
-`9b59d15ba9e4d3be8d8a64ea6d9d3071d1e8650333ee8c21c5504e7900353c7c`,
-and metadata SHA-256 is
-`83ba42f6fc5b8ef2025588f35a3a2bba9a9d7e4074487d85c43ef5b25fc13a7b`.
-Exact selection and training evidence is
-[`gemma4/metrics/training_selection_gemma4_color_mirror_decoder_banks_v13.json`](gemma4/metrics/training_selection_gemma4_color_mirror_decoder_banks_v13.json)
-and
-[`gemma4/metrics/training_gemma4_color_mirror_decoder_banks_v13.json`](gemma4/metrics/training_gemma4_color_mirror_decoder_banks_v13.json)
-(training file SHA-256
-`f86659cbc3ab4407c82d583f2e846c9acf6713c82d89c5dfaded4d91bed6a79c`).
-
-Saved-and-reloaded, model-validated BF16 greedy generation measured:
-
-| Intervention | Training status | Exact sides | Exact complete units | Changed predictions |
-| --- | --- | ---: | ---: | ---: |
-| Color swap | selected | 12/12 | 6/6 | 6/6 |
-| Mirror subset | selected | 0/12 | 0/6 | 0/6 |
-| Mirror, all units | selected + unselected | 0/70 | 0/35 | 0/35 |
-| Cube support | held-out test | 0/8 | 0/4 | 0/4 |
-
-All 70 mirror outputs were the literal model response `unknown`. None used an
-audit answer fallback, decoded to an empty string, or exhausted the 32-token
-budget. The eight support outputs were six `unknown` responses and two copies of
-`The floor is light gray.`; none was exact. Thus neither fluency nor a changed
-wrong answer inflates the strict scores.
-
-The first audit attempt correctly stopped on a constructor defect in the audit
-harness: it created FP32 native-boundary placeholders before loading the
-checkpoint, silently casting persisted BF16 BOI/EOI buffers and causing the frozen
-scene-state hash check to fail. It did not mutate the saved checkpoint or affect
-training. Fix commit `a10579d6dadecf8082cc179a201bb1db517656aa`
-constructs native boundaries from the loaded model, or directly in configured BF16
-for skip-generation audits. The complete rerun has zero contract warnings,
-validates the model's BF16 runtime dtype and native boundaries, and confirms exact
-runtime-prefix parity. The audit is
-[`gemma4/metrics/scene_signal_audit_gemma4_color_mirror_decoder_banks_v13_best.json`](gemma4/metrics/scene_signal_audit_gemma4_color_mirror_decoder_banks_v13_best.json),
-file SHA-256 `042fd7c5b085858ac334aaf40f08533e8f2db1ab0ef258917fa901be224256dc`.
-
-After the boundary-dtype repair, the V13 tree passed the standard full suite with
-310 tests passed and 15 skipped; a broader Gemma-focused suite passed 92 tests
-with two benign SWIG warnings. Focused standard tests passed 17/17 and Gemma
-audit/boundary tests passed 26/26. These results validate the implementation and
-checkpoint contract, not scene understanding. No `promotion.json` was created.
-V13 therefore falsifies this added-decoder-bank configuration: it preserves the
-trained color overfit but learns no complete mirror unit and transfers to no
-held-out support side. Held-out static QA, interactive chat, Gemma-specific
-leakage/prefix-invariance tests, and semantic robot navigation remain gated.
-
-#### v14 exact-restart learning-rate response: transient partial fit, no gate pass
-
-V14 changed only the learning rate of V13's trainable 229,376-parameter
-layers-30-33 extension. The scene adapter, inherited V12 layer-34 bank, Gemma base,
-V12 epoch-8 restart, 24 records, ordering, and objectives remained fixed. The
-screen contract is
-[`../configs/experiments/gemma4_color_mirror_decoder_banks_v14_lr_sweep.yaml`](../configs/experiments/gemma4_color_mirror_decoder_banks_v14_lr_sweep.yaml).
-Each arm began from exact-zero-output extension hash
-`b4ec0518e4759dda33fc93c9c1d4c76f52f1024fd5b8b1667ad1b4ef5da198af`
-and completed four MPS optimizer updates under clean commit
-`1ee8b5d13777e74ebdfe1f87e7d8320403ad5fbf` (tree
-`b606e85cbb5a786ba2e00f971cf07c174bc5cbef`; tracked-diff hash
-`e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855`).
-Selection hash
-`7f0714e3151c9ddb57c1da95a457820a833e490c070881a88a9fee4a9168f933`
-and pair-membership hash
-`99ee448c23fb71b7269a353a54b2156ac55701847af170597dcc351af15cbcbe`
-were identical across arms. Scene hash
-`690bd890bfda024dbb5c7d3c68087b8113bc3b8ee81dd6143c7eb2a884e7245b`
-and inherited-bank hash
-`dec768bed654c8c4e16da0318857543ad54d8f5f68f4d24a9a87cd19ec706594`
-remained frozen.
-
-Every arm retained the epoch-4 color requirement at 12/12 full-vocabulary sides
-and 6/6 complete units. The screen results were:
-
-| Learning rate | Recorded screen time (s) | Mirror full-vocab sides | Complete units | Mean / minimum mirror margin | Report SHA-256 |
-| ---: | ---: | ---: | ---: | ---: | --- |
-| 1e-4 | 180.22852345905267 | 0/12 | 0/6 | -19.5859375 / -25.4375 | `88593afc7998785afbe7e4e2c41e56bed7fb90f0f77ee55cd63ca5f5c7f95bfc` |
-| 3e-4 | 176.10611624992453 | 0/12 | 0/6 | -18.22395896911621 / -23.78125 | `f651cffc9d42eda7f9f89f010bcda9fee743240e32dfb1f78d405a6086db9ebe` |
-| 1e-3 | 179.8313142498955 | 0/12 | 0/6 | -8.165771484375 / -11.78125 | `5b789526563d82d86d29ec8b599ce485de273e939b4e494946168f74dfa4cbe2` |
-| 2e-3 | not retained separately | 5/12 | 0/6 | -0.2604166567325592 / -3.9375 | overwritten by resume; see below |
-
-The predeclared color-first ranking selected 2e-3 because it was the only arm to
-make five mirror target tokens full-vocabulary top-1 at update 4. Three of four
-arms satisfied the separate extension criterion; none passed the complete
-color-plus-mirror gate. The historical summary is
-[`gemma4/metrics/lr_sweep_gemma4_color_mirror_decoder_banks_v14.json`](gemma4/metrics/lr_sweep_gemma4_color_mirror_decoder_banks_v14.json),
-file SHA-256
-`b0643e4a09d147702efae58f0559a54fe8f61f98d4ef9d823392a365493ada4a`,
-with common provenance-contract hash
-`f016b57fd79dc3a229e5015a0d146424a16c345810133783a3ad6f960e3f7968`.
-The canonical evidence is the checkpoint-backed
-[`gemma4/metrics/lr_sweep_checkpoint_attestation_gemma4_color_mirror_decoder_banks_v14.json`](gemma4/metrics/lr_sweep_checkpoint_attestation_gemma4_color_mirror_decoder_banks_v14.json),
-file SHA-256
-`9f959226e1d10f16888c5f1b4db165912c286c84c21d98930fe635e3f290359e`.
-It loads no historical training report, validates the four intact `epoch_004`
-checkpoints and selection manifests, recomputes every trainable-bank hash from
-safetensors, checks optimizer slots, steps, and learning rates, and independently
-reproduces the ranking `lr2e3`, `lr1e3`, `lr3e4`, `lr1e4`.
-The selected epoch-4 extension state is
-`78839fc9683c8b9e4f0227d9c248a5ce916b44967f75424be8d484d50eb07681`.
-Its adapter, metadata, and optimizer file hashes are
-`0e41bc85b4c3e7bb8e9c71d3ed7ff43d8b4f7d3b682fa05c0f5f009b1e0a2203`,
-`9168e0e02ff5a92b23f0f6aeece937f17cc2eb37980dc34ffa88a1aa06001fda`,
-and `bbffc2feb60a780b43a483faa38ebd9ab740ff3b806861deb5a0161bd1129a7f`.
-
-The selected arm resumed exactly from epoch 4, including optimizer and history,
-and ran eight additional updates. That resume invocation took
-351.17732408316806 seconds. Its aggregate trace contains 12 epochs, 144 decoder
-microsteps, and 12 optimizer updates:
-
-| Epoch | Color full-vocab sides / units | Mirror full-vocab sides / units | Mirror mean / minimum full-vocab margin | Status |
-| ---: | ---: | ---: | ---: | --- |
-| 4 | 12/12 / 6/6 | 5/12 / 0/6 | -0.2604166567325592 / -3.9375 | selected screen arm |
-| 7 | 12/12 / 6/6 | 7/12 / 1/6 | 0.0416666679084301 / -2.3125 | best discrete result |
-| 8 | 10/12 / 4/6 | 6/12 / 0/6 | 0.0364583320915699 / -3.125 | color regression |
-| 9 | 10/12 / 4/6 | 6/12 / 0/6 | 0.078125 / -2.9375 | color regression |
-| 10 | 12/12 / 6/6 | 5/12 / 0/6 | 0.0833333358168602 / -1.375 | scalar-selected `best` |
-| 12 | 12/12 / 6/6 | 6/12 / 0/6 | 0.0572916679084301 / -2.25 | final |
-
-Epoch 7 is the best discrete teacher-forced relation result. The configured
-`pair_composite_full_vocab_gate_margin` monitor instead selected epoch 10 at loss
-0.700520858168602. The `best` directory is byte-identical to epoch 10: extension
-state SHA-256
-`5355e6849adfead434aa021d64af09e62b79af25b8d0075be9994921613c8888`,
-adapter SHA-256
-`b84c64cadfedb295c9c2806284f06675cc51146e09ea993cabb59c3bb9e15931`,
-metadata SHA-256
-`da791884ce7a8f89a1c63e4b5a58035b62ff3a16a4a3d47d29d9b7c8112050c2`,
-and optimizer SHA-256
-`6318ec44520ea8166860e3fdd3e6ad1389cee523f3203fdafbb68347a74b5933`.
-Final epoch 12 has extension hash
-`c6483c420210272335d041f1ae4ee7e0e5cdab6e57798d19cd4d2cd539092a1a`
-and adapter, metadata, and optimizer hashes
-`2e077d3f46e95898a0b33881bf5e11c7029e198bd775cd9d25ed6e60ce78d6a5`,
-`41d283be981c6a9dc03066298080f55ca3450a568d8a56d22ecb4235e93ccb9a`,
-and `fda344dbbe733cdf81683c3d9f4d2ecc03b25e8b542c512a8721524eaddcf036`.
-
-The aggregate report is
-[`gemma4/metrics/training_gemma4_color_mirror_decoder_banks_v14_lr2e3.json`](gemma4/metrics/training_gemma4_color_mirror_decoder_banks_v14_lr2e3.json),
-file SHA-256
-`5efe39c22985908afcd0cf720c06b94b87c5d7f6a4f4fe03ec6ca91b5313d38d`.
-That path was first consumed by the sweep summarizer at epoch 4 and later
-overwritten by the 12-epoch exact-resume aggregate. The checkpoint attestation
-now provides immutable file identities and verifies the summary directly from
-the epoch-4 checkpoint rather than trusting that mutable path. The original
-screen report and its elapsed time do not survive separately. Therefore
-351.17732408316806 is only the eight-update resume time and must not be reported
-as the screen time.
-
-V14 never achieved 12/12 mirror sides or 6/6 complete mirror units, and epochs
-8-9 temporarily damaged the protected color task. The complete teacher gate never
-passed. Following the predeclared fail-closed policy, no checkpoint received a
-greedy audit, no `promotion.json` was created, and no all-mirror, held-out support,
-static-chat, leakage, or semantic-navigation downstream claim is made. V14 shows
-that a larger learning rate can transiently move the relation decision; it does
-not establish usable scene understanding.
-
-The earlier v7 and v8 results remain below as historical adapter lineage.
-
-Gemma v7 completed 12 epochs, 72 decoder microsteps, and 12 optimizer updates in
-567.844 seconds. The best checkpoint was epoch 7: 3/6 changed units, 9/12 correct
-sides, 3/6 prediction flips, 3/6 wrong-prefix flips, mean ranking margin 0.439616,
-minimum margin -0.71875, and hinge 0.314453. The final checkpoint again reached
-3/6 changed units and 9/12 sides, with hinge 0.386068 and minimum margin -1.484375.
-The required teacher-forced counterfactual gate therefore failed. The higher
-4/6 changed-unit count at epoch 3 also failed because its hinge was 0.716146 and its
-minimum margin was -3.59375. Runs v1-v6 and the v6 resumes through epochs 18 and 24
-also failed; none is promoted.
-
-The exact source hash loaded by the already-running v7 process was not captured.
-The implementation hashes in
-`gemma4/metrics/gemma4_color_wiring_v7_failure.json` are post-run audited snapshots
-and do not prove that later padding or audit/resume fixes executed in v7.
-
-#### v8 controlled fallback: teacher-forced overfit passed, free generation failed
-
-The controlled v8 fallback leaves the native boundaries and complete continuous
-scene prefix unchanged. It adapts only layer 34
-`model.language_model.layers.34.self_attn.q_proj` and `o_proj`, using rank 4,
-alpha 8, dropout 0, LoRA learning rate `1e-4`, and weight decay 0. This is 45,056
-FP32 A/B-only parameters (180,224 bytes, approximately 176 KiB). Strict config,
-optimizer, checkpoint, SHA/tamper, resume, chat-load, and scene-signal-audit paths
-have test coverage.
-
-The fresh MPS run completed epoch 12 in 574.56 seconds and failed the gate: 4/6
-changed units, 10/12 correct sides, and candidate-ranking hinge 0.272786. Its exact
-result is `gemma4/metrics/training_gemma4_color_wiring_v8.json`. A controlled resume
-from that checkpoint stopped early at epoch 22 after 22 total optimizer updates.
-The resumed portion took 388.31 seconds and passed the teacher-forced gate with 6/6
-changed units, 12/12 correct sides, prediction-flip rate 1.0, wrong-prefix-flip
-rate 1.0, and minimum candidate margin 0.0390625. Its exact result is
-`gemma4/metrics/training_gemma4_color_wiring_v8_resume24.json`.
-
-This pass is a same-distribution teacher-forced wiring/overfit result only. The
-model-validated free-generation audit changed outputs for 5/6 training color-swap
-questions, but canonical correctness remained poor: responses were mostly
-`orange` or `unknown`, with only isolated correct colors. It changed 0/35 answers
-for the mirrored-room pair and 0/4 for the held-out cube-support pair. The exact
-decoded outputs and expected answers are in
-`gemma4/metrics/scene_signal_audit_gemma4_color_wiring_v8_resume24.json`. Because
-the learned behavior did not transfer to those controls, no `promotion.json` was
-created and static held-out QA, interactive chat, prefix/oracle-deletion inference,
-and language-conditioned robot navigation remain gated.
-
-Reproduce selection, fresh training, and the bounded resume with:
-
-```bash
-PYTHONPATH=src .venv-gemma4/bin/python -m semantic_3d_chat.training.train_adapter \
-  --config configs/experiments/gemma4_color_wiring_v8.yaml --selection-only
-PYTHONPATH=src .venv-gemma4/bin/python -m semantic_3d_chat.training.train_adapter \
-  --config configs/experiments/gemma4_color_wiring_v8.yaml
-PYTHONPATH=src .venv-gemma4/bin/python -m semantic_3d_chat.training.train_adapter \
-  --config configs/experiments/gemma4_color_wiring_v8.yaml \
-  --resume data_gemma4/checkpoints/gemma4_color_wiring_v8/epoch_012 \
-  --epochs 24 --output-namespace gemma4_color_wiring_v8_resume24
-```
-
-The current Gemma semantic prerequisite did pass on `scene_000001`: 61.54% top-1,
-84.62% hit@100, and 45.23% precision@100 versus 8.07% random precision; same-voxel
-cosine was 0.5889 versus 0.4009 for different voxels. This validates useful map
-signal, not language-model scene understanding.
-
-### Preserved legacy CLIP/Qwen evidence
-
-The preserved legacy data path satisfies the representation constraint: the runtime consumes continuous scene features and geometry, not environmental text. Held-out QA is measured on 274 test records at 74.8% exact accuracy. The v1 controls invalidate that raw score as evidence of scene-specific understanding: wrong-scene and shuffled-content prefixes matched or exceeded the primary path, and changed-fact consistency was zero. The v2 resampler has a structural, no-training signal-preservation diagnostic, but no v2 held-out behavioral result is yet associated with the report artifacts.
-
-## 2. Preserved legacy CLIP/Qwen architecture
-
-![Continuous scene-memory architecture](figures/architecture.png)
-
-The scan is rendered with exact metric camera-Z depth, intrinsics, and camera-to-world poses. Each complete RGB image is encoded once. Middle 768-D, late 768-D, and MaskCLIP-value-aligned 512-D patch streams form a 2,048-D feature. Weighted voxel fusion builds the persistent map before any question. Every occupied block contributes to the question-independent global scene-token set. The selected encoder architecture is `spatial_coverage_resampler_v2`, projected directly into the local LM embedding space.
+Can a local causal language model discuss and act in a synthetic room when the
+environment reaches it only through continuous, spatially fused visual features and
+numeric geometry—not through captions, labels, object lists, scene graphs, or
+simulator metadata?
+
+## 2. Exact architecture
+
+`24 complete RGB images -> one Gemma vision pass/image -> 48x48x3072 patch field -> exact RGB-D world projection -> 5 cm persistent voxel map -> all-block hierarchical encoder -> 256 question-independent scene latents -> 1536D continuous Gemma prefix -> local Gemma decoder`
+
+The 3072D field concatenates 768D middle, 768D late, and 1536D native
+language-aligned projected features. Every occupied block is processed; the
+question does not select voxels or scene latents.
+
+### Corrected global-map rover operator path
+
+The current Blender operator integration is designed around the precomputed
+global room memory, not the rover's instantaneous camera image. For
+`scene_000001`, 24 complete RGB-D views were each passed through Gemma vision
+once, yielding spatial `48x48x3072` patch fields. Exact simulator depth and pose
+projected those features into 74,699 persistent 5 cm voxels. The all-block scene
+encoder reduces that complete map to 256 question-independent latents; with the
+two non-semantic boundaries, the static scene prefix has shape
+`[1,258,1536]`. Four additional 1536D continuous tokens carry numeric robot
+state.
+
+The current interaction contract is high-level-only. The user supplies an
+outcome such as facing, approaching, or circling through the room. For every
+closed-loop step, actual local Gemma receives the fixed complete scene prefix,
+four continuous robot-state tokens, numeric action-history tokens, and the raw
+user goal. Learned heads select one `MOVE_TO`, `FACE`, or `STOP` action. Gemma
+therefore selects every intermediate waypoint, relative facing change, route
+change after a rejected action, and the final STOP. Deterministic runtime code
+only transforms the exact model output into world coordinates, checks bounds and
+collisions, and executes or rejects that primitive. There is no runtime route
+planner, fallback, substituted action, recovery waypoint, or synthetic STOP.
+Bounded turn/move receipts remain inspectable internal records, not the intended
+user interface.
+
+This corrected mode sets both `initial_scan: false` and
+`auto_scan_after_motion: false`. No rover-camera observation is required before
+the first decision or during goal execution. The map identity, map version, and
+scene-prefix hash are required to remain unchanged throughout a goal; only the
+robot-state and active-prefix hashes advance after movement. Blender's viewport,
+point-map overlay, and any display images are human-only outputs and are not model
+inputs. Runtime environmental-text inputs remain empty: no object inventory,
+caption, oracle relationship, simulator label, or Blender object name is supplied.
+
+The model-only checkpoint package is exactly `policy.safetensors` plus
+`runtime_metadata.json`; frozen Gemma weights remain in their pinned local
+snapshot. The current waypoint DAgger V14 package has weights SHA-256
+`149f5e04de1d8305e642909443f03b96894edc3ece67e4500eacec8f5ca81e7c`.
+It records 258 complete-scene tokens, four robot tokens, 16D numeric history, an
+actual Gemma causal forward, no oracle or environmental-text runtime inputs, and
+an explicit prohibition on deterministic route planners. Its 7,115 training
+rows all come from `scene_000001`; training action accuracy is 99.9719%, with
+0.004970 m mean waypoint error and 0.094552° mean heading error. The cache also
+contains 96 rows from two scene-disjoint validation scenes, but the reported
+configured 24-row disjoint control reaches only 12.5% action accuracy,
+0.122765 m mean waypoint error, 29.5241° mean heading error, and zero STOP
+recall. These metrics make the scope clear: the live result is a one-room
+vertical slice, not evidence of broad unseen-room navigation.
+
+For historical comparison only, the superseded V3 checkpoint recorded 91.45%
+offline action accuracy and V3.3 passed 6/6 on one development-scene benchmark.
+Those paths used numeric convergence and deterministic waypoint planning and do
+not describe the current model-only controller.
+
+The earlier toy UI used the wrong control abstraction: it exposed low-level
+manual commands and attempted one-step JSON actions through an explicitly
+untrained decoder. The model-only integration disables both surfaces. Blender
+does display the furnished 3D room, sampled semantic point-map overlay,
+high-level transcript, scene-token diagnostics, animated rover, and trajectory;
+that UI integration is not itself behavioral acceptance. The fresh V14
+model-loaded lap and two object-goal checks passed; exact measurements and
+limitations are reported in Section 22. V14 is now the practical-rover default
+for this one-room demonstration.
+
+V66b is reported as an **enhanced readout ablation**, not as the strict primary:
+it preserves that complete base prefix and performs no retrieval, but appends four
+continuous tokens computed bilinearly from the cached all-scene signature and the
+current question. Consequently the base-prefix hash is invariant while the full
+environment-conditioned embedding input is not. A strict primary result must use
+one complete environment-conditioned token sequence computed before and reused
+unchanged for every question.
+
+The runnable strict primary is V89.
+It supplies the immutable `[1, 738, 1536]` continuous scene memory directly to
+Gemma, including all 736 environmental payload slots and the native BOI/EOI
+boundaries. The memory is compiled before user-question tokenization and reused
+byte-identically for every question, with no question-derived environmental
+tokens, question-conditioned scene readout, retrieval, or environmental text.
+Its exact eleven-bank release scored
+122/
+138
+(88.41%) on the
+training-authorized scene-one canonical set and passed the independent isolated
+runtime gate. This is a working local single-scene proof, not held-out
+generalization.
+
+V54 remains a runnable legacy strict comparator whose development behavior is
+below the project gate. V75 remains the historical enhanced comparator: it
+attends the complete 256-latent scene but adds four question-conditioned
+continuous control tokens, so its total environment-conditioned input is not the
+strict invariant V89 input.
+
+The learned strict atlas preserves the 256 base scene latents and appends all 96
+continuous probe keys plus four scene-conditioned values per key, giving 738
+tokens including boundaries. Compilation takes no user-question input, and the
+compiler is discarded before chat.
+
+The versioned V2 layout keeps the same 738 tensors but orders them as
+`[BOI][all 480 atlas tokens][all 256 base latents][EOI]`. Its hash-pinned source,
+config, and tests establish lossless reordering plus the exact 0-to-256 direct
+base-latent exposure change for prompt lengths 57--64 in sliding-attention layers.
+Periodic full-attention layers are outside that calculation, and no accuracy or
+generation result is inferred from it. The preregistered PLE-reader follow-up
+would adapt only Gemma's per-layer model projection with a rank-4, unmerged FP32
+LoRA (41,984 parameters). The separate V54
+V1--V5 chain exercised that reader family under its own sealed protocols and
+failed its scene-selectivity gates; it is not an accepted successor.
+
+V81 is a runnable **experimental strict-scene-memory
+candidate**, not a promoted replacement for V75. It serializes exactly two numeric
+runtime files and binds one `[1, 738, 1536]` bfloat16 scene memory with
+canonical hash `a428f5147c815839ae7315a0adab952ab210814fb21dcdc5bf13b167f28a6e37` before any question.
+The 738 tokens contain boundaries, all 480 atlas tokens, and all 256 base scene
+latents; all 96 groups and all 384 scene-value tokens receive positive dense-read
+weight, with no semantic/spatial top-k selection or question-dependent scene
+retrieval. Its three-question live isolation run held both the 738-token memory and
+258-token base prefix invariant, audited 4,204
+reads with zero forbidden accesses, and succeeded while the oracle directory was
+unavailable. The compiler checkpoint and numeric probe bank were not loaded by chat.
+
+V82 adds a 688,130-parameter learned dense reader over the
+same immutable 738x1536 V81 memory. Its positive-floor contract gives every one of
+the 384 atlas values and 256 base latents a nonzero coefficient, uses no top-k or
+question-dependent retrieval, and preserves an exact zero-environment output. On
+the sealed pair- and scene-disjoint historical numeric development fold
+(384 rows across 16 scenes), it
+reached 0.991352 mean control cosine and
+0.029239 normalized MSE; shuffling atlas values changed
+the controls by 0.112454 RMS.
+
+V83 is the strictest direct fixed-memory mechanism tested.
+Gemma receives the exact immutable `[1, 738, 1536]`
+environmental memory directly in its native image-prefix slot: all 738 tokens are
+supplied before the question, with 736 continuous payload tokens plus native BOI/EOI.
+The same memory is reused unchanged for every question. There is no separate
+question-conditioned environmental reader, retrieval, top-k selection, or control
+activation, and the number of question-derived environmental tokens is exactly zero.
+The native boundary, image-modality, and PAD-PLE layout checks passed.
+
+V84 and V84.1 now provide authenticated causal-wiring
+evidence over the strict immutable-memory surface. Both use complete
+`[1, 738, 1536]` continuous memories compiled before the
+question and supplied directly to Gemma's native image-prefix slot. All 738
+memory tokens remain present and byte-invariant; environmental readout, retrieval,
+top-k selection, and control tokens are absent, and the count of question-derived
+environmental tokens is exactly 0.
+
+The original V84 four-update answer-NLL wiring smoke passed its declared loss
+gates: mean correct-scene NLL fell from
+5.284232 to
+3.165234, and both rows improved with a
+nonzero finite gradient on every update. It did **not** separate the pair in
+generation: both final greedy answers remained `under the table`, with 0/2 exact.
+
+The separately preregistered V84.1 follow-up restarted a fresh 55,296-parameter
+rank-4 bridge and ran the fixed 32-update two-scene paired-wrong-memory-margin
+protocol. Mean correct-scene NLL fell from
+5.284232 to
+0.030677. For the identical question,
+`scene_000019` produced exact `on`
+(correct NLL 0.032218475, paired-wrong-minus-correct
+margin +2.590780955); `scene_000020` produced
+exact `under` (correct NLL
+0.029135911, margin
++1.378014477). This establishes a
+preregistered **two-scene causal overfit/wiring result**, not held-out scene
+understanding. No development behavior, sealed historical behavior set, official
+split, deferred-final split, or oracle was opened. Runtime promotion is not
+authorized for either checkpoint, and no held-scene generalization is claimed.
 
 ## 3. Hardware used
 
 | Item | Measured value |
-| --- | --- |
+|---|---:|
 | Architecture | arm64 |
-| Processor identifier | arm |
-| Logical / physical CPUs | 12 / 12 |
 | Unified memory | 24.0 GiB |
-| Free disk at inspection | 136.0 GiB |
-| PyTorch MPS built / available / smoke | True / True / True |
-
-The exact Apple chip model is not present in the current machine-report JSON; the report therefore does not guess it.
+| macOS | 26.5 |
+| MPS available | true |
+| Blender | Blender 5.2.0 LTS |
 
 ## 4. Software versions
 
-| Component | Version / revision |
-| --- | --- |
-| macOS | 26.5 |
-| Python | 3.12.13 |
-| Blender | Blender 5.2.0 LTS |
-| uv | uv 0.10.11 (Homebrew 2026-03-16) |
-| PyTorch | 2.13.0 |
-| Vision weights | openai/clip-vit-base-patch16 @ 57c216476eefef5ab752ec549e440a49ae4ae5f3 |
-| Language weights | Qwen/Qwen2.5-0.5B-Instruct @ 7ae557604adf67be50417f59c2c2f167def9a775 |
+Python 3.12.13, PyTorch 2.13.0, Blender
+5.2.0 LTS, Transformers 5.14.1 in the isolated Gemma environment, and the pinned
+official MCP Python SDK 2.0.0.
 
-## 5. Preserved legacy vision encoder
+## 5. Vision encoder selected
 
-`openai/clip-vit-base-patch16` at pinned revision `57c216476eefef5ab752ec549e440a49ae4ae5f3`. One complete 224×224 image produces a localized 14×14 patch grid; no manual patch crops are independently encoded. The preserved legacy aligned slice uses `maskclip_value`.
+`google/gemma-4-E2B-it`, pinned revision
+`3e22461f65e89153144f8adb70e3b8c2cc9845a7`. Each complete image is encoded once;
+no manual crop-and-reencode loop is used.
 
-## 6. Preserved legacy language model
+## 6. Language model selected
 
-`Qwen/Qwen2.5-0.5B-Instruct` at pinned revision `7ae557604adf67be50417f59c2c2f167def9a775`. Scene latents are passed through `inputs_embeds`; no scene caption or decoded object list is interposed. CLIP is MIT-licensed and Qwen2.5 is Apache-2.0 according to the project records.
+The local Gemma 4 E2B instruct decoder from the same checkpoint. The frozen base
+accepts `inputs_embeds` plus Gemma's required per-layer embedding stream. No cloud
+inference API is used.
 
-## 7–11. Preserved legacy representation dimensions and scan scale
+## 7. Feature dimensions
 
-| Parameter | Value |
-| --- | --- |
-| Scan images | 24 |
-| Render resolution | 224 × 224 |
-| Feature layout | middle 768 + late 768 + aligned 512 = 2,048 |
-| Aligned method | maskclip_value |
-| Stored semantic dtype | float16 |
-| Voxel size | 0.050 m |
-| Occupied voxels | 74,699 |
-| Raw observations | 301,056 |
-| Tokenizer input voxels | 8,422 |
-| Occupied spatial blocks | 3,019 |
-| Global scene latents | 256 |
-| Scene encoder dimension | 384 |
-| LM hidden dimension | 896 |
-| Continuous prefix shape | [1, 258, 896] |
+3072D float16 features are retained in the raw
+map with the identity semantic codec.
 
-![Camera scan montage](figures/scan_montage.png)
+## 8. Number of scan images
 
-## 12–13. Training dataset and split
+24 complete RGB-D views in the center scan.
 
-QA records: `train=823, validation=260, test=274`. Scene split metadata: `{"test": ["scene_000005", "scene_000006"], "train": ["scene_000001", "scene_000002", "scene_000003", "scene_000004", "scene_000007", "scene_000008"], "validation": ["scene_000009", "scene_000010"]}`.
+## 9. Voxel size
 
+0.05 m.
 
-## 14. Preserved legacy training
+## 10. Number of occupied voxels
 
-| Measurement | Value |
-| --- | --- |
-| Selected run namespace | multiscene_anticollapse |
-| Scene-encoder architecture | spatial_coverage_resampler_v2 |
-| Completed / target epochs | 2 / Not measured |
-| Latest checkpoint epoch | 2 |
-| Latest checkpoint train loss | 0.962692 |
-| Best checkpoint epoch | 2 |
-| Best checkpoint loss | 0.962692 |
-| Best validation loss | 0.752224 |
-| Scenes in checkpoint | 6 |
-| Selected-run training time | Not measured |
-| Peak memory | Not measured |
+74,699 in `scene_000001`, fused from
+301,056 observations.
 
-![Training loss curve](figures/training_loss.png)
+## 11. Scene tokens
 
-### Adapter-generation lineage
+256 global latents projected to
+1536 dimensions. The complete scene prefix is
+built before question text.
 
-- **v1 multi-scene:** 6 training scenes, 5 epochs, best validation loss `0.385679`, elapsed `903.9 s`.
-- **v2 anti-collapse:** architecture `spatial_coverage_resampler_v2`; completed/target epochs `2 / Not measured`.
-- The v1 held-out score is retained as a failure result, not promoted as evidence of scene-conditioned language behavior.
-- The CPU-only, no-training v2 diagnostic increased projected pairwise scene-change magnitude by `255.9×–607.7×`. This is structural evidence only, not a QA result.
+## 12. Training dataset size
 
-## 15. Preserved legacy static QA failure result
+V66b preregisters 576 training-only questions and
+12 pair-held-out folds. Its training-only CV produced 409/571 supported exact answers, but only 37/75 changed-side answers and 5/35 complete changed pairs; the fail-closed gate withheld the checkpoint.
 
-| Metric | Result |
-| --- | --- |
-| Normalized exact accuracy | 74.8% |
-| Order-insensitive list accuracy | 0.0% |
-| Count accuracy | 100.0% |
-| Spatial-relation accuracy | 78.8% |
-| Presence precision | 100.0% |
-| Presence recall | 66.7% |
+V67's immutable preregistration and training-only numeric screen are authenticated. Across twelve pair-held-out folds it scored 482/571 supported classes and 52/75 changed classes. It failed exactly three locked gates: complete class units 13/35 (minimum 15), prediction-changing units 14/35 (minimum 20), and positive own-over-opposite sides 47/70 (minimum 53). The fail-closed protocol authorized no Gemma generation or full run, and no V67 checkpoint was published.
 
-![Accuracy by question type](figures/accuracy_by_question_type.png)
+V68's three-arm regularized numeric grid is
+authenticated end to end. Every arm executed all twelve pair-held-out folds;
+the builder independently recomputed every fold aggregate and gate.
 
-Artifact lineage: **v1** (`/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/predictions/multiscene_test.jsonl`).
+| Preregistered arm | Supported | Complete units | Prediction changes | Positive margins |
+|---|---:|---:|---:|---:|
+| balanced_all_value_anchor | 489/571 | 13/35 | 14/35 | 47/70 |
+| interaction_only_anchor | 484/571 | 13/35 | 14/35 | 50/70 |
+| strong_all_value_anchor | 489/571 | 14/35 | 17/35 | 50/70 |
 
-**Interpretation:** these are genuine held-out structured scores, but they do not demonstrate use of scene-specific content. The v1 wrong-scene, semantic-shuffle, position-shuffle, and geometry-only controls matched or slightly exceeded the primary score.
+All three arms failed exactly the same locked gates. The strongest arm,
+`strong_all_value_anchor`, missed complete units by
+1, prediction-changing
+units by 3, and
+positive own-over-opposite sides by
+3. The grid used
+no Gemma generation, selected no arm, launched no full behavioral run, and
+published no V68 checkpoint.
 
-### Preserved legacy CLIP semantic-map prerequisite
+V69's transition-balanced pair-augmentation grid is
+authenticated end to end. The builder independently recomputed each executed
+arm's twelve fold aggregates, unchanged gates, and first-pass selection.
 
-| Metric | Observed | Random control | Lift |
-| --- | --- | --- | --- |
-| Top-1 localization | 61.5% | 8.1% | 53.5% |
-| Hit@100 | 92.3% | 55.7% | 36.6% |
-| Precision@100 | 54.9% | 8.1% | 46.9% |
+| Preregistered arm | State | Supported | Complete units | Prediction changes | Positive margins |
+|---|---|---:|---:|---:|---:|
+| balanced_extrapolation_010 | failed | 487/571 | 15/35 | 18/35 | 50/70 |
+| balanced_extrapolation_010_question_mix_010 | failed | 488/571 | 15/35 | 17/35 | 49/70 |
+| balanced_extrapolation_020_question_mix_015 | failed | 488/571 | 15/35 | 16/35 | 49/70 |
 
-Cross-view consistency: same-voxel cosine `0.7903` versus different-voxel `0.7223`; margin `0.0680` across `174,405` same-voxel view pairs.
+Every executed arm failed at least one unchanged gate. No Gemma generation, full behavioral run, or checkpoint publication was authorized.
 
-![Semantic localization by category](figures/semantic_localization_by_category.png)
+V70's preregistered single-arm 32-low-frequency-moment
+screen is authenticated end to end. It changed only the fixed DCT scene-signature
+count from 8 to 32, retained the exact V68 `strong_all_value_anchor` foundation,
+processed all 256 scene latents, and independently held out each of the twelve
+counterfactual pairs. It scored 484/
+571 supported classes and
+55/75 changed
+classes. It met the complete-unit gate exactly at
+15/35, but
+failed exactly two locked gates: prediction-changing units
+16/35
+(minimum 20) and positive
+own-over-opposite sides 51/
+70 (minimum
+53).
 
-## 16. Preserved legacy counterfactual failure result
+The richer signature improved continuous pair diagnostics over V69's strongest
+executed arm—mean pair-delta cosine rose from 0.394 to
+0.500, mean own-over-opposite margin from
+0.090 to 0.119, and positive pair
+deltas from 26/35 to 30/35—but prediction
+changes regressed from 18/35 to 16/35.
+Therefore the 32-moment hypothesis did not clear the discrete causal gate. The
+fail-closed protocol ran no Gemma generation, atlas compilation, or full
+behavioral evaluation and published no V70 checkpoint.
 
-| Metric | Result |
-| --- | --- |
-| Eligible pairs | 134 |
-| Pair accuracy | 73.9% |
-| Changed when expected | 0.0% |
-| Invariant when expected | 99.2% |
+V71's preregistered one-arm multiscale screen is
+authenticated end to end. Two independent value paths processed fixed DCT[0:8]
+and DCT[0:32] signatures over every one of the 256 scene latents, with separate
+scene/question projections, trunks, and output heads. One global fusion scalar
+was fitted only on each training fold; its branch-8 weight remained effectively
+equal at 0.499998–
+0.500006. The exact V69
+`balanced_extrapolation_010` augmentation arm was reused without held-row tuning.
 
-![Counterfactual consistency](figures/counterfactual_consistency.png)
+Across twelve pair-held-out folds, V71 scored
+489/571 supported
+classes, 57/75
+changed classes, 17/
+35 complete units, and
+28/
+35 positive pair deltas. It failed exactly two
+unchanged gates: prediction-changing units were
+17/35
+(minimum 20, short 3) and positive
+own-over-opposite sides were 52/
+70 (minimum 53, short
+1). Thus independent
+multiscale branches improved complete units versus V69/V70 but still did not clear
+the discrete causal gate. No generation, atlas, full run, or checkpoint occurred.
 
-**Failure:** none of the expected-change pairs changed answer. High aggregate pair accuracy is dominated by invariant pairs and must not be read as counterfactual success.
+V72 tested question-adaptive fusion of the same
+complete all-latent 8- and 32-moment branches. Its first pair-disjoint development
+fold used no held rows or held teacher outputs during calibration, produced
+92 distinct question-weight
+vectors, and still performed worse than the frozen 32-moment branch on the omitted
+pair: adaptive complete units were 1/4
+versus 2/4, prediction changes
+were 1/4 versus
+2/4, and positive
+own-over-opposite sides were
+5/8 versus
+6/8. The sealed
+terminal rule stopped all remaining development folds and withheld the full
+numeric screen, internal validation, Gemma generation, and checkpoint publication.
+V72 is an authenticated development-negative mechanism test, not a promoted model.
 
-## 17. Preserved legacy grounding result
+The next full-scene reader sequence now has
+two terminal negatives and one promoted V75 candidate with completed one-shot
+official validation. V73's
+full-scene cross-attention reader scored
+16.19% broad supported accuracy,
+4.00% on changed sides, and
+0 prediction-change units; the frozen DCT-40 comparator scored
+21.93%,
+16.00%, and
+18 prediction-change units. V73 therefore
+failed its numeric screen. V74 then cleared all eight teacher-proxy numeric gates
+(86.42% broad,
+72.00% changed,
+12 complete units), but the required
+16-row local-Gemma smoke fell to 2/16
+versus 6/16 for frozen V54 and only
+4/16 with the wrong scene. V74 was
+rejected. A bounded historical-train NLL repair reduced mean answer NLL from
+6.610632 to
+3.855856 and raised train exact sides
+from 2/18 to
+11/18, while using zero held
+optimization rows; its held smoke remained
+6/16, identical to frozen V54,
+with zero correct-over-wrong-scene advantage. V75's nonlinear coefficient decoder
+again cleared all eight numeric proxy gates
+(88.51% broad,
+72.00% changed,
+14 prediction changes), but its measured
+local-Gemma smoke reached only 4/16,
+versus 5/16 under the wrong scene, with
+4 prediction-change units.
+A subsequent V75 historical-train-only NLL repair reduced train NLL from
+7.562226 to
+2.506602, then reached
+9/16
+(56.25%) on the untouched
+training-pool scene-disjoint smoke versus
+6/16 for V54 and
+6/16 with the wrong scene: an
+18.75% gain. It changed
+only 2/8 paired
+predictions in that small smoke, so the complete internal-development gate was
+required. That full 384-row run is now complete: V75 answered
+295/384
+(76.82%) correctly versus
+148/384
+(38.54%) for the exact cached V54 baseline,
+a 38.28% gain. With each row's paired
+counterfactual scene substituted, original-target accuracy was
+278/384
+(72.40%). On the 52
+physically changed sides, the correct scene produced
+31/52 original-target
+answers, while the wrong paired scene produced only
+14/52 original-target but
+31/52 paired-target answers.
+Complete units moved from 6/26
+under the correct scene to
+0/26 on the old target
+and 6/26 on the paired
+target; 24/52 outputs changed
+between scene arms. This is positive causal paired-scene evidence. It remains an
+**internal development** result from the training-pool pair/scene-disjoint split,
+not official validation. V75 was subsequently promoted into the exact two-file
+runtime release `data_gemma4/runtime/checkpoints/gemma4_v75_nll_control_release_v1`. Its live isolation run answered
+3 questions while the oracle, training, and teacher
+artifact directories were renamed and unavailable, then restored them; all
+4,198 audited reads produced zero forbidden
+accesses and no QA/oracle load. The full scene prefix was computed before the
+first question and remained hash-invariant.
 
-| Metric | Result |
-| --- | --- |
-| Grounding coverage | 100.0% |
-| Mean coordinate error | 1.7023 m |
-| Median coordinate error | 1.7134 m |
-| Within 0.5 m | 0.0% |
+At V75's promotion, `make demo` launched this path; the current static-chat default
+is strict V89, and V75 is preserved as the historical question-conditioned
+comparator. Its five-question audited sample reused one prequestion
+`[1, 258, 1536]` prefix over all questions and
+recorded 5,197 file reads with zero forbidden
+accesses. It answered the first two bounded examples `yes` and `red` correctly.
+Its well-formed third output, `right`, is physically incorrect; the corrected
+bowl-to-chair relation is `left`. The two broader support questions historically
+produced malformed short strings.
+The current vocabulary-free output guard—without an answer mapping or codebook—now
+fails closed as `unknown` for both. This removes malformed chat output but does not
+make broad list QA supported; the live conversation remains illustrative rather
+than an accuracy claim.
 
-## 18. Preserved legacy ablation results
+The sealed one-candidate official validation then scored
+167/216
+(77.31%) canonical and
+76.39% normalized exact across six
+untouched validation scenes. Per type: attribute 30/48, count 40/42, metric 6/6,
+orientation 6/6, presence 38/42, spatial relation 28/48, and support 19/24. The
+paired counterfactual subset reached
+7/12 complete units,
+17/24 correct sides, and
+8/12
+prediction-changing units, with a complete success in all three physical-change
+families. Nine of ten preregistered gates passed. The overall official gate is
+**failed**, not passed, because spatial relations reached 58.33% against the 60%
+minimum. Grounding is also weak: mean coordinate error
+2.136 m and 0/132 targets
+within 1 m. Answer references were available only to the isolated scorer; the
+prediction process used no simulator oracle, answer references, environmental
+text, or question-dependent scene retrieval.
 
-| Condition | Exact | Spatial relation | Changed when expected | Exact Δ vs primary |
-| --- | --- | --- | --- | --- |
-| primary | 74.8% | 78.8% | 0.0% | 0.0000 |
-| wrong_scene_prefix | 75.2% | 79.4% | 0.0% | 0.0036 |
-| semantic_shuffle | 75.5% | 79.4% | 0.0% | 0.0073 |
-| position_shuffle | 75.2% | 79.4% | 0.0% | 0.0036 |
-| geometry_only | 75.2% | 79.4% | 25.0% | 0.0036 |
-| semantics_without_xyz | 75.2% | 79.4% | 0.0% | 0.0036 |
-| remove_rgb | 75.2% | 79.4% | 0.0% | 0.0036 |
-| remove_normals | 74.8% | 78.8% | 0.0% | 0.0000 |
-| empty_scene_prefix | 0.0% | 0.0% | 0.0% | -0.7482 |
+V75 preserves and reuses the complete 256-latent scene prefix, and every scene
+latent influences its four continuous control tokens. Those four control tokens
+are question-conditioned, however, so the total environment-conditioned input is
+not invariant even though the base scene prefix is. V75 is therefore strong
+continuous-scene evidence and a promoted runtime, but not a strict fixed-input
+primary-path or final project-acceptance result.
 
-![Ablation accuracy](figures/ablation_accuracy.png)
+V76 then trained a pair-contrast objective over all 40 historical changed units
+(80 sides, two cycles). Training answer NLL fell from
+7.900908 to
+4.371634 and mean paired margin rose from
+4.154925 to
+5.632363 in
+471.26 seconds. But the held Gemma smoke was
+6/16, tied with both V54 and wrong-scene,
+with zero correct-over-wrong advantage. It was rejected without a runtime
+checkpoint. Importantly, V76 started from raw pre-NLL V75 (`182481dd…`), not the
+promoted NLL candidate (`d0127553…`), and is superseded by V75.
 
-**Provenance limitation:** this aggregate does not record its checkpoint or architecture. The numeric rows are not automatically attributed to the selected v2 checkpoint.
+V77 started from promoted NLL V75 and made one bounded historical-training-pool
+repair: 72 of 576 available rows, balanced across 28 answer classes and 47 question
+templates, for nine optimizer steps. On its separate 24-row measurement subset,
+correct-answer NLL fell from
+2.518216 to
+1.604626, while the negative-answer
+margin rose from 6.736418 to
+7.248879. Its bounded 16-row
+pair-disjoint Gemma smoke reached 9/16
+versus 6/16 for V54 and
+6/16 with the wrong scene, a positive
+3/16 correct-over-wrong difference. However, predictions changed across only
+2/8 paired units. Its now-complete
+384-row internal screen reached
+299/384
+(77.86%) versus V75's
+295/384
+(76.82%), a gain of only four
+answers, with 35
+versus 33 paired units
+changing. This remains internal-development evidence; no matched full wrong-scene
+arm was run. V77 is not promoted, no runtime checkpoint was published, and official
+validation was not reopened. This is not a promotion. Protected official test,
+deferred-final, and oracle
+data remain unopened by the reported training and prediction paths.
 
-Artifact-supplied interpretation: **A nonzero prefix is necessary, but the first multiscene checkpoint is insensitive to its scene-specific content.**
+V85 is the first authenticated multi-scene training result
+on the strict immutable 738-token memory surface. It froze base Gemma and all
+inherited adapters, trained one fresh 55,296-
+parameter rank-4 bridge for one fixed epoch over
+576 rows from
+24 scenes, and selected fixed update
+72 before opening development behavior. Every
+scene supplied one `[1,738,1536]` bfloat16 memory compiled before the question;
+there were no question-derived environmental tokens, retrieval results, top-k
+selections, or control tokens.
 
-### v1 collapse diagnosis
+On the pair- and scene-disjoint **development** split, V85 scored
+214/
+384
+(55.73%) canonical exact,
+versus the answer-frequency majority baseline of
+62/
+384
+(16.15%).
+Spatial-relation accuracy was
+52.50%. Predictions changed on
+8/
+26 counterfactual units and both sides were
+correct on 4/
+26. All preregistered gates authorizing a
+separate runtime-packaging test passed. This is development evidence, not official
+validation. The [accuracy-by-type figure](reports/gemma4/figures/v85_development_accuracy_by_type.png) is a deterministic
+post-hoc rendering bound to SHA-256 `4fee17cd5581663d5b01b0bddcfa08cf5c89d067d36dda7c83b330fa4c90b95f`; it ran no new
+inference.
 
-The counterfactual signal is present in raw and aggregated maps and remains visible in spatial block tokens. The dominant loss occurs in the global Perceiver resampler: its 256 native latents are almost duplicate vectors, and scene-pair relative L2 falls by roughly two to three further orders of magnitude before LM projection. Distinct SHA-256 hashes therefore certify only bitwise inequality, not a behaviorally useful separation.
-Measured raw-to-projected attenuation: `28549.6×–56551.4×`.
+Two fail-closed setup attempts preceded the definitive smoke: attempt 1 rejected
+a stale frozen-source-stack digest before any question, and attempt 2 refused a
+candidate because the smoke harness omitted its explicit allow-candidate flag.
+Both had zero forbidden reads. A preregistered scene-39 replay then reproduced all
+24/24 sealed development
+predictions exactly with the invariant `f2587d717746678c6d08d14e46ea5e51465f065b586938ce8595cd81a1cfa36a` memory,
+zero forbidden reads, and the oracle physically unavailable. That rules out a
+runtime-packaging mismatch; it is **not** a ground-truth rescore, a new accuracy
+measurement, or promotion evidence.
 
-### v2 structural diagnostic
+The independent unseen scene-1 strict smoke completed but failed behavior. It
+returned `no` for chair presence and
+`blue` for bowl color, both wrong. It returned
+`left` for bowl relative to chair, which is
+correct. The original sealed smoke had predeclared `right` by reversing subject
+and reference; a separate hash-bound post-hoc oracle correction preserved that
+source and establishes the corrected score as
+1/
+3. The same complete memory/input hash
+was used for all questions, the oracle was unavailable, and 5,208 reads contained
+zero forbidden accesses. Behavior still failed decisively, so V85 is **not
+promoted**. That failure left V75 as the default at the time; the later accepted
+strict V89 release is the current static-chat default.
 
-The v2 artifact compares the legacy checkpoint under the old and new resamplers without retraining. It tests signal preservation only; it must not be cited as held-out language behavior.
-| Pair change | Native signal gain | Projected signal gain | v2 native latent cosine | v2 projected cosine |
-| --- | --- | --- | --- | --- |
-| color_swap | 30.3 | 312.5 | 0.8734 | 0.9328 |
-| mirror_lr | 63.8 | 607.7 | 0.8734 | 0.9328 |
-| cube_support | 25.9 | 255.9 | 0.8734 | 0.9328 |
+V86 completed the preregistered strict single-scene
+wiring/overfit experiment and is a terminal negative for its locked acceptance
+gate. It retained the exact immutable `[1,738,1536]` memory, compiled it before
+questions, supplied all 738 tokens directly to Gemma, and used no
+question-conditioned environmental readout, retrieval, top-k selection, control
+token, or environmental text. Base Gemma and seven inherited V54/V85 banks were
+frozen; only a fresh 110,592-parameter
+rank-8 layer-34 MLP bridge trained. The fixed schedule consumed all
+552 rows over 4 epochs,
+including 12 causal-margin rows, in
+486.18 seconds on MPS. It reached exactly
+92 updates, every gradient and training gate
+passed, and the scene-memory and zero-payload hashes remained invariant.
 
-## 19. Direct multi-view image baseline
+The fixed-final candidate then scored
+86/
+138
+(62.32%) canonical exact on
+all 138 training-authorized scene-1 rows, below the locked 80% minimum by
+25 correct answers. By type:
+attribute 4/18, count 9/9, metric 0/1, presence 19/22, spatial relation 54/86,
+and support 0/2. The [accuracy-by-type figure](reports/gemma4/figures/v86_scene1_accuracy_by_type.png) is a
+deterministic post-hoc rendering of that sealed aggregate and ran no new
+inference.
 
-Not measured.
+The bounded generic evaluation smoke nevertheless answered all
+3/3 predeclared questions correctly:
+`yes`, `red`, and the physically corrected `left`. The causal zero-payload control
+also passed: correct memory mean NLL was
+0.715594 versus
+2.193265 for zero payload, a positive
+1.477671 gap, with
+2/3 canonical prediction changes.
+The complete input hash was identical across every question and 81 evaluation
+reads contained zero protected/oracle access. These are real causal and mechanism
+positives, but the sole failed all-row accuracy gate is decisive. Per the
+preregistration, it blocked the independent oracle-unavailable runtime smoke;
+no V86 runtime package was promoted, V85 evidence was not mutated, and V75 remains
+the default. This is single-scene overfit evidence, not held-out generalization or
+official validation.
 
+![V86 training-authorized single-scene accuracy by question type](../reports/gemma4/figures/v86_scene1_accuracy_by_type.png)
+
+The figure is a sealed diagnostic of the failed single-scene model gate, not a
+held-out result: overall accuracy was 62.32% against the preregistered 80% threshold.
+
+V87 then tested a preregistered class-balanced successor
+without changing the strict environmental-input contract. It retained the same
+immutable `[1,738,1536]` complete scene memory, compiled before questions, with all
+738 tokens supplied directly to Gemma and no question-dependent scene processing,
+retrieval, control tokens, or environmental text. V54, V85, and V86 remained frozen;
+only a new 110,592-parameter rank-8 layer-34
+MLP gate bridge trained. The fixed eight-epoch schedule consumed every one of 138
+rows once per epoch (1,104 rows total), including
+24 causal-margin rows, and reached exactly
+184 updates in
+968.25 seconds on MPS. All eight training-integrity
+gates passed, every update had a positive finite gradient, and the scene-memory and
+zero-payload hashes remained invariant.
+
+The sealed fixed-final evaluation reached
+103/
+138
+(74.64%) canonical exact. That is
+17 more correct answers and
+12.32 percentage points above V86, but still
+8 correct answers short of
+the locked 80% overall gate. Presence was 22/22 and spatial relations were 63/86
+(73.26%), both above their floors; count was 9/9, metric 1/1, and support 1/2.
+Attribute accuracy remained only 7/18 (38.89%), two correct answers short of its
+locked 50% floor.
+
+Crucially, the predeclared generic smoke regressed from V86's 3/3 to
+0/3. Its observed answers—`no`, `wood`, and
+`right`—were **all incorrect** against `yes`, `red`, and `left`; `right` is not
+reported anywhere as a success. The zero-payload causal check still passed, with a
+1.618152 mean NLL advantage and
+2/3 prediction changes. The complete
+prefix/input invariance and 83-read zero-protected-access evaluation checks also
+passed. Nevertheless, three locked model gates failed: overall accuracy, attribute
+accuracy, and the 3/3 generic smoke. Therefore the independent oracle-unavailable
+runtime smoke was blocked, no V87 runtime package was built or promoted, and the
+default runtime did not change. This remains training-authorized single-scene
+development evidence, not held-out generalization or official validation.
+
+![V87 training-authorized single-scene accuracy by question type](../reports/gemma4/figures/v87_scene1_accuracy_by_type.png)
+
+The figure is a deterministic post-hoc rendering of the sealed aggregate. It loaded
+no model, QA, oracle, or predictions and performed no new inference.
+
+V88 followed with a preregistered, retention-aware
+development-only correction while preserving the strict environmental-input
+contract. The same immutable `[1,738,1536]` complete scene memory was compiled
+before questions, every one of its 738 tokens was supplied directly to Gemma, and
+there were no question-conditioned environmental tokens, retrieval, control
+tokens, or environmental text. V85, V86, and V87 remained frozen; only a fresh
+57,344-parameter rank-16 adapter on the
+disjoint layer-27 attention `q_proj` trained.
+
+The fixed four-epoch schedule used 282
+items per epoch and consumed 1,128 micro-rows:
+all 138 canonical rows, 35
+V87 hard-error replays, and 86
+inverse-relation rows per epoch, plus deterministic training-only paraphrases and
+smoke coverage. It included 20 causal
+margin rows and completed exactly 188 optimizer
+updates in 1508.05 seconds on MPS. All eleven
+training-integrity gates passed with zero protected reads. Launch provenance also
+records two harmless pre-training invocation failures—neither loaded the full
+model nor created a candidate—before the one complete fixed-final run; no
+intermediate behavior selected the checkpoint.
+
+The sealed fixed-final evaluation reached
+107/
+138
+(77.54%) canonical exact. This
+was 4 more correct answers and
+2.90 percentage points above V87, but still
+4 correct answers short of
+the locked 80% overall gate. Attribute accuracy improved to
+11/18
+(61.11%); presence was
+21/22, spatial
+relations 64/
+86, count
+9/9, metric
+1/1, and support
+1/2. Every
+preregistered model gate except overall accuracy passed.
+
+The bounded smoke answered 3/3 with
+`yes`, `red`, and the physically correct `left`. All three smoke questions were
+explicitly represented in the V88 training schedule, however, so this is a
+development-known wiring/demo check—not held-out evidence or a generalization
+result. The zero-payload control passed with a
+1.895403 mean NLL advantage and
+2/3 prediction changes. The complete
+738-token input remained byte-identical across questions, and all 85 evaluation
+reads had zero protected/oracle accesses. Because 107/138 failed the unchanged
+overall gate, the independent oracle-unavailable runtime smoke was correctly
+blocked; no V88 runtime package was built or promoted, and the default runtime did
+not change. No held-out or official-validation claim is made.
+
+![V88 training-authorized single-scene accuracy by question type](../reports/gemma4/figures/v88_scene1_accuracy_by_type.png)
+
+The figure is a deterministic post-hoc rendering of the sealed development-known
+aggregate. It loaded no model, QA, oracle, or predictions and performed no new
+inference.
+
+V89 is a sealed, source-authenticated post-V88
+single-scene **training-set development** experiment. It freezes the ten-bank
+V85+V86+V87+V88 stack and preregisters one disjoint rank-8
+adapter on layer 27 attention `o_proj` (28,672
+trainable parameters). Its fixed retention schedule has
+310 rows per epoch for 3 epochs
+(930 micro-rows and 155
+optimizer updates), including all 31 sealed V88 errors, all 107 V88-correct
+retention anchors, and 18 causal-margin rows.
+
+Fixed-final MPS training consumed all 930
+micro-rows and 155 optimizer updates; every
+training gate passed and protected/oracle reads were zero. The fixed checkpoint
+scored **122/
+138
+(88.41%)** exact on the
+138 canonical scene-one training-authorized questions, a gain of
+15 correct answers
+(10.87 percentage points) over V88. It
+passed all 11 preregistered model gates. By type: attribute 15/18, count 9/9,
+metric 1/1, presence 22/22, spatial relation 74/86, and support 1/2.
+
+The correct continuous memory beat the zero-payload control by
+2.028 mean NLL and changed two of
+three causal predictions. The exact `[1, 738, 1536]` scene prefix was compiled
+before each question, reused byte-identically, and supplied with zero
+question-derived environmental tokens, no retrieval, and no environmental text.
+
+The three demo-smoke questions and expected `yes`, `red`, and `left` answers were
+explicitly included in training; the observed 3/
+3 is therefore development-known and **not held out**. The
+separate strict-runtime process nevertheless passed all 15 independent runtime
+gates with the oracle physically unavailable: its file audit found zero forbidden
+reads, it loaded no training or evaluation report, and all three questions reused
+identical prefix and total-environment hashes. The exact two-file, eleven-bank
+release (`9408092e589834671c79394260b67198262e4d2a4f1fe01f3f772fed6b4c2b1b`) is promoted as the **strict
+scene-one experimental runtime**. This is runnable local scene-one evidence, not
+held-out generalization or official validation.
+
+![V89 training-authorized single-scene accuracy by question type](../reports/gemma4/figures/v89_scene1_accuracy_by_type.png)
+
+The figure is a deterministic post-hoc rendering of the sealed aggregate. It
+loaded no model, QA, oracle, or predictions and is not runtime evidence.
+
+The offline generator now has source and synthetic-test coverage for
+object_location, containment, viewpoint_relative, metric, uncertainty. It uses fixed yaw-0 X-right/Y-forward
+viewpoint geometry, exact ray-hit visibility evidence, ambiguity gates, and
+structured target/reference coordinates. This is an implementation-capability
+record only: the builder regenerated no dataset, and model accuracy on these new
+families remains unmeasured.
+
+The actual V54 PLE-reader V1--V5 chain is now
+terminal and hash-authenticated separately from the earlier design-only
+preregistration. V1 failed its numerical smoke tolerance; V2 aborted before
+training on diagnostic serialization; V3 aborted before optimizer construction
+on MPS memory. V4 completed 40 updates and V5 completed
+80 updates, two pair cycles, and every one of its
+496 broad rows exactly once. V5 reduced
+answer NLL from 3.235832 to
+2.944323, but wrong-prefix positive sides regressed from
+30/52 to
+28/52 and
+complete changed units from 12/
+26 to 9/
+26. Greedy evaluation was therefore skipped and no reader
+checkpoint was published. Deferred and final splits remained unopened.
+
+The real Gemma tool-decoder V2.2 run is
+also terminal and hash-authenticated. It completed
+64 optimizer updates across
+512 microbatches; training loss fell from
+2.414296 to
+0.234181. On all
+2,268 rows from
+8 held-out scenes, answer-token NLL was
+0.377758 and token accuracy was
+87.13%, but exact sequence
+accuracy was only 17.42%,
+valid-schema rate 26.41%, and
+tool accuracy 24.12%. Those last
+three locked gates failed. The protocol correctly skipped greedy generation and
+published no runtime checkpoint; consequently no learned-decoder runtime or
+navigation-success claim is made.
+
+The fixed-prefix upper-decoder
+reader V6 also has an immutable terminal result, but it failed before reader
+gradients. Its one authorized zero-update real-model MPS smoke stopped at the
+preregistered byte-exact full-sequence-versus-answer-tail selected-logit
+equivalence gate. The attempt therefore computed no V6 gradient, constructed no
+optimizer, executed no optimizer step or training update, and published no
+checkpoint. Its whole-execution file audit recorded
+233 unique files, zero forbidden reads, and
+no deferred/final-QA access. The planned 576
+training rows, 384 validation rows,
+and 96 updates were never executed. This
+smoke failure says the two forward paths were not byte-identical under the real
+model; it provides no behavioral evidence for or against the proposed reader.
+
+The independently released V6.1
+successor corrected V6's invalid byte-equality criterion and completed its one
+authorized zero-update real-model MPS smoke. Objective equivalence passed: raw
+logit maximum difference was 0.125,
+RMS difference 0.00037811027635, per-token
+NLL maximum difference 0.0, and maximum
+Jensen-Shannon divergence 1.63732948148e-11. The
+correct, wrong-prefix, and broad branch gradients each passed their locked
+comparisons. Their first-schedule aggregate did not: cosine was
+0.9998925988237569 (minimum
+0.99999) and relative L2 was
+0.0146557515911212 (maximum
+0.005); its 1.000092007
+norm ratio remained in bounds and its full gradient norm was nonzero at
+0.505919538. The terminal gate therefore constructed
+no optimizer, ran no training, and published no checkpoint. Its whole-execution
+audit recorded 240 files and zero forbidden
+reads. Release `4456ebd11d8cbb154236aa6962bfc5875499580ab326068b1b9581f2127e4b33`, attempt
+`ec462122b737cda9bd111afa2a66f187039711e3f211ea3901f2eaa15986e53a`, and terminal
+`099c1fa684439814b58c17223781b745e406d17cc20c65c402159bd0ede18add` are byte-pinned.
+
+V6.2 then removed the disputed
+shape-specialized path entirely and consumed its one released exact-full-forward
+training attempt. It completed all 96
+AdamW updates in 872.414 seconds. Generic
+validation answer NLL improved from
+3.2358 to
+1.9157, and all three retention gates
+passed. The causal scene-selectivity gate did not: expanded positive margins fell
+from 0.6647 to
+0.5941, curated
+complete units fell from 12
+to 11 of
+26, and orientation positive margins
+collapsed from 0.8571
+to 0.1429.
+Because the locked teacher-forced gates failed, greedy evaluation was correctly
+skipped and no checkpoint was published. The whole-execution audit recorded
+246 files, zero forbidden reads, no
+environmental-text runtime inputs, and no deferred/final-scene access. Release
+`c2cc4110549bf6fca6c575a247ef0d3494f85458e7e644e24ad051a64d023258` and terminal
+`e86b417d5edeaedc5f541171845c37d3e740b5b24468fb0b2b062a2b8ae85f12` are byte-pinned.
+
+V6.3 moved the trainable
+surface into Gemma's shared K/V attention projections at physical layers 13 and
+14. Its zero-update full-HuggingFace-forward gradient screen passed for all four
+target modules (30,720 trainable
+parameters). The bounded train-only pilot then consumed each of
+40 paired units exactly once in
+8 AdamW updates. Positive
+wrong-prefix margins improved from 48/80 to
+49/80, complete paired units improved from
+16/40 to 18/40,
+mean margin rose from 0.441833 to
+0.447165, and retention remained bounded at mean KL
+0.000340547 with exact next-token
+top-1 agreement. This is an authenticated positive diagnostic, not a promoted
+adapter: it loaded no validation, deferred/final, or oracle inputs; ran no greedy
+generation; and published no runtime checkpoint. Its terminal authorized only a
+pair-disjoint train-only V6.4 confirmation; that confirmation has since completed
+and failed as reported below. Terminal
+`9c6f7ddef4eeba0a7cd4038b86719c3ce046abdf4a3521045bd0d33e31d37115` is byte-pinned.
+
+V6.4 executed the sole
+authorized hard pair-disjoint confirmation of that exact shared-K/V surface. Its
+split held out 12 units from three
+physical pairs and all 6 associated
+scenes, while training on 28 units
+from 18 disjoint scenes. Twelve
+full-HuggingFace-forward AdamW updates improved the training side—positive margins
+rose from 36/56 to
+39/56 and complete units from
+13/28 to 15/28—
+but did not generalize. Held complete units stayed
+3/12 to 3/12;
+held mean margin fell by 0.016739, and held margin
+softplus worsened by 0.011246. Those two locked
+held-generalization checks failed. Retention and the 126-file isolation audit
+passed, with no oracle, internal-validation, deferred/final, or forbidden reads.
+The terminal authorizes no continuation of this exact attention surface, no
+runtime promotion, and no checkpoint. Result `a909c71e10c2cca5757556dd462132a499b09f05576bb11119bf1b7f424f0414`
+and terminal `7e144231b81d0082d6c90956072f7d2564775005d3b805f2192ed7c57fec442e` are byte-pinned. The
+historical V75-reader blocker was causal pair-disjoint generalization itself, not
+a pending run; V89 is now the static-chat-default strict scene-one path.
+
+## 13. Train/validation/test split
+
+The completed V55 diagnostic used six development scenes and 216 questions. Scene
+splits are disjoint. Deferred final scenes remain untouched by this report builder.
+
+## 14. Training time and peak memory
+
+V66b's twelve numeric fold fits took 105.00
+seconds in aggregate, excluding local-Gemma generation and the separately cached
+teacher construction. Peak memory was not instrumented. The reported wall time is
+therefore incomplete and is not presented as total training time.
+
+V67's numeric-only fold fits took 190.40 seconds in aggregate. This excludes teacher-cache creation and, by design after the failed screen, includes no Gemma generation.
+
+V68's 36 numeric-only fold fits took 682.64 seconds in aggregate. This excludes teacher-cache construction and contains no Gemma generation.
+
+V69's executed numeric-only folds took 1134.36 seconds in aggregate, including their exact V68-strong foundations and V69 augmentation stages. No Gemma generation is included.
+
+V70's numeric-only screen took 385.40 seconds inside 393.31 seconds total wall time, below its 1200-second cap. No Gemma generation is included.
+
+V71 used 767.19 seconds of numeric fitting inside 774.21 seconds total wall time, below its 1200-second hard cap.
+
+V72's one development-fold fusion calibration took 1.412 seconds for 100 numeric optimizer steps.
+
+V73 used 116.80 seconds for its bounded numeric screen. V74's historical-train-only Gemma NLL repair used 163.92 seconds for 54 updates. V75's corresponding repair used 86.79 seconds for 54 updates. Its full correct-scene and wrong-scene internal-development passes took 144.13 and 146.24 seconds. V76's 80-step pair-contrast training took 471.26 seconds. V77's nine-step bounded historical repair took 299.80 seconds; its full internal screen took 144.92 seconds.
+
+PLE-reader V4 took 550.02 seconds and V5 took 1145.14 seconds. V5 peak process RSS was 6.42 GiB. The Gemma tool-decoder V2.2 terminal run took 1672.69 seconds.
+The consumed V6 zero-update smoke took 12.81 seconds. The consumed V6.1 zero-update smoke took 16.75 seconds.
+The consumed V6.2 full-forward training run took 872.41 seconds; peak process RSS was 5.98 GiB and peak reported MPS driver allocation was 14.74 GiB. V6.3's gradient screen took 18.06 seconds and its eight-update pilot took 334.37 seconds.
+V6.4 completed its three-epoch, 12-update pair-disjoint screen in 394.81 seconds, below its 480-second hard ceiling. These timings
+are local measured wall times, not cross-machine benchmarks.
+
+V85's fixed one-epoch, 72-update MPS run took 546.61 seconds for 576 rows.
+
+## 15. Static QA results
+
+The completed V54/V55 development run reached 41.20%
+normalized exact and 42.59% canonical accuracy over
+216 questions. Count accuracy was
+66.67%, spatial-relation accuracy
+56.25%, and presence F1
+22.22%. This did **not** pass the full acceptance gate.
+The exact fixed-prefix CLI and launcher pass structural preflight, but a new live
+three-question transcript is now recorded. It is illustrative only; the scored
+V55 development result remains the behavioral evidence.
+
+The V75 reader first established internal-development evidence on its exact
+matched set: 295/384
+(76.82%) versus
+148/384
+(38.54%) for cached V54. It is a
+pair/scene-disjoint split inside the historical training pool and remains labeled
+as such. The subsequent isolated official validation is distinct: V75 scored
+167/216
+(77.31%) canonical and
+76.39% normalized exact. It passed
+all preregistered gates except spatial relations, whose 28/48 (58.33%) narrowly
+missed the 60% threshold. The sealed V75 runtime is promoted and passed live
+leakage/oracle-and-training-removal checks, but the official validation as a whole
+is recorded as failed and final acceptance is not claimed.
+
+![V75 official-validation canonical accuracy by question type](gemma4/figures/v75_official_validation_accuracy_by_type.png)
+
+*Post-hoc visualization of the already-sealed V75 official-validation aggregate,
+not a new evaluation. Canonical accuracy by question type from the sealed V75 official-validation score.*
+
+The bounded 16-row historical-development control
+did **not** clear promotion: V81 scored 8/16 versus
+6/16 for frozen V54,
+3/16 after atlas-value shuffling,
+1/16 with an exactly zero environmental
+payload, and 9/16 with the paired wrong scene.
+V81 changed 2/8 paired units, but the wrong-scene arm outscored it and both the
+9/16 minimum and +3-over-V54 gate failed. These rows were historical-training-pool,
+pair- and scene-disjoint but not question-disjoint; this is development evidence,
+not official validation. V81 remains experimental and runtime promotion is false.
+
+The subsequent real local-Gemma bounded V82
+behavior run scored
+8/16, versus
+6/16 for frozen V54,
+3/16 with shuffled atlas values,
+1/16 with zero environment, and
+6/16 with the paired wrong scene. The +2
+wrong-scene gap is causal evidence in this small development slice, but V82 still
+missed both its 9/16 candidate minimum and +3-over-V54 gate, tied V81 at 8/16,
+trailed direct V75's 9/16 comparator, and is not promoted or officially validated.
+
+That strict structural success did **not** produce
+behavioral success. The isolated real-Gemma historical-development run scored
+6/16 for direct V83,
+6/16 for frozen V54,
+7/16 with the paired wrong scene,
+6/16 with shuffled atlas values, and
+5/16 with all 736 payload tokens zeroed.
+V83 changed predictions on only
+1/8 counterfactual units.
+It failed the 9/16 candidate, +3-over-V54, correct-over-wrong-scene, and 2/8
+prediction-change gates. These rows are pair- and scene-disjoint historical-
+training-pool development data, not question-disjoint or official validation.
+V83 is authenticated but **not promoted**.
+
+V85's scene-disjoint development and strict-runtime outcome are detailed in
+Section 12. Its 55.73% development aggregate is not official validation or
+runtime-promotion evidence.
+
+## 16. Counterfactual results
+
+V55 answered 11/
+24 changed sides canonically and completed
+1/
+12 paired units. V66b's pair-held-out gate
+answered 37/75 changed sides, completed 5/35 paired
+units, and changed its prediction on 16/35 units. Those
+figures failed the locked gate.
+
+V67's numeric screen changed prediction on 14/35 held units and completed 13/35 units. Its mean pair-delta cosine was 0.455, but those two discrete scene-dependence gates and the own-over-opposite-side gate failed.
+
+V68's strongest arm completed 14/35 held units and changed predictions on 17/35, versus locked minima of 15 and 20. Its 50/70 positive own-over-opposite sides missed the minimum of 53.
+
+V69's strongest executed numeric arm, `balanced_extrapolation_010`, completed 15/35 held units, changed predictions on 18/35, and produced 50/70 positive margins.
+
+V70 completed 15/35 held units and changed predictions on 16/35. Its 51/70 positive margins missed the locked minimum by 2; the prediction-change count missed by 4.
+
+V71 completed 17/35 held units, changed predictions on 17/35, and achieved 52/70 positive margins.
+
+On its single omitted pair, V72 completed 1/4 units and changed 1/4 predictions; the frozen 32-moment branch was better on both measures.
+
+V74 produced no positive correct-over-wrong-scene accuracy after NLL repair. V75's full changed-side control is materially stronger: correct scene/original target 31/52; wrong scene/original target 14/52; wrong scene/paired target 31/52. The corresponding complete-unit counts are 6/26, 0/26, and 6/26, with 24/52 outputs changing. V77's bounded smoke improved correct-scene answers to 9/16 versus 6/16 with the wrong scene, but changed predictions on only 2/8 paired units.
+
+V79 is a separately authenticated, terminal
+historical-training-pool relation/counterfactual repair. It trained only the V75
+dense reader for 15 optimizer steps over
+120 historical rows, including
+48 changed sides, with no held-scene optimization.
+On the locked 28-row, 14-unit scene-disjoint screen, correct-scene scores were
+V75 18/28, V77
+19/28, and V79
+20/28; every wrong-scene arm
+scored 5/28, giving correct-minus-wrong gaps of 13, 14, and 15. But correct-scene
+prediction-changing units were 9/14, 10/14, and 9/14 respectively. V79 therefore
+failed the locked requirement to match the best baseline's prediction-change
+count. The full 384-row evaluation and runtime publication were correctly
+blocked. This is historical-internal negative evidence, not official validation
+or a promoted checkpoint.
+
+![V75 official-validation counterfactual outcomes](gemma4/figures/v75_official_validation_counterfactuals.png)
+
+*Post-hoc visualization of the already-sealed V75 official-validation aggregate,
+not a new evaluation. Per-family complete-unit, correct-side, and prediction-change rates for the sealed official counterfactual subset.*
+
+V6.4's hard pair- and scene-disjoint holdout retained 13/24 positive sides and 3/12 complete units, but mean margin declined from 0.096205 to 0.079467; the causal generalization gate failed.
+
+## 17. Grounding results
+
+V55 mean coordinate error was 2.077 m, which is not a
+successful room-scale grounding result. Separately, the development semantic
+navigation scorer localized 8/
+9 targets within its 0.15 m bounding-box threshold.
+V75's official validation produced coordinates for all 132 grounded targets, but
+mean error was 2.136 m,
+median error 2.242 m, and
+zero targets were within 1 m. The answer score improved substantially; the
+grounding head did not.
+
+![V75 official-validation aggregate grounding summary](gemma4/figures/v75_official_validation_grounding_summary.png)
+
+*Post-hoc visualization of the already-sealed V75 official-validation aggregate,
+not a new evaluation. Aggregate grounding errors and threshold hit rates. The sealed score contains no per-example errors, so no distribution is inferred.*
+
+V78 is a separately authenticated
+**historical training-pool, pair- and scene-disjoint internal-held diagnostic**,
+not official validation. On 94 held rows its grounding sidecar reached
+0.527 m mean error and
+92.55% within 1 m, versus
+2.027 m / 0.00%
+for V54, 2.022 m /
+0.00% for a zero scene,
+2.177 m /
+1.06% after position shuffle, and
+2.232 m /
+20.21% after question shuffle. Those are
+the strong controls. The paired-wrong-scene aggregate was nearly unchanged at
+0.534 m and
+92.55% because many rows do not move their
+target, so it is not presented as a strong global causal control. Only the
+10 changed-target sides showed
+90.00% correct-scene
+preference, while paired-scene predictions followed the paired target on
+50.00%. V78 is not
+official validation and is not authorized for promotion. This aggregate figure
+is not itself runtime evidence; the separately authenticated optional runtime is
+reported below.
+
+![V78 historical-held grounding repair and controls](gemma4/figures/v78_grounding_internal_held_controls.png)
+
+*V78 historical-held grounding candidate versus matched controls. The paired-wrong-scene aggregate is nearly unchanged (0.534 m mean error and 92.6% within 1 m) because many rows do not move their target; only the 10 changed-target sides show 90% correct-scene preference. Position/question shuffles and zero scene are the stronger controls. This is internal diagnostic evidence only.*
+
+The exact V78 historical-held
+point-cloud replay independently reconstructed all
+94 coordinate rows with zero aggregate delta from the
+sealed score: mean error 0.527083278 m and
+92.55% within 1 m. Its predictions
+were also compared to sanitized numeric map support—not semantic labels—with mean
+nearest-voxel distance
+0.179402542 m. The deterministic
+figure shows 6 examples chosen by a fixed rule
+before inspecting errors; its SHA-256 is `8289bfa9d40097336c834a00555f43aef2e51dfe9b7cd04113f1e81876b0bfb2`. Oracle
+target markers and target coordinates are evaluator-only. This is an internal
+historical training-pool evaluation, not official validation or runtime evidence.
+The complete 256-token scene prefix was fixed and every token was scored, but the
+grounding readout itself is question-conditioned, so the result does not satisfy
+strict identical-total-environment-input semantics and is not promoted.
+
+![V78 historical-held predicted and evaluator-only target coordinates on sanitized point clouds](gemma4/figures/v78_grounding_held_pointcloud_examples.png)
+
+*Six deterministic evaluation-only overlays. The chatbot runtime does not receive
+the plotted oracle targets, questions as environmental metadata, or object labels.*
+
+The optional V78 numeric-grounding
+runtime is also authenticated as an exact two-file internal diagnostic release:
+`grounding.safetensors` (3c7914a61e63d80617e7fcfca122e02eec30d15af5a43e910daa0cd6c0b501c4) and
+`metadata.json` (ea5536dc078b7707000404661c92bdb198dc0c40bbf73cf987d5f94b20464480). It scores all
+256 immutable scene tokens in
+1536 dimensions, has no question-only coordinate
+path or question-dependent scene retrieval, and serializes no answer text,
+question text, object IDs, target coordinates, or environmental text. A real
+three-question local run loaded this sidecar beside the unchanged V75 answer
+generator and returned numeric coordinates: `Where is the chair?` -> `right` at (-0.744, 0.477, 0.631) m, `Where is the bowl?` -> `red` at (-1.608, -1.020, 0.183) m, `Which object is closest to the camera?` -> `cube` at (0.451, 0.366, 1.030) m. That proves
+runtime integration, not answer correctness: the two location questions still
+received V75's weak relation/color answers (`right` and `red`). V78 remains an
+optional historical-internal diagnostic, with no official-validation evidence
+and no runtime-promotion authorization.
+
+A separate live V81-plus-V78 mechanism check kept
+the same fixed hash, scored all 256 scene latents
+without top-k selection, and predicted numeric point
+`[-0.7444932460784912, 0.4774942398071289, 0.63103187084198]` with 0.278 m
+support distance and 0.784 confidence. The answer to
+`Where is the chair?` was `unknown`. Its
+5,208-read audit had zero forbidden accesses.
+This proves the optional grounding path runs over V81; it is not grounding-accuracy
+evidence.
+
+## 18. Ablation results
+
+The fail-closed control pipeline implements primary, empty_scene_prefix, wrong_scene_prefix, semantic_shuffle, position_shuffle, geometry_only, semantics_without_xyz, remove_rgb, remove_normals,
+authenticates prediction hashes and transform receipts, and requires exact
+reference coverage. The completed V55 development suite is
+hash-authenticated through its manifest, all nine prediction files, and all nine
+metric files. It covers 216 questions per
+condition. Negative deltas are degradation relative to the same primary run.
+
+| Condition | Exact | Delta vs primary | Spatial relation |
+|---|---:|---:|---:|
+| primary | 41.20% | +0.00 pp | 56.25% |
+| empty_scene_prefix | 12.04% | -29.17 pp | 39.58% |
+| wrong_scene_prefix | 39.81% | -1.39 pp | 50.00% |
+| semantic_shuffle | 12.04% | -29.17 pp | 43.75% |
+| position_shuffle | 13.43% | -27.78 pp | 43.75% |
+| geometry_only | 12.04% | -29.17 pp | 37.50% |
+| semantics_without_xyz | 10.19% | -31.02 pp | 39.58% |
+| remove_rgb | 41.67% | +0.46 pp | 54.17% |
+| remove_normals | 41.20% | +0.00 pp | 56.25% |
+
+Semantic shuffling and geometry-only input each reduced exact accuracy from
+41.20%
+to 12.04%
+and 12.04%,
+respectively, while removing XYZ reduced it to
+10.19%;
+both visual semantics and spatial coordinates materially affect this adapter. The
+wrong-scene prefix fell only to
+39.81%,
+so scene discrimination remains weak. Removing RGB did not hurt exact accuracy.
+Removing normals exactly matched the primary because the normal channel is
+unpopulated in these V55 maps, making that condition a no-op rather than evidence
+that useful normals are unnecessary. These are development controls around the
+historical below-acceptance V55 baseline, not the current V89 runtime and not a
+final causal or held-out success claim.
+
+The immutable V94 post-hoc full-profile control matrix is:
+
+| V94 condition | Correct | Accuracy | Change vs primary | Outputs changed |
+|---|---:|---:|---:|---:|
+| primary | 143/216 | 66.20% | +0.00 pp | — |
+| zero full scene | 85/216 | 39.35% | -26.85 pp | 138 |
+| paired wrong scene | 140/216 | 64.81% | -1.39 pp | 30 |
+| full interior-token permutation | 143/216 | 66.20% | +0.00 pp | 57 |
+| XYZ/position shuffle | 132/216 | 61.11% | -5.09 pp | 72 |
+| 3072D semantic-row shuffle | 131/216 | 60.65% | -5.56 pp | 73 |
+| remove RGB | 147/216 | 68.06% | +1.85 pp | 8 |
+
+The V94 table uses the candidate's own primary predictions as its comparator; it
+is not directly interchangeable with the older V55 ablation table above.
+
+The authenticated V95 known-development aggregate is:
+
+| V95 condition | Correct | Accuracy | Mean answer NLL | NLL gap vs primary |
+|---|---:|---:|---:|---:|
+| primary | 167/216 | 77.31% | 0.307097 | — |
+| zero payload | 36/216 | 16.67% | 2.603536 | +2.296439 |
+| full interior-token permutation | 127/216 | 58.80% | 0.923975 | +0.616878 |
+| paired wrong scene | 164/216 | 75.93% | 0.361189 | +0.054092 |
+
+This table is sealed negative development evidence. Its stronger aggregate
+payload controls did not repair the failed counterfactual unit gate and did not
+authorize runtime promotion or deferred-final materialization.
+
+The authenticated, model-free report-only scan
+ablation compares the existing 24-view center scan with the isolated 96-view
+multi-position scan on the same scene, voxel size, 3,072D feature layout, model
+revisions, and 13-query inventory. Occupied voxels increased from
+74,699 to 98,076
+(+31.29%), and the
+multiview-voxel fraction increased from
+71.34% to
+92.84%
+(+21.50 pp).
+
+Semantic localization did not improve: top-1 changed from
+61.54% to
+38.46%
+(-23.08
+pp), top-k remained 84.62%, and
+P@k changed from 45.23% to
+41.08%
+(-4.15 pp).
+Same-voxel cosine changed from 0.589
+to 0.515, while different-voxel cosine
+changed from 0.401 to
+0.467; their separation narrowed
+from 0.188 to
+0.048. This one-scene result
+confounds camera positions with a fourfold view-count increase and includes no
+downstream QA or navigation run, so it is not evidence that more views generally
+harm semantics.
+
+## 19. Direct-image baseline
+
+The authenticated evaluation-only direct multi-view Gemma control scored
+100/216 exact
+(46.30%) across
+6 development scenes. Every question received all
+24 complete RGB views through one immutable,
+question-independent decoder cache per scene. Spatial-relation accuracy was
+45.83%, count accuracy was
+0.00%, and presence F1 was
+95.65%. This is a meaningful comparator, but raw-image
+chat is categorically prohibited as the primary path and does not satisfy the
+persistent continuous-3D-memory research goal.
 
 ## 20. Oracle-text upper bound
 
-Not measured.
+The complete oracle-text artifact chain is byte-preserved and internally bound, but its inference implementation evidence is stale because the live source hash changed for language/local_lm.py. No upper-bound result is claimed; a fresh local-Gemma run is required.
 
+## 21. Leakage tests
 
-## 21. Preserved legacy leakage-test result
+The strict V54 CLI denies oracle, generated-QA, rendered-frame, feature-cache,
+training, and scorer-only paths and records the full environment-input hash for
+every question. The live test renamed the oracle directory, completed three local
+answers, restored it, observed 3,957
+file reads and zero forbidden accesses, and reused one exact prefix hash. Schema-7
+oracle deletion is separately pending because V66b is an enhanced
+question-conditioned ablation.
+V75 now has its own live runtime evidence: the oracle, training-artifact, and
+teacher-artifact directories were all renamed and unavailable during inference,
+then restored. The run audited 4,198 file reads,
+found zero forbidden accesses, loaded no QA/oracle or training artifact, and used
+only the sealed two-file V75 controller. Its complete 256-latent base scene prefix
+was constructed before the first question and retained one hash across all three
+questions.
 
-| Control | Result |
-| --- | --- |
-| Overall leakage test | PASS |
-| Oracle unavailable during inference | True |
-| Oracle restored | True |
-| Forbidden accesses | 0 |
-| Prefix built before first question | True |
-| Prefix invariant | True |
-| Prefix hash | f4ed6bc9cbf75bd878bcebab04e432ad3eb04ef236aadd6659931c8f214b7c9b |
-| Audited loaded files | 4347 |
+The optional V78 live isolation artifact
+(070feddd71141dfa75f8ca807ec47275225e8b056fce1e2f3862f88e89fc6215) passed after
+4,204 audited reads with zero forbidden accesses.
+The oracle directory was unavailable during all three answers and restored
+afterward; no QA/oracle file was loaded. The 256-latent base prefix was computed
+before the first question and retained hash `52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95`.
+The V78 grounding scene-token input independently retained hash
+`fc55fad4eaab895616d365cd74cd67f1ece36df2a4e45840e3471ddcdfc5528e` for every question. As with V75,
+the total input is not invariant because V75's four control tokens are
+question-conditioned; no contrary strict-total-input claim is made.
 
-This PASS belongs only to the legacy Qwen checkpoint lineage. It has not been run
-for Gemma v9 and cannot be transferred to any Gemma checkpoint. V9's exact trained
-color generation is not a Gemma leakage-test or oracle-deletion result.
+V81 separately passed its own oracle-deletion and runtime-isolation test. The
+fixed 738-token memory hash remained
+`a428f5147c815839ae7315a0adab952ab210814fb21dcdc5bf13b167f28a6e37` across
+all three questions, the base 258-token prefix was also invariant, and neither
+the compile-time V75 controller nor the numeric probe bank was read by chat.
+
+V85's definitive scene-1 runtime ran with the oracle physically unavailable, audited 5,208 reads with zero forbidden accesses, and reused one exact total environment-conditioned input hash for all three questions. Scene 39 independently repeated those properties for 24 prediction-equivalence rows. Leakage and invariance passed; behavioral promotion did not.
 
 ## 22. Robot-navigation results
 
-| Measurement | Result |
-| --- | --- |
-| Benchmark scope | bounded_numeric_actions_collision_scan_and_reset |
-| Checks passed | 11 / 11 |
-| Pass rate | 100.0% |
-| Trajectory steps | 15 |
-| MCP tools registered | 9 |
-| MCP SDK | 2.0.0 |
-| Semantic target navigation evaluated | False |
+The model-only operator separates **scene acquisition** from **robot control**.
+It loads the pre-scanned 74,699-voxel, 3072D semantic map and builds the fixed
+`[1,258,1536]` scene prefix before receiving a user goal. Actual local Gemma then
+reasons over that complete memory, four continuous robot-state tokens, numeric
+action-history tokens, and the raw high-level goal at every closed-loop step.
+Its learned heads select each `MOVE_TO`, `FACE`, or `STOP`; this includes every
+intermediate waypoint, relative facing change, multi-step recovery decision, and
+the goal-completing STOP. Low-level coordinate conversion, bounds/collision
+checking, and exact primitive execution are deterministic, but they do not pick
+a route or substitute an action.
 
-Artifact snapshot:
+The Blender sidebar is limited to a visible transcript, high-level goal input,
+execution status, and compact token diagnostics; manual move/turn/look/scan
+buttons and rover-camera control input are absent. The 3D UI/backend integration
+runs, and the current waypoint DAgger V14 checkpoint has passed the bounded
+one-room live acceptance suite and is the practical-rover default.
+Each transcript decision now carries the exact continuous action output, all
+three MOVE/FACE/STOP probabilities and raw logits, causal token counts, and
+abbreviated output/prefix/checkpoint hashes. A 4,096-line scrollback replaces
+the earlier 160-line cap so one maximum-length 128-decision turn is retained in
+full without turning the default sidebar into an analytics dashboard.
 
-```json
-{
-  "benchmark_scope": "bounded_numeric_actions_collision_scan_and_reset",
-  "checks": {
-    "bounded_look_succeeded": true,
-    "bounded_turn_succeeded": true,
-    "collision_rejected_atomically": true,
-    "free_space_move_succeeded": true,
-    "mcp_structured_call_succeeded": true,
-    "mcp_tools_registered": true,
-    "numeric_start_state": true,
-    "reset_restores_episode": true,
-    "scan_updated_scene": true,
-    "stop_blocks_motion": true,
-    "turn_limit_rejected": true
-  },
-  "final_state": {
-    "action_count": 0,
-    "angular_velocity_degrees": 0.0,
-    "body_yaw_degrees": 0.0,
-    "camera_position_m": [
-      0.0,
-      0.0,
-      1.2
-    ],
-    "camera_yaw_degrees": 0.0,
-    "clearance_m": null,
-    "collision": false,
-    "distance_moved": 0.0,
-    "error_code": null,
-    "last_movement_delta_m": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "linear_velocity_xy_m": [
-      0.0,
-      0.0
-    ],
-    "observation_id": null,
-    "pitch_degrees": 0.0,
-    "position_m": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "scan_count": 0,
-    "scan_coverage": 0.0,
-    "scene_id": "scene_000001",
-    "scene_version": 0,
-    "seed": 20260808,
-    "stopped": false,
-    "success": true,
-    "turn_degrees": 0.0,
-    "visible_voxels": 0
-  },
-  "map_source": "numeric_voxel_map",
-  "mcp_sdk_version": "2.0.0",
-  "mcp_tool_count": 9,
-  "metadata_or_labels_loaded": false,
-  "pass_rate": 1.0,
-  "passed": 11,
-  "scene_id": "scene_000001",
-  "schema_version": 1,
-  "semantic_target_navigation_evaluated": false,
-  "total": 11,
-  "trajectory_steps": 15
-}
+The reproducible operator entry points are:
+
+```bash
+make rover-3d-check  # finite/model-free dependency and artifact preflight
+make rover-3d        # local Gemma backend plus Blender 3D goal/chat UI
+
+# Standard macOS application location when `blender` is not on PATH:
+BLENDER=/Applications/Blender.app/Contents/MacOS/Blender make rover-3d
 ```
 
-This is a bounded numeric action, collision, scan-update, reset, and MCP wiring benchmark. It does **not** demonstrate that the chatbot can navigate to a named object or follow language-conditioned semantic directions.
-The measured mechanics do not change the central limitation: language-conditioned semantic target navigation remains unmeasured.
+`make rover-3d-check` starts neither Gemma nor Blender and is not behavioral
+evidence. `make rover-3d` is the intended acceptance surface: the operator gives
+high-level goals in the Blender transcript while the low-level action loop remains
+internal.
 
-## 23. Preserved legacy representative conversation
+### Current actual-local-Gemma model-only result
 
-| Question | Answer | Grounding XYZ (m) | Prefix hash |
-| --- | --- | --- | --- |
-| Is there a chair? | yes | [-0.08731317520141602, 0.26656126976013184, 0.699421226978302] | 4f45ffbd6edd4ee8… |
+The fresh waypoint DAgger V14 lap used checkpoint SHA-256
+`149f5e04de1d8305e642909443f03b96894edc3ece67e4500eacec8f5ca81e7c`
+and the exact static map and prefix described above. Gemma chose 76 decisions:
+46 `MOVE_TO`, 29 `FACE`, and its own final `STOP`. The rover traveled
+18.715407829 m, swept 4.272961944 m² of absolute winding area, and returned
+0.048733232 m from its start. All 76 decisions were accepted; no proposal was
+rejected. The lap passed every configured geometry threshold.
 
-These examples demonstrate runnable local inference only. Their correctness is not inferred from fluency; structured held-out metrics are reported separately.
+The same checkpoint passed two object-directed goals. `Face the cube, then
+stop.` took two Gemma decisions and finished with 0.201561761° oracle-scored yaw
+error. `Move close to the chair, then stop.` made 0.263674096 m center progress
+and finished at 0.431456385 m bounding-box standoff. It required 16 Gemma
+decisions: eight were accepted and eight colliding proposals were rejected by
+the unchanged safety boundary before Gemma selected the accepted terminal STOP.
+Those rejections were returned as numeric receipts; the runtime did not replace
+them with safe waypoints.
+
+These are genuine model-only successes, not planner-assisted routes. Every
+decision performed an actual local `google/gemma-4-E2B-it` causal forward over
+the complete continuous scene prefix, four numeric robot-state tokens, numeric
+history, and the raw high-level goal. The prefix was built before the goal and
+remained byte-identical at SHA-256
+`52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95`.
+The artifacts record local inference, zero cloud inference, zero runtime oracle
+access, `deterministic_route_planner_used=false`, `fallback_used=false`,
+`substitution_applied=false`, and `synthetic_stop_applied=false`. Gemma selected
+every action class, waypoint, heading, route continuation, and STOP; deterministic
+code only executed or rejected the bounded primitive. The isolated runtime test
+also passed with the source oracle directory physically unavailable and found
+zero forbidden accesses.
+
+Machine-readable evidence is
+[`gemma_waypoint_dagger_v14_live_acceptance.json`](gemma4/metrics/gemma_waypoint_dagger_v14_live_acceptance.json),
+[`gemma_waypoint_dagger_v14_approach_chair_score.json`](gemma4/metrics/gemma_waypoint_dagger_v14_approach_chair_score.json),
+[`gemma_waypoint_dagger_v14_face_cube_score.json`](gemma4/metrics/gemma_waypoint_dagger_v14_face_cube_score.json),
+and
+[`gemma_waypoint_dagger_v14_oracle_isolation.json`](gemma4/metrics/gemma_waypoint_dagger_v14_oracle_isolation.json).
+The earlier DAgger-v1 premature-STOP result remains a historical negative, not
+the current operator result.
+
+The separate current Blender acceptance used only the visible high-level goal
+`Move closer to the chair and stop.` Gemma generated all 17 decisions: ten
+`MOVE_TO`, six `FACE`, and its own `STOP`. Nine proposals were executed and the
+deterministic safety layer rejected eight collision attempts without replacing
+them. The furnished 3D room, toy rover, continuous point-map overlay, visible
+goal/transcript, and animated rover motion were present; direct driving controls
+were absent. The authenticated artifact records no route planner, fallback,
+action substitution, or synthetic STOP. This is current V14 model-only visual
+evidence and is distinct from the historical 47-waypoint hybrid/planner images.
+
+![V14 model-only rover before the chair goal](gemma4/figures/blender_rover_v14_approach_chair_before.png)
+
+![V14 model-only rover after Gemma completed the chair goal](gemma4/figures/blender_rover_v14_approach_chair_complete.png)
+
+The current official-SDK MCP surface exposes exactly one high-level tool,
+`navigate(goal)`, and no motor primitives. The goal is passed verbatim to Gemma;
+the response contains numeric state and model-decision provenance but no
+environmental text. The authenticated
+[`gemma_goal_mcp_preflight.json`](gemma4/metrics/gemma_goal_mcp_preflight.json)
+is a **model-free preflight** with in-process SDK dispatch, not a second live
+model run. No second heavy Gemma MCP process was launched while Blender already
+held the model; the same controller was verified live through the Blender
+acceptance above. The legacy numeric motor-tool MCP remains a separate historical
+interface and is not the current user-facing control surface.
+
+### Historical hybrid operator evidence
+
+The older 47-waypoint patrol, face-lamp, approach-bowl, and between-chair/table
+records used the V3/V3.3 hybrid path. The patrol followed 47 deterministically
+planned waypoints over 19.1558 m and returned to its start. Face-lamp used a
+camera-free all-voxel fallback after a rejected V3 proposal; approach and between
+goals used numeric convergence/interlocks. Those measurements remain useful
+historical integration evidence, but they are **not** current model-only Gemma
+navigation results. Their machine-readable artifacts remain
+[`semantic_goal_live_acceptance.json`](gemma4/metrics/semantic_goal_live_acceptance.json)
+and [`blender_rover_ui_acceptance.json`](gemma4/metrics/blender_rover_ui_acceptance.json),
+with the corresponding historical
+[in-motion](gemma4/figures/blender_rover_patrol_in_motion.jpeg) and
+[completed-trajectory](gemma4/figures/blender_rover_patrol_complete.jpeg) images.
+
+### Historical camera-update and low-level MCP experiments
+
+The remaining measurements in this section preserve earlier scan-refresh and
+MCP work. They do not describe the current static-map Blender operator.
+
+Fresh Blender RGB-D -> one full-image Gemma call -> fusion -> prefix refresh passed
+in 53.77 seconds, with
+74,897 source voxels and
+8,422 occupied spatial-block representations. On one deterministic
+development room, the semantic numeric policy grounded and navigated successfully
+on 8/9 tasks with
+0 collisions. This is not held-out navigation or an
+autonomous LLM tool-use result. The production seam maps
+18 numeric robot-state values to
+4x1536 continuous tokens. Its
+checkpoint is deterministic and untrained (`task_trained: false`), so it proves
+the interface and checkpoint binding rather than navigation learning.
+The official MCP SDK stdio smoke negotiated protocol
+`2025-11-25`, listed all
+9 numeric tools, exercised a bounded turn, rejected
+malformed and out-of-range calls without state changes, restored a clean episode
+through `reset_scene` (`scene_version=0`), and found zero semantic words or fields
+in tool results.
+
+Successful `look`, `turn`, `move_forward`,
+`move_backward`, and `move_to` calls are now wired to render a fresh observation,
+fuse the map, and refresh the continuous prefix transactionally when
+`auto_scan_after_motion` is enabled. Unit tests cover all five actions, changed
+map/prefix hashes, preserved numeric action receipts, collision rejection with no
+scan, and question-prefix invariance within one map version. The semantic MCP
+preflight passed with
+4,085 audited
+reads and zero forbidden accesses; the separate official-SDK stdio smoke passed
+all 9 numeric tools with zero semantic
+result leakage. The real local runtime has now also executed one live auto-motion
+transaction: after the initial observation, an accepted
+15-degree turn captured `o_000002` through a second
+complete-image encoder call, reached scene/map version 2, and changed both the map
+and continuous prefix. The run used 2
+encoder calls total, took 50.55 seconds, and audited
+125 files with zero forbidden accesses or oracle/QA
+loads. That first proof used the direct runtime function. A second live measurement
+then exercised the actual official-SDK MCP stdio boundary with the V54 base and
+active V75 continuous controller: an explicit scan followed by a
+15-degree turn and automatic scan advanced the map from
+version 0 to 1 to
+2, increased source voxels from
+74,699 to 74,897 to
+75,594, and processed 50,176 valid-depth pixels in each
+complete-image observation. Map, base scene-prefix, V75 scene-control,
+active-prefix, robot-state/token, and binding hashes changed after both observations;
+the robot-state encoder identity remained fixed. The 57.29
+second MCP run audited 4,178 reads with zero forbidden
+accesses and returned no environmental text or semantic labels. A separately sealed direct embodied conversation
+then reproduced the version `0 -> 1 -> 2` scan/turn chain, used a prequestion scene
+K/V cache, and generated `yes` at map version 2 using the
+same active-prefix hash created by the turn/autoscan transaction. Its four-record
+transcript included two complete observations with 50,176 valid-depth pixels each;
+the 123-read audit found zero forbidden accesses
+and every environmental-text input field was empty. This proves one answer is bound
+to newly observed continuous scene state, not general conversational-navigation
+competence.
+
+The production
+`ConversationalEmbodiedAgent` has also completed the complete official-SDK MCP
+stdio path on two independent source scenes (`scene_000001` and `scene_000031`).
+For each scene, scripted `scan -> turn -> stop` calls produced map versions
+`0 -> 1 -> 2 -> 2` and exactly four accepted continuous-prefix bindings. The scan
+and turn/autoscan each changed the scene-prefix hash; stop preserved the unchanged
+scene prefix while changing the numeric robot-state binding. Both runs returned
+strict numeric structured receipts, exposed no environmental text, and audited
+8,364 total file reads
+with zero forbidden accesses. Their final scene hashes differ, confirming that
+the two source scenes did not collapse to one binding. This is real two-scene
+transport/state-refresh evidence, not semantic instruction-following accuracy.
+
+A separate live conversational MCP
+episode now connects one natural-language face instruction to continuous semantic
+grounding and bounded official-SDK stdio actions. On `scene_000001`, the user text
+`Face the chair, then stop.` triggered an initial scan, turns of
+45.000 and
+21.923 degrees, and stop. Every decision
+rescored every active map voxel from a fresh observation; scene/map/active-prefix
+bindings refreshed after both turns. The final yaw was
+66.923 degrees, the final continuous
+grounding residual was
+0.325
+degrees, and there were zero collisions, semantic tool-receipt leaks, or forbidden
+client/server reads. A physically separate evaluation-only oracle scorer,
+executed only after authenticating the runtime and both access audits, measured
+0.146 degrees physical
+heading error against its 20-degree bound.
+
+The policy boundary is exact and deliberately modest: selective local Gemma tied-
+token embeddings ground the user-supplied target phrase against all active voxels,
+then the deterministic V3 numeric alignment interlock chooses turns from continuous
+target XYZ and numeric robot yaw. It does **not** use Gemma native function calling,
+does **not** execute the learned V3 action head, and does not claim that a learned
+action decoder selected these calls. Tool execution still crosses the official MCP
+stdio process boundary and returns numeric structured receipts only. This is one
+deterministic development scene and one instruction family, not held-out or general
+conversational-navigation evidence.
+
+The embodied runtime now also
+completed a sealed five-turn conversation—`face -> approach -> scan -> state ->
+stop`—through one persistent official Python MCP SDK stdio session. Its 11 numeric
+tool receipts include two positive translations totaling
+0.746 m. Six complete observation
+refreshes advanced the map to version 6
+and every refresh changed both map and complete scene-prefix bindings; all read-only
+state queries preserved them. The client accepted exactly 12 continuous bindings,
+the final standalone stop remained latched, and the run recorded zero collisions,
+semantic receipt leaks, environmental-text inputs, oracle inputs, or forbidden
+accesses across 93 client and
+4,194 server reads. Every semantic
+navigation decision scored every active map voxel rather than retrieving a
+question-selected subset.
+
+A separate evaluation-only scorer authenticated the immutable runtime, inspection,
+and both audits before opening oracle geometry. The robot reduced its target-center
+distance from 1.344 m to
+0.598 m, for
+0.746 m progress. Physical heading error
+was 0.146 degrees after
+the face turn and 0.329
+degrees at the final pose, with zero collisions and final stop latched. The oracle
+score was never fed back to the runtime.
+
+This historical persistent-MCP integration proof remains useful, but its boundary
+is important: selective local Gemma tied-token embeddings supplied continuous target
+grounding, while deterministic numeric alignment and approach interlocks selected
+the bounded actions. It did **not** use Gemma native function calling or the learned
+V3 action head. It is one scripted conversation in one deterministic development
+scene, not held-out navigation accuracy or a promoted autonomous policy.
+
+A historical two-scene semantic face-target
+development run now completes 2/2 episodes with zero collisions and zero forbidden
+runtime reads. The learned V3 action policy consumes continuous semantic grounding
+and numeric robot state; when its turn output stalls, a bounded numeric convergence
+interlock computes the remaining angle only from the continuously grounded target
+XYZ and robot yaw, then requires fresh grounding inside a 3-degree deadband before
+issuing stop. Final continuous-grounding residuals were
+0.262 and 0.162 degrees. A physically
+separate evaluation-only oracle scorer—never the runtime process—measured heading
+errors of 6.579 and 3.302 degrees,
+both below its 20-degree threshold. The preserved learned-only predecessor passed
+0/1: it timed out after
+12 steps, which is the diagnosis that motivated the
+interlock. This is a hybrid learned-plus-numeric result on two deterministic
+development scenes and one instruction family, not general navigation. The static
+256-latent base memory stays question-independent, but V75's four continuous
+control tokens and the navigation grounding are question-conditioned; therefore
+the total embodied input is not a strict identical-input prefix.
+
+The preserved two-scene approach-development
+comparison is also authenticated. V2 passed 1/2: scene 1 completed
+normally, while
+scene 31 moved 1.220 m and made
+1.208 m of evaluator-measured
+center progress before an exact collision rejection caused `action_failure`; it
+neither stopped nor passed. That failure is preserved, not overwritten.
+
+The V3 successor passed 2/2 with all action receipts successful,
+zero collisions, zero forbidden reads, and no runtime oracle or environmental-text
+input. Scene 1 used the ordinary semantic-standoff completion at
+0.482 m after
+0.700 m of numeric motion
+(0.693 m evaluator-measured center
+progress). Scene 31 is deliberately a different completion mode: its final
+semantic target distance was
+0.763 m, so the ordinary
+0.5 m semantic-standoff goal remained false. A numeric-map collision precheck
+found no material safe step remaining and issued an explicit
+`collision_limited_safe_stop`; after
+1.287 m of motion, the separate
+evaluator measured 1.272 m center
+progress and 0.292 m final
+bounding-box standoff. This is 2/2 under the declared continuous-completion rule,
+not 2/2 ordinary-standoff completion. The exact historical V3 policy source is
+preserved at `reports/gemma4/evidence/navigation_policy_v3_sources/navigation_policy_v3.py` with SHA-256
+`4e687161f6174192a2e44de160c847a70c6dbbab09f7f3277373f6bceed5fcc2`. Both scores are two deterministic development
+scenes only; oracle target identity and geometry belong solely to the evaluator,
+and neither result is promoted or held-out navigation evidence.
+
+The V3 robot trajectories are also
+preserved as a hard-hash-authenticated, post-hoc runtime-only visualization. Its
+generator opened exactly two runtime result JSON files and no oracle, QA, scene
+metadata, semantic map, or model files; it ran no new inference and preserved both
+runtime-result hashes. Scene 1 shows ordinary `semantic_standoff` completion after
+6 steps at
+0.482 m. Scene 31 shows
+the distinct `collision_limited_safe_stop` path after
+7 steps at
+0.763 m: this is the
+closest-safe collision-limited stop, **not ordinary 0.5 m semantic-standoff
+success**. The PNG is hash-bound as `6bbe03c6dbd847469baff427121e5e3d01f0ead4899f8773dade6a3a561178a2`; the machine
+summary is `reports/gemma4/examples/embodied_approach_v3_trajectories.json` with SHA-256
+`2b1482c0364ac72fa912df8222714aefbd0d1a90d62c18c1b28a880b91acc72a`.
+
+![Hash-authenticated V3 approach trajectories](gemma4/figures/embodied_approach_v3_trajectories.png)
+
+The corrected V3.3 embodied runtime completed all
+6/6 tasks in its single sealed
+development-calibration run: face, approach, bounded forward/stop, obstacle
+avoidance, left/right turning, and scan-then-approach. It executed
+28 bounded actions with zero collisions, action
+failures, or policy rejections. The previously failing scan-update task executed
+`scan -> move_to` (seven bounded waypoints) `-> stop`, advanced
+2.114 m toward the target, and stopped at
+0.287 m after one successful map update.
+All 28 decisions matched their continuous context and
+prefix chain; robot tokens refreshed 28
+times and the scene prefix refreshed once with the map. Runtime environmental-text
+inputs were empty, oracle inputs were absent, and the inference audit recorded zero
+forbidden accesses. The machine-readable episode/trajectory journal is
+`reports/gemma4/predictions/llm_navigation_scene_000001_learned_v3_3.json` (`e9db17df1bb4d12a235492a24c34c8eb60d803a35d3512b86c671146c7238337`).
+
+This is an accepted correction/calibration of the supervised continuous-semantic
+V3 controller plus deterministic V3.3 numeric waypoint planner—not native Gemma
+JSON function calling. The same one-scene six-task benchmark was used to diagnose
+V3.1/V3.2 and then score V3.3. Therefore 6/6 is development calibration only,
+not held-out, cross-scene, or general conversational-navigation evidence, and it
+does not change the project-wide static V89 promotion boundary.
+
+The already-authenticated embodied camera path
+passes rendered RGB-D scan -> full-image feature extraction -> persistent map and
+continuous-prefix refresh. V78 checkpoint forwarding is now wired through both a
+lightweight embodied preflight target (`make v78-grounding-embodied-check`) and a
+finite scan-plus-answer target (`make v78-grounding-embodied-once`), with an
+explicit audit output. The wiring and bounded targets are authenticated, but no
+sealed V78-specific embodied transcript or navigation score is reported.
+
+The tool seam consumes the exact active continuous scene and robot-state prefix,
+proposes bounded JSON calls, revalidates context and limits immediately before
+execution, and fails closed after at most two retries. Its current status is
+`authenticated_historical_v3_partial_v4_1_rejected`. The learned controller is a compact supervised
+continuous-input action policy; environmental object semantics remain continuous
+at runtime and its two-file checkpoint passed oracle-deletion isolation.
+The historical hash-authenticated supervised V3 controller passed 5/6 tasks with 0 collisions and 0 policy rejections. V2 completed 4/6, V1 completed 3/6, and the preserved untrained seam completed 0/6. V3's preregistered numeric start is feasible (`true`) without weakening the V1 criteria. Its held-out offline action accuracy was 91.45%. The numeric semantic target is causal: zeroing it reduced action accuracy by 0.648148, while the wrong-target control changed 89 turn signs. Direct raw scene-prefix dependence remains weak: wrong-scene action-accuracy delta 0.003527, zero-scene delta -0.000441. Overall benchmark pass remains `false`; this is one unseen-scene live benchmark after scene-disjoint offline validation, not complete multi-scene navigation success. See the [trajectory figure](gemma4/figures/navigation_policy_v3_trajectory.png) and [machine-readable trajectories](gemma4/examples/navigation_policy_v3_trajectories.json). The single preregistered V4.1 successor passed 13/14 offline gates but was rejected because shuffled-clearance obstacle/update accuracy fell by only 0.049565, below the preregistered 0.10 minimum. No V4.1 checkpoint was published and no live V4.1 benchmark ran. The immutable historical result remains authenticated, while current-runtime compatibility is explicitly not claimed; 6 sealed source paths now differ from the historical snapshot.
+
+The newer decoder-level V2.2 tool experiment did not replace that historical
+controller: its early teacher-forced gate failed, greedy generation did not run,
+and no V2.2 runtime checkpoint exists.
+
+## 23. Representative successful conversations
+
+The current promoted strict V89 static-chat runtime produced this authenticated
+three-question transcript while reusing the exact same prequestion scene-memory
+hash and total environment-conditioned input for every question:
+
+- **User:** Is there a chair? **V89:** `yes`
+- **User:** What color is the bowl? **V89:** `red`
+- **User:** Is the bowl left or right of the chair? **V89:** `left`
+
+These three questions and answers were explicitly included in V89 training. The
+transcript demonstrates the runnable continuous-memory path and isolated release,
+not held-out accuracy or generalization. The separate 138-question canonical
+score and causal zero-payload control are reported above.
+
+The historical V75 question-conditioned comparator produced these bounded
+successful answers while reusing one complete base scene-prefix hash:
+
+- **Is there a chair?** — `yes`
+- **What color is the bowl?** — `red`
+
+The historical third well-formed answer, `right`, is semantically incorrect: the bowl is **left** of the chair under the documented world +X-right convention. It is retained only as an explicit failure, never as a successful chat. A vocabulary-free output safety guard now fails closed as `unknown` for 2 broader support questions. Broad list QA remains unsupported. This comparator transcript is illustrative; the isolated
+216-question official score above is its behavioral evidence. V75 is not the
+static-chat default.
+
+The legacy strict-prefix V54 comparator produced these three local responses while
+reusing exact environment-prefix hash
+`52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95`:
+
+- **Is there a chair?** — `yes`
+- **What color is the bowl?** — `red`
+- **Is the bowl left or right of the chair?** — `right`
+
+The V54 rows are a demo transcript, not representative held-out accuracy
+evidence. The
+hash-bound rows are in [strict_prefix_chat.jsonl](gemma4/examples/strict_prefix_chat.jsonl).
+No V66b conversation is included because its checkpoint was not published after
+the failed pair-disjoint gate.
 
 ## 24. Representative failures
 
-Semantic localization missed hit@k for: `book`.
-The initial tokenwise CLIP patch projection failed the semantic sanity gate and was replaced by MaskCLIP-style final-block value features. The obsolete numeric run is not promoted as a current result.
-The v1 adapter reached a high raw held-out score but failed scene-content controls; it learned a near-constant nonzero soft-prompt/prior solution.
-Gemma v8-resume24 passed its teacher-forced color-ranking gate but generated mostly
-`orange`/`unknown`, stayed unchanged across all 35 mirror questions, and stayed
-unchanged across all four held-out cube-support questions. It is an overfit/wiring
-milestone, not a scene-understanding result.
-Gemma v9 corrected the trained-color decoding failure at both epoch 30 and epoch
-36, reaching 12/12 normalized-exact color sides and 6/6 complete units. It still
-produced 0/70 exact mirror sides and 0/8 exact held-out cube-support sides, with no
-prediction changes on either control. This is a stronger overfit milestone, not a
-held-out scene-understanding result.
-Gemma v10 then initialized from v9 epoch 36 and trained color plus a selected mirror
-subset. Its best and final audits both fell to 9/12 exact color sides and 3/6 color
-units. Both scored 0/12 exact selected mirror sides and 0/6 selected mirror units;
-the best checkpoint scored only 1/70 across all mirror sides and the final scored
-0/70. Both scored 0/8 on held-out support. This is failed continuation with partial
-forgetting, not a scene-understanding result.
-Gemma v11 restored all trained color answers and made mirror outputs more decisive,
-but it still completed none of the six trained mirror pairs and none of the four
-held-out support pairs. Its improved 7/70 strict mirror sides and 28/70 secondary
-canonical sides do not meet promotion criteria.
-Gemma v12 made all 12 selected relation sides pass its auxiliary spatial margin,
-but both epoch 8 and epoch 12 then generated 0/12 exact selected mirror sides,
-0/70 across all mirror sides, and 0/8 held-out support sides. All 70 mirror
-responses were literal `unknown` outputs, not audit fallbacks. This falsifies the
-claim that satisfying the current spatial auxiliary objective is sufficient for
-the existing decoder adapter to express the relation.
-Gemma v13 kept the V12 epoch-8 scene state and inherited decoder bank immutable and
-trained only a disjoint 229,376-parameter bank across layers 30-33. It retained
-12/12 exact color sides but again produced 0/12 selected mirror sides, 0/70 across
-all mirror sides, and 0/8 held-out support sides. Every mirror response was still
-the literal `unknown`; passing decoder-gradient, checkpoint-integrity, and runtime-
-reload checks was not sufficient to produce the desired relation behavior.
-Gemma v14 screened four exact-restart learning rates for the same trainable bank.
-All four protected 12/12 color sides at update 4, and the selected 2e-3 arm reached
-5/12 mirror sides. Its continuation briefly reached 7/12 mirror sides and 1/6
-complete units at epoch 7, regressed color to 10/12 at epochs 8-9, and finished at
-12/12 color but only 6/12 mirror sides and 0/6 units. The complete teacher gate
-never passed, so generation was deliberately not audited and no downstream result
-was promoted.
-Fluent chat samples must not be treated as evidence of scene understanding; only the structured held-out and control measurements support behavioral claims.
+The V55 static model was weak on attributes, counterfactual pair completion, and
+metric grounding. V66b improved broad training-only exact accuracy to
+71.63%, but failed changed-side,
+complete-pair, prediction-change, and spatial-relation thresholds; no checkpoint
+was published. V67 improved the training-only numeric class screen, but failed `held_complete_class_units`, `held_prediction_change_units`, and `positive_own_over_opposite_sides`; generation and checkpoint publication were correctly withheld. V68's regularized hard-negative grid improved the best complete-unit and prediction-change counts to 14 and 17, but every arm failed the same three immutable scene-dependence gates; generation and checkpoint publication remained disabled. V69 exhausted its preregistered numeric arms without authorizing generation or checkpoint publication.
+V70's 32-moment controlled ablation improved continuous pair diagnostics but regressed discrete prediction changes versus V69; it failed exactly two unchanged gates, so generation and checkpoint publication remained disabled. V71's independent 8+32-moment branches missed the unchanged prediction-change gate by three and margin-side gate by one; it failed closed and published no checkpoint. V72's question-adaptive fusion underperformed the frozen 32-moment branch on its first pair-disjoint development fold, so it stopped without a full screen or checkpoint.
+V73 failed numerically and V74's train-only NLL gain produced no held accuracy gain. V75 reverses that trend, has a promoted leakage-cleared runtime, and reached 167/216 on official validation. It still failed the overall preregistered gate because spatial relations were 28/48 rather than the required 60%; grounding was also room-scale weak. V76 improved its historical training objective but tied V54 and the wrong-scene arm at 6/16 held, so it was rejected. V77 improved its bounded smoke to 9/16 and its full internal screen by only 4/384 answers, without a full wrong-scene arm; it remains quarantined with no runtime publication.
+V6.3 passed its small in-sample train-only pilot, but its exact surface did not survive V6.4's pair-disjoint confirmation; it remains non-promotable with no runtime checkpoint. V6.4 improved its disjoint training subset but worsened both locked held margin-quality measures; the exact shared-K/V surface is terminal and published no checkpoint.
+The optional V78 sidecar produced finite, spatially supported numeric coordinates in its live demo, but it deliberately did not change V75 answer generation: `Where is the chair?` returned `right` and `Where is the bowl?` returned `red`. This remains a weak conversational location interface and is not counted as behavioral success.
+V79 raised correct-scene accuracy to 20/28 and the causal gap to 15 while leaving wrong-scene accuracy at 5/28, but its 9/14 prediction-changing units trailed V77's 10/14. The preregistered screen failed and stopped the full 384-row run and runtime publication.
+V80 preregistered one 122,880-parameter rank-8 attention reader over the complete fixed 738-token V75 atlas. Its correction-v2 artifact authenticates that the earlier `optimizer_updates_on_real_model` pass flag was misleading and that the authoritative prelaunch update count was zero. The real optimizer-free zero-step gradient smoke then ended with `RuntimeError` MPS out-of-memory after 3.75 GiB of MPS allocations plus 9.57 GiB of other allocations at the 13.32 GiB limit. It failed before the optimizer-bearing bounded screen: no optimizer update, checkpoint, behavioral result, or runtime promotion was produced, and oracle, official-validation, official-test, and deferred-final inputs remained unopened.
+V81's fixed-memory mechanism ran, but its 8/16 candidate score trailed the 9/16 paired wrong-scene arm and missed its candidate and V54-gain gates. It remains experimental and unpromoted.
+V82 improved the wrong-scene contrast but not the candidate score: 8/16 missed the 9/16 and +3-over-V54 gates.
+V83 supplied the exact immutable 738x1536 memory directly to Gemma, but behavioral performance was 6/16 with only 1/8 counterfactual prediction changes; every promotion gate failed.
+The original V84 four-update smoke reduced NLL but generated the same `under the table` answer for both scenes. V84.1 repaired that exact two-scene wiring unit, but remains an optimization-scene overfit with no held-out evidence or runtime promotion.
+V85 passed scene-disjoint development packaging gates and reproduced 24/24 sealed scene-39 predictions through the packaged runtime, but its corrected unseen scene-1 smoke was only 1/3; promotion was denied.
+V94 improved its primary aggregate to 143/216, but paired wrong-scene memory remained 140/216 and full interior-token permutation remained 143/216. Its locked behavior gate failed, so the candidate was not released or promoted.
+V95 improved aggregate known-development accuracy to 167/216 and showed large zero/permutation NLL gaps, but its decisive paired counterfactual gate remained 13/24 sides, 1/12 complete units, and 2/12 changed predictions. The preregistered gate failed; no V95 runtime was promoted and deferred-final materialization remains locked.
+V2 approach navigation passed only 1/2: scene 31 moved 1.220 m but terminated on collision rejection without stopping. V3 reached 2/2, but scene 31 did so through a collision-limited safe-stop rule while the ordinary 0.5 m semantic-standoff goal was still false.
+PLE-reader V4 and V5 both improved
+generic answer NLL but made the locked scene-selectivity metrics worse; V5 ended
+at 28/52 positive wrong-prefix sides and 9/26 complete changed units, so neither
+published a checkpoint. Tool decoder V2.2 learned token likelihood but reached
+only 17.42% exact sequences, 26.41% valid schemas, and 24.12% correct tools on its
+held-out teacher-forced gate; it stopped before greedy generation and checkpoint
+publication. Fixed-prefix decoder-reader V6 failed even earlier: its only
+authorized real-model smoke found the full and answer-tail selected logits were
+not byte-exact, so it stopped before gradients, optimizer construction, training,
+or checkpoint publication. The semantic navigation policy missed the cabinet
+target. Historical learned navigation V2 failed the
+face-heading and scan-update standoff tasks, yielding 4/6. Historical V3 passed the
+face task and five families overall, but its scan-update episode stopped 1.630 m
+from the lamp after moving 0.771 m toward it (0.85 m maximum), yielding 5/6 rather
+than a full benchmark pass. Its preregistered V4.1 successor was not promoted:
+although 13/14 offline gates passed, its shuffled-clearance obstacle/update drop
+was 0.049565 versus the required 0.10, so no checkpoint or live result exists.
 
-## 25. Preserved legacy prefix-invariance evidence
+## 25. Question-independent prefix evidence
 
-PASS for checkpoint `data/checkpoints/best`. Prefix `f4ed6bc9cbf75bd878bcebab04e432ad3eb04ef236aadd6659931c8f214b7c9b` was constructed before the first question and remained identical across 3 questions.
+The embodied smoke constructed its full scene prefix before any user question and
+changed the prefix only after a new observation. The strict V54 runtime contract
+computes and hashes one environment-conditioned input before questions and exposes
+no question-conditioned scene-token path. The live three-question audit observed
+one exact hash before and after every question. V66b's readout-token hashes are
+expected to vary, so V66b cannot by itself establish strict full-input invariance.
+V75 likewise preserves an invariant complete base scene prefix, as demonstrated
+both in its live leakage run and independently for each of six official-validation
+scenes. Its four added continuous control tokens depend on the question while
+attending all 256 scene latents; therefore only the base prefix—not the total
+environment-conditioned input—is invariant.
+The separately executed V75 atlas structural mechanism compiled one 738-token
+scene-only input before user text and preserved all 256 base latents plus all 480
+atlas tokens. It used no question-dependent scene processing or retrieval. This
+was then repeated for all 16 scenes in the bounded behavior run: every atlas was
+compiled before the predictor question manifest opened, and every per-scene hash
+remained identical before and after generation. The behavior was negative, but
+the strict question-independent prefix property held.
+The optional V78 sidecar also consumed the same invariant 256-latent base scene
+input for all three questions: both the base-prefix hash and the extracted V78
+scene-token hash remained fixed. V75's four question-conditioned control tokens
+still make the total answer-model input question-dependent.
+V81's serialized 738-token scene memory is stronger mechanism evidence for the
+fixed-memory constraint: the exact memory was compiled before questions and its
+canonical hash stayed identical across all live questions. The latest user text
+only computes a dense read over all 96 atlas groups; it does not retrieve, omit,
+or mutate environmental tokens.
+V83 is stricter still: it performs no separate question-conditioned environmental
+readout at all. The exact 738x1536 memory is inserted directly into Gemma's native
+image-prefix slot before the question, all 738 tokens remain visible, the payload
+uses exact PAD PLE, and question-derived environmental/readout/control token counts
+are zero. The historical predictor compiled and bound all 16 memories before
+opening its answer-free question manifest and verified identical hashes afterward.
+V84 and V84.1 retain that exact structural contract during optimization. For each
+of the two wiring scenes, the `[1,738,1536]` memory was compiled before question
+tokenization and its SHA-256 was identical before and after every fixed-update run.
+The only question-dependent consumer was Gemma; the bridge added zero environmental
+tokens, readers, retrieval results, top-k selections, or control tokens.
+V85 preserves the same strict contract across 24 training scenes and 16
+scene-disjoint development scenes. Its definitive unseen-scene runtime reused one
+exact `[1,738,1536]` memory and total environment-conditioned input hash for all
+three questions, with zero question-derived environmental tokens. The scene-39
+24-row equivalence replay independently preserved a second scene's fixed hash.
+These invariance results hold even though the unseen-scene behavioral gate failed.
 
-## 26. Preserved legacy oracle-deletion evidence
+## 26. Oracle-deletion evidence
 
-PASS for checkpoint `data/checkpoints/best`. The oracle directory was atomically renamed away during local inference, no forbidden path was opened, answers completed, and the directory was restored. This result is not automatically transferred to a different checkpoint without rerunning the test.
+The current strict V89 runtime independently passed all 15 isolated runtime gates
+with the oracle physically unavailable throughout inference and restored
+afterward. Its audited chat process opened no training or evaluation report,
+recorded zero forbidden reads, and reused an identical full environment input for
+all three questions. The historical strict V54 comparator also passed an earlier
+oracle-deletion run. That older evidence does not transfer to V66b. V75 separately
+passed the stronger oracle-plus-training-and-
+teacher directory removal run described above; it is not relying on V54's proof.
+No V66b oracle-deletion success is claimed yet.
+The optional V78 live demo independently kept the oracle directory unavailable
+for all three questions, audited 4,204 reads with zero forbidden accesses, loaded
+no QA/oracle path, and restored the directory afterward.
+The fixed-atlas behavior predictor separately audited 119 reads with zero forbidden
+access, loaded no oracle or official/protected input, and never opened its
+physically isolated scorer references; scoring happened afterward in the separate
+scorer process.
+V81 independently ran with the oracle directory unavailable, restored it afterward,
+and audited 4,204 reads with zero forbidden accesses. The runtime also blocked its
+compiler controller, probe bank, training artifacts, QA, and scorer paths.
+V83's isolated predictor audited 118 reads with zero forbidden access and did not
+open its answer-bearing scorer reference. Its independent live direct-memory check
+audited 5,207 reads with zero forbidden access. The current-report builder checks
+the scorer-reference hash against its pinned identity but does not open that file.
+V84/V84.1 optimization reports state that no oracle, official, deferred-final,
+sealed historical-behavior, or development-behavior input was opened; the report
+builder authenticates their pinned artifacts without opening oracle or QA data.
+This is scope isolation for a train-only wiring experiment, not a fresh
+oracle-directory-deletion runtime test.
+All three learned-navigation checkpoints independently loaded from exactly two
+files while the oracle directory was unavailable. V3 also completed its live
+six-task inference audit with zero forbidden accesses.
+V3.3 independently repeated the six-task runtime with an empty environmental-text
+input list and zero forbidden accesses; its continuous-context audit opened zero
+oracle and zero QA files. Oracle target identity and geometry entered only the
+post-inference scorer. This is runtime isolation evidence for the development
+calibration, not a new static-chat oracle-deletion or held-out result.
 
 ## 27. Exact remaining limitations
 
-- Gemma v9 passes its strict six-unit teacher-forced full-vocabulary gate and
-  free-generates all trained color answers exactly, but scores 0/70 exact mirror
-  sides and 0/8 exact held-out support sides.
-- Gemma v10 completed a weights-only continuation from v9 epoch 36 but never passed
-  its gate. Both audited checkpoints score 9/12 color sides and 3/6 color units,
-  0/12 selected mirror sides and 0/6 selected mirror units, and 0/8 held-out support
-  sides. V10 partially forgets v9's trained-color behavior and is not promoted.
-- Gemma v11 restores 12/12 exact color sides but reaches only 3/12 selected mirror
-  sides, 0/6 selected mirror units, 7/70 all-mirror sides, and 1/8 held-out support
-  sides. It is not promoted.
-- Gemma v12 preserves 12/12 exact color sides and its spatial-relation warmup
-  reaches 12/12 auxiliary-margin sides, but greedy generation reaches 0/12
-  selected mirror sides, 0/70 all-mirror sides, and 0/8 held-out support sides.
-  It is not promoted.
-- Gemma v13 passes its no-update parity/gradient probe and its training,
-  checkpoint-integrity, BF16 runtime-reload, and prefix-parity checks. It preserves
-  12/12 exact color sides but reaches 0/12 selected mirror sides, 0/70 all-mirror
-  sides, and 0/8 held-out support sides. It is not promoted.
-- Gemma v14's four-arm screen preserves 12/12 color sides at update 4 and selects
-  2e-3 at 5/12 mirror sides. Its exact continuation peaks discretely at 7/12
-  mirror sides and 1/6 units, ends at 6/12 and 0/6 while restoring 12/12 color,
-  and never passes the complete teacher gate. It has no greedy audit or promotion.
-- Gemma v15-v22 test shared-attention, scene-residual, centered-content, and
-  reflection-odd local-field bridges. V21 is the strongest of that group at 8/12
-  mirror sides and 2/6 units while preserving color; none passes the complete
-  teacher gate or receives a greedy audit.
-- Gemma v23 freezes V21 and adapts only physical layers 13--14 shared K/V. Its
-  selected update 2 preserves color at 12/12 sides and 6/6 units and improves
-  mirror to 10/12 and 4/6, but its minimum mirror full-vocabulary margin remains
-  `-1.0`. Updates 3--8 do not improve that discrete peak. The bounded experiment
-  is closed without greedy decoding or promotion.
-- No Gemma held-out static-QA, interactive-chat, prefix-invariance, or
-  oracle-deletion/leakage inference result exists for v9-v23.
-- The exact source hash loaded by the v7 process was not captured; current source
-  hashes are post-run audited snapshots.
-- The v1 multi-scene adapter is scene-content-insensitive despite its raw held-out accuracy; wrong-scene and content-shuffle controls invalidate a scene-understanding claim for that checkpoint.
-- The v2 structural diagnostic preserves more scene signal, but no explicitly v2-tagged held-out QA artifact is available yet.
-- v8, v8-resume24, and v9-v23 wall-clock times are recorded where retained, but
-  the original v14 2e-3 screen time was overwritten by its resume report; peak
-  training memory is not recorded.
-- Preserved legacy expected-change counterfactual consistency is zero.
-- The direct multi-view image baseline is not scored.
-- The prohibited oracle-text upper bound is not scored.
-- The robot benchmark covers numeric mechanics and MCP wiring only; language-conditioned semantic target navigation is unmeasured.
-- The deterministic robot scan is a pose-dependent numerical map reobservation, not an arbitrary-pose Blender render plus CLIP remapping.
-- A center scan reconstructs visible surfaces but cannot reveal occluded rear surfaces.
-- Legacy CLIP patch semantics missed its top-k query set for: book.
+- The static-map, high-level-only Blender UI/backend integration and the
+  actual-local-Gemma waypoint DAgger V14 rover pass their bounded one-room live
+  checks. That is not held-out or broad navigation acceptance. All 7,115 V14
+  training rows come from `scene_000001`; the reported 24-row sample from its
+  two disjoint validation scenes is only 12.5% action-accurate, with 29.5241°
+  mean heading error and zero STOP recall. Cross-room generalization remains a
+  primary open problem despite the successful live room-one lap and object goals.
+- The passing V14 chair approach included eight safely rejected colliding
+  proposals across 16 Gemma decisions. This proves Gemma can continue from
+  numeric rejection receipts in that episode, not that the policy is generally
+  collision-efficient. The historical V3/V3.3 face, approach,
+  between, and 47-waypoint patrol results used deterministic numeric convergence,
+  fallback, or geometric planning. They are explicitly hybrid integration
+  evidence, not evidence that Gemma chose those complete routes.
+- Static-map control intentionally ignores rover-camera observations. This cleanly
+  tests reasoning over a globally embedded 3D environment, but it cannot discover
+  new obstacles or scene changes until an explicit future map-update mode is
+  enabled and evaluated separately.
+- V66b failed its preregistered scene-dependence gate, so no sealed schema-7 checkpoint was published.
+- V67 failed three immutable training-only numeric scene-dependence gates; it therefore has no generated-answer result and no checkpoint.
+- V68 exhausted all three preregistered regularization arms without passing its unchanged numeric gate; it has no generated-answer result and no checkpoint.
+- V69 did not pass its unchanged training-only numeric gate and has no generated-answer or checkpoint result.
+- V70 did not pass its unchanged training-only numeric gate; it has no generated-answer, atlas, full-run, or checkpoint result.
+- V71 did not pass its unchanged training-only numeric gate; the near-equal learned fusion did not yield an accepted successor.
+- V72 is a terminal one-fold development negative: the adaptive fusion did not improve over its stronger frozen branch, and no checkpoint exists.
+- V73/V74 are terminal negatives. V75 is a sealed, leakage-cleared runtime with 167/216 canonical official-validation answers and strong count/presence performance, but its 28/48 spatial-relation result missed the 60% gate and grounding mean error was 2.136 m. Its four question-conditioned continuous control tokens also mean it is not the strict identical-total-environment-input primary path. V76 is a superseded raw-pre-NLL-V75 branch with no held gain or checkpoint; V77 is a training-pool-only 72-row diagnostic with a positive 9/16 smoke but only 2/8 paired prediction changes. Its full internal result of 299/384 improves V75 by only 4 answers and lacks a matched full wrong-scene arm, so it remains unpromoted.
+- The multi-position ablation covers one development scene and jointly changes camera positions and view count; coverage improved, but its semantic localization and view-separation metrics did not.
+- V6.3 improved all locked in-pilot pair aggregates, but this was a non-disjoint train-only diagnostic. Its V6.4 pair-disjoint successor failed, so the V6.3 surface is closed and no checkpoint was published.
+- V6.4 failed hard pair- and scene-disjoint margin generalization. No continuation of the exact V6.3/V6.4 attention surface, validation run, generation, runtime promotion, or checkpoint is authorized.
+- Motion-triggered Blender RGB-D -> map/prefix refresh has both a live direct-runtime 15-degree-turn measurement and a live official-SDK MCP stdio explicit-scan-plus-turn measurement. This remains a one-scene integration smoke, not evidence of conversational navigation success.
+- V79 is terminal at its historical scene-disjoint screen: 20/28 correct and a 15-row correct-minus-wrong gap were insufficient because 9/14 prediction-changing units missed V77's 10/14 baseline. No full 384-row result, runtime checkpoint, official validation, or promotion exists.
+- V80 is terminal at its optimizer-free zero-step gradient smoke due to MPS OOM. The bounded screen never launched, no optimizer update or checkpoint exists, protected data remained unopened, and no behavioral or scene-causal improvement can be claimed.
+- V81 is runnable and leakage-cleared, but its bounded historical control failed: 8/16 trailed its 9/16 wrong-scene arm and direct V75's 9/16 comparator. It is not promoted or officially validated.
+- V82's numeric reader fit is authenticated and its real-Gemma wrong-scene arm fell to 6/16, but the candidate remained 8/16. It failed its candidate and V54-gain gates and is not promoted.
+- V83 meets the strict direct immutable-memory architecture, but its 6/16 candidate tied frozen V54 and shuffled atlas, trailed the 7/16 wrong-scene arm, and changed only 1/8 counterfactual units. It is not promoted or officially validated.
+- V84.1 proves that a trainable bridge can causally separate one preregistered on/under pair from immutable 738-token memories, but it trained and scored those same two scenes. No development, held-out, official, oracle-deletion runtime, or promotion evidence exists.
+- V85's 55.73% result is scene-disjoint development, not official validation. Counterfactual completeness is 4/26, attribute accuracy is 25%, and the corrected leakage-clean unseen scene-1 smoke is only 1/3. The candidate is not promoted.
+- V86 proved a 3/3 bounded room smoke and strong zero-payload causal dependence over the strict fixed 738-token memory, but reached only 86/138 (62.32%) on its own training-authorized scene versus the locked 80% gate. Attribute, metric, and support accuracy remained weak. The runtime smoke and promotion were correctly blocked; there is no held-out generalization claim.
+- V87 improved strict single-scene exact accuracy to 103/138 (74.64%) and passed presence/spatial-relation floors, but failed the 80% overall gate, the 50% attribute floor at 7/18, and the required generic smoke at 0/3. All smoke answers—including `right`—were wrong. Runtime testing and promotion were correctly blocked; no held-out claim is made.
+- V88 improved strict development-known scene-one accuracy to 107/138 (77.54%) and passed every preregistered model gate except the locked 80% overall threshold. Its 3/3 `yes`/`red`/`left` smoke was explicitly included in training and is not held out. The failed overall gate correctly blocked runtime smoke, packaging, and promotion; no held-out generalization or official-validation claim is made.
+- V89 is an authenticated, runnable scene-one training-set development result: 122/138 (88.41%), all 11 model gates, and all 15 independent runtime gates passed. Its three smoke questions are trained and non-held-out. The promoted runtime is deliberately scoped to local scene-one demonstration; no held-out generalization or official-validation claim is made.
+- V94's terminal post-hoc controls show strong zero-scene dependence but weak exact scene/order binding: wrong-scene accuracy fell only 1.39 points and full token permutation fell 0 points. V94 is not promoted, held-out, official, or final-acceptance evidence.
+- V95 is sealed known-development negative evidence, not held-out-final or generalization evidence. Its gate failed at 13/24 counterfactual sides, 1/12 complete units, and 2/12 changed predictions; V89 remains the static-chat default and deferred-final materialization remains locked.
+- The current conversational MCP proof covers two scenes and the real stdio/process boundary, but uses scripted numeric scan/turn/stop commands; it does not add a held-out semantic navigation score.
+- The live semantic conversational MCP result is one development scene and one face-target instruction. Its selective-Gemma grounding is real, but action choice is deterministic V3 numeric convergence—not Gemma function calling or the learned V3 action head. It is not promoted or held-out navigation evidence.
+- The five-turn persistent MCP session passed its separate physical score on one development scene, but deterministic numeric interlocks—not Gemma native function calling or the learned V3 action head—selected actions. It is neither held-out navigation nor promotion evidence.
+- Historical hybrid semantic face-target navigation was 2/2 only with a numeric convergence interlock, on two development scenes and one instruction family. Learned-only was 0/1, and question-conditioned continuous controls/grounding mean this is not strict identical-total-input evidence.
+- Approach development improves from V2 1/2 to V3 2/2 on the same two scenes, but V3 scene 31 is collision-limited safe-stop success—not ordinary semantic-standoff success. This is evaluator-scored development evidence only, with no held-out generalization or runtime promotion.
+- The V3 trajectory figure is post-hoc visualization of two development-runtime result files, not new inference or held-out navigation evidence. Scene 31 remains collision-limited closest-safe completion, not ordinary 0.5 m semantic-standoff success.
+- V3.3 passed 6/6 only on the same one-scene development benchmark used for diagnosis. It combines the supervised V3 controller with a deterministic numeric waypoint planner; no held-out, cross-scene, or native Gemma function-calling claim follows.
+- V78's 94-row point-cloud replay is historical internal evaluation only. Its oracle targets are evaluator-only and its fixed-prefix grounding readout is still question-conditioned; no strict-input, official-validation, answer-correctness, or promotion claim follows.
+- V66b is a no-retrieval enhanced readout, not a strict identical-environment-token
+  primary path. V89 now supplies the measured strict scene-one runtime, while
+  held-out cross-scene generalization remains unmeasured.
+- No schema-7 held-out static QA, scene-swap, leakage, or oracle-removal result is
+  currently reported.
+- The current static-reader blocker is causal pair-disjoint generalization itself;
+  completed historical screens ruled out treating it as merely a pending run.
+- The legacy runnable strict fixed-prefix V54 comparator has only below-gate
+  development behavior. The V75-driven fixed atlas has also been measured on a bounded
+  historical-internal smoke and tied V54 at 6/16, below direct exact V75's 9/16.
+- V75 remains runnable and officially evaluated as a historical comparator, but
+  its four question-conditioned
+  continuous scene-control tokens make it an enhanced no-retrieval readout rather
+  than the strict identical-total-input primary. The immutable 256-latent base
+  prefix remains present and every latent is attended.
+- The 738-token strict atlas no longer depends on rejected V66b: an exact sealed
+  V75 controller compiled all 256 base plus 480 atlas tokens before questions.
+  Its later 16-row behavior run verified invariant prefixes and isolated scoring,
+  but gained 0 points over V54, changed only 1/8 paired units, and was not
+  question-disjoint because 12 prompts overlapped training. There is no promoted
+  atlas runtime checkpoint or official/protected evaluation result.
+- V78 is an optional two-file numeric-grounding sidecar over all 256 scene tokens,
+  not a new answer model. Its historical-internal controls and live isolation are
+  authenticated, but it has no official-validation or promotion evidence. The
+  live location prompts exposed the unchanged V75 answer weakness (`right` and
+  `red` instead of location-form answers), and no sealed V78-specific embodied
+  transcript or navigation score exists.
+- Atlas V2 has authenticated lossless layout and sliding-window exposure evidence,
+  but compilation is explicitly disabled: it has no accepted controller,
+  checkpoint, generation, behavioral score, or accuracy-improvement result.
+- The original rank-4, 41,984-parameter PLE reader artifact remains a design-only
+  preregistration. A separate sealed V54 V1--V5 reader chain was actually run, but
+  its two completed arms failed the scene-selectivity gate and published no
+  checkpoint; generic NLL improvement did not translate into causal scene use.
+- Gemma tool decoder V2.2 completed 64 updates and achieved 87.13% answer-token
+  accuracy, but only 17.42% exact sequences, 26.41% valid schemas, and 24.12% tool
+  accuracy. Its preregistered early gate correctly blocked greedy evaluation,
+  strict runtime probing, and checkpoint publication.
+- Fixed-prefix upper-decoder reader V6 consumed its only authorized zero-update
+  smoke and failed byte-exact full-vs-tail selected-logit equivalence. It has no
+  gradient measurement, optimizer, training result, behavioral score, or
+  checkpoint. Its zero-forbidden-read audit does not convert that failure into
+  evidence that the reader itself works.
+- Fixed-prefix upper-decoder reader V6.2 completed its exact 96-update
+  full-forward run and improved answer NLL from
+  3.2358 to
+  1.9157, but scene selectivity
+  regressed: expanded positive margins fell from
+  0.6647 to
+  0.5941, curated
+  complete units fell from 12
+  to 11, and orientation
+  margins fell from 0.8571
+  to 0.1429.
+  Retention passed, but the fail-closed gate skipped greedy evaluation and
+  published no checkpoint.
+- V55 development accuracy is above simple priors on some types but counterfactual
+  consistency and grounding are inadequate. V75 materially improves held-out
+  answers, yet its official 58.33% spatial-relation score missed the 60% gate and
+  its 2.136 m mean grounding error remains inadequate.
+- The full direct-image baseline is
+  5.09
+  percentage points above the historical V55 continuous-3D baseline on that
+  development split. V89 is the current strict scene-one runtime, but it has not
+  been evaluated on the same held-out split; cross-scene and counterfactual
+  generalization remain open.
+- Learned navigation V3 is supervised and improved the live result to 5/6 with
+  zero collisions, action failures, or policy rejections, but it remains a
+  historical one-scene partial result whose sealed source snapshot does not claim
+  compatibility with today's successor runtime. Its numeric target state is strongly causal, while
+  wrong-scene and zero-scene action-accuracy deltas are only 0.003527 and
+  -0.000441; strong direct scene-prefix dependence has not been demonstrated.
+- Navigation V4.1 was a single preregistered arm and passed 13/14 offline gates,
+  but its 0.049565 shuffled-clearance obstacle/update accuracy drop missed the
+  required 0.10 causal threshold. It was correctly rejected with no checkpoint
+  publication and no live benchmark; obstacle-aware policy learning remains open.
+- Occluded surfaces remain unobserved by a center-only scan.
 
 ## 28. Recommended next experiments
 
-1. Preserve V23 as a failed but informative controlled ablation; do not extend it
-   past the declared update-8 limit. Its update-2 peak followed by regression
-   supports a newly versioned complementary readout intervention, not more K/V-only
-   optimizer steps.
-2. Test a zero-output query-only LoRA bridge on the last untouched sliding/full
-   attention consumers (physical layers 28 and 29) while freezing the selected
-   V23 update-2 K/V state and resetting optimizer history. Keep the V23 objective
-   and gates fixed so the architecture change is isolated.
-3. Require the next saved-and-reloaded candidate to preserve 12/12 strict color
-   sides and reach 12/12 strict selected-mirror sides with 6/6 changed units. Only
-   then rerun all-mirror and held-out support controls before static QA, chat,
-   leakage, robot, or promotion work.
-4. Run the direct multi-view VLM and isolated oracle-text upper-bound baselines.
-5. Train and evaluate language-conditioned target-facing and approach behavior
-   only after the static semantic gate passes, without returning semantic labels
-   through tools.
-6. Preserve the v1/v2 CLIP/Qwen runs as historical anti-collapse evidence, not as
-   primary-model results.
+Do not promote or simply scale the current V75 fixed-prefix atlas: its bounded
+historical behavior tied V54 and trailed direct V75. A successor needs a newly
+preregistered mechanism and question-disjoint evaluation with wrong-scene,
+empty-prefix, prefix-invariance, and oracle-removal controls. Atlas V2 should
+remain structural until such a successor clears those gates.
+V81 now supplies that runnable fixed-memory mechanism and passes the zero-payload,
+shuffle, prefix-invariance, and oracle-removal checks, but it must also remain
+experimental: its 8/16 historical score trailed the 9/16 wrong-scene arm. Do not
+tune further on that consumed smoke. Train against untouched training-only data,
+preregister a new question-disjoint causal screen, and require a positive margin
+over both wrong-scene and frozen-V54 controls before promotion or official testing.
+V84.1 demonstrates the missing two-scene causal wiring capability, but its exact
+on/under pair is consumed optimization data. Keep that checkpoint non-promoted;
+the next strict-memory bridge must be selected without held results, then clear a
+new pair-, scene-, and question-disjoint multi-family screen plus wrong-memory,
+zero-memory, prefix-invariance, and oracle-deletion controls before any runtime or
+official evaluation.
+For grounding, preserve V78 as an internal comparator, improve the conversational
+answer/coordinate coupling on training-only data, and require a separately sealed
+multi-scene embodied run before making any navigation claim.
+For the static path, use V6.2's measured failure to prioritize a causally stronger
+objective: explicitly preserve orientation and wrong-prefix margins throughout
+optimization, and require intermediate held-internal scene-selectivity improvement
+without selecting on deferred/final scenes. Do not repeat longer generic-NLL
+optimization of the failed PLE/V6.2 surfaces. V6.3 supplies the first bounded
+positive attention-routing diagnostic, but V6.4 proves that the exact surface did
+not generalize to hard pair- and scene-disjoint units. Do not continue or promote
+that surface. A successor needs a newly preregistered causal mechanism or objective
+that clears pair-disjoint margins before internal validation, Gemma generation, or
+runtime checkpoint creation.
+V74 and pre-NLL V75 show that clearing a teacher-space numeric screen is
+insufficient. V75 has now completed the subsequent runtime-promotion, leakage, and
+one-candidate official-validation stages. The next static experiment should target
+the observed failure rather than reopen selection on this consumed split: improve
+spatial relations on a newly preregistered training/development protocol, require
+a comfortably higher spatial margin than 60%, add an effective metric-grounding
+objective, and evaluate once on a new untouched split. In parallel, train a strict
+fixed-total-input successor that does not append question-conditioned scene-control
+tokens, while retaining the successful all-latent V75 control as an enhanced
+readout comparator. V76 is already a rejected, superseded branch and should not be
+extended. V77's bounded historical repair should remain training-pool-only and
+must not tune against the consumed official validation; its small 4/384 full-screen
+gain needed a preregistered causal confirmation with a matched wrong-scene arm.
+V79 supplied that bounded matched screen and improved correct/gap counts, but
+failed the locked prediction-change gate; it is terminal and must not proceed to
+the blocked full 384-row or runtime stages. V80's separate fixed-atlas attention reader never reached its bounded screen: the optimizer-free zero-step MPS gradient smoke exhausted memory, so it is terminal with zero updates, no checkpoint, and no protected-data access. Any successor needs a newly sealed memory-safe design; V80 must not be presented as behavioral evidence. The
+bounded live semantic-MCP
+scan/turn integration is now measured; the next embodied experiment should score
+conversational target-facing and approach behavior over multiple held-out scenes
+without semantic tool-result leakage.
+For tool use, repair sequence-level JSON supervision or use constrained
+decoding, then rerun the same exact/schema/tool early gate before any runtime
+publication. Preserve wrong-prefix, retention, clearance-shuffle, strict-reload,
+and MCP safety gates. Keep the official test and deferred-final scenes closed;
+the six-scene V75 validation split is now consumed and must not become a tuning set.
 
-## Geometry validation detail
+## Measured prerequisites
 
-| Metric | Value |
-| --- | --- |
-| Validation status | PASS |
-| Sampled points | 75,264 |
-| Inside-room fraction | 100.000% |
-| Reprojection RMSE | 0.00000627 px |
-| Depth round-trip RMSE | 0.0000001034 m |
-| Cube median surface error | 0.0000000298 m |
+- Geometry: reprojection RMSE 6.27e-06 px, depth
+  round-trip RMSE 1.03e-07 m, cube-surface median
+  error 2.98e-08 m; pass.
+- Zero-shot semantic localization over 17 scenes
+  and 221 queries: mean top-1
+  48.42%, mean top-k
+  78.28%, P@k
+  43.17% versus
+  8.09% random.
+- Five scenes with cached multi-view pairs: same-voxel cosine
+  0.593 versus
+  0.399
+  different-voxel cosine.
+- Full local regression: 3,021/
+  3,021 tests passed in
+  177.20 seconds with zero failures.
 
-### Artifact-version warning
+## Reproducible entry points
 
-The mapping summary content hash differs from the semantic-sanity map hash, consistent with the later MaskCLIP map rebuild. Semantic results refer to the map hash recorded in `semantic_sanity_scene_000001.json`; regenerate the mapping summary for a fully synchronized manifest.
-
-### Runtime warnings
-
-- Full config hash differs from training, but all inference architecture fields match: checkpoint=ad07d037490e runtime=6c6d150bca7a
-
-## Preserved legacy artifact inventory
-
-Present sources: `{"ablations": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/metrics/ablations.json", "best_checkpoint": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data/checkpoints/multiscene_anticollapse/best/metadata.json", "geometry": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/metrics/geometry.json", "leakage": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/metrics/leakage.json", "machine": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/metrics/machine_report.json", "map": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/metrics/map_scene_000001.json", "models": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/metrics/model_revisions.json", "qa": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/metrics/metrics.json", "render_manifest": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data/rendered/scene_000001/manifest.json", "resampler_diagnostic": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/metrics/resampler_fix_diagnostic.json", "robot": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/metrics/robot_navigation.json", "semantic": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/metrics/semantic_sanity_scene_000001.json", "signal_audit": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/metrics/scene_signal_audit.json", "training_v1": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/metrics/training_multiscene.json", "validation": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/metrics/validation_metrics.json"}`
-
-Missing metric groups: `baselines, training`
+```bash
+make doctor
+make current-report
+make gemma4-v71-authenticate # read-only sealed multiscale-screen authentication
+PYTHONPATH=src .venv-gemma4/bin/python -c 'from semantic_3d_chat.evaluation.v72_development_authentication import authenticate_v72_development_negative as a; import json; print(json.dumps(a(), indent=2, sort_keys=True))'
+PYTHONPATH=src .venv-gemma4/bin/python -m semantic_3d_chat.evaluation.fixed_prefix_attention_reader_v6_3_evidence authenticate
+PYTHONPATH=src .venv-gemma4/bin/python -m semantic_3d_chat.evaluation.fixed_prefix_attention_reader_v6_4_evidence authenticate
+make score-multi-position-ablation # authenticated 24-view vs 96-view report-only ablation
+make demo-check            # promoted strict V89 + comparator/service preflights
+make demo                  # current V89: interactive on TTY, finite in CI
+make demo-smoke            # finite promoted strict V89 three-question proof
+make demo-leakage          # V89 oracle-unavailable audit + prefix invariance
+make chat                  # interactive current strict V89 operator chat
+make v89-runtime-verify    # authenticate promoted V89 checkpoint and bindings
+make v89-demo-check        # lightweight promoted V89 readiness check
+make v89-demo              # finite explicit V89 demo
+make v89-demo-chat         # interactive explicit V89 chat
+make v89-demo-leakage      # explicit V89 isolation/invariance check
+make v75-demo-chat         # historical question-conditioned V75 comparator
+make v81-reader-check      # model-free sealed reader/layout preflight
+make v81-scene-memory-check # authenticate the exact two-file 738-token memory
+make v81-scene-memory-demo # finite experimental V81 local chat
+make v81-scene-memory-chat # interactive experimental V81 local chat
+make v81-scene-memory-leakage # oracle deletion + fixed-memory invariance
+make v83-check             # authenticate exact direct 738-token Gemma layout
+make v83-chat              # experimental direct fixed-memory chat; not promoted
+make v83-historical-score  # display create-once 16-row negative control score
+make v78-grounding-held-pointcloud # exact 94-row replay + six held-map overlays
+make strict-demo-chat      # legacy strict V54 comparator chat
+make strict-demo-leakage   # legacy V54 comparator isolation/invariance
+make strict-web            # legacy V54 comparator browser UI
+make strict-web-check      # legacy comparator UI preflight without Gemma
+make strict-atlas-build    # after an accepted sealed controller exists
+make strict-atlas-evaluate # questions-only held evaluation
+make strict-atlas-v2-auth  # read-only structural/hash authentication; no model
+make ple-reader-prereg-auth # read-only design/hash authentication; no training
+PYTHONPATH=src .venv/bin/python -m semantic_3d_chat.evaluation.fixed_prefix_ple_v54_evidence
+PYTHONPATH=src .venv/bin/python -m semantic_3d_chat.evaluation.gemma4_tool_decoder_v2_2_evidence
+PYTHONPATH=src .venv/bin/python -m semantic_3d_chat.evaluation.fixed_prefix_decoder_reader_v6_evidence
+make research-demo-check   # historical V75 enhanced-comparator gate
+make research-demo         # finite historical V75 comparator
+make research-demo-chat    # interactive historical V75 comparator
+make research-demo-leakage # historical V75 isolation check
+make gemma4-semantic-navigation SCENE=scene_000001
+make gemma4-embodied-chat-llm SCENE=scene_000001
+make gemma4-embodied-mcp-check SCENE=scene_000001 # read-only semantic access preflight
+make gemma4-embodied-mcp-live-smoke # heavy SDK + Gemma + Blender scan/turn proof
+make conversation-mcp-smoke # real conversational agent -> official MCP stdio proof
+make gemma4-embodied-mcp SCENE=scene_000001
+```

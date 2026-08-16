@@ -1,0 +1,2994 @@
+{
+  "artifact": "gemma4_v54_fixed_prefix_attention_reader_v6_3_pilot",
+  "audit": {
+    "forbidden_accesses": [],
+    "loaded_file_count": 125,
+    "loaded_files_sha256": "8dfebcd1873917c6ef774827d142379e0d57040cd525cf6c8fc7bf06595dcf8e",
+    "oracle_accessed": false,
+    "passed": true,
+    "validation_deferred_or_final_accessed": false
+  },
+  "baseline_pair_metrics": {
+    "complete_units": 16,
+    "mean_correct_nll": 2.7300667949020863,
+    "mean_margin": 0.44183284789323807,
+    "mean_margin_softplus": 0.8436957606580109,
+    "positive_margin_sides": 48,
+    "records": [
+      {
+        "answer_type": "orientation",
+        "complete_unit": true,
+        "pair_id": "pair_000005",
+        "pair_question_key": "cfq_a578dc166be9a217",
+        "scene_ids": [
+          "scene_000011",
+          "scene_000012"
+        ],
+        "sides": [
+          {
+            "answer": "upright",
+            "correct_nll": 0.5079594850540161,
+            "wrong_minus_correct_margin": 0.029239296913146973,
+            "wrong_nll": 0.5371987819671631
+          },
+          {
+            "answer": "upside down",
+            "correct_nll": 0.9634072780609131,
+            "wrong_minus_correct_margin": 0.09342432022094727,
+            "wrong_nll": 1.0568315982818604
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": false,
+        "pair_id": "pair_000006",
+        "pair_question_key": "cfq_0a79d507273195ef",
+        "scene_ids": [
+          "scene_000013",
+          "scene_000014"
+        ],
+        "sides": [
+          {
+            "answer": "right",
+            "correct_nll": 1.5240448713302612,
+            "wrong_minus_correct_margin": -0.012211322784423828,
+            "wrong_nll": 1.5118335485458374
+          },
+          {
+            "answer": "left",
+            "correct_nll": 1.495721697807312,
+            "wrong_minus_correct_margin": -0.11989748477935791,
+            "wrong_nll": 1.375824213027954
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": true,
+        "pair_id": "pair_000006",
+        "pair_question_key": "cfq_5c84a2c27d2be251",
+        "scene_ids": [
+          "scene_000013",
+          "scene_000014"
+        ],
+        "sides": [
+          {
+            "answer": "left",
+            "correct_nll": 1.3282660245895386,
+            "wrong_minus_correct_margin": 0.09448444843292236,
+            "wrong_nll": 1.422750473022461
+          },
+          {
+            "answer": "right",
+            "correct_nll": 1.22396719455719,
+            "wrong_minus_correct_margin": 0.1042405366897583,
+            "wrong_nll": 1.3282077312469482
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": true,
+        "pair_id": "pair_000006",
+        "pair_question_key": "cfq_8e9855d51fa91bfb",
+        "scene_ids": [
+          "scene_000013",
+          "scene_000014"
+        ],
+        "sides": [
+          {
+            "answer": "left",
+            "correct_nll": 1.1570852994918823,
+            "wrong_minus_correct_margin": 0.01826155185699463,
+            "wrong_nll": 1.175346851348877
+          },
+          {
+            "answer": "right",
+            "correct_nll": 1.5114688873291016,
+            "wrong_minus_correct_margin": 0.08645248413085938,
+            "wrong_nll": 1.597921371459961
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": false,
+        "pair_id": "pair_000006",
+        "pair_question_key": "cfq_f1e8f24afac4339b",
+        "scene_ids": [
+          "scene_000013",
+          "scene_000014"
+        ],
+        "sides": [
+          {
+            "answer": "right",
+            "correct_nll": 1.1947839260101318,
+            "wrong_minus_correct_margin": -0.041796088218688965,
+            "wrong_nll": 1.1529878377914429
+          },
+          {
+            "answer": "left",
+            "correct_nll": 1.7388319969177246,
+            "wrong_minus_correct_margin": 0.06463050842285156,
+            "wrong_nll": 1.8034625053405762
+          }
+        ]
+      },
+      {
+        "answer_type": "attribute",
+        "complete_unit": false,
+        "pair_id": "pair_000007",
+        "pair_question_key": "cfq_736067b51ce93c49",
+        "scene_ids": [
+          "scene_000015",
+          "scene_000016"
+        ],
+        "sides": [
+          {
+            "answer": "green",
+            "correct_nll": 4.119704723358154,
+            "wrong_minus_correct_margin": -0.5493345260620117,
+            "wrong_nll": 3.5703701972961426
+          },
+          {
+            "answer": "yellow",
+            "correct_nll": 4.173592567443848,
+            "wrong_minus_correct_margin": 0.11569595336914062,
+            "wrong_nll": 4.289288520812988
+          }
+        ]
+      },
+      {
+        "answer_type": "attribute",
+        "complete_unit": true,
+        "pair_id": "pair_000007",
+        "pair_question_key": "cfq_997610c185204121",
+        "scene_ids": [
+          "scene_000015",
+          "scene_000016"
+        ],
+        "sides": [
+          {
+            "answer": "green",
+            "correct_nll": 4.043489456176758,
+            "wrong_minus_correct_margin": 0.11773157119750977,
+            "wrong_nll": 4.161221027374268
+          },
+          {
+            "answer": "yellow",
+            "correct_nll": 4.078913688659668,
+            "wrong_minus_correct_margin": 0.3419771194458008,
+            "wrong_nll": 4.420890808105469
+          }
+        ]
+      },
+      {
+        "answer_type": "attribute",
+        "complete_unit": true,
+        "pair_id": "pair_000007",
+        "pair_question_key": "cfq_bd500364dac52b59",
+        "scene_ids": [
+          "scene_000015",
+          "scene_000016"
+        ],
+        "sides": [
+          {
+            "answer": "yellow",
+            "correct_nll": 3.145266532897949,
+            "wrong_minus_correct_margin": 3.440258502960205,
+            "wrong_nll": 6.585525035858154
+          },
+          {
+            "answer": "green",
+            "correct_nll": 0.8206819891929626,
+            "wrong_minus_correct_margin": 4.548361778259277,
+            "wrong_nll": 5.369043827056885
+          }
+        ]
+      },
+      {
+        "answer_type": "attribute",
+        "complete_unit": true,
+        "pair_id": "pair_000007",
+        "pair_question_key": "cfq_f004e89a2284b94a",
+        "scene_ids": [
+          "scene_000015",
+          "scene_000016"
+        ],
+        "sides": [
+          {
+            "answer": "yellow",
+            "correct_nll": 2.9326889514923096,
+            "wrong_minus_correct_margin": 4.032873153686523,
+            "wrong_nll": 6.965561866760254
+          },
+          {
+            "answer": "green",
+            "correct_nll": 0.6365102529525757,
+            "wrong_minus_correct_margin": 4.629086017608643,
+            "wrong_nll": 5.265596389770508
+          }
+        ]
+      },
+      {
+        "answer_type": "count",
+        "complete_unit": false,
+        "pair_id": "pair_000008",
+        "pair_question_key": "cfq_39808de4310f3388",
+        "scene_ids": [
+          "scene_000017",
+          "scene_000018"
+        ],
+        "sides": [
+          {
+            "answer": "1",
+            "correct_nll": 2.1274871826171875,
+            "wrong_minus_correct_margin": 0.011990785598754883,
+            "wrong_nll": 2.1394779682159424
+          },
+          {
+            "answer": "2",
+            "correct_nll": 3.8773345947265625,
+            "wrong_minus_correct_margin": -0.009141921997070312,
+            "wrong_nll": 3.868192672729492
+          }
+        ]
+      },
+      {
+        "answer_type": "support",
+        "complete_unit": false,
+        "pair_id": "pair_000009",
+        "pair_question_key": "cfq_5611adccccae59f1",
+        "scene_ids": [
+          "scene_000019",
+          "scene_000020"
+        ],
+        "sides": [
+          {
+            "answer": "on",
+            "correct_nll": 9.117733001708984,
+            "wrong_minus_correct_margin": -0.021513938903808594,
+            "wrong_nll": 9.096219062805176
+          },
+          {
+            "answer": "under",
+            "correct_nll": 3.6965529918670654,
+            "wrong_minus_correct_margin": 0.020717382431030273,
+            "wrong_nll": 3.7172703742980957
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": false,
+        "pair_id": "pair_000009",
+        "pair_question_key": "cfq_885e53344a9de104",
+        "scene_ids": [
+          "scene_000019",
+          "scene_000020"
+        ],
+        "sides": [
+          {
+            "answer": "above",
+            "correct_nll": 3.1949667930603027,
+            "wrong_minus_correct_margin": 0.0034508705139160156,
+            "wrong_nll": 3.1984176635742188
+          },
+          {
+            "answer": "below",
+            "correct_nll": 1.4812637567520142,
+            "wrong_minus_correct_margin": -0.005604743957519531,
+            "wrong_nll": 1.4756590127944946
+          }
+        ]
+      },
+      {
+        "answer_type": "support",
+        "complete_unit": false,
+        "pair_id": "pair_000009",
+        "pair_question_key": "cfq_b90a7681f59f317a",
+        "scene_ids": [
+          "scene_000019",
+          "scene_000020"
+        ],
+        "sides": [
+          {
+            "answer": "book, cube",
+            "correct_nll": 6.5014543533325195,
+            "wrong_minus_correct_margin": -0.17989110946655273,
+            "wrong_nll": 6.321563243865967
+          },
+          {
+            "answer": "cube",
+            "correct_nll": 6.22586727142334,
+            "wrong_minus_correct_margin": -0.3103017807006836,
+            "wrong_nll": 5.915565490722656
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": false,
+        "pair_id": "pair_000009",
+        "pair_question_key": "cfq_b93bc343e2be3284",
+        "scene_ids": [
+          "scene_000019",
+          "scene_000020"
+        ],
+        "sides": [
+          {
+            "answer": "below",
+            "correct_nll": 1.537964105606079,
+            "wrong_minus_correct_margin": -0.01586306095123291,
+            "wrong_nll": 1.5221010446548462
+          },
+          {
+            "answer": "above",
+            "correct_nll": 3.68391752243042,
+            "wrong_minus_correct_margin": -0.005963802337646484,
+            "wrong_nll": 3.6779537200927734
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": false,
+        "pair_id": "pair_000010",
+        "pair_question_key": "cfq_3b6232930290e58a",
+        "scene_ids": [
+          "scene_000021",
+          "scene_000022"
+        ],
+        "sides": [
+          {
+            "answer": "left",
+            "correct_nll": 1.2750087976455688,
+            "wrong_minus_correct_margin": 0.1701143980026245,
+            "wrong_nll": 1.4451231956481934
+          },
+          {
+            "answer": "right",
+            "correct_nll": 1.3331599235534668,
+            "wrong_minus_correct_margin": -0.03422975540161133,
+            "wrong_nll": 1.2989301681518555
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": true,
+        "pair_id": "pair_000010",
+        "pair_question_key": "cfq_8379fb0541822481",
+        "scene_ids": [
+          "scene_000021",
+          "scene_000022"
+        ],
+        "sides": [
+          {
+            "answer": "left",
+            "correct_nll": 1.684381127357483,
+            "wrong_minus_correct_margin": 0.8133653402328491,
+            "wrong_nll": 2.497746467590332
+          },
+          {
+            "answer": "right",
+            "correct_nll": 1.1674658060073853,
+            "wrong_minus_correct_margin": 0.04695785045623779,
+            "wrong_nll": 1.214423656463623
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": false,
+        "pair_id": "pair_000010",
+        "pair_question_key": "cfq_873ba9281d37e099",
+        "scene_ids": [
+          "scene_000021",
+          "scene_000022"
+        ],
+        "sides": [
+          {
+            "answer": "right",
+            "correct_nll": 1.3257765769958496,
+            "wrong_minus_correct_margin": 0.10705089569091797,
+            "wrong_nll": 1.4328274726867676
+          },
+          {
+            "answer": "left",
+            "correct_nll": 1.6331987380981445,
+            "wrong_minus_correct_margin": -0.1739894151687622,
+            "wrong_nll": 1.4592093229293823
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": false,
+        "pair_id": "pair_000010",
+        "pair_question_key": "cfq_aa4b7a89ff2ee3ba",
+        "scene_ids": [
+          "scene_000021",
+          "scene_000022"
+        ],
+        "sides": [
+          {
+            "answer": "left",
+            "correct_nll": 2.430051565170288,
+            "wrong_minus_correct_margin": -0.19793486595153809,
+            "wrong_nll": 2.23211669921875
+          },
+          {
+            "answer": "right",
+            "correct_nll": 1.4356822967529297,
+            "wrong_minus_correct_margin": -0.197015643119812,
+            "wrong_nll": 1.2386666536331177
+          }
+        ]
+      },
+      {
+        "answer_type": "support",
+        "complete_unit": false,
+        "pair_id": "pair_000011",
+        "pair_question_key": "cfq_34bc318f4e30a8bf",
+        "scene_ids": [
+          "scene_000023",
+          "scene_000024"
+        ],
+        "sides": [
+          {
+            "answer": "wall",
+            "correct_nll": 4.0767412185668945,
+            "wrong_minus_correct_margin": 0.32855796813964844,
+            "wrong_nll": 4.405299186706543
+          },
+          {
+            "answer": "floor",
+            "correct_nll": 1.5454778671264648,
+            "wrong_minus_correct_margin": -0.39639174938201904,
+            "wrong_nll": 1.1490861177444458
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": false,
+        "pair_id": "pair_000011",
+        "pair_question_key": "cfq_77d49144288e75e5",
+        "scene_ids": [
+          "scene_000023",
+          "scene_000024"
+        ],
+        "sides": [
+          {
+            "answer": "above",
+            "correct_nll": 3.4703869819641113,
+            "wrong_minus_correct_margin": -0.15750980377197266,
+            "wrong_nll": 3.3128771781921387
+          },
+          {
+            "answer": "below",
+            "correct_nll": 1.851115345954895,
+            "wrong_minus_correct_margin": -0.21317648887634277,
+            "wrong_nll": 1.6379388570785522
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": false,
+        "pair_id": "pair_000011",
+        "pair_question_key": "cfq_92cfe24420e64641",
+        "scene_ids": [
+          "scene_000023",
+          "scene_000024"
+        ],
+        "sides": [
+          {
+            "answer": "above",
+            "correct_nll": 3.3665575981140137,
+            "wrong_minus_correct_margin": 0.03835630416870117,
+            "wrong_nll": 3.404913902282715
+          },
+          {
+            "answer": "below",
+            "correct_nll": 2.144798994064331,
+            "wrong_minus_correct_margin": -0.3092153072357178,
+            "wrong_nll": 1.8355836868286133
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": false,
+        "pair_id": "pair_000011",
+        "pair_question_key": "cfq_e1e142773f6d422e",
+        "scene_ids": [
+          "scene_000023",
+          "scene_000024"
+        ],
+        "sides": [
+          {
+            "answer": "above",
+            "correct_nll": 3.443362236022949,
+            "wrong_minus_correct_margin": -0.19782352447509766,
+            "wrong_nll": 3.2455387115478516
+          },
+          {
+            "answer": "below",
+            "correct_nll": 1.797488808631897,
+            "wrong_minus_correct_margin": -0.10597622394561768,
+            "wrong_nll": 1.6915125846862793
+          }
+        ]
+      },
+      {
+        "answer_type": "support",
+        "complete_unit": false,
+        "pair_id": "pair_000015",
+        "pair_question_key": "cfq_13b1138d14c52a7c",
+        "scene_ids": [
+          "scene_000031",
+          "scene_000032"
+        ],
+        "sides": [
+          {
+            "answer": "on",
+            "correct_nll": 8.60103988647461,
+            "wrong_minus_correct_margin": -0.07260894775390625,
+            "wrong_nll": 8.528430938720703
+          },
+          {
+            "answer": "under",
+            "correct_nll": 3.9064533710479736,
+            "wrong_minus_correct_margin": 0.04166841506958008,
+            "wrong_nll": 3.9481217861175537
+          }
+        ]
+      },
+      {
+        "answer_type": "support",
+        "complete_unit": false,
+        "pair_id": "pair_000015",
+        "pair_question_key": "cfq_163eb92339ad35a5",
+        "scene_ids": [
+          "scene_000031",
+          "scene_000032"
+        ],
+        "sides": [
+          {
+            "answer": "book, cube",
+            "correct_nll": 6.587954521179199,
+            "wrong_minus_correct_margin": -0.20344161987304688,
+            "wrong_nll": 6.384512901306152
+          },
+          {
+            "answer": "cube",
+            "correct_nll": 6.1188154220581055,
+            "wrong_minus_correct_margin": 0.6595830917358398,
+            "wrong_nll": 6.778398513793945
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": false,
+        "pair_id": "pair_000015",
+        "pair_question_key": "cfq_a1c673a1197a0961",
+        "scene_ids": [
+          "scene_000031",
+          "scene_000032"
+        ],
+        "sides": [
+          {
+            "answer": "above",
+            "correct_nll": 3.134655475616455,
+            "wrong_minus_correct_margin": -0.032620906829833984,
+            "wrong_nll": 3.102034568786621
+          },
+          {
+            "answer": "below",
+            "correct_nll": 1.3502920866012573,
+            "wrong_minus_correct_margin": -0.02358078956604004,
+            "wrong_nll": 1.3267112970352173
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": false,
+        "pair_id": "pair_000015",
+        "pair_question_key": "cfq_ac7ac024c40aaddc",
+        "scene_ids": [
+          "scene_000031",
+          "scene_000032"
+        ],
+        "sides": [
+          {
+            "answer": "below",
+            "correct_nll": 1.3796662092208862,
+            "wrong_minus_correct_margin": -0.0010014772415161133,
+            "wrong_nll": 1.3786647319793701
+          },
+          {
+            "answer": "above",
+            "correct_nll": 3.533320188522339,
+            "wrong_minus_correct_margin": -0.08816313743591309,
+            "wrong_nll": 3.445157051086426
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": true,
+        "pair_id": "pair_000016",
+        "pair_question_key": "cfq_699675ceeaf65406",
+        "scene_ids": [
+          "scene_000033",
+          "scene_000034"
+        ],
+        "sides": [
+          {
+            "answer": "left",
+            "correct_nll": 1.3096747398376465,
+            "wrong_minus_correct_margin": 0.23262834548950195,
+            "wrong_nll": 1.5423030853271484
+          },
+          {
+            "answer": "right",
+            "correct_nll": 1.5338594913482666,
+            "wrong_minus_correct_margin": 0.015102028846740723,
+            "wrong_nll": 1.5489615201950073
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": true,
+        "pair_id": "pair_000016",
+        "pair_question_key": "cfq_9152e66b248e4692",
+        "scene_ids": [
+          "scene_000033",
+          "scene_000034"
+        ],
+        "sides": [
+          {
+            "answer": "left",
+            "correct_nll": 1.3829327821731567,
+            "wrong_minus_correct_margin": 0.6843761205673218,
+            "wrong_nll": 2.0673089027404785
+          },
+          {
+            "answer": "right",
+            "correct_nll": 1.152017593383789,
+            "wrong_minus_correct_margin": 0.5430376529693604,
+            "wrong_nll": 1.6950552463531494
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": true,
+        "pair_id": "pair_000016",
+        "pair_question_key": "cfq_e08b96268b3c2a10",
+        "scene_ids": [
+          "scene_000033",
+          "scene_000034"
+        ],
+        "sides": [
+          {
+            "answer": "left",
+            "correct_nll": 1.8671684265136719,
+            "wrong_minus_correct_margin": 0.5735177993774414,
+            "wrong_nll": 2.4406862258911133
+          },
+          {
+            "answer": "right",
+            "correct_nll": 1.2137491703033447,
+            "wrong_minus_correct_margin": 0.13624811172485352,
+            "wrong_nll": 1.3499972820281982
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": true,
+        "pair_id": "pair_000016",
+        "pair_question_key": "cfq_efba0c82a7336161",
+        "scene_ids": [
+          "scene_000033",
+          "scene_000034"
+        ],
+        "sides": [
+          {
+            "answer": "left",
+            "correct_nll": 1.6148927211761475,
+            "wrong_minus_correct_margin": 0.6075561046600342,
+            "wrong_nll": 2.2224488258361816
+          },
+          {
+            "answer": "right",
+            "correct_nll": 0.9768877029418945,
+            "wrong_minus_correct_margin": 0.25528836250305176,
+            "wrong_nll": 1.2321760654449463
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": false,
+        "pair_id": "pair_000017",
+        "pair_question_key": "cfq_1c8b8cd72fcde904",
+        "scene_ids": [
+          "scene_000035",
+          "scene_000036"
+        ],
+        "sides": [
+          {
+            "answer": "above",
+            "correct_nll": 2.9092326164245605,
+            "wrong_minus_correct_margin": 0.36766767501831055,
+            "wrong_nll": 3.276900291442871
+          },
+          {
+            "answer": "below",
+            "correct_nll": 1.5906380414962769,
+            "wrong_minus_correct_margin": -0.005137324333190918,
+            "wrong_nll": 1.585500717163086
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": false,
+        "pair_id": "pair_000017",
+        "pair_question_key": "cfq_66aab89cee5bef49",
+        "scene_ids": [
+          "scene_000035",
+          "scene_000036"
+        ],
+        "sides": [
+          {
+            "answer": "above",
+            "correct_nll": 3.161092758178711,
+            "wrong_minus_correct_margin": 0.006424903869628906,
+            "wrong_nll": 3.16751766204834
+          },
+          {
+            "answer": "below",
+            "correct_nll": 1.5279462337493896,
+            "wrong_minus_correct_margin": -0.05473661422729492,
+            "wrong_nll": 1.4732096195220947
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": true,
+        "pair_id": "pair_000017",
+        "pair_question_key": "cfq_d469c4ac156ac42d",
+        "scene_ids": [
+          "scene_000035",
+          "scene_000036"
+        ],
+        "sides": [
+          {
+            "answer": "above",
+            "correct_nll": 2.339055061340332,
+            "wrong_minus_correct_margin": 0.746246337890625,
+            "wrong_nll": 3.085301399230957
+          },
+          {
+            "answer": "below",
+            "correct_nll": 1.8582955598831177,
+            "wrong_minus_correct_margin": 0.12120485305786133,
+            "wrong_nll": 1.979500412940979
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": true,
+        "pair_id": "pair_000017",
+        "pair_question_key": "cfq_fa3601dfffa80a0e",
+        "scene_ids": [
+          "scene_000035",
+          "scene_000036"
+        ],
+        "sides": [
+          {
+            "answer": "above",
+            "correct_nll": 3.111367702484131,
+            "wrong_minus_correct_margin": 0.29655981063842773,
+            "wrong_nll": 3.4079275131225586
+          },
+          {
+            "answer": "below",
+            "correct_nll": 1.5726866722106934,
+            "wrong_minus_correct_margin": 0.01654374599456787,
+            "wrong_nll": 1.5892304182052612
+          }
+        ]
+      },
+      {
+        "answer_type": "count",
+        "complete_unit": true,
+        "pair_id": "pair_000018",
+        "pair_question_key": "cfq_90b3d9852a93ce2a",
+        "scene_ids": [
+          "scene_000037",
+          "scene_000038"
+        ],
+        "sides": [
+          {
+            "answer": "1",
+            "correct_nll": 2.7519876956939697,
+            "wrong_minus_correct_margin": 0.172532320022583,
+            "wrong_nll": 2.9245200157165527
+          },
+          {
+            "answer": "0",
+            "correct_nll": 3.445397138595581,
+            "wrong_minus_correct_margin": 3.1293437480926514,
+            "wrong_nll": 6.574740886688232
+          }
+        ]
+      },
+      {
+        "answer_type": "presence",
+        "complete_unit": true,
+        "pair_id": "pair_000018",
+        "pair_question_key": "cfq_b2c2e9aec9f883bc",
+        "scene_ids": [
+          "scene_000037",
+          "scene_000038"
+        ],
+        "sides": [
+          {
+            "answer": "yes",
+            "correct_nll": 3.5279200077056885,
+            "wrong_minus_correct_margin": 3.097029447555542,
+            "wrong_nll": 6.6249494552612305
+          },
+          {
+            "answer": "no",
+            "correct_nll": 2.9933857917785645,
+            "wrong_minus_correct_margin": 2.0365986824035645,
+            "wrong_nll": 5.029984474182129
+          }
+        ]
+      },
+      {
+        "answer_type": "presence",
+        "complete_unit": true,
+        "pair_id": "pair_000018",
+        "pair_question_key": "cfq_f58d3fc750290b0f",
+        "scene_ids": [
+          "scene_000037",
+          "scene_000038"
+        ],
+        "sides": [
+          {
+            "answer": "yes",
+            "correct_nll": 2.3657760620117188,
+            "wrong_minus_correct_margin": 2.3259196281433105,
+            "wrong_nll": 4.691695690155029
+          },
+          {
+            "answer": "no",
+            "correct_nll": 2.271097183227539,
+            "wrong_minus_correct_margin": 3.3996171951293945,
+            "wrong_nll": 5.670714378356934
+          }
+        ]
+      },
+      {
+        "answer_type": "support",
+        "complete_unit": false,
+        "pair_id": "pair_000026",
+        "pair_question_key": "cfq_696dbfc4086cfb80",
+        "scene_ids": [
+          "scene_000053",
+          "scene_000054"
+        ],
+        "sides": [
+          {
+            "answer": "book, cube",
+            "correct_nll": 5.8317952156066895,
+            "wrong_minus_correct_margin": -0.008429527282714844,
+            "wrong_nll": 5.823365688323975
+          },
+          {
+            "answer": "book",
+            "correct_nll": 5.435137748718262,
+            "wrong_minus_correct_margin": 0.3059544563293457,
+            "wrong_nll": 5.741092205047607
+          }
+        ]
+      },
+      {
+        "answer_type": "metric",
+        "complete_unit": false,
+        "pair_id": "pair_000026",
+        "pair_question_key": "cfq_a9f59b924e583255",
+        "scene_ids": [
+          "scene_000053",
+          "scene_000054"
+        ],
+        "sides": [
+          {
+            "answer": "cube",
+            "correct_nll": 4.9859724044799805,
+            "wrong_minus_correct_margin": -0.2582526206970215,
+            "wrong_nll": 4.727719783782959
+          },
+          {
+            "answer": "chair",
+            "correct_nll": 4.030509948730469,
+            "wrong_minus_correct_margin": 0.32100486755371094,
+            "wrong_nll": 4.35151481628418
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": false,
+        "pair_id": "pair_000026",
+        "pair_question_key": "cfq_c482df06c040c2b2",
+        "scene_ids": [
+          "scene_000053",
+          "scene_000054"
+        ],
+        "sides": [
+          {
+            "answer": "below",
+            "correct_nll": 1.2797883749008179,
+            "wrong_minus_correct_margin": 0.060545921325683594,
+            "wrong_nll": 1.3403342962265015
+          },
+          {
+            "answer": "above",
+            "correct_nll": 3.7313013076782227,
+            "wrong_minus_correct_margin": -0.06009531021118164,
+            "wrong_nll": 3.671205997467041
+          }
+        ]
+      }
+    ],
+    "records_sha256": "e1ed62829cd5f49328fa4f4bae4eaf52ce332b317f455dffe5a86b76b099f606",
+    "side_count": 80,
+    "unit_count": 40
+  },
+  "baseline_retention": {
+    "example_count": 8,
+    "maximum_kl_nats": 0.0,
+    "mean_kl_nats": 0.0,
+    "records": [
+      {
+        "index": 0,
+        "kl_nats": 0.0,
+        "top1_agreement": true
+      },
+      {
+        "index": 1,
+        "kl_nats": 0.0,
+        "top1_agreement": true
+      },
+      {
+        "index": 2,
+        "kl_nats": 0.0,
+        "top1_agreement": true
+      },
+      {
+        "index": 3,
+        "kl_nats": 0.0,
+        "top1_agreement": true
+      },
+      {
+        "index": 4,
+        "kl_nats": 0.0,
+        "top1_agreement": true
+      },
+      {
+        "index": 5,
+        "kl_nats": 0.0,
+        "top1_agreement": true
+      },
+      {
+        "index": 6,
+        "kl_nats": 0.0,
+        "top1_agreement": true
+      },
+      {
+        "index": 7,
+        "kl_nats": 0.0,
+        "top1_agreement": true
+      }
+    ],
+    "top1_agreement": 1.0
+  },
+  "candidate_pair_metrics": {
+    "complete_units": 18,
+    "mean_correct_nll": 2.729046481847763,
+    "mean_margin": 0.4471647158265114,
+    "mean_margin_softplus": 0.8419060810701922,
+    "positive_margin_sides": 49,
+    "records": [
+      {
+        "answer_type": "orientation",
+        "complete_unit": true,
+        "pair_id": "pair_000005",
+        "pair_question_key": "cfq_a578dc166be9a217",
+        "scene_ids": [
+          "scene_000011",
+          "scene_000012"
+        ],
+        "sides": [
+          {
+            "answer": "upright",
+            "correct_nll": 0.5004749298095703,
+            "wrong_minus_correct_margin": 0.0249292254447937,
+            "wrong_nll": 0.525404155254364
+          },
+          {
+            "answer": "upside down",
+            "correct_nll": 0.9667174220085144,
+            "wrong_minus_correct_margin": 0.053654611110687256,
+            "wrong_nll": 1.0203720331192017
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": false,
+        "pair_id": "pair_000006",
+        "pair_question_key": "cfq_0a79d507273195ef",
+        "scene_ids": [
+          "scene_000013",
+          "scene_000014"
+        ],
+        "sides": [
+          {
+            "answer": "right",
+            "correct_nll": 1.48585045337677,
+            "wrong_minus_correct_margin": 0.07328534126281738,
+            "wrong_nll": 1.5591357946395874
+          },
+          {
+            "answer": "left",
+            "correct_nll": 1.4698024988174438,
+            "wrong_minus_correct_margin": -0.06005978584289551,
+            "wrong_nll": 1.4097427129745483
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": true,
+        "pair_id": "pair_000006",
+        "pair_question_key": "cfq_5c84a2c27d2be251",
+        "scene_ids": [
+          "scene_000013",
+          "scene_000014"
+        ],
+        "sides": [
+          {
+            "answer": "left",
+            "correct_nll": 1.29915452003479,
+            "wrong_minus_correct_margin": 0.1539551019668579,
+            "wrong_nll": 1.453109622001648
+          },
+          {
+            "answer": "right",
+            "correct_nll": 1.2253189086914062,
+            "wrong_minus_correct_margin": 0.1428290605545044,
+            "wrong_nll": 1.3681479692459106
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": false,
+        "pair_id": "pair_000006",
+        "pair_question_key": "cfq_8e9855d51fa91bfb",
+        "scene_ids": [
+          "scene_000013",
+          "scene_000014"
+        ],
+        "sides": [
+          {
+            "answer": "left",
+            "correct_nll": 1.1905618906021118,
+            "wrong_minus_correct_margin": -0.062123894691467285,
+            "wrong_nll": 1.1284379959106445
+          },
+          {
+            "answer": "right",
+            "correct_nll": 1.562561273574829,
+            "wrong_minus_correct_margin": 0.0712132453918457,
+            "wrong_nll": 1.6337745189666748
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": true,
+        "pair_id": "pair_000006",
+        "pair_question_key": "cfq_f1e8f24afac4339b",
+        "scene_ids": [
+          "scene_000013",
+          "scene_000014"
+        ],
+        "sides": [
+          {
+            "answer": "right",
+            "correct_nll": 1.1296052932739258,
+            "wrong_minus_correct_margin": 0.05718660354614258,
+            "wrong_nll": 1.1867918968200684
+          },
+          {
+            "answer": "left",
+            "correct_nll": 1.751775860786438,
+            "wrong_minus_correct_margin": 0.023170113563537598,
+            "wrong_nll": 1.7749459743499756
+          }
+        ]
+      },
+      {
+        "answer_type": "attribute",
+        "complete_unit": false,
+        "pair_id": "pair_000007",
+        "pair_question_key": "cfq_736067b51ce93c49",
+        "scene_ids": [
+          "scene_000015",
+          "scene_000016"
+        ],
+        "sides": [
+          {
+            "answer": "green",
+            "correct_nll": 4.174443244934082,
+            "wrong_minus_correct_margin": -0.5708053112030029,
+            "wrong_nll": 3.603637933731079
+          },
+          {
+            "answer": "yellow",
+            "correct_nll": 4.2046122550964355,
+            "wrong_minus_correct_margin": 0.1147618293762207,
+            "wrong_nll": 4.319374084472656
+          }
+        ]
+      },
+      {
+        "answer_type": "attribute",
+        "complete_unit": true,
+        "pair_id": "pair_000007",
+        "pair_question_key": "cfq_997610c185204121",
+        "scene_ids": [
+          "scene_000015",
+          "scene_000016"
+        ],
+        "sides": [
+          {
+            "answer": "green",
+            "correct_nll": 4.03996467590332,
+            "wrong_minus_correct_margin": 0.017972469329833984,
+            "wrong_nll": 4.057937145233154
+          },
+          {
+            "answer": "yellow",
+            "correct_nll": 4.020333766937256,
+            "wrong_minus_correct_margin": 0.3943619728088379,
+            "wrong_nll": 4.414695739746094
+          }
+        ]
+      },
+      {
+        "answer_type": "attribute",
+        "complete_unit": true,
+        "pair_id": "pair_000007",
+        "pair_question_key": "cfq_bd500364dac52b59",
+        "scene_ids": [
+          "scene_000015",
+          "scene_000016"
+        ],
+        "sides": [
+          {
+            "answer": "yellow",
+            "correct_nll": 3.1412134170532227,
+            "wrong_minus_correct_margin": 3.4977807998657227,
+            "wrong_nll": 6.638994216918945
+          },
+          {
+            "answer": "green",
+            "correct_nll": 0.8163910508155823,
+            "wrong_minus_correct_margin": 4.602198600769043,
+            "wrong_nll": 5.4185895919799805
+          }
+        ]
+      },
+      {
+        "answer_type": "attribute",
+        "complete_unit": true,
+        "pair_id": "pair_000007",
+        "pair_question_key": "cfq_f004e89a2284b94a",
+        "scene_ids": [
+          "scene_000015",
+          "scene_000016"
+        ],
+        "sides": [
+          {
+            "answer": "yellow",
+            "correct_nll": 2.8926353454589844,
+            "wrong_minus_correct_margin": 4.142165184020996,
+            "wrong_nll": 7.0348005294799805
+          },
+          {
+            "answer": "green",
+            "correct_nll": 0.634590744972229,
+            "wrong_minus_correct_margin": 4.652073383331299,
+            "wrong_nll": 5.286664009094238
+          }
+        ]
+      },
+      {
+        "answer_type": "count",
+        "complete_unit": false,
+        "pair_id": "pair_000008",
+        "pair_question_key": "cfq_39808de4310f3388",
+        "scene_ids": [
+          "scene_000017",
+          "scene_000018"
+        ],
+        "sides": [
+          {
+            "answer": "1",
+            "correct_nll": 2.1793570518493652,
+            "wrong_minus_correct_margin": -0.04047799110412598,
+            "wrong_nll": 2.1388790607452393
+          },
+          {
+            "answer": "2",
+            "correct_nll": 3.9060001373291016,
+            "wrong_minus_correct_margin": 0.0748739242553711,
+            "wrong_nll": 3.9808740615844727
+          }
+        ]
+      },
+      {
+        "answer_type": "support",
+        "complete_unit": true,
+        "pair_id": "pair_000009",
+        "pair_question_key": "cfq_5611adccccae59f1",
+        "scene_ids": [
+          "scene_000019",
+          "scene_000020"
+        ],
+        "sides": [
+          {
+            "answer": "on",
+            "correct_nll": 9.106914520263672,
+            "wrong_minus_correct_margin": 0.04909706115722656,
+            "wrong_nll": 9.156011581420898
+          },
+          {
+            "answer": "under",
+            "correct_nll": 3.693671226501465,
+            "wrong_minus_correct_margin": 0.05954599380493164,
+            "wrong_nll": 3.7532172203063965
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": true,
+        "pair_id": "pair_000009",
+        "pair_question_key": "cfq_885e53344a9de104",
+        "scene_ids": [
+          "scene_000019",
+          "scene_000020"
+        ],
+        "sides": [
+          {
+            "answer": "above",
+            "correct_nll": 3.165416717529297,
+            "wrong_minus_correct_margin": 0.05235481262207031,
+            "wrong_nll": 3.217771530151367
+          },
+          {
+            "answer": "below",
+            "correct_nll": 1.4863669872283936,
+            "wrong_minus_correct_margin": 0.008448481559753418,
+            "wrong_nll": 1.494815468788147
+          }
+        ]
+      },
+      {
+        "answer_type": "support",
+        "complete_unit": false,
+        "pair_id": "pair_000009",
+        "pair_question_key": "cfq_b90a7681f59f317a",
+        "scene_ids": [
+          "scene_000019",
+          "scene_000020"
+        ],
+        "sides": [
+          {
+            "answer": "book, cube",
+            "correct_nll": 6.511259078979492,
+            "wrong_minus_correct_margin": -0.18213319778442383,
+            "wrong_nll": 6.329125881195068
+          },
+          {
+            "answer": "cube",
+            "correct_nll": 6.112778186798096,
+            "wrong_minus_correct_margin": -0.2665281295776367,
+            "wrong_nll": 5.846250057220459
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": false,
+        "pair_id": "pair_000009",
+        "pair_question_key": "cfq_b93bc343e2be3284",
+        "scene_ids": [
+          "scene_000019",
+          "scene_000020"
+        ],
+        "sides": [
+          {
+            "answer": "below",
+            "correct_nll": 1.5254812240600586,
+            "wrong_minus_correct_margin": -0.0464634895324707,
+            "wrong_nll": 1.479017734527588
+          },
+          {
+            "answer": "above",
+            "correct_nll": 3.649477481842041,
+            "wrong_minus_correct_margin": -0.07443523406982422,
+            "wrong_nll": 3.575042247772217
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": false,
+        "pair_id": "pair_000010",
+        "pair_question_key": "cfq_3b6232930290e58a",
+        "scene_ids": [
+          "scene_000021",
+          "scene_000022"
+        ],
+        "sides": [
+          {
+            "answer": "left",
+            "correct_nll": 1.28435480594635,
+            "wrong_minus_correct_margin": 0.1403743028640747,
+            "wrong_nll": 1.4247291088104248
+          },
+          {
+            "answer": "right",
+            "correct_nll": 1.3455002307891846,
+            "wrong_minus_correct_margin": -0.09269249439239502,
+            "wrong_nll": 1.2528077363967896
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": true,
+        "pair_id": "pair_000010",
+        "pair_question_key": "cfq_8379fb0541822481",
+        "scene_ids": [
+          "scene_000021",
+          "scene_000022"
+        ],
+        "sides": [
+          {
+            "answer": "left",
+            "correct_nll": 1.7041075229644775,
+            "wrong_minus_correct_margin": 0.723785400390625,
+            "wrong_nll": 2.4278929233551025
+          },
+          {
+            "answer": "right",
+            "correct_nll": 1.1321254968643188,
+            "wrong_minus_correct_margin": 0.034182190895080566,
+            "wrong_nll": 1.1663076877593994
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": false,
+        "pair_id": "pair_000010",
+        "pair_question_key": "cfq_873ba9281d37e099",
+        "scene_ids": [
+          "scene_000021",
+          "scene_000022"
+        ],
+        "sides": [
+          {
+            "answer": "right",
+            "correct_nll": 1.282762050628662,
+            "wrong_minus_correct_margin": 0.0838613510131836,
+            "wrong_nll": 1.3666234016418457
+          },
+          {
+            "answer": "left",
+            "correct_nll": 1.6194775104522705,
+            "wrong_minus_correct_margin": -0.1092987060546875,
+            "wrong_nll": 1.510178804397583
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": false,
+        "pair_id": "pair_000010",
+        "pair_question_key": "cfq_aa4b7a89ff2ee3ba",
+        "scene_ids": [
+          "scene_000021",
+          "scene_000022"
+        ],
+        "sides": [
+          {
+            "answer": "left",
+            "correct_nll": 2.355552911758423,
+            "wrong_minus_correct_margin": -0.12513375282287598,
+            "wrong_nll": 2.230419158935547
+          },
+          {
+            "answer": "right",
+            "correct_nll": 1.4283175468444824,
+            "wrong_minus_correct_margin": -0.1191706657409668,
+            "wrong_nll": 1.3091468811035156
+          }
+        ]
+      },
+      {
+        "answer_type": "support",
+        "complete_unit": false,
+        "pair_id": "pair_000011",
+        "pair_question_key": "cfq_34bc318f4e30a8bf",
+        "scene_ids": [
+          "scene_000023",
+          "scene_000024"
+        ],
+        "sides": [
+          {
+            "answer": "wall",
+            "correct_nll": 4.122620582580566,
+            "wrong_minus_correct_margin": 0.3271670341491699,
+            "wrong_nll": 4.449787616729736
+          },
+          {
+            "answer": "floor",
+            "correct_nll": 1.570146083831787,
+            "wrong_minus_correct_margin": -0.4180406332015991,
+            "wrong_nll": 1.152105450630188
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": false,
+        "pair_id": "pair_000011",
+        "pair_question_key": "cfq_77d49144288e75e5",
+        "scene_ids": [
+          "scene_000023",
+          "scene_000024"
+        ],
+        "sides": [
+          {
+            "answer": "above",
+            "correct_nll": 3.4440975189208984,
+            "wrong_minus_correct_margin": -0.10276007652282715,
+            "wrong_nll": 3.3413374423980713
+          },
+          {
+            "answer": "below",
+            "correct_nll": 1.8080559968948364,
+            "wrong_minus_correct_margin": -0.17002630233764648,
+            "wrong_nll": 1.63802969455719
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": false,
+        "pair_id": "pair_000011",
+        "pair_question_key": "cfq_92cfe24420e64641",
+        "scene_ids": [
+          "scene_000023",
+          "scene_000024"
+        ],
+        "sides": [
+          {
+            "answer": "above",
+            "correct_nll": 3.3970530033111572,
+            "wrong_minus_correct_margin": 0.01806473731994629,
+            "wrong_nll": 3.4151177406311035
+          },
+          {
+            "answer": "below",
+            "correct_nll": 2.0795366764068604,
+            "wrong_minus_correct_margin": -0.2676365375518799,
+            "wrong_nll": 1.8119001388549805
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": false,
+        "pair_id": "pair_000011",
+        "pair_question_key": "cfq_e1e142773f6d422e",
+        "scene_ids": [
+          "scene_000023",
+          "scene_000024"
+        ],
+        "sides": [
+          {
+            "answer": "above",
+            "correct_nll": 3.397223711013794,
+            "wrong_minus_correct_margin": -0.18689203262329102,
+            "wrong_nll": 3.210331678390503
+          },
+          {
+            "answer": "below",
+            "correct_nll": 1.8276963233947754,
+            "wrong_minus_correct_margin": -0.10986435413360596,
+            "wrong_nll": 1.7178319692611694
+          }
+        ]
+      },
+      {
+        "answer_type": "support",
+        "complete_unit": false,
+        "pair_id": "pair_000015",
+        "pair_question_key": "cfq_13b1138d14c52a7c",
+        "scene_ids": [
+          "scene_000031",
+          "scene_000032"
+        ],
+        "sides": [
+          {
+            "answer": "on",
+            "correct_nll": 8.547748565673828,
+            "wrong_minus_correct_margin": -0.15682220458984375,
+            "wrong_nll": 8.390926361083984
+          },
+          {
+            "answer": "under",
+            "correct_nll": 3.925158739089966,
+            "wrong_minus_correct_margin": -0.02985095977783203,
+            "wrong_nll": 3.895307779312134
+          }
+        ]
+      },
+      {
+        "answer_type": "support",
+        "complete_unit": false,
+        "pair_id": "pair_000015",
+        "pair_question_key": "cfq_163eb92339ad35a5",
+        "scene_ids": [
+          "scene_000031",
+          "scene_000032"
+        ],
+        "sides": [
+          {
+            "answer": "book, cube",
+            "correct_nll": 6.621706962585449,
+            "wrong_minus_correct_margin": -0.19592618942260742,
+            "wrong_nll": 6.425780773162842
+          },
+          {
+            "answer": "cube",
+            "correct_nll": 6.150660991668701,
+            "wrong_minus_correct_margin": 0.5673112869262695,
+            "wrong_nll": 6.717972278594971
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": false,
+        "pair_id": "pair_000015",
+        "pair_question_key": "cfq_a1c673a1197a0961",
+        "scene_ids": [
+          "scene_000031",
+          "scene_000032"
+        ],
+        "sides": [
+          {
+            "answer": "above",
+            "correct_nll": 3.119821071624756,
+            "wrong_minus_correct_margin": -0.08310317993164062,
+            "wrong_nll": 3.0367178916931152
+          },
+          {
+            "answer": "below",
+            "correct_nll": 1.3766844272613525,
+            "wrong_minus_correct_margin": -0.05612063407897949,
+            "wrong_nll": 1.320563793182373
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": false,
+        "pair_id": "pair_000015",
+        "pair_question_key": "cfq_ac7ac024c40aaddc",
+        "scene_ids": [
+          "scene_000031",
+          "scene_000032"
+        ],
+        "sides": [
+          {
+            "answer": "below",
+            "correct_nll": 1.3878920078277588,
+            "wrong_minus_correct_margin": -0.03606152534484863,
+            "wrong_nll": 1.3518304824829102
+          },
+          {
+            "answer": "above",
+            "correct_nll": 3.5527758598327637,
+            "wrong_minus_correct_margin": -0.08847284317016602,
+            "wrong_nll": 3.4643030166625977
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": true,
+        "pair_id": "pair_000016",
+        "pair_question_key": "cfq_699675ceeaf65406",
+        "scene_ids": [
+          "scene_000033",
+          "scene_000034"
+        ],
+        "sides": [
+          {
+            "answer": "left",
+            "correct_nll": 1.289613962173462,
+            "wrong_minus_correct_margin": 0.24576878547668457,
+            "wrong_nll": 1.5353827476501465
+          },
+          {
+            "answer": "right",
+            "correct_nll": 1.426342248916626,
+            "wrong_minus_correct_margin": 0.1577051877975464,
+            "wrong_nll": 1.5840474367141724
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": true,
+        "pair_id": "pair_000016",
+        "pair_question_key": "cfq_9152e66b248e4692",
+        "scene_ids": [
+          "scene_000033",
+          "scene_000034"
+        ],
+        "sides": [
+          {
+            "answer": "left",
+            "correct_nll": 1.3557497262954712,
+            "wrong_minus_correct_margin": 0.6802915334701538,
+            "wrong_nll": 2.036041259765625
+          },
+          {
+            "answer": "right",
+            "correct_nll": 1.133143663406372,
+            "wrong_minus_correct_margin": 0.5302917957305908,
+            "wrong_nll": 1.663435459136963
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": true,
+        "pair_id": "pair_000016",
+        "pair_question_key": "cfq_e08b96268b3c2a10",
+        "scene_ids": [
+          "scene_000033",
+          "scene_000034"
+        ],
+        "sides": [
+          {
+            "answer": "left",
+            "correct_nll": 1.8717710971832275,
+            "wrong_minus_correct_margin": 0.5079524517059326,
+            "wrong_nll": 2.37972354888916
+          },
+          {
+            "answer": "right",
+            "correct_nll": 1.186214804649353,
+            "wrong_minus_correct_margin": 0.13825976848602295,
+            "wrong_nll": 1.324474573135376
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": true,
+        "pair_id": "pair_000016",
+        "pair_question_key": "cfq_efba0c82a7336161",
+        "scene_ids": [
+          "scene_000033",
+          "scene_000034"
+        ],
+        "sides": [
+          {
+            "answer": "left",
+            "correct_nll": 1.6436209678649902,
+            "wrong_minus_correct_margin": 0.6083793640136719,
+            "wrong_nll": 2.252000331878662
+          },
+          {
+            "answer": "right",
+            "correct_nll": 0.9768384695053101,
+            "wrong_minus_correct_margin": 0.31303632259368896,
+            "wrong_nll": 1.289874792098999
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": true,
+        "pair_id": "pair_000017",
+        "pair_question_key": "cfq_1c8b8cd72fcde904",
+        "scene_ids": [
+          "scene_000035",
+          "scene_000036"
+        ],
+        "sides": [
+          {
+            "answer": "above",
+            "correct_nll": 2.9673900604248047,
+            "wrong_minus_correct_margin": 0.31543493270874023,
+            "wrong_nll": 3.282824993133545
+          },
+          {
+            "answer": "below",
+            "correct_nll": 1.5589866638183594,
+            "wrong_minus_correct_margin": 0.0019898414611816406,
+            "wrong_nll": 1.560976505279541
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": false,
+        "pair_id": "pair_000017",
+        "pair_question_key": "cfq_66aab89cee5bef49",
+        "scene_ids": [
+          "scene_000035",
+          "scene_000036"
+        ],
+        "sides": [
+          {
+            "answer": "above",
+            "correct_nll": 3.191826343536377,
+            "wrong_minus_correct_margin": -0.023312091827392578,
+            "wrong_nll": 3.1685142517089844
+          },
+          {
+            "answer": "below",
+            "correct_nll": 1.563904047012329,
+            "wrong_minus_correct_margin": -0.08648049831390381,
+            "wrong_nll": 1.4774235486984253
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": true,
+        "pair_id": "pair_000017",
+        "pair_question_key": "cfq_d469c4ac156ac42d",
+        "scene_ids": [
+          "scene_000035",
+          "scene_000036"
+        ],
+        "sides": [
+          {
+            "answer": "above",
+            "correct_nll": 2.3482484817504883,
+            "wrong_minus_correct_margin": 0.7942123413085938,
+            "wrong_nll": 3.142460823059082
+          },
+          {
+            "answer": "below",
+            "correct_nll": 1.9511667490005493,
+            "wrong_minus_correct_margin": 0.12783586978912354,
+            "wrong_nll": 2.079002618789673
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": false,
+        "pair_id": "pair_000017",
+        "pair_question_key": "cfq_fa3601dfffa80a0e",
+        "scene_ids": [
+          "scene_000035",
+          "scene_000036"
+        ],
+        "sides": [
+          {
+            "answer": "above",
+            "correct_nll": 3.130798578262329,
+            "wrong_minus_correct_margin": 0.28752660751342773,
+            "wrong_nll": 3.418325185775757
+          },
+          {
+            "answer": "below",
+            "correct_nll": 1.6788017749786377,
+            "wrong_minus_correct_margin": -0.09161341190338135,
+            "wrong_nll": 1.5871883630752563
+          }
+        ]
+      },
+      {
+        "answer_type": "count",
+        "complete_unit": true,
+        "pair_id": "pair_000018",
+        "pair_question_key": "cfq_90b3d9852a93ce2a",
+        "scene_ids": [
+          "scene_000037",
+          "scene_000038"
+        ],
+        "sides": [
+          {
+            "answer": "1",
+            "correct_nll": 2.7645442485809326,
+            "wrong_minus_correct_margin": 0.22859835624694824,
+            "wrong_nll": 2.993142604827881
+          },
+          {
+            "answer": "0",
+            "correct_nll": 3.426326274871826,
+            "wrong_minus_correct_margin": 3.176429271697998,
+            "wrong_nll": 6.602755546569824
+          }
+        ]
+      },
+      {
+        "answer_type": "presence",
+        "complete_unit": true,
+        "pair_id": "pair_000018",
+        "pair_question_key": "cfq_b2c2e9aec9f883bc",
+        "scene_ids": [
+          "scene_000037",
+          "scene_000038"
+        ],
+        "sides": [
+          {
+            "answer": "yes",
+            "correct_nll": 3.5364012718200684,
+            "wrong_minus_correct_margin": 3.1646900177001953,
+            "wrong_nll": 6.701091289520264
+          },
+          {
+            "answer": "no",
+            "correct_nll": 3.0194244384765625,
+            "wrong_minus_correct_margin": 1.9418888092041016,
+            "wrong_nll": 4.961313247680664
+          }
+        ]
+      },
+      {
+        "answer_type": "presence",
+        "complete_unit": true,
+        "pair_id": "pair_000018",
+        "pair_question_key": "cfq_f58d3fc750290b0f",
+        "scene_ids": [
+          "scene_000037",
+          "scene_000038"
+        ],
+        "sides": [
+          {
+            "answer": "yes",
+            "correct_nll": 2.3760673999786377,
+            "wrong_minus_correct_margin": 2.3770029544830322,
+            "wrong_nll": 4.75307035446167
+          },
+          {
+            "answer": "no",
+            "correct_nll": 2.253476142883301,
+            "wrong_minus_correct_margin": 3.3334732055664062,
+            "wrong_nll": 5.586949348449707
+          }
+        ]
+      },
+      {
+        "answer_type": "support",
+        "complete_unit": false,
+        "pair_id": "pair_000026",
+        "pair_question_key": "cfq_696dbfc4086cfb80",
+        "scene_ids": [
+          "scene_000053",
+          "scene_000054"
+        ],
+        "sides": [
+          {
+            "answer": "book, cube",
+            "correct_nll": 5.8898491859436035,
+            "wrong_minus_correct_margin": -0.07830286026000977,
+            "wrong_nll": 5.811546325683594
+          },
+          {
+            "answer": "book",
+            "correct_nll": 5.5019307136535645,
+            "wrong_minus_correct_margin": 0.3202071189880371,
+            "wrong_nll": 5.822137832641602
+          }
+        ]
+      },
+      {
+        "answer_type": "metric",
+        "complete_unit": false,
+        "pair_id": "pair_000026",
+        "pair_question_key": "cfq_a9f59b924e583255",
+        "scene_ids": [
+          "scene_000053",
+          "scene_000054"
+        ],
+        "sides": [
+          {
+            "answer": "cube",
+            "correct_nll": 4.9342546463012695,
+            "wrong_minus_correct_margin": -0.0779733657836914,
+            "wrong_nll": 4.856281280517578
+          },
+          {
+            "answer": "chair",
+            "correct_nll": 4.068112373352051,
+            "wrong_minus_correct_margin": 0.34710264205932617,
+            "wrong_nll": 4.415215015411377
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": false,
+        "pair_id": "pair_000026",
+        "pair_question_key": "cfq_c482df06c040c2b2",
+        "scene_ids": [
+          "scene_000053",
+          "scene_000054"
+        ],
+        "sides": [
+          {
+            "answer": "below",
+            "correct_nll": 1.2326204776763916,
+            "wrong_minus_correct_margin": 0.0819617509841919,
+            "wrong_nll": 1.3145822286605835
+          },
+          {
+            "answer": "above",
+            "correct_nll": 3.722486972808838,
+            "wrong_minus_correct_margin": -0.0588834285736084,
+            "wrong_nll": 3.6636035442352295
+          }
+        ]
+      }
+    ],
+    "records_sha256": "5e0273667eba3e4bc0696b298043a8157d22c5bbef27160becf17bddc30841a3",
+    "side_count": 80,
+    "unit_count": 40
+  },
+  "candidate_retention": {
+    "example_count": 8,
+    "maximum_kl_nats": 0.0015222491872718081,
+    "mean_kl_nats": 0.00034054686319865915,
+    "records": [
+      {
+        "index": 0,
+        "kl_nats": 3.603152211388465e-08,
+        "top1_agreement": true
+      },
+      {
+        "index": 1,
+        "kl_nats": 1.3324171687013676e-06,
+        "top1_agreement": true
+      },
+      {
+        "index": 2,
+        "kl_nats": 0.0008176679576798963,
+        "top1_agreement": true
+      },
+      {
+        "index": 3,
+        "kl_nats": 0.00024365876898892397,
+        "top1_agreement": true
+      },
+      {
+        "index": 4,
+        "kl_nats": 3.5259035730443317e-06,
+        "top1_agreement": true
+      },
+      {
+        "index": 5,
+        "kl_nats": 0.0015222491872718081,
+        "top1_agreement": true
+      },
+      {
+        "index": 6,
+        "kl_nats": 8.62271152797131e-05,
+        "top1_agreement": true
+      },
+      {
+        "index": 7,
+        "kl_nats": 4.96775241050722e-05,
+        "top1_agreement": true
+      }
+    ],
+    "top1_agreement": 1.0
+  },
+  "checks": {
+    "audit_clean": true,
+    "complete_units_not_worse": true,
+    "mean_margin_softplus_improved": true,
+    "positive_margin_sides_not_worse": true,
+    "retention_mean_kl_at_most_0_02": true,
+    "retention_top1_exact": true
+  },
+  "deferred_or_final_inputs_loaded": false,
+  "diagnostic_pass": true,
+  "elapsed_seconds": 334.36937754112296,
+  "full_huggingface_forward": true,
+  "optimization": {
+    "all_pair_units_consumed_exactly_once": true,
+    "final_state_sha256": "0a061c4b659b77cf3720adf6441f2aea861ec38616b8c2e58a7b577eba75a49d",
+    "gradient_clip_l2": 0.5,
+    "initial_state_sha256": "2e6133d83688e5632fa8c810efdd87fad0b251bb8dce747148ba38a4c8dc5355",
+    "learning_rate": 2e-05,
+    "optimizer": "AdamW",
+    "pair_units_per_update": 5,
+    "total_pair_units": 40,
+    "updates": 8
+  },
+  "oracle_inputs_loaded": false,
+  "pair_metric_delta": {
+    "complete_units": 2,
+    "mean_correct_nll": -0.001020313054323374,
+    "mean_margin": 0.005331867933273338,
+    "mean_margin_softplus": -0.0017896795878187266,
+    "positive_margin_sides": 1
+  },
+  "promotion_authorized": false,
+  "runtime_checkpoint_published": false,
+  "schema_version": 1,
+  "status": "diagnostic_pass",
+  "target_modules": [
+    "model.language_model.layers.13.self_attn.k_proj",
+    "model.language_model.layers.13.self_attn.v_proj",
+    "model.language_model.layers.14.self_attn.k_proj",
+    "model.language_model.layers.14.self_attn.v_proj"
+  ],
+  "trace": [
+    {
+      "adapter_state_sha256": "08d9af4afde8d4415871a4fd8551cc635c322a5d649eaf00f67fe8b6010c8742",
+      "learning_rate": 2e-05,
+      "pair_unit_count": 5,
+      "pair_units": [
+        {
+          "pair_id": "pair_000009",
+          "pair_question_key": "cfq_b90a7681f59f317a",
+          "sides": [
+            {
+              "answer": "book, cube",
+              "correct_nll": 6.524441242218018,
+              "margin": -0.1992034912109375,
+              "unscaled_objective": 1.7550981044769287,
+              "wrong_nll": 6.32523775100708
+            },
+            {
+              "answer": "cube",
+              "correct_nll": 6.151559352874756,
+              "margin": -0.28819704055786133,
+              "unscaled_objective": 1.7781277894973755,
+              "wrong_nll": 5.8633623123168945
+            }
+          ]
+        },
+        {
+          "pair_id": "pair_000007",
+          "pair_question_key": "cfq_736067b51ce93c49",
+          "sides": [
+            {
+              "answer": "green",
+              "correct_nll": 4.090857028961182,
+              "margin": -0.45060253143310547,
+              "unscaled_objective": 1.6864765882492065,
+              "wrong_nll": 3.640254497528076
+            },
+            {
+              "answer": "yellow",
+              "correct_nll": 4.187053680419922,
+              "margin": 0.10338163375854492,
+              "unscaled_objective": 1.3296973705291748,
+              "wrong_nll": 4.290435314178467
+            }
+          ]
+        },
+        {
+          "pair_id": "pair_000015",
+          "pair_question_key": "cfq_ac7ac024c40aaddc",
+          "sides": [
+            {
+              "answer": "below",
+              "correct_nll": 1.3487207889556885,
+              "margin": 0.04435372352600098,
+              "unscaled_objective": 1.0815725326538086,
+              "wrong_nll": 1.3930745124816895
+            },
+            {
+              "answer": "above",
+              "correct_nll": 3.5435566902160645,
+              "margin": -0.08675718307495117,
+              "unscaled_objective": 1.3833132982254028,
+              "wrong_nll": 3.4567995071411133
+            }
+          ]
+        },
+        {
+          "pair_id": "pair_000009",
+          "pair_question_key": "cfq_5611adccccae59f1",
+          "sides": [
+            {
+              "answer": "on",
+              "correct_nll": 9.122446060180664,
+              "margin": -0.03973197937011719,
+              "unscaled_objective": 1.9112379550933838,
+              "wrong_nll": 9.082714080810547
+            },
+            {
+              "answer": "under",
+              "correct_nll": 3.7292933464050293,
+              "margin": -0.0382542610168457,
+              "unscaled_objective": 1.3709893226623535,
+              "wrong_nll": 3.6910390853881836
+            }
+          ]
+        },
+        {
+          "pair_id": "pair_000006",
+          "pair_question_key": "cfq_5c84a2c27d2be251",
+          "sides": [
+            {
+              "answer": "left",
+              "correct_nll": 1.3352605104446411,
+              "margin": 0.07242214679718018,
+              "unscaled_objective": 1.063143014907837,
+              "wrong_nll": 1.4076826572418213
+            },
+            {
+              "answer": "right",
+              "correct_nll": 1.2403829097747803,
+              "margin": 0.14487528800964355,
+              "unscaled_objective": 1.010429859161377,
+              "wrong_nll": 1.3852581977844238
+            }
+          ]
+        }
+      ],
+      "preclip_gradient_l2": 0.36148664355278015,
+      "retention_index": 0,
+      "retention_kl": 0.0,
+      "retention_weight": 0.25,
+      "update": 1
+    },
+    {
+      "adapter_state_sha256": "81ff21339c3bb405cc8cc38802a9ae56936da3e830d934d8bd22353f42c142df",
+      "learning_rate": 2e-05,
+      "pair_unit_count": 5,
+      "pair_units": [
+        {
+          "pair_id": "pair_000007",
+          "pair_question_key": "cfq_f004e89a2284b94a",
+          "sides": [
+            {
+              "answer": "yellow",
+              "correct_nll": 2.937398672103882,
+              "margin": 4.020170211791992,
+              "unscaled_objective": 0.3229048550128937,
+              "wrong_nll": 6.957569122314453
+            },
+            {
+              "answer": "green",
+              "correct_nll": 0.6375578045845032,
+              "margin": 4.605349540710449,
+              "unscaled_objective": 0.08010564744472504,
+              "wrong_nll": 5.242907524108887
+            }
+          ]
+        },
+        {
+          "pair_id": "pair_000007",
+          "pair_question_key": "cfq_997610c185204121",
+          "sides": [
+            {
+              "answer": "green",
+              "correct_nll": 4.071948051452637,
+              "margin": -0.03941059112548828,
+              "unscaled_objective": 1.4059852361679077,
+              "wrong_nll": 4.032537460327148
+            },
+            {
+              "answer": "yellow",
+              "correct_nll": 4.016674041748047,
+              "margin": 0.4325428009033203,
+              "unscaled_objective": 1.1291117668151855,
+              "wrong_nll": 4.449216842651367
+            }
+          ]
+        },
+        {
+          "pair_id": "pair_000011",
+          "pair_question_key": "cfq_77d49144288e75e5",
+          "sides": [
+            {
+              "answer": "above",
+              "correct_nll": 3.496004104614258,
+              "margin": -0.1409897804260254,
+              "unscaled_objective": 1.4137450456619263,
+              "wrong_nll": 3.3550143241882324
+            },
+            {
+              "answer": "below",
+              "correct_nll": 1.8153114318847656,
+              "margin": -0.18129944801330566,
+              "unscaled_objective": 1.2722605466842651,
+              "wrong_nll": 1.63401198387146
+            }
+          ]
+        },
+        {
+          "pair_id": "pair_000026",
+          "pair_question_key": "cfq_c482df06c040c2b2",
+          "sides": [
+            {
+              "answer": "below",
+              "correct_nll": 1.2801262140274048,
+              "margin": 0.08644795417785645,
+              "unscaled_objective": 1.0491633415222168,
+              "wrong_nll": 1.3665741682052612
+            },
+            {
+              "answer": "above",
+              "correct_nll": 3.7019600868225098,
+              "margin": -0.01593637466430664,
+              "unscaled_objective": 1.3542224168777466,
+              "wrong_nll": 3.686023712158203
+            }
+          ]
+        },
+        {
+          "pair_id": "pair_000018",
+          "pair_question_key": "cfq_b2c2e9aec9f883bc",
+          "sides": [
+            {
+              "answer": "yes",
+              "correct_nll": 3.512504816055298,
+              "margin": 3.1740124225616455,
+              "unscaled_objective": 0.41795071959495544,
+              "wrong_nll": 6.686517238616943
+            },
+            {
+              "answer": "no",
+              "correct_nll": 2.9837265014648438,
+              "margin": 2.006438732147217,
+              "unscaled_objective": 0.4986143708229065,
+              "wrong_nll": 4.9901652336120605
+            }
+          ]
+        }
+      ],
+      "preclip_gradient_l2": 0.4083723723888397,
+      "retention_index": 1,
+      "retention_kl": 3.4387485357001424e-06,
+      "retention_weight": 0.25,
+      "update": 2
+    },
+    {
+      "adapter_state_sha256": "2e708f3ca1cf156662281f834b69104a404eab1036e16c1f43f715c7886c7950",
+      "learning_rate": 2e-05,
+      "pair_unit_count": 5,
+      "pair_units": [
+        {
+          "pair_id": "pair_000011",
+          "pair_question_key": "cfq_34bc318f4e30a8bf",
+          "sides": [
+            {
+              "answer": "wall",
+              "correct_nll": 4.114780902862549,
+              "margin": 0.3237271308898926,
+              "unscaled_objective": 1.1966407299041748,
+              "wrong_nll": 4.438508033752441
+            },
+            {
+              "answer": "floor",
+              "correct_nll": 1.496315836906433,
+              "margin": -0.387853741645813,
+              "unscaled_objective": 1.3821651935577393,
+              "wrong_nll": 1.1084620952606201
+            }
+          ]
+        },
+        {
+          "pair_id": "pair_000016",
+          "pair_question_key": "cfq_e08b96268b3c2a10",
+          "sides": [
+            {
+              "answer": "left",
+              "correct_nll": 1.8552439212799072,
+              "margin": 0.530045747756958,
+              "unscaled_objective": 0.8637615442276001,
+              "wrong_nll": 2.3852896690368652
+            },
+            {
+              "answer": "right",
+              "correct_nll": 1.1861540079116821,
+              "margin": 0.17795789241790771,
+              "unscaled_objective": 0.9856917858123779,
+              "wrong_nll": 1.3641119003295898
+            }
+          ]
+        },
+        {
+          "pair_id": "pair_000016",
+          "pair_question_key": "cfq_699675ceeaf65406",
+          "sides": [
+            {
+              "answer": "left",
+              "correct_nll": 1.2784086465835571,
+              "margin": 0.21279621124267578,
+              "unscaled_objective": 0.9748654365539551,
+              "wrong_nll": 1.491204857826233
+            },
+            {
+              "answer": "right",
+              "correct_nll": 1.4580374956130981,
+              "margin": 0.12742269039154053,
+              "unscaled_objective": 1.0424919128417969,
+              "wrong_nll": 1.5854601860046387
+            }
+          ]
+        },
+        {
+          "pair_id": "pair_000026",
+          "pair_question_key": "cfq_696dbfc4086cfb80",
+          "sides": [
+            {
+              "answer": "book, cube",
+              "correct_nll": 5.820289134979248,
+              "margin": 0.01835155487060547,
+              "unscaled_objective": 1.544722318649292,
+              "wrong_nll": 5.8386406898498535
+            },
+            {
+              "answer": "book",
+              "correct_nll": 5.467596054077148,
+              "margin": 0.21463871002197266,
+              "unscaled_objective": 1.3927319049835205,
+              "wrong_nll": 5.682234764099121
+            }
+          ]
+        },
+        {
+          "pair_id": "pair_000007",
+          "pair_question_key": "cfq_bd500364dac52b59",
+          "sides": [
+            {
+              "answer": "yellow",
+              "correct_nll": 3.1842381954193115,
+              "margin": 3.372366189956665,
+              "unscaled_objective": 0.37344685196876526,
+              "wrong_nll": 6.556604385375977
+            },
+            {
+              "answer": "green",
+              "correct_nll": 0.8202342987060547,
+              "margin": 4.6053466796875,
+              "unscaled_objective": 0.09837330877780914,
+              "wrong_nll": 5.425580978393555
+            }
+          ]
+        }
+      ],
+      "preclip_gradient_l2": 0.41087764501571655,
+      "retention_index": 2,
+      "retention_kl": 0.000964182720053941,
+      "retention_weight": 0.25,
+      "update": 3
+    },
+    {
+      "adapter_state_sha256": "de6b71b1349046a4b956fd2f9010c02cdc445968675db25a292724e3371bbd09",
+      "learning_rate": 2e-05,
+      "pair_unit_count": 5,
+      "pair_units": [
+        {
+          "pair_id": "pair_000006",
+          "pair_question_key": "cfq_f1e8f24afac4339b",
+          "sides": [
+            {
+              "answer": "right",
+              "correct_nll": 1.1189247369766235,
+              "margin": 0.09132754802703857,
+              "unscaled_objective": 1.0301088094711304,
+              "wrong_nll": 1.210252285003662
+            },
+            {
+              "answer": "left",
+              "correct_nll": 1.6808052062988281,
+              "margin": 0.07011425495147705,
+              "unscaled_objective": 1.0990949869155884,
+              "wrong_nll": 1.7509194612503052
+            }
+          ]
+        },
+        {
+          "pair_id": "pair_000016",
+          "pair_question_key": "cfq_efba0c82a7336161",
+          "sides": [
+            {
+              "answer": "left",
+              "correct_nll": 1.5947449207305908,
+              "margin": 0.6309640407562256,
+              "unscaled_objective": 0.7892820239067078,
+              "wrong_nll": 2.2257089614868164
+            },
+            {
+              "answer": "right",
+              "correct_nll": 0.9954656958580017,
+              "margin": 0.26843923330307007,
+              "unscaled_objective": 0.9151616096496582,
+              "wrong_nll": 1.2639049291610718
+            }
+          ]
+        },
+        {
+          "pair_id": "pair_000006",
+          "pair_question_key": "cfq_0a79d507273195ef",
+          "sides": [
+            {
+              "answer": "right",
+              "correct_nll": 1.4966363906860352,
+              "margin": 0.08482587337493896,
+              "unscaled_objective": 1.0717910528182983,
+              "wrong_nll": 1.5814622640609741
+            },
+            {
+              "answer": "left",
+              "correct_nll": 1.4076985120773315,
+              "margin": 0.02026081085205078,
+              "unscaled_objective": 1.1022835969924927,
+              "wrong_nll": 1.4279593229293823
+            }
+          ]
+        },
+        {
+          "pair_id": "pair_000026",
+          "pair_question_key": "cfq_a9f59b924e583255",
+          "sides": [
+            {
+              "answer": "cube",
+              "correct_nll": 4.93361759185791,
+              "margin": -0.13413238525390625,
+              "unscaled_objective": 1.5530202388763428,
+              "wrong_nll": 4.799485206604004
+            },
+            {
+              "answer": "chair",
+              "correct_nll": 4.045663833618164,
+              "margin": 0.3628506660461426,
+              "unscaled_objective": 1.1686376333236694,
+              "wrong_nll": 4.408514499664307
+            }
+          ]
+        },
+        {
+          "pair_id": "pair_000010",
+          "pair_question_key": "cfq_3b6232930290e58a",
+          "sides": [
+            {
+              "answer": "left",
+              "correct_nll": 1.294206142425537,
+              "margin": 0.07219338417053223,
+              "unscaled_objective": 1.059175968170166,
+              "wrong_nll": 1.3663995265960693
+            },
+            {
+              "answer": "right",
+              "correct_nll": 1.3855332136154175,
+              "margin": -0.10670793056488037,
+              "unscaled_objective": 1.18037748336792,
+              "wrong_nll": 1.278825283050537
+            }
+          ]
+        }
+      ],
+      "preclip_gradient_l2": 0.4005035161972046,
+      "retention_index": 3,
+      "retention_kl": 0.0009124487405642867,
+      "retention_weight": 0.25,
+      "update": 4
+    },
+    {
+      "adapter_state_sha256": "b7e4de775bcb6a0834d5edaab8f87d3d526c79b66824f1f0b8f2e04dd08ead4c",
+      "learning_rate": 2e-05,
+      "pair_unit_count": 5,
+      "pair_units": [
+        {
+          "pair_id": "pair_000018",
+          "pair_question_key": "cfq_90b3d9852a93ce2a",
+          "sides": [
+            {
+              "answer": "1",
+              "correct_nll": 2.706373453140259,
+              "margin": 0.25360918045043945,
+              "unscaled_objective": 1.094549298286438,
+              "wrong_nll": 2.9599826335906982
+            },
+            {
+              "answer": "0",
+              "correct_nll": 3.404048442840576,
+              "margin": 3.1572375297546387,
+              "unscaled_objective": 0.4081958830356598,
+              "wrong_nll": 6.561285972595215
+            }
+          ]
+        },
+        {
+          "pair_id": "pair_000017",
+          "pair_question_key": "cfq_66aab89cee5bef49",
+          "sides": [
+            {
+              "answer": "above",
+              "correct_nll": 3.206777334213257,
+              "margin": -0.0853426456451416,
+              "unscaled_objective": 1.3487266302108765,
+              "wrong_nll": 3.1214346885681152
+            },
+            {
+              "answer": "below",
+              "correct_nll": 1.589187502861023,
+              "margin": -0.1231069564819336,
+              "unscaled_objective": 1.211386799812317,
+              "wrong_nll": 1.4660805463790894
+            }
+          ]
+        },
+        {
+          "pair_id": "pair_000011",
+          "pair_question_key": "cfq_92cfe24420e64641",
+          "sides": [
+            {
+              "answer": "above",
+              "correct_nll": 3.441683530807495,
+              "margin": -0.019215822219848633,
+              "unscaled_objective": 1.3302496671676636,
+              "wrong_nll": 3.4224677085876465
+            },
+            {
+              "answer": "below",
+              "correct_nll": 2.0877487659454346,
+              "margin": -0.2804081439971924,
+              "unscaled_objective": 1.366398811340332,
+              "wrong_nll": 1.8073406219482422
+            }
+          ]
+        },
+        {
+          "pair_id": "pair_000015",
+          "pair_question_key": "cfq_163eb92339ad35a5",
+          "sides": [
+            {
+              "answer": "book, cube",
+              "correct_nll": 6.574460506439209,
+              "margin": -0.17986440658569336,
+              "unscaled_objective": 1.747222900390625,
+              "wrong_nll": 6.394596099853516
+            },
+            {
+              "answer": "cube",
+              "correct_nll": 6.126288414001465,
+              "margin": 0.5044984817504883,
+              "unscaled_objective": 1.3035292625427246,
+              "wrong_nll": 6.630786895751953
+            }
+          ]
+        },
+        {
+          "pair_id": "pair_000009",
+          "pair_question_key": "cfq_885e53344a9de104",
+          "sides": [
+            {
+              "answer": "above",
+              "correct_nll": 3.1802847385406494,
+              "margin": 0.0061511993408203125,
+              "unscaled_objective": 1.288280963897705,
+              "wrong_nll": 3.1864359378814697
+            },
+            {
+              "answer": "below",
+              "correct_nll": 1.5470560789108276,
+              "margin": -0.06003618240356445,
+              "unscaled_objective": 1.1665740013122559,
+              "wrong_nll": 1.4870198965072632
+            }
+          ]
+        }
+      ],
+      "preclip_gradient_l2": 0.5067549347877502,
+      "retention_index": 4,
+      "retention_kl": 1.0123812899109907e-05,
+      "retention_weight": 0.25,
+      "update": 5
+    },
+    {
+      "adapter_state_sha256": "3fd3aae347cc7f05eed7f3da81c0fc44130daaa7120a75e0af5810ae9dae5d9d",
+      "learning_rate": 2e-05,
+      "pair_unit_count": 5,
+      "pair_units": [
+        {
+          "pair_id": "pair_000017",
+          "pair_question_key": "cfq_d469c4ac156ac42d",
+          "sides": [
+            {
+              "answer": "above",
+              "correct_nll": 2.340311050415039,
+              "margin": 0.7510380744934082,
+              "unscaled_objective": 0.8095160722732544,
+              "wrong_nll": 3.0913491249084473
+            },
+            {
+              "answer": "below",
+              "correct_nll": 1.833542823791504,
+              "margin": 0.20812773704528809,
+              "unscaled_objective": 1.0330486297607422,
+              "wrong_nll": 2.041670560836792
+            }
+          ]
+        },
+        {
+          "pair_id": "pair_000015",
+          "pair_question_key": "cfq_13b1138d14c52a7c",
+          "sides": [
+            {
+              "answer": "on",
+              "correct_nll": 8.507329940795898,
+              "margin": -0.0061702728271484375,
+              "unscaled_objective": 1.8286552429199219,
+              "wrong_nll": 8.50115966796875
+            },
+            {
+              "answer": "under",
+              "correct_nll": 3.9415178298950195,
+              "margin": -0.0865485668182373,
+              "unscaled_objective": 1.4229754209518433,
+              "wrong_nll": 3.8549692630767822
+            }
+          ]
+        },
+        {
+          "pair_id": "pair_000009",
+          "pair_question_key": "cfq_b93bc343e2be3284",
+          "sides": [
+            {
+              "answer": "below",
+              "correct_nll": 1.4935896396636963,
+              "margin": 0.03702807426452637,
+              "unscaled_objective": 1.1005489826202393,
+              "wrong_nll": 1.5306177139282227
+            },
+            {
+              "answer": "above",
+              "correct_nll": 3.574310064315796,
+              "margin": 0.01139688491821289,
+              "unscaled_objective": 1.3244291543960571,
+              "wrong_nll": 3.585706949234009
+            }
+          ]
+        },
+        {
+          "pair_id": "pair_000010",
+          "pair_question_key": "cfq_aa4b7a89ff2ee3ba",
+          "sides": [
+            {
+              "answer": "left",
+              "correct_nll": 2.365832805633545,
+              "margin": -0.03194570541381836,
+              "unscaled_objective": 1.2306647300720215,
+              "wrong_nll": 2.3338871002197266
+            },
+            {
+              "answer": "right",
+              "correct_nll": 1.4282722473144531,
+              "margin": -0.1650373935699463,
+              "unscaled_objective": 1.2227877378463745,
+              "wrong_nll": 1.2632348537445068
+            }
+          ]
+        },
+        {
+          "pair_id": "pair_000011",
+          "pair_question_key": "cfq_e1e142773f6d422e",
+          "sides": [
+            {
+              "answer": "above",
+              "correct_nll": 3.4264883995056152,
+              "margin": -0.14427423477172852,
+              "unscaled_objective": 1.408945918083191,
+              "wrong_nll": 3.2822141647338867
+            },
+            {
+              "answer": "below",
+              "correct_nll": 1.7657768726348877,
+              "margin": -0.0746603012084961,
+              "unscaled_objective": 1.197778582572937,
+              "wrong_nll": 1.6911165714263916
+            }
+          ]
+        }
+      ],
+      "preclip_gradient_l2": 0.5001616477966309,
+      "retention_index": 5,
+      "retention_kl": 0.0003652760642580688,
+      "retention_weight": 0.25,
+      "update": 6
+    },
+    {
+      "adapter_state_sha256": "e0e0a6eaf79922bf39cb4ebd882ad93a425aff0c1bfe01f8643873fb5ff1f8e9",
+      "learning_rate": 2e-05,
+      "pair_unit_count": 5,
+      "pair_units": [
+        {
+          "pair_id": "pair_000015",
+          "pair_question_key": "cfq_a1c673a1197a0961",
+          "sides": [
+            {
+              "answer": "above",
+              "correct_nll": 3.1359143257141113,
+              "margin": -0.04893159866333008,
+              "unscaled_objective": 1.318406581878662,
+              "wrong_nll": 3.0869827270507812
+            },
+            {
+              "answer": "below",
+              "correct_nll": 1.3458176851272583,
+              "margin": 0.006854414939880371,
+              "unscaled_objective": 1.1043975353240967,
+              "wrong_nll": 1.3526721000671387
+            }
+          ]
+        },
+        {
+          "pair_id": "pair_000010",
+          "pair_question_key": "cfq_873ba9281d37e099",
+          "sides": [
+            {
+              "answer": "right",
+              "correct_nll": 1.29201340675354,
+              "margin": 0.04809403419494629,
+              "unscaled_objective": 1.073614478111267,
+              "wrong_nll": 1.3401074409484863
+            },
+            {
+              "answer": "left",
+              "correct_nll": 1.6556034088134766,
+              "margin": -0.07751142978668213,
+              "unscaled_objective": 1.1885862350463867,
+              "wrong_nll": 1.5780919790267944
+            }
+          ]
+        },
+        {
+          "pair_id": "pair_000010",
+          "pair_question_key": "cfq_8379fb0541822481",
+          "sides": [
+            {
+              "answer": "left",
+              "correct_nll": 1.6798157691955566,
+              "margin": 0.8420271873474121,
+              "unscaled_objective": 0.7046672105789185,
+              "wrong_nll": 2.5218429565429688
+            },
+            {
+              "answer": "right",
+              "correct_nll": 1.0764405727386475,
+              "margin": 0.13062965869903564,
+              "unscaled_objective": 1.0024346113204956,
+              "wrong_nll": 1.207070231437683
+            }
+          ]
+        },
+        {
+          "pair_id": "pair_000017",
+          "pair_question_key": "cfq_fa3601dfffa80a0e",
+          "sides": [
+            {
+              "answer": "above",
+              "correct_nll": 3.1078033447265625,
+              "margin": 0.22848105430603027,
+              "unscaled_objective": 1.148874044418335,
+              "wrong_nll": 3.3362843990325928
+            },
+            {
+              "answer": "below",
+              "correct_nll": 1.5923467874526978,
+              "margin": -0.06698596477508545,
+              "unscaled_objective": 1.1755318641662598,
+              "wrong_nll": 1.5253608226776123
+            }
+          ]
+        },
+        {
+          "pair_id": "pair_000017",
+          "pair_question_key": "cfq_1c8b8cd72fcde904",
+          "sides": [
+            {
+              "answer": "above",
+              "correct_nll": 2.9059572219848633,
+              "margin": 0.3767538070678711,
+              "unscaled_objective": 1.047263503074646,
+              "wrong_nll": 3.2827110290527344
+            },
+            {
+              "answer": "below",
+              "correct_nll": 1.566550374031067,
+              "margin": -0.03576469421386719,
+              "unscaled_objective": 1.1531438827514648,
+              "wrong_nll": 1.5307856798171997
+            }
+          ]
+        }
+      ],
+      "preclip_gradient_l2": 0.39235666394233704,
+      "retention_index": 6,
+      "retention_kl": 6.922344618942589e-05,
+      "retention_weight": 0.25,
+      "update": 7
+    },
+    {
+      "adapter_state_sha256": "0a061c4b659b77cf3720adf6441f2aea861ec38616b8c2e58a7b577eba75a49d",
+      "learning_rate": 2e-05,
+      "pair_unit_count": 5,
+      "pair_units": [
+        {
+          "pair_id": "pair_000018",
+          "pair_question_key": "cfq_f58d3fc750290b0f",
+          "sides": [
+            {
+              "answer": "yes",
+              "correct_nll": 2.3846874237060547,
+              "margin": 2.4093403816223145,
+              "unscaled_objective": 0.37664517760276794,
+              "wrong_nll": 4.794027805328369
+            },
+            {
+              "answer": "no",
+              "correct_nll": 2.281480073928833,
+              "margin": 3.3053672313690186,
+              "unscaled_objective": 0.2868739366531372,
+              "wrong_nll": 5.586847305297852
+            }
+          ]
+        },
+        {
+          "pair_id": "pair_000005",
+          "pair_question_key": "cfq_a578dc166be9a217",
+          "sides": [
+            {
+              "answer": "upright",
+              "correct_nll": 0.5165042281150818,
+              "margin": 0.022635996341705322,
+              "unscaled_objective": 1.011697769165039,
+              "wrong_nll": 0.5391402244567871
+            },
+            {
+              "answer": "upside down",
+              "correct_nll": 0.9375005960464478,
+              "margin": 0.12613070011138916,
+              "unscaled_objective": 0.9912033677101135,
+              "wrong_nll": 1.063631296157837
+            }
+          ]
+        },
+        {
+          "pair_id": "pair_000006",
+          "pair_question_key": "cfq_8e9855d51fa91bfb",
+          "sides": [
+            {
+              "answer": "left",
+              "correct_nll": 1.0993270874023438,
+              "margin": 0.02837836742401123,
+              "unscaled_objective": 1.0664401054382324,
+              "wrong_nll": 1.127705454826355
+            },
+            {
+              "answer": "right",
+              "correct_nll": 1.494423270225525,
+              "margin": 0.16655206680297852,
+              "unscaled_objective": 1.0231479406356812,
+              "wrong_nll": 1.6609753370285034
+            }
+          ]
+        },
+        {
+          "pair_id": "pair_000016",
+          "pair_question_key": "cfq_9152e66b248e4692",
+          "sides": [
+            {
+              "answer": "left",
+              "correct_nll": 1.4052261114120483,
+              "margin": 0.5555745363235474,
+              "unscaled_objective": 0.8062685132026672,
+              "wrong_nll": 1.9608006477355957
+            },
+            {
+              "answer": "right",
+              "correct_nll": 1.1011513471603394,
+              "margin": 0.5830597877502441,
+              "unscaled_objective": 0.7625945210456848,
+              "wrong_nll": 1.6842111349105835
+            }
+          ]
+        },
+        {
+          "pair_id": "pair_000008",
+          "pair_question_key": "cfq_39808de4310f3388",
+          "sides": [
+            {
+              "answer": "1",
+              "correct_nll": 2.151822805404663,
+              "margin": -0.04894208908081055,
+              "unscaled_objective": 1.2200039625167847,
+              "wrong_nll": 2.1028807163238525
+            },
+            {
+              "answer": "2",
+              "correct_nll": 3.930736780166626,
+              "margin": -0.005994081497192383,
+              "unscaled_objective": 1.370885968208313,
+              "wrong_nll": 3.9247426986694336
+            }
+          ]
+        }
+      ],
+      "preclip_gradient_l2": 0.2895578444004059,
+      "retention_index": 7,
+      "retention_kl": 0.00012312458420637995,
+      "retention_weight": 0.25,
+      "update": 8
+    }
+  ],
+  "trace_sha256": "69ebb45e8e67d43d90314ff01124d816c52a6308d543079bc165a33e8cca6b99",
+  "trainable_parameter_count": 30720,
+  "v6_2_down_projection_installed": false,
+  "validation_inputs_loaded": false
+}

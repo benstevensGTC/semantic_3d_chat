@@ -1,0 +1,498 @@
+{
+  "arbitrary_training_authorized": false,
+  "artifact": "v45_retention_repair_terminal_gate",
+  "candidate_checkpoint_write_authorized": false,
+  "chat_or_runtime_promotion_authorized": false,
+  "checkpoint_inventory": {
+    "directory_entries": {
+      "update_000": [
+        "adapter.safetensors",
+        "metadata.json",
+        "runtime_metadata.json"
+      ],
+      "update_002": [
+        "adapter.safetensors",
+        "metadata.json",
+        "optimizer.pt",
+        "runtime_metadata.json"
+      ],
+      "update_004": [
+        "adapter.safetensors",
+        "metadata.json",
+        "optimizer.pt",
+        "runtime_metadata.json"
+      ]
+    },
+    "file_sha256": {
+      "update_000/adapter.safetensors": "22f7e0276a91d45e31893843345e98e310fbffd14147852c05c5c3bec4dc6589",
+      "update_000/metadata.json": "ca31cb6143b7dbf55670bf7a6d78c9b5e35bcd32def4ffd99075470dceaac1b2",
+      "update_000/runtime_metadata.json": "6dab5ea12d9ab5ae9518eb70ece2cce23285c837a980e7c97028775c726d4fe8",
+      "update_002/adapter.safetensors": "2859bf4c308e984d3ca591cb8ebcfcaa16a730e63302ddaafddb2c71cec20693",
+      "update_002/metadata.json": "7552c8d0f6c54082917eb3a8717bde22bf0fdf531eb2ae11e6b327671cc27fbd",
+      "update_002/optimizer.pt": "50568eec0300f7e5f5e05e58ed975c071f2d9d4b2636dd9eda065ddd8799b06a",
+      "update_002/runtime_metadata.json": "f8388e9813be67609ef4bbbeb0fbaf1e6086daa1d10eb0156a3a957119d91a9e",
+      "update_004/adapter.safetensors": "baffb29e31e1ddf0164bf4b9bcf47ab14f61160f3d46e834ceafc3c1a7c66e17",
+      "update_004/metadata.json": "4249bcdec60dd7468e62c0687616a8a820be0bae94289636da33e4379dc7bf6c",
+      "update_004/optimizer.pt": "c409db27ccc6ef68e43c36123519810c3b65a9d579715ff64d5f3595d7da688d",
+      "update_004/runtime_metadata.json": "8beca055a77016f4ce0960b49789e750ab6b34d3edd852888cddec7a4e2980f0"
+    },
+    "manifest_sha256": "df4262b5866b3d5e3017fc909afa4fb687abd120c4d99b03f04bb64d9f9477e5",
+    "no_checkpoint_after_failed_update_four": true,
+    "root": "data_gemma4/checkpoints/gemma4_v45_retention_repair_l14_query",
+    "root_entries": [
+      "update_000",
+      "update_002",
+      "update_004"
+    ],
+    "update_006_absent": true,
+    "update_008_absent": true
+  },
+  "conditional_successor_authorization": {
+    "authorization_id": "v46_train_only_checkpoint_gradient_diagnostic",
+    "authorized": true,
+    "authorized_report": "reports/gemma4/metrics/v46_v45_u4_lost_side_no_step_diagnostic.json",
+    "authorized_script": "src/semantic_3d_chat/evaluation/v46_v45_u4_lost_side_screen.py",
+    "authorized_test": "tests/test_v46_v45_u4_lost_side_screen.py",
+    "explicit_terminal_sha256_cli_required": true,
+    "fixed_data_boundary": {
+      "all_occupied_blocks_processed": true,
+      "blocking_file_access_audit_required": true,
+      "broad_nll_row_count": 48,
+      "changed_pair_unit_count": 25,
+      "complete_pre_question_scene_prefixes": true,
+      "question_dependent_retrieval": false,
+      "question_dependent_scene_processing": false,
+      "scene_count": 16,
+      "scene_ids": [
+        "scene_000011",
+        "scene_000012",
+        "scene_000013",
+        "scene_000014",
+        "scene_000015",
+        "scene_000016",
+        "scene_000017",
+        "scene_000018",
+        "scene_000031",
+        "scene_000032",
+        "scene_000033",
+        "scene_000034",
+        "scene_000035",
+        "scene_000036",
+        "scene_000037",
+        "scene_000038"
+      ],
+      "train_question_count": 384
+    },
+    "forbidden_actions": {
+      "candidate_or_checkpoint_write": true,
+      "chat_promotion": true,
+      "embodied_promotion": true,
+      "final_test_access": true,
+      "optimizer_state_deserialization": true,
+      "optimizer_state_file_open": true,
+      "optimizer_state_loading": true,
+      "optimizer_step": true,
+      "oracle_access": true,
+      "parameter_state_persist": true,
+      "runtime_promotion": true,
+      "selector_execution": true,
+      "validation_access": true
+    },
+    "fresh_adam_sign_line": {
+      "adaptive_direction_or_scalar_selection": false,
+      "alpha_grid": [
+        0.125,
+        0.25,
+        0.5,
+        1.0,
+        2.0
+      ],
+      "candidate_formula": "float32_P0-alpha*lr_group*sign(g5)",
+      "diagnostic_gradient_q699_and_q0a79_used_as_directions": false,
+      "direction_definitions": {
+        "g5_both_sign": "scene_readout_and_query_sign(g5)",
+        "g5_query_sign": "query_only_sign(g5)",
+        "g5_scene_sign": "scene_readout_only_sign(g5)"
+      },
+      "direction_ids": [
+        "g5_scene_sign",
+        "g5_query_sign",
+        "g5_both_sign"
+      ],
+      "direction_source": {
+        "autograd_exact_at_source": true,
+        "gradient_id": "g5",
+        "loss": "-side_margins[0] for pair_000006/cfq_5c84a2c27d2be251 at exact update_004"
+      },
+      "exact_candidate_count": 15,
+      "exact_u4_restoration_before_and_after_every_probe": true,
+      "full_25_unit_teacher_metrics_per_candidate": true,
+      "full_fixed_48_row_broad_nll_per_candidate": true,
+      "full_tensor_hash_restored_after_every_probe": "468f493a746c6125f8ebc62d57ca8ae0419160f6e13ce903dd9f40c64aa772c2",
+      "in_memory_only": true,
+      "query_learning_rate": 8e-06,
+      "scene_readout_learning_rate": 1e-05,
+      "source_checkpoint": "data_gemma4/checkpoints/gemma4_v45_retention_repair_l14_query/update_004",
+      "weight_decay": 0.0
+    },
+    "implementation_integrity": {
+      "config_sha256": "9a4b77c43d30d258be9e4e6d60c477ef6af593fe440d61d28082f2f343519436",
+      "script_sha256": "acda1857fd8e1c8673d313dabca07dd1834df5fd17d1eb54021f46a1ae451926",
+      "test_sha256": "300d58d1f412f5f94e89193bd091f9e15665960aac12035c896f61c2c04d3547"
+    },
+    "invocation_contract": {
+      "expected_value": "sha256_of_materialized_v45_terminal_passed_explicitly",
+      "required_cli_argument": "--expected-v45-terminal-sha256",
+      "terminal_path": "reports/gemma4/metrics/v45_retention_repair_terminal_gate.json",
+      "v46_must_authenticate_terminal_bytes_and_exact_authorization": true,
+      "v46_must_not_embed_terminal_sha256": true
+    },
+    "measurements": {
+      "gradient_groups": {
+        "query": [
+          "lora_banks.extension_v28_stage_b_query.adapters.1.lora_a",
+          "lora_banks.extension_v28_stage_b_query.adapters.1.lora_b"
+        ],
+        "scene_readout": [
+          "block_cross_residual.w_o"
+        ]
+      },
+      "gradient_loss_formula": "negative_selected_side_margin",
+      "isolated_side_gradient_specs": [
+        {
+          "pair_id": "pair_000006",
+          "question_key": "cfq_5c84a2c27d2be251",
+          "role": "g5_candidate_direction_source",
+          "side_index": 0
+        },
+        {
+          "pair_id": "pair_000016",
+          "question_key": "cfq_699675ceeaf65406",
+          "role": "diagnostic_only_never_a_candidate_direction",
+          "side_index": 1
+        },
+        {
+          "pair_id": "pair_000006",
+          "question_key": "cfq_0a79d507273195ef",
+          "role": "diagnostic_only_never_a_candidate_direction",
+          "side_index": 0
+        }
+      ],
+      "report_gradient_norms_and_pairwise_cosines": true,
+      "source_fixed_full_48_row_broad_nll": true,
+      "source_full_teacher_forced_pair_metrics": true
+    },
+    "only_exact_action": "one_bounded_read_only_v46_train_checkpoint_gradient_diagnostic",
+    "schema_version": 1,
+    "scope": {
+      "chat_promotion_authorized": false,
+      "final_test_access_authorized": false,
+      "new_terminal_seal_required_for_any_successor": true,
+      "no_candidate_is_authorized_by_this_diagnostic": true,
+      "oracle_access_authorized": false,
+      "read_only_except_single_report": true,
+      "report_only_output": true,
+      "runtime_promotion_authorized": false,
+      "selector_execution_authorized": false,
+      "train_only": true,
+      "validation_access_authorized": false
+    },
+    "source": {
+      "authorized_surface_state_sha256": "e4165bb1c2a4664eeb146a48107aead3e69bb576c1604bea39b3b7474d17c696",
+      "checkpoint": "data_gemma4/checkpoints/gemma4_v45_retention_repair_l14_query/update_004",
+      "file_sha256": {
+        "adapter.safetensors": "baffb29e31e1ddf0164bf4b9bcf47ab14f61160f3d46e834ceafc3c1a7c66e17",
+        "metadata.json": "4249bcdec60dd7468e62c0687616a8a820be0bae94289636da33e4379dc7bf6c",
+        "optimizer.pt": "c409db27ccc6ef68e43c36123519810c3b65a9d579715ff64d5f3595d7da688d",
+        "runtime_metadata.json": "8beca055a77016f4ce0960b49789e750ab6b34d3edd852888cddec7a4e2980f0"
+      },
+      "frozen_state_sha256": "31cb215cf0d1623886d4a79203c501912e66537021da53dd711124abdc2e36fa",
+      "full_tensor_state_sha256": "468f493a746c6125f8ebc62d57ca8ae0419160f6e13ce903dd9f40c64aa772c2",
+      "update_002_is_authenticated_by_terminal_but_not_a_v46_probe_source": true
+    }
+  },
+  "embodied_agent_promotion_authorized": false,
+  "execution_conclusion": {
+    "final_test_loaded": false,
+    "frozen_state_exact": true,
+    "oracle_loaded": false,
+    "runtime_promoted": false,
+    "selector_executed": false,
+    "update4_checkpoint_persisted": true,
+    "update4_gate_passed": false,
+    "update6_checkpoint_present": false,
+    "update8_checkpoint_or_gate_present": false,
+    "update_five_executed": false,
+    "updates_one_through_four_executed": true,
+    "validation_loaded": false
+  },
+  "final_test_access_authorized": false,
+  "history_audit": {
+    "checkpoint_steps_persisted": [
+      0,
+      2,
+      4
+    ],
+    "fixed_targets_executed": [
+      {
+        "optimizer_update": 1,
+        "pair_id": "pair_000006",
+        "question_key": "cfq_5c84a2c27d2be251"
+      },
+      {
+        "optimizer_update": 2,
+        "pair_id": "pair_000016",
+        "question_key": "cfq_699675ceeaf65406"
+      },
+      {
+        "optimizer_update": 3,
+        "pair_id": "pair_000006",
+        "question_key": "cfq_5c84a2c27d2be251"
+      },
+      {
+        "optimizer_update": 4,
+        "pair_id": "pair_000016",
+        "question_key": "cfq_699675ceeaf65406"
+      }
+    ],
+    "history_frozen_hash_exact_every_step": true,
+    "history_prefixes_bit_exact": true,
+    "no_update_after_four_persisted": true,
+    "optimizer_updates_executed": [
+      1,
+      2,
+      3,
+      4
+    ]
+  },
+  "input_integrity": {
+    "file_sha256": {
+      "configs/experiments/gemma4_diverse28_retention_repair_v45.yaml": "9a4b77c43d30d258be9e4e6d60c477ef6af593fe440d61d28082f2f343519436",
+      "reports/gemma4/metrics/training_selection_gemma4_color_mirror_full_vocab_v11_resume36.json": "c0086f66edbb8854a7938e09c57535bfd47100adbaf3b3c95eeb4b08014ce2f8",
+      "reports/gemma4/metrics/v44_joint_scene_readout_terminal_gate.json": "b968c46c686051e864417b7539db7e90160a1f0b4639af031d02aab005643b67",
+      "src/semantic_3d_chat/evaluation/v46_v45_u4_lost_side_screen.py": "acda1857fd8e1c8673d313dabca07dd1834df5fd17d1eb54021f46a1ae451926",
+      "src/semantic_3d_chat/training/train_retention_repair_v45.py": "dcd46f96a510693b45ea511bd2e1daebfdb1a3461f819f04e5b7182ddc78ae28",
+      "tests/test_train_retention_repair_v45.py": "6f69c5da39f4b8ba1f1b3ccb1e8e51ff90c8e7b77f25922668d9882179f98f2d",
+      "tests/test_v46_v45_u4_lost_side_screen.py": "300d58d1f412f5f94e89193bd091f9e15665960aac12035c896f61c2c04d3547"
+    },
+    "normalized_config_hash": "9a5bb6c41d3d",
+    "protected_report_access": "bytes_hashed_only"
+  },
+  "only_exact_successor_authorized": "v46_train_only_checkpoint_gradient_diagnostic",
+  "oracle_access_authorized": false,
+  "passed": true,
+  "resume_v45_training_authorized": false,
+  "runtime_metadata_audit": {
+    "update_000": {
+      "optimizer_step": 0,
+      "runtime_metadata_sha256": "6dab5ea12d9ab5ae9518eb70ece2cce23285c837a980e7c97028775c726d4fe8",
+      "sanitized_runtime_exact": true,
+      "training_history_qa_and_gate_fields_absent": true
+    },
+    "update_002": {
+      "optimizer_step": 2,
+      "runtime_metadata_sha256": "f8388e9813be67609ef4bbbeb0fbaf1e6086daa1d10eb0156a3a957119d91a9e",
+      "sanitized_runtime_exact": true,
+      "training_history_qa_and_gate_fields_absent": true
+    },
+    "update_004": {
+      "optimizer_step": 4,
+      "runtime_metadata_sha256": "8beca055a77016f4ce0960b49789e750ab6b34d3edd852888cddec7a4e2980f0",
+      "sanitized_runtime_exact": true,
+      "training_history_qa_and_gate_fields_absent": true
+    }
+  },
+  "schema_version": 1,
+  "selector_execution_authorized": false,
+  "tensor_transition": {
+    "all_tensors_finite": true,
+    "authorized_parameter_count": 415744,
+    "authorized_parameter_counts": [
+      393216,
+      6144,
+      16384
+    ],
+    "authorized_parameter_names": [
+      "block_cross_residual.w_o",
+      "lora_banks.extension_v28_stage_b_query.adapters.1.lora_a",
+      "lora_banks.extension_v28_stage_b_query.adapters.1.lora_b"
+    ],
+    "authorized_parameter_shapes": [
+      [
+        256,
+        1536
+      ],
+      [
+        4,
+        1536
+      ],
+      [
+        4096,
+        4
+      ]
+    ],
+    "changed_tensor_names": {
+      "update_002": [
+        "block_cross_residual.w_o",
+        "lora_banks.extension_v28_stage_b_query.adapters.1.lora_a",
+        "lora_banks.extension_v28_stage_b_query.adapters.1.lora_b"
+      ],
+      "update_004": [
+        "block_cross_residual.w_o",
+        "lora_banks.extension_v28_stage_b_query.adapters.1.lora_a",
+        "lora_banks.extension_v28_stage_b_query.adapters.1.lora_b"
+      ]
+    },
+    "frozen_state_bit_exact_through_update_four": true,
+    "only_three_authorized_tensors_changed": true,
+    "state_sha256": {
+      "update_000": {
+        "authorized": "f56fdc4ce31a3e97c80e9a214948b6855fd87ae3b7f96ebf1f152229cf833e02",
+        "frozen": "31cb215cf0d1623886d4a79203c501912e66537021da53dd711124abdc2e36fa",
+        "full": "ad9b2227e68020ae785084666c9dca58c3d479e5b1e3e4c13461539fcb19c6fb"
+      },
+      "update_002": {
+        "authorized": "09020e44b2b2cfec4d894bd9f784441a8a688e9eefffbdd3ddf5f09e5f889c5c",
+        "frozen": "31cb215cf0d1623886d4a79203c501912e66537021da53dd711124abdc2e36fa",
+        "full": "0ed1e9412d747a492903ed9025bc49c9db4cc71cd7bb6ea13f9f990f01bd607b"
+      },
+      "update_004": {
+        "authorized": "e4165bb1c2a4664eeb146a48107aead3e69bb576c1604bea39b3b7474d17c696",
+        "frozen": "31cb215cf0d1623886d4a79203c501912e66537021da53dd711124abdc2e36fa",
+        "full": "468f493a746c6125f8ebc62d57ca8ae0419160f6e13ce903dd9f40c64aa772c2"
+      }
+    },
+    "tensor_count_each_checkpoint": 179,
+    "update_zero_adapter_bytes_equal_v44_source": true
+  },
+  "terminal_conclusion": "update4_train_only_gate_failed_stop_is_final",
+  "terminal_process_access_audit": {
+    "adapter_tensors_loaded_on_cpu_for_hash_and_equality_audit": true,
+    "final_test_loaded": false,
+    "gemma_loaded": false,
+    "maps_loaded": false,
+    "optimizer_deserialized": false,
+    "optimizer_files_bytes_hashed_only": true,
+    "optimizer_step_executed": false,
+    "oracle_loaded": false,
+    "protected_report_access": "bytes_hashed_only",
+    "qa_loaded": false,
+    "validation_loaded": false
+  },
+  "update4_gate_replay": {
+    "broad_nll_delta": -0.00865592559178685,
+    "checks": {
+      "both_authorized_parameter_groups_changed": true,
+      "both_lost_side_margins_strictly_positive": false,
+      "broad_nll_at_most_authorized_maximum": true,
+      "complete_physical_pair_id_coverage_at_least_4": false,
+      "frozen_state_exact": true,
+      "priority_teacher_deficit_improved_at_least_0_5_vs_original_v41_u0": true,
+      "query_state_changed": true,
+      "scene_readout_state_changed": true,
+      "teacher_complete_units_at_least_9": false,
+      "teacher_cross_complete_units_at_least_17": true,
+      "teacher_positive_sides_at_least_34": false
+    },
+    "complete_physical_pair_coverage": 3,
+    "complete_units": 8,
+    "complete_units_by_family": {
+      "book_support": 0,
+      "mirror_lr": 2,
+      "picture_support": 0
+    },
+    "cross_prefix_complete_units": 17,
+    "cross_prefix_complete_units_by_family": {
+      "book_support": 1,
+      "mirror_lr": 4,
+      "picture_support": 3
+    },
+    "failed_checks": [
+      "both_lost_side_margins_strictly_positive",
+      "complete_physical_pair_id_coverage_at_least_4",
+      "teacher_complete_units_at_least_9",
+      "teacher_positive_sides_at_least_34"
+    ],
+    "lost_side_evidence": [
+      {
+        "margin": -0.0625,
+        "pair_id": "pair_000006",
+        "question_key": "cfq_5c84a2c27d2be251",
+        "side_index": 0,
+        "strictly_positive": false
+      },
+      {
+        "margin": 0.24999994039535522,
+        "pair_id": "pair_000016",
+        "question_key": "cfq_699675ceeaf65406",
+        "side_index": 1,
+        "strictly_positive": true
+      }
+    ],
+    "original_v41_priority_side_deficit": 31.113729119300842,
+    "passed": false,
+    "passing_checks": [
+      "both_authorized_parameter_groups_changed",
+      "broad_nll_at_most_authorized_maximum",
+      "frozen_state_exact",
+      "priority_teacher_deficit_improved_at_least_0_5_vs_original_v41_u0",
+      "query_state_changed",
+      "scene_readout_state_changed",
+      "teacher_cross_complete_units_at_least_17"
+    ],
+    "positive_sides": 32,
+    "priority_side_deficit_improvement": 1.3136229515075684,
+    "source_broad_nll": 2.898227721452713,
+    "stopped_before_update_five": true,
+    "update4_broad_nll": 2.889571795860926,
+    "update4_priority_side_deficit": 29.800106167793274,
+    "update4_source_prefix_trust_rms": 0.0013297934783622622,
+    "update8_gate_absent": true
+  },
+  "v44_source_authentication": {
+    "exact_v45_authorization_authenticated": true,
+    "source_authorized_state_sha256": "f56fdc4ce31a3e97c80e9a214948b6855fd87ae3b7f96ebf1f152229cf833e02",
+    "source_checkpoint": "data_gemma4/checkpoints/gemma4_v44_joint_scene_readout_l14_query/update_008",
+    "source_file_sha256": {
+      "adapter.safetensors": "22f7e0276a91d45e31893843345e98e310fbffd14147852c05c5c3bec4dc6589",
+      "metadata.json": "797fcdb87da3391c5196fda15fca4d352846dda2d5dcc49263ca3f7854fcd1b3",
+      "optimizer.pt": "cdf9eb0c3560be1bc1542963354444eddb7a89ed0d063ffaa769c45231b9d61a",
+      "runtime_metadata.json": "59542b55239d64a9c28b9b99ec0a39b47c1dd93839753f61d145722ea7c50acf"
+    },
+    "source_frozen_state_sha256": "31cb215cf0d1623886d4a79203c501912e66537021da53dd711124abdc2e36fa",
+    "source_full_tensor_state_sha256": "ad9b2227e68020ae785084666c9dca58c3d479e5b1e3e4c13461539fcb19c6fb",
+    "source_optimizer_bytes_authenticated_but_not_deserialized": true,
+    "terminal_path": "reports/gemma4/metrics/v44_joint_scene_readout_terminal_gate.json",
+    "terminal_sha256": "b968c46c686051e864417b7539db7e90160a1f0b4639af031d02aab005643b67"
+  },
+  "v45_provenance": {
+    "exact_train_scene_count": 16,
+    "exact_train_scene_ids": [
+      "scene_000011",
+      "scene_000012",
+      "scene_000013",
+      "scene_000014",
+      "scene_000015",
+      "scene_000016",
+      "scene_000017",
+      "scene_000018",
+      "scene_000031",
+      "scene_000032",
+      "scene_000033",
+      "scene_000034",
+      "scene_000035",
+      "scene_000036",
+      "scene_000037",
+      "scene_000038"
+    ],
+    "question_dependent_scene_processing_or_retrieval": false,
+    "same_exact_v44_authorization_at_updates_zero_two_four": true,
+    "source_optimizer_files_or_states_loaded": false,
+    "train_changed_pair_unit_count": 25,
+    "train_question_count": 384,
+    "v44_terminal_sha256": "b968c46c686051e864417b7539db7e90160a1f0b4639af031d02aab005643b67",
+    "validation_oracle_and_final_access": false
+  },
+  "v46_train_only_checkpoint_gradient_diagnostic_authorized": true,
+  "validation_access_authorized": false
+}

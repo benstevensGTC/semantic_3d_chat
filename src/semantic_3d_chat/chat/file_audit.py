@@ -15,10 +15,20 @@ class FileAccessAudit:
     _instances: ClassVar[list[FileAccessAudit]] = []
     _lock: ClassVar[threading.Lock] = threading.Lock()
 
-    def __init__(self, forbidden_roots: list[str | Path] | None = None) -> None:
+    def __init__(
+        self,
+        forbidden_roots: list[str | Path] | None = None,
+        *,
+        forbidden_component_names: set[str] | frozenset[str] | None = None,
+        block_forbidden: bool = False,
+    ) -> None:
         self.active = False
         self.paths: list[str] = []
         self.forbidden_roots = [Path(path).resolve() for path in (forbidden_roots or [])]
+        self.forbidden_component_names = frozenset(
+            str(name).casefold() for name in (forbidden_component_names or ())
+        )
+        self.block_forbidden = bool(block_forbidden)
         with self._lock:
             self._instances.append(self)
             if not self.__class__._installed:
@@ -44,10 +54,15 @@ class FileAccessAudit:
             path = str(candidate)
         except (OSError, TypeError, ValueError):
             path = os.fsdecode(raw)
+        blocked_by: list[FileAccessAudit] = []
         with cls._lock:
             for instance in cls._instances:
                 if instance.active:
                     instance.paths.append(path)
+                    if instance.block_forbidden and instance._is_forbidden(Path(path)):
+                        blocked_by.append(instance)
+        if blocked_by:
+            raise PermissionError(f"Blocked forbidden runtime file read before open: {path}")
 
     def __enter__(self) -> Self:
         self.paths.clear()
@@ -65,21 +80,35 @@ class FileAccessAudit:
         """Explicitly record native-extension reads that may bypass Python's hook."""
 
         resolved = str(Path(path).expanduser().resolve())
+        blocked = False
         with self._lock:
             if self.active:
                 self.paths.append(resolved)
+                blocked = self.block_forbidden and self._is_forbidden(Path(resolved))
+        if blocked:
+            raise PermissionError(
+                f"Blocked forbidden runtime file read during explicit audit: {resolved}"
+            )
+
+    def _is_forbidden(self, path: Path) -> bool:
+        if self.forbidden_component_names.intersection(
+            part.casefold() for part in path.parts
+        ):
+            return True
+        for root in self.forbidden_roots:
+            try:
+                path.relative_to(root)
+            except ValueError:
+                continue
+            return True
+        return False
 
     def forbidden_accesses(self) -> list[str]:
         violations = []
         for raw_path in self.unique_paths:
             path = Path(raw_path)
-            for root in self.forbidden_roots:
-                try:
-                    path.relative_to(root)
-                except ValueError:
-                    continue
+            if self._is_forbidden(path):
                 violations.append(raw_path)
-                break
         return violations
 
     def assert_clean(self) -> None:
@@ -92,6 +121,8 @@ class FileAccessAudit:
         payload = {
             "loaded_files": self.unique_paths,
             "forbidden_roots": [str(path) for path in self.forbidden_roots],
+            "forbidden_component_names": sorted(self.forbidden_component_names),
+            "block_forbidden": self.block_forbidden,
             "forbidden_accesses": self.forbidden_accesses(),
             "passed": not self.forbidden_accesses(),
         }

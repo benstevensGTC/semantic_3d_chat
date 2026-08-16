@@ -1,0 +1,38 @@
+{
+  "artifact": "v75_official_validation_posthoc_figures_v1",
+  "figures": {
+    "canonical_accuracy_by_type": {
+      "caption": "Canonical accuracy by question type from the sealed V75 official-validation score.",
+      "path": "reports/gemma4/figures/v75_official_validation_accuracy_by_type.png",
+      "sha256": "74a89f364dddfba9432e3b5a8fbffd62d945f8c46529178b92d13ff07f3d000a"
+    },
+    "counterfactual_outcomes": {
+      "caption": "Per-family complete-unit, correct-side, and prediction-change rates for the sealed official counterfactual subset.",
+      "path": "reports/gemma4/figures/v75_official_validation_counterfactuals.png",
+      "sha256": "d2adc6e17b49330dafb5161e2440039753eedf0f14b3fe5e3fdb8efaf7c2eed5"
+    },
+    "grounding_aggregate_summary": {
+      "caption": "Aggregate grounding errors and threshold hit rates. The sealed score contains no per-example errors, so no distribution is inferred.",
+      "path": "reports/gemma4/figures/v75_official_validation_grounding_summary.png",
+      "sha256": "464aa7dcfe3d1d14bf174ca2eeaf819d2acd94ec1c6839c1167d07970cd6cd06"
+    }
+  },
+  "schema_version": 1,
+  "scope": {
+    "grounding_visualization": "aggregate_summary_only_no_distribution",
+    "model_loaded": false,
+    "new_evaluation": false,
+    "per_example_grounding_errors_available": false,
+    "post_hoc_visualization_only": true,
+    "predictions_or_references_loaded": false,
+    "qa_or_oracle_loaded": false,
+    "scene_map_loaded": false,
+    "source_file_count": 1,
+    "unopened_split_loaded": false
+  },
+  "source": {
+    "artifact": "v75_official_validation_score_v1",
+    "path": "reports/gemma4/metrics/v75_official_validation_score.json",
+    "sha256": "f6d9ceea78622c3a4851c3366ac06ed0835824f7b786424725fbfa5d5b978679"
+  }
+}

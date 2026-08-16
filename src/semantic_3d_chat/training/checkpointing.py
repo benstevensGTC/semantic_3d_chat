@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import json
+import math
 import os
+import re
 import tempfile
 from collections.abc import Mapping, Sequence
 from copy import deepcopy
@@ -59,6 +61,18 @@ RUNTIME_METADATA_FIELDS = frozenset(
         "dense_alignment_initial_state_sha256",
         "dense_alignment_state_sha256",
         "all_voxels_transformed",
+        "dense_sidecar_adapter",
+        "dense_sidecar_adapter_parameter_count",
+        "dense_sidecar_adapter_initial_state_sha256",
+        "dense_sidecar_adapter_state_sha256",
+        "dense_sidecar_adapter_zero_output_equivalence",
+        "frozen_dense_alignment_state_sha256",
+        "block_cross_residual",
+        "block_cross_residual_parameter_count",
+        "block_cross_residual_initial_state_sha256",
+        "block_cross_residual_state_sha256",
+        "block_cross_residual_zero_output_equivalence",
+        "frozen_block_cross_source_stack_state_sha256",
         "freeze_scene_adapter",
         "frozen_scene_state_sha256",
         "lora",
@@ -72,6 +86,57 @@ RUNTIME_METADATA_FIELDS = frozenset(
         "lora_parameter_count",
     }
 )
+_RUNTIME_METADATA_FORBIDDEN_FRAGMENTS = frozenset(
+    {
+        "oracle",
+        "caption",
+        "category",
+        "label",
+        "object_id",
+        "object_name",
+        "instance_id",
+        "scene_graph",
+        "relationship",
+        "answer_text",
+        "question_text",
+        "chair",
+        "bowl",
+        "book",
+        "picture",
+        "frame",
+        "cube",
+        "table",
+        "lamp",
+        "door",
+        "plant",
+        "cabinet",
+    }
+)
+_RUNTIME_METADATA_QA_TOKEN = re.compile(r"(?<![a-z0-9])qa(?![a-z0-9])")
+
+
+def _validate_runtime_metadata_value(value: object, location: str = "root") -> None:
+    if isinstance(value, Mapping):
+        for key, nested in value.items():
+            _validate_runtime_metadata_value(str(key), f"{location}.<key>")
+            _validate_runtime_metadata_value(nested, f"{location}.{key}")
+        return
+    if isinstance(value, (list, tuple)):
+        for index, nested in enumerate(value):
+            _validate_runtime_metadata_value(nested, f"{location}[{index}]")
+        return
+    if isinstance(value, float) and not math.isfinite(value):
+        raise ValueError(f"Runtime checkpoint metadata contains nonfinite data at {location}")
+    if not isinstance(value, str):
+        return
+    lowered = value.casefold().replace("-", "_")
+    if any(fragment in lowered for fragment in _RUNTIME_METADATA_FORBIDDEN_FRAGMENTS) or (
+        _RUNTIME_METADATA_QA_TOKEN.search(lowered)
+    ):
+        raise ValueError(
+            "Runtime checkpoint metadata contains forbidden environmental text at "
+            f"{location}"
+        )
 
 
 def _minimal_equivalence(
@@ -168,6 +233,61 @@ def runtime_checkpoint_metadata(metadata: Mapping[str, Any]) -> dict[str, Any]:
             "all_voxels_transformed",
         ):
             result.pop(field, None)
+    sidecar_contract = result.get("dense_sidecar_adapter")
+    sidecar_enabled = bool(
+        isinstance(sidecar_contract, Mapping) and sidecar_contract.get("enabled") is True
+    )
+    if sidecar_enabled:
+        result["dense_sidecar_adapter_zero_output_equivalence"] = _minimal_equivalence(
+            metadata.get("dense_sidecar_adapter_zero_output_equivalence"),
+            fields=(
+                "verified",
+                "base",
+                "question_dependent_scene_processing",
+                "all_scene_slots_accounted",
+                "all_voxels_covered",
+                "application_order",
+            ),
+        )
+    else:
+        for field in (
+            "dense_sidecar_adapter",
+            "dense_sidecar_adapter_parameter_count",
+            "dense_sidecar_adapter_initial_state_sha256",
+            "dense_sidecar_adapter_state_sha256",
+            "dense_sidecar_adapter_zero_output_equivalence",
+            "frozen_dense_alignment_state_sha256",
+        ):
+            result.pop(field, None)
+    block_cross_contract = result.get("block_cross_residual")
+    block_cross_enabled = bool(
+        isinstance(block_cross_contract, Mapping)
+        and block_cross_contract.get("enabled") is True
+    )
+    if block_cross_enabled:
+        result["block_cross_residual_zero_output_equivalence"] = _minimal_equivalence(
+            metadata.get("block_cross_residual_zero_output_equivalence"),
+            fields=(
+                "verified",
+                "base",
+                "question_dependent_scene_processing",
+                "all_scene_slots_accounted",
+                "all_occupied_block_tokens_accounted",
+                "all_voxels_covered",
+                "normalized_block_positions_used",
+                "application_order",
+            ),
+        )
+    else:
+        for field in (
+            "block_cross_residual",
+            "block_cross_residual_parameter_count",
+            "block_cross_residual_initial_state_sha256",
+            "block_cross_residual_state_sha256",
+            "block_cross_residual_zero_output_equivalence",
+            "frozen_block_cross_source_stack_state_sha256",
+        ):
+            result.pop(field, None)
     unknown = set(result) - RUNTIME_METADATA_FIELDS
     if unknown:
         raise RuntimeError(f"Runtime metadata sanitizer emitted unknown fields: {sorted(unknown)}")
@@ -180,6 +300,7 @@ def validate_runtime_checkpoint_metadata(metadata: Mapping[str, Any]) -> None:
     unknown = sorted(set(metadata) - RUNTIME_METADATA_FIELDS)
     if unknown:
         raise ValueError(f"Runtime checkpoint metadata contains forbidden fields: {unknown}")
+    _validate_runtime_metadata_value(metadata)
 
 
 def _atomic_json(destination: Path, filename: str, payload: Mapping[str, Any]) -> None:

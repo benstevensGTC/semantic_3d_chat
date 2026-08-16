@@ -1,0 +1,63 @@
+experiment:
+  schema_version: 1
+  artifact: gemma4_v54_fixed_prefix_ple_reader_v1
+  model_id: google/gemma-4-E2B-it
+  model_revision: 3e22461f65e89153144f8adb70e3b8c2cc9845a7
+  base_runtime_config: configs/runtime/gemma4_v54.yaml
+  base_checkpoint: data_gemma4/checkpoints/gemma4_v54_semantic_greedy_gate/update_000
+  prefix_cache: data_gemma4/scene_tokens/v56_question_control_full_prefixes
+  train_qa: data_gemma4/training/v62_pair_disjoint/train.jsonl
+  validation_questions: reports/gemma4/questions/v62_internal_validation.json
+  validation_references: reports/gemma4/scorer_only/v62_internal_validation_references.json
+  baseline_predictions: reports/gemma4/predictions/v62_v54_no_control_internal_validation.jsonl
+  retention_corpus: configs/experiments/gemma4_v54_fixed_prefix_ple_reader_v1_retention.json
+  output_checkpoint: data_gemma4/checkpoints/gemma4_v54_fixed_prefix_ple_reader_v1
+  result_report: reports/gemma4/metrics/gemma4_v54_fixed_prefix_ple_reader_v1_result.json
+  smoke_report: reports/gemma4/metrics/gemma4_v54_fixed_prefix_ple_reader_v1_smoke.json
+  question_dependent_retrieval: false
+  fixed_prefix_tokens: 258
+  scene_latents: 256
+  scene_hidden_dimension: 1536
+
+adapter:
+  exact_target: model.language_model.per_layer_model_projection
+  rank: 4
+  alpha: 8.0
+  dropout: 0.0
+  dtype: float32
+  trainable_parameter_count: 41984
+  merge: false
+
+objective:
+  answer_token_normalized_ce_weight: 1.0
+  same_question_wrong_prefix_hinge_weight: 1.0
+  same_question_wrong_prefix_margin_nats_per_token: 0.25
+  retention_kl_weight: 0.2
+  labels_before_answer_suffix: -100
+
+optimization:
+  seed: 720054
+  optimizer: adamw
+  learning_rate: 0.0003
+  weight_decay: 0.0
+  gradient_accumulation: 4
+  maximum_updates: 40
+  gradient_clip_l2: 1.0
+  decoder_gradient_checkpointing: true
+  base_dtype: bfloat16
+  adapter_dtype: float32
+  device: mps_with_cpu_fallback
+
+selection:
+  teacher_forced_batch_size: 2
+  greedy_rows_per_scene: 6
+  validation_answer_nll_improvement_minimum: 0.03
+  changed_wrong_prefix_positive_margin_rate_minimum: 0.65
+  changed_wrong_prefix_positive_margin_rate_delta_minimum: 0.10
+  changed_pair_complete_unit_delta_minimum: 3
+  greedy_exact_accuracy_delta_minimum: 0.02
+  retention_mean_ce_increase_nats_maximum: 0.03
+  retention_mean_kl_nats_maximum: 0.02
+  retention_next_token_top1_agreement_minimum: 0.98
+  every_gate_required: true
+  failed_run_publishes_no_checkpoint: true

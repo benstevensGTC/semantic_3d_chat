@@ -1,0 +1,42 @@
+# Offline conversion/evaluation settings for the strict question-independent path.
+# This file is never loaded by chat. Chat continues to use the sanitized
+# standalone configs/runtime/gemma4_v54.yaml architecture contract.
+strict_fixed_prefix_atlas:
+  schema_version: 1
+  architecture: fixed_scene_key_value_atlas_v1
+  source_runtime_config: configs/runtime/gemma4_v54.yaml
+  source_base_checkpoint: data_gemma4/checkpoints/gemma4_v54_semantic_greedy_gate/update_000
+  source_sealed_controller: data_gemma4/checkpoints/gemma4_v66b_allrow_always_on_control
+  offline_training_source: data_gemma4/training/v62_pair_disjoint/train.jsonl
+  output_checkpoint: data_gemma4/checkpoints/gemma4_strict_fixed_prefix_atlas_v1
+  probe_count: 96
+  clustering_iterations: 12
+  base_environment_latents: 256
+  values_per_probe: 4
+  language_hidden_size: 1536
+  compiled_fixed_prefix_tokens: 738
+  compile_before_user_question: true
+  retain_compiler_during_chat: false
+  question_dependent_scene_processing: false
+  question_dependent_retrieval: false
+  semantic_or_spatial_top_k_selection: false
+  preserve_complete_base_scene_prefix: true
+  runtime_environmental_text_inputs: []
+
+evaluation:
+  questions_only_manifest: reports/gemma4/questions/v62_internal_validation.json
+  prediction_output: reports/gemma4/predictions/strict_fixed_prefix_atlas_v1.jsonl
+  require_one_prefix_hash_per_scene: true
+  require_prefix_built_before_first_question: true
+  require_no_runtime_training_files: true
+  require_no_runtime_oracle_files: true
+  behavioral_status_before_run: pending
+
+# A decoder-reader LoRA is a future enhancement only after the zero-additional-
+# training atlas has been measured. It must consume this exact fixed memory;
+# it may not introduce live-question scene tokens or any retrieval layer.
+future_reader_ablation:
+  enabled: false
+  allowed_trainable_surface: decoder_lora_only
+  scene_compiler_frozen: true
+  fixed_prefix_reused_across_questions: true

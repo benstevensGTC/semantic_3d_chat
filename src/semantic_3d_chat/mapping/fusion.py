@@ -13,7 +13,11 @@ import typer
 
 from semantic_3d_chat.mapping.depth_projection import project_depth_to_world
 from semantic_3d_chat.mapping.semantic_codec import IdentitySemanticCodec
-from semantic_3d_chat.mapping.voxel_map import SparseVoxelMap
+from semantic_3d_chat.mapping.voxel_map import (
+    PERSISTED_MAP_CONTENT_HASH_DOMAIN,
+    SparseVoxelMap,
+    persisted_voxel_map_content_hash,
+)
 from semantic_3d_chat.rendering_io import iter_frames, load_rgb_depth
 
 
@@ -285,7 +289,8 @@ def build_map_cli(
                 **voxel_map.summary(),
                 "map_path": str(output),
                 "preview_paths": [str(path) for path in previews],
-                "content_hash": voxel_map.content_hash(),
+                "content_hash": persisted_voxel_map_content_hash(output),
+                "content_hash_domain": PERSISTED_MAP_CONTENT_HASH_DOMAIN,
             },
             sort_keys=True,
         )

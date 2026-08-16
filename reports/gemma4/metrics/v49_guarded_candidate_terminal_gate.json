@@ -1,0 +1,383 @@
+{
+  "arbitrary_candidate_or_checkpoint_write_authorized": false,
+  "artifact": "v49_guarded_candidate_terminal_gate",
+  "chat_promotion_authorized": false,
+  "conditional_successor_authorization": {
+    "authorization_id": "v50_scene_query_alpha_grid",
+    "authorized": true,
+    "authorized_config": "configs/experiments/gemma4_diverse28_book_continuation_v47.yaml",
+    "authorized_report": "reports/gemma4/metrics/v50_scene_query_alpha_grid.json",
+    "authorized_script": "src/semantic_3d_chat/evaluation/v50_scene_query_alpha_grid.py",
+    "authorized_test": "tests/test_v50_scene_query_alpha_grid.py",
+    "candidate_grid": {
+      "adaptive_grid_or_candidate_mutation": false,
+      "candidate_count": 3,
+      "candidate_formula": "float32_P0-scene_or_query_alpha*lr_group*sign(normalized_component_sum)",
+      "candidate_hash_inventory_fixed_before_any_candidate_forward": true,
+      "candidates_declared_order": [
+        {
+          "candidate_id": "guarded_scene_alpha_1p0_query_alpha_2p0",
+          "declared_order": 0,
+          "query_alpha": 2.0,
+          "scene_alpha": 1.0
+        },
+        {
+          "candidate_id": "guarded_scene_alpha_0p5_query_alpha_2p0",
+          "declared_order": 1,
+          "query_alpha": 2.0,
+          "scene_alpha": 0.5
+        },
+        {
+          "candidate_id": "guarded_scene_alpha_0p25_query_alpha_2p0",
+          "declared_order": 2,
+          "query_alpha": 2.0,
+          "scene_alpha": 0.25
+        }
+      ],
+      "direction_components": [
+        "g_book",
+        "g_mirror",
+        "g5_guard"
+      ],
+      "direction_id": "guarded_both_sign",
+      "exact_source_restoration_before_and_after_each_candidate": true,
+      "fixed_before_any_candidate_forward": true,
+      "isolated_side_gradient_specs": [
+        {
+          "gradient_id": "g_book",
+          "loss": "negative_selected_side_margin",
+          "pair_id": "pair_000015",
+          "question_key": "cfq_163eb92339ad35a5",
+          "side_index": 0
+        },
+        {
+          "gradient_id": "g_mirror",
+          "loss": "negative_selected_side_margin",
+          "pair_id": "pair_000016",
+          "question_key": "cfq_699675ceeaf65406",
+          "side_index": 1
+        },
+        {
+          "gradient_id": "g5_guard",
+          "loss": "negative_selected_side_margin",
+          "pair_id": "pair_000006",
+          "question_key": "cfq_5c84a2c27d2be251",
+          "side_index": 0
+        }
+      ],
+      "normalize_each_nonzero_component": "unit_l2_within_each_scene_or_query_group_before_combination",
+      "query_alpha_fixed": 2.0,
+      "query_learning_rate": 8e-06,
+      "scene_alpha_grid_declared_order": [
+        1.0,
+        0.5,
+        0.25
+      ],
+      "scene_readout_learning_rate": 1e-05
+    },
+    "conditional_checkpoint_output": "data_gemma4/checkpoints/gemma4_v50_scene_query_alpha_grid/update_000",
+    "conditional_persistence": {
+      "always_write_atomic_report": true,
+      "checkpoint_contains_declared_order_winner_only": true,
+      "checkpoint_inventory_if_passed": [
+        "adapter.safetensors",
+        "metadata.json",
+        "runtime_metadata.json"
+      ],
+      "checkpoint_provenance_must_bind_terminal_report_source_grid_and_winner": true,
+      "checkpoint_write_iff_full_gate_winner_exists": true,
+      "failed_grid_writes_no_checkpoint": true,
+      "optimizer_file_in_checkpoint": false,
+      "runtime_metadata_exact_sanitization_required": true
+    },
+    "evaluation_and_selection": {
+      "all_candidates_receive_full_25_unit_teacher_metrics_and_per_unit_nll": true,
+      "all_candidates_receive_full_fixed_48_row_broad_nll": true,
+      "all_candidates_receive_full_non_greedy_gate_before_selection": true,
+      "all_candidates_receive_original_v46_candidate_relative_prefix_trust": true,
+      "every_pre_gate_passing_candidate_receives_full_broad_48_greedy": true,
+      "every_pre_gate_passing_candidate_receives_full_changed_25_greedy": true,
+      "greedy_runs_for_every_pre_gate_passing_candidate": true,
+      "greedy_runs_only_for_pre_gate_passing_candidates": true,
+      "no_early_stop_after_first_full_gate_pass": true,
+      "no_winner_if_no_candidate_passes_full_gate": true,
+      "pre_gate_failure_requires_greedy_skipped_due_pre_gate": true,
+      "question_dependent_retrieval": false,
+      "question_dependent_scene_processing": false,
+      "winner_eligibility_requires_every_non_greedy_and_greedy_check": true,
+      "winner_selection": "first_full_gate_passing_candidate_in_fixed_declared_order_after_all_evaluations"
+    },
+    "explicit_terminal_sha256_cli_required": true,
+    "implementation_integrity": {
+      "config_sha256": "6b15813237b217d8daad446c799127215bbb1366f2b442b61e975787efa4f6b7",
+      "hashes_complete": true,
+      "script_sha256": "965868c3e620147fb23ee77a04ef2e2f51f07f2d47c9cffda0236104ebdc174a",
+      "test_sha256": "f8ffa0bc37d3a3b9ec4aac1d40b7e50d8d232899ac89de006f2b9d0846ad5166"
+    },
+    "invocation_contract": {
+      "required_cli_argument": "--expected-v49-terminal-sha256",
+      "terminal_path": "reports/gemma4/metrics/v49_guarded_candidate_terminal_gate.json",
+      "v50_must_authenticate_terminal_bytes_and_exact_authorization": true,
+      "v50_must_not_embed_terminal_sha256": true
+    },
+    "only_exact_action": "one_fixed_v50_train_only_scene_query_alpha_grid",
+    "per_candidate_gate": {
+      "book_complete_units_minimum": 1,
+      "book_cross_prefix_complete_units_minimum": 1,
+      "both_lost_side_margins_strictly_positive": true,
+      "broad_greedy_exact_correct_minimum": 23,
+      "broad_greedy_row_count_exact": 48,
+      "broad_nll_maximum": 2.9213306349515915,
+      "complete_physical_pair_coverage_minimum": 5,
+      "frozen_state_exact": true,
+      "greedy_check_names": [
+        "train_greedy_complete_units_at_least_5",
+        "broad_greedy_exact_correct_at_least_23_of_48",
+        "broad_greedy_row_count_exactly_48"
+      ],
+      "mirror_complete_units_minimum": 2,
+      "non_greedy_check_names": [
+        "source_v47_u4_exact_before_reconstruction",
+        "reconstructed_candidate_full_tensor_state_exact",
+        "reconstructed_candidate_authorized_surface_state_exact",
+        "teacher_complete_units_at_least_10",
+        "teacher_positive_sides_at_least_35",
+        "teacher_cross_prefix_complete_units_at_least_17",
+        "complete_physical_pair_coverage_at_least_5",
+        "mirror_complete_units_at_least_2",
+        "book_complete_units_at_least_1",
+        "book_cross_prefix_complete_units_at_least_1",
+        "priority_deficit_improvement_at_least_0_5_vs_original_v41_u0",
+        "broad_nll_at_most_v45_maximum",
+        "both_lost_sides_strictly_positive",
+        "scene_readout_state_changed",
+        "query_state_changed",
+        "frozen_state_exact",
+        "original_v46_candidate_relative_prefix_trust_rms_at_most_0_002"
+      ],
+      "original_v46_candidate_relative_prefix_trust_rms_maximum": 0.002,
+      "priority_deficit_improvement_minimum_vs_original_v41_u0": 0.5,
+      "query_state_changed": true,
+      "scene_readout_state_changed": true,
+      "teacher_complete_units_minimum": 10,
+      "teacher_cross_prefix_complete_units_minimum": 17,
+      "teacher_positive_sides_minimum": 35,
+      "thresholds_unchanged_from_v49": true,
+      "train_greedy_complete_units_minimum": 5
+    },
+    "schema_version": 1,
+    "scope": {
+      "backward_or_parameter_gradient_accumulation_authorized": false,
+      "chat_promotion_authorized": false,
+      "embodied_promotion_authorized": false,
+      "exact_three_autograd_grad_probes_reused_for_all_candidates": true,
+      "final_test_access_authorized": false,
+      "fixed_three_candidate_grid": true,
+      "optimizer_construction_authorized": false,
+      "optimizer_state_file_open_authorized": false,
+      "optimizer_state_loading_authorized": false,
+      "optimizer_step_authorized": false,
+      "oracle_access_authorized": false,
+      "runtime_promotion_authorized": false,
+      "selector_execution_authorized": false,
+      "train_only": true,
+      "validation_access_authorized": false
+    },
+    "source": {
+      "original_v46_candidate_prefix_reference": {
+        "authorized_surface_state_sha256": "d60b665d9a970433b2ed59e6769b9114468bef608b98eae828268101d39db56c",
+        "checkpoint": "data_gemma4/checkpoints/gemma4_v47_book_continuation_l14_query/update_000",
+        "file_sha256": {
+          "adapter.safetensors": "c47bbb9bacbb5bc8178e9a1797ec47b04ee4a3709042c6b30f6935eacc4686f0",
+          "metadata.json": "e76e8a905af53fb082684000a6a6e16845b79e0795b6dbb047a2703245198574",
+          "runtime_metadata.json": "01e645b82c5e533dd2319ef8a97171437b149c4e1ef86201f83fdb22de047987"
+        },
+        "frozen_state_sha256": "31cb215cf0d1623886d4a79203c501912e66537021da53dd711124abdc2e36fa",
+        "full_tensor_state_sha256": "1d5adc1fb0d7a895056b77d38c8a12aba95c9997ec8a94edf68673f9c58fb954",
+        "question_free_global_scene_prefix": true,
+        "scene_count": 16
+      },
+      "v47_u4": {
+        "authorized_surface_state_sha256": "a23de4988774a966c0d7aac378ede5d15a3fa1d96093c5039f181a62b0bb09b0",
+        "checkpoint": "data_gemma4/checkpoints/gemma4_v47_book_continuation_l14_query/update_004",
+        "file_sha256": {
+          "adapter.safetensors": "8f903f5d1ba93d37ccd6204e3b58c9a5529ff9ee2b74edca0787ecb5a2c62c66",
+          "metadata.json": "c6affe7f60c094580e2ea5f5d1330f475bf359e0a3a58bfc3bf3b3ada1de0be1",
+          "optimizer.pt": "fe66be9cae13951fbfc217e0c512e43366c347181457c9e551230a9d6001db80",
+          "runtime_metadata.json": "4e3a1af91642c9f2adb0b3e43997455a1aea31f86bf45618459d6005a68d4bbf"
+        },
+        "frozen_state_sha256": "31cb215cf0d1623886d4a79203c501912e66537021da53dd711124abdc2e36fa",
+        "full_tensor_state_sha256": "adfc0400d1a3bb49b278cd3012ab571d01465f2380881f986c085a25474276e5",
+        "optimizer_file_open_authorized": false
+      },
+      "v49_failed_result": {
+        "checkpoint_written": false,
+        "greedy_executed": false,
+        "observed_prefix_trust_rms": 0.0020444965921342373,
+        "only_failed_check": "original_v46_candidate_relative_prefix_trust_rms_at_most_0_002",
+        "path": "reports/gemma4/metrics/v49_guarded_candidate_train_gate.json",
+        "prefix_trust_rms_maximum": 0.002,
+        "sha256": "7d82a503a5402dcfd80816459eea5d653849e89a49fa8ce7b585dc806ff7acc9",
+        "source_restored_exact": true
+      }
+    }
+  },
+  "embodied_promotion_authorized": false,
+  "final_test_access_authorized": false,
+  "input_integrity": {
+    "authorization_checks": {
+      "artifact": true,
+      "authorization_id": true,
+      "authorized": true,
+      "checkpoint": true,
+      "config_hash": true,
+      "passed": true,
+      "report": true,
+      "scope": true,
+      "script": true,
+      "script_hash": true,
+      "successor": true,
+      "test": true,
+      "test_hash": true
+    },
+    "maps_loaded": false,
+    "model_loaded": false,
+    "protected_report": {
+      "path": "reports/gemma4/metrics/training_selection_gemma4_color_mirror_full_vocab_v11_resume36.json",
+      "sha256": "c0086f66edbb8854a7938e09c57535bfd47100adbaf3b3c95eeb4b08014ce2f8"
+    },
+    "qa_loaded": false,
+    "v48_terminal": {
+      "path": "reports/gemma4/metrics/v48_v47_u4_dual_margin_terminal_gate.json",
+      "sha256": "406becf0ec94c7b59ffa0acdef6441dab224d279b2cdccc86645c6048a8ef6f3"
+    },
+    "v49_checkpoint_absent": true,
+    "v49_config": {
+      "path": "configs/experiments/gemma4_diverse28_book_continuation_v47.yaml",
+      "sha256": "6b15813237b217d8daad446c799127215bbb1366f2b442b61e975787efa4f6b7"
+    },
+    "v49_script": {
+      "path": "src/semantic_3d_chat/evaluation/v49_guarded_candidate_greedy_gate.py",
+      "sha256": "8358e1326eab30292829e0d6978dfbf93d5bc29d6dab96f595e0e80b5eb52854"
+    },
+    "v49_test": {
+      "path": "tests/test_v49_guarded_candidate_greedy_gate.py",
+      "sha256": "46f6cba7354aaa360e8be64a0d0968926fb384031fc54e4c0cb4158bd2960603"
+    }
+  },
+  "only_exact_successor_authorized": "v50_scene_query_alpha_grid",
+  "oracle_access_authorized": false,
+  "passed": true,
+  "runtime_promotion_authorized": false,
+  "schema_version": 1,
+  "selector_execution_authorized": false,
+  "terminal_conclusion": "v49_failed_only_original_prefix_trust_v50_grid_required",
+  "terminal_materialization_authorized": true,
+  "terminal_process_access_audit": {
+    "candidate_checkpoint_written": false,
+    "final_test_loaded": false,
+    "maps_loaded": false,
+    "model_loaded": false,
+    "optimizer_state_loaded": false,
+    "oracle_loaded": false,
+    "qa_loaded": false,
+    "selector_executed": false,
+    "v49_report_read_only": true,
+    "validation_loaded": false
+  },
+  "v49_checkpoint_write_authorized": false,
+  "v49_report_reference": {
+    "authenticated": true,
+    "path": "reports/gemma4/metrics/v49_guarded_candidate_train_gate.json",
+    "sha256": "7d82a503a5402dcfd80816459eea5d653849e89a49fa8ce7b585dc806ff7acc9"
+  },
+  "v49_result_review": {
+    "access_audit_passed": true,
+    "candidate_reconstruction_checks": {
+      "audit_hashes": true,
+      "hashes": true,
+      "identity": true,
+      "loader": true,
+      "maps": true,
+      "prefix": true,
+      "qa": true,
+      "single_no_selection": true,
+      "source": true,
+      "state": true
+    },
+    "fixed_envelope_checks": {
+      "access": true,
+      "artifact": true,
+      "authorization_checks": true,
+      "authorization_id": true,
+      "failed": true,
+      "final_failed_cleanly": true,
+      "greedy_skipped": true,
+      "no_checkpoint": true,
+      "restored": true,
+      "schema": true,
+      "terminal_path": true,
+      "terminal_sha": true,
+      "top_level_scope": true
+    },
+    "non_greedy_review": {
+      "checks": {
+        "book_complete_units_at_least_1": true,
+        "book_cross_prefix_complete_units_at_least_1": true,
+        "both_lost_sides_strictly_positive": true,
+        "broad_nll_at_most_v45_maximum": true,
+        "complete_physical_pair_coverage_at_least_5": true,
+        "frozen_state_exact": true,
+        "mirror_complete_units_at_least_2": true,
+        "original_v46_candidate_relative_prefix_trust_rms_at_most_0_002": false,
+        "priority_deficit_improvement_at_least_0_5_vs_original_v41_u0": true,
+        "query_state_changed": true,
+        "reconstructed_candidate_authorized_surface_state_exact": true,
+        "reconstructed_candidate_full_tensor_state_exact": true,
+        "scene_readout_state_changed": true,
+        "source_v47_u4_exact_before_reconstruction": true,
+        "teacher_complete_units_at_least_10": true,
+        "teacher_cross_prefix_complete_units_at_least_17": true,
+        "teacher_positive_sides_at_least_35": true
+      },
+      "evidence_checks": {
+        "broad": true,
+        "deficit": true,
+        "diagnostic_hashes": true,
+        "envelope": true,
+        "families": true,
+        "full25": true,
+        "full48": true,
+        "teacher": true,
+        "trust": true
+      },
+      "excess": 4.449659213423725e-05,
+      "failed_checks": [
+        "original_v46_candidate_relative_prefix_trust_rms_at_most_0_002"
+      ],
+      "observed_prefix_trust_rms": 0.0020444965921342373,
+      "prefix_trust_rms_maximum": 0.002
+    },
+    "source_restored_exact": true,
+    "v49_checkpoint_written": false,
+    "v49_final_train_gate_passed": false,
+    "v49_greedy_executed": false
+  },
+  "v50_implementation_review": {
+    "conditional_checkpoint": "data_gemma4/checkpoints/gemma4_v50_scene_query_alpha_grid/update_000",
+    "no_v50_file_opened_in_placeholder_mode": false,
+    "ready": true,
+    "report": "reports/gemma4/metrics/v50_scene_query_alpha_grid.json",
+    "script": {
+      "path": "src/semantic_3d_chat/evaluation/v50_scene_query_alpha_grid.py",
+      "sha256": "965868c3e620147fb23ee77a04ef2e2f51f07f2d47c9cffda0236104ebdc174a"
+    },
+    "status": "exact_v50_implementation_authenticated",
+    "test": {
+      "path": "tests/test_v50_scene_query_alpha_grid.py",
+      "sha256": "f8ffa0bc37d3a3b9ec4aac1d40b7e50d8d232899ac89de006f2b9d0846ad5166"
+    }
+  },
+  "v50_scene_query_alpha_grid_authorized": true,
+  "validation_access_authorized": false
+}

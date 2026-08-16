@@ -1,0 +1,126 @@
+{
+  "artifact": "gemma4_v90_scene1_conversational_preregistration_v1",
+  "config_sha256": "e9d740b53fbd34a7764d039b4cd8e6d7cea4f61543aa3ea820ce57345a385fc4",
+  "model_loaded": false,
+  "mps_used": false,
+  "oracle_loaded": false,
+  "parent": {
+    "all_release_gates_passed": true,
+    "canonical_correct": 122,
+    "canonical_errors": 16,
+    "fresh_target_disjoint": true,
+    "frozen_adapter_parameter_count": 872448,
+    "frozen_bank_count": 11,
+    "held_out_generalization_claim": false,
+    "promotion_decision": "strict_scene1_experimental_primary",
+    "release_artifact": "gemma4_v89_strict_runtime_release_v1",
+    "runtime_promotion_authorized": true
+  },
+  "protocol": {
+    "canonical_rows_per_epoch": 138,
+    "checks": {
+      "accumulation_6_exact": true,
+      "canonical_138_exact": true,
+      "conversational_52_exact": true,
+      "fresh_target_disjoint": true,
+      "held_wording_26_excluded_from_training": true,
+      "inventory_hash_exact": true,
+      "micro_rows_1032_exact": true,
+      "optimizer_updates_172_exact": true,
+      "oracle_not_loaded_by_trainer": true,
+      "primary_causal_13_per_epoch_exact": true,
+      "primary_causal_39_total_exact": true,
+      "rows_per_epoch_344_exact": true,
+      "runtime_serializes_no_supervision": true,
+      "schedule_hash_exact": true,
+      "three_epochs_exact": true,
+      "v89_anchors_122_exact": true,
+      "v89_errors_32_exact": true
+    },
+    "conversational_rows_per_epoch": 52,
+    "epochs": 3,
+    "gradient_accumulation_rows": 6,
+    "held_wording_rows": 26,
+    "lora": {
+      "bank_name": "v90_scene1_conversational_bridge",
+      "base_projection_type": "torch.nn.Linear",
+      "base_projection_weight_shape": [
+        1536,
+        2048
+      ],
+      "device": "cpu",
+      "exact_zero_output_at_initialization": true,
+      "full_gemma_model_loaded": false,
+      "initial_state_sha256": "136039ab015a91dce401bae423f14be0277e253cec677c622bece4fd8a0c6f1a",
+      "lora_a_shape": [
+        8,
+        2048
+      ],
+      "lora_b_nonzero_count": 0,
+      "lora_b_shape": [
+        1536,
+        8
+      ],
+      "parameter_count": 28672,
+      "target_modules": [
+        "model.language_model.layers.28.self_attn.o_proj"
+      ]
+    },
+    "optimizer_updates": 172,
+    "parent_correct_anchor_rows_per_epoch": 122,
+    "parent_error_replay_rows_per_epoch": 32,
+    "primary_causal_rows_per_epoch": 13,
+    "rows_per_epoch": 344,
+    "total_micro_rows": 1032,
+    "total_primary_causal_rows": 39,
+    "training_inventory_sha256": "8963085d8276f2000480e11651cbe97fcc5b7eb7711c9c3c2cb3e20090fc9cc7",
+    "training_schedule_sha256": "3c3b199b723d9bf6be6686a421b997fbac2eb209c5886bcd4544a67fd7954643"
+  },
+  "schema_version": 90,
+  "scope": {
+    "cloud_inference": false,
+    "deferred_final_loaded": false,
+    "development_known_questions": true,
+    "held_out_generalization_claim": false,
+    "local_inference_only": true,
+    "official_test_loaded": false,
+    "official_validation_loaded": false,
+    "runtime_promotion_authorized": false,
+    "single_scene_conversational_overfit": true
+  },
+  "source_sha256": {
+    "configs/runtime/gemma4_v89_strict_scene1.yaml": "184860d1a46b6e54f5b8e28def9dcd03b6cbf90f55537d9810afa9d540416c42",
+    "data/qa/train.jsonl": "ffa721d57849ade8fdd0811e3e1e62fe807200f710aec780dc4d3dcecd4fb0e0",
+    "data_gemma4/runtime/checkpoints/gemma4_v89_strict_scene1_release_v1/adapter.safetensors": "78856650751f8c700a651553e02d95ac389be53e12a56c39576a6d2f23d7d386",
+    "data_gemma4/runtime/checkpoints/gemma4_v89_strict_scene1_release_v1/runtime_metadata.json": "c375d729d0a23e515eef979129a7032479fe153ad1b5491d594bf61a9f1f9a72",
+    "data_gemma4/runtime/scene_memories/v89/scene_000001/memory.safetensors": "3427851432d8f2a3609b6205b18b8c0d9a0fcf68d8f3bf0c98c758ac64209ffb",
+    "data_gemma4/runtime/scene_memories/v89/scene_000001/runtime_metadata.json": "ea3a45080b3a0c519292a5e230fa1c4e17a1caafa6f3ff9d23adfd9ef1c2befd",
+    "gemma_model_blob_sha256_identity": "2db5482b20d746879bb3ef79b5203e9075a2e2b98f54ec7c2f281c1477ddc550",
+    "reports/gemma4/metrics/gemma4_v89_scene1_retention_evaluation.json": "c880c0707c6c87783a20134984914e4a0c6cace4d4d70c7d202ee2a527ee87a2",
+    "reports/gemma4/metrics/gemma4_v89_strict_runtime_release.json": "fe414043ad80c6e43fdc424c695e6856600c96a44446b6fab5409d0ac06d45cb",
+    "reports/gemma4/predictions/gemma4_v89_scene1_retention_evaluation.json": "49ff7b9fd4010f6d3201c5ee22ca25ed11d035617910b722a53c52956b9df640",
+    "src/semantic_3d_chat/evaluation/evaluate_v90_scene1_conversational.py": "a84084996cda91feb6984825775b27859e19e107fdf0d0339a6a604f83167372",
+    "src/semantic_3d_chat/evaluation/v90_scene1_conversational_preflight.py": "bf612ec620a42cfb467624f845ae5acfeb7b2a27df17dddb14104d6e6d43c8de",
+    "src/semantic_3d_chat/training/train_v90_scene1_conversational.py": "ebbaabc7507aff6963571e8f8043fe3c83b4d556afcefd7b3fe5d96ca972720a"
+  },
+  "status": "sealed_before_full_model_load",
+  "strict_input_contract": {
+    "compiled_before_question": true,
+    "continuous_environment_payload_tokens": 736,
+    "control_tokens": 0,
+    "environmental_text_inputs": [],
+    "native_boi_eoi_retained": true,
+    "question_conditioned_environmental_readout": false,
+    "question_dependent_retrieval": false,
+    "question_dependent_scene_processing": false,
+    "question_derived_environmental_tokens": 0,
+    "reused_byte_identically_across_questions": true,
+    "semantic_or_spatial_top_k_selection": false,
+    "shape": [
+      1,
+      738,
+      1536
+    ],
+    "supplied_directly_to_native_gemma_image_prefix": true
+  }
+}

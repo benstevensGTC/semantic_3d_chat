@@ -1,0 +1,9 @@
+_base_: gemma_waypoint_policy_operator.yaml
+
+# Development control: keep the finite AdamW solution instead of the exact-row
+# LBFGS action refit. The latter is useful as a memorization gate but can make
+# the FACE/MOVE_TO boundary brittle to sub-degree closed-loop yaw drift.
+gemma_waypoint_policy:
+  checkpoint_output: data_gemma4/checkpoints/gemma_waypoint_policy_v1_operator_fixed_turn_regularized
+  action_refit_max_iter: 0
+  minimum_training_action_accuracy: 0.95

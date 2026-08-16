@@ -1,0 +1,165 @@
+{
+  "backend_url": "http://127.0.0.1:8770",
+  "checks": {
+    "approach_bowl": {
+      "action_count_total": 59,
+      "action_receipt_count": 9,
+      "active_prefix_sha256": "51cd58e63d67e3dc2b185a99b71b0215ccf564267e5d4e97eed22a3c0a13ec25",
+      "body_yaw_degrees": 110.52537433823147,
+      "control_mode": "task_trained_local_gemma_full_scene_goal_policy_v3",
+      "elapsed_seconds": 19.055197790999998,
+      "evaluator_distance_after_m": 0.5856389677197374,
+      "evaluator_distance_before_m": 1.3272150956519189,
+      "evaluator_progress_m": 0.7415761279321814,
+      "fallback_used": false,
+      "gemma_accepted": true,
+      "gemma_attempted": true,
+      "map_version": 0,
+      "passed": true,
+      "position_xy_m": [
+        -1.3171662837109361,
+        -0.5559385065728346
+      ],
+      "reply": "Done \u2014 I completed the bounded approach action.",
+      "scan_count": 0,
+      "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95"
+    },
+    "between_chair_and_table": {
+      "action_count_total": 63,
+      "action_receipt_count": 4,
+      "active_prefix_sha256": "6ad88611191988b5a819bb2bba13ccd536a8579bca87f57ec6319a2783309166",
+      "body_yaw_degrees": 110.52537433823147,
+      "control_mode": "local_gemma_all_voxel_between_goal_planner",
+      "elapsed_seconds": 6.365415165999998,
+      "evaluator_midpoint_error_m": 0.2504707689290847,
+      "evaluator_midpoint_xy_m": [
+        -0.17685018479824066,
+        0.5557893961668015
+      ],
+      "fallback_used": false,
+      "gemma_accepted": true,
+      "gemma_attempted": true,
+      "map_version": 0,
+      "passed": true,
+      "position_xy_m": [
+        -0.4222421944141388,
+        0.6059727370738983
+      ],
+      "reply": "Goal complete \u2014 I reached a collision-free point between the two regions grounded in the fixed semantic 3D map.",
+      "scan_count": 0,
+      "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95"
+    },
+    "face_floor_lamp": {
+      "action_count_total": 50,
+      "action_receipt_count": 3,
+      "active_prefix_sha256": "51df2f7c47375813b38d48cb5392e2802fa288334120bcef16a2517d36811217",
+      "body_yaw_degrees": 42.7067798750619,
+      "control_mode": "task_trained_policy_then_all_voxel_semantic_geometry_fallback",
+      "elapsed_seconds": 7.500206791000001,
+      "evaluator_expected_yaw_degrees": 42.96230746261051,
+      "evaluator_yaw_error_degrees": 0.25552758754861316,
+      "fallback_used": true,
+      "gemma_accepted": true,
+      "gemma_attempted": true,
+      "map_version": 0,
+      "passed": true,
+      "position_xy_m": [
+        -0.5,
+        -0.25
+      ],
+      "reply": "Goal complete \u2014 I used all-voxel semantic grounding and the fixed 3D geometry to face the requested region.",
+      "scan_count": 0,
+      "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95"
+    },
+    "global_map_room_patrol": {
+      "action_count_total": 47,
+      "action_receipt_count": 47,
+      "active_prefix_sha256": "9094221f5a02e0aa8dd4c7d339b79050cd0c3736b8b6e2a7e40860745a4a5144",
+      "body_yaw_degrees": -90.0,
+      "control_mode": "global_static_3d_map_patrol_planner",
+      "elapsed_seconds": 0.49734158300000003,
+      "fallback_used": false,
+      "gemma_accepted": false,
+      "gemma_attempted": false,
+      "map_version": 0,
+      "passed": true,
+      "path_length_m": 19.15579347825883,
+      "position_xy_m": [
+        -0.5,
+        -0.25
+      ],
+      "reply": "Patrol complete \u2014 I followed 47 internally planned waypoints over 19.2 m using the fixed 3D map.",
+      "return_to_start_error_m": 0.0,
+      "scan_count": 0,
+      "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95"
+    },
+    "low_level_user_command_rejected": {
+      "action_count_total": 0,
+      "action_receipt_count": 0,
+      "active_prefix_sha256": "0ba226709092bf3ef2aa50748394b404ff699bacbb90fae3e91410a540a287f2",
+      "body_yaw_degrees": -90.0,
+      "control_mode": "low_level_chat_command_disabled",
+      "elapsed_seconds": 0.041178124999999996,
+      "fallback_used": false,
+      "gemma_accepted": false,
+      "gemma_attempted": false,
+      "map_version": 0,
+      "passed": true,
+      "position_xy_m": [
+        -0.5,
+        -0.25
+      ],
+      "reply": "Give me an outcome-level goal, such as patrolling the room, facing something, or approaching something you name.",
+      "scan_count": 0,
+      "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95"
+    },
+    "runtime_loaded_file_audit": {
+      "enabled": true,
+      "forbidden_access_count": 0,
+      "loaded_file_count": 147,
+      "loaded_file_inventory_sha256": "dfeeec27418339e2e2c99d8399e32ba416a93dd03d47db38f0c4c3058004f7f5",
+      "passed": true
+    }
+  },
+  "continuous_scene_memory": {
+    "active_tensor_shape": [
+      1,
+      262,
+      1536
+    ],
+    "all_runtime_voxels_encoded": true,
+    "l2_norm": 284.2933044433594,
+    "map_version": 0,
+    "processed_spatial_representations": 8422,
+    "question_dependent_scene_retrieval": false,
+    "rms": 0.4516076445579529,
+    "scan_count": 0,
+    "scene_id": "scene_000001",
+    "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95",
+    "semantic_feature_dim": 3072,
+    "source_voxels": 74699,
+    "tensor_shape": [
+      1,
+      258,
+      1536
+    ],
+    "unchanged_across_every_goal": true
+  },
+  "control_contract": {
+    "camera_control_input": false,
+    "cloud_model_used": false,
+    "high_level_natural_language_only": true,
+    "local_inference": true,
+    "static_precomputed_scene_memory": true,
+    "task_trained_navigation": true,
+    "untrained_json_backend_enabled": false
+  },
+  "evaluator_separation": {
+    "oracle_path": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data/oracle/scene_000001/oracle.json",
+    "oracle_used_only_by_this_scoring_process": true,
+    "runtime_received_oracle_data": false
+  },
+  "passed": true,
+  "schema": "semantic_3d_chat.semantic_goal_live_acceptance.v1",
+  "scope": "single-scene live local proof of concept"
+}

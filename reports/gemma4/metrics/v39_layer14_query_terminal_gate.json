@@ -1,0 +1,676 @@
+{
+  "arbitrary_training_authorized": false,
+  "artifact": "v39_layer14_query_terminal_gate",
+  "audit_method": "exact_report_module_test_v38_seal_and_protected_hashes_plus_persisted_contract_mutation_file_scope_and_gram_replay_only",
+  "chat_or_runtime_promotion_authorized": false,
+  "conditional_successor_authorization": {
+    "authorization_id": "v40_cross_preserving_l14_q_t13",
+    "authorization_schema_version": 1,
+    "authorized": true,
+    "authorized_output_root": "data_gemma4/checkpoints/gemma4_v40_diverse28_cross_preserving_l14_query",
+    "chat_or_runtime_promotion_authorized": false,
+    "data_and_scene_scope": {
+      "all_occupied_blocks_must_be_processed": true,
+      "exact_training_scene_count": 16,
+      "exact_training_scene_ids": [
+        "scene_000011",
+        "scene_000012",
+        "scene_000013",
+        "scene_000014",
+        "scene_000015",
+        "scene_000016",
+        "scene_000017",
+        "scene_000018",
+        "scene_000031",
+        "scene_000032",
+        "scene_000033",
+        "scene_000034",
+        "scene_000035",
+        "scene_000036",
+        "scene_000037",
+        "scene_000038"
+      ],
+      "final_test_loaded_during_training": false,
+      "oracle_loaded_during_training": false,
+      "question_dependent_retrieval": false,
+      "scene_prefixes_built_before_questions": true,
+      "scene_prefixes_question_independent": true,
+      "training_qa_only": true,
+      "validation_qa_loaded_during_training": false,
+      "validation_scene_maps_loaded_during_training": false
+    },
+    "embodied_agent_promotion_authorized": false,
+    "final_test_access_authorized": false,
+    "hard_train_only_gates": {
+      "unchanged_from_exact_v38": true,
+      "update16": {
+        "book_or_picture_complete_units_minimum": 1,
+        "broad_nll_maximum_increase": 0.02,
+        "complete_physical_pair_coverage_minimum": 5,
+        "complete_units_minimum": 10,
+        "cross_prefix_complete_units_minimum": 17,
+        "optimizer_step": 16,
+        "positive_sides_minimum": 35,
+        "priority_side_deficit_minimum_improvement": 3.12,
+        "require_update8_passed": true
+      },
+      "update41": {
+        "book_complete_units_minimum": 1,
+        "broad_greedy_accuracy_must_meet_source": true,
+        "broad_nll_maximum_increase": 0.02,
+        "complete_physical_pair_coverage_minimum": 6,
+        "complete_units_minimum": 12,
+        "cross_prefix_complete_units_minimum": 18,
+        "greedy_complete_units_minimum": 6,
+        "mirror_complete_units_minimum": 2,
+        "optimizer_step": 41,
+        "picture_complete_units_minimum": 1,
+        "positive_sides_minimum": 37,
+        "priority_side_deficit_minimum_improvement": 6.24,
+        "require_one_greedy_complete_per_priority_family": true,
+        "require_update16_passed": true
+      },
+      "update8": {
+        "broad_nll_maximum_increase": 0.02,
+        "complete_units_minimum": 9,
+        "cross_prefix_complete_units_minimum": 17,
+        "optimizer_step": 8,
+        "positive_sides_minimum": 34,
+        "priority_side_deficit_minimum_improvement": 0.5
+      }
+    },
+    "objective": {
+      "broad_nll_weight": 1.0,
+      "correct_answer_nll_weight": 0.5,
+      "cross_prefix_hinge_weight": 56.0,
+      "cross_prefix_margin": 0.1,
+      "cross_prefix_weight_28_authorized": false,
+      "formula": "1.0*broad_nll + 0.5*correct_answer_nll + 8.0*side_hinge + 56.0*cross_prefix_hinge",
+      "gradient_construction_t": 13.0,
+      "gradient_formula": "g_v40 = g_v39_total + 13 * g_v39_cross_weight4",
+      "side_hinge_margin": 0.5,
+      "side_hinge_weight": 8.0
+    },
+    "only_exact_successor_authorized": "v40_cross_preserving_layer14_query_training",
+    "optimizer": {
+      "adam_or_adamw_authorized": false,
+      "clip_is_one_global_scalar_over_the_single_b_tensor": true,
+      "dampening": 0.0,
+      "direction_preserving_after_scalar_clip": true,
+      "fresh": true,
+      "gradient_clip_norm": 1.0,
+      "implementation": "torch.optim.SGD",
+      "learning_rate": 0.003,
+      "momentum": 0.0,
+      "nesterov": false,
+      "resume_only_self_hashed_v40_sgd_state": true,
+      "resume_optimizer_type_must_remain_exact": true,
+      "source_optimizer_file_opened": false,
+      "source_optimizer_state_loaded": false,
+      "trainable_parameter_count": 16384,
+      "type": "SGD",
+      "weight_decay": 0.0
+    },
+    "oracle_access_authorized": false,
+    "per_microstep_raw_gradient_guard": {
+      "aggregate_v39_evidence_alone_is_not_a_microstep_pass": true,
+      "assign_exact_summed_raw_gradient_to_parameter_grad": true,
+      "backward_for_component_construction_authorized": false,
+      "component_gradient_api": "torch.autograd.grad",
+      "directions_checked_if_nonzero": [
+        "broad",
+        "answer",
+        "scene",
+        "cross"
+      ],
+      "fail_stop_before_clip_or_step_on_any_guard_failure": true,
+      "momentum_free_sgd_step_only_after_guard_passes": true,
+      "persist_every_microstep": [
+        "component_norms",
+        "total_norm_before_clip",
+        "clip_scalar",
+        "total_vs_broad_dot_and_cosine",
+        "total_vs_answer_dot_and_cosine",
+        "total_vs_scene_dot_and_cosine",
+        "total_vs_cross_dot_and_cosine",
+        "guard_passed",
+        "target_hash_before_and_after",
+        "frozen_excluding_b_hash_before_and_after"
+      ],
+      "require_each_component_gradient_finite": true,
+      "require_strictly_positive_total_direction_cosine": true,
+      "require_strictly_positive_total_direction_dot": true,
+      "require_total_gradient_finite_and_nonzero": true,
+      "required_before_every_optimizer_step": true,
+      "scalar_global_clip_only_after_guard_passes": true,
+      "scene_gradient_formula": "side + cross",
+      "target_parameter_names": [
+        "lora_banks.extension_v28_stage_b_query.adapters.1.lora_b"
+      ],
+      "total_gradient_formula": "broad + answer + side + cross",
+      "weighted_components": {
+        "answer": 0.5,
+        "broad": 1.0,
+        "cross": 56.0,
+        "side": 8.0
+      }
+    },
+    "schedule": {
+      "exact_v38_schedule": true,
+      "full_schedule_sha256": "2e7a2a8136c968739a8aaaa1138be87bec322fefa0fb340e6fb9bc6e07278bea",
+      "maximum_optimizer_step": 41,
+      "pair_schedule_sha256": "4e26160c9a36e20ac894ff5e26604e6fad985ff5c84211282fd9807c9e738b3f",
+      "per_unit_nll_diagnostics_required_at_steps": [
+        0,
+        8,
+        16,
+        41
+      ],
+      "saved_optimizer_steps": [
+        0,
+        8,
+        16,
+        24,
+        32,
+        40,
+        41
+      ],
+      "true_microsteps": true
+    },
+    "selector_execution_authorized": false,
+    "source": {
+      "adapter_file_sha256": "b0bdceb7699e9d97467915c69186f433d3b0fac2b09144d38c3078afe1f70cb0",
+      "checkpoint": "data_gemma4/checkpoints/gemma4_v38_diverse28_query_recovery/update_000",
+      "complete_v28_bank_state_sha256": "cc9dfa838bb87f32e2922d675658af4a1085d53a84ccdca6d5bacc6f7097217b",
+      "frozen_excluding_target_state_sha256": "7f33e541d36de33b10ceeac25e5f40374bffd1cf4b234af7a6b6341198b85360",
+      "full_tensor_state_sha256": "7b951c6d7ae4f7b50603159f0bc4dfb4d50b5b40f9325134d78d1de1dae87fc0",
+      "metadata_file_sha256": "9a4b03e8fd7f8a6ef50b6d85ae6c07c602f353ecfe104dae28efaa239da5a0ed",
+      "optimizer_step": 0,
+      "runtime_metadata_file_sha256": "7ec71195b6187524b903f8955af4db375b109c890fbbda9986f179b97dc58d30",
+      "source_optimizer_access_authorized": false,
+      "target_state_sha256": "9ff9d535a094f96328483c46ff8c8ea5fca30edc35878492976c35f8674a9f87",
+      "update8_checkpoint_access_authorized": false
+    },
+    "stop_protocol": {
+      "evaluate_update16_before_any_update17": true,
+      "evaluate_update8_before_any_update9": true,
+      "failed_gate_checkpoint_may_be_sealed_but_not_promoted": true,
+      "new_terminal_seal_required_after_training": true,
+      "no_gate_relaxation_authorized": true,
+      "no_training_past_optimizer_step_41": true,
+      "stop_at_update16_if_gate_fails": true,
+      "stop_at_update41_if_gate_fails": true,
+      "stop_at_update8_if_gate_fails": true
+    },
+    "target_surface": {
+      "all_other_parameters_and_buffers_frozen": true,
+      "alpha": 8.0,
+      "dropout": 0.0,
+      "existing_adapter_index": 1,
+      "existing_bank": "extension_v28_stage_b_query",
+      "frozen_excluding_b_hash_must_be_verified_before_first_step": true,
+      "frozen_lora_a_name": "lora_banks.extension_v28_stage_b_query.adapters.1.lora_a",
+      "frozen_lora_a_shape": [
+        4,
+        1536
+      ],
+      "language_layer": 14,
+      "lora_a_learned_basis_frozen": true,
+      "lora_a_write_authorized": false,
+      "lora_b_only": true,
+      "module_path": "model.language_model.layers.14.self_attn.q_proj",
+      "new_lora_bank_authorized": false,
+      "parameter_count": 16384,
+      "parameter_names": [
+        "lora_banks.extension_v28_stage_b_query.adapters.1.lora_b"
+      ],
+      "parameter_shapes": [
+        [
+          4096,
+          4
+        ]
+      ],
+      "pre_step_self_attested_hashes_must_remain_exact_on_resume": true,
+      "rank": 4,
+      "source_a_plus_b_state_sha256": "9ff9d535a094f96328483c46ff8c8ea5fca30edc35878492976c35f8674a9f87",
+      "source_b_only_hash_must_be_verified_before_first_step": true,
+      "source_frozen_excluding_b_parameter_count": 13969292,
+      "source_frozen_excluding_b_state_sha256": "cec01bc088bb87c6bb44e0659eb03aa766f951ddeee706ca9a70edaa080dea5e",
+      "source_frozen_excluding_b_tensor_count": 178,
+      "source_full_checkpoint_key_b_state_sha256": "1cdda782f0caf121c743d36d8b122e9480aa8300453c03872da37dfe81556799",
+      "source_local_a_state_sha256": "9f0ee5f9bbb9ec07bd42aaca1e0817be567a11c396c693e6412e5f2b08f37403",
+      "source_local_b_state_sha256": "d0834cc588ee2a9edf08aabedfd01e0a6d2b01c6b6ae7e3a3d764eaddf58cc3e",
+      "tensor_count": 1
+    },
+    "validation_access_authorized": false
+  },
+  "cross_preserving_gradient_math": {
+    "adam_preconditioning_not_certified_by_raw_gradient": true,
+    "adam_rejected_for_v40": true,
+    "cross_hinge_can_shut_off_when_margin_is_satisfied": true,
+    "direction_preserving_sgd_selected": true,
+    "directions_replayed_at_authorized_t": [
+      "book_support_aggregate",
+      "picture_support_aggregate",
+      "book_scene_discriminative_aggregate",
+      "picture_scene_discriminative_aggregate",
+      "broad_retention_aggregate",
+      "scene_discriminative_aggregate",
+      "cross_prefix_maintenance_aggregate"
+    ],
+    "directions_used_for_interval": [
+      "book_scene_discriminative_aggregate",
+      "picture_scene_discriminative_aggregate",
+      "broad_retention_aggregate",
+      "scene_discriminative_aggregate",
+      "cross_prefix_maintenance_aggregate"
+    ],
+    "effective_cross_weight_formula": "4 * (1 + t)",
+    "formula": "g(t) = proposed_training_aggregate + t * cross_prefix_maintenance_aggregate",
+    "global_and_both_tensor_subvectors_strictly_compatible": true,
+    "global_strict_feasible_interval": {
+      "lower_exclusive": 4.834377059531332,
+      "upper_exclusive": 29.880385532751976
+    },
+    "joint_global_and_per_tensor_strict_feasible_interval": {
+      "lower_exclusive": 12.566257500163564,
+      "upper_exclusive": 13.859227571889285
+    },
+    "passed": true,
+    "per_tensor_raw_gradient_subvectors_checked": true,
+    "persisted_cross_gradient_already_includes_weight": 4.0,
+    "raw_gradient_feasibility_does_not_certify_adam_preconditioning": true,
+    "rejected_t6_control": {
+      "effective_cross_weight": 28.0,
+      "global_interval_contains_t": true,
+      "lora_a_cross_prefix_dot_product": -0.002621586035608664,
+      "lora_a_interval_contains_t": false,
+      "reason": "LoRA-A cross-prefix subvector remains directionally negative",
+      "rejected": true,
+      "t": 6.0
+    },
+    "schema_version": 1,
+    "selected_effective_cross_weight": 56.0,
+    "selected_t": 13.0,
+    "selected_t_strictly_inside_joint_interval": true,
+    "surfaces": {
+      "global": {
+        "all_authorized_dots_and_cosines_strictly_positive": true,
+        "authorized_directional_compatibility": {
+          "book_scene_discriminative_aggregate": {
+            "cosine": 0.3480284944452526,
+            "dot_product": 0.3943999667727083,
+            "passed": true,
+            "positive_cosine": true,
+            "positive_dot": true
+          },
+          "book_support_aggregate": {
+            "cosine": 0.38989864741436403,
+            "dot_product": 0.41903743067082455,
+            "passed": true,
+            "positive_cosine": true,
+            "positive_dot": true
+          },
+          "broad_retention_aggregate": {
+            "cosine": 0.12754402461326758,
+            "dot_product": 0.015457231453392775,
+            "passed": true,
+            "positive_cosine": true,
+            "positive_dot": true
+          },
+          "cross_prefix_maintenance_aggregate": {
+            "cosine": 0.47310928377576505,
+            "dot_product": 0.022810502035153144,
+            "passed": true,
+            "positive_cosine": true,
+            "positive_dot": true
+          },
+          "picture_scene_discriminative_aggregate": {
+            "cosine": 0.5881097184483296,
+            "dot_product": 0.5909082173165995,
+            "passed": true,
+            "positive_cosine": true,
+            "positive_dot": true
+          },
+          "picture_support_aggregate": {
+            "cosine": 0.5908045551301788,
+            "dot_product": 0.6212747684076343,
+            "passed": true,
+            "positive_cosine": true,
+            "positive_dot": true
+          },
+          "scene_discriminative_aggregate": {
+            "cosine": 0.6257340520263471,
+            "dot_product": 0.4926540953673207,
+            "passed": true,
+            "positive_cosine": true,
+            "positive_dot": true
+          }
+        },
+        "authorized_gradient_norm": 0.9122221484517025,
+        "authorized_t": 13.0,
+        "constraints": {
+          "book_scene_discriminative_aggregate": {
+            "base_dot": 0.6981370797727174,
+            "cross_dot": -0.023364393307693014,
+            "feasible_relation": "t_strictly_less_than_root",
+            "zero_crossing_t": 29.880385532751976
+          },
+          "broad_retention_aggregate": {
+            "base_dot": 0.0008479096625568932,
+            "cross_dot": 0.0011237939839104523,
+            "feasible_relation": "t_strictly_greater_than_root",
+            "zero_crossing_t": -0.7545063193935531
+          },
+          "cross_prefix_maintenance_aggregate": {
+            "base_dot": -0.013504734244905985,
+            "cross_dot": 0.0027934797138507023,
+            "feasible_relation": "t_strictly_greater_than_root",
+            "zero_crossing_t": 4.834377059531332
+          },
+          "picture_scene_discriminative_aggregate": {
+            "base_dot": 0.7059202056141387,
+            "cross_dot": -0.008847076022887633,
+            "feasible_relation": "t_strictly_less_than_root",
+            "zero_crossing_t": 79.79135748216737
+          },
+          "scene_discriminative_aggregate": {
+            "base_dot": 0.7020286460270433,
+            "cross_dot": -0.016105734666132507,
+            "feasible_relation": "t_strictly_less_than_root",
+            "zero_crossing_t": 43.58873783654741
+          }
+        },
+        "strict_feasible_interval": {
+          "lower_exclusive": 4.834377059531332,
+          "upper_exclusive": 29.880385532751976
+        },
+        "surface": "global",
+        "tensor_name": null
+      },
+      "lora_a": {
+        "all_authorized_dots_and_cosines_strictly_positive": true,
+        "authorized_directional_compatibility": {
+          "book_scene_discriminative_aggregate": {
+            "cosine": 0.06938358051209415,
+            "dot_product": 0.006693801202643401,
+            "passed": true,
+            "positive_cosine": true,
+            "positive_dot": true
+          },
+          "book_support_aggregate": {
+            "cosine": 0.07915759290015378,
+            "dot_product": 0.00664586613000924,
+            "passed": true,
+            "positive_cosine": true,
+            "positive_dot": true
+          },
+          "broad_retention_aggregate": {
+            "cosine": 0.2707941464222547,
+            "dot_product": 0.0028061081494166564,
+            "passed": true,
+            "positive_cosine": true,
+            "positive_dot": true
+          },
+          "cross_prefix_maintenance_aggregate": {
+            "cosine": 0.042040508069368265,
+            "dot_product": 0.00017317220358672655,
+            "passed": true,
+            "positive_cosine": true,
+            "positive_dot": true
+          },
+          "picture_scene_discriminative_aggregate": {
+            "cosine": 0.7625400611571737,
+            "dot_product": 0.06627824110900203,
+            "passed": true,
+            "positive_cosine": true,
+            "positive_dot": true
+          },
+          "picture_support_aggregate": {
+            "cosine": 0.7707366547341471,
+            "dot_product": 0.06823661498232358,
+            "passed": true,
+            "positive_cosine": true,
+            "positive_dot": true
+          },
+          "scene_discriminative_aggregate": {
+            "cosine": 0.4883461512380691,
+            "dot_product": 0.036486021160160184,
+            "passed": true,
+            "positive_cosine": true,
+            "positive_dot": true
+          }
+        },
+        "authorized_gradient_norm": 0.206151796974884,
+        "authorized_t": 13.0,
+        "constraints": {
+          "book_scene_discriminative_aggregate": {
+            "base_dot": 0.10797013180621592,
+            "cross_dot": -0.007790486969505579,
+            "feasible_relation": "t_strictly_less_than_root",
+            "zero_crossing_t": 13.859227571889285
+          },
+          "broad_retention_aggregate": {
+            "base_dot": -0.0022626512315368067,
+            "cross_dot": 0.000389904567765651,
+            "feasible_relation": "t_strictly_greater_than_root",
+            "zero_crossing_t": 5.803089829141871
+          },
+          "cross_prefix_maintenance_aggregate": {
+            "base_dot": -0.005017093097776142,
+            "cross_dot": 0.00039925117702791293,
+            "feasible_relation": "t_strictly_greater_than_root",
+            "zero_crossing_t": 12.566257500163564
+          },
+          "picture_scene_discriminative_aggregate": {
+            "base_dot": 0.120767325580983,
+            "cross_dot": -0.004191468036306229,
+            "feasible_relation": "t_strictly_less_than_root",
+            "zero_crossing_t": 28.81265574135461
+          },
+          "scene_discriminative_aggregate": {
+            "base_dot": 0.11436872892908818,
+            "cross_dot": -0.0059909775206867695,
+            "feasible_relation": "t_strictly_less_than_root",
+            "zero_crossing_t": 19.090161586180955
+          }
+        },
+        "strict_feasible_interval": {
+          "lower_exclusive": 12.566257500163564,
+          "upper_exclusive": 13.859227571889285
+        },
+        "surface": "lora_a",
+        "tensor_name": "lora_banks.extension_v28_stage_b_query.adapters.1.lora_a"
+      },
+      "lora_b": {
+        "all_authorized_dots_and_cosines_strictly_positive": true,
+        "authorized_directional_compatibility": {
+          "book_scene_discriminative_aggregate": {
+            "cosine": 0.3791379890932132,
+            "dot_product": 0.387706165570065,
+            "passed": true,
+            "positive_cosine": true,
+            "positive_dot": true
+          },
+          "book_support_aggregate": {
+            "cosine": 0.41978318426811095,
+            "dot_product": 0.4123915645408154,
+            "passed": true,
+            "positive_cosine": true,
+            "positive_dot": true
+          },
+          "broad_retention_aggregate": {
+            "cosine": 0.11576837502475545,
+            "dot_product": 0.012651123303976119,
+            "passed": true,
+            "positive_cosine": true,
+            "positive_dot": true
+          },
+          "cross_prefix_maintenance_aggregate": {
+            "cosine": 0.5206245753129085,
+            "dot_product": 0.022637328264020342,
+            "passed": true,
+            "positive_cosine": true,
+            "positive_dot": true
+          },
+          "picture_scene_discriminative_aggregate": {
+            "cosine": 0.5802026164031331,
+            "dot_product": 0.5246299762075975,
+            "passed": true,
+            "positive_cosine": true,
+            "positive_dot": true
+          },
+          "picture_support_aggregate": {
+            "cosine": 0.5817608746571852,
+            "dot_product": 0.5530381534253108,
+            "passed": true,
+            "positive_cosine": true,
+            "positive_dot": true
+          },
+          "scene_discriminative_aggregate": {
+            "cosine": 0.6553569881003264,
+            "dot_product": 0.45616807420716043,
+            "passed": true,
+            "positive_cosine": true,
+            "positive_dot": true
+          }
+        },
+        "authorized_gradient_norm": 0.8886231288803002,
+        "authorized_t": 13.0,
+        "constraints": {
+          "book_scene_discriminative_aggregate": {
+            "base_dot": 0.5901669479665017,
+            "cross_dot": -0.01557390633818744,
+            "feasible_relation": "t_strictly_less_than_root",
+            "zero_crossing_t": 37.89459979731636
+          },
+          "broad_retention_aggregate": {
+            "base_dot": 0.0031105608940936993,
+            "cross_dot": 0.0007338894161448014,
+            "feasible_relation": "t_strictly_greater_than_root",
+            "zero_crossing_t": -4.238459944597381
+          },
+          "cross_prefix_maintenance_aggregate": {
+            "base_dot": -0.008487641147129844,
+            "cross_dot": 0.002394228416242322,
+            "feasible_relation": "t_strictly_greater_than_root",
+            "zero_crossing_t": 3.545042356673292
+          },
+          "picture_scene_discriminative_aggregate": {
+            "base_dot": 0.5851528800331558,
+            "cross_dot": -0.0046556079865814025,
+            "feasible_relation": "t_strictly_less_than_root",
+            "zero_crossing_t": 125.68774727591092
+          },
+          "scene_discriminative_aggregate": {
+            "base_dot": 0.5876599170979551,
+            "cross_dot": -0.01011475714544574,
+            "feasible_relation": "t_strictly_less_than_root",
+            "zero_crossing_t": 58.09926117331983
+          }
+        },
+        "strict_feasible_interval": {
+          "lower_exclusive": 3.545042356673292,
+          "upper_exclusive": 37.89459979731636
+        },
+        "surface": "lora_b",
+        "tensor_name": "lora_banks.extension_v28_stage_b_query.adapters.1.lora_b"
+      }
+    }
+  },
+  "final_test_access_authorized": false,
+  "input_integrity": {
+    "protected_artifact": {
+      "access": "bytes_hashed_only",
+      "path": "reports/gemma4/metrics/training_selection_gemma4_color_mirror_full_vocab_v11_resume36.json",
+      "sha256": "c0086f66edbb8854a7938e09c57535bfd47100adbaf3b3c95eeb4b08014ce2f8",
+      "unchanged": true
+    },
+    "screen_module": {
+      "path": "src/semantic_3d_chat/evaluation/v39_layer14_query_gradient_screen.py",
+      "sha256": "49477f22908c7b9230a4f8f0862824b427967c48dfd181a7dca1a812ad365c5c"
+    },
+    "screen_report": {
+      "path": "reports/gemma4/metrics/v39_layer14_query_gradient_screen.json",
+      "sha256": "d10ee48738864bb8e1b8136d7f16a2176e6e46e8adea5a9faa05bf974eb4bdbe"
+    },
+    "screen_tests": {
+      "path": "tests/test_v39_layer14_query_gradient_screen.py",
+      "sha256": "bff3612e5433c39cb5429f6e13934291fe8080c62a7934ef4cb89c41b2633f6b"
+    },
+    "v38_terminal_seal": {
+      "path": "reports/gemma4/metrics/v38_update8_terminal_gate.json",
+      "sha256": "1015949e802abccd562f7762cc01111818646527f3366aeaf01de3854bbe164a"
+    }
+  },
+  "mutation_and_data_scope_replay": {
+    "all_occupied_blocks_processed": true,
+    "checkpoint_or_parameter_write_performed": false,
+    "checkpoint_state_bit_exact": true,
+    "final_test_scenes_touched": false,
+    "objective_measurement_count": 32,
+    "optimizer_constructed": false,
+    "optimizer_opened": false,
+    "optimizer_step_called": false,
+    "oracle_loaded": false,
+    "question_dependent_retrieval": false,
+    "screen_loaded_environment_file_inventory_count": 24,
+    "screen_loaded_environment_file_inventory_sha256": "aac9e78d6822b56ca6ece255c7627772e80a759c21958f1d7114d282190ae22e",
+    "screen_loaded_file_inventory_count": 151,
+    "screen_loaded_file_inventory_sha256": "ef9e3cb0ea7c86dde4c00b0621c1f101c5928ec29343323079fc096417bcdcd5",
+    "training_question_count": 384,
+    "training_scene_count": 16,
+    "validation_qa_loaded": false,
+    "validation_scene_maps_loaded": false
+  },
+  "only_exact_successor_authorized": "v40_cross_preserving_layer14_query_training",
+  "oracle_access_authorized": false,
+  "passed": true,
+  "schema_version": 1,
+  "seal_revision": 1,
+  "selector_execution_authorized": false,
+  "single_failure_replay": {
+    "all_other_predeclared_directions_passed": true,
+    "diagnostic_completed": true,
+    "diagnostic_passed": false,
+    "failed_cross_prefix_cosine": -0.30298788564923285,
+    "failed_cross_prefix_dot_product": -0.013504734244905985,
+    "failed_directional_pairs": [
+      "proposed_training_aggregate__cross_prefix_maintenance_aggregate"
+    ],
+    "false_contract_checks": [
+      "all_predeclared_directional_compatibility_checks_passed"
+    ],
+    "screen_itself_authorized_no_training_or_promotion": true
+  },
+  "source_and_surface_replay": {
+    "diagnostic_objective_exact": true,
+    "gemma_architecture_exact": true,
+    "source_exact": true,
+    "target_surface_exact": true,
+    "terminal_exact": true
+  },
+  "terminal_process_access_audit": {
+    "checkpoint_tensor_or_metadata_loaded": false,
+    "final_test_loaded": false,
+    "gemma_loaded": false,
+    "loaded_file_count": 5,
+    "loaded_file_inventory": [
+      "reports/gemma4/metrics/training_selection_gemma4_color_mirror_full_vocab_v11_resume36.json",
+      "reports/gemma4/metrics/v38_update8_terminal_gate.json",
+      "reports/gemma4/metrics/v39_layer14_query_gradient_screen.json",
+      "src/semantic_3d_chat/evaluation/v39_layer14_query_gradient_screen.py",
+      "tests/test_v39_layer14_query_gradient_screen.py"
+    ],
+    "optimizer_opened": false,
+    "oracle_loaded": false,
+    "qa_loaded": false,
+    "scene_maps_loaded": false,
+    "validation_loaded": false
+  },
+  "v39_diagnostic_completed": true,
+  "v39_diagnostic_passed": false,
+  "v39_training_or_promotion_authorized_by_screen": false,
+  "v40_cross_preserving_layer14_query_training_authorized": true,
+  "validation_access_authorized": false
+}

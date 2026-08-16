@@ -1,0 +1,35 @@
+{
+  "artifact": "gemma4_v96_atomic_pair_repair_topology_smoke_v1",
+  "checks": {
+    "candidate_work_and_report_absent": true,
+    "exact_nine_frozen_banks": true,
+    "exact_ten_bank_stack": true,
+    "failed_v95_parent_authenticated": true,
+    "fresh_initial_state_exact": true,
+    "fresh_output_starts_zero": true,
+    "fresh_parameter_count_exact": true,
+    "fresh_targets_exact": true,
+    "full_gemma_model_loaded_false": true,
+    "pinned_gemma_target_shapes_exact": true,
+    "pinned_gemma_targets_are_linear": true,
+    "sole_fresh_bank_trainable": true
+  },
+  "config_sha256": "435eaf63844175c26ecd541d60fb46bfefea6789a9602d884e8b176d2861645d",
+  "cpu_preflight_sha256": "b4451e6e1557a9d95b8af57cdab0cf4b77a832f7a0517a4ed0925f3df552cfdf",
+  "full_gemma_model_loaded": false,
+  "initial_output_absence": {
+    "checked_paths": {
+      "fixed_final_candidate": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/gemma4/artifacts/v96_atomic_pair_repair_final",
+      "training_report": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/gemma4/metrics/gemma4_v96_atomic_pair_repair_training.json",
+      "work_root": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/checkpoints/v96_atomic_pair_repair_work"
+    },
+    "fixed_final_candidate_absent": true,
+    "training_report_absent": true,
+    "work_root_absent": true
+  },
+  "optimizer_constructed": false,
+  "passed": true,
+  "schema_version": 96,
+  "status": "passed_meta_device_no_weight_load",
+  "training_started": false
+}

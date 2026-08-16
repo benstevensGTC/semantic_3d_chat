@@ -1,0 +1,3464 @@
+{
+  "artifact": "gemma4_v54_fixed_prefix_attention_reader_v6_4_pair_disjoint_screen",
+  "audit": {
+    "forbidden_accesses": [],
+    "loaded_file_count": 126,
+    "loaded_files_sha256": "34872e12f2361e5f78b0c32e09d7f222dd70c6243814cd503e9c30e680cde685",
+    "oracle_accessed": false,
+    "passed": true,
+    "validation_deferred_or_final_accessed": false
+  },
+  "baseline_held": {
+    "complete_units": 3,
+    "mean_correct_nll": 2.7069681932528815,
+    "mean_margin": 0.0962052841981252,
+    "mean_margin_softplus": 0.9248307446638743,
+    "positive_margin_sides": 12,
+    "records": [
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": false,
+        "pair_id": "pair_000010",
+        "pair_question_key": "cfq_3b6232930290e58a",
+        "scene_ids": [
+          "scene_000021",
+          "scene_000022"
+        ],
+        "sides": [
+          {
+            "answer": "left",
+            "correct_nll": 1.2750087976455688,
+            "wrong_minus_correct_margin": 0.1701143980026245,
+            "wrong_nll": 1.4451231956481934
+          },
+          {
+            "answer": "right",
+            "correct_nll": 1.3331599235534668,
+            "wrong_minus_correct_margin": -0.03422975540161133,
+            "wrong_nll": 1.2989301681518555
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": true,
+        "pair_id": "pair_000010",
+        "pair_question_key": "cfq_8379fb0541822481",
+        "scene_ids": [
+          "scene_000021",
+          "scene_000022"
+        ],
+        "sides": [
+          {
+            "answer": "left",
+            "correct_nll": 1.684381127357483,
+            "wrong_minus_correct_margin": 0.8133653402328491,
+            "wrong_nll": 2.497746467590332
+          },
+          {
+            "answer": "right",
+            "correct_nll": 1.1674658060073853,
+            "wrong_minus_correct_margin": 0.04695785045623779,
+            "wrong_nll": 1.214423656463623
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": false,
+        "pair_id": "pair_000010",
+        "pair_question_key": "cfq_873ba9281d37e099",
+        "scene_ids": [
+          "scene_000021",
+          "scene_000022"
+        ],
+        "sides": [
+          {
+            "answer": "right",
+            "correct_nll": 1.3257765769958496,
+            "wrong_minus_correct_margin": 0.10705089569091797,
+            "wrong_nll": 1.4328274726867676
+          },
+          {
+            "answer": "left",
+            "correct_nll": 1.6331987380981445,
+            "wrong_minus_correct_margin": -0.1739894151687622,
+            "wrong_nll": 1.4592093229293823
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": false,
+        "pair_id": "pair_000010",
+        "pair_question_key": "cfq_aa4b7a89ff2ee3ba",
+        "scene_ids": [
+          "scene_000021",
+          "scene_000022"
+        ],
+        "sides": [
+          {
+            "answer": "left",
+            "correct_nll": 2.430051565170288,
+            "wrong_minus_correct_margin": -0.19793486595153809,
+            "wrong_nll": 2.23211669921875
+          },
+          {
+            "answer": "right",
+            "correct_nll": 1.4356822967529297,
+            "wrong_minus_correct_margin": -0.197015643119812,
+            "wrong_nll": 1.2386666536331177
+          }
+        ]
+      },
+      {
+        "answer_type": "support",
+        "complete_unit": false,
+        "pair_id": "pair_000015",
+        "pair_question_key": "cfq_13b1138d14c52a7c",
+        "scene_ids": [
+          "scene_000031",
+          "scene_000032"
+        ],
+        "sides": [
+          {
+            "answer": "on",
+            "correct_nll": 8.60103988647461,
+            "wrong_minus_correct_margin": -0.07260894775390625,
+            "wrong_nll": 8.528430938720703
+          },
+          {
+            "answer": "under",
+            "correct_nll": 3.9064533710479736,
+            "wrong_minus_correct_margin": 0.04166841506958008,
+            "wrong_nll": 3.9481217861175537
+          }
+        ]
+      },
+      {
+        "answer_type": "support",
+        "complete_unit": false,
+        "pair_id": "pair_000015",
+        "pair_question_key": "cfq_163eb92339ad35a5",
+        "scene_ids": [
+          "scene_000031",
+          "scene_000032"
+        ],
+        "sides": [
+          {
+            "answer": "book, cube",
+            "correct_nll": 6.587954521179199,
+            "wrong_minus_correct_margin": -0.20344161987304688,
+            "wrong_nll": 6.384512901306152
+          },
+          {
+            "answer": "cube",
+            "correct_nll": 6.1188154220581055,
+            "wrong_minus_correct_margin": 0.6595830917358398,
+            "wrong_nll": 6.778398513793945
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": false,
+        "pair_id": "pair_000015",
+        "pair_question_key": "cfq_a1c673a1197a0961",
+        "scene_ids": [
+          "scene_000031",
+          "scene_000032"
+        ],
+        "sides": [
+          {
+            "answer": "above",
+            "correct_nll": 3.134655475616455,
+            "wrong_minus_correct_margin": -0.032620906829833984,
+            "wrong_nll": 3.102034568786621
+          },
+          {
+            "answer": "below",
+            "correct_nll": 1.3502920866012573,
+            "wrong_minus_correct_margin": -0.02358078956604004,
+            "wrong_nll": 1.3267112970352173
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": false,
+        "pair_id": "pair_000015",
+        "pair_question_key": "cfq_ac7ac024c40aaddc",
+        "scene_ids": [
+          "scene_000031",
+          "scene_000032"
+        ],
+        "sides": [
+          {
+            "answer": "below",
+            "correct_nll": 1.3796662092208862,
+            "wrong_minus_correct_margin": -0.0010014772415161133,
+            "wrong_nll": 1.3786647319793701
+          },
+          {
+            "answer": "above",
+            "correct_nll": 3.533320188522339,
+            "wrong_minus_correct_margin": -0.08816313743591309,
+            "wrong_nll": 3.445157051086426
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": false,
+        "pair_id": "pair_000017",
+        "pair_question_key": "cfq_1c8b8cd72fcde904",
+        "scene_ids": [
+          "scene_000035",
+          "scene_000036"
+        ],
+        "sides": [
+          {
+            "answer": "above",
+            "correct_nll": 2.9092326164245605,
+            "wrong_minus_correct_margin": 0.36766767501831055,
+            "wrong_nll": 3.276900291442871
+          },
+          {
+            "answer": "below",
+            "correct_nll": 1.5906380414962769,
+            "wrong_minus_correct_margin": -0.005137324333190918,
+            "wrong_nll": 1.585500717163086
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": false,
+        "pair_id": "pair_000017",
+        "pair_question_key": "cfq_66aab89cee5bef49",
+        "scene_ids": [
+          "scene_000035",
+          "scene_000036"
+        ],
+        "sides": [
+          {
+            "answer": "above",
+            "correct_nll": 3.161092758178711,
+            "wrong_minus_correct_margin": 0.006424903869628906,
+            "wrong_nll": 3.16751766204834
+          },
+          {
+            "answer": "below",
+            "correct_nll": 1.5279462337493896,
+            "wrong_minus_correct_margin": -0.05473661422729492,
+            "wrong_nll": 1.4732096195220947
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": true,
+        "pair_id": "pair_000017",
+        "pair_question_key": "cfq_d469c4ac156ac42d",
+        "scene_ids": [
+          "scene_000035",
+          "scene_000036"
+        ],
+        "sides": [
+          {
+            "answer": "above",
+            "correct_nll": 2.339055061340332,
+            "wrong_minus_correct_margin": 0.746246337890625,
+            "wrong_nll": 3.085301399230957
+          },
+          {
+            "answer": "below",
+            "correct_nll": 1.8582955598831177,
+            "wrong_minus_correct_margin": 0.12120485305786133,
+            "wrong_nll": 1.979500412940979
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": true,
+        "pair_id": "pair_000017",
+        "pair_question_key": "cfq_fa3601dfffa80a0e",
+        "scene_ids": [
+          "scene_000035",
+          "scene_000036"
+        ],
+        "sides": [
+          {
+            "answer": "above",
+            "correct_nll": 3.111367702484131,
+            "wrong_minus_correct_margin": 0.29655981063842773,
+            "wrong_nll": 3.4079275131225586
+          },
+          {
+            "answer": "below",
+            "correct_nll": 1.5726866722106934,
+            "wrong_minus_correct_margin": 0.01654374599456787,
+            "wrong_nll": 1.5892304182052612
+          }
+        ]
+      }
+    ],
+    "records_sha256": "d71218132f218a83401c076f81b42946f601941aab05b3a8dd343275c4def9c3",
+    "side_count": 24,
+    "unit_count": 12
+  },
+  "baseline_retention": {
+    "example_count": 12,
+    "maximum_kl_nats": 0.0,
+    "mean_kl_nats": 0.0,
+    "records": [
+      {
+        "index": 0,
+        "kl_nats": 0.0,
+        "top1_agreement": true
+      },
+      {
+        "index": 1,
+        "kl_nats": 0.0,
+        "top1_agreement": true
+      },
+      {
+        "index": 2,
+        "kl_nats": 0.0,
+        "top1_agreement": true
+      },
+      {
+        "index": 3,
+        "kl_nats": 0.0,
+        "top1_agreement": true
+      },
+      {
+        "index": 4,
+        "kl_nats": 0.0,
+        "top1_agreement": true
+      },
+      {
+        "index": 5,
+        "kl_nats": 0.0,
+        "top1_agreement": true
+      },
+      {
+        "index": 6,
+        "kl_nats": 0.0,
+        "top1_agreement": true
+      },
+      {
+        "index": 7,
+        "kl_nats": 0.0,
+        "top1_agreement": true
+      },
+      {
+        "index": 8,
+        "kl_nats": 0.0,
+        "top1_agreement": true
+      },
+      {
+        "index": 9,
+        "kl_nats": 0.0,
+        "top1_agreement": true
+      },
+      {
+        "index": 10,
+        "kl_nats": 0.0,
+        "top1_agreement": true
+      },
+      {
+        "index": 11,
+        "kl_nats": 0.0,
+        "top1_agreement": true
+      }
+    ],
+    "top1_agreement": 1.0
+  },
+  "baseline_train": {
+    "complete_units": 13,
+    "mean_correct_nll": 2.7399661956088885,
+    "mean_margin": 0.589958946619715,
+    "mean_margin_softplus": 0.8089236246554979,
+    "positive_margin_sides": 36,
+    "records": [
+      {
+        "answer_type": "orientation",
+        "complete_unit": true,
+        "pair_id": "pair_000005",
+        "pair_question_key": "cfq_a578dc166be9a217",
+        "scene_ids": [
+          "scene_000011",
+          "scene_000012"
+        ],
+        "sides": [
+          {
+            "answer": "upright",
+            "correct_nll": 0.5079594850540161,
+            "wrong_minus_correct_margin": 0.029239296913146973,
+            "wrong_nll": 0.5371987819671631
+          },
+          {
+            "answer": "upside down",
+            "correct_nll": 0.9634072780609131,
+            "wrong_minus_correct_margin": 0.09342432022094727,
+            "wrong_nll": 1.0568315982818604
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": false,
+        "pair_id": "pair_000006",
+        "pair_question_key": "cfq_0a79d507273195ef",
+        "scene_ids": [
+          "scene_000013",
+          "scene_000014"
+        ],
+        "sides": [
+          {
+            "answer": "right",
+            "correct_nll": 1.5240448713302612,
+            "wrong_minus_correct_margin": -0.012211322784423828,
+            "wrong_nll": 1.5118335485458374
+          },
+          {
+            "answer": "left",
+            "correct_nll": 1.495721697807312,
+            "wrong_minus_correct_margin": -0.11989748477935791,
+            "wrong_nll": 1.375824213027954
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": true,
+        "pair_id": "pair_000006",
+        "pair_question_key": "cfq_5c84a2c27d2be251",
+        "scene_ids": [
+          "scene_000013",
+          "scene_000014"
+        ],
+        "sides": [
+          {
+            "answer": "left",
+            "correct_nll": 1.3282660245895386,
+            "wrong_minus_correct_margin": 0.09448444843292236,
+            "wrong_nll": 1.422750473022461
+          },
+          {
+            "answer": "right",
+            "correct_nll": 1.22396719455719,
+            "wrong_minus_correct_margin": 0.1042405366897583,
+            "wrong_nll": 1.3282077312469482
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": true,
+        "pair_id": "pair_000006",
+        "pair_question_key": "cfq_8e9855d51fa91bfb",
+        "scene_ids": [
+          "scene_000013",
+          "scene_000014"
+        ],
+        "sides": [
+          {
+            "answer": "left",
+            "correct_nll": 1.1570852994918823,
+            "wrong_minus_correct_margin": 0.01826155185699463,
+            "wrong_nll": 1.175346851348877
+          },
+          {
+            "answer": "right",
+            "correct_nll": 1.5114688873291016,
+            "wrong_minus_correct_margin": 0.08645248413085938,
+            "wrong_nll": 1.597921371459961
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": false,
+        "pair_id": "pair_000006",
+        "pair_question_key": "cfq_f1e8f24afac4339b",
+        "scene_ids": [
+          "scene_000013",
+          "scene_000014"
+        ],
+        "sides": [
+          {
+            "answer": "right",
+            "correct_nll": 1.1947839260101318,
+            "wrong_minus_correct_margin": -0.041796088218688965,
+            "wrong_nll": 1.1529878377914429
+          },
+          {
+            "answer": "left",
+            "correct_nll": 1.7388319969177246,
+            "wrong_minus_correct_margin": 0.06463050842285156,
+            "wrong_nll": 1.8034625053405762
+          }
+        ]
+      },
+      {
+        "answer_type": "attribute",
+        "complete_unit": false,
+        "pair_id": "pair_000007",
+        "pair_question_key": "cfq_736067b51ce93c49",
+        "scene_ids": [
+          "scene_000015",
+          "scene_000016"
+        ],
+        "sides": [
+          {
+            "answer": "green",
+            "correct_nll": 4.119704723358154,
+            "wrong_minus_correct_margin": -0.5493345260620117,
+            "wrong_nll": 3.5703701972961426
+          },
+          {
+            "answer": "yellow",
+            "correct_nll": 4.173592567443848,
+            "wrong_minus_correct_margin": 0.11569595336914062,
+            "wrong_nll": 4.289288520812988
+          }
+        ]
+      },
+      {
+        "answer_type": "attribute",
+        "complete_unit": true,
+        "pair_id": "pair_000007",
+        "pair_question_key": "cfq_997610c185204121",
+        "scene_ids": [
+          "scene_000015",
+          "scene_000016"
+        ],
+        "sides": [
+          {
+            "answer": "green",
+            "correct_nll": 4.043489456176758,
+            "wrong_minus_correct_margin": 0.11773157119750977,
+            "wrong_nll": 4.161221027374268
+          },
+          {
+            "answer": "yellow",
+            "correct_nll": 4.078913688659668,
+            "wrong_minus_correct_margin": 0.3419771194458008,
+            "wrong_nll": 4.420890808105469
+          }
+        ]
+      },
+      {
+        "answer_type": "attribute",
+        "complete_unit": true,
+        "pair_id": "pair_000007",
+        "pair_question_key": "cfq_bd500364dac52b59",
+        "scene_ids": [
+          "scene_000015",
+          "scene_000016"
+        ],
+        "sides": [
+          {
+            "answer": "yellow",
+            "correct_nll": 3.145266532897949,
+            "wrong_minus_correct_margin": 3.440258502960205,
+            "wrong_nll": 6.585525035858154
+          },
+          {
+            "answer": "green",
+            "correct_nll": 0.8206819891929626,
+            "wrong_minus_correct_margin": 4.548361778259277,
+            "wrong_nll": 5.369043827056885
+          }
+        ]
+      },
+      {
+        "answer_type": "attribute",
+        "complete_unit": true,
+        "pair_id": "pair_000007",
+        "pair_question_key": "cfq_f004e89a2284b94a",
+        "scene_ids": [
+          "scene_000015",
+          "scene_000016"
+        ],
+        "sides": [
+          {
+            "answer": "yellow",
+            "correct_nll": 2.9326889514923096,
+            "wrong_minus_correct_margin": 4.032873153686523,
+            "wrong_nll": 6.965561866760254
+          },
+          {
+            "answer": "green",
+            "correct_nll": 0.6365102529525757,
+            "wrong_minus_correct_margin": 4.629086017608643,
+            "wrong_nll": 5.265596389770508
+          }
+        ]
+      },
+      {
+        "answer_type": "count",
+        "complete_unit": false,
+        "pair_id": "pair_000008",
+        "pair_question_key": "cfq_39808de4310f3388",
+        "scene_ids": [
+          "scene_000017",
+          "scene_000018"
+        ],
+        "sides": [
+          {
+            "answer": "1",
+            "correct_nll": 2.1274871826171875,
+            "wrong_minus_correct_margin": 0.011990785598754883,
+            "wrong_nll": 2.1394779682159424
+          },
+          {
+            "answer": "2",
+            "correct_nll": 3.8773345947265625,
+            "wrong_minus_correct_margin": -0.009141921997070312,
+            "wrong_nll": 3.868192672729492
+          }
+        ]
+      },
+      {
+        "answer_type": "support",
+        "complete_unit": false,
+        "pair_id": "pair_000009",
+        "pair_question_key": "cfq_5611adccccae59f1",
+        "scene_ids": [
+          "scene_000019",
+          "scene_000020"
+        ],
+        "sides": [
+          {
+            "answer": "on",
+            "correct_nll": 9.117733001708984,
+            "wrong_minus_correct_margin": -0.021513938903808594,
+            "wrong_nll": 9.096219062805176
+          },
+          {
+            "answer": "under",
+            "correct_nll": 3.6965529918670654,
+            "wrong_minus_correct_margin": 0.020717382431030273,
+            "wrong_nll": 3.7172703742980957
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": false,
+        "pair_id": "pair_000009",
+        "pair_question_key": "cfq_885e53344a9de104",
+        "scene_ids": [
+          "scene_000019",
+          "scene_000020"
+        ],
+        "sides": [
+          {
+            "answer": "above",
+            "correct_nll": 3.1949667930603027,
+            "wrong_minus_correct_margin": 0.0034508705139160156,
+            "wrong_nll": 3.1984176635742188
+          },
+          {
+            "answer": "below",
+            "correct_nll": 1.4812637567520142,
+            "wrong_minus_correct_margin": -0.005604743957519531,
+            "wrong_nll": 1.4756590127944946
+          }
+        ]
+      },
+      {
+        "answer_type": "support",
+        "complete_unit": false,
+        "pair_id": "pair_000009",
+        "pair_question_key": "cfq_b90a7681f59f317a",
+        "scene_ids": [
+          "scene_000019",
+          "scene_000020"
+        ],
+        "sides": [
+          {
+            "answer": "book, cube",
+            "correct_nll": 6.5014543533325195,
+            "wrong_minus_correct_margin": -0.17989110946655273,
+            "wrong_nll": 6.321563243865967
+          },
+          {
+            "answer": "cube",
+            "correct_nll": 6.22586727142334,
+            "wrong_minus_correct_margin": -0.3103017807006836,
+            "wrong_nll": 5.915565490722656
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": false,
+        "pair_id": "pair_000009",
+        "pair_question_key": "cfq_b93bc343e2be3284",
+        "scene_ids": [
+          "scene_000019",
+          "scene_000020"
+        ],
+        "sides": [
+          {
+            "answer": "below",
+            "correct_nll": 1.537964105606079,
+            "wrong_minus_correct_margin": -0.01586306095123291,
+            "wrong_nll": 1.5221010446548462
+          },
+          {
+            "answer": "above",
+            "correct_nll": 3.68391752243042,
+            "wrong_minus_correct_margin": -0.005963802337646484,
+            "wrong_nll": 3.6779537200927734
+          }
+        ]
+      },
+      {
+        "answer_type": "support",
+        "complete_unit": false,
+        "pair_id": "pair_000011",
+        "pair_question_key": "cfq_34bc318f4e30a8bf",
+        "scene_ids": [
+          "scene_000023",
+          "scene_000024"
+        ],
+        "sides": [
+          {
+            "answer": "wall",
+            "correct_nll": 4.0767412185668945,
+            "wrong_minus_correct_margin": 0.32855796813964844,
+            "wrong_nll": 4.405299186706543
+          },
+          {
+            "answer": "floor",
+            "correct_nll": 1.5454778671264648,
+            "wrong_minus_correct_margin": -0.39639174938201904,
+            "wrong_nll": 1.1490861177444458
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": false,
+        "pair_id": "pair_000011",
+        "pair_question_key": "cfq_77d49144288e75e5",
+        "scene_ids": [
+          "scene_000023",
+          "scene_000024"
+        ],
+        "sides": [
+          {
+            "answer": "above",
+            "correct_nll": 3.4703869819641113,
+            "wrong_minus_correct_margin": -0.15750980377197266,
+            "wrong_nll": 3.3128771781921387
+          },
+          {
+            "answer": "below",
+            "correct_nll": 1.851115345954895,
+            "wrong_minus_correct_margin": -0.21317648887634277,
+            "wrong_nll": 1.6379388570785522
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": false,
+        "pair_id": "pair_000011",
+        "pair_question_key": "cfq_92cfe24420e64641",
+        "scene_ids": [
+          "scene_000023",
+          "scene_000024"
+        ],
+        "sides": [
+          {
+            "answer": "above",
+            "correct_nll": 3.3665575981140137,
+            "wrong_minus_correct_margin": 0.03835630416870117,
+            "wrong_nll": 3.404913902282715
+          },
+          {
+            "answer": "below",
+            "correct_nll": 2.144798994064331,
+            "wrong_minus_correct_margin": -0.3092153072357178,
+            "wrong_nll": 1.8355836868286133
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": false,
+        "pair_id": "pair_000011",
+        "pair_question_key": "cfq_e1e142773f6d422e",
+        "scene_ids": [
+          "scene_000023",
+          "scene_000024"
+        ],
+        "sides": [
+          {
+            "answer": "above",
+            "correct_nll": 3.443362236022949,
+            "wrong_minus_correct_margin": -0.19782352447509766,
+            "wrong_nll": 3.2455387115478516
+          },
+          {
+            "answer": "below",
+            "correct_nll": 1.797488808631897,
+            "wrong_minus_correct_margin": -0.10597622394561768,
+            "wrong_nll": 1.6915125846862793
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": true,
+        "pair_id": "pair_000016",
+        "pair_question_key": "cfq_699675ceeaf65406",
+        "scene_ids": [
+          "scene_000033",
+          "scene_000034"
+        ],
+        "sides": [
+          {
+            "answer": "left",
+            "correct_nll": 1.3096747398376465,
+            "wrong_minus_correct_margin": 0.23262834548950195,
+            "wrong_nll": 1.5423030853271484
+          },
+          {
+            "answer": "right",
+            "correct_nll": 1.5338594913482666,
+            "wrong_minus_correct_margin": 0.015102028846740723,
+            "wrong_nll": 1.5489615201950073
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": true,
+        "pair_id": "pair_000016",
+        "pair_question_key": "cfq_9152e66b248e4692",
+        "scene_ids": [
+          "scene_000033",
+          "scene_000034"
+        ],
+        "sides": [
+          {
+            "answer": "left",
+            "correct_nll": 1.3829327821731567,
+            "wrong_minus_correct_margin": 0.6843761205673218,
+            "wrong_nll": 2.0673089027404785
+          },
+          {
+            "answer": "right",
+            "correct_nll": 1.152017593383789,
+            "wrong_minus_correct_margin": 0.5430376529693604,
+            "wrong_nll": 1.6950552463531494
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": true,
+        "pair_id": "pair_000016",
+        "pair_question_key": "cfq_e08b96268b3c2a10",
+        "scene_ids": [
+          "scene_000033",
+          "scene_000034"
+        ],
+        "sides": [
+          {
+            "answer": "left",
+            "correct_nll": 1.8671684265136719,
+            "wrong_minus_correct_margin": 0.5735177993774414,
+            "wrong_nll": 2.4406862258911133
+          },
+          {
+            "answer": "right",
+            "correct_nll": 1.2137491703033447,
+            "wrong_minus_correct_margin": 0.13624811172485352,
+            "wrong_nll": 1.3499972820281982
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": true,
+        "pair_id": "pair_000016",
+        "pair_question_key": "cfq_efba0c82a7336161",
+        "scene_ids": [
+          "scene_000033",
+          "scene_000034"
+        ],
+        "sides": [
+          {
+            "answer": "left",
+            "correct_nll": 1.6148927211761475,
+            "wrong_minus_correct_margin": 0.6075561046600342,
+            "wrong_nll": 2.2224488258361816
+          },
+          {
+            "answer": "right",
+            "correct_nll": 0.9768877029418945,
+            "wrong_minus_correct_margin": 0.25528836250305176,
+            "wrong_nll": 1.2321760654449463
+          }
+        ]
+      },
+      {
+        "answer_type": "count",
+        "complete_unit": true,
+        "pair_id": "pair_000018",
+        "pair_question_key": "cfq_90b3d9852a93ce2a",
+        "scene_ids": [
+          "scene_000037",
+          "scene_000038"
+        ],
+        "sides": [
+          {
+            "answer": "1",
+            "correct_nll": 2.7519876956939697,
+            "wrong_minus_correct_margin": 0.172532320022583,
+            "wrong_nll": 2.9245200157165527
+          },
+          {
+            "answer": "0",
+            "correct_nll": 3.445397138595581,
+            "wrong_minus_correct_margin": 3.1293437480926514,
+            "wrong_nll": 6.574740886688232
+          }
+        ]
+      },
+      {
+        "answer_type": "presence",
+        "complete_unit": true,
+        "pair_id": "pair_000018",
+        "pair_question_key": "cfq_b2c2e9aec9f883bc",
+        "scene_ids": [
+          "scene_000037",
+          "scene_000038"
+        ],
+        "sides": [
+          {
+            "answer": "yes",
+            "correct_nll": 3.5279200077056885,
+            "wrong_minus_correct_margin": 3.097029447555542,
+            "wrong_nll": 6.6249494552612305
+          },
+          {
+            "answer": "no",
+            "correct_nll": 2.9933857917785645,
+            "wrong_minus_correct_margin": 2.0365986824035645,
+            "wrong_nll": 5.029984474182129
+          }
+        ]
+      },
+      {
+        "answer_type": "presence",
+        "complete_unit": true,
+        "pair_id": "pair_000018",
+        "pair_question_key": "cfq_f58d3fc750290b0f",
+        "scene_ids": [
+          "scene_000037",
+          "scene_000038"
+        ],
+        "sides": [
+          {
+            "answer": "yes",
+            "correct_nll": 2.3657760620117188,
+            "wrong_minus_correct_margin": 2.3259196281433105,
+            "wrong_nll": 4.691695690155029
+          },
+          {
+            "answer": "no",
+            "correct_nll": 2.271097183227539,
+            "wrong_minus_correct_margin": 3.3996171951293945,
+            "wrong_nll": 5.670714378356934
+          }
+        ]
+      },
+      {
+        "answer_type": "support",
+        "complete_unit": false,
+        "pair_id": "pair_000026",
+        "pair_question_key": "cfq_696dbfc4086cfb80",
+        "scene_ids": [
+          "scene_000053",
+          "scene_000054"
+        ],
+        "sides": [
+          {
+            "answer": "book, cube",
+            "correct_nll": 5.8317952156066895,
+            "wrong_minus_correct_margin": -0.008429527282714844,
+            "wrong_nll": 5.823365688323975
+          },
+          {
+            "answer": "book",
+            "correct_nll": 5.435137748718262,
+            "wrong_minus_correct_margin": 0.3059544563293457,
+            "wrong_nll": 5.741092205047607
+          }
+        ]
+      },
+      {
+        "answer_type": "metric",
+        "complete_unit": false,
+        "pair_id": "pair_000026",
+        "pair_question_key": "cfq_a9f59b924e583255",
+        "scene_ids": [
+          "scene_000053",
+          "scene_000054"
+        ],
+        "sides": [
+          {
+            "answer": "cube",
+            "correct_nll": 4.9859724044799805,
+            "wrong_minus_correct_margin": -0.2582526206970215,
+            "wrong_nll": 4.727719783782959
+          },
+          {
+            "answer": "chair",
+            "correct_nll": 4.030509948730469,
+            "wrong_minus_correct_margin": 0.32100486755371094,
+            "wrong_nll": 4.35151481628418
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": false,
+        "pair_id": "pair_000026",
+        "pair_question_key": "cfq_c482df06c040c2b2",
+        "scene_ids": [
+          "scene_000053",
+          "scene_000054"
+        ],
+        "sides": [
+          {
+            "answer": "below",
+            "correct_nll": 1.2797883749008179,
+            "wrong_minus_correct_margin": 0.060545921325683594,
+            "wrong_nll": 1.3403342962265015
+          },
+          {
+            "answer": "above",
+            "correct_nll": 3.7313013076782227,
+            "wrong_minus_correct_margin": -0.06009531021118164,
+            "wrong_nll": 3.671205997467041
+          }
+        ]
+      }
+    ],
+    "records_sha256": "5b26647bd166ca5e2a323d1466162c84dc2fbd52911483917ca53a2adfbbc2d5",
+    "side_count": 56,
+    "unit_count": 28
+  },
+  "candidate_held": {
+    "complete_units": 3,
+    "mean_correct_nll": 2.7124500970045724,
+    "mean_margin": 0.07946662604808807,
+    "mean_margin_softplus": 0.9360770657658577,
+    "positive_margin_sides": 13,
+    "records": [
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": false,
+        "pair_id": "pair_000010",
+        "pair_question_key": "cfq_3b6232930290e58a",
+        "scene_ids": [
+          "scene_000021",
+          "scene_000022"
+        ],
+        "sides": [
+          {
+            "answer": "left",
+            "correct_nll": 1.2849953174591064,
+            "wrong_minus_correct_margin": 0.09722363948822021,
+            "wrong_nll": 1.3822189569473267
+          },
+          {
+            "answer": "right",
+            "correct_nll": 1.378169298171997,
+            "wrong_minus_correct_margin": -0.11092185974121094,
+            "wrong_nll": 1.2672474384307861
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": true,
+        "pair_id": "pair_000010",
+        "pair_question_key": "cfq_8379fb0541822481",
+        "scene_ids": [
+          "scene_000021",
+          "scene_000022"
+        ],
+        "sides": [
+          {
+            "answer": "left",
+            "correct_nll": 1.6635133028030396,
+            "wrong_minus_correct_margin": 0.9335545301437378,
+            "wrong_nll": 2.5970678329467773
+          },
+          {
+            "answer": "right",
+            "correct_nll": 1.1648848056793213,
+            "wrong_minus_correct_margin": 0.05974876880645752,
+            "wrong_nll": 1.2246335744857788
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": false,
+        "pair_id": "pair_000010",
+        "pair_question_key": "cfq_873ba9281d37e099",
+        "scene_ids": [
+          "scene_000021",
+          "scene_000022"
+        ],
+        "sides": [
+          {
+            "answer": "right",
+            "correct_nll": 1.3574217557907104,
+            "wrong_minus_correct_margin": 0.03202259540557861,
+            "wrong_nll": 1.389444351196289
+          },
+          {
+            "answer": "left",
+            "correct_nll": 1.663870096206665,
+            "wrong_minus_correct_margin": -0.19462096691131592,
+            "wrong_nll": 1.4692491292953491
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": false,
+        "pair_id": "pair_000010",
+        "pair_question_key": "cfq_aa4b7a89ff2ee3ba",
+        "scene_ids": [
+          "scene_000021",
+          "scene_000022"
+        ],
+        "sides": [
+          {
+            "answer": "left",
+            "correct_nll": 2.441762924194336,
+            "wrong_minus_correct_margin": -0.1926708221435547,
+            "wrong_nll": 2.2490921020507812
+          },
+          {
+            "answer": "right",
+            "correct_nll": 1.3758238554000854,
+            "wrong_minus_correct_margin": -0.1253056526184082,
+            "wrong_nll": 1.2505182027816772
+          }
+        ]
+      },
+      {
+        "answer_type": "support",
+        "complete_unit": false,
+        "pair_id": "pair_000015",
+        "pair_question_key": "cfq_13b1138d14c52a7c",
+        "scene_ids": [
+          "scene_000031",
+          "scene_000032"
+        ],
+        "sides": [
+          {
+            "answer": "on",
+            "correct_nll": 8.484580993652344,
+            "wrong_minus_correct_margin": 0.04286003112792969,
+            "wrong_nll": 8.527441024780273
+          },
+          {
+            "answer": "under",
+            "correct_nll": 3.9049997329711914,
+            "wrong_minus_correct_margin": -0.010701894760131836,
+            "wrong_nll": 3.8942978382110596
+          }
+        ]
+      },
+      {
+        "answer_type": "support",
+        "complete_unit": false,
+        "pair_id": "pair_000015",
+        "pair_question_key": "cfq_163eb92339ad35a5",
+        "scene_ids": [
+          "scene_000031",
+          "scene_000032"
+        ],
+        "sides": [
+          {
+            "answer": "book, cube",
+            "correct_nll": 6.558926105499268,
+            "wrong_minus_correct_margin": -0.19426918029785156,
+            "wrong_nll": 6.364656925201416
+          },
+          {
+            "answer": "cube",
+            "correct_nll": 6.070427417755127,
+            "wrong_minus_correct_margin": 0.5994439125061035,
+            "wrong_nll": 6.6698713302612305
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": false,
+        "pair_id": "pair_000015",
+        "pair_question_key": "cfq_a1c673a1197a0961",
+        "scene_ids": [
+          "scene_000031",
+          "scene_000032"
+        ],
+        "sides": [
+          {
+            "answer": "above",
+            "correct_nll": 3.0720224380493164,
+            "wrong_minus_correct_margin": 0.0022869110107421875,
+            "wrong_nll": 3.0743093490600586
+          },
+          {
+            "answer": "below",
+            "correct_nll": 1.3764293193817139,
+            "wrong_minus_correct_margin": -0.030761361122131348,
+            "wrong_nll": 1.3456679582595825
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": false,
+        "pair_id": "pair_000015",
+        "pair_question_key": "cfq_ac7ac024c40aaddc",
+        "scene_ids": [
+          "scene_000031",
+          "scene_000032"
+        ],
+        "sides": [
+          {
+            "answer": "below",
+            "correct_nll": 1.3435417413711548,
+            "wrong_minus_correct_margin": 0.02620863914489746,
+            "wrong_nll": 1.3697503805160522
+          },
+          {
+            "answer": "above",
+            "correct_nll": 3.5480005741119385,
+            "wrong_minus_correct_margin": -0.11340212821960449,
+            "wrong_nll": 3.434598445892334
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": false,
+        "pair_id": "pair_000017",
+        "pair_question_key": "cfq_1c8b8cd72fcde904",
+        "scene_ids": [
+          "scene_000035",
+          "scene_000036"
+        ],
+        "sides": [
+          {
+            "answer": "above",
+            "correct_nll": 3.0252087116241455,
+            "wrong_minus_correct_margin": 0.2524569034576416,
+            "wrong_nll": 3.277665615081787
+          },
+          {
+            "answer": "below",
+            "correct_nll": 1.616296648979187,
+            "wrong_minus_correct_margin": -0.08971130847930908,
+            "wrong_nll": 1.526585340499878
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": false,
+        "pair_id": "pair_000017",
+        "pair_question_key": "cfq_66aab89cee5bef49",
+        "scene_ids": [
+          "scene_000035",
+          "scene_000036"
+        ],
+        "sides": [
+          {
+            "answer": "above",
+            "correct_nll": 3.2972817420959473,
+            "wrong_minus_correct_margin": -0.1909618377685547,
+            "wrong_nll": 3.1063199043273926
+          },
+          {
+            "answer": "below",
+            "correct_nll": 1.5529104471206665,
+            "wrong_minus_correct_margin": -0.14899778366088867,
+            "wrong_nll": 1.4039126634597778
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": true,
+        "pair_id": "pair_000017",
+        "pair_question_key": "cfq_d469c4ac156ac42d",
+        "scene_ids": [
+          "scene_000035",
+          "scene_000036"
+        ],
+        "sides": [
+          {
+            "answer": "above",
+            "correct_nll": 2.381035804748535,
+            "wrong_minus_correct_margin": 0.7687392234802246,
+            "wrong_nll": 3.1497750282287598
+          },
+          {
+            "answer": "below",
+            "correct_nll": 1.8651303052902222,
+            "wrong_minus_correct_margin": 0.09813392162322998,
+            "wrong_nll": 1.9632642269134521
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": true,
+        "pair_id": "pair_000017",
+        "pair_question_key": "cfq_fa3601dfffa80a0e",
+        "scene_ids": [
+          "scene_000035",
+          "scene_000036"
+        ],
+        "sides": [
+          {
+            "answer": "above",
+            "correct_nll": 3.1135711669921875,
+            "wrong_minus_correct_margin": 0.3651285171508789,
+            "wrong_nll": 3.4786996841430664
+          },
+          {
+            "answer": "below",
+            "correct_nll": 1.5579978227615356,
+            "wrong_minus_correct_margin": 0.031716227531433105,
+            "wrong_nll": 1.5897140502929688
+          }
+        ]
+      }
+    ],
+    "records_sha256": "d3f7984db010baa3412d92b893a9dcfe7c8f271293e4c15b3558a4c9dbf26f22",
+    "side_count": 24,
+    "unit_count": 12
+  },
+  "candidate_retention": {
+    "example_count": 12,
+    "maximum_kl_nats": 0.0012180075826351187,
+    "mean_kl_nats": 0.00029075244895109383,
+    "records": [
+      {
+        "index": 0,
+        "kl_nats": 9.619075598350017e-08,
+        "top1_agreement": true
+      },
+      {
+        "index": 1,
+        "kl_nats": 2.0107560707470657e-06,
+        "top1_agreement": true
+      },
+      {
+        "index": 2,
+        "kl_nats": 0.0001512759606903036,
+        "top1_agreement": true
+      },
+      {
+        "index": 3,
+        "kl_nats": 0.0008220828043928178,
+        "top1_agreement": true
+      },
+      {
+        "index": 4,
+        "kl_nats": 5.331711613060949e-06,
+        "top1_agreement": true
+      },
+      {
+        "index": 5,
+        "kl_nats": 0.0005683733554470503,
+        "top1_agreement": true
+      },
+      {
+        "index": 6,
+        "kl_nats": 5.279779017877006e-05,
+        "top1_agreement": true
+      },
+      {
+        "index": 7,
+        "kl_nats": 0.00020886550808444726,
+        "top1_agreement": true
+      },
+      {
+        "index": 8,
+        "kl_nats": 0.0004551039061138846,
+        "top1_agreement": true
+      },
+      {
+        "index": 9,
+        "kl_nats": 1.2340330774446415e-06,
+        "top1_agreement": true
+      },
+      {
+        "index": 10,
+        "kl_nats": 3.8497883534975365e-06,
+        "top1_agreement": true
+      },
+      {
+        "index": 11,
+        "kl_nats": 0.0012180075826351187,
+        "top1_agreement": true
+      }
+    ],
+    "top1_agreement": 1.0
+  },
+  "candidate_train": {
+    "complete_units": 15,
+    "mean_correct_nll": 2.728779168001243,
+    "mean_margin": 0.6051304478730474,
+    "mean_margin_softplus": 0.8006690505093762,
+    "positive_margin_sides": 39,
+    "records": [
+      {
+        "answer_type": "orientation",
+        "complete_unit": true,
+        "pair_id": "pair_000005",
+        "pair_question_key": "cfq_a578dc166be9a217",
+        "scene_ids": [
+          "scene_000011",
+          "scene_000012"
+        ],
+        "sides": [
+          {
+            "answer": "upright",
+            "correct_nll": 0.5107149481773376,
+            "wrong_minus_correct_margin": 0.06250792741775513,
+            "wrong_nll": 0.5732228755950928
+          },
+          {
+            "answer": "upside down",
+            "correct_nll": 0.9807754755020142,
+            "wrong_minus_correct_margin": 0.01528632640838623,
+            "wrong_nll": 0.9960618019104004
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": false,
+        "pair_id": "pair_000006",
+        "pair_question_key": "cfq_0a79d507273195ef",
+        "scene_ids": [
+          "scene_000013",
+          "scene_000014"
+        ],
+        "sides": [
+          {
+            "answer": "right",
+            "correct_nll": 1.529799222946167,
+            "wrong_minus_correct_margin": 0.028189659118652344,
+            "wrong_nll": 1.5579888820648193
+          },
+          {
+            "answer": "left",
+            "correct_nll": 1.4550108909606934,
+            "wrong_minus_correct_margin": -0.05881857872009277,
+            "wrong_nll": 1.3961923122406006
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": true,
+        "pair_id": "pair_000006",
+        "pair_question_key": "cfq_5c84a2c27d2be251",
+        "scene_ids": [
+          "scene_000013",
+          "scene_000014"
+        ],
+        "sides": [
+          {
+            "answer": "left",
+            "correct_nll": 1.3092155456542969,
+            "wrong_minus_correct_margin": 0.09976375102996826,
+            "wrong_nll": 1.4089792966842651
+          },
+          {
+            "answer": "right",
+            "correct_nll": 1.318610668182373,
+            "wrong_minus_correct_margin": 0.03194546699523926,
+            "wrong_nll": 1.3505561351776123
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": true,
+        "pair_id": "pair_000006",
+        "pair_question_key": "cfq_8e9855d51fa91bfb",
+        "scene_ids": [
+          "scene_000013",
+          "scene_000014"
+        ],
+        "sides": [
+          {
+            "answer": "left",
+            "correct_nll": 1.089084267616272,
+            "wrong_minus_correct_margin": 0.099357008934021,
+            "wrong_nll": 1.188441276550293
+          },
+          {
+            "answer": "right",
+            "correct_nll": 1.5019447803497314,
+            "wrong_minus_correct_margin": 0.17901825904846191,
+            "wrong_nll": 1.6809630393981934
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": true,
+        "pair_id": "pair_000006",
+        "pair_question_key": "cfq_f1e8f24afac4339b",
+        "scene_ids": [
+          "scene_000013",
+          "scene_000014"
+        ],
+        "sides": [
+          {
+            "answer": "right",
+            "correct_nll": 1.1477954387664795,
+            "wrong_minus_correct_margin": 0.045392513275146484,
+            "wrong_nll": 1.193187952041626
+          },
+          {
+            "answer": "left",
+            "correct_nll": 1.6760783195495605,
+            "wrong_minus_correct_margin": 0.032296180725097656,
+            "wrong_nll": 1.7083745002746582
+          }
+        ]
+      },
+      {
+        "answer_type": "attribute",
+        "complete_unit": false,
+        "pair_id": "pair_000007",
+        "pair_question_key": "cfq_736067b51ce93c49",
+        "scene_ids": [
+          "scene_000015",
+          "scene_000016"
+        ],
+        "sides": [
+          {
+            "answer": "green",
+            "correct_nll": 4.079774856567383,
+            "wrong_minus_correct_margin": -0.4680204391479492,
+            "wrong_nll": 3.6117544174194336
+          },
+          {
+            "answer": "yellow",
+            "correct_nll": 4.20338773727417,
+            "wrong_minus_correct_margin": 0.1300644874572754,
+            "wrong_nll": 4.333452224731445
+          }
+        ]
+      },
+      {
+        "answer_type": "attribute",
+        "complete_unit": false,
+        "pair_id": "pair_000007",
+        "pair_question_key": "cfq_997610c185204121",
+        "scene_ids": [
+          "scene_000015",
+          "scene_000016"
+        ],
+        "sides": [
+          {
+            "answer": "green",
+            "correct_nll": 4.102176189422607,
+            "wrong_minus_correct_margin": -0.003912925720214844,
+            "wrong_nll": 4.098263263702393
+          },
+          {
+            "answer": "yellow",
+            "correct_nll": 4.077507495880127,
+            "wrong_minus_correct_margin": 0.28580665588378906,
+            "wrong_nll": 4.363314151763916
+          }
+        ]
+      },
+      {
+        "answer_type": "attribute",
+        "complete_unit": true,
+        "pair_id": "pair_000007",
+        "pair_question_key": "cfq_bd500364dac52b59",
+        "scene_ids": [
+          "scene_000015",
+          "scene_000016"
+        ],
+        "sides": [
+          {
+            "answer": "yellow",
+            "correct_nll": 3.1597042083740234,
+            "wrong_minus_correct_margin": 3.409989356994629,
+            "wrong_nll": 6.569693565368652
+          },
+          {
+            "answer": "green",
+            "correct_nll": 0.8672118782997131,
+            "wrong_minus_correct_margin": 4.514519214630127,
+            "wrong_nll": 5.381731033325195
+          }
+        ]
+      },
+      {
+        "answer_type": "attribute",
+        "complete_unit": true,
+        "pair_id": "pair_000007",
+        "pair_question_key": "cfq_f004e89a2284b94a",
+        "scene_ids": [
+          "scene_000015",
+          "scene_000016"
+        ],
+        "sides": [
+          {
+            "answer": "yellow",
+            "correct_nll": 2.9398555755615234,
+            "wrong_minus_correct_margin": 4.002887725830078,
+            "wrong_nll": 6.942743301391602
+          },
+          {
+            "answer": "green",
+            "correct_nll": 0.6366223692893982,
+            "wrong_minus_correct_margin": 4.551109790802002,
+            "wrong_nll": 5.187732219696045
+          }
+        ]
+      },
+      {
+        "answer_type": "count",
+        "complete_unit": true,
+        "pair_id": "pair_000008",
+        "pair_question_key": "cfq_39808de4310f3388",
+        "scene_ids": [
+          "scene_000017",
+          "scene_000018"
+        ],
+        "sides": [
+          {
+            "answer": "1",
+            "correct_nll": 2.1062424182891846,
+            "wrong_minus_correct_margin": 0.013970613479614258,
+            "wrong_nll": 2.120213031768799
+          },
+          {
+            "answer": "2",
+            "correct_nll": 3.792693614959717,
+            "wrong_minus_correct_margin": 0.1844334602355957,
+            "wrong_nll": 3.9771270751953125
+          }
+        ]
+      },
+      {
+        "answer_type": "support",
+        "complete_unit": true,
+        "pair_id": "pair_000009",
+        "pair_question_key": "cfq_5611adccccae59f1",
+        "scene_ids": [
+          "scene_000019",
+          "scene_000020"
+        ],
+        "sides": [
+          {
+            "answer": "on",
+            "correct_nll": 9.002218246459961,
+            "wrong_minus_correct_margin": 0.09540176391601562,
+            "wrong_nll": 9.097620010375977
+          },
+          {
+            "answer": "under",
+            "correct_nll": 3.666552782058716,
+            "wrong_minus_correct_margin": 0.02930927276611328,
+            "wrong_nll": 3.695862054824829
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": false,
+        "pair_id": "pair_000009",
+        "pair_question_key": "cfq_885e53344a9de104",
+        "scene_ids": [
+          "scene_000019",
+          "scene_000020"
+        ],
+        "sides": [
+          {
+            "answer": "above",
+            "correct_nll": 3.0890209674835205,
+            "wrong_minus_correct_margin": 0.1424548625946045,
+            "wrong_nll": 3.231475830078125
+          },
+          {
+            "answer": "below",
+            "correct_nll": 1.5399389266967773,
+            "wrong_minus_correct_margin": -0.0869297981262207,
+            "wrong_nll": 1.4530091285705566
+          }
+        ]
+      },
+      {
+        "answer_type": "support",
+        "complete_unit": false,
+        "pair_id": "pair_000009",
+        "pair_question_key": "cfq_b90a7681f59f317a",
+        "scene_ids": [
+          "scene_000019",
+          "scene_000020"
+        ],
+        "sides": [
+          {
+            "answer": "book, cube",
+            "correct_nll": 6.472163677215576,
+            "wrong_minus_correct_margin": -0.1374492645263672,
+            "wrong_nll": 6.334714412689209
+          },
+          {
+            "answer": "cube",
+            "correct_nll": 6.092134952545166,
+            "wrong_minus_correct_margin": -0.19964313507080078,
+            "wrong_nll": 5.892491817474365
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": false,
+        "pair_id": "pair_000009",
+        "pair_question_key": "cfq_b93bc343e2be3284",
+        "scene_ids": [
+          "scene_000019",
+          "scene_000020"
+        ],
+        "sides": [
+          {
+            "answer": "below",
+            "correct_nll": 1.4749058485031128,
+            "wrong_minus_correct_margin": 0.046892762184143066,
+            "wrong_nll": 1.5217986106872559
+          },
+          {
+            "answer": "above",
+            "correct_nll": 3.6973676681518555,
+            "wrong_minus_correct_margin": -0.1442875862121582,
+            "wrong_nll": 3.5530800819396973
+          }
+        ]
+      },
+      {
+        "answer_type": "support",
+        "complete_unit": false,
+        "pair_id": "pair_000011",
+        "pair_question_key": "cfq_34bc318f4e30a8bf",
+        "scene_ids": [
+          "scene_000023",
+          "scene_000024"
+        ],
+        "sides": [
+          {
+            "answer": "wall",
+            "correct_nll": 4.14945125579834,
+            "wrong_minus_correct_margin": 0.3090834617614746,
+            "wrong_nll": 4.4585347175598145
+          },
+          {
+            "answer": "floor",
+            "correct_nll": 1.628238558769226,
+            "wrong_minus_correct_margin": -0.5366123914718628,
+            "wrong_nll": 1.0916261672973633
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": false,
+        "pair_id": "pair_000011",
+        "pair_question_key": "cfq_77d49144288e75e5",
+        "scene_ids": [
+          "scene_000023",
+          "scene_000024"
+        ],
+        "sides": [
+          {
+            "answer": "above",
+            "correct_nll": 3.4924488067626953,
+            "wrong_minus_correct_margin": -0.1973123550415039,
+            "wrong_nll": 3.2951364517211914
+          },
+          {
+            "answer": "below",
+            "correct_nll": 1.8069660663604736,
+            "wrong_minus_correct_margin": -0.17215967178344727,
+            "wrong_nll": 1.6348063945770264
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": false,
+        "pair_id": "pair_000011",
+        "pair_question_key": "cfq_92cfe24420e64641",
+        "scene_ids": [
+          "scene_000023",
+          "scene_000024"
+        ],
+        "sides": [
+          {
+            "answer": "above",
+            "correct_nll": 3.422771453857422,
+            "wrong_minus_correct_margin": -0.007387638092041016,
+            "wrong_nll": 3.415383815765381
+          },
+          {
+            "answer": "below",
+            "correct_nll": 2.0791313648223877,
+            "wrong_minus_correct_margin": -0.22223639488220215,
+            "wrong_nll": 1.8568949699401855
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": false,
+        "pair_id": "pair_000011",
+        "pair_question_key": "cfq_e1e142773f6d422e",
+        "scene_ids": [
+          "scene_000023",
+          "scene_000024"
+        ],
+        "sides": [
+          {
+            "answer": "above",
+            "correct_nll": 3.397275447845459,
+            "wrong_minus_correct_margin": -0.0886232852935791,
+            "wrong_nll": 3.30865216255188
+          },
+          {
+            "answer": "below",
+            "correct_nll": 1.7804752588272095,
+            "wrong_minus_correct_margin": -0.09160757064819336,
+            "wrong_nll": 1.6888676881790161
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": true,
+        "pair_id": "pair_000016",
+        "pair_question_key": "cfq_699675ceeaf65406",
+        "scene_ids": [
+          "scene_000033",
+          "scene_000034"
+        ],
+        "sides": [
+          {
+            "answer": "left",
+            "correct_nll": 1.2795097827911377,
+            "wrong_minus_correct_margin": 0.24771761894226074,
+            "wrong_nll": 1.5272274017333984
+          },
+          {
+            "answer": "right",
+            "correct_nll": 1.5467910766601562,
+            "wrong_minus_correct_margin": 0.05040693283081055,
+            "wrong_nll": 1.5971980094909668
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": true,
+        "pair_id": "pair_000016",
+        "pair_question_key": "cfq_9152e66b248e4692",
+        "scene_ids": [
+          "scene_000033",
+          "scene_000034"
+        ],
+        "sides": [
+          {
+            "answer": "left",
+            "correct_nll": 1.350656270980835,
+            "wrong_minus_correct_margin": 0.615393877029419,
+            "wrong_nll": 1.966050148010254
+          },
+          {
+            "answer": "right",
+            "correct_nll": 1.0650620460510254,
+            "wrong_minus_correct_margin": 0.5591611862182617,
+            "wrong_nll": 1.624223232269287
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": true,
+        "pair_id": "pair_000016",
+        "pair_question_key": "cfq_e08b96268b3c2a10",
+        "scene_ids": [
+          "scene_000033",
+          "scene_000034"
+        ],
+        "sides": [
+          {
+            "answer": "left",
+            "correct_nll": 1.9111648797988892,
+            "wrong_minus_correct_margin": 0.49171173572540283,
+            "wrong_nll": 2.402876615524292
+          },
+          {
+            "answer": "right",
+            "correct_nll": 1.150509238243103,
+            "wrong_minus_correct_margin": 0.21154963970184326,
+            "wrong_nll": 1.3620588779449463
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": true,
+        "pair_id": "pair_000016",
+        "pair_question_key": "cfq_efba0c82a7336161",
+        "scene_ids": [
+          "scene_000033",
+          "scene_000034"
+        ],
+        "sides": [
+          {
+            "answer": "left",
+            "correct_nll": 1.6570675373077393,
+            "wrong_minus_correct_margin": 0.6148030757904053,
+            "wrong_nll": 2.2718706130981445
+          },
+          {
+            "answer": "right",
+            "correct_nll": 0.9618790149688721,
+            "wrong_minus_correct_margin": 0.2905508279800415,
+            "wrong_nll": 1.2524298429489136
+          }
+        ]
+      },
+      {
+        "answer_type": "count",
+        "complete_unit": true,
+        "pair_id": "pair_000018",
+        "pair_question_key": "cfq_90b3d9852a93ce2a",
+        "scene_ids": [
+          "scene_000037",
+          "scene_000038"
+        ],
+        "sides": [
+          {
+            "answer": "1",
+            "correct_nll": 2.7079553604125977,
+            "wrong_minus_correct_margin": 0.2628962993621826,
+            "wrong_nll": 2.9708516597747803
+          },
+          {
+            "answer": "0",
+            "correct_nll": 3.392646551132202,
+            "wrong_minus_correct_margin": 3.1701414585113525,
+            "wrong_nll": 6.562788009643555
+          }
+        ]
+      },
+      {
+        "answer_type": "presence",
+        "complete_unit": true,
+        "pair_id": "pair_000018",
+        "pair_question_key": "cfq_b2c2e9aec9f883bc",
+        "scene_ids": [
+          "scene_000037",
+          "scene_000038"
+        ],
+        "sides": [
+          {
+            "answer": "yes",
+            "correct_nll": 3.4211583137512207,
+            "wrong_minus_correct_margin": 3.29587459564209,
+            "wrong_nll": 6.7170329093933105
+          },
+          {
+            "answer": "no",
+            "correct_nll": 3.0028574466705322,
+            "wrong_minus_correct_margin": 1.9915311336517334,
+            "wrong_nll": 4.994388580322266
+          }
+        ]
+      },
+      {
+        "answer_type": "presence",
+        "complete_unit": true,
+        "pair_id": "pair_000018",
+        "pair_question_key": "cfq_f58d3fc750290b0f",
+        "scene_ids": [
+          "scene_000037",
+          "scene_000038"
+        ],
+        "sides": [
+          {
+            "answer": "yes",
+            "correct_nll": 2.3848578929901123,
+            "wrong_minus_correct_margin": 2.4177191257476807,
+            "wrong_nll": 4.802577018737793
+          },
+          {
+            "answer": "no",
+            "correct_nll": 2.1993517875671387,
+            "wrong_minus_correct_margin": 3.4332947731018066,
+            "wrong_nll": 5.632646560668945
+          }
+        ]
+      },
+      {
+        "answer_type": "support",
+        "complete_unit": false,
+        "pair_id": "pair_000026",
+        "pair_question_key": "cfq_696dbfc4086cfb80",
+        "scene_ids": [
+          "scene_000053",
+          "scene_000054"
+        ],
+        "sides": [
+          {
+            "answer": "book, cube",
+            "correct_nll": 5.876590251922607,
+            "wrong_minus_correct_margin": -0.041593074798583984,
+            "wrong_nll": 5.834997177124023
+          },
+          {
+            "answer": "book",
+            "correct_nll": 5.488612174987793,
+            "wrong_minus_correct_margin": 0.28297996520996094,
+            "wrong_nll": 5.771592140197754
+          }
+        ]
+      },
+      {
+        "answer_type": "metric",
+        "complete_unit": false,
+        "pair_id": "pair_000026",
+        "pair_question_key": "cfq_a9f59b924e583255",
+        "scene_ids": [
+          "scene_000053",
+          "scene_000054"
+        ],
+        "sides": [
+          {
+            "answer": "cube",
+            "correct_nll": 5.082748889923096,
+            "wrong_minus_correct_margin": -0.27567148208618164,
+            "wrong_nll": 4.807077407836914
+          },
+          {
+            "answer": "chair",
+            "correct_nll": 4.049484729766846,
+            "wrong_minus_correct_margin": 0.3685116767883301,
+            "wrong_nll": 4.417996406555176
+          }
+        ]
+      },
+      {
+        "answer_type": "spatial_relation",
+        "complete_unit": false,
+        "pair_id": "pair_000026",
+        "pair_question_key": "cfq_c482df06c040c2b2",
+        "scene_ids": [
+          "scene_000053",
+          "scene_000054"
+        ],
+        "sides": [
+          {
+            "answer": "below",
+            "correct_nll": 1.2539238929748535,
+            "wrong_minus_correct_margin": 0.1142873764038086,
+            "wrong_nll": 1.368211269378662
+          },
+          {
+            "answer": "above",
+            "correct_nll": 3.7535390853881836,
+            "wrong_minus_correct_margin": -0.10864114761352539,
+            "wrong_nll": 3.644897937774658
+          }
+        ]
+      }
+    ],
+    "records_sha256": "23dd5743e3a6fcebb6930fce8477479da330c0bbaccf22c2d1d559c5a97b71fc",
+    "side_count": 56,
+    "unit_count": 28
+  },
+  "checks": {
+    "audit_clean": true,
+    "checkpoint_absent": true,
+    "completed_under_480_seconds": true,
+    "held_complete_units_nonworse": true,
+    "held_mean_margin_delta_at_least_0_002": false,
+    "held_mean_margin_softplus_delta_at_most_minus_0_001": false,
+    "held_positive_margin_sides_nonworse": true,
+    "retention_maximum_kl_at_most_0_02": true,
+    "retention_mean_kl_at_most_0_005": true,
+    "retention_top1_exact": true,
+    "train_mean_margin_softplus_improved": true
+  },
+  "deferred_or_final_inputs_loaded": false,
+  "elapsed_seconds": 394.81183775002137,
+  "full_huggingface_forward": true,
+  "held_answer_family_metrics": {
+    "baseline": {
+      "spatial_relation": {
+        "complete_units": 3,
+        "mean_margin": 0.09418629407882691,
+        "mean_margin_softplus": 0.9252840876579285,
+        "positive_margin_sides": 10,
+        "side_count": 20,
+        "unit_count": 10
+      },
+      "support": {
+        "complete_units": 0,
+        "mean_margin": 0.1063002347946167,
+        "mean_margin_softplus": 0.9225640296936035,
+        "positive_margin_sides": 2,
+        "side_count": 4,
+        "unit_count": 2
+      }
+    },
+    "candidate": {
+      "spatial_relation": {
+        "complete_units": 3,
+        "mean_margin": 0.0734933078289032,
+        "mean_margin_softplus": 0.9396730780601501,
+        "positive_margin_sides": 11,
+        "side_count": 20,
+        "unit_count": 10
+      },
+      "support": {
+        "complete_units": 0,
+        "mean_margin": 0.10933321714401245,
+        "mean_margin_softplus": 0.9180970042943954,
+        "positive_margin_sides": 2,
+        "side_count": 4,
+        "unit_count": 2
+      }
+    },
+    "delta": {
+      "spatial_relation": {
+        "complete_units": 0,
+        "mean_margin": -0.020692986249923703,
+        "mean_margin_softplus": 0.014388990402221635,
+        "positive_margin_sides": 1
+      },
+      "support": {
+        "complete_units": 0,
+        "mean_margin": 0.003032982349395752,
+        "mean_margin_softplus": -0.004467025399208069,
+        "positive_margin_sides": 0
+      }
+    }
+  },
+  "held_delta": {
+    "complete_units": 0,
+    "mean_correct_nll": 0.005481903751690886,
+    "mean_margin": -0.016738658150037125,
+    "mean_margin_softplus": 0.011246321101983425,
+    "positive_margin_sides": 1
+  },
+  "internal_validation_inputs_loaded": false,
+  "memory": {
+    "mps_current_allocated_bytes": 258481408,
+    "mps_driver_allocated_bytes": 18439454720,
+    "peak_process_rss_bytes": 7947337728
+  },
+  "optimization": {
+    "epochs": 3,
+    "final_state_sha256": "552b2cfb63841e4a34b28fdf2c9fb07468ff362272efde48e316f53be190df38",
+    "gradient_clip_l2": 0.5,
+    "hard_runtime_seconds": 480.0,
+    "initial_state_sha256": "2e6133d83688e5632fa8c810efdd87fad0b251bb8dce747148ba38a4c8dc5355",
+    "learning_rate": 2e-05,
+    "maximum_mps_driver_bytes": 23000000000,
+    "optimizer": "AdamW",
+    "pair_unit_exposures": 84,
+    "units_per_update": 7,
+    "updates": 12
+  },
+  "oracle_inputs_loaded": false,
+  "parent_v6_3_terminal_sha256": "9c6f7ddef4eeba0a7cd4038b86719c3ce046abdf4a3521045bd0d33e31d37115",
+  "promotion_authorized": false,
+  "runtime_checkpoint_published": false,
+  "schema_version": 1,
+  "screen_pass": false,
+  "split": {
+    "held_physical_pair_ids": [
+      "pair_000010",
+      "pair_000015",
+      "pair_000017"
+    ],
+    "held_scene_count": 6,
+    "held_scene_ids": [
+      "scene_000021",
+      "scene_000022",
+      "scene_000031",
+      "scene_000032",
+      "scene_000035",
+      "scene_000036"
+    ],
+    "held_unit_count": 12,
+    "physical_pair_disjoint": true,
+    "scene_disjoint": true,
+    "train_scene_count": 18,
+    "train_unit_count": 28
+  },
+  "status": "screen_fail",
+  "sufficient_for_runtime_promotion": false,
+  "target_modules": [
+    "model.language_model.layers.13.self_attn.k_proj",
+    "model.language_model.layers.13.self_attn.v_proj",
+    "model.language_model.layers.14.self_attn.k_proj",
+    "model.language_model.layers.14.self_attn.v_proj"
+  ],
+  "trace": [
+    {
+      "adapter_state_sha256": "8c37032cd19b91d9ca60464bf98e8ee4db8874a66d91d0c5a770e1bb9aabd05b",
+      "epoch": 1,
+      "mean_preupdate_margin": 0.7577692099979946,
+      "mean_preupdate_side_objective": 1.094035763825689,
+      "mps_driver_allocated_bytes": 17556537344,
+      "preclip_gradient_l2": 0.4475926160812378,
+      "retention_index": 0,
+      "retention_kl": 0.0,
+      "unit_keys": [
+        [
+          "pair_000009",
+          "cfq_5611adccccae59f1"
+        ],
+        [
+          "pair_000018",
+          "cfq_b2c2e9aec9f883bc"
+        ],
+        [
+          "pair_000018",
+          "cfq_f58d3fc750290b0f"
+        ],
+        [
+          "pair_000011",
+          "cfq_92cfe24420e64641"
+        ],
+        [
+          "pair_000006",
+          "cfq_f1e8f24afac4339b"
+        ],
+        [
+          "pair_000007",
+          "cfq_997610c185204121"
+        ],
+        [
+          "pair_000007",
+          "cfq_736067b51ce93c49"
+        ]
+      ],
+      "update": 1,
+      "within_epoch_update": 1
+    },
+    {
+      "adapter_state_sha256": "2da327701d894418bef443da9cbacfd4ff1292fa9d889ebf37e13bb119af5600",
+      "epoch": 1,
+      "mean_preupdate_margin": 0.8521273050989423,
+      "mean_preupdate_side_objective": 0.9874120578169823,
+      "mps_driver_allocated_bytes": 17583800320,
+      "preclip_gradient_l2": 0.31000691652297974,
+      "retention_index": 1,
+      "retention_kl": 4.065219400217757e-06,
+      "unit_keys": [
+        [
+          "pair_000011",
+          "cfq_e1e142773f6d422e"
+        ],
+        [
+          "pair_000011",
+          "cfq_77d49144288e75e5"
+        ],
+        [
+          "pair_000007",
+          "cfq_f004e89a2284b94a"
+        ],
+        [
+          "pair_000008",
+          "cfq_39808de4310f3388"
+        ],
+        [
+          "pair_000006",
+          "cfq_0a79d507273195ef"
+        ],
+        [
+          "pair_000006",
+          "cfq_8e9855d51fa91bfb"
+        ],
+        [
+          "pair_000018",
+          "cfq_90b3d9852a93ce2a"
+        ]
+      ],
+      "update": 2,
+      "within_epoch_update": 2
+    },
+    {
+      "adapter_state_sha256": "513d8494b071d01df4d3d1730f9e94f8018e5a0bce04afbcd82dd38750da0f64",
+      "epoch": 1,
+      "mean_preupdate_margin": 0.2013731300830841,
+      "mean_preupdate_side_objective": 1.1660477433885847,
+      "mps_driver_allocated_bytes": 18787581952,
+      "preclip_gradient_l2": 0.3498035967350006,
+      "retention_index": 2,
+      "retention_kl": 0.001413377234712243,
+      "unit_keys": [
+        [
+          "pair_000016",
+          "cfq_9152e66b248e4692"
+        ],
+        [
+          "pair_000016",
+          "cfq_efba0c82a7336161"
+        ],
+        [
+          "pair_000009",
+          "cfq_b90a7681f59f317a"
+        ],
+        [
+          "pair_000005",
+          "cfq_a578dc166be9a217"
+        ],
+        [
+          "pair_000026",
+          "cfq_a9f59b924e583255"
+        ],
+        [
+          "pair_000006",
+          "cfq_5c84a2c27d2be251"
+        ],
+        [
+          "pair_000026",
+          "cfq_696dbfc4086cfb80"
+        ]
+      ],
+      "update": 3,
+      "within_epoch_update": 3
+    },
+    {
+      "adapter_state_sha256": "0e44688896b9c7eff23205d2bf36c990d17fbaba0683c16d6195da0728c54560",
+      "epoch": 1,
+      "mean_preupdate_margin": 0.647822516305106,
+      "mean_preupdate_side_objective": 1.0180698659803187,
+      "mps_driver_allocated_bytes": 18791776256,
+      "preclip_gradient_l2": 0.364615797996521,
+      "retention_index": 3,
+      "retention_kl": 0.002005339367315173,
+      "unit_keys": [
+        [
+          "pair_000007",
+          "cfq_bd500364dac52b59"
+        ],
+        [
+          "pair_000016",
+          "cfq_e08b96268b3c2a10"
+        ],
+        [
+          "pair_000026",
+          "cfq_c482df06c040c2b2"
+        ],
+        [
+          "pair_000011",
+          "cfq_34bc318f4e30a8bf"
+        ],
+        [
+          "pair_000009",
+          "cfq_b93bc343e2be3284"
+        ],
+        [
+          "pair_000016",
+          "cfq_699675ceeaf65406"
+        ],
+        [
+          "pair_000009",
+          "cfq_885e53344a9de104"
+        ]
+      ],
+      "update": 4,
+      "within_epoch_update": 4
+    },
+    {
+      "adapter_state_sha256": "508076e56c176da182a5058503e6f2019d652d640e9ba89446b12376988b23dd",
+      "epoch": 2,
+      "mean_preupdate_margin": 0.6315374544688633,
+      "mean_preupdate_side_objective": 1.124288307768958,
+      "mps_driver_allocated_bytes": 18793873408,
+      "preclip_gradient_l2": 0.43367987871170044,
+      "retention_index": 4,
+      "retention_kl": 2.0389063138281927e-05,
+      "unit_keys": [
+        [
+          "pair_000011",
+          "cfq_e1e142773f6d422e"
+        ],
+        [
+          "pair_000026",
+          "cfq_c482df06c040c2b2"
+        ],
+        [
+          "pair_000009",
+          "cfq_5611adccccae59f1"
+        ],
+        [
+          "pair_000018",
+          "cfq_90b3d9852a93ce2a"
+        ],
+        [
+          "pair_000011",
+          "cfq_92cfe24420e64641"
+        ],
+        [
+          "pair_000018",
+          "cfq_b2c2e9aec9f883bc"
+        ],
+        [
+          "pair_000007",
+          "cfq_997610c185204121"
+        ]
+      ],
+      "update": 5,
+      "within_epoch_update": 1
+    },
+    {
+      "adapter_state_sha256": "76370263a103a7ffbceae231a332f0a8940213f9a3e5a5b18d2367f1df6b510d",
+      "epoch": 2,
+      "mean_preupdate_margin": 0.632638944046838,
+      "mean_preupdate_side_objective": 1.1237532900912421,
+      "mps_driver_allocated_bytes": 18774999040,
+      "preclip_gradient_l2": 0.271084725856781,
+      "retention_index": 5,
+      "retention_kl": 0.002421029144898057,
+      "unit_keys": [
+        [
+          "pair_000008",
+          "cfq_39808de4310f3388"
+        ],
+        [
+          "pair_000009",
+          "cfq_b93bc343e2be3284"
+        ],
+        [
+          "pair_000026",
+          "cfq_a9f59b924e583255"
+        ],
+        [
+          "pair_000009",
+          "cfq_b90a7681f59f317a"
+        ],
+        [
+          "pair_000016",
+          "cfq_699675ceeaf65406"
+        ],
+        [
+          "pair_000005",
+          "cfq_a578dc166be9a217"
+        ],
+        [
+          "pair_000007",
+          "cfq_f004e89a2284b94a"
+        ]
+      ],
+      "update": 6,
+      "within_epoch_update": 2
+    },
+    {
+      "adapter_state_sha256": "3a34d131fafdf2c585b1c8a92281220c0dc8a9144938bf752f8a39b11cd1c4ae",
+      "epoch": 2,
+      "mean_preupdate_margin": 0.1289276991571699,
+      "mean_preupdate_side_objective": 1.0810821141515459,
+      "mps_driver_allocated_bytes": 18793873408,
+      "preclip_gradient_l2": 0.36430680751800537,
+      "retention_index": 6,
+      "retention_kl": 3.0758168577449396e-05,
+      "unit_keys": [
+        [
+          "pair_000006",
+          "cfq_0a79d507273195ef"
+        ],
+        [
+          "pair_000016",
+          "cfq_9152e66b248e4692"
+        ],
+        [
+          "pair_000011",
+          "cfq_34bc318f4e30a8bf"
+        ],
+        [
+          "pair_000006",
+          "cfq_8e9855d51fa91bfb"
+        ],
+        [
+          "pair_000016",
+          "cfq_efba0c82a7336161"
+        ],
+        [
+          "pair_000009",
+          "cfq_885e53344a9de104"
+        ],
+        [
+          "pair_000006",
+          "cfq_f1e8f24afac4339b"
+        ]
+      ],
+      "update": 7,
+      "within_epoch_update": 3
+    },
+    {
+      "adapter_state_sha256": "0abf3ee41d41cad7afbd608183bff8bd7e6f7d4e134fbbe000b9d093187ab3d6",
+      "epoch": 2,
+      "mean_preupdate_margin": 1.016609856060573,
+      "mean_preupdate_side_objective": 0.975041828517403,
+      "mps_driver_allocated_bytes": 18791776256,
+      "preclip_gradient_l2": 0.3266841173171997,
+      "retention_index": 7,
+      "retention_kl": 3.614836896304041e-05,
+      "unit_keys": [
+        [
+          "pair_000006",
+          "cfq_5c84a2c27d2be251"
+        ],
+        [
+          "pair_000026",
+          "cfq_696dbfc4086cfb80"
+        ],
+        [
+          "pair_000007",
+          "cfq_bd500364dac52b59"
+        ],
+        [
+          "pair_000007",
+          "cfq_736067b51ce93c49"
+        ],
+        [
+          "pair_000018",
+          "cfq_f58d3fc750290b0f"
+        ],
+        [
+          "pair_000016",
+          "cfq_e08b96268b3c2a10"
+        ],
+        [
+          "pair_000011",
+          "cfq_77d49144288e75e5"
+        ]
+      ],
+      "update": 8,
+      "within_epoch_update": 4
+    },
+    {
+      "adapter_state_sha256": "3d148be55a171f64b0fbf78fd42cfd3183244b9fdb5e8c6847231a89cfa91fec",
+      "epoch": 3,
+      "mean_preupdate_margin": 0.22648079906191146,
+      "mean_preupdate_side_objective": 1.219788664153644,
+      "mps_driver_allocated_bytes": 18791776256,
+      "preclip_gradient_l2": 0.3745570480823517,
+      "retention_index": 8,
+      "retention_kl": 0.00034655979834496975,
+      "unit_keys": [
+        [
+          "pair_000009",
+          "cfq_b93bc343e2be3284"
+        ],
+        [
+          "pair_000018",
+          "cfq_90b3d9852a93ce2a"
+        ],
+        [
+          "pair_000007",
+          "cfq_736067b51ce93c49"
+        ],
+        [
+          "pair_000008",
+          "cfq_39808de4310f3388"
+        ],
+        [
+          "pair_000009",
+          "cfq_b90a7681f59f317a"
+        ],
+        [
+          "pair_000016",
+          "cfq_699675ceeaf65406"
+        ],
+        [
+          "pair_000006",
+          "cfq_5c84a2c27d2be251"
+        ]
+      ],
+      "update": 9,
+      "within_epoch_update": 1
+    },
+    {
+      "adapter_state_sha256": "dfadc707f44f8e52137e7a2d8889b88d99264ea8ee9e763dc2f31bb540aa0cc9",
+      "epoch": 3,
+      "mean_preupdate_margin": 0.49378332069941927,
+      "mean_preupdate_side_objective": 1.1030949034861155,
+      "mps_driver_allocated_bytes": 18793873408,
+      "preclip_gradient_l2": 0.369011253118515,
+      "retention_index": 9,
+      "retention_kl": 4.533316314336844e-06,
+      "unit_keys": [
+        [
+          "pair_000016",
+          "cfq_9152e66b248e4692"
+        ],
+        [
+          "pair_000007",
+          "cfq_997610c185204121"
+        ],
+        [
+          "pair_000026",
+          "cfq_696dbfc4086cfb80"
+        ],
+        [
+          "pair_000011",
+          "cfq_e1e142773f6d422e"
+        ],
+        [
+          "pair_000018",
+          "cfq_f58d3fc750290b0f"
+        ],
+        [
+          "pair_000026",
+          "cfq_c482df06c040c2b2"
+        ],
+        [
+          "pair_000011",
+          "cfq_77d49144288e75e5"
+        ]
+      ],
+      "update": 10,
+      "within_epoch_update": 2
+    },
+    {
+      "adapter_state_sha256": "0d575740d947c17dc6ef1fd9f6576d87aa69f7a94266077a6083701bdc0a807a",
+      "epoch": 3,
+      "mean_preupdate_margin": 1.0103263024772917,
+      "mean_preupdate_side_objective": 0.9588723587138313,
+      "mps_driver_allocated_bytes": 18791776256,
+      "preclip_gradient_l2": 0.34965988993644714,
+      "retention_index": 10,
+      "retention_kl": 4.0560917113907635e-06,
+      "unit_keys": [
+        [
+          "pair_000007",
+          "cfq_f004e89a2284b94a"
+        ],
+        [
+          "pair_000011",
+          "cfq_34bc318f4e30a8bf"
+        ],
+        [
+          "pair_000018",
+          "cfq_b2c2e9aec9f883bc"
+        ],
+        [
+          "pair_000009",
+          "cfq_885e53344a9de104"
+        ],
+        [
+          "pair_000006",
+          "cfq_0a79d507273195ef"
+        ],
+        [
+          "pair_000026",
+          "cfq_a9f59b924e583255"
+        ],
+        [
+          "pair_000005",
+          "cfq_a578dc166be9a217"
+        ]
+      ],
+      "update": 11,
+      "within_epoch_update": 3
+    },
+    {
+      "adapter_state_sha256": "552b2cfb63841e4a34b28fdf2c9fb07468ff362272efde48e316f53be190df38",
+      "epoch": 3,
+      "mean_preupdate_margin": 0.7285439627511161,
+      "mean_preupdate_side_objective": 0.9915055435683046,
+      "mps_driver_allocated_bytes": 19112640512,
+      "preclip_gradient_l2": 0.40795981884002686,
+      "retention_index": 11,
+      "retention_kl": 0.00628812238574028,
+      "unit_keys": [
+        [
+          "pair_000011",
+          "cfq_92cfe24420e64641"
+        ],
+        [
+          "pair_000016",
+          "cfq_e08b96268b3c2a10"
+        ],
+        [
+          "pair_000006",
+          "cfq_f1e8f24afac4339b"
+        ],
+        [
+          "pair_000016",
+          "cfq_efba0c82a7336161"
+        ],
+        [
+          "pair_000007",
+          "cfq_bd500364dac52b59"
+        ],
+        [
+          "pair_000006",
+          "cfq_8e9855d51fa91bfb"
+        ],
+        [
+          "pair_000009",
+          "cfq_5611adccccae59f1"
+        ]
+      ],
+      "update": 12,
+      "within_epoch_update": 4
+    }
+  ],
+  "trace_sha256": "cff03a3b4ad1f7259d71b9b5bfd128c6a6179525f74fd38584159dbd3efbae5c",
+  "train_answer_family_metrics": {
+    "baseline": {
+      "attribute": {
+        "complete_units": 3,
+        "mean_margin": 2.084581196308136,
+        "mean_margin_softplus": 0.505562771577388,
+        "positive_margin_sides": 7,
+        "side_count": 8,
+        "unit_count": 4
+      },
+      "count": {
+        "complete_units": 1,
+        "mean_margin": 0.8261812329292297,
+        "mean_margin_softplus": 0.7215691823512316,
+        "positive_margin_sides": 3,
+        "side_count": 4,
+        "unit_count": 2
+      },
+      "metric": {
+        "complete_units": 0,
+        "mean_margin": 0.03137612342834473,
+        "mean_margin_softplus": 0.9645638763904572,
+        "positive_margin_sides": 1,
+        "side_count": 2,
+        "unit_count": 1
+      },
+      "orientation": {
+        "complete_units": 1,
+        "mean_margin": 0.06133180856704712,
+        "mean_margin_softplus": 0.9364672899246216,
+        "positive_margin_sides": 2,
+        "side_count": 2,
+        "unit_count": 1
+      },
+      "presence": {
+        "complete_units": 2,
+        "mean_margin": 2.714791238307953,
+        "mean_margin_softplus": 0.11740262061357498,
+        "positive_margin_sides": 4,
+        "side_count": 4,
+        "unit_count": 2
+      },
+      "spatial_relation": {
+        "complete_units": 6,
+        "mean_margin": 0.08118014250482831,
+        "mean_margin_softplus": 0.9316133175577436,
+        "positive_margin_sides": 16,
+        "side_count": 28,
+        "unit_count": 14
+      },
+      "support": {
+        "complete_units": 0,
+        "mean_margin": -0.0326622873544693,
+        "mean_margin_softplus": 1.0015122964978218,
+        "positive_margin_sides": 3,
+        "side_count": 8,
+        "unit_count": 4
+      }
+    },
+    "candidate": {
+      "attribute": {
+        "complete_units": 2,
+        "mean_margin": 2.052805483341217,
+        "mean_margin_softplus": 0.510680602863431,
+        "positive_margin_sides": 6,
+        "side_count": 8,
+        "unit_count": 4
+      },
+      "count": {
+        "complete_units": 2,
+        "mean_margin": 0.9078604578971863,
+        "mean_margin_softplus": 0.6785977501422167,
+        "positive_margin_sides": 4,
+        "side_count": 4,
+        "unit_count": 2
+      },
+      "metric": {
+        "complete_units": 0,
+        "mean_margin": 0.04642009735107422,
+        "mean_margin_softplus": 0.9577145576477051,
+        "positive_margin_sides": 1,
+        "side_count": 2,
+        "unit_count": 1
+      },
+      "orientation": {
+        "complete_units": 1,
+        "mean_margin": 0.03889712691307068,
+        "mean_margin_softplus": 0.9501095414161682,
+        "positive_margin_sides": 2,
+        "side_count": 2,
+        "unit_count": 1
+      },
+      "presence": {
+        "complete_units": 2,
+        "mean_margin": 2.7846049070358276,
+        "mean_margin_softplus": 0.11279646307229996,
+        "positive_margin_sides": 4,
+        "side_count": 4,
+        "unit_count": 2
+      },
+      "spatial_relation": {
+        "complete_units": 7,
+        "mean_margin": 0.097246025289808,
+        "mean_margin_softplus": 0.9211893400975636,
+        "positive_margin_sides": 18,
+        "side_count": 28,
+        "unit_count": 14
+      },
+      "support": {
+        "complete_units": 1,
+        "mean_margin": -0.024815425276756287,
+        "mean_margin_softplus": 0.997186928987503,
+        "positive_margin_sides": 4,
+        "side_count": 8,
+        "unit_count": 4
+      }
+    },
+    "delta": {
+      "attribute": {
+        "complete_units": -1,
+        "mean_margin": -0.031775712966918945,
+        "mean_margin_softplus": 0.005117831286042929,
+        "positive_margin_sides": -1
+      },
+      "count": {
+        "complete_units": 1,
+        "mean_margin": 0.08167922496795654,
+        "mean_margin_softplus": -0.04297143220901489,
+        "positive_margin_sides": 1
+      },
+      "metric": {
+        "complete_units": 0,
+        "mean_margin": 0.015043973922729492,
+        "mean_margin_softplus": -0.006849318742752075,
+        "positive_margin_sides": 0
+      },
+      "orientation": {
+        "complete_units": 0,
+        "mean_margin": -0.02243468165397644,
+        "mean_margin_softplus": 0.01364225149154663,
+        "positive_margin_sides": 0
+      },
+      "presence": {
+        "complete_units": 0,
+        "mean_margin": 0.06981366872787476,
+        "mean_margin_softplus": -0.004606157541275024,
+        "positive_margin_sides": 0
+      },
+      "spatial_relation": {
+        "complete_units": 1,
+        "mean_margin": 0.016065882784979682,
+        "mean_margin_softplus": -0.010423977460179978,
+        "positive_margin_sides": 2
+      },
+      "support": {
+        "complete_units": 1,
+        "mean_margin": 0.007846862077713013,
+        "mean_margin_softplus": -0.004325367510318756,
+        "positive_margin_sides": 1
+      }
+    }
+  },
+  "train_delta": {
+    "complete_units": 2,
+    "mean_correct_nll": -0.011187027607645561,
+    "mean_margin": 0.015171501253332331,
+    "mean_margin_softplus": -0.00825457414612174,
+    "positive_margin_sides": 3
+  },
+  "train_order_diagnostics": {
+    "epochs": 3,
+    "exposures_per_unit_distribution": {
+      "3": 28
+    },
+    "held_pair_ids_in_schedule": [],
+    "records": [
+      {
+        "answer_types": [
+          "support",
+          "presence",
+          "presence",
+          "spatial_relation",
+          "spatial_relation",
+          "attribute",
+          "attribute"
+        ],
+        "epoch": 1,
+        "unit_keys": [
+          [
+            "pair_000009",
+            "cfq_5611adccccae59f1"
+          ],
+          [
+            "pair_000018",
+            "cfq_b2c2e9aec9f883bc"
+          ],
+          [
+            "pair_000018",
+            "cfq_f58d3fc750290b0f"
+          ],
+          [
+            "pair_000011",
+            "cfq_92cfe24420e64641"
+          ],
+          [
+            "pair_000006",
+            "cfq_f1e8f24afac4339b"
+          ],
+          [
+            "pair_000007",
+            "cfq_997610c185204121"
+          ],
+          [
+            "pair_000007",
+            "cfq_736067b51ce93c49"
+          ]
+        ],
+        "update": 1,
+        "within_epoch_update": 1
+      },
+      {
+        "answer_types": [
+          "spatial_relation",
+          "spatial_relation",
+          "attribute",
+          "count",
+          "spatial_relation",
+          "spatial_relation",
+          "count"
+        ],
+        "epoch": 1,
+        "unit_keys": [
+          [
+            "pair_000011",
+            "cfq_e1e142773f6d422e"
+          ],
+          [
+            "pair_000011",
+            "cfq_77d49144288e75e5"
+          ],
+          [
+            "pair_000007",
+            "cfq_f004e89a2284b94a"
+          ],
+          [
+            "pair_000008",
+            "cfq_39808de4310f3388"
+          ],
+          [
+            "pair_000006",
+            "cfq_0a79d507273195ef"
+          ],
+          [
+            "pair_000006",
+            "cfq_8e9855d51fa91bfb"
+          ],
+          [
+            "pair_000018",
+            "cfq_90b3d9852a93ce2a"
+          ]
+        ],
+        "update": 2,
+        "within_epoch_update": 2
+      },
+      {
+        "answer_types": [
+          "spatial_relation",
+          "spatial_relation",
+          "support",
+          "orientation",
+          "metric",
+          "spatial_relation",
+          "support"
+        ],
+        "epoch": 1,
+        "unit_keys": [
+          [
+            "pair_000016",
+            "cfq_9152e66b248e4692"
+          ],
+          [
+            "pair_000016",
+            "cfq_efba0c82a7336161"
+          ],
+          [
+            "pair_000009",
+            "cfq_b90a7681f59f317a"
+          ],
+          [
+            "pair_000005",
+            "cfq_a578dc166be9a217"
+          ],
+          [
+            "pair_000026",
+            "cfq_a9f59b924e583255"
+          ],
+          [
+            "pair_000006",
+            "cfq_5c84a2c27d2be251"
+          ],
+          [
+            "pair_000026",
+            "cfq_696dbfc4086cfb80"
+          ]
+        ],
+        "update": 3,
+        "within_epoch_update": 3
+      },
+      {
+        "answer_types": [
+          "attribute",
+          "spatial_relation",
+          "spatial_relation",
+          "support",
+          "spatial_relation",
+          "spatial_relation",
+          "spatial_relation"
+        ],
+        "epoch": 1,
+        "unit_keys": [
+          [
+            "pair_000007",
+            "cfq_bd500364dac52b59"
+          ],
+          [
+            "pair_000016",
+            "cfq_e08b96268b3c2a10"
+          ],
+          [
+            "pair_000026",
+            "cfq_c482df06c040c2b2"
+          ],
+          [
+            "pair_000011",
+            "cfq_34bc318f4e30a8bf"
+          ],
+          [
+            "pair_000009",
+            "cfq_b93bc343e2be3284"
+          ],
+          [
+            "pair_000016",
+            "cfq_699675ceeaf65406"
+          ],
+          [
+            "pair_000009",
+            "cfq_885e53344a9de104"
+          ]
+        ],
+        "update": 4,
+        "within_epoch_update": 4
+      },
+      {
+        "answer_types": [
+          "spatial_relation",
+          "spatial_relation",
+          "support",
+          "count",
+          "spatial_relation",
+          "presence",
+          "attribute"
+        ],
+        "epoch": 2,
+        "unit_keys": [
+          [
+            "pair_000011",
+            "cfq_e1e142773f6d422e"
+          ],
+          [
+            "pair_000026",
+            "cfq_c482df06c040c2b2"
+          ],
+          [
+            "pair_000009",
+            "cfq_5611adccccae59f1"
+          ],
+          [
+            "pair_000018",
+            "cfq_90b3d9852a93ce2a"
+          ],
+          [
+            "pair_000011",
+            "cfq_92cfe24420e64641"
+          ],
+          [
+            "pair_000018",
+            "cfq_b2c2e9aec9f883bc"
+          ],
+          [
+            "pair_000007",
+            "cfq_997610c185204121"
+          ]
+        ],
+        "update": 5,
+        "within_epoch_update": 1
+      },
+      {
+        "answer_types": [
+          "count",
+          "spatial_relation",
+          "metric",
+          "support",
+          "spatial_relation",
+          "orientation",
+          "attribute"
+        ],
+        "epoch": 2,
+        "unit_keys": [
+          [
+            "pair_000008",
+            "cfq_39808de4310f3388"
+          ],
+          [
+            "pair_000009",
+            "cfq_b93bc343e2be3284"
+          ],
+          [
+            "pair_000026",
+            "cfq_a9f59b924e583255"
+          ],
+          [
+            "pair_000009",
+            "cfq_b90a7681f59f317a"
+          ],
+          [
+            "pair_000016",
+            "cfq_699675ceeaf65406"
+          ],
+          [
+            "pair_000005",
+            "cfq_a578dc166be9a217"
+          ],
+          [
+            "pair_000007",
+            "cfq_f004e89a2284b94a"
+          ]
+        ],
+        "update": 6,
+        "within_epoch_update": 2
+      },
+      {
+        "answer_types": [
+          "spatial_relation",
+          "spatial_relation",
+          "support",
+          "spatial_relation",
+          "spatial_relation",
+          "spatial_relation",
+          "spatial_relation"
+        ],
+        "epoch": 2,
+        "unit_keys": [
+          [
+            "pair_000006",
+            "cfq_0a79d507273195ef"
+          ],
+          [
+            "pair_000016",
+            "cfq_9152e66b248e4692"
+          ],
+          [
+            "pair_000011",
+            "cfq_34bc318f4e30a8bf"
+          ],
+          [
+            "pair_000006",
+            "cfq_8e9855d51fa91bfb"
+          ],
+          [
+            "pair_000016",
+            "cfq_efba0c82a7336161"
+          ],
+          [
+            "pair_000009",
+            "cfq_885e53344a9de104"
+          ],
+          [
+            "pair_000006",
+            "cfq_f1e8f24afac4339b"
+          ]
+        ],
+        "update": 7,
+        "within_epoch_update": 3
+      },
+      {
+        "answer_types": [
+          "spatial_relation",
+          "support",
+          "attribute",
+          "attribute",
+          "presence",
+          "spatial_relation",
+          "spatial_relation"
+        ],
+        "epoch": 2,
+        "unit_keys": [
+          [
+            "pair_000006",
+            "cfq_5c84a2c27d2be251"
+          ],
+          [
+            "pair_000026",
+            "cfq_696dbfc4086cfb80"
+          ],
+          [
+            "pair_000007",
+            "cfq_bd500364dac52b59"
+          ],
+          [
+            "pair_000007",
+            "cfq_736067b51ce93c49"
+          ],
+          [
+            "pair_000018",
+            "cfq_f58d3fc750290b0f"
+          ],
+          [
+            "pair_000016",
+            "cfq_e08b96268b3c2a10"
+          ],
+          [
+            "pair_000011",
+            "cfq_77d49144288e75e5"
+          ]
+        ],
+        "update": 8,
+        "within_epoch_update": 4
+      },
+      {
+        "answer_types": [
+          "spatial_relation",
+          "count",
+          "attribute",
+          "count",
+          "support",
+          "spatial_relation",
+          "spatial_relation"
+        ],
+        "epoch": 3,
+        "unit_keys": [
+          [
+            "pair_000009",
+            "cfq_b93bc343e2be3284"
+          ],
+          [
+            "pair_000018",
+            "cfq_90b3d9852a93ce2a"
+          ],
+          [
+            "pair_000007",
+            "cfq_736067b51ce93c49"
+          ],
+          [
+            "pair_000008",
+            "cfq_39808de4310f3388"
+          ],
+          [
+            "pair_000009",
+            "cfq_b90a7681f59f317a"
+          ],
+          [
+            "pair_000016",
+            "cfq_699675ceeaf65406"
+          ],
+          [
+            "pair_000006",
+            "cfq_5c84a2c27d2be251"
+          ]
+        ],
+        "update": 9,
+        "within_epoch_update": 1
+      },
+      {
+        "answer_types": [
+          "spatial_relation",
+          "attribute",
+          "support",
+          "spatial_relation",
+          "presence",
+          "spatial_relation",
+          "spatial_relation"
+        ],
+        "epoch": 3,
+        "unit_keys": [
+          [
+            "pair_000016",
+            "cfq_9152e66b248e4692"
+          ],
+          [
+            "pair_000007",
+            "cfq_997610c185204121"
+          ],
+          [
+            "pair_000026",
+            "cfq_696dbfc4086cfb80"
+          ],
+          [
+            "pair_000011",
+            "cfq_e1e142773f6d422e"
+          ],
+          [
+            "pair_000018",
+            "cfq_f58d3fc750290b0f"
+          ],
+          [
+            "pair_000026",
+            "cfq_c482df06c040c2b2"
+          ],
+          [
+            "pair_000011",
+            "cfq_77d49144288e75e5"
+          ]
+        ],
+        "update": 10,
+        "within_epoch_update": 2
+      },
+      {
+        "answer_types": [
+          "attribute",
+          "support",
+          "presence",
+          "spatial_relation",
+          "spatial_relation",
+          "metric",
+          "orientation"
+        ],
+        "epoch": 3,
+        "unit_keys": [
+          [
+            "pair_000007",
+            "cfq_f004e89a2284b94a"
+          ],
+          [
+            "pair_000011",
+            "cfq_34bc318f4e30a8bf"
+          ],
+          [
+            "pair_000018",
+            "cfq_b2c2e9aec9f883bc"
+          ],
+          [
+            "pair_000009",
+            "cfq_885e53344a9de104"
+          ],
+          [
+            "pair_000006",
+            "cfq_0a79d507273195ef"
+          ],
+          [
+            "pair_000026",
+            "cfq_a9f59b924e583255"
+          ],
+          [
+            "pair_000005",
+            "cfq_a578dc166be9a217"
+          ]
+        ],
+        "update": 11,
+        "within_epoch_update": 3
+      },
+      {
+        "answer_types": [
+          "spatial_relation",
+          "spatial_relation",
+          "spatial_relation",
+          "spatial_relation",
+          "attribute",
+          "spatial_relation",
+          "support"
+        ],
+        "epoch": 3,
+        "unit_keys": [
+          [
+            "pair_000011",
+            "cfq_92cfe24420e64641"
+          ],
+          [
+            "pair_000016",
+            "cfq_e08b96268b3c2a10"
+          ],
+          [
+            "pair_000006",
+            "cfq_f1e8f24afac4339b"
+          ],
+          [
+            "pair_000016",
+            "cfq_efba0c82a7336161"
+          ],
+          [
+            "pair_000007",
+            "cfq_bd500364dac52b59"
+          ],
+          [
+            "pair_000006",
+            "cfq_8e9855d51fa91bfb"
+          ],
+          [
+            "pair_000009",
+            "cfq_5611adccccae59f1"
+          ]
+        ],
+        "update": 12,
+        "within_epoch_update": 4
+      }
+    ],
+    "records_sha256": "4719f275168599226c193c2fb0a07625d191f927e9c01bc67b83d245c510acdf",
+    "total_unit_exposures": 84,
+    "unique_training_units": 28,
+    "units_per_update": 7,
+    "updates": 12
+  },
+  "trainable_parameter_count": 30720,
+  "v6_2_down_projection_installed": false
+}

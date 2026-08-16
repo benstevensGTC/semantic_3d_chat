@@ -1,0 +1,250 @@
+_base_: navigation_policy_v3.yaml
+
+# Training-only supervision for a successor policy whose only outputs are
+# absolute FACE headings, absolute MOVE_TO world coordinates, and STOP.  The
+# numeric patrol/waypoint planners generate expert labels offline; they are not
+# present in the deployed Gemma decision loop.
+gemma_waypoint_traces:
+  source_trace_dataset: data_gemma4/training/navigation_policy_v3
+  oracle_root: data/oracle
+  map_root: data_gemma4/maps
+  output_root: data_gemma4/training/gemma_waypoint_policy_v1
+  train_scene_ids:
+    - scene_000011
+    - scene_000012
+    - scene_000013
+    - scene_000014
+    - scene_000015
+    - scene_000016
+    - scene_000017
+    - scene_000018
+    - scene_000019
+    - scene_000020
+    - scene_000021
+    - scene_000022
+    - scene_000023
+    - scene_000024
+  validation_scene_ids:
+    - scene_000031
+    - scene_000032
+    - scene_000033
+    - scene_000034
+    - scene_000035
+    - scene_000036
+    - scene_000037
+    - scene_000039
+  history_length: 16
+  max_waypoint_step_m: 0.50
+  planner_grid_resolution_m: 0.15
+  lap_anchor_count: 8
+  lap_wall_margin_m: 0.45
+  lap_max_waypoints: 64
+  # Lap demonstrations use only full +/-40-degree FACE decisions. The small
+  # residual angle is deliberately omitted; each following MOVE_TO label is
+  # expressed in the rover frame produced by those coarse model actions.
+  lap_fixed_face_step_degrees: 40.0
+  between_search_resolution_m: 0.05
+  approach_standoff_m: 0.60
+  approach_standoff_tolerance_m: 0.20
+  approach_angular_samples: 48
+  seed: 20260815
+
+  # Default script profile: a quick two-scene wiring dataset that still covers
+  # train/validation isolation, both lap windings, and a between-object route.
+  profiles:
+    smoke:
+      train_scene_limit: 1
+      validation_scene_limit: 1
+      start_pose_count: 1
+      initial_yaw_degrees: [0.0]
+      between_pairs_per_scene: 1
+      object_targets_per_scene: 1
+
+    # Full offline teacher set: all existing V3 train/validation scenes, two
+    # collision-free starts, four initial headings, and varied object pairs.
+    full:
+      start_pose_count: 2
+      initial_yaw_degrees: [0.0, -90.0, 90.0, 180.0]
+      between_pairs_per_scene: 4
+      object_targets_per_scene: 4
+
+    # Deliberately fit the live demonstration room while keeping validation on
+    # two distinct scenes. Scene 1 has map/oracle artifacts but no legacy V3
+    # rows, so its supervision comes entirely from new lap/between experts.
+    demo:
+      train_scene_ids: [scene_000001]
+      validation_scene_ids: [scene_000031, scene_000032]
+      start_pose_count: 2
+      initial_yaw_degrees: [0.0, -90.0, 90.0, 180.0]
+      between_pairs_per_scene: 4
+      object_targets_per_scene: 4
+
+    # Small enough to cache through real Gemma in a few minutes while directly
+    # fitting live scene 1 and retaining two disjoint held-out scenes.
+    live:
+      train_scene_ids: [scene_000001]
+      validation_scene_ids: [scene_000031, scene_000032]
+      start_pose_count: 1
+      initial_yaw_degrees: [0.0]
+      between_pairs_per_scene: 1
+      object_targets_per_scene: 2
+      include_source_rows: false
+
+    # Deployment-quality mix: retain the exact live room while exposing the
+    # policy heads to thirteen additional training rooms and seven held-out
+    # rooms. The generic clockwise phrasing deliberately covers the common UI
+    # request "do a lap around the room"; the route remains training-only
+    # supervision and every deployed waypoint is still emitted by Gemma.
+    production:
+      train_scene_ids:
+        - scene_000001
+        - scene_000011
+        - scene_000012
+        - scene_000013
+        - scene_000014
+        - scene_000015
+        - scene_000016
+        - scene_000017
+        - scene_000018
+        - scene_000019
+        - scene_000020
+        - scene_000021
+        - scene_000022
+        - scene_000023
+      validation_scene_ids:
+        - scene_000031
+        - scene_000032
+        - scene_000033
+        - scene_000034
+        - scene_000035
+        - scene_000036
+        - scene_000039
+      start_pose_count: 1
+      initial_yaw_degrees: [-90.0, 0.0]
+      between_pairs_per_scene: 1
+      object_targets_per_scene: 2
+      include_source_rows: true
+      required_start_pose_xy_by_scene:
+        scene_000001: [-0.5, -0.25]
+      generic_clockwise_lap_instructions:
+        - Do a lap around the room.
+        - Take one lap around the room and stop.
+
+    # Live-operator specialization retains every step of every scene_000001
+    # exact-start episode.  This prevents the phase aliasing caused by a sparse
+    # balanced sampler seeing only six points from a 121-step lap.
+    operator:
+      train_scene_ids: [scene_000001]
+      validation_scene_ids: [scene_000031, scene_000032]
+      start_pose_count: 1
+      initial_yaw_degrees: [-90.0, 0.0]
+      between_pairs_per_scene: 1
+      object_targets_per_scene: 2
+      include_source_rows: false
+      # Dense train-only start headings put the exact full lap history on both
+      # sides of the FACE/MOVE decision boundary observed during live rollout.
+      # Validation scenes retain only the unjittered headings above.
+      training_initial_yaw_jitter_degrees: [-1.0, -0.5, 0.0, 0.5, 1.0]
+      # Keep teacher turns strictly inside the 45-degree runtime cap. Exact
+      # boundary labels are unsafe under normal bfloat/MPS numerical drift.
+      expert_turn_margin_degrees: 5.0
+      # Train-only V3 rows replay cumulative model-sized under-turns through a
+      # complete numeric lap prefix, then retain every state immediately after
+      # FACE. The target action/heading/robot-frame waypoint remains the
+      # offline expert's; no drift correction is present at runtime.
+      lap_execution_drift_augmentation:
+        enabled: true
+        nominal_initial_yaws_only: true
+        post_face_rows_only: true
+        turn_magnitude_profiles_degrees:
+          # The first two are the exact observed live prefixes that reached
+          # yaw 29.995811 and 29.292076 from the -90-degree start.
+          - [40.0, 39.9959716796875, 39.999839782714844]
+          - [39.99665451049805, 39.56814193725586, 39.72727966308594]
+          # Uniform profiles span tiny through moderate cumulative drift.
+          - [39.99933333333333]
+          - [39.998333333333335]
+          - [39.99666666666667]
+          - [39.983333333333334]
+          - [39.96666666666667]
+          - [39.916666666666664]
+          - [39.833333333333336]
+      # Offline DAgger recovery snapshots perturb a safe lap state toward a
+      # boundary, append the runtime's numeric success=0 rejection history,
+      # and label a collision-free next MOVE_TO. No planner is packaged into
+      # or imported by the deployed Gemma controller.
+      lap_recovery_augmentation:
+        enabled: true
+        # V2 continues every selected recovery through all remaining lap
+        # waypoints and a model-labeled STOP. Restrict recovery origins to the
+        # unjittered start-yaw episodes to avoid duplicating near-identical long
+        # continuations; dense yaw jitter still applies to nominal lap traces.
+        full_post_recovery_continuation: true
+        nominal_initial_yaws_only: true
+        max_states_per_episode: 6
+        minimum_states_per_episode: 4
+        position_perturbation_m: 0.10
+        yaw_offsets_degrees: [-8.0, 8.0]
+        rejected_proposal_distance_m: 0.45
+        rejection_streak_lengths: [1, 4, 8, 16]
+      required_start_pose_xy_by_scene:
+        scene_000001: [-0.5, -0.25]
+      generic_clockwise_lap_instructions:
+        - Do a lap around the room.
+        - Take one lap around the room and stop.
+
+# Runtime-compatible learner for the expert traces above. The default is the
+# live scene_000001 fit plus two scene-disjoint validation rooms; use explicit
+# --dataset/--prefix-cache-root overrides for the larger full profile.
+gemma_waypoint_policy:
+  trace_dataset: data_gemma4/training/gemma_waypoint_policy_v1_live
+  prefix_cache_root: data_gemma4/scene_tokens/gemma_waypoint_policy_v1_live
+  hidden_cache: data_gemma4/training/gemma_waypoint_policy_v1_live_hidden
+  checkpoint_output: data_gemma4/checkpoints/gemma_waypoint_policy_v1_live
+  robot_state_checkpoint: data_gemma4/checkpoints/robot_state_numeric_v1
+  scene_token_count: 258
+  robot_token_count: 4
+  hidden_size: 1536
+  state_dim: 18
+  history_dim: 12
+  max_history_tokens: 16
+  context_token_count: 1
+  head_hidden_dim: 256
+  max_waypoint_step_m: 0.50
+  # Gemma emits a robot-relative scalar turn through 40*tanh(raw). This is
+  # the model's native output domain, not an executor clamp, and leaves a
+  # five-degree margin inside the simulator's unchanged 45-degree action cap.
+  max_turn_delta_degrees: 40.0
+  batch_size: 1
+  # Gemma caching remains one real full-prefix forward per row.  Once cached,
+  # train the small numeric heads in ordinary batches so class weighting does
+  # not degenerate into a singleton-weight cancellation.
+  head_batch_size: 32
+  gradient_accumulation_steps: 1
+  epochs: 80
+  learning_rate: 0.0003
+  weight_decay: 0.0001
+  action_class_weight_power: 0.5
+  # Optional deterministic second-stage multinomial logistic fit over the
+  # authenticated frozen-Gemma decision states.  It updates only the action
+  # classifier; geometry/heading regression remains bit-identical.  The
+  # general multi-scene experiment leaves it disabled, while the exact live
+  # operator profile enables it with a hard accuracy gate.
+  action_refit_max_iter: 0
+  action_refit_learning_rate: 0.5
+  minimum_training_action_accuracy: 0.0
+  checkpoint_selection: heldout_validation
+  heading_refit_steps: 0
+  heading_refit_learning_rate: 0.0005
+  minimum_training_turn_margin_degrees: 0.0
+  waypoint_loss_weight: 1.0
+  heading_loss_weight: 0.5
+  gradient_clip_norm: 1.0
+  training_sample_limit: 192
+  validation_sample_limit: 48
+  control_sample_limit: 24
+  seed: 20260815
+
+  # Alternate scene-disjoint scale-up inputs, selected explicitly by CLI.
+  full_trace_dataset: data_gemma4/training/gemma_waypoint_policy_v1_full
+  full_prefix_cache_root: data_gemma4/scene_tokens/v56_question_control_full_prefixes

@@ -1,0 +1,85 @@
+_base_: gemma4_color_mirror_dense_sidecar_v27.yaml
+
+# V27 falsified fixed additive mixing: every nonzero fixed scale created two
+# new mirrored-control failures.  V28 retains the calibrated all-voxel V26
+# evidence as a separately pooled sidecar, restores V24's established scene
+# tokens exactly, and installs a learned adapter only after V24's frozen
+# global and signed-X scene stack.  Both adapter output routes initialize to
+# exact zero, making the constructed candidate a bit-identical V24 no-op.
+scene_encoder:
+  dense_alignment:
+    application_mode: coverage_sidecar
+    sidecar_scale: 0.0
+  dense_sidecar_adapter:
+    enabled: true
+    width: 128
+    fourier_bands: 8
+    max_direct_scale: 0.25
+    initialization_seed: 28028
+    expected_initial_state_sha256: fd8abd78bed2d04ac2f83d70564028285c361729c62591a05e3eddcbb8794d02
+
+training:
+  output_namespace: gemma4_v28_post_stack_sidecar
+  extension_output_namespace: gemma4_v28_post_stack_sidecar_extension
+  train_dense_alignment_only: false
+  freeze_scene_adapter: true
+  post_stack_sidecar_stage_a:
+    enabled: true
+    max_optimizer_steps: 4
+    evaluation_interval_steps: 1
+    batch_size: 1
+    gradient_accumulation: 12
+    learning_rate: 0.0001
+    channel_gain_learning_rate: 0.0001
+    weight_decay: 0.0
+    gradient_clip_norm: 1.0
+    minimum_answer_types: 4
+    trainable_routes:
+      - output_projection
+      - channel_gain
+
+v27_screen: null
+
+v28_screen:
+  schema_version: 1
+  role: zero_output_post_v24_stack_calibrated_dense_sidecar
+  base_checkpoint: data_gemma4/checkpoints/gemma4_v24_shared_query/epoch_001
+  base_adapter_sha256: 45e0c5affa9cf556e29bab5de418dffb867817b703c848bc6828255347748d31
+  base_metadata_sha256: 216c501f5b248aa8f44e86198be3902d5f45d87774ad932056bafc95c4637e7b
+  base_scene_state_sha256: 690bd890bfda024dbb5c7d3c68087b8113bc3b8ee81dd6143c7eb2a884e7245b
+  base_global_scene_residual_state_sha256: ce3bf864eed6dd4a50f1b67296981e144d6a79e9cf192ad9a9230f2ae18208dc
+  base_signed_x_scene_residual_state_sha256: e8dabc69627f60723b89520b02dfee985e49b7b7e35fdd1213cc79f7b8164f58
+  calibrated_bridge: reports/gemma4/artifacts/v26_dense_alignment_bridge.safetensors
+  calibrated_bridge_sha256: 3340c453ded5152775e34e6e40ccb7e97dda1d7201e7321ff15c408edf92a83a
+  calibrated_state_sha256: 5c8721fd1ff789b7a8a55e82f31fd7faae54b8114616d3a29efd8605190bad6e
+  dense_alignment_parameter_count: 24576
+  dense_alignment_application_mode: coverage_sidecar
+  dense_alignment_sidecar_scale: 0.0
+  dense_sidecar_adapter_parameter_count: 604416
+  dense_sidecar_adapter_initial_state_sha256: fd8abd78bed2d04ac2f83d70564028285c361729c62591a05e3eddcbb8794d02
+  update_zero_requires:
+    color_full_vocab_sides: 12
+    mirror_full_vocab_sides: 10
+  stage_a_selection_requires:
+    color_full_vocab_sides: 12
+    mirror_full_vocab_sides: 10
+    maximum_relative_prefix_rms_drift: 0.10
+    minimum_prefix_cosine: 0.995
+  zero_output_equivalence:
+    verified: true
+    base: loaded_v24_post_signed_x_scene_tokens
+    question_dependent_scene_processing: false
+    all_scene_slots_accounted: true
+    all_voxels_covered: true
+    application_order: after_global_and_signed_x_before_prefix_composer
+
+experiment:
+  role: zero_output_learned_post_stack_dense_sidecar_v28
+  question_dependent_scene_processing: false
+  question_dependent_retrieval: false
+  runtime_oracle_access: false
+  runtime_category_strings: false
+  runtime_text_prototypes: false
+  all_voxels_transformed: true
+  base_semantic_path_modified_at_initialization: false
+  dense_sidecar_adapter_trainable_parameter_count: 604416

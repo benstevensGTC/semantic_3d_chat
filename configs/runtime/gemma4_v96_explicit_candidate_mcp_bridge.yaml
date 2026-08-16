@@ -1,0 +1,19 @@
+v96_candidate_mcp_bridge:
+  schema_version: 96
+  artifact: gemma4_v96_explicit_candidate_mcp_bridge_v1
+  mode: explicit_candidate_only_not_default
+  candidate_hook: configs/runtime/gemma4_v96_explicit_candidate_hook.yaml
+  atlas_control_checkpoint: data_gemma4/runtime/checkpoints/gemma4_v75_nll_control_release_v1
+  atlas_probe_bank: reports/gemma4/artifacts/v75_fixed_atlas_historical_internal_v1/probe_bank
+  action_transport: official_python_mcp_sdk_stdio
+  numeric_tool_outputs_only: true
+  full_memory_recompiled_before_map_commit: true
+  require_authenticated_pass_evidence: true
+  require_authenticated_deferred_final_pass: true
+  require_authenticated_runtime_leakage_smoke: true
+  require_promoted_runtime_release_verification: true
+  require_explicit_candidate_flag: true
+  default_runtime_pointer_modified: false
+  runtime_promotion_authorized: false
+  direct_v96_answer_robot_tokens_authenticated: false
+  environmental_text_inputs: []

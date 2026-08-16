@@ -1,0 +1,107 @@
+_base_: gemma_waypoint_policy_operator_dagger_v11.yaml
+
+# V12 preserves every V4--V11 row and adds two exact, training-only corrections
+# from sealed V11 live evidence: STOP immediately after the successful chair
+# approach, plus a first-rejection lap recovery branch. Runtime still has no oracle,
+# target lookup, route planner, fallback, substitution, or deterministic STOP.
+gemma_waypoint_traces:
+  history_parameterization: selected_action_parameters_goal_progress_v2
+  history_feature_dim: 16
+  profiles:
+    operator:
+      # Append to—not replace—the six inherited authenticated lap sources.
+      successor_live_failure_dagger_augmentations:
+        - enabled: true
+          report_path: reports/gemma4/metrics/gemma_waypoint_dagger_v11_live_acceptance.json
+          report_sha256: ef756eca81f4da644cbe8728ec9c005ad484967c68e87f1369d2a9ad08bcfc39
+          scene_id: scene_000001
+          instruction: Do a lap around the room.
+          initial_pose_xy_yaw: [-0.5, -0.25, -90.0]
+          checkpoint_sha256: dcc8eb080c2a418d2ae1b6de8fc4665387ccf90f56f2add3bb1873a998606368
+          scene_prefix_sha256: 52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95
+          first_rejection_step: 52
+          first_rejection_error_code: E_MODEL_COLLISION
+          failed_target_xy_m: [1.4742031455556566, -0.08804275167477256]
+          failed_target_tolerance_m: 0.000001
+          route_direction: clockwise
+          resume_waypoint_index: 29
+          maximum_total_decisions: 128
+          minimum_path_length_m: 5.0
+          minimum_abs_winding_area_m2: 0.5
+          maximum_return_error_m: 0.35
+      additional_live_object_goal_dagger_augmentations:
+        - enabled: true
+          runtime_report_path: reports/gemma4/metrics/gemma_waypoint_dagger_v11_approach_chair_runtime.json
+          runtime_report_sha256: a853478a05e07ef5e1b8acec14f014fec41172dcf676ac8eeb8a30e46ee52aad
+          score_report_path: reports/gemma4/metrics/gemma_waypoint_dagger_v11_approach_chair_score.json
+          score_report_sha256: a757800363e06789665504bfc91d91f427fd1f8c95ef12720d86eeb6f7ab31d5
+          scene_id: scene_000001
+          goal_id: approach_chair
+          instruction: Move close to the chair, then stop.
+          initial_pose_xy_yaw: [-0.5, -0.25, -90.0]
+          checkpoint_sha256: dcc8eb080c2a418d2ae1b6de8fc4665387ccf90f56f2add3bb1873a998606368
+          scene_prefix_sha256: 52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95
+          correction_decision_step: 7
+          observed_model_action: move_to
+          observed_action_accepted: false
+          expected_pose_xy_yaw: [-1.3479610430683904, -0.01765689076636459, 67.99934768676758]
+          expected_input_sha256: e3fefe1dd9d1cd43364715ee9f4b4e25ce3ea72028abab6ac23ef597840fd190
+          expected_expert_first_action: STOP
+          stop_position_neighborhood_offsets_m:
+            - [-0.015, 0.0]
+            - [0.015, 0.0]
+            - [0.0, -0.015]
+            - [0.0, 0.005]
+          target_category: chair
+          target_instance_id: i_000101
+          maximum_total_decisions: 32
+          minimum_center_progress_m: 0.25
+          maximum_bbox_standoff_m: 0.60
+
+gemma_waypoint_policy:
+  trace_dataset: data_gemma4/training/gemma_waypoint_policy_v2_operator_dagger_v12
+  hidden_cache: data_gemma4/training/gemma_waypoint_policy_v2_operator_dagger_v12_runtime_aligned_hidden_branch_refit_v2
+  checkpoint_output: data_gemma4/checkpoints/gemma_waypoint_policy_v2_operator_dagger_v12_runtime_aligned
+  history_dim: 16
+  history_parameterization: selected_action_parameters_goal_progress_v2
+  # Warm-start the last policy that passed the authenticated live lap.  The
+  # V11 seven-row chair repair fit its new labels but drifted enough on shared
+  # numeric outputs to destroy closed-loop lap behavior.  V12 therefore
+  # authenticates every V10 row and explicitly retains V10's action logits,
+  # waypoints, and headings while up-weighting only the 37 post-V10 rows.
+  retention_reference_checkpoint: data_gemma4/checkpoints/gemma_waypoint_policy_v2_operator_dagger_v10_runtime_aligned
+  retention_reference_trace_dataset: data_gemma4/training/gemma_waypoint_policy_v2_operator_dagger_v10
+  # The generic 200-epoch joint phase caused the measured V11/V12 numeric
+  # regressions. Start from the authenticated V10 policy and let each branch
+  # pass its own deterministic repair and retention gates instead.
+  retention_joint_training_epochs: 0
+  retention_freeze_input_norm: true
+  retention_new_sample_weight: 32.0
+  retention_logit_weight: 1.0
+  retention_waypoint_weight: 20.0
+  retention_heading_weight: 32.0
+  retention_minimum_shared_action_agreement: 1.0
+  retention_minimum_new_action_accuracy: 1.0
+  # The deterministic minimum-drift linear feasibility solve proves that all
+  # 37 new actions plus all 7,068 retained actions require RMSE 0.242962 at a
+  # positive 0.001 logit margin.  The previous 0.20 heuristic was therefore
+  # mutually incompatible with the exact action gates; 0.25 is the narrowest
+  # practical preregistered bound above the measured convex optimum.
+  retention_maximum_shared_centered_logit_rmse: 0.25
+  action_constrained_refit_margin: 0.001
+  action_constrained_refit_covariance_ridge: 0.000000001
+  action_constrained_refit_feasibility_tolerance: 0.0000001
+  action_constrained_refit_shared_cut_iterations: 16
+  waypoint_branch_refit_enabled: true
+  waypoint_branch_refit_steps: 1000
+  waypoint_branch_refit_learning_rate: 0.0003
+  waypoint_branch_refit_weight_decay: 0.0001
+  waypoint_branch_refit_gradient_clip_norm: 1.0
+  waypoint_branch_refit_new_error_tolerance_m: 0.025
+  waypoint_branch_refit_minimum_new_within_tolerance_fraction: 1.0
+  retention_maximum_shared_waypoint_drift_m: 0.025
+  retention_maximum_shared_heading_drift_degrees: 1.0
+  action_refit_max_iter: 500
+  action_refit_learning_rate: 0.5
+  action_refit_l2_weight: 0.00001
+  minimum_training_action_accuracy: 0.995

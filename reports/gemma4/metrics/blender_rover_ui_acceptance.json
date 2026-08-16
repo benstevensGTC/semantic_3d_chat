@@ -1,0 +1,50 @@
+{
+  "schema": "semantic_3d_chat.blender_rover_ui_acceptance.v1",
+  "passed": true,
+  "scene_id": "scene_000001",
+  "verified_at_local": "2026-08-15T19:04:08-04:00",
+  "verification_method": "computer_use_visual_inspection_plus_loopback_api",
+  "blender_version": "5.2.0 LTS",
+  "backend_url": "http://127.0.0.1:8770",
+  "visible_ui_checks": {
+    "real_3d_furnished_room_visible": true,
+    "toy_rover_visible_in_3d_viewport": true,
+    "continuous_point_map_overlay_visible": true,
+    "high_level_goal_field_visible": true,
+    "direct_driving_controls_absent": true,
+    "scrollable_transcript_visible": true,
+    "scene_token_shape_hash_and_norm_visible": true,
+    "rover_motion_animated": true,
+    "trajectory_visible": true,
+    "completed_status_visible": true
+  },
+  "goal": "do a lap around the room",
+  "result": {
+    "visual_steps": 47,
+    "path_length_m": 19.15579347825883,
+    "return_to_start_error_m": 0.0,
+    "action_count": 47,
+    "map_version": 0,
+    "scan_count": 0,
+    "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95"
+  },
+  "continuous_memory": {
+    "source_voxels": 74699,
+    "human_overlay_sample_points": 3827,
+    "semantic_feature_dim": 3072,
+    "scene_tensor_shape": [1, 258, 1536],
+    "active_tensor_shape": [1, 262, 1536],
+    "all_runtime_voxels_encoded": true,
+    "camera_control_input": false
+  },
+  "runtime_loaded_file_audit": {
+    "loaded_file_count": 147,
+    "forbidden_access_count": 0,
+    "passed": true
+  },
+  "evidence": {
+    "in_motion_screenshot": "reports/gemma4/figures/blender_rover_patrol_in_motion.jpeg",
+    "completed_screenshot": "reports/gemma4/figures/blender_rover_patrol_complete.jpeg",
+    "numeric_acceptance": "reports/gemma4/metrics/semantic_goal_live_acceptance.json"
+  }
+}

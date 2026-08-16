@@ -1,0 +1,81 @@
+{
+  "count": {
+    "accuracy": null,
+    "examples": 0,
+    "mean_absolute_error": null,
+    "prediction_coverage": null
+  },
+  "counterfactual": {
+    "changed_when_expected_rate": null,
+    "eligible_pairs": 0,
+    "expected_change_pairs": 0,
+    "invariant_pairs": 0,
+    "invariant_when_expected_rate": null,
+    "malformed_pair_groups": 2,
+    "pair_accuracy": null
+  },
+  "examples": [
+    {
+      "answer_type": "support",
+      "coordinate_error_m": null,
+      "list_order_insensitive": true,
+      "normalized_exact": true,
+      "prediction_present": true,
+      "question_id": "q_000045",
+      "scene_id": "scene_000019"
+    },
+    {
+      "answer_type": "presence",
+      "normalized_exact": true,
+      "prediction_present": true,
+      "presence_correct": true,
+      "question_id": "q_000080",
+      "scene_id": "scene_000019"
+    }
+  ],
+  "extra_prediction_count": 0,
+  "grounding": {
+    "coverage": 0.0,
+    "mean_coordinate_error_m": null,
+    "median_coordinate_error_m": null,
+    "prediction_count": 0,
+    "rmse_coordinate_error_m": null,
+    "target_count": 1,
+    "within_0_25m_accuracy": null,
+    "within_0_50m_accuracy": null,
+    "within_1_00m_accuracy": null
+  },
+  "list_order_insensitive_accuracy": 1.0,
+  "matched_prediction_count": 2,
+  "missing_prediction_count": 0,
+  "normalized_exact_accuracy": 1.0,
+  "per_type": {
+    "presence": {
+      "normalized_exact_accuracy": 1.0,
+      "total": 1
+    },
+    "support": {
+      "list_order_insensitive_accuracy": 1.0,
+      "normalized_exact_accuracy": 1.0,
+      "total": 1
+    }
+  },
+  "prediction_count": 2,
+  "predictions_path": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/gemma4/predictions/direct_multiview_diverse20_validation_smoke.jsonl",
+  "predictions_sha256": "bf5464b88f8b07d87de82bf3b212b065f8c1e24ee24892abe91aaac98bdcad60",
+  "presence": {
+    "f1": null,
+    "false_negative": 0,
+    "false_positive": 0,
+    "invalid_negative_predictions": 0,
+    "precision": null,
+    "recall": null,
+    "true_negative": 1,
+    "true_positive": 0
+  },
+  "reference_count": 2,
+  "references_path": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/gemma4/references/direct_multiview_diverse20_validation_smoke.jsonl",
+  "references_sha256": "12eb8c60866a15f83b2257df15eee13c00e82e8266053a3d8817c777c2364e15",
+  "schema_version": 1,
+  "spatial_relation_accuracy": null
+}

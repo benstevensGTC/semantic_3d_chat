@@ -1,0 +1,147 @@
+_base_: gemma4_diverse28_environmental_sidecar_v33.yaml
+
+# Conditional base-route repair after V33's immutable update-64 early-gate
+# failure.  The exact stopped V33 checkpoint is the source.  Gemma, every LoRA
+# bank, and all eight V33-learned environmental tensors remain frozen.
+training:
+  output_namespace: gemma4_v34_diverse28_base_surface
+  v34_base_surface:
+    enabled: true
+    optimizer_steps: 64
+    checkpoint_interval_steps: 8
+    broad_batch_size: 1
+    pair_units_per_step: 1
+    broad_exclude_expected_change: true
+    broad_nll_weight: 1.0
+    pair_language_nll_weight: 1.0
+    pair_margin_weight: 4.0
+    pair_margin: 0.5
+    separation_rank_weight: 2.0
+    separation_rank_margin: 0.01980262729617973
+    unrelated_stability_weight: 1.0
+    pair_ratio_cap: 1.25
+    pair_ratio_cap_weight: 1.0
+    source_trust_region_weight: 0.25
+    separation_rms_floor: 0.000001
+    base_norm_learning_rate: 0.000025
+    base_projection_learning_rate: 0.0001
+    weight_decay: 0.0
+    base_norm_gradient_clip_norm: 1.0
+    base_projection_gradient_clip_norm: 1.0
+    minimum_answer_types: 4
+
+v34_base_surface:
+  schema_version: 1
+  role: conditional_v33_u64_base_scene_surface_v34
+  engine: exact_v33_u64_base_only_true_microsteps_with_bounded_separation_rank
+  v33_terminal_gate_report: reports/gemma4/metrics/v33_update64_terminal_gate.json
+  v33_terminal_gate_report_sha256: 703525975c7a03a9b995c6f950dda92ed2945bd1857008196a1086e2a6c19a49
+  source_checkpoint: data_gemma4/checkpoints/gemma4_v33_diverse28_environmental_sidecar/update_064
+  source_optimizer_step: 64
+  source_file_sha256:
+    adapter.safetensors: 32c071d7acca0e52f8ae4c3dee8cba83319d67b184bbb3ab9957a6f6c4fcf987
+    metadata.json: ef97dfc3415eb4cfbdf30fe952e85db5ea4c54e4dec896a40725fb41fd787c91
+    runtime_metadata.json: fe8df1c8c052ac50899eb19952f96b74ac691780e20b604ba4e11072db32e168
+    optimizer.pt: 845aa42380b5c8c575162cb003fcadc7761fd615071b9dab71d9da4a85ba3d09
+  source_v33_config_sha256: e920d28da8ab0abc3c0ab2c4ad812a2743d1894b769c6302097ac41c31da3905
+  source_v33_schedule_sha256: 90b7c3b337f573b47a75ed3faefc915eacd98c9ef11b572ff3c45c4166fc9590
+  train_scene_ids:
+    - scene_000011
+    - scene_000012
+    - scene_000013
+    - scene_000014
+    - scene_000015
+    - scene_000016
+    - scene_000017
+    - scene_000018
+    - scene_000031
+    - scene_000032
+    - scene_000033
+    - scene_000034
+    - scene_000035
+    - scene_000036
+    - scene_000037
+    - scene_000038
+  validation_scene_ids:
+    - scene_000019
+    - scene_000020
+    - scene_000021
+    - scene_000022
+    - scene_000023
+    - scene_000024
+  deferred_final_scene_ids:
+    - scene_000025
+    - scene_000026
+    - scene_000027
+    - scene_000028
+    - scene_000029
+    - scene_000030
+  train_question_count: 384
+  validation_question_count: 216
+  train_changed_pair_unit_count: 25
+  validation_changed_pair_unit_count: 12
+  optimizer_steps: 64
+  checkpoint_interval_steps: 8
+  saved_optimizer_steps: [0, 8, 16, 24, 32, 40, 48, 56, 64]
+  exact_balanced_pair_recurrence_minimum: 2
+  exact_balanced_pair_recurrence_maximum: 3
+  exact_pair_units_with_third_recurrence: 14
+  trainable_parameter_names:
+    - base_norm.weight
+    - base_norm.bias
+    - base_projection.weight
+    - base_projection.bias
+  exact_trainable_parameter_count: 199808
+  frozen_v33_parameter_names:
+    - output_projection.weight
+    - channel_gain
+    - sidecar_norm.weight
+    - sidecar_norm.bias
+    - sidecar_projection.weight
+    - sidecar_projection.bias
+    - position_projection.weight
+    - position_projection.bias
+  frozen_v33_parameter_count: 404608
+  gemma_decoder_frozen: true
+  all_lora_banks_frozen: true
+  every_v33_learned_tensor_frozen: true
+  exact_update0_source_tensors: true
+  exact_update0_source_prefixes: true
+  exact_update0_source_validation_nll: true
+  separation_uses_training_scenes_only: true
+  separation_uses_question_or_answer_text: false
+  separation_uses_oracle_environment_inputs: false
+  separation_baselines_fixed_at_update0: true
+  separation_unique_physical_changed_pair_count: 8
+  separation_all_nonchanged_train_scene_pair_count: 112
+  separation_all_pair_sets_fixed_before_training: true
+  separation_reduction: separate_log_ratio_means_over_8_changed_and_112_nonchanged_pairs
+  separation_objective_bounded: true
+  inspect_every_saved_arm: true
+  early_gate_optimizer_step: 32
+  early_gate_changed_pair_selectivity_ratio_minimum: 1.02
+  early_gate_changed_pair_coverage_minimum: 6
+  early_gate_minimum_physical_pair_selectivity_ratio: 0.98
+  early_gate_unrelated_median_ratio_minimum: 0.9803921568627451
+  early_gate_unrelated_median_ratio_maximum: 1.02
+  early_gate_unrelated_p90_abs_log_ratio_maximum: 0.01980262729617973
+  early_gate_uses_training_scenes_only: true
+  development_training_changed_pair_selectivity_ratio_minimum: 1.02
+  development_training_changed_pair_coverage_minimum: 6
+  development_validation_weak_minus_unrelated_ratio_minimum: 0.005
+  development_each_weak_family_exceeds_unrelated: true
+  development_unrelated_ratio_minimum: 0.9803921568627451
+  development_unrelated_ratio_maximum: 1.02
+  development_nonmirror_teacher_complete_minimum: 1
+  development_changed_complete_pairs_minimum: 1
+  chat_promotion_changed_complete_pairs_minimum: 6
+  chat_promotion_requires_each_validation_family: true
+  chat_promotion_aggregate_exact_no_regression: true
+  old_color_full_vocab_sides_minimum: 12
+  old_mirror_full_vocab_sides_minimum: 10
+  old_controls_no_new_negatives: true
+
+experiment:
+  role: conditional_v33_u64_base_scene_surface_v34
+  Gemma_decoder_frozen: true
+  final_test_deferred: true

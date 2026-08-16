@@ -1,0 +1,274 @@
+{
+  "artifact": "gemma4_v86_scene1_demo_evaluation_v1",
+  "checkpoint_selection_after_scoring": false,
+  "config_sha256": "ddb7e8f4b02b9912f8adff88dab91868253912b2101d5c1484964740318ea929",
+  "cpu_preflight_sha256": "482e0d7c9cfc5f28264d53351af8082220aef3908d699286000a275ff65feffc",
+  "deferred_final_loaded": false,
+  "elapsed_seconds": 248.1980129168369,
+  "evaluation_predictions_path": "reports/gemma4/predictions/gemma4_v86_scene1_demo_evaluation.json",
+  "evaluation_predictions_sha256": "c7191eaf4f6e803902265581feaab8956606c833f0a613a9cf5e4c4de7e04dbf",
+  "fixed_checkpoint_selected_before_scoring": true,
+  "frozen_source": {
+    "adapter_sha256": "163ceb462bafe4b1d38099c07ca32bcc22944ad93917222b019e75634883fd8d",
+    "fresh_initial_state_sha256": "b5ec50969d4ce1d34fca9544248e208e48e74f03445c8efeea1c8e08202c4161",
+    "frozen_bank_count": 7,
+    "frozen_bank_state_sha256": {
+      "extension_v13": "4eb90fb9b0bea579d14cfcb0f61ebd5b6d566fd600bd3d5e1bfe5177a39e1b34",
+      "extension_v23_shared_kv": "5c9233bd96b381e2f63443f8a739a868a21997b28061d90fb407a46d9de2d4cb",
+      "extension_v24_shared_query": "6db2807476506b947bbaf01837490e97c12e57b1906bab671ef7c82ed36d6399",
+      "extension_v28_stage_b_query": "ac90fc60e944b792d41fc18a21daca3ed87a7ec634a7a5c8594339371b0631e9",
+      "extension_v30_joint_pair_query": "050706c300e6fb0ac8e4cc02e26c565b54a9a89505104302d4ffcedc02124c64",
+      "inherited_v12": "dec768bed654c8c4e16da0318857543ad54d8f5f68f4d24a9a87cd19ec706594",
+      "v85_strict_multiscene_bridge": "f31b8f99f77f1b7b92dafd74220e5e12ccfa35cbc8630a6d7640f2fe1f93c581"
+    },
+    "runtime_metadata_sha256": "093d43c80722dd00cd3f7347d55451eca1cc45e416f6bda220157f18024ce0bd"
+  },
+  "held_out_generalization_claim": false,
+  "leakage": {
+    "loaded_file_count": 81,
+    "loaded_file_inventory_sha256": "1f8bda1418a847f961bbd4572c235d0794e6734567a1ff02a0a6203c5390d647",
+    "oracle_loaded": false,
+    "protected_read_count": 0,
+    "protected_reads": []
+  },
+  "metrics": {
+    "answer_token_mean_nll": 0.39011235630639113,
+    "canonical_accuracy_by_answer_type": {
+      "attribute": {
+        "accuracy": 0.2222222222222222,
+        "correct": 4,
+        "total": 18
+      },
+      "count": {
+        "accuracy": 1.0,
+        "correct": 9,
+        "total": 9
+      },
+      "metric": {
+        "accuracy": 0.0,
+        "correct": 0,
+        "total": 1
+      },
+      "presence": {
+        "accuracy": 0.8636363636363636,
+        "correct": 19,
+        "total": 22
+      },
+      "spatial_relation": {
+        "accuracy": 0.627906976744186,
+        "correct": 54,
+        "total": 86
+      },
+      "support": {
+        "accuracy": 0.0,
+        "correct": 0,
+        "total": 2
+      }
+    },
+    "canonical_type_specific": {
+      "accuracy": 0.6231884057971014,
+      "correct": 86,
+      "total": 138
+    },
+    "causal_control": {
+      "canonical_prediction_changes": 2,
+      "mean_correct_memory_nll": 0.7155938322345415,
+      "mean_zero_minus_correct_nll": 1.4776708508531253,
+      "mean_zero_payload_nll": 2.193264683087667,
+      "records": [
+        {
+          "answer_type": "presence",
+          "correct_mean_nll": 0.09413465112447739,
+          "correct_memory_sha256": "a428f5147c815839ae7315a0adab952ab210814fb21dcdc5bf13b167f28a6e37",
+          "correct_prediction": "yes",
+          "question_id": "q_000080",
+          "reference_answer": "yes",
+          "scene_id": "scene_000001",
+          "zero_layout_audit": {
+            "answer_only_supervision": true,
+            "answer_tokens": 2,
+            "control_tokens": 0,
+            "memory_supplied_directly": true,
+            "memory_tokens": 738,
+            "prepared_tokens": 799,
+            "prompt_tokens": 59,
+            "question_derived_environmental_tokens": 0
+          },
+          "zero_mean_nll": 1.4499186277389526,
+          "zero_minus_correct_nll": 1.3557839766144753,
+          "zero_payload_memory_sha256": "c455ed77bf3fe841a4e360e89c036ffb4e8cdb8935c97d767f556d25a9f790d8",
+          "zero_prediction": "no"
+        },
+        {
+          "answer_type": "attribute",
+          "correct_mean_nll": 0.40678927302360535,
+          "correct_memory_sha256": "a428f5147c815839ae7315a0adab952ab210814fb21dcdc5bf13b167f28a6e37",
+          "correct_prediction": "red",
+          "question_id": "q_000108",
+          "reference_answer": "red",
+          "scene_id": "scene_000001",
+          "zero_layout_audit": {
+            "answer_only_supervision": true,
+            "answer_tokens": 2,
+            "control_tokens": 0,
+            "memory_supplied_directly": true,
+            "memory_tokens": 738,
+            "prepared_tokens": 797,
+            "prompt_tokens": 57,
+            "question_derived_environmental_tokens": 0
+          },
+          "zero_mean_nll": 1.5957753658294678,
+          "zero_minus_correct_nll": 1.1889860928058624,
+          "zero_payload_memory_sha256": "c455ed77bf3fe841a4e360e89c036ffb4e8cdb8935c97d767f556d25a9f790d8",
+          "zero_prediction": "inconclusive"
+        },
+        {
+          "answer_type": "spatial_relation",
+          "correct_mean_nll": 1.645857572555542,
+          "correct_memory_sha256": "a428f5147c815839ae7315a0adab952ab210814fb21dcdc5bf13b167f28a6e37",
+          "correct_prediction": "left",
+          "question_id": "q_000014",
+          "reference_answer": "right",
+          "scene_id": "scene_000001",
+          "zero_layout_audit": {
+            "answer_only_supervision": true,
+            "answer_tokens": 2,
+            "control_tokens": 0,
+            "memory_supplied_directly": true,
+            "memory_tokens": 738,
+            "prepared_tokens": 801,
+            "prompt_tokens": 61,
+            "question_derived_environmental_tokens": 0
+          },
+          "zero_mean_nll": 3.53410005569458,
+          "zero_minus_correct_nll": 1.888242483139038,
+          "zero_payload_memory_sha256": "c455ed77bf3fe841a4e360e89c036ffb4e8cdb8935c97d767f556d25a9f790d8",
+          "zero_prediction": "left"
+        }
+      ],
+      "row_count": 3
+    },
+    "generic_smoke": {
+      "accuracy": 1.0,
+      "correct": 3,
+      "records": [
+        {
+          "exact_correct": true,
+          "expected": "yes",
+          "normalized_prediction": "yes",
+          "prediction": "yes",
+          "question": "Is there a chair?",
+          "question_id": "v86_smoke_00",
+          "scene_memory_sha256": "a428f5147c815839ae7315a0adab952ab210814fb21dcdc5bf13b167f28a6e37"
+        },
+        {
+          "exact_correct": true,
+          "expected": "red",
+          "normalized_prediction": "red",
+          "prediction": "red",
+          "question": "What color is the bowl?",
+          "question_id": "v86_smoke_01",
+          "scene_memory_sha256": "a428f5147c815839ae7315a0adab952ab210814fb21dcdc5bf13b167f28a6e37"
+        },
+        {
+          "exact_correct": true,
+          "expected": "left",
+          "normalized_prediction": "left",
+          "prediction": "left",
+          "question": "Is the bowl left or right of the chair?",
+          "question_id": "v86_smoke_02",
+          "scene_memory_sha256": "a428f5147c815839ae7315a0adab952ab210814fb21dcdc5bf13b167f28a6e37"
+        }
+      ],
+      "total": 3
+    },
+    "model_acceptance_gate_passed": false,
+    "model_acceptance_gates": {
+      "all_scene1_canonical_accuracy_at_least_0_80": false,
+      "causal_correct_memory_mean_nll_below_zero_payload": true,
+      "causal_prediction_change_at_least_1": true,
+      "exact_prefix_hash_invariance": true,
+      "exact_total_environment_input_invariance": true,
+      "exact_training_row_count_138": true,
+      "generic_live_smoke_at_least_2_of_3": true,
+      "protected_read_count_zero": true
+    },
+    "runtime_file_audit_gate_pending": false,
+    "runtime_oracle_unavailable_gate_pending": false,
+    "runtime_promotion_authorized": false,
+    "strict_normalized_exact": {
+      "accuracy": 0.6231884057971014,
+      "correct": 86,
+      "total": 138
+    }
+  },
+  "official_test_loaded": false,
+  "official_validation_loaded": false,
+  "oracle_loaded": false,
+  "preregistered_gates": {
+    "all_scene1_canonical_accuracy_minimum": 0.8,
+    "causal_correct_memory_mean_nll_below_zero_payload": true,
+    "causal_prediction_change_minimum": 1,
+    "exact_prefix_hash_invariance_required": true,
+    "exact_total_environment_input_invariance_required": true,
+    "exact_training_row_count_required": 138,
+    "forbidden_runtime_read_count_maximum": 0,
+    "live_smoke_minimum_correct": 2,
+    "live_smoke_questions": [
+      {
+        "expected": "yes",
+        "question": "Is there a chair?"
+      },
+      {
+        "expected": "red",
+        "question": "What color is the bowl?"
+      },
+      {
+        "expected": "left",
+        "question": "Is the bowl left or right of the chair?"
+      }
+    ],
+    "live_smoke_total": 3,
+    "oracle_physically_unavailable_during_runtime_required": true,
+    "runtime_promotion_only_after_all_gates": true
+  },
+  "preregistration_sha256": "df22b1dae791904136808687a780e7d7f9802be6fb478d62d3e20251b3c24c55",
+  "runtime_file_audit_gate_pending": false,
+  "runtime_oracle_unavailable_gate_pending": false,
+  "runtime_promotion_authorized": false,
+  "scene_memory": {
+    "compiled_before_question_tokenization": true,
+    "prefix_hash_invariant": true,
+    "prefix_sha256_after": "a428f5147c815839ae7315a0adab952ab210814fb21dcdc5bf13b167f28a6e37",
+    "prefix_sha256_before": "a428f5147c815839ae7315a0adab952ab210814fb21dcdc5bf13b167f28a6e37",
+    "question_conditioned_environmental_readout": false,
+    "question_dependent_retrieval": false,
+    "question_dependent_scene_processing": false,
+    "question_derived_environmental_tokens": 0,
+    "same_prefix_reused_for_every_question": true,
+    "shape": [
+      1,
+      738,
+      1536
+    ],
+    "zero_payload_prefix_sha256_after": "c455ed77bf3fe841a4e360e89c036ffb4e8cdb8935c97d767f556d25a9f790d8",
+    "zero_payload_prefix_sha256_before": "c455ed77bf3fe841a4e360e89c036ffb4e8cdb8935c97d767f556d25a9f790d8"
+  },
+  "schema_version": 86,
+  "source_hashes": {
+    "configs/runtime/gemma4_v85_strict_multiscene.yaml": "49d9595e6167fe352dc49f1ca363af396fe3d3be91d50cb430721bc74b130575",
+    "data/qa/train.jsonl": "ffa721d57849ade8fdd0811e3e1e62fe807200f710aec780dc4d3dcecd4fb0e0",
+    "data_gemma4/runtime/scene_memories/v81/scene_000001/memory.safetensors": "3427851432d8f2a3609b6205b18b8c0d9a0fcf68d8f3bf0c98c758ac64209ffb",
+    "data_gemma4/runtime/scene_memories/v81/scene_000001/runtime_metadata.json": "9ca43f9216106668afafe65007b1649621036735b512c07e330358bbeb0bcbcc",
+    "gemma_model_blob_sha256_identity": "2db5482b20d746879bb3ef79b5203e9075a2e2b98f54ec7c2f281c1477ddc550",
+    "reports/gemma4/artifacts/v85_strict_runtime_candidate/adapter.safetensors": "163ceb462bafe4b1d38099c07ca32bcc22944ad93917222b019e75634883fd8d",
+    "reports/gemma4/artifacts/v85_strict_runtime_candidate/runtime_metadata.json": "093d43c80722dd00cd3f7347d55451eca1cc45e416f6bda220157f18024ce0bd",
+    "reports/gemma4/metrics/v85_strict_runtime_equivalence_scene_000039.json": "e75373211d2fecb5e76b37f4901885bf039559ca45dbf1275b749fbf20320383",
+    "src/semantic_3d_chat/evaluation/evaluate_v86_scene1_demo.py": "955e7b88426e1717051d9040e43d4e74346acb8a32b3ae60a127a5128aac0ccc",
+    "src/semantic_3d_chat/evaluation/v86_scene1_demo_preflight.py": "624dd8e027bf22ebcb020270b52fcf83871e1c77752ed68b80ba0b7f24883b8b",
+    "src/semantic_3d_chat/training/train_v86_scene1_demo.py": "64311219d25e53e4fa96fa77f74bc5352a844d418545e94f6bd0f28947f5efb6"
+  },
+  "status": "model_gates_fail_not_runtime_promotable",
+  "training_report_sha256": "6bce76de06112fc0f11435c133e71eb245429addfc7772def1c2945eda68af63",
+  "v85_held_evidence_mutated": false
+}

@@ -1,0 +1,61 @@
+_base_: gemma4_diverse28_projected_gradient_v41_retry1.yaml
+
+# V44 is a bounded train-only pilot.  It deliberately widens the V41 surface
+# just enough to let the full-scene readout and the already learned layer-14
+# language interface co-adapt.  The immutable V43 terminal seal authorizes
+# this exact config, output namespace, optimizer, objective, and train-only
+# boundary; the trainer checks every authorization field before construction.
+training:
+  output_namespace: gemma4_v44_joint_scene_readout_l14_query
+  v44_joint_scene_readout:
+    enabled: true
+    optimizer_steps: 16
+    checkpoint_steps: [0, 4, 8, 16]
+    broad_nll_weight: 0.25
+    pair_correct_nll_weight: 0.5
+    side_hinge_weight: 8.0
+    cross_prefix_flip_weight: 8.0
+    side_hinge_margin: 0.5
+    cross_prefix_flip_margin: 0.1
+    source_prefix_trust_weight: 0.001
+    source_prefix_trust_scale: 0.05
+    scene_readout_learning_rate: 0.000025
+    query_learning_rate: 0.00002
+    weight_decay: 0.0
+    gradient_clip_norm: 1.0
+
+v44_joint_scene_readout:
+  schema_version: 1
+  role: exact_v41_u0_joint_scene_readout_layer14_query_train_only_pilot
+  v43_terminal_report: reports/gemma4/metrics/v43_aggregate_projected_screen_terminal_gate.json
+  v43_terminal_report_sha256: 013fbe79ac42e842e83989e33f132b9ff3529746a8045feb212ded32e50a2cc2
+  source_checkpoint: data_gemma4/checkpoints/gemma4_v41_retry1_diverse28_projected_gradient_l14_query/update_000
+  source_file_sha256:
+    adapter.safetensors: b0bdceb7699e9d97467915c69186f433d3b0fac2b09144d38c3078afe1f70cb0
+    metadata.json: 331cda3f2ebc1539e8ee27ebbae398be5e19f3fd77d0aa20dde635d569e29d6d
+    runtime_metadata.json: 690e790b612e0b75323c1f27f7e9afe87243ccc1564c8cc690e86a442cffbfcd
+  source_full_tensor_state_sha256: 7b951c6d7ae4f7b50603159f0bc4dfb4d50b5b40f9325134d78d1de1dae87fc0
+  source_authorized_surface_state_sha256: b935c7e6ccceb1068f80e679b4159c6ca756f9f81868b954b93ac683e014f5a0
+  frozen_excluding_authorized_state_sha256: 31cb215cf0d1623886d4a79203c501912e66537021da53dd711124abdc2e36fa
+  authorized_parameter_names:
+    - block_cross_residual.w_o
+    - lora_banks.extension_v28_stage_b_query.adapters.1.lora_a
+    - lora_banks.extension_v28_stage_b_query.adapters.1.lora_b
+  authorized_parameter_shapes:
+    - [256, 1536]
+    - [4, 1536]
+    - [4096, 4]
+  scene_readout_parameter_count: 393216
+  query_parameter_count: 22528
+  total_trainable_parameter_count: 415744
+  optimizer: fresh_adamw_two_groups
+  validation_access_authorized: false
+  oracle_access_authorized: false
+  final_test_access_authorized: false
+  selector_execution_authorized: false
+  runtime_promotion_authorized: false
+
+experiment:
+  role: bounded_joint_scene_readout_layer14_query_v44
+  training_scenes_only: true
+  final_test_deferred: true

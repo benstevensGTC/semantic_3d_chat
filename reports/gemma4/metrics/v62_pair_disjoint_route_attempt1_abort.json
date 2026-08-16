@@ -1,0 +1,26 @@
+{
+  "artifact": "v62_pair_disjoint_route_training_attempt_abort",
+  "schema_version": 1,
+  "timestamp_utc": "2026-08-12T14:49:48Z",
+  "attempt": 1,
+  "status": "aborted_before_cross_validation_completion",
+  "reason": "training_only_optimizer_regression_required_best_state_retention",
+  "observations": {
+    "pair_000005_training_routes_exact_at_epoch": 1200,
+    "pair_000005_epoch_2400_minimum_signed_logit_margin": 1.7258092164993286,
+    "pair_000006_first_margin_three_epoch": 1381,
+    "pair_000007_training_routes_exact_at_epoch": 1200,
+    "pair_000007_epoch_2000_routes_exact": false,
+    "pair_000007_epoch_2000_minimum_signed_logit_margin": -3.2714526653289795,
+    "pair_000007_epoch_2200_routes_exact": true,
+    "pair_000007_epoch_2200_minimum_signed_logit_margin": 2.023258686065674
+  },
+  "corrective_action": "restore the deterministic best factorized-route state before fold evaluation",
+  "checkpoint_written": false,
+  "training_report_written": false,
+  "internal_validation_questions_loaded": false,
+  "scorer_references_loaded": false,
+  "oracle_loaded": false,
+  "fresh_development_loaded": false,
+  "deferred_final_loaded": false
+}

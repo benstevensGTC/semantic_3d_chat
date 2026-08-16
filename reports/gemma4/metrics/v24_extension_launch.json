@@ -1,0 +1,211 @@
+{
+  "audit_type": "v24_shared_query_extension_launch",
+  "authorized": true,
+  "config_path": "configs/experiments/gemma4_color_mirror_shared_query_v24.yaml",
+  "config_sha256": "82d5fee205842fb86133498eb4ac7765e61c22e7e7bc2745cfa6a2e36b9447f1",
+  "contract_sha256": "3922eaed356dffa9a46ee601135cceb3e5a68e81e459805c8ddb8664a4c8a996",
+  "control_plane_transition": {
+    "Makefile": "M",
+    "src/semantic_3d_chat/evaluation/v24_extension_controller.py": "A",
+    "tests/test_v24_extension_controller.py": "A"
+  },
+  "controller_source_provenance": {
+    "available": true,
+    "head_commit": "b52cd8750a3f3bcecfd0e9c9073e2e214da65d06",
+    "head_tree": "0c1a21c9a5ff3374badc6c75889f85dbae191b7a",
+    "is_clean": true,
+    "schema_version": 1,
+    "scope": "repository_excluding_generated_artifacts_v1",
+    "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "expected_branch_epochs": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "extension_checkpoint_root": "data_gemma4/checkpoints/gemma4_v24_shared_query_extension_u8",
+  "extension_namespace_absent_at_authorization": true,
+  "extension_output_namespace": "gemma4_v24_shared_query_extension_u8",
+  "final_selection_epochs": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "greedy_audit_authorized": false,
+  "microsteps_per_optimizer_update": 12,
+  "model_loaded": false,
+  "novel_epochs": [
+    5,
+    6,
+    7,
+    8
+  ],
+  "oracle_loaded": false,
+  "original_output_namespace": "gemma4_v24_shared_query",
+  "question_dependent_scene_processing": false,
+  "replay_epochs": [
+    2,
+    3,
+    4
+  ],
+  "replay_resume_epoch": 1,
+  "replay_target_epoch": 4,
+  "report_only": true,
+  "schema_version": 1,
+  "screen_decision": "screen_passed_extension_authorized_no_greedy_audit",
+  "screen_path": "reports/gemma4/metrics/v24_epoch_screen.json",
+  "screen_sha256": "146890f2106d473ee0f6ea72facf43c00243000900a5eef1fd4b68270113b002",
+  "selected_checkpoint": "data_gemma4/checkpoints/gemma4_v24_shared_query/epoch_001",
+  "selected_checkpoint_artifact_hashes": {
+    "adapter_sha256": "45e0c5affa9cf556e29bab5de418dffb867817b703c848bc6828255347748d31",
+    "metadata_sha256": "216c501f5b248aa8f44e86198be3902d5f45d87774ad932056bafc95c4637e7b",
+    "optimizer_sha256": "f1121353fc2c6b9239b8163390a0593832825abd9ff9f8dce4cce7f1cff99669"
+  },
+  "selected_epoch": 1,
+  "selected_history_sha256": "64c42155f8bbd48182e6680abcdb485c3775fbdef2f9d5fbcceb486b5cd18255",
+  "selected_initialization_provenance_sha256": "dc3d89274542a852e8df4d63aaaf7bec5885061284b5752abd34066d13e774a8",
+  "selected_new_bank_state_sha256": "6db2807476506b947bbaf01837490e97c12e57b1906bab671ef7c82ed36d6399",
+  "selected_optimizer_manifest": {
+    "all_state_tensors_sha256": "6ff36bb2913d186fdecc1193bdc9834716092c9a40c312996e3cafcdad8be099",
+    "expected_step": 1,
+    "group": {
+      "amsgrad": false,
+      "betas": [
+        0.9,
+        0.999
+      ],
+      "capturable": false,
+      "decoupled_weight_decay": true,
+      "differentiable": false,
+      "eps": 1e-08,
+      "foreach": false,
+      "fused": false,
+      "lr": 0.0003,
+      "maximize": false,
+      "name": "language_lora",
+      "params": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "weight_decay": 0.0
+    },
+    "optimizer": "AdamW",
+    "parameter_states": [
+      {
+        "exp_avg_nonzero": 0,
+        "exp_avg_sq_nonzero": 0,
+        "parameter_id": 0,
+        "role": "A",
+        "shape": [
+          4,
+          1536
+        ],
+        "state_sha256": "f694355d52e224b521ad60ff41cf7711004a6d73332cc41c024ce4c22dada6b8",
+        "step": 1.0
+      },
+      {
+        "exp_avg_nonzero": 8192,
+        "exp_avg_sq_nonzero": 8192,
+        "parameter_id": 1,
+        "role": "B",
+        "shape": [
+          2048,
+          4
+        ],
+        "state_sha256": "f3d25339ccad42378bfcf4ecd83d4808380c8d3d546281abde255d7214b1bf74",
+        "step": 1.0
+      },
+      {
+        "exp_avg_nonzero": 0,
+        "exp_avg_sq_nonzero": 0,
+        "parameter_id": 2,
+        "role": "A",
+        "shape": [
+          4,
+          1536
+        ],
+        "state_sha256": "f694355d52e224b521ad60ff41cf7711004a6d73332cc41c024ce4c22dada6b8",
+        "step": 1.0
+      },
+      {
+        "exp_avg_nonzero": 16384,
+        "exp_avg_sq_nonzero": 16384,
+        "parameter_id": 3,
+        "role": "B",
+        "shape": [
+          4096,
+          4
+        ],
+        "state_sha256": "62b1d0734a74fcb9d25dcef5e9f214a676c4f49532be8878a4e04cf77d0afecb",
+        "step": 1.0
+      }
+    ]
+  },
+  "stage_b_authorized": false,
+  "target_optimizer_update": 8,
+  "trainer": {
+    "environment": {
+      "PYTHONPATH": "src"
+    },
+    "linked_ignored_inputs": [
+      "data/qa",
+      "data_gemma4/checkpoints",
+      "data_gemma4/features",
+      "data_gemma4/maps"
+    ],
+    "module": "semantic_3d_chat.training.train_adapter",
+    "novel_argv": [
+      "-m",
+      "semantic_3d_chat.training.train_adapter",
+      "--config",
+      "configs/experiments/gemma4_color_mirror_shared_query_v24.yaml",
+      "--resume",
+      "data_gemma4/checkpoints/gemma4_v24_shared_query_extension_u8/epoch_004",
+      "--output-namespace",
+      "gemma4_v24_shared_query_extension_u8",
+      "--epochs",
+      "8"
+    ],
+    "novel_resume": "data_gemma4/checkpoints/gemma4_v24_shared_query_extension_u8/epoch_004",
+    "novel_target_epochs": 8,
+    "python_executable": ".venv-gemma4/bin/python",
+    "replay_argv": [
+      "-m",
+      "semantic_3d_chat.training.train_adapter",
+      "--config",
+      "configs/experiments/gemma4_color_mirror_shared_query_v24.yaml",
+      "--resume",
+      "data_gemma4/checkpoints/gemma4_v24_shared_query/epoch_001",
+      "--output-namespace",
+      "gemma4_v24_shared_query_extension_u8",
+      "--epochs",
+      "4"
+    ],
+    "replay_epochs": 4,
+    "replay_resume": "data_gemma4/checkpoints/gemma4_v24_shared_query/epoch_001",
+    "requires_detached_training_source_worktree": true,
+    "requires_exact_provenance_preflight": true,
+    "training_source_commit": "622dd3687756c0d6cebd332de860a7d01899bb8b",
+    "working_directory": "temporary_detached_training_source_worktree"
+  },
+  "training_source_provenance": {
+    "available": true,
+    "head_commit": "622dd3687756c0d6cebd332de860a7d01899bb8b",
+    "head_tree": "45c2126beedd0dc34c34fb1b876cb56a0ae50af3",
+    "is_clean": true,
+    "schema_version": 1,
+    "scope": "repository_excluding_generated_artifacts_v1",
+    "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

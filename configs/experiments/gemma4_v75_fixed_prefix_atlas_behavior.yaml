@@ -1,0 +1,49 @@
+# Model-bearing predictor contract. This config contains no training-QA,
+# answer-reference, oracle, official-validation, test, or deferred-final path.
+v75_fixed_atlas_behavior:
+  schema_version: 1
+  status: historical_internal_behavior_diagnostic_not_promoted
+  runtime_config: configs/runtime/gemma4_v54.yaml
+  base_checkpoint: data_gemma4/runtime/checkpoints/gemma4_v54_release_v1
+  source_controller: data_gemma4/runtime/checkpoints/gemma4_v75_nll_control_release_v1
+  source_prefix_cache: data_gemma4/scene_tokens/v56_question_control_full_prefixes
+  probe_bank: reports/gemma4/artifacts/v75_fixed_atlas_historical_internal_v1/probe_bank
+  predictor_questions: reports/gemma4/artifacts/v75_fixed_atlas_historical_internal_v1/predictor
+  scorer_forbidden_root: reports/gemma4/artifacts/v75_fixed_atlas_historical_internal_v1/scorer
+  scene_ids:
+    - scene_000039
+    - scene_000040
+    - scene_000041
+    - scene_000042
+    - scene_000043
+    - scene_000044
+    - scene_000045
+    - scene_000046
+    - scene_000047
+    - scene_000048
+    - scene_000049
+    - scene_000050
+    - scene_000051
+    - scene_000052
+    - scene_000055
+    - scene_000056
+  probe_count: 96
+  base_prefix_tokens: 258
+  atlas_prefix_tokens: 738
+  atlas_memory_tokens: 480
+  row_count: 16
+  layout: v2_atlas_then_all_256_base_latents
+  output_predictions: reports/gemma4/predictions/v75_fixed_atlas_historical_internal.json
+  scope:
+    historical_training_pool_only: true
+    pair_disjoint_smoke: true
+    scene_disjoint_smoke: true
+    question_disjoint_smoke: false
+    all_prefixes_compiled_before_questions: true
+    question_dependent_scene_processing: false
+    question_dependent_retrieval: false
+    official_validation_loaded: false
+    official_test_loaded: false
+    deferred_final_loaded: false
+    oracle_loaded: false
+    runtime_promotion_authorized: false

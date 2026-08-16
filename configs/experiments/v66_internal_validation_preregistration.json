@@ -1,0 +1,209 @@
+{
+  "artifact": "v66_always_on_internal_validation_preregistration",
+  "candidate_contract": {
+    "architecture": "always_on_teacher_basis_full_scene_control_v7",
+    "control_runtime_schema_version": 7,
+    "environment_latent_count": 256,
+    "environmental_text_inputs": [],
+    "expected_checkpoint_path": "data_gemma4/checkpoints/gemma4_v66b_allrow_always_on_control",
+    "expected_training_report_path": "reports/gemma4/metrics/v66b_allrow_always_on_distillation.json",
+    "question_dependent_scene_retrieval": false,
+    "saved_runtime_training_gate_required": true,
+    "training_preregistration_sha256": "9c47e43e85b66bcf07794ccc206783db6a40b18af8ad29407475f081e60930bf",
+    "training_report_artifact": "v66b_allrow_paired_opposite_pair_disjoint_training"
+  },
+  "controls": {
+    "all_256_environment_latents_must_influence_signature": true,
+    "all_rows_must_use_always_on_continuous_control": true,
+    "bidirectional_scene_swap_required": true,
+    "candidate_selection_after_reference_open_permitted": false,
+    "natural_prefix_and_signature_immutable_across_questions": true,
+    "reference_file_is_last_input_opened": true,
+    "retry_permitted": false,
+    "scene_swap_prefix_and_signature_must_match_injected_scene": true,
+    "paired_opposite_training_dependence_gate_required": true
+  },
+  "population": {
+    "changed_paired_units": 26,
+    "changed_sides": 52,
+    "natural_question_count": 384,
+    "paired_units": 192,
+    "scene_count": 16,
+    "scene_swap_question_count": 384
+  },
+  "schema": "semantic_3d_chat.v66.always_on_internal_validation_preregistration.v1",
+  "schema_version": 1,
+  "source_boundary": {
+    "baseline_lock_sha256": "ff9aef64c85e243219216638163ab308d8aaf6492be7209ae43775fecd283d66",
+    "parent_v62_preregistration_sha256": "a8bd6db776f772f579db2eaeb6dd817f46c23581807559c34870f6be22d6e1e7",
+    "question_key_inventory_sha256": "f36885e43100a5b7a3682ca38f7a06187c1f9b204095f5dc89b2e597e227ba27",
+    "questions_manifest_sha256": "078f65e1402e6e382a7bfdb2ad4b8a65d58e3164705a8a46cd222503aa201052",
+    "questions_sha256": "05bd92897b1888b92cfe7be651cc83f9b94cc4a36950c17cb58859ec73325167",
+    "scorer_records_sha256": "e140ea3a178d4f9bd8ac93c72148df73219ccac2867e5590ddd01f49e4d5b5a9",
+    "scorer_references_sha256": "4202e777ee57ab3f7da329f15589e56b8b0464b782fb4d856dd1a3281ff3115c"
+  },
+  "split": {
+    "internal_validation_pair_ids": [
+      "pair_000019",
+      "pair_000020",
+      "pair_000021",
+      "pair_000022",
+      "pair_000023",
+      "pair_000024",
+      "pair_000025",
+      "pair_000027"
+    ],
+    "internal_validation_scene_ids": [
+      "scene_000039",
+      "scene_000040",
+      "scene_000041",
+      "scene_000042",
+      "scene_000043",
+      "scene_000044",
+      "scene_000045",
+      "scene_000046",
+      "scene_000047",
+      "scene_000048",
+      "scene_000049",
+      "scene_000050",
+      "scene_000051",
+      "scene_000052",
+      "scene_000055",
+      "scene_000056"
+    ],
+    "pair_disjoint": true,
+    "scene_disjoint": true,
+    "training_pair_ids": [
+      "pair_000005",
+      "pair_000006",
+      "pair_000007",
+      "pair_000008",
+      "pair_000009",
+      "pair_000010",
+      "pair_000011",
+      "pair_000015",
+      "pair_000016",
+      "pair_000017",
+      "pair_000018",
+      "pair_000026"
+    ]
+  },
+  "status": "locked_before_v66_internal_validation_candidate_generation",
+  "thresholds": {
+    "internal_validation": {
+      "canonical_exact": {
+        "minimum": 192,
+        "total": 384
+      },
+      "changed_paired_unit_complete": {
+        "minimum": 10,
+        "total": 26
+      },
+      "changed_paired_unit_correct_direction": {
+        "minimum": 15,
+        "total": 26
+      },
+      "changed_side_exact": {
+        "minimum": 32,
+        "total": 52
+      }
+    },
+    "same_question_different_scene": {
+      "complete_unit_coverage": {
+        "minimum": 26,
+        "total": 26
+      },
+      "distinct_scene_prefix_hashes": {
+        "minimum": 26,
+        "total": 26
+      },
+      "distinct_scene_signature_hashes": {
+        "minimum": 26,
+        "total": 26
+      },
+      "question_text_identity": {
+        "minimum": 26,
+        "total": 26
+      }
+    },
+    "scene_swap": {
+      "answer_follows_injected_scene": {
+        "minimum": 32,
+        "total": 52
+      },
+      "bidirectional_unit_complete": {
+        "minimum": 10,
+        "total": 26
+      },
+      "opposite_prefix_hash_exact": {
+        "minimum": 52,
+        "total": 52
+      },
+      "opposite_signature_hash_exact": {
+        "minimum": 52,
+        "total": 52
+      },
+      "question_bytes_unchanged": {
+        "minimum": 52,
+        "total": 52
+      },
+      "swapped_side_coverage": {
+        "minimum": 52,
+        "total": 52
+      }
+    },
+    "training": {
+      "eligible_fold_total": 12,
+      "eligible_folds_with_exact_hit_minimum": 12,
+      "final_complete_unit_minimum": 36,
+      "final_complete_unit_total": 40,
+      "final_exact_minimum": 520,
+      "final_total": 576,
+      "held_changed_side_exact_minimum": 45,
+      "held_changed_side_total": 75,
+      "held_complete_unit_minimum": 15,
+      "held_complete_unit_total": 35,
+      "held_prediction_change_unit_minimum": 20,
+      "held_prediction_change_unit_total": 35,
+      "held_supported_exact_minimum": 300,
+      "held_supported_total": 571,
+      "held_unsupported_total": 5,
+      "per_type_minimum_exact": [
+        [
+          "attribute",
+          35
+        ],
+        [
+          "count",
+          58
+        ],
+        [
+          "metric",
+          3
+        ],
+        [
+          "orientation",
+          20
+        ],
+        [
+          "presence",
+          60
+        ],
+        [
+          "spatial_relation",
+          65
+        ],
+        [
+          "support",
+          35
+        ]
+      ],
+      "paired_opposite_follows_complete_minimum": 25,
+      "paired_opposite_follows_side_minimum": 60,
+      "paired_opposite_original_complete_maximum": 5,
+      "paired_opposite_original_exact_maximum": 20,
+      "paired_opposite_side_total": 80,
+      "paired_opposite_unit_total": 40
+    }
+  }
+}

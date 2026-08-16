@@ -6,6 +6,1001 @@ memory into a frozen local causal language model. The primary inference path nev
 receives an object list, caption, textual scene graph, simulator labels, or oracle
 metadata.
 
+## Executive status — 2026-08-16
+
+The complete local vertical slice is runnable, including strict static chat, the
+persistent embodied MCP process, and a Blender-native semantic-goal rover. V89 is
+the promoted static-chat runtime for `scene_000001`; the rover now uses a separate
+actual-Gemma closed-loop waypoint policy over the 258-token scene memory and four
+numeric robot-state tokens. The runtime-aligned waypoint DAgger V14 checkpoint
+is now the model-only operator default after passing fresh local lap, face-cube,
+approach-chair, and oracle-isolation checks. This is a working single-room
+vertical slice, not held-out rover generalization or project-wide final
+acceptance. The authoritative current snapshot is
+[`reports/final_report.md`](reports/final_report.md); the long experiment diary
+later in this README is retained as historical engineering evidence.
+
+- The selected integrated model is the locally cached
+  `google/gemma-4-E2B-it`, not a cloud API. One complete image pass produces a
+  48×48 field retaining 3072D float16 middle, late, and language-aligned features.
+- Exact RGB-D geometry passes: 6.27e-6 px reprojection RMSE and 1.03e-7 m depth
+  round-trip RMSE. The reference map fuses 301,056 observations into 74,699
+  occupied 5 cm voxels.
+- Across 17 development scenes and 221 semantic queries, zero-shot 3D
+  localization reaches 48.42% mean top-1 and 78.28% mean top-k; mean P@k is
+  43.17% versus an 8.09% random baseline.
+- The promoted strict V89 scene-one runtime supplies one immutable
+  `[1,738,1536]` memory directly to Gemma: 736 continuous environmental payload
+  tokens plus native BOI/EOI, compiled before the question and reused exactly.
+  It has zero question-derived environmental tokens and no retrieval or
+  question-conditioned scene readout. It scored 122/138 (88.41%) on its known,
+  trained scene-one development set and answered the finite operator smoke
+  `yes`, `red`, `left` at 3/3. All model, packaging, oracle-unavailable, and
+  runtime-isolation gates passed. This is a real runnable overfit/general-chat
+  proof, not held-out-scene evidence.
+- Separate V85 scene-disjoint development evidence is 214/384 (55.73%) versus a
+  62/384 (16.15%) answer-frequency baseline, with 8 prediction-changing paired
+  units. It demonstrates above-prior multiscene transfer, but it is internal
+  development evidence; the official test remains unopened. The earlier V54/V55
+  41.20% exact run is retained as historical base-checkpoint evidence.
+- V94's immutable full-profile post-hoc diagnostic scored 143/216 (66.20%) on
+  its six-scene primary arm versus 85/216 (39.35%) with the full scene zeroed.
+  That 26.85-point drop is real aggregate scene dependence. Exact binding is
+  still weak: paired wrong-scene memory scored 140/216 (only a 1.39-point drop),
+  and fully permuting all 736 interior scene tokens remained 143/216 despite
+  changing 57 outputs. XYZ and 3072D semantic-row shuffles reduced accuracy to
+  132/216 and 131/216; removing RGB improved it to 147/216. Normals were already
+  zero and viewpoint is not consumed, so neither is reported as a meaningful
+  control. This is a label-isolated, model-free-scored, terminal post-hoc
+  diagnostic—not preregistered promotion, held-out/generalization, official, or
+  final evidence. V94 remains unpromoted.
+- V95 completed its preregistered 40-scene strict-causal training run in
+  13,234.8 s on MPS with only a fresh 143,360-parameter bridge trainable. Its
+  sealed post-fixed-final known-development gate scored **167/216 (77.31%)**
+  primary, **36/216** with zero payload, **127/216** with all 736 interior tokens
+  permuted, and **164/216** with paired wrong-scene memory. Control-minus-primary
+  mean answer-NLL gaps were +2.296439, +0.616878, and +0.054092 respectively;
+  the changed-side paired-wrong gap was +0.486824. The decisive counterfactual
+  result remained **13/24 sides, 1/12 complete units, and 2/12 changed
+  predictions**, so the preregistered gate failed. V95 was not promoted,
+  deferred-final materialization remains locked, and V89 remains the default.
+  This is sealed known-development negative evidence—not held-out-final,
+  official, generalization, or final-acceptance evidence. The training, structured,
+  NLL, final-gate, and evidence-seal SHA-256 values are serialized in
+  [`current_metrics.json`](reports/metrics/current_metrics.json).
+- V96 completed 285 optimizer updates in 7,231 s and retained the same strict,
+  question-independent `[1,738,1536]` continuous scene input. Its separately
+  sealed, auth-v2 known-development evaluation scored **174/216 (80.56%)**:
+  attribute 25/48, count 41/42, metric 6/6, orientation 6/6, presence 40/42,
+  spatial relation 38/48, and support 18/24. Controls scored 36/216 with the
+  payload zeroed, 128/216 with all 736 interior tokens permuted, and 165/216
+  with paired wrong-scene memory. Primary, zero, permutation, and wrong-scene
+  mean answer NLL were 0.277091, 2.616119, 0.882842, and 0.329378; the changed-
+  side wrong-minus-primary margin was +0.470579. Counterfactuals reached 16/24
+  correct sides and 4/12 complete units, but only 5/12 prediction-changing units;
+  24/192 invariant sides also changed. Thus 19/21 gates passed and the two exact
+  failures were prediction changes (5, minimum 7) and invariant false changes
+  (24, maximum 20). The implementation seal, candidate attestation, prediction,
+  label-isolated scoring, and NLL audit recorded zero protected reads and bound
+  the local Gemma snapshot, adapter bank, source closure, memories, and outputs.
+  V96 was **not** promoted, no deferred-final scenes were materialized, and V89
+  remains the default. This is sealed known-development evidence, not held-out
+  final, official, generalization, or final-acceptance evidence.
+- The current model-only rover is waypoint DAgger V14, checkpoint SHA-256
+  `149f5e04de1d8305e642909443f03b96894edc3ece67e4500eacec8f5ca81e7c`.
+  On the fresh live lap, Gemma chose all 76 decisions (29 `FACE`, 46 `MOVE_TO`,
+  one `STOP`), traveled 18.715408 m, swept 4.272962 m², returned within
+  0.048733 m, and incurred zero rejected decisions. It also passed `Face the
+  cube, then stop.` in two decisions at 0.201562° yaw error and `Move close to
+  the chair, then stop.` with 0.263674 m center progress and 0.431456 m bounding-
+  box standoff; the latter took 16 model decisions and eight collision rejections.
+  These are live `scene_000001` results, not held-out evidence.
+- The corrected Blender operator path is deliberately different from the earlier
+  raw-command toy. It starts from the already scanned, complete 74,699-voxel map,
+  uses the immutable 256-latent base scene memory (`[1,258,1536]` including
+  boundaries), adds four continuous numeric robot-state tokens, and accepts only
+  outcome-level language from the user. On every closed-loop step the local
+  `google/gemma-4-E2B-it` decoder consumes that complete continuous prefix, the
+  raw goal, and numeric action history; learned heads select `MOVE_TO`, `FACE`, or
+  `STOP` and emit the waypoint or heading. Deterministic code only transforms the
+  exact model output into world coordinates, rejects unsafe proposals, and
+  executes accepted primitives. It never selects a destination, route, recovery
+  waypoint, heading, or synthetic stop. Rover-camera observations remain disabled
+  in this static-map mode. The prior V3 fallbacks and global patrol/between
+  planners are retained only as historical code and are not reachable from the
+  model-only default runtime. Direct UI motion controls are also disabled.
+- The offline oracle-only QA generator now covers object location, containment,
+  fixed-yaw viewpoint-relative reasoning, metric distance/comparisons, and
+  exact-ray-hit uncertainty. It gates ambiguous or duplicate-category questions,
+  retains structured grounding/reference coordinates, and withholds zero-pixel
+  objects from answerable rows. This is source plus synthetic-test coverage; no
+  existing QA split was regenerated and no model accuracy on these new families
+  is claimed yet.
+- V66b was an **enhanced readout ablation**: an always-on continuous
+  schema-7 controller over the immutable full 256-token scene prefix. It uses no
+  question-dependent retrieval and every scene latent contributes, but it appends
+  four scene-and-question-conditioned tokens. It is therefore not being claimed
+  as the strict fixed-environment-token primary. Its 576-row, 12-fold
+  pair-held-out training gate completed at 409/571 supported exact, but only
+  37/75 changed-side exact, 5/35 complete changed pairs, and 16/35 prediction
+  changes. It failed the locked scene-dependence gate, and the code correctly
+  published no checkpoint. No V66b held-out or leakage success is claimed.
+- V67 through V71 are now sealed negative results for that numeric scene-control
+  line. V70 changed only the global signature from the
+  first 8 to the first 32 fixed low-frequency DCT moments over all 256 scene
+  latents. Across 12 pair-held-out folds it reached 484/571 supported classes,
+  55/75 changed classes, 15/35 complete units, 16/35 prediction changes, and
+  51/70 positive own-over-opposite margins. It passed every locked gate except
+  prediction changes (minimum 20) and positive margins (minimum 53). This is an
+  honest falsification: continuous pair diagnostics improved, but discrete
+  scene-conditioned decisions did not. The fail-closed runner used no Gemma
+  generation, compiled no atlas, ran no full behavioral evaluation, and wrote no
+  checkpoint. V71 then tested the measured complement directly: independent
+  8-moment and 32-moment all-latent value branches, separate projections/trunks/
+  heads, a fold-trained bounded global fusion scalar, and the exact V69
+  `balanced_extrapolation_010` training arm. Across the same 12 isolated folds it
+  reached 489/571 supported classes, 57/75 changed classes, 17/35 complete units,
+  17/35 prediction changes, 52/70 positive margins, and 28/35 positive pair
+  deltas. It again missed only prediction changes (by 3) and positive margins
+  (by 1). The fusion stayed effectively equal-weight (0.499998–0.500006), so the
+  two independently trained paths did not learn a useful global preference.
+  V71 used 767.19 s of numeric fitting and 774.21 s wall time under its 1200 s
+  cap; no Gemma generation, atlas, full run, or checkpoint occurred.
+  Re-authenticate the immutable V71 preregistration, result, all fold sums,
+  source hashes, and absent checkpoint with `make gemma4-v71-authenticate`.
+- V72 tested question-adaptive fusion of the same complete 8- and 32-moment
+  all-latent branches. Its first pair-disjoint development fold used no held rows
+  or held teacher outputs during calibration, but adaptive fusion was worse than
+  the frozen 32-moment branch: 1/4 versus 2/4 complete units, 1/4 versus 2/4
+  prediction changes, and 5/8 versus 6/8 positive own-over-opposite margins. The
+  sealed terminal rule stopped the remaining folds and withheld the full numeric
+  screen, internal validation, Gemma generation, and checkpoint publication.
+  V72 is an authenticated development-negative mechanism test, not a model.
+- The separate fixed-prefix PLE-reader V1--V5 chain is now terminal negative
+  evidence. V1 failed a numerical smoke tolerance; V2 and V3 aborted before
+  optimizer construction; V4 completed 40 updates and V5 completed 80. V5
+  improved answer NLL from 3.235832 to 2.944323 and retained the text control,
+  but wrong-prefix positive sides regressed from 30/52 to 28/52 and complete
+  changed units from 12/26 to 9/26. Its locked gate therefore skipped greedy
+  evaluation and published no checkpoint. The 57--62 deferred and 25--30 final
+  scenes remained unopened.
+- The fixed-prefix upper-decoder reader V6 did not reach training. Its immutable
+  preregistration authorized one zero-update real-model MPS smoke, which failed
+  the byte-exact full-sequence-versus-answer-tail selected-logit equality gate in
+  12.81 s. It stopped before reader gradients, optimizer construction, training,
+  or checkpoint publication. The whole-execution audit recorded 233 unique files,
+  zero forbidden reads, and no deferred/final-QA access. The planned 96 updates
+  were never run, so V6 supplies no behavioral evidence for the reader.
+- V6.1 replaced that invalid byte-equality requirement with a preregistered
+  bounded objective-and-gradient comparison and consumed exactly one new
+  zero-update MPS smoke. Objective equivalence passed: raw logits differed by at
+  most 0.125 (RMS 0.000378110276), per-token NLL differed by 0, and maximum
+  Jensen-Shannon divergence was 1.63732948148244e-11. The correct, wrong-prefix,
+  and broad gradient comparisons passed individually, but their combined
+  first-schedule gradient failed: cosine 0.9998925988237569 was below 0.99999,
+  and relative L2 0.014655751591121162 exceeded 0.005. Its 1.000092 norm ratio
+  stayed in bounds and the full aggregate gradient was nonzero (L2 0.5059195),
+  so this is a bounded numerical-path mismatch—not a missing-gradient failure.
+  The fail-closed gate built no optimizer, ran no training, and published no
+  checkpoint. The audit recorded 240 files and zero forbidden reads. Exact
+  release, attempt, and terminal hashes are `4456ebd1…`, `ec462122…`, and
+  `099c1fa6…`.
+- V6.2 removed the disputed shape-specialized path and consumed one sealed,
+  exact-full-forward training attempt. It completed all 96 AdamW updates in
+  872.414 s. Validation answer NLL improved from 3.2358 to 1.9157 and retention
+  passed, but causal scene selectivity regressed: expanded positive margins fell
+  from 0.6647 to 0.5941, curated complete units fell from 12 to 11 of 26, and
+  orientation positive margins collapsed from 0.8571 to 0.1429. The locked gate
+  therefore skipped greedy evaluation and published no checkpoint. Its
+  whole-execution audit covered 246 loaded files with zero forbidden reads and no
+  deferred/final-scene access. Peak process RSS was 6.42 GB and reported MPS
+  driver allocation was 15.82 GB. Exact release and terminal hashes are
+  `c2cc4110…` and `e86b417d…`.
+- V6.3 moved the tiny trainable reader surface into Gemma's shared K/V attention
+  projections at physical layers 13--14. Its full-forward gradient screen passed,
+  then an eight-update, 40-pair-unit train-only pilot improved positive
+  wrong-prefix margins from 48/80 to 49/80, complete paired units from 16/40 to
+  18/40, and mean margin from 0.441833 to 0.447165. Retention stayed bounded at
+  mean KL 0.000341 with exact next-token top-1 agreement, and the 125-file audit
+  had zero forbidden reads and no oracle, validation, or deferred/final access.
+  This is a positive diagnostic only: it is non-disjoint, ran no validation or
+  generation, and published no runtime checkpoint. It authorized only a
+  pair-disjoint V6.4 train-only confirmation; that confirmation has now completed
+  and failed.
+- V6.4 held out 12 units from three complete physical pairs and all six associated
+  scenes, trained on 28 units from 18 disjoint scenes, and completed 12 exact
+  full-forward updates in 394.812 s. Training positive margins improved from
+  36/56 to 39/56 and complete units from 13/28 to 15/28, but the result did not
+  generalize: held complete units stayed 3/12, held mean margin fell by 0.016739,
+  and held margin softplus worsened by 0.011246. Those two locked gates failed.
+  Retention and its 126-file isolation audit passed with zero forbidden reads and
+  no protected inputs. The exact V6.3/V6.4 attention surface is now terminal: no
+  continuation, internal validation, generation, runtime promotion, or checkpoint
+  is authorized. The current static-reader blocker is causal pair-disjoint
+  generalization itself, not a pending run.
+- V73 and V74 are terminal negatives; V75 now has positive internal-development,
+  promoted-runtime, leakage-isolation, and official-validation evidence. V73's
+  full-scene cross-attention reader failed its numeric screen:
+  16.19% broad supported accuracy, 4% changed-side accuracy, and 0
+  prediction-change units, versus 21.93%, 16%, and 18 for frozen DCT-40. V74
+  passed all eight teacher-proxy numeric gates, but real local Gemma fell to 2/16
+  versus 6/16 for V54. Its bounded historical-train-only NLL repair lowered NLL
+  from 6.610632 to 3.855856 and raised train exact sides from 2/18 to 11/18, yet
+  the untouched smoke stayed 6/16—tied with both V54 and wrong-scene—so V74 was
+  rejected. V75's nonlinear reader also passed every numeric proxy gate and its
+  initial smoke was only 4/16 versus 5/16 wrong-scene. The subsequent V75 NLL
+  candidate (`d0127553…`) first reached 9/16 versus 6/16 for V54 in its smoke.
+  Its complete 384-row internal-development result is now 295/384 (76.82%) versus
+  148/384 (38.54%) for the exact cached V54 baseline. The paired wrong-scene arm
+  scored 278/384 (72.40%) against the original targets. More importantly, on the
+  52 physically changed sides, the correct scene scored 31/52 against its target;
+  after substituting the paired scene, outputs scored only 14/52 against the old
+  target but 31/52 against the paired scene's target. Complete changed units were
+  6/26 correct-scene/original-target, 0/26 wrong-scene/original-target, and 6/26
+  wrong-scene/paired-target; 24/52 outputs changed between scene arms. V54 reached
+  only 18/52 changed sides, 0/26 complete units, and 6/26 prediction-changing
+  units, versus V75's 31/52, 6/26, and 12/26. This is meaningful causal evidence
+  that answers follow the continuous scene input. It remains an **internal
+  development** result and is not conflated with the later validation.
+- V75 has since been promoted into the sealed two-file controller release
+  `data_gemma4/runtime/checkpoints/gemma4_v75_nll_control_release_v1`
+  (`control.safetensors` plus `runtime_metadata.json`). A live three-question
+  isolation run renamed the oracle, training-artifact, and teacher-artifact
+  directories so they were unavailable during inference, then restored them.
+  It audited 4,198 file reads with zero forbidden accesses, loaded no QA/oracle
+  or training artifact, computed the full scene prefix before the first question,
+  and reused one prefix hash. The runtime receives no environmental text and does
+  no question-dependent scene retrieval.
+- The subsequent one-candidate official validation covered 216 questions from six
+  held-out validation scenes. V75 scored 167/216 canonical (77.31%) and 76.39%
+  normalized exact. Canonical results were attribute 30/48 (62.5%), count 40/42
+  (95.24%), metric 6/6, orientation 6/6, presence 38/42 (90.48%), spatial
+  relation 28/48 (58.33%), and support 19/24 (79.17%). Counterfactuals reached
+  7/12 complete units, 17/24 correct sides, and 8/12 prediction-changing units,
+  with success in all three physical-change families. Nine of ten preregistered
+  gates passed; the overall validation is nevertheless **failed** because spatial
+  relations narrowly missed the 60% minimum. Grounding was weak (2.136 m mean
+  error and 0/132 targets within 1 m). Answer references were opened only by the
+  isolated scorer, not inference. Official test, deferred-final, and simulator
+  oracle inputs remain unopened.
+- V75 preserves the complete, prequestion 256-latent base scene prefix and every
+  scene latent influences its output. It also appends four question-conditioned
+  continuous control tokens, so the total environment-conditioned input is not
+  invariant even though the base prefix is. It is therefore a strong continuous-
+  scene enhanced readout and a promoted runtime, but not the strict identical-
+  total-input primary result or final project acceptance. V75 remains an
+  enhanced-readout comparator rather than the strict result.
+- The V75 fixed-prefix atlas mechanism has now been executed and hash-pinned
+  (`db2f161fb043a3e259e881e2c68c0b8e14e4708805725969809e5dfb68f16725`),
+  using the exact sealed V75 controller weights. It compiled all 256 base scene
+  latents plus all 480 atlas tokens into one 738-token scene-only prefix before
+  any user question; every base latent, probe, and atlas token was preserved.
+  The structural check loaded no Gemma model, questions, answers, oracle,
+  protected split, or environmental text. This removes the former dependency on
+  rejected V66b. A subsequent sealed 16-row Gemma behavior run then compiled all
+  16 prefixes before opening questions and kept every 738-token prefix invariant.
+  The atlas scored 6/16 (37.5%), exactly tying frozen V54 and trailing direct
+  exact V75 at 9/16 (56.25%); prediction-changing paired units were 1/8, 1/8,
+  and 2/8 respectively. The predictor audited 119 reads with zero forbidden
+  access and never loaded its isolated scorer references. This is negative
+  historical-training-pool evidence: the rows were pair- and scene-disjoint but
+  12 questions overlapped training, so it is not question-disjoint or official
+  validation, and no atlas runtime was promoted.
+- V81 turns that layout into a runnable, compile/runtime-separated continuous
+  scene memory. Its runtime artifact contains exactly `memory.safetensors` and
+  sanitized `runtime_metadata.json`: one bfloat16 `[1,738,1536]` memory with
+  canonical prequestion hash
+  `a428f5147c815839ae7315a0adab952ab210814fb21dcdc5bf13b167f28a6e37`.
+  It retains all 480 atlas tokens and all 256 base scene latents. The latest user
+  text performs a dense read across all 96 atlas groups; every one of the 384
+  scene-value tokens receives positive weight, with no semantic/spatial top-k
+  selection, retrieval, or mutation of the serialized scene memory. A real
+  three-question local run kept both the 738-token memory and 258-token base
+  prefix invariant, audited 4,204 reads with zero forbidden accesses, and worked
+  while the oracle directory was unavailable. Chat loaded neither the compile-time
+  V75 controller nor the numeric probe bank.
+- V81 is nevertheless **experimental and not promoted**. Its bounded 16-row
+  historical-development control scored 8/16 versus 6/16 for frozen V54, 3/16
+  with shuffled atlas values, 1/16 with an exactly zero environmental payload,
+  and 9/16 with the paired wrong scene. It changed 2/8 paired units but failed
+  the 9/16 candidate, +3-over-V54, and correct-over-wrong-scene gates. The rows
+  were pair- and scene-disjoint but not question-disjoint, and official validation
+  was not opened. At that historical point V75 remained the default; strict V89
+  later superseded it as the operator default.
+- V82 is the first fitted dense learned reader over the exact immutable V81
+  memory. It has 688,130 trainable parameters, gives all 384 atlas values and all
+  256 base latents positive attention floors, performs no top-k selection or
+  question-dependent retrieval, and returns exact zero controls for an empty
+  environmental payload. Its pair- and scene-disjoint historical numeric
+  development fold covered 384 rows across 16 scenes and reached 0.991352 mean
+  control cosine with 0.029239 normalized MSE; shuffled atlas values changed the
+  output by 0.112454 RMS. The real local-Gemma behavioral control still failed:
+  V82 scored 8/16, versus 6/16 frozen V54, 3/16 shuffled atlas, 1/16 zero
+  environment, and 6/16 wrong scene. Although the +2 correct-over-wrong-scene
+  gap passed, V82 missed the 9/16 candidate and +3-over-V54 gates, tied V81,
+  trailed direct V75's 9/16 comparator, and is **not promoted or officially
+  validated**. The config's original `implemented_model_free_preflight_only_...`
+  status is retained as a hash-sealed preregistration snapshot; measured outcome
+  status lives in the authenticated development and behavioral reports.
+- V83 tests the strictest direct fixed-memory form: the exact immutable
+  `[1,738,1536]` memory is inserted directly into Gemma's native image-prefix
+  slot before the question. All 738 tokens remain visible with exact native
+  BOI/EOI and PAD-PLE handling. There is no separate question-conditioned
+  environmental reader, retrieval, top-k selection, or control activation, and
+  the count of question-derived environmental tokens is zero. This structural
+  contract passed, but the isolated 16-row historical-development behavior did
+  not: direct V83 scored 6/16, frozen V54 6/16, paired wrong scene 7/16,
+  shuffled atlas 6/16, and zero payload 5/16. V83 changed only 1/8
+  counterfactual units and failed every promotion gate. It is authenticated but
+  **not promoted or officially validated**. V75 was still the default at that
+  point; V89 is now the strict default runtime.
+- V84.1 establishes the narrower causal wiring result that V83 lacked. A
+  preregistered train-only follow-up supplied the same complete immutable
+  `[1,738,1536]` memories directly to Gemma, retained zero question-derived
+  environmental tokens/readout/retrieval, froze Gemma plus all six inherited
+  V54 LoRA banks, and trained only a fresh 55,296-parameter rank-4 LoRA on the
+  final layer-34 MLP projection. After a fixed 32 updates with paired-wrong-scene
+  margin loss, the identical question produced `on` for `scene_000019` and
+  `under` for `scene_000020`. Correct-scene NLLs were 0.0322 and 0.0291, while
+  paired-wrong-minus-correct margins were +2.5908 and +1.3780; both scene-memory
+  hashes remained byte-identical. This passes the preregistered **two-scene
+  wiring/overfit** gate, not held-scene generalization: no development behavior,
+  official split, sealed historical behavior set, or oracle was opened, and the
+  candidate is explicitly **not runtime-promoted**.
+- The optional V78 grounding sidecar also runs on V81 without changing the fixed
+  scene-memory hash. A live `Where is the chair?` check scored all 256 scene
+  latents, predicted `[-0.7445, 0.4775, 0.6310]` m with 0.278 m map-support
+  distance and 0.784 confidence, and audited 5,208 reads with zero forbidden
+  accesses. Its text answer was honestly `unknown`, so this is mechanism evidence,
+  not a grounding-accuracy result.
+- The default `make demo` now launches the promoted strict V89 scene-one runtime;
+  `make demo-smoke` is its finite three-question proof. A current local MPS run
+  answered `yes`, `red`, and `left`, reused the exact
+  `a428f5147c815839ae7315a0adab952ab210814fb21dcdc5bf13b167f28a6e37`
+  environment-input hash for every question, audited 5,208 reads with zero
+  forbidden access, and loaded no training or evaluation report. The independent
+  release smoke also passed while the oracle directory was physically unavailable.
+  V75 remains available as the stronger scene-disjoint but question-conditioned
+  enhanced-readout comparator; its historical five-prompt sample answered
+  `yes`, `red`, then the physically wrong `right`, and failed broad support prompts
+  closed as `unknown`. Broad free-form list QA remains unsupported.
+- V76 is complete and rejected. It trained the raw pre-NLL V75 branch
+  (`182481dd…`, not promoted NLL V75 `d0127553…`) on all 40 historical changed
+  units / 80 sides for 80 steps. Training answer NLL improved from 7.900908 to
+  4.371634 and paired margin from 4.154925 to 5.632363 in 471.26 s, but its held
+  smoke reached only 6/16—tied with V54 and the wrong-scene arm—with zero
+  correct-over-wrong-scene advantage and four prediction-changing units. It
+  published no checkpoint and is superseded by promoted V75. V77 then started
+  from promoted NLL V75 and made a bounded historical-training-pool repair over
+  72 of 576 rows (28 answer classes, 47 question templates, nine optimizer
+  steps). On a separate 24-row training-pool measurement slice, correct-answer
+  NLL fell from 2.518216 to 1.604626 and negative-answer margin rose from
+  6.736418 to 7.248879. Its 16-row pair-disjoint Gemma smoke reached 9/16 versus
+  6/16 for V54 and 6/16 with the wrong scene, but only 2/8 paired units changed
+  predictions. The complete 384-row internal screen then reached 299/384 (77.86%)
+  versus V75's 295/384 (76.82%), with 35 versus 33 prediction-changing units.
+  This four-answer gain has no matched full wrong-scene arm and is internal-only,
+  so V77 remains quarantined: no runtime checkpoint was published and official
+  validation was not reopened.
+- V79 performed the bounded, matched historical relation/counterfactual follow-up.
+  It trained the V75 reader for 15 optimizer steps over 120 historical rows, then
+  ran a locked 28-row, 14-unit scene-disjoint screen. Correct-scene counts were
+  V75 18/28, V77 19/28, and V79 20/28; all wrong-scene arms were 5/28, so the
+  correct-minus-wrong gaps improved 13 -> 14 -> 15. However, prediction-changing
+  units were 9/14, 10/14, and 9/14: V79 missed the locked best-baseline gate.
+  The full 384-row run and runtime publication were blocked. The exact diagnostic
+  candidate is `bdd4b6f4…`, but it is not a runtime checkpoint, official result,
+  or promotion.
+- V78 adds optional continuous numeric grounding without changing the V75 answer
+  generator. Its exact two-file diagnostic release contains
+  `grounding.safetensors`
+  (`3c7914a61e63d80617e7fcfca122e02eec30d15af5a43e910daa0cd6c0b501c4`)
+  and `metadata.json`
+  (`ea5536dc078b7707000404661c92bdb198dc0c40bbf73cf987d5f94b20464480`).
+  A real three-question local isolation run
+  (`070feddd71141dfa75f8ca807ec47275225e8b056fce1e2f3862f88e89fc6215`)
+  audited 4,204 reads with zero forbidden accesses while the oracle directory
+  was unavailable. The prequestion base-prefix hash and the V78 256-token scene
+  input were each invariant across questions. Numeric grounding ran, but answer
+  text remained V75's output: the two `Where` prompts returned `right` and `red`,
+  so this is runtime-integration evidence, not strong conversational location QA.
+  The reproducible point-cloud evaluator now reconstructs all 94 historical-held
+  predictions exactly without loading full Gemma: mean 3D error is 0.527 m,
+  92.55% fall within 1 m, and the mean nearest sanitized-map-voxel distance is
+  0.179 m. It renders one prediction/target overlay per held scene using a fixed
+  pre-error selection rule; the six-example PNG is deterministic at SHA-256
+  `8289bfa9d40097336c834a00555f43aef2e51dfe9b7cd04113f1e81876b0bfb2`.
+  Oracle target markers exist only in the evaluation
+  report/figure; no runtime artifact is written. Historical held grounding and
+  its controls remain internal diagnostics; V78 is neither officially validated
+  nor promoted, and its readout remains question-conditioned.
+- V78 checkpoint forwarding is wired into the existing passing embodied
+  RGB-D scan/map/prefix-refresh path. Lightweight preflight and finite
+  scan-plus-answer Make targets exist, but there is no sealed V78-specific
+  embodied transcript or navigation score yet.
+- The preserved strict V54 web/mechanism comparator prepares and verifies a minimal two-file
+  inference release: `adapter.safetensors` plus `runtime_metadata.json`. Its
+  manifest declares zero environmental-text inputs and no training metadata.
+  This is safer packaging of the existing below-acceptance V54 mechanism demo,
+  not model promotion or a claim that static QA acceptance has been reached.
+- A fresh embodied observation has already completed the full Blender RGB-D ->
+  one complete-image Gemma pass -> map fusion -> scene-prefix refresh transaction
+  in 31.31 s. The label-free development navigation policy succeeds on 8/9
+  targets with zero collisions; this is not yet held-out or autonomous LLM tool
+  use. A separately sealed deterministic seam maps 18 numeric robot-state values
+  into 4×1536 continuous tokens. It is an untrained interface proof
+  (`task_trained: false`), not a learned navigation controller.
+- The opt-in local-Gemma action seam now has a live strict-prefix success: Gemma
+  consumed the continuous scene plus numeric robot-state tokens, proposed a valid
+  bounded `turn(10°)` JSON call, passed schema/context validation, and executed it
+  with no collision or fallback. This is one protocol smoke, not navigation
+  accuracy or evidence of a trained tool policy.
+- A real decoder-level Gemma tool policy V2.2 was also trained under a sealed
+  early gate: 64 optimizer updates / 512 microbatches reduced training loss from
+  2.414296 to 0.234181. Across all 2,268 rows in eight held-out scenes it reached
+  0.377758 answer-token NLL and 87.13% token accuracy, but only 17.42% exact JSON
+  sequences, 26.41% valid schemas, and 24.12% correct tools. Those three locked
+  gates failed, so greedy generation and saved-runtime probing were not run and
+  no V2.2 runtime checkpoint was published. This is useful negative evidence,
+  not a working learned action decoder.
+- Historical V3 supervised-action evidence grounds each
+  conversational navigation target by comparing local-Gemma text embeddings with
+  every voxel in the continuous semantic map, then supplies only numeric target
+  state to the bounded controller. It completed 5/6 live tasks with zero
+  collisions, action failures, or policy rejections. The grounded-target controls
+  are causal but direct scene-prefix controls remain weak, so this is authenticated
+  partial evidence rather than a complete navigation claim. Its 5/6 live result
+  is now authenticated against byte-exact historical shared-source snapshots;
+  compatibility of that sealed run with today's successor source is not claimed.
+  V1/V2 remain sealed historical controls.
+- The historical V3.3 development runtime passed all 6/6 tasks in one sealed
+  run with 28 actions, zero collisions, zero action failures, and zero policy
+  rejections. The scan-update task used `scan`, seven bounded `move_to` waypoints,
+  and `stop`; it made 2.114 m of target progress and stopped at 0.287 m after a
+  real map/prefix update. All 28 decision-context and prefix-chain checks passed,
+  runtime environmental-text inputs were empty, and oracle/QA runtime reads were
+  zero. This is the supervised continuous-semantic V3 controller combined with
+  the deterministic V3.3 numeric planner—not native Gemma function calling. The
+  same one-scene benchmark was used to diagnose V3.1/V3.2, so 6/6 is accepted
+  development calibration only, not held-out or cross-scene generalization.
+- Collision-aware V4.1 was a preregistered single-arm successor to V3. It added
+  24 anonymous robot-frame clearance rays, a collision-risk head, and an exact
+  mask that redirects an unsafe movement to the highest-ranked safe nonterminal
+  action. Its held-out action accuracy was 93.47%, scan-update accuracy 91.03%,
+  collision-risk accuracy 98.23%, and exact unsafe-motion rejection 100% (21/21),
+  but shuffled clearance reduced the obstacle/scan-update mean by only 0.049565
+  against the preregistered 0.10 minimum. It therefore passed 13/14 gates, was
+  rejected, wrote no checkpoint, and was never exposed to the live benchmark.
+- The official MCP 2.0 stdio boundary exposes all nine numerical tools, rejects
+  malformed or out-of-range calls without changing state, and transactionally
+  resets the loaded scene's robot pose, renderer coverage, persistent map, and
+  continuous prefix. Cross-scene reset remains intentionally fail-closed.
+  Successful `look`, `turn`, `move_forward`, `move_backward`, and `move_to` calls
+  now auto-scan and transactionally refresh the map and continuous prefix when
+  enabled; tests cover all five actions and prove rejected collisions do not scan.
+  A live direct-runtime 15° turn has now captured `o_000002` through the second
+  complete-image encoder call, advanced both scene and map to version 2, and
+  changed both the persistent map and continuous prefix. The 51.89 s run audited
+  125 loaded files with zero forbidden accesses and no oracle/QA reads.
+  The actual official-SDK MCP 2.0 stdio boundary has now also run a live explicit
+  scan followed by a 15° turn and automatic scan with the V54 base and active V75
+  continuous controller. It advanced map version `0 -> 1 -> 2`, increased source
+  voxels `74,699 -> 74,897 -> 75,594`, and processed 50,176 valid-depth pixels in
+  each complete-image observation. Map, base-prefix, V75 control, active-prefix,
+  robot-state/token, and binding hashes changed after both observations while the
+  robot-state encoder identity stayed fixed. The 57.29 s run audited 4,178 reads
+  with zero forbidden accesses and returned no environmental text or semantic
+  labels. This is a one-scene integration smoke, not a navigation success-rate
+  claim.
+- A separately sealed four-record direct embodied conversation reproduced the
+  map-version `0 -> 1 -> 2` explicit-scan/15°-turn-autoscan chain, preserved a
+  prequestion scene K/V cache, then generated `yes` at version 2 using exactly the
+  refreshed active-prefix hash produced by the turn. Both observations had 50,176
+  valid-depth pixels; all environmental-text input arrays were empty, and the
+  123-read audit had zero forbidden accesses. This proves a local Gemma answer can
+  be bound to newly observed continuous scene state; it does not establish broad
+  conversational-navigation competence.
+- The historical camera-refresh `ConversationalEmbodiedAgent` also crossed the actual
+  official-SDK MCP stdio process boundary. Real smokes on `scene_000001` and
+  `scene_000031` each executed `scan -> turn -> stop`, accepted exactly four
+  continuous binding refreshes, and produced map versions `0 -> 1 -> 2 -> 2`.
+  Scan and turn/autoscan changed each scene prefix; stop preserved the unchanged
+  scene prefix while changing the numeric robot-state binding. Both runs returned
+  numeric structured receipts only, exposed no environmental text, and audited
+  4,182 reads apiece with zero forbidden accesses. The scenes ended with distinct
+  scene-prefix hashes. This proves two-scene transport and continuous-state refresh,
+  not held-out semantic instruction-following or navigation accuracy.
+- A historical finite natural-language semantic MCP successor closed those two seams in
+  one real `scene_000001` episode. For `Face the chair, then stop.`, selective
+  local-Gemma tied-token rows grounded only the user-supplied target phrase against
+  every current map voxel; the V3 numeric alignment interlock then issued
+  `scan -> turn(45°) -> turn(21.923°) -> stop` exclusively through the official
+  MCP 2.0 stdio subprocess. The run stopped at a fresh 0.325° continuous-grounding
+  residual after 85.73 s. Each observation advanced the map exactly once and
+  changed the map, scene-prefix, and active-prefix hashes; stop preserved the map
+  and scene prefix while changing the numeric robot-state prefix. It scored all
+  `74,897 -> 75,468 -> 76,220` active voxels, returned no semantic text in tool
+  receipts, and both process audits passed with zero forbidden reads (93 client,
+  4,185 server). A physically separate post-run oracle scorer measured 0.146°
+  chair-heading error and zero collisions. This policy explicitly uses neither
+  Gemma function calling nor the learned V3 action head: it is selective-Gemma
+  continuous grounding plus deterministic numeric convergence over real MCP.
+  It is one development scene and one instruction family; newly fused views also
+  moved the semantic target XYZ substantially, so broader grounding stability
+  remains an important limitation despite the correct final heading.
+- Historical hybrid semantic face-target navigation completed 2/2 development episodes on
+  `scene_000001` and `scene_000031`, with zero collisions, zero forbidden runtime
+  reads, and no runtime oracle inputs. V3 supplies the learned bounded action;
+  after its turn output stalls, a numeric convergence interlock uses only the
+  continuously grounded target XYZ and robot yaw, then requires fresh grounding
+  inside a 3° deadband before stopping. Final continuous-grounding residuals were
+  0.262° and 0.162°. A separate evaluation-only oracle scorer measured physical
+  heading errors of 6.579° and 3.302°, both below its 20° threshold. The preserved
+  learned-only predecessor timed out after 12 steps (0/1), so this is honestly a
+  **hybrid learned-plus-numeric** result—not evidence that V3 alone converged.
+  It covers two deterministic development scenes and one instruction family.
+  The 256-latent static base memory remains question-independent, but V75's four
+  continuous control tokens and navigation grounding are question-conditioned;
+  this embodied result therefore does not satisfy strict identical-total-input
+  invariance.
+- The separate two-scene approach comparison preserves the failed V2 result and
+  its V3 successor. V2 passed 1/2: on `scene_000031` it moved 1.220 m but hit an
+  exact collision rejection and terminated without stopping. V3 passed 2/2 with
+  all action receipts successful, zero collisions, zero forbidden reads, and no
+  runtime oracle or environmental-text input. Scene 1 completed the ordinary
+  semantic-standoff goal at 0.482 m after 0.700 m of motion. Scene 31 moved
+  1.287 m, made 1.272 m of evaluator-measured center progress, and finished
+  0.292 m from the oracle bounding box, but its semantic target distance was
+  still 0.763 m: it passed through an explicit numeric-map
+  `collision_limited_safe_stop`, not the ordinary 0.5 m semantic-standoff rule.
+  Oracle target identity and geometry were scorer-only. Both are deterministic
+  development results, not held-out evidence or promoted runtimes. The exact
+  historical V3 policy source is preserved at
+  `reports/gemma4/evidence/navigation_policy_v3_sources/navigation_policy_v3.py`
+  (`4e687161…`).
+- The V3 approach paths are now preserved in the hash-authenticated
+  [trajectory figure](reports/gemma4/figures/embodied_approach_v3_trajectories.png)
+  (`6bbe03c6…`) and its
+  [machine summary](reports/gemma4/examples/embodied_approach_v3_trajectories.json)
+  (`2b1482c0…`). The deterministic post-hoc generator reads only the two pinned
+  runtime result JSON files—no oracle, QA, scene metadata, semantic map, or model
+  files—and runs no new inference. Scene 1 is ordinary semantic-standoff
+  completion; scene 31 is visibly and explicitly a collision-limited
+  closest-safe stop at 0.763 m, **not ordinary 0.5 m standoff success**. Rebuild
+  and re-authenticate both artifacts with
+  `make embodied-approach-v3-trajectories`.
+
+### Global-map semantic-goal Blender rover
+
+Blender is the preferred operator surface for the corrected embodied
+demonstration. It shows the furnished room, an unmistakable toy rover, the rover
+trajectory, and a sampled rendering of the persistent semantic point map in a
+normal perspective 3D viewport. The `Gemma Rover` sidebar is a high-level goal
+conversation, not a remote-control pad: it keeps a scrollable user/assistant/
+agent transcript, reports thinking/execution state, and exposes the scene-token
+shape, hash, and norm without filling the screen with research analytics.
+Every motion row identifies the actual selected action, exact continuous output,
+MOVE/FACE/STOP probabilities and raw logits, causal scene/robot/history/prompt
+token counts, and abbreviated output/prefix/checkpoint hashes. The Blender
+scrollback is sized to retain a complete worst-case 128-decision turn; extra
+scene-memory diagnostics remain collapsed by default.
+
+The operator path is:
+
+```text
+24 complete RGB-D room views
+  -> one Gemma vision pass per complete image
+  -> 48 x 48 x 3072 spatial patch fields
+  -> exact depth/pose projection and 5 cm fusion
+  -> 74,699 persistent semantic voxels
+  -> every occupied spatial block -> 256 global scene latents
+  -> fixed [1,258,1536] continuous Gemma scene prefix
+  + four numeric robot-state tokens + numeric action-history tokens
+  -> actual Gemma causal forward for every closed-loop decision
+  -> learned MOVE_TO / FACE / STOP heads
+  -> exact model waypoint/heading execution or safety rejection
+```
+
+The 3072D voxel payload retains 768D middle-layer, 768D late-layer, and
+1536D language-aligned Gemma features in float16. The full scene prefix is built
+before a goal, after every occupied block has contributed. There is no runtime
+target-query retrieval, question-dependent scene crop, nearby-point selection,
+object inventory, caption, or simulator label. A phrase such as `the chair`
+enters only as part of the user's raw goal; it can influence Gemma's action
+decision, but it cannot alter or select the already-fixed scene prefix.
+
+User input should describe an outcome, for example `Face the chair`, `Move close
+to the bowl`, or `Do a lap around the room`. Gemma selects every intermediate
+waypoint, heading, route change, and goal-completing STOP. The host may reject an
+out-of-bounds or colliding proposal, but it may not clamp it, reroute it, insert a
+recovery waypoint, or turn failure into STOP. After a rejection, the next action
+must come from another actual Gemma forward over the unchanged complete scene,
+the refreshed numeric robot state, and the recorded failed-action row. Turns and
+waypoint moves are internal receipts rather than commands the user must compose.
+
+The V14 waypoint checkpoint binds
+`history_parameterization: selected_action_parameters_goal_progress_v2`. Its
+16D numeric history contains only the selected action's parameters: `MOVE_TO`
+keeps its actual
+robot-frame waypoint and uses current/result yaw as a neutral heading, `FACE`
+keeps its requested heading and zeros the inactive waypoint, and `STOP` zeros
+the inactive waypoint and uses current yaw. A rejected `MOVE_TO` still retains
+the exact rejected waypoint. Four further values summarize only numeric action
+receipts: accepted path length, signed swept area, return distance, and rejection
+streak. They contain no target, label, oracle value, route, or stop rule. Raw
+Gemma outputs remain unchanged in the signed step receipts; canonicalization
+affects only the history supplied to the next Gemma forward. Older checkpoints
+lacking this contract fail closed.
+
+This mode does **not** use the rover's current camera view to choose actions.
+`initial_scan` and `auto_scan_after_motion` are both disabled: the precomputed map
+and its scene-prefix hash remain fixed while only the continuous robot-state tokens
+refresh after motion. The Blender viewport and point-map overlay are human displays
+and are never fed back to Gemma.
+
+```bash
+make rover-3d-check  # model-free: starts neither Gemma nor Blender
+make rover-3d        # one command: local backend + Blender 3D viewport
+make rover-gemma-mcp-check # authenticate the one-tool model-owned MCP surface
+make rover-gemma-mcp       # stdio MCP: navigate(goal), with no motor tools exposed
+```
+
+If Blender is installed as the normal macOS application but is not on `PATH`, use:
+
+```bash
+BLENDER=/Applications/Blender.app/Contents/MacOS/Blender make rover-3d-check
+BLENDER=/Applications/Blender.app/Contents/MacOS/Blender make rover-3d
+```
+
+The live command authenticates the sanitized scene, base semantic map, local
+Gemma snapshot, continuous-memory checkpoints, numeric robot-state encoder, and
+the configured two-file waypoint-policy checkpoint before starting anything. It then
+starts the loopback-only backend at `127.0.0.1:8770`, builds the complete scene
+prefix, and launches the sanitized `.blend` with the sidebar. The policy
+checkpoint contains only the numeric history projector, decision token, and
+action/waypoint/heading heads; frozen Gemma weights remain in the pinned local
+model snapshot. Its runtime contract requires an actual Gemma causal forward,
+all 258 scene tokens, four robot tokens, raw user text, numeric history, no
+environmental text, and no runtime planner.
+
+The earlier failure mode was primarily incorrect integration, not proof that
+Gemma E2B was too small: the UI exposed low-level controls and routed text through
+an untrained one-step JSON decoder, while several high-level goals were actually
+completed by deterministic planners. The model-only launcher rejects that decoder,
+disables direct UI tool calls, and requires high-level goals. The local Gemma
+decoder owns the entire movement sequence; deterministic code is restricted to
+exact coordinate conversion, validation, collision rejection, and primitive
+execution.
+
+The previous 47-waypoint patrol and 6/6 V3.3 measurements are historical hybrid
+planner evidence and must not be attributed to the new model-only movement path.
+The runtime-aligned V14 policy trains on 7,115 rows from `scene_000001` and
+reaches 99.9719% action accuracy, 0.004970 m mean waypoint error, and 0.094552°
+mean heading error there. Its cache contains 96 validation rows from two disjoint
+scenes, but the reported configured 24-row disjoint control is only 12.5%
+action-accurate, with 0.122765 m mean waypoint error, 29.5241° mean heading
+error, and zero STOP recall. The passing live tests below therefore demonstrate
+a runnable one-room controller, not broad unseen-room transfer.
+
+The fresh model-only closed-loop V14 lap **passed** live acceptance. Gemma made
+76 decisions (46 `MOVE_TO`, 29 `FACE`, and its own final `STOP`), traveled
+18.715408 m, swept 4.272962 m², returned 0.048733 m from its start, and produced
+zero rejected decisions. The same checkpoint passed the chair approach with
+0.263674 m center progress and 0.431456 m bounding-box standoff despite eight
+safely rejected collision attempts over 16 decisions; it faced the cube with
+0.201562° yaw error in two decisions. Every accepted primitive used Gemma's
+exact selected action and numeric argument. The runs used local inference and
+the fixed scene-prefix hash
+`52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95`;
+they used no cloud model, oracle runtime input, deterministic route planner,
+fallback, action substitution, or synthetic STOP. The isolated runtime also
+passed with the source oracle directory physically unavailable. Evidence:
+[`lap`](reports/gemma4/metrics/gemma_waypoint_dagger_v14_live_acceptance.json),
+[`chair`](reports/gemma4/metrics/gemma_waypoint_dagger_v14_approach_chair_score.json),
+[`cube`](reports/gemma4/metrics/gemma_waypoint_dagger_v14_face_cube_score.json),
+and [`oracle isolation`](reports/gemma4/metrics/gemma_waypoint_dagger_v14_oracle_isolation.json).
+
+A separate visual acceptance run used the Blender sidebar itself and supplied
+only `Move closer to the chair and stop.` Gemma emitted 17 causal decisions
+(10 `MOVE_TO`, six `FACE`, and its own `STOP`); nine were executed and eight
+collision-risk proposals were rejected without replacement. The toy rover moved
+and replayed the returned trajectory in the actual furnished 3D viewport. See the
+[`machine-readable UI result`](reports/gemma4/metrics/blender_rover_v14_live_acceptance.json)
+and the authenticated [completed Blender view](reports/gemma4/figures/blender_rover_v14_approach_chair_complete.png).
+
+Closing Blender also stops a backend created by this command. A compatible
+backend that was already running is reused and left running. If port 8770 belongs
+to another service, the launcher refuses to kill it and explains how to select
+another port.
+
+### Browser compatibility surface
+
+The browser route remains available for local API/debug compatibility, but the
+Blender viewport above is the preferred real-3D experience:
+
+```bash
+make rover-demo-check  # finite/read-only; loads neither Gemma nor Blender
+make rover-demo        # opens http://127.0.0.1:8770
+```
+
+It uses the same high-level-only, static-map controller: no initial rover scan,
+no motion-triggered camera input, no untrained JSON fallback, and no user-facing
+manual motion tools. The displayed images remain human-only. The earlier
+turn-right browser smoke belongs to the superseded low-level integration and is
+not evidence for the corrected semantic-goal path. To expose the bounded numeric
+execution boundary to an external local MCP client, run `make rover-demo-mcp` in
+its own terminal; those tools are an internal agent protocol, not the intended
+human language interface. For the corrected model-owned MCP contract, run
+`make rover-gemma-mcp`: it exposes only `navigate(goal)`. The exact goal text is
+passed to the same V14 closed loop, and the structured response includes numeric
+state, each authenticated Gemma decision, accepted/rejected status, and prefix/
+checkpoint hashes—but no object labels, caption, oracle data, deterministic route,
+or client-supplied motor command. The authenticated model-free server check and
+official-SDK dispatch result are recorded in
+[`gemma_goal_mcp_preflight.json`](reports/gemma4/metrics/gemma_goal_mcp_preflight.json).
+
+Current commands:
+
+```bash
+make doctor                    # works before setup; records available local tools
+make setup                     # locked support env + separately pinned Gemma env
+make download-models           # fetch the pinned 10.25 GB Gemma checkpoint once
+make demo-artifacts-check-fast # inspect preserved V54/comparator artifact inventory
+make prepare-demo-runtime      # materialize the preserved V54 comparator release
+make demo                      # strict V89: interactive TTY, finite/exit-safe in CI
+make demo-smoke                # finite promoted V89 scene-one three-question proof
+make chat                      # interactive promoted strict V89 scene-one chat
+make web                       # strict V54 point-map browser comparator
+make robot                     # interactive learned embodied Gemma loop
+make mcp                       # official local semantic embodied MCP server
+make rover-demo-check          # finite room/scan/Gemma/rover/UI readiness gate
+make rover-demo                # high-level browser compatibility/debug UI
+make rover-demo-mcp            # optional numeric-only official MCP stdio server
+make rover-gemma-mcp-check     # authenticate high-level-only V14 Gemma MCP
+make rover-gemma-mcp           # one MCP navigate(goal) tool; Gemma owns all motion
+make rover-3d-check            # model-free Blender + local backend readiness gate
+make rover-3d                  # preferred real-3D Blender rover operator UI
+make rover-live-verify         # score high-level goals against a fresh running backend
+make demo-check                # model-free V89 + V3.3 + embodied-MCP readiness
+make embodied-check            # authenticate V3.3 evidence and MCP session inputs
+make demo-leakage              # V89 oracle-unavailable + exact-input invariance proof
+make v89-demo-check            # authenticate V89 without loading Gemma
+make v89-demo                  # finite V89 proof
+make v89-demo-chat             # interactive V89 chat
+make v89-demo-leakage          # authenticate isolated V89 runtime smoke
+make strict-demo-chat        # legacy interactive strict V54 fixed-prefix chat
+make strict-demo-leakage     # oracle removal + exact full-prefix invariance
+make strict-web              # loopback browser UI over that same strict prefix
+make strict-web-check        # validate UI inputs without loading Gemma
+make v75-fixed-atlas-mechanism-check # rebuild the V75 738-token structural proof
+make v75-fixed-atlas-behavior-preflight # authenticate bounded behavior inputs
+make v81-reader-check      # model-free sealed reader/layout preflight
+make v81-scene-memory-check # authenticate exact two-file 738-token scene memory
+make v81-scene-memory-demo # finite experimental V81 chat
+make v81-scene-memory-chat # interactive experimental V81 chat
+make v81-scene-memory-leakage # oracle deletion + fixed-memory invariance
+make v82-reader-preflight  # authenticate dense-reader shape/floors/zero control
+make v82-reader-evaluate   # pair/scene-disjoint numeric development diagnostic
+make v82-historical-score  # bounded real-Gemma 16-row control (gate failed)
+make v82-chat              # experimental V82 chat; not the promoted default
+make v83-check             # exact direct 738-token native-Gemma layout tests
+make v83-chat              # experimental strict direct-memory chat; not promoted
+make v83-historical-score  # read create-once 16-row negative behavior result
+make v84-pair-margin-check  # authenticate passed strict two-scene causal wiring
+make v84-pair-margin-result # print measured fixed-update result; no model load
+make strict-atlas-build      # legacy runtime build; no promoted atlas checkpoint yet
+make strict-atlas-evaluate   # behavior only after a separately authenticated build
+make strict-atlas-v2-auth    # read-only V2 layout/exposure hash authentication
+make v78-grounding-check     # authenticate optional V78 + unchanged V75 answer path
+make v78-grounding-demo      # finite local V75 answer plus V78 numeric grounding
+make v78-grounding-chat      # interactive optional-grounding mode
+make v78-grounding-leakage   # oracle deletion + base/V78 scene-token invariance
+make v78-grounding-held-pointcloud # exact 94-row replay + six held-map overlays
+make v78-grounding-embodied-check # authenticate embodied checkpoint forwarding
+make v78-grounding-embodied-once  # finite scan then one grounded answer + audit
+make ple-reader-prereg-auth  # read-only rank-4 reader design authentication
+PYTHONPATH=src .venv/bin/python -m semantic_3d_chat.evaluation.fixed_prefix_ple_v54_evidence
+PYTHONPATH=src .venv/bin/python -m semantic_3d_chat.evaluation.gemma4_tool_decoder_v2_2_evidence
+PYTHONPATH=src .venv/bin/python -m semantic_3d_chat.evaluation.fixed_prefix_decoder_reader_v6_evidence
+make current-report          # rebuild claim-bounded JSON + Markdown
+make gemma4-v70-authenticate # verify sealed 32-moment negative result
+make gemma4-v71-authenticate # verify sealed 8+32-branch negative result
+PYTHONPATH=src .venv-gemma4/bin/python -c 'from semantic_3d_chat.evaluation.v72_development_authentication import authenticate_v72_development_negative as a; import json; print(json.dumps(a(), indent=2, sort_keys=True))'
+PYTHONPATH=src .venv-gemma4/bin/python -m semantic_3d_chat.evaluation.fixed_prefix_attention_reader_v6_3_evidence authenticate
+PYTHONPATH=src .venv-gemma4/bin/python -m semantic_3d_chat.evaluation.fixed_prefix_attention_reader_v6_4_evidence authenticate
+make research-demo-check     # exact schema-7 preflight; currently fails closed
+make research-demo           # finite enhanced readout only after a sealed successor
+make research-demo-chat      # interactive form; currently fails closed
+make research-demo-leakage   # oracle/training removal + prefix invariance
+make gemma4-semantic-navigation SCENE=scene_000001
+make gemma4-embodied-chat-learned-check # read-only V3/controller/model preflight
+make gemma4-embodied-chat-learned SCENE=scene_000001
+make gemma4-embodied-chat-learned-once  # finite 12-step-capped instruction
+make gemma4-embodied-chat-llm SCENE=scene_000001
+make gemma4-embodied-mcp-check SCENE=scene_000001 # read-only access preflight
+make gemma4-embodied-mcp-live-smoke # heavy SDK + Gemma + Blender scan/turn proof
+make gemma4-embodied-mcp-conversation-check # finite semantic MCP policy preflight
+make gemma4-embodied-mcp-conversation # natural instruction -> real stdio actions
+make gemma4-embodied-mcp-conversation-score # separate oracle-only heading score
+make embodied-demo-check SCENE=scene_000001 # model/renderer-free session preflight
+make embodied-demo-smoke SCENE=scene_000001 # finite same-stdio five-command proof
+make embodied-demo-smoke-inspect SCENE=scene_000001 # model-free saved-run auth
+make embodied-demo-smoke-score SCENE=scene_000001 # separate oracle geometry score
+make embodied-demo SCENE=scene_000001 # persistent conversational MCP session
+make conversation-mcp-smoke # conversational agent -> official MCP stdio proof
+make gemma4-embodied-mcp SCENE=scene_000001
+make mcp-stdio-smoke          # finite official-SDK transport/safety/leakage proof
+make navigation-policy-v3-demo # read-only exact V3 evidence authentication (5/6)
+make navigation-policy-v3-3-check # historical V3.3 seal; rejects after runtime-source evolution
+make navigation-policy-v4-1-result # authenticate rejected 13/14-gate V4.1 arm
+make navigation-policy-v2-demo # read-only hash check + measured V2 result (4/6)
+# Fresh V2 run; choose a new ID because the launcher refuses every overwrite:
+make navigation-policy-benchmark NAVIGATION_POLICY_RUN_ID=learned_v2_local_001
+```
+
+Running `./scripts/run_full_demo.sh` with no stack-selection options is equivalent
+to `make demo`. Its explicit `--config` form is retained for the legacy/configurable
+launcher used by the `legacy-demo*` targets.
+
+`make demo` first runs the machine doctor and `make demo-check`. That model-free
+gate authenticates the exact two-file V89 release, runs the current strict
+continuous-prefix embodied implementation tests, and preflights the official
+numeric-only MCP 2.0 server plus persistent conversational-session inputs. The
+historical V3.3 6/6 artifact remains preserved, but its source seal predates the
+current runtime and is not presented as current navigation acceptance. A fresh
+held-out navigation claim remains blocked until a successor static release is
+promoted. The demo then prints the point-map,
+point-cloud, browser-UI, and MCP commands. With
+terminal stdin and stdout it enters strict V89 chat; under CI, pipes, or redirected
+input it runs the finite three-question V89 smoke and exits. It does not
+automatically open a GUI or start a second blocking server. `make demo-smoke`
+always selects that finite form, while `make demo-leakage` authenticates the
+create-once smoke executed with the oracle directory physically unavailable.
+The preserved `make strict-web` comparator can materialize the exact two-file V54
+checkpoint when its local source artifacts are present. `make
+demo-artifacts-check-fast` verifies
+exact hashes for all project artifacts and verifies the pinned model by local
+revision, required filenames, and exact model-weight size without loading Gemma
+or running Blender;
+`make demo-artifacts-check` additionally hashes every artifact, including the
+10.25 GB model weights. The expected sizes and SHA-256 digests are tracked in
+`configs/runtime/demo_artifacts_v1.json`.
+
+The repository currently has no public distribution URL for the ignored 57.4 MB
+V89 adapter, its approximately 2.2 MB immutable scene memory, the 53 MB V54
+source adapter, 8 MB V75 comparator, 410 MB sanitized scene map, or human-only
+preview files. Therefore a clone on this already-prepared Mac is one-command
+runnable, while a different fresh machine still needs those exact hash-bound
+artifacts transferred locally or must reproduce the applicable earlier phases.
+The readiness check reports every missing path and expected size/hash; it does
+not invent a download source or claim fresh-clone portability. The pinned Gemma
+weights are separately obtainable with `make download-gemma4-weights`.
+
+The unqualified phase commands now select the Gemma research stack consistently:
+
+```bash
+make generate-smoke-scene
+make render-smoke-scan
+make build-smoke-map
+make semantic-sanity
+make generate-dataset
+make train
+make evaluate \
+  GEMMA4_STATIC_CONFIG=/path/to/promoted-runtime.yaml \
+  GEMMA4_STATIC_CHECKPOINT=/path/to/promoted-checkpoint \
+  GEMMA4_STATIC_REFERENCES=/physically/separate/test.jsonl
+```
+
+The build and training commands are explicit development operations; `make demo`
+does not depend on them or overwrite prepared releases. In particular, `make train`
+trains the configured Gemma adapter experiment—it does not pretend to regenerate
+the sealed historical V75 or V89 releases. `make evaluate` creates fresh questions-only
+inference input and predictions before scoring, and fails before inference when the
+explicit protected reference file or accepted static adapter is unavailable. The
+corresponding preserved CLIP/Qwen commands use the `legacy-*` prefix documented
+below.
+
+V2 remains the default for the generic training/evaluation `navigation-policy-*`
+Make targets; the conversational learned navigator selects V3 explicitly. V1
+remains reproducible by explicitly overriding
+the config, checkpoint, embodied config, task manifest, scoring sidecar, output
+paths, and run ID. The V2 demo target reads only the sanitized checkpoint,
+user-authored tasks, sealed inference journal, clean access audit, and numeric
+score; it does not open oracle, QA, or navigation-training data and writes no
+files.
+The V3 demo target is also read-only: it authenticates the exact historical
+shared-source bytes bound by the V3 journal, training-trace hashes, sanitized
+two-file checkpoint, held-out controls, oracle-removal audit, separated score,
+and trajectory artifacts. It explicitly does not claim that the sealed live run
+used today's successor runtime source. `navigation-policy-v3-3-check` is the
+corresponding current read-only successor check: it recomputes all gates for the
+single preregistered V3.3 development run (6/6 tasks, zero collisions, zero action
+failures, and zero policy rejections) without loading Gemma or Blender and without
+opening oracle or QA files. This authenticates development evidence; it is not a
+held-out navigation claim. `navigation-policy-v4-1-result` verifies
+the V4/V4.1 preregistrations, mechanical serialization incident, terminal
+13/14-gate rejection, absent checkpoint, and absence of any V4.1 live run.
+
+The default `make demo` now uses promoted V89: Gemma receives the exact immutable
+738-token `[1,738,1536]` continuous scene memory directly, with zero
+question-derived environmental tokens and no query-conditioned scene readout.
+V75 remains the scene-disjoint enhanced-readout comparator; its four continuous
+control tokens are question-conditioned. The preserved `make strict-demo` /
+`make strict-demo-chat` V54 path is a below-acceptance mechanism comparator
+(41.20% exact development behavior with failed counterfactual/grounding gates).
+V89 is a strong single-scene development proof, not held-scene final acceptance.
+
+The strict browser path shows the fused RGB point-map raster and chat side by
+side on `http://127.0.0.1:8766`. It binds loopback only, builds the complete
+prefix before starting HTTP, returns the same environment-input hash on every
+answer, and blocks oracle, QA, rendered frames, feature caches, training data,
+and scorer-only files. The displayed raster is a human visualization and is
+never supplied to Gemma.
+
+The stronger strict mechanism is implemented as a fixed continuous key/value
+atlas. The offline compiler has now been executed with the exact sealed V75
+controller over 96 continuous probes before any user question. It appends all 96
+keys plus four values per key to the complete 256 scene latents, producing a
+738-token environment input. The hash-pinned run preserved every base latent,
+probe, and atlas token and loaded no Gemma model, question, answer, oracle,
+protected split, or environmental text. Thus, the mechanism no longer waits on
+or uses rejected V66b. Behavioral accuracy was deliberately unmeasured at that
+structural-check stage. The subsequent bounded Gemma diagnostic measured
+6/16 for the fixed atlas, tied with V54 and below direct V75's 9/16, with only
+1/8 prediction-changing units. All 16 prefixes remained invariant and the
+predictor/scorer boundary stayed isolated, but 12 prompts overlapped historical
+training. The compiler is therefore structurally sound while this behavior is a
+negative, non-promoted result—not evidence for an atlas runtime.
+
+An isolated, versioned Atlas V2 layout contract now orders that same complete
+memory as `[BOI][all 480 atlas key/value tokens][all 256 base scene latents][EOI]`.
+Nothing is compressed, selected, or retrieved, and compilation still occurs
+before user text. This places all 256 base latents inside the direct 512-token
+window of the final prompt token for inclusive prompt lengths 57--64; the V1
+ordering places zero base latents inside that local window. This is an exact
+sliding-attention exposure calculation, not behavioral evidence: V2 compilation
+is disabled, no accepted sealed controller or V2 checkpoint exists, and no
+accuracy improvement is claimed. The contract is in
+`configs/experiments/gemma4_strict_fixed_prefix_atlas_v2.yaml`.
+
+The original Atlas-dependent reader follow-up is a rank-4, unmerged FP32 LoRA on
+Gemma 4's `model.language_model.per_layer_model_projection`: 41,984 trainable
+parameters, answer-only cross entropy, and a same-question wrong-scene-prefix
+hinge. It is deliberately design-only. Training, generation, and checkpoint
+publication are unauthorized until an independently accepted Atlas V2 artifact
+supplies concrete checkpoint, weights, runtime-metadata, and acceptance-report
+digests. The contract also requires an empty-prefix control, wrong-scene-prefix
+answer following, oracle removal, invariant pre-question prefix hashes, and
+non-environmental text-retention checks. Its hash-pinned preregistration is
+[`gemma4_fixed_prefix_ple_reader_preregistration_v1.json`](reports/gemma4/metrics/gemma4_fixed_prefix_ple_reader_preregistration_v1.json).
+A separate V54 reader family was later executed through five independently
+sealed versions and failed its causal scene-selectivity gates as summarized
+above. It does not satisfy or promote the Atlas-dependent design. None of these
+read-only authentication commands loads model weights or writes artifacts:
+
+```bash
+make strict-atlas-v2-auth
+make ple-reader-prereg-auth
+PYTHONPATH=src .venv/bin/python -m semantic_3d_chat.evaluation.fixed_prefix_ple_v54_evidence
+PYTHONPATH=src .venv/bin/python -m semantic_3d_chat.evaluation.gemma4_tool_decoder_v2_2_evidence
+PYTHONPATH=src .venv/bin/python -m semantic_3d_chat.evaluation.fixed_prefix_decoder_reader_v6_evidence
+```
+
+`scripts/run_research_demo.sh` accepts only the exact two-file sealed schema-7
+checkpoint whose saved-runtime generation gate passed. It does not fall back to a
+legacy model or an unsealed training artifact. Because V66b failed and no such
+checkpoint exists, its
+nonzero exit is deliberate. This launcher is an enhanced-readout experiment; a
+separate strict launcher must require one complete environment-conditioned token
+sequence computed before and reused unchanged across questions.
+
+The machine-readable summary is
+[`reports/metrics/current_metrics.json`](reports/metrics/current_metrics.json).
+It is generated from an explicit allowlist that contains no oracle, QA,
+scorer-only, or deferred-final-scene paths.
+
+### Historical experiment diary
+
 The current primary experiment uses `google/gemma-4-E2B-it`. Real-weight
 full-image feature extraction, 3D map fusion, and zero-shot semantic localization
 run locally on this Mac. The completed v9 LoRA run first passed its stricter
@@ -61,8 +1056,8 @@ K/V path: its selected update 2 retained color at 12/12 and 6/6 and reached the
 project's strongest mirror result so far, 10/12 sides and 4/6 complete units.
 Updates 3--8 did not improve that peak, and no epoch reached the required 12/12,
 6/6 mirror gate. V23 therefore closed at its preregistered limit without greedy
-generation or promotion. Gemma held-out static QA, interactive chat, Gemma
-leakage claims, and language-conditioned robot navigation remain gated.
+generation or promotion. At V23, static chat, leakage, and navigation remained
+gated; the later V89 and embodied results supersede that historical status.
 
 ## Current primary stack
 
@@ -76,16 +1071,14 @@ leakage claims, and language-conditioned robot navigation remain gated.
   `signal_preserving_resampler_v3`: every occupied block contributes to 256
   question-independent 384D scene latents, which are projected into Gemma's 1536D
   decoder space.
-- Gemma decoder base weights remain frozen. V9-v12 adapt only the explicitly
-  listed 45,056-parameter layer-34 LoRA state. V13-v14 use a versioned,
-  disjoint-bank checkpoint contract: that 45,056-parameter V12 bank is frozen and
-  a 229,376-parameter rank-8 bank in layers 30-33 is trainable. The scene adapter
-  is also frozen. The completed V23 experiment instead starts from the sealed V21
-  scene stack, freezes both earlier decoder banks and every scene-side parameter,
-  and trains only a 30,720-parameter rank-4/alpha-8 bank on physical layers 13--14
-  shared K/V projections. The decoder receives continuous scene tokens, numeric
-  geometry, and the user's question—never an environmental caption, label list,
-  or oracle metadata.
+- The deployed V89 release freezes Gemma and all 11 authenticated LoRA banks at
+  runtime (872,448 adapter parameters total). It inserts the V81-derived immutable
+  `[1,738,1536]` memory directly into Gemma's native image-prefix slot: all 480
+  atlas tokens and all 256 base latents, bounded by native BOI/EOI. There are zero
+  question-derived environmental tokens, no question-conditioned readout, and no
+  retrieval. The decoder receives continuous scene memory and the user's question—
+  never an environmental caption, label list, or oracle metadata. Earlier V9--V23
+  banks remain part of the authenticated historical lineage.
 
 Gemma 4 is therefore used on both sides of the bridge: its native multimodal
 vision tower supplies the full-image patch field, and its causal language decoder
@@ -107,7 +1100,7 @@ matched or exceeded it. `HuggingFaceTB/SmolVLM-256M-Instruct` remains reserved f
 the unmeasured direct multi-view baseline. None of these is the current primary
 model path.
 
-### Gemma 4 E2B primary path (not behaviorally validated)
+### Gemma 4 E2B primary path (V89 strict runtime promoted; held-scene acceptance open)
 
 `google/gemma-4-E2B-it` is the selected integrated vision/language model. Its public
 checkpoint is 10.25 GB: Google describes it as 2.3B effective parameters and
@@ -190,9 +1183,14 @@ environment runs adapter training:
 make train-gemma4
 ```
 
-`make chat-gemma4` deliberately has no default checkpoint. It remains locked until
-an adapter passes the behavioral gate and receives an explicit, hash-bound
-`promotion.json`; none of the current Gemma checkpoints qualifies.
+`make chat-gemma4` has no checkpoint fallback. It resolves only the immutable
+`configs/runtime/primary.json` pointer for a conventional promoted static adapter;
+that pointer remains absent because no such adapter passed every strict gate. The
+operator-facing `make chat` and `make demo` commands instead select the separately
+sealed V89 strict scene-one release described above. V89 passes its model and
+oracle-unavailable runtime gates with an identical direct scene memory for every
+question, but is trained single-scene development evidence, not held-scene final
+acceptance. V75 remains available as the question-conditioned comparator.
 
 Variable-length teacher-forcing batches retain Gemma's explicit PLE and
 multimodal-type streams, use native PAD PLE at masked positions, and supervise
@@ -1110,40 +2108,237 @@ PYTHONPATH=src python -m semantic_3d_chat.evaluation.v23_archive_validator --sum
 PYTHONPATH=src python -m semantic_3d_chat.evaluation.v23_archive_validator
 ```
 
-### Fail-closed Gemma static evaluation and chat
+### V28 learned post-stack dense sidecar
 
-Gemma evaluation must use the isolated Transformers 5 environment and the exact
-approved config/checkpoint pair. `GEMMA4_STATIC_CONFIG` and
-`GEMMA4_STATIC_CHECKPOINT` are intentionally empty by default. All Gemma prediction,
-scoring, control, and chat Make targets fail before inference unless both are
-explicitly supplied, architecture-compatible, and accompanied by
-`GEMMA4_STATIC_CHECKPOINT/promotion.json`.
+V26 established that a calibrated residual over every occupied voxel localizes
+held-out bowl and cabinet regions, while V27 showed that any tested fixed additive
+sidecar scale damaged V24's mirrored-room decoder control. V28 keeps the complete
+V24 scene stack unchanged, pools the frozen V26 all-voxel signal into the same 256
+spatial slots, and applies a learned adapter only after V24's global and signed-X
+residuals. Its output projection and bounded full-dimensional channel gain both
+start at exact zero; no question, label, caption, oracle relation, or text prototype
+enters this numerical route.
 
-The promotion record is a deliberate scientific acceptance artifact, not something
-training writes automatically. It must have `status: "accepted"`, contain a
-non-empty list of supporting metric artifact paths in `evidence`, and bind the
-exact approved config, checkpoint metadata, and adapter with `config_hash`,
-`checkpoint_metadata_sha256`, and `checkpoint_adapter_sha256`. No such record
-exists today: v9 free-generates its trained color pair exactly but fails both
-controls, v10 partially forgets color, and v11 restores color without learning a
-complete selected mirror unit or held-out support unit. V12's auxiliary relation
-margin did not transfer to generation, and V13's frozen-scene decoder-bank run
-preserves color but generates zero correct mirror or held-out support sides. After
-a future checkpoint is accepted, the invocation shape will be:
+The hash-pinned update-zero candidate is
+`data_gemma4/checkpoints/gemma4_v28_post_stack_sidecar/candidate_zero`. The measured
+update-zero screen processed every coarse voxel in four control scenes, reproduced
+V24 scene-token and prefix tensors bit-for-bit, reproduced teacher-forced details
+exactly, and retained 12/12 color plus 10/12 mirror full-vocabulary sides. Its
+machine-readable audit is
+`reports/gemma4/metrics/v28_post_stack_update_zero_screen.json`.
+
+Run the bounded workflow with:
 
 ```bash
-make gemma4-evaluate-static \
-  GEMMA4_STATIC_CONFIG=/path/to/accepted-config.yaml \
-  GEMMA4_STATIC_CHECKPOINT=/path/to/accepted-checkpoint \
-  GEMMA4_EVAL_SPLIT=test
-
-make chat-gemma4 \
-  GEMMA4_STATIC_CONFIG=/path/to/accepted-config.yaml \
-  GEMMA4_STATIC_CHECKPOINT=/path/to/accepted-checkpoint \
-  SCENE=scene_000005
+make gemma4-v28-build-candidate
+make gemma4-v28-update-zero
+make gemma4-v28-train-stage-a
+make gemma4-v28-select-stage-a
+make gemma4-v28-evaluate
 ```
 
-`make gemma4-evaluate-static` runs those prediction and scoring stages in order.
+Stage A freezes Gemma, V24, the calibrated V26 bridge, inherited LoRA banks,
+composer, grounding head, and the adapter's input projections. It trains only the
+zero-initialized output projection and channel gain for at most four optimizer
+steps using broad answer-token NLL, one question per batch, and 12-way gradient
+accumulation. It caches one question-independent base/sidecar scene tensor pair per
+scene before consuming questions. Selection loads Gemma once, evaluates update 0
+and all four trained updates, and requires improved validation NLL while retaining
+12/12 color sides, at least 10/12 mirror sides, no new negative control sides, and
+bounded prefix drift. Evaluation reads `selected_checkpoint` from
+`reports/gemma4/metrics/v28_stage_a_selection.json`; it never silently substitutes
+the trainer's NLL-only `best` alias. The default evaluation is the validation split;
+override `GEMMA4_V28_EVAL_SPLIT` and `GEMMA4_V28_EVAL_CHECKPOINT` explicitly for a
+different bounded measurement. These research targets do not create a promotion
+record or authorize chat.
+
+An optional selector-gated Stage B can adapt a deliberately tiny decoder surface
+after Stage A passes. It adds one fresh deterministic zero-output rank-4/alpha-8
+LoRA bank to only Gemma language-layer 13 and 14 query projections (36,864
+parameters). The approved sidecar, complete scene stack, Gemma base, and all four
+inherited LoRA banks remain frozen and hash-checked. Each scene is encoded once
+before questions, and the same full-scene tokens drive broad answer-token NLL for
+four bounded updates. Update zero must reproduce the selected Stage-A validation
+NLL within `1e-7`. The second selector rejects any update that fails 12 color
+sides, 10 mirror sides, introduces a new negative causal side, or does not strictly
+improve validation NLL:
+
+```bash
+make gemma4-v28-train-stage-b
+make gemma4-v28-select-stage-b
+make gemma4-v28-evaluate-stage-b
+```
+
+The Stage-B config is
+`configs/experiments/gemma4_color_mirror_post_stack_decoder_stage_b_v28.yaml`;
+selection is written to `reports/gemma4/metrics/v28_stage_b_selection.json`.
+Like Stage A, this optional research branch never creates a promotion record or
+authorizes chat by itself.
+
+V29 reuses that exact Stage-B architecture for the first scene-disjoint
+`diverse20` development run. Its config is
+`configs/experiments/gemma4_diverse20_post_stack_decoder_stage_b_v29.yaml`.
+The trainer is locked to `data_diverse20/qa`: scenes 11-18 are training, scenes
+19-24 are validation, and deferred scenes 25-30 must be absent from both the
+split manifest and QA records. The lock verifies the split fingerprint, balanced
+question counts (192 train and 216 validation), exact scene coverage, an empty
+`test.jsonl`, and the absence of deferred scene IDs before Gemma is loaded. Four
+48-question accumulation windows cover one deterministic pass over the 192
+training questions. Because Stage A's scalar validation NLL came from a different
+dataset, V29 does not compare those incomparable scalars; it instead verifies the
+fresh bank's zero B tensors and bit-exact per-target outputs, then records the new
+validation NLL as update zero.
+
+Model selection still runs the pre-V29 V24/V28 color and mirror controls from a
+physically separate config and requires 12/12 color sides, at least 10/12 mirror
+sides, no new negative side, and lower V29 validation NLL. There is deliberately
+no final-test target yet:
+
+```bash
+make gemma4-v29-train-diverse-stage-b
+make gemma4-v29-select-diverse-stage-b
+make gemma4-v29-evaluate-diverse-validation
+```
+
+V29's bounded decoder-only adaptation improved validation NLL but did not fix
+the causal failure: free-generation exact accuracy remained `0.375`, spatial
+extraction remained `0.5625`, all 12 answer-changing validation units remained
+wrong on at least one side, and only 7 of 216 outputs changed from update zero.
+V30 is therefore a separate development experiment, not a mutation or promotion
+of V29. Its config is
+`configs/experiments/gemma4_diverse20_joint_pair_v30.yaml`.
+
+V30 pins the selector-approved V29 update by selector, adapter, and runtime
+metadata hashes. It freezes every inherited scene/decoder tensor except the
+post-stack sidecar's `output_projection.weight` and `channel_gain` (198,144
+parameters), and adds a disjoint exact-zero rank-8/alpha-16 query LoRA bank at
+Gemma language layers 18-21 (131,072 parameters). The complete bounded surface
+is 329,216 parameters. The fresh decoder bank is proven bit-exact at update zero;
+all 14 development scene prefixes and the 216-question validation NLL must also
+exactly reproduce V29 before an optimizer step.
+
+The cache boundary is deliberately before the trainable sidecar: every numeric
+map is processed in full once, producing a frozen base tensor and an all-voxel
+aligned tensor before any question is read. Each training cycle presents every
+changed-answer unit atomically three times. Both scene prefixes are scored
+against their correct and swapped canonical answers with a configurable NLL
+margin, alongside a deterministic answer-type-balanced broad-NLL subset. No QA,
+oracle, label, caption, or retrieval result enters chat runtime, and scenes 25-30
+remain absent.
+
+Selection retains the old 12/12 color and 10/12 mirror gates, forbids new
+negative sides, requires lower diverse validation NLL, requires paired-margin
+improvement, and runs development-only greedy checks on all 24 changed rows plus
+a deterministic broad retention subset. One newly correct complete changed unit
+is recorded only as development progress. Chat promotion requires at least 6 of
+12 complete changed validation units and no aggregate exact-accuracy regression;
+missing that bar means another repair iteration, not promotion.
+
+```bash
+make gemma4-v30-train-joint-pair
+make gemma4-v30-select-joint-pair
+```
+
+There is intentionally no V30 final-test target. Deferred scenes 25-30 are not
+generated or opened until the architecture is locked by the development gates.
+
+### Fail-closed Gemma static evaluation and chat
+
+Production Gemma chat uses the isolated Transformers 5 environment and the
+standalone [runtime config](configs/runtime/gemma4_primary.yaml). That file has no
+`_base_` inheritance and contains only numeric architecture/model/runtime fields;
+it does not contain QA paths, oracle paths, experiment controls, answer categories,
+scene variants, or object-label vocabulary. The CLI and web server reject files
+below `configs/experiments` before opening them, refuse an implicit `best`
+checkpoint, and require a hash-valid promotion for every direct runtime pair.
+
+Promotion is a deliberate offline scientific acceptance action, never a trainer
+side effect. Schema-2 `promotion.json` is written beside one exact checkpoint only
+after all of the following independently supplied artifacts validate:
+
+- the selector passed, explicitly set `chat_promotion_eligible: true`, selected
+  that exact checkpoint/update, retained every required control, and did not touch
+  final-test scenes;
+- a complete, scene-disjoint held-out test report is above its declared chance
+  control, covers every reference with no missing or extra prediction, evaluates
+  counterfactuals and grounding, and binds the runtime config, adapter, runtime
+  metadata, metric file, and prediction file by SHA-256;
+- the executable leakage report passed with the oracle directory actually renamed
+  and unavailable, no forbidden file access, at least three questions, and one
+  prefix hash computed before and unchanged across all questions.
+
+The interactive process never opens those evidence reports. It reads only the
+standalone runtime config, numeric map, model snapshot, adapter,
+`runtime_metadata.json`, and the compact hash/numeric promotion attestation. A
+single `configs/runtime/primary.json` pointer additionally binds the exact runtime
+config, checkpoint directory, and promotion-file hash. Tampering with any bound
+runtime input or the pointer fails before model loading.
+
+There is intentionally no conventional schema-2 promotion or
+`configs/runtime/primary.json` pointer today. That promotion path therefore fails
+closed until real selector, held-out-final, and leakage artifacts exist. This does
+not negate the separately packaged V89 strict scene-one operator release. The
+held-out wrapper is itself created from the real primary and
+empty-scene-prefix metric files, prediction JSONL files, their immutable
+provenance sidecars, and a nonempty scene-disjoint test split. It re-hashes and
+cross-checks every file, verifies complete prediction coverage, and requires
+counterfactual and grounding cases plus primary exact accuracy strictly above the
+empty-prefix control:
+
+```bash
+make gemma4-create-final-evidence \
+  GEMMA4_PROMOTION_CHECKPOINT=/path/to/selected-checkpoint \
+  GEMMA4_FINAL_METRICS=/path/to/test-metrics.json \
+  GEMMA4_FINAL_PREDICTIONS=/path/to/test-predictions.jsonl \
+  GEMMA4_FINAL_PREDICTION_PROVENANCE=/path/to/test-predictions.jsonl.provenance.json \
+  GEMMA4_FINAL_CHANCE_METRICS=/path/to/empty-prefix-metrics.json \
+  GEMMA4_FINAL_CHANCE_PREDICTIONS=/path/to/empty-prefix.jsonl \
+  GEMMA4_FINAL_CHANCE_PROVENANCE=/path/to/empty-prefix.jsonl.provenance.json \
+  GEMMA4_FINAL_SPLIT_MANIFEST=/path/to/frozen-splits.json
+```
+
+Once that report and the independent leakage report pass, the one-time operator
+promotion command is:
+
+```bash
+make gemma4-create-chat-promotion \
+  GEMMA4_PROMOTION_CHECKPOINT=/path/to/selected-checkpoint \
+  GEMMA4_PROMOTION_SELECTOR_REPORT=/path/to/selector.json \
+  GEMMA4_PROMOTION_FINAL_EVIDENCE=/path/to/held-out-final-evidence.json \
+  GEMMA4_PROMOTION_LEAKAGE_REPORT=/path/to/leakage.json
+```
+
+The creator refuses to overwrite either an existing checkpoint promotion or
+primary pointer. Validate and launch the installed pair with:
+
+```bash
+make gemma4-validate-chat-promotion
+make chat-gemma4 SCENE=scene_000005
+make web-gemma4 SCENE=scene_000005
+make demo-gemma4 SCENE=scene_000005
+```
+
+Until the conventional pointer exists, those four `*-gemma4` commands stop without
+inference. The unqualified `make chat` and `make demo` use the separately
+authenticated V89 release. An explicit conventional direct launch is also allowed
+only for an already promoted pair:
+
+```bash
+PYTHONPATH=src .venv-gemma4/bin/python -m semantic_3d_chat.chat.cli \
+  --config configs/runtime/gemma4_primary.yaml \
+  --checkpoint /path/to/selected-checkpoint \
+  --scene scene_000005
+```
+
+Development/static scoring targets retain explicit `GEMMA4_STATIC_CONFIG`,
+`GEMMA4_STATIC_CHECKPOINT`, and `GEMMA4_STATIC_REFERENCES` inputs and do not confer
+promotion by themselves. The reference path is deliberately never inferred: if
+the physically separate answer-bearing JSONL is unavailable, `make evaluate`
+stops before inference rather than scoring stale predictions or silently reading
+another split.
+
+`make evaluate` (or its explicit `make gemma4-evaluate-static` equivalent) runs
+those prediction and scoring stages in order once all three inputs are supplied.
 Predictions go to `reports/gemma4/predictions/test.jsonl`; metrics go to
 `reports/gemma4/metrics/static_qa_test.json`. The prediction target first creates
 `reports/gemma4/questions/test.json`, a sanitized questions-only manifest, then
@@ -1163,6 +2358,7 @@ with explicit lineage:
 make gemma4-predict-controls \
   GEMMA4_STATIC_CONFIG=/path/to/accepted-config.yaml \
   GEMMA4_STATIC_CHECKPOINT=/path/to/accepted-checkpoint \
+  GEMMA4_STATIC_REFERENCES=/physically/separate/test.jsonl \
   GEMMA4_EVAL_SPLIT=test
 ```
 
@@ -1173,23 +2369,26 @@ promoted.
 ## Preserved legacy CLIP/Qwen entry points
 
 ```bash
-make setup
+make legacy-setup
 make doctor
-make download-models
-make render-smoke-scan
-make build-smoke-map
-make semantic-sanity
-make generate-dataset
-make train
-make evaluate
-make web
-make robot-evaluate
-make demo-check
-make demo
+make legacy-download-models
+make legacy-render-smoke-scan
+make legacy-build-smoke-map
+make legacy-semantic-sanity
+make legacy-generate-dataset
+make legacy-train
+make legacy-evaluate
+make legacy-chat
+make legacy-web
+make legacy-robot
+make legacy-robot-evaluate
+make legacy-mcp
+make legacy-demo-check
+make legacy-demo
 ```
 
-These generic commands retain the earlier CLIP/Qwen infrastructure; they are not
-the current Gemma primary experiment. `make demo-check` is a finite offline
+These namespaced commands retain the earlier CLIP/Qwen infrastructure; they are not
+the current Gemma primary experiment. `make legacy-demo-check` is a finite offline
 preflight for prepared artifacts. It checks
 the sanitized 24-frame RGB-D manifest, numeric high-dimensional voxel-map headers,
 local model snapshots, visualizations, and adapter/config compatibility without
@@ -1200,32 +2399,36 @@ filenames in the sanitized manifest. Its machine-readable result is
 check, not a behavioral-success gate. For Gemma invocations, the demo wrapper also
 requires the explicit accepted promotion record described above.
 
-There is currently **no accepted primary one-command Gemma demo**. Generic
-`make demo` preserves the legacy workflow and may resolve an
-architecture-compatible legacy checkpoint; that does not promote the legacy model
-or establish scene understanding. If its config selects Gemma, both `CONFIG` and
-`CHECKPOINT` must be explicit and the checkpoint must carry a valid promotion
-record, otherwise the script exits before model inference. A historical legacy
-invocation is:
+There is currently no conventional static-adapter entry in
+`configs/runtime/primary.json`, so `make demo-gemma4` remains wired to that
+promotion contract and fails closed. This does not describe the separate sealed
+V89 scene-one release: the default `make demo` authenticates that release and
+starts strict direct-memory chat over the exact immutable 738-token scene memory.
+V89 is the promoted static-chat runtime, with its trained single-scene/no-held-out
+scope explicitly disclosed. V75 remains the question-conditioned, scene-disjoint
+enhanced-readout comparator. The preserved
+CLIP/Qwen workflow is namespaced under `legacy-*`; it may resolve an
+architecture-compatible legacy checkpoint, but that does not promote the legacy
+model or establish scene understanding. A historical legacy invocation is:
 
 ```bash
-make demo \
+make legacy-demo \
   CONFIG=configs/experiments/multiscene_anticollapse.yaml \
   CHECKPOINT=data/checkpoints/multiscene_anticollapse/best
 ```
 
 For the preserved legacy finite inference/leakage demonstration (including
 temporarily making the oracle unavailable and checking prefix invariance), run
-`make demo-leakage` with an explicit compatible legacy checkpoint. That result does
-not transfer to Gemma.
+`make legacy-demo-leakage` with an explicit compatible legacy checkpoint. That
+result does not transfer to Gemma. The unqualified `make demo-leakage` exercises
+the current promoted V89 oracle-unavailable smoke and exact-input invariance proof.
 Model downloads are an explicit setup step; normal map building uses the pinned
 local vision snapshot in offline mode.
 
-`make report` is artifact-only: it never loads model weights or runs inference. Its
-current renderer describes the preserved CLIP/Qwen lineage and is not yet a
-Gemma-complete report generator. `reports/final_report.md` is therefore prominently
-marked legacy and includes a manually audited current Gemma failure summary; do not
-read its legacy tables as current primary-model results.
+`make report` is artifact-only: it never loads model weights or runs inference. It
+rebuilds the claim-bounded current Gemma metrics snapshot and Markdown report from
+an explicit source allowlist. The older CLIP/Qwen report generator remains
+available as `make legacy-report`.
 
 The prohibited oracle-text upper bound and direct-image VLM control are isolated
 under `semantic_3d_chat.evaluation`; the primary chat runtime never imports them.
@@ -1242,6 +2445,34 @@ by opaque `(scene_id, question_id)`. The oracle-text command is intentionally
 evaluation-only. The direct-image command reads only complete RGB paths from the
 sanitized render manifest. Neither is part of `make chat` or the continuous-3D
 primary architecture.
+
+The diverse20 direct-image control can reuse the already-cached
+`google/gemma-4-E2B-it` checkpoint in the isolated Transformers 5 environment—no
+second VLM download is needed. It is explicitly a **prohibited primary
+substitute** because direct RGB chat bypasses depth projection, persistent 3D
+fusion, and question-independent scene tokens. The first command limits only the
+number of validation questions; every selected question still receives all 24
+complete frames in deterministic manifest order. The config rejects download-
+enabled loading and supplies no depth, segmentation, oracle facts, or captions:
+
+```bash
+make evaluate-direct-images-gemma4-smoke       # 2 validation questions by default
+make evaluate-direct-images-gemma4-validation  # all 216 development-validation questions
+```
+
+The validation command uses the versioned
+`gemma4_decoder_kv_scene_prefix_v1` optimization. For each scene, Gemma processes
+all 24 complete frames plus the fixed instruction once, stopping immediately
+after the fixed `Question:` anchor. That continuous causal KV state is built
+without a question and privately cloned for each of the scene's 36 questions.
+This is exactly the same causal factorization as the uncached prompt, but avoids
+repeating a roughly 6,200-token multimodal prefill 36 times. Prediction rows
+record the cache contract and a scene-level prefix identity hash; JSONL
+checkpoint/resume remains per question. Pass `--no-scene-cache` directly to the
+module only for uncached parity debugging.
+
+Override `GEMMA4_DIRECT_BASELINE_SMOKE_LIMIT` for a larger resumable smoke slice.
+Scenes 25–30 remain deferred and neither command references their test split.
 
 ### Preserved legacy continuous-scene controls
 
@@ -1305,11 +2536,12 @@ results are therefore not Gemma leakage-test results.
 
 ## Preserved legacy local web interface
 
-The current web command is legacy CLIP/Qwen infrastructure. After a compatible
+The `legacy-web` command is CLIP/Qwen infrastructure. The unqualified `make web`
+now launches the strict Gemma V54 point-map comparator instead. After a compatible
 legacy adapter checkpoint and fused map are available, start it with:
 
 ```bash
-make web SCENE=scene_000001 CONFIG=configs/default.yaml
+make legacy-web SCENE=scene_000001 CONFIG=configs/default.yaml
 ```
 
 Open `http://127.0.0.1:8765`. The server constructs the complete continuous scene
@@ -1325,7 +2557,13 @@ QA, or feature-cache paths. The access audit is written to
 `reports/metrics/web_file_access.json` when the server exits. By default it binds
 only to loopback; a non-loopback host requires the explicit `--allow-network` flag.
 
-## Embodied-camera precursor and MCP
+## Historical embodied-camera precursor and MCP
+
+> **Historical architecture:** this section preserves the earlier camera-refresh
+> and low-level MCP experiments for reproducibility. It does not describe the
+> current `make rover-3d` operator. The Blender semantic-goal rover starts from a
+> fixed pre-scanned map, sets both initial and post-motion scanning to false, and
+> does not use the rover camera as a control input.
 
 The first embodied layer is a kinematic camera base with a circular collision
 footprint. It reads only anonymous numerical voxel geometry, not scene-generation
@@ -1339,7 +2577,7 @@ render → vision patch-token → map-fusion path.
 The direct precursor accepts one strict JSON envelope per line:
 
 ```bash
-make robot SCENE=scene_000001
+make legacy-robot SCENE=scene_000001
 {"tool":"turn","arguments":{"angle_degrees":30}}
 {"tool":"move_forward","arguments":{"distance_meters":0.2}}
 {"tool":"scan","arguments":{}}
@@ -1351,18 +2589,180 @@ only protocol status, opaque IDs, numerical pose/velocity, collision state,
 coverage, and scene version. It never returns an object name, label, caption, or
 semantic relationship.
 
+The embodied conversation CLI also has an opt-in local-Gemma action selector:
+
+```bash
+make gemma4-embodied-chat-llm SCENE=scene_000001
+```
+
+For action turns, Gemma receives the cached continuous scene plus numeric
+robot-state tokens and must emit exactly one bounded JSON tool call. Duplicate
+keys, trailing prose, non-finite values, stale prefix attestations, and limit
+violations fail before execution; retries are capped at two. This seam is
+currently marked `untrained_tool_selection_seam`, so it demonstrates safe local
+model integration rather than claimed navigation competence. The default policy
+fails closed; deterministic parsing is available only through an explicit CLI
+fallback option.
+
+The historical task-trained conversational MCP target is the V3 continuous
+semantic-grounded controller; the current high-level Blender rover instead uses
+the model-only waypoint DAgger V14 policy documented above:
+
+```bash
+make gemma4-embodied-chat-learned-check
+make gemma4-embodied-chat-learned SCENE=scene_000001
+# Or run one finite instruction, capped at 12 refreshed policy/action steps:
+make gemma4-embodied-chat-learned-once \
+  GEMMA4_LEARNED_NAVIGATION_COMMAND="Move closer to the chair, then stop."
+```
+
+The historical refresh experiments inherited the hash-sealed `embodied_v54.yaml`
+contract and enabled one automatic complete RGB-D scan after accepted motion.
+The current `configs/runtime/embodied_live.yaml` instead configures the static-map
+Blender rover and disables both initial and post-motion scans. Archived reports
+retain their original configuration hashes for evidence authentication.
+
+V3 receives the complete cached continuous scene prefix, continuous numeric
+robot-state tokens, and the user's literal instruction. For target-bearing
+navigation instructions it embeds only the user-supplied target phrase, scores
+every voxel in the active semantic map, and supplies the learned controller with
+the resulting numeric target state. It does not load an object inventory,
+caption, scene graph, segmentation labels, QA data, or oracle metadata. Each
+step emits the policy attestation, map/query hashes, scored-voxel count, numeric
+tool receipt, and refreshed-prefix binding. The same instruction is re-evaluated
+after every successful bounded action until the controller selects `stop`, an
+action or policy fails, or the configurable 12-step cap is reached. The older
+`gemma4-embodied-chat-llm` target remains available and remains explicitly marked
+`untrained_tool_selection_seam`; it is not the current learned-navigation path.
+
 The official Python MCP SDK is pinned at `mcp[cli]==2.0.0`. Start its local stdio
 server with `make mcp`; use `--transport streamable-http` only when an HTTP client
 is needed. The nine exposed tools are `get_robot_state`, `look`, `turn`,
 `move_forward`, `move_backward`, `move_to`, `scan`, `stop`, and `reset_scene`.
 
+The finite semantic process-boundary demonstration is:
+
+```bash
+make gemma4-embodied-mcp-conversation-check SCENE=scene_000001
+make gemma4-embodied-mcp-conversation SCENE=scene_000001 \
+  GEMMA4_LEARNED_NAVIGATION_COMMAND="Face the chair, then stop."
+make gemma4-embodied-mcp-conversation-score SCENE=scene_000001
+```
+
+The first command loads no Gemma tensors and starts no renderer or transport. The
+second starts the production semantic MCP subprocess and uses a separate client
+process for natural-language target parsing, selective local-Gemma text embedding,
+fresh all-voxel grounding, and V3 numeric alignment decisions. All robot actions
+cross stdio; the subprocess owns complete-image RGB-D encoding, semantic-map fusion,
+full scene-prefix reconstruction, and numeric robot-state token refresh. The third
+command is evaluation-only and refuses to open its oracle until the runtime result
+and both process-lifetime access audits have passed authentication. The emitted
+policy record deliberately says `learned_v3_action_head_used: false` and
+`gemma_native_function_calling_used: false`; hashes received over MCP are not
+misrepresented as the unavailable prefix tensors required by the learned action
+head.
+
+For the useful repeated-command form, run:
+
+```bash
+make embodied-demo-check SCENE=scene_000001
+make embodied-demo-smoke SCENE=scene_000001
+make embodied-demo-smoke-inspect SCENE=scene_000001
+make embodied-demo-smoke-score SCENE=scene_000001
+make embodied-demo SCENE=scene_000001
+```
+
+The historical smoke command is a deterministic finite heavy proof that sends
+face-chair, approach-chair, scan, state, and standalone stop through the same
+stdio session;
+its result and two process-lifetime audit files are separate from the interactive
+demo's artifacts. It automatically runs the strict post-run inspector. The
+`embodied-demo-smoke-inspect` command repeats only that model-free authentication
+against an existing report. It verifies the exact command order, every passed
+turn, positive translation, every-voxel grounding, receipt-to-receipt map/prefix
+refresh, strict numeric-only receipts, two hash-bound zero-forbidden access audits,
+and the final safety-latched stop. It deliberately opens no semantic map, Gemma
+weights, Blender asset, QA/training file, or oracle geometry; target-distance
+scoring remains a separate later oracle-only step. `embodied-demo` keeps one
+official-MCP stdio subprocess, robot episode, persistent
+semantic map, and continuous scene-prefix binding alive. The prompt accepts
+`Face the <target>`, `Look at the <target>`, `Turn toward the <target>`, `Approach
+the <target>`, `Move closer to the <target>`, `Walk toward the <target>`, `scan`,
+`get robot state`, and `stop`; the optional suffix `then stop` is accepted on
+target goals. There is no built-in object vocabulary: the target phrase comes
+only from the user's command, is embedded with selectively loaded local-Gemma
+token rows, and is scored against every active-map voxel. Only the resulting
+numeric turn/movement arguments cross MCP. In these archived auto-scan experiments,
+successful motion captured a new complete RGB-D image, fused it into the map, and
+rebuilt the scene prefix. The current Blender operator intentionally does none of
+those camera updates: its fixed scene prefix remains byte-identical and only
+numeric robot tokens refresh.
+
+Reaching a face or approach goal verifies zero numeric linear/angular velocity
+and acknowledges the state through MCP, but deliberately does not consume the
+episode-wide stop latch; this permits a face command followed by an approach,
+scan, or another target. A standalone `stop` invokes the real MCP safety latch and
+rejects later motion. Exiting or EOF also latches stop before closing stdio. This
+entry point reuses the tested V3 **numeric alignment/approach interlocks**, not the
+learned V3 action head, and does not claim Gemma function calling. The local Gemma
+rows provide continuous target grounding; action choice is deterministic numeric
+geometry plus the anonymous collision field.
+
+A non-interactive same-session sequence is available for reproducible diagnosis:
+
+```bash
+PYTHONPATH=src .venv-gemma4/bin/python \
+  -m semantic_3d_chat.robot.conversational_mcp_agent \
+  --config configs/runtime/embodied_live.yaml \
+  --scene scene_000001 \
+  --runtime-asset data/runtime_assets/scene_000001/s_000001.blend \
+  --command "Face the chair, then stop." \
+  --command "Move closer to the chair, then stop." \
+  --command scan \
+  --command "get robot state" \
+  --command stop
+```
+
+Both client and server lifetime file audits are authenticated in the saved
+session report. MCP receipts are strict numeric/protocol records and contain no
+target phrase, category label, caption, object ID, QA data, or oracle metadata.
+
+The first completed `scene_000001` finite same-session smoke passed all five
+turns in 162.51 seconds. Its action transcript was initial scan, two bounded
+turns, stationary face acknowledgment, two collision-limited forward moves,
+stationary approach acknowledgment, explicit scan, state query, standalone stop,
+and final state verification. It moved 0.7457 m with zero collisions, refreshed
+the continuous map/scene prefix for all six observations, scored every active-map
+voxel at every target decision, and finished with the stop latch set. The
+model-free inspector passed all 15 checks with zero forbidden reads in both
+process audits. The separate oracle-only score reduced chair-center XY distance
+from 1.3436 m to 0.5979 m, measured 0.7457 m progress, 0.146° face-heading error,
+0.329° final heading error, and zero collisions. This is one deterministic
+development-scene integration proof, not held-out navigation generalization.
+
 Run the reproducible numerical action/collision benchmark with `make
-robot-evaluate`. It deliberately does not claim language-conditioned semantic
-target navigation: that requires training the robot-state tokens and action policy
-on top of the static scene adapter. The current `RobotStateEncoder` maps normalized
-position, sine/cosine orientation, velocity, collision, last motion, coverage, and
-stop state to configurable continuous tokens that can be appended directly to the
-continuous scene prefix.
+robot-evaluate`. A separate label-free semantic policy embeds the user's target
+text with the local Gemma tied input-token rows, scores every voxel against the
+map's continuous language-aligned visual feature, plans through anonymous geometry,
+and executes only bounded numerical robot actions. Run its leakage-blocked policy
+and physically separate oracle scorer with:
+
+```bash
+make gemma4-semantic-navigation SCENE=scene_000001
+```
+
+On the deterministic development room this reached the correct target bounding
+box for 8/9 instructions (88.89%), finished within the 0.85 m navigation standoff
+for 8/9, had zero collisions, and scored 0/9 on the cyclic wrong-target control.
+The cabinet instruction was the sole miss. This is a development-scene vertical
+slice, not held-out navigation generalization. Its arrival scan is the sanitized
+map reobservation path; the separate `gemma4-embodied-smoke` command proves the
+fresh Blender RGB-D → one full-image Gemma pass → 3D fusion → scene-prefix refresh
+path.
+
+The current `RobotStateEncoder` maps normalized position, sine/cosine orientation,
+velocity, collision, last motion, coverage, and stop state to configurable
+continuous tokens that can be appended directly to the continuous scene prefix.
 
 ## Deterministic multi-scene controls
 
@@ -1392,6 +2792,455 @@ For a bounded Blender-side smoke test, select scenes explicitly:
 The default seed remains `20260808` for `scene_000001`; later independent scenes
 use stable seed offsets, while both members of each counterfactual pair share one
 seed so all stochastic placement factors remain fixed.
+
+### Isolated diverse28 development expansion
+
+`configs/experiments/diverse28.yaml` extends `diverse20` with four new atomic
+training pairs at opaque scene IDs 31--38: book on/under the table, mirrored
+left/right geometry, picture on wall/floor, and floor-lamp present/removed. It
+uses new deterministic pair seeds and varied layouts/colors. The resulting
+split trains on scenes 11--18 plus 31--38, keeps validation scenes 19--24
+unchanged, and retains scenes 25--30 as the deferred final test. The inherited
+artifact paths reuse `data/oracle`, `data/rendered`, and `data_gemma4/maps`; only
+the generated QA dataset is isolated at `data_diverse28/qa`.
+
+These development targets name only scenes 31--38 and never pass the deferred
+test unlock flag. Inspect, generate, render, and then build balanced QA with:
+
+```bash
+make diverse28-dry-run
+make diverse28-generate-expansion
+make diverse28-render-expansion
+make diverse28-generate-dataset
+```
+
+The equivalent batch and QA entry points are:
+
+```bash
+.venv/bin/python scripts/generate_scene_batch.py \
+  --config configs/experiments/diverse28.yaml --stage generate --split train
+.venv/bin/python scripts/generate_scene_batch.py \
+  --config configs/experiments/diverse28.yaml --stage render --split train
+PYTHONPATH=src .venv/bin/python -m semantic_3d_chat.data.qa_generator \
+  --config configs/experiments/diverse28.yaml
+```
+
+The first two direct commands also visit inherited training scenes 11--18, but
+the content-matched cache leaves them unchanged. QA generation fails closed if
+any selected development scene or its exact depth-ray visibility evidence is
+missing. Counterfactual questions remain selected as indivisible two-scene
+units with the inherited per-scene balancing limits.
+
+### V31 expanded-pair development run
+
+V31 consumes the isolated `data_diverse28/qa` dataset after that expansion is
+materialized. It is a fresh branch from the selector-approved V29 `update_004`,
+not a continuation of the unsuccessful V30 weights. The audited V30
+exact-zero/frozen-state engine is reused unchanged: only the sidecar output
+projection/gain and the disjoint rank-8 Gemma query bank are trainable.
+
+The strict contract in
+`configs/experiments/gemma4_diverse28_joint_pair_v31.yaml` requires exactly 384
+questions from training scenes 11--18 plus 31--38, exactly the existing 216
+questions from validation scenes 19--24, an empty deferred `test.jsonl`, and no
+loaded artifact from scenes 25--30. The training lock also requires all 25
+answer-changing units across the eight declared physical-change types. It pins
+both the diverse28 source config and
+the approved V29 selector/checkpoint hashes. V31 runs eight bounded cycles,
+evaluates and checkpoints every cycle, uses clipped zero-weight-decay updates,
+and raises the sidecar/decoder learning rates to `1e-4`/`2e-4`. This is a
+stronger but still narrow 329,216-parameter repair surface.
+
+```bash
+make gemma4-v31-preflight-expanded-pair
+make gemma4-v31-train-expanded-pair
+make gemma4-v31-select-expanded-pair
+```
+
+The selector independently inspects update zero and all eight intermediates.
+Development selection requires a strict validation-NLL improvement, retention
+of the old 12/12 color and 10/12 mirror sides, no new negative sides, broad-QA
+non-regression, and at least one newly correct complete changed validation pair.
+That is only evidence of development progress. Chat promotion remains a
+separate, harder gate requiring at least 6/12 changed pairs and no aggregate
+validation exact-accuracy regression. There is intentionally no V31 final-test
+target.
+
+### Conditional V32 true-microstep optimizer repair
+
+V32 is prepared only as a fallback and is conditional on an independently
+rejected V31 selector report. Its trainer fails closed while V31 is pending and
+also refuses to run if V31 passes. It does not continue V31 (or V30): it starts
+again from the hash-pinned, selector-approved V29 `update_004`, reconstructs the
+same exact-zero cache, and permits only new training scenes 31--38 to use the
+bit-exact repeated derived-prefix path. Validation remains scenes 19--24 and
+final scenes 25--30 remain deferred and unopened.
+
+The V31 evidence showed that each full cycle became one giant clipped optimizer
+step: validation NLL improved while changed validation pairs remained at 0/12,
+with pre-clip norms around 18--20 against a clip of 1. V32 repairs that optimizer
+granularity. It makes 80 real AdamW updates. Every update combines one balanced
+broad QA record with one indivisible changed-answer pair unit; all 25 units
+recur at least three times. The learning rates are `2.5e-5` for the sidecar
+surfaces and `2e-5` for the fresh decoder bank, with zero weight decay
+and the existing norm-1 clip. The authorized parameter surface remains exactly
+329,216 parameters.
+
+```bash
+make gemma4-v32-preflight-microstep
+# The next command is authorized only after V31's selector writes a rejection.
+make gemma4-v32-train-microstep
+make gemma4-v32-select-microstep
+```
+
+V32 saves update zero and optimizer steps 8, 16, ..., 80. The selector must
+independently inspect all eleven arms and verifies that each saved Adam state
+records the claimed number of true optimizer updates. Each candidate must strictly improve on
+the selected V29 validation NLL, retain the old 12/12 color and 10/12 mirror
+teacher controls without a new negative side, avoid broad-QA regression, and
+solve at least 1/12 complete changed validation pairs. That is a development
+gate only. Chat promotion separately requires at least 6/12 changed pairs and
+no aggregate exact-accuracy regression. There is intentionally no V32-specific
+final-test bypass target.
+An interrupted `make gemma4-v32-train-microstep` resumes from the latest
+contiguous complete saved arm. Resume validates the config, V31-rejection hash,
+schedule hash, data boundary, full adapter state, and Adam step counters before
+performing the next micro-update; a partial or forged checkpoint fails closed.
+
+### V33 environmental-only sidecar recovery
+
+V32 was formally rejected: decoder updates reduced validation NLL but did not
+produce a complete non-mirror counterfactual answer. V33 therefore restarts
+from the same hash-pinned V29 `update_004` and freezes Gemma, every LoRA bank,
+the base-normalization/projection route, and the rest of the scene stack. Its
+only trainable surface is 404,608 parameters on the continuous all-voxel
+dense-sidecar path: output projection plus channel gain (198,144), sidecar
+normalization plus projection (199,808), and position projection (6,656).
+
+The 100 true AdamW updates contain one broad record and one indivisible pair
+unit each, so all 25 changed training units recur exactly four times. The three
+parameter groups use learning rates `2.5e-5`, `1e-4`, and `1e-4`, zero weight
+decay, and independently measured/clipped norm-1 gradients. Saved arms are
+0, 8, ..., 96, and 100. Actual adapted continuous-prefix distances are audited
+at every saved arm; weak book/picture separations must improve by at least 25%
+without increasing unrelated-scene separation by more than 25%.
+
+```bash
+make gemma4-v33-preflight-environmental
+make gemma4-v33-train-environmental
+make gemma4-v33-select-environmental
+```
+
+The preflight is pinned to the exact terminal V32 rejection SHA-256 and refuses
+any existing final-scene 25--30 footprint. At update 64, training saves the
+causal checkpoint and then refuses to continue unless at least one non-mirror
+teacher-forced unit is complete and both book and picture margin advantages
+are positive. A failed update-64 arm remains valid evidence for the defined,
+disabled 199,808-parameter base-route follow-up; resume cannot bypass the gate.
+
+Chat promotion still requires at least 6/12 complete changed validation units,
+at least one in each book/mirror/picture family, all old 12 color and 10 mirror
+sides with no new negatives, and no aggregate exact-accuracy regression. There
+is no V33 final-test bypass target.
+
+### V34 bounded base-route isolation
+
+V33 stopped as designed immediately after saving update 64. Its two weak
+non-mirror families regressed instead of crossing the causal gate: the book
+teacher margin moved from `0.065371` to `-0.006955`, the picture margin moved
+from `-0.054688` to `-0.177734`, and non-mirror completed units remained zero.
+The weak-pair adapted-prefix RMS changed by only `1.000267x`, essentially the
+same as unrelated scenes (`1.000553x`). The metadata/tensor-only terminal seal
+pins all four update-64 files, proves there is no update 72 or later, verifies
+the V29/V32/config/schedule lineage, and opens no model, QA, map, oracle, or
+final-scene artifact:
+
+```bash
+make gemma4-v33-seal-update64
+```
+
+V34 is one bounded architectural isolation, not an indefinite hyperparameter
+search. It starts from the exact numbered V33 `update_064`; update zero must be
+bit-exact in every checkpoint tensor, every training-scene prefix, and the
+216-row validation NLL. Gemma, all LoRA banks, every V33-learned environmental
+tensor, structural buffers, and all other scene modules remain frozen. Only
+`base_norm.{weight,bias}` and `base_projection.{weight,bias}` train: 199,808
+parameters split into fresh Adam groups at learning rates `2.5e-5` and `1e-4`,
+each with its own norm-1 clip and zero weight decay.
+
+The language schedule still covers all 25 atomic changed QA units in 64 true
+microsteps (11 units twice and 14 three times). Its additional question-free
+geometry objective is reduced separately over the eight unique changed
+physical training-scene pairs and all 112 other pairs among the same 16 train
+scenes. Distances are divided by fixed update-zero RMS baselines. The loss uses
+the bounded log-selectivity ranking
+`log(changed_ratio) - mean(log(unrelated_ratio))`, a two-sided unrelated-scene
+log trust penalty, a changed-ratio cap, and a source-centered prefix mean/norm
+trust region. It never uses validation IDs, questions, answers, or oracle
+environment inputs.
+
+```bash
+make gemma4-v34-preflight-base-surface
+make gemma4-v34-train-base-surface
+make gemma4-v34-select-base-surface
+```
+
+Update 32 is a train-only causal stop: geometric-mean selectivity must exceed
+`1.02`, at least 6/8 physical changes must exceed `1.02`, none may fall below
+`0.98`, and unrelated median/P90 drift must remain within the same two-sided
+`1.02` trust region. Validation is logged but cannot decide whether training
+continues. Only after a complete bounded run does the independent selector
+replay all nine arms on development validation. Retention and aggregate
+non-regression are measured against approved V29; improvements are measured
+against V33 update 64. Chat promotion additionally requires 6/12 changed
+pairs, every book/mirror/picture family, 12 color and 10 mirror control sides,
+no new V29-relative negatives, and aggregate exact non-regression. Rich checks
+remain separately audited while the outward promotion attestation preserves
+the exact three-field final-once protocol. There is no V34 final-test bypass.
+
+V34 stopped as designed after saving update 32 because the train-only causal
+gate failed. Changed-pair selectivity was `1.00003981590271x`, no physical pair
+exceeded the required `1.02x` ratio, and the inherited 199,808-parameter base
+surface therefore did not expose the missing scene distinctions. The terminal
+seal verifies the exact five saved arms, all four update-32 file hashes, every
+optimizer step, and the four changed base tensors while proving all inherited
+tensors stayed frozen. It loads no Gemma weights, maps, QA, oracle data, or
+final scenes:
+
+```bash
+make gemma4-v34-seal-update32
+```
+
+This failure does not authorize chat or final evaluation. It conditionally
+authorizes only the exact-zero V35 block-token cross-residual experiment; no
+other follow-up architecture is authorized by the seal.
+
+### V35 bounded all-block cross-residual
+
+V34 established that the inherited low-rank/base surfaces did not expose the
+changed physical facts. V35 is the bounded high-rank repair. It restarts from
+the exact immutable V33 `update_064` (tensor-state SHA-256
+`cb7bb3b48ace60212ee5c7f326839bf2ddd993810417de45c9a9cbc666313fe6`);
+V34 update 32 is never a weight source. Its terminal report merely authorizes
+this one architecture.
+
+For each of the 22 development scenes, the question-free cache retains exact
+post-V33 scene tokens as float32 CPU tensors, every occupied-block token as
+float16 CPU, and the repeated normalized XYZ position for every block token.
+It checks `processed_voxels == voxel_count` and
+`token_count == tokens_per_block * occupied_blocks`. The six validation-scene
+caches are used only to prove exact update-zero prefix identity; all optimizer
+losses, residual penalties, separation diagnostics, and continuation gates use
+only the 16 training scenes. Training never opens `validation.jsonl`, an oracle
+file, or a deferred final-scene artifact.
+
+The new module sends all block tokens into all 256 scene slots with four-head
+FP32 cross-attention, a 1% uniform attention floor, normalized spatial bias,
+and a bounded `0.25 * tanh` residual. Its four matrices
+`w_q/w_k/w_v/w_o` contain exactly 983,040 parameters. `w_o` starts at exact
+zero, making update zero bit-identical to V33. Step 1 trains only `w_o` at
+`2.5e-5`; subsequent steps open Q/K/V at `1e-4`. Gemma, every LoRA bank, and
+the complete V33 scene stack remain frozen and hash-checked.
+
+The 100-step schedule presents every one of the 25 atomic changed QA units
+exactly four times plus one balanced unchanged broad example per step. Its
+locked loss is
+`0.25*broad_CE + 0.5*pair_CE + 4*side_hinge(0.5) + 8*cross_prefix_flip_hinge(0.25) + 0.001*mean((delta/0.05)^2)`.
+The cross-prefix term scores the exact differing answer tokens under both
+physical scene prefixes; it is not a vector-distance surrogate.
+
+```bash
+make gemma4-v35-preflight-block-cross
+make gemma4-v35-train-block-cross
+make gemma4-v35-select-block-cross
+```
+
+Update 32 is a train-only causal gate requiring at least `1.02x` geometric
+changed-prefix selectivity, 6/8 changed physical pairs above `1.02x`, no pair
+below `0.98x`, bounded unrelated drift, strictly improved training mean margin
+and completed-unit count, and residual RMS at most `0.10`. Update 64 additionally
+requires at least 8/25 completed changed QA units and at least one completion in
+each of the book-support, mirror-left/right, and picture-support training
+families. A failed gate is saved as evidence and cannot be bypassed by resume.
+Validation QA is evaluated only afterward by an independent selector. V35 has
+no chat or final-test bypass target.
+
+#### V35 post-training selector
+
+The independent selector refuses to load validation QA or Gemma until the
+checkpoint directory contains exactly `update_000, update_008, ..., update_096,
+update_100`. It inspects every adapter tensor, sanitized runtime metadata file,
+and saved Adam state; independently replays the training-only update-32 and
+update-64 gates; and requires both gates to have passed. Validation therefore
+cannot influence training continuation.
+
+With one local Gemma load, the selector builds the complete question-free
+all-block cache and evaluates teacher-forced NLL, pair margins, and continuous
+prefix separation for every numbered arm. Greedy generation is bounded to
+updates 32, 64, and 100. Exact V33 update 64 is the improvement baseline;
+approved V29 is the color/mirror/no-new-negative, broad-retention, and aggregate
+accuracy baseline. A development arm must strictly improve validation NLL,
+mean pair margin, and passed pair count; separate every book, mirror, and
+picture family more than unrelated scenes; retain old controls; and complete a
+non-mirror teacher unit. Chat promotion additionally requires 6/12 greedy
+counterfactual completions, one in every family, aggregate exact non-regression,
+and question-independent prefix/leakage attestations. The outward promotion
+record retains exactly the three fields required by the final-once controller;
+all richer requirements are recorded separately. This target never reads or
+creates deferred final scenes.
+
+V35 stopped as designed after saving update 32 because its first train-only
+causal gate failed. The changed-pair prefix-selectivity geometric mean was
+`1.000036597251892x`, with `0/8` physical pairs reaching the required `1.02x`;
+book-support and picture-support each still had zero complete training units.
+The slight training-margin improvement (`1.2638574838638306` to
+`1.32265043258667`) and completion increase (`8` to `9`) therefore do not
+constitute evidence that the scene prefixes became causally discriminative.
+
+The deterministic terminal seal checks every byte of all five saved arms,
+replays the exact failure from metadata, validates all four staged Adam states,
+proves all 168 inherited V33 tensors stayed bit-exact, and proves the only
+changed tensors were `w_q/w_k/w_v/w_o` while all seven persistent block-core
+buffers remained exact. It opens no Gemma weights, QA, scene maps, oracle data,
+or deferred final scenes:
+
+```bash
+make gemma4-v35-seal-update32
+```
+
+This seal does not authorize selection, chat, or final evaluation. It permits
+only a fresh-Adam V36 experiment sourced from exact V35 update 32: updates 1--8
+may train the already-present exact-zero rank-8
+`extension_v30_joint_pair_query` bank on Q projections in language layers
+18--21; updates 9--100 may jointly train that same bank and the four V35 block
+matrices. No new LoRA bank or other inherited V33 tensor is authorized to
+change.
+
+### V36 bounded joint decoder readout
+
+V35 proved that the all-block route can improve train-only answer margins, but
+its Euclidean prefix-distance gate did not measure whether Gemma could decode
+those small continuous changes. V36 isolates that readout hypothesis. It loads
+the exact stopped V35 `update_032` adapter (full tensor-state SHA-256
+`1fe8f278460faeb1e13d9da09051a497965a566565c79a4f6ea28c56a9120326`),
+including learned block-core state `75af9958...`; it does not restart from the
+zero V35 core and never loads V35 Adam momentum. The inherited V33 stack
+remains exact.
+
+The only language surface is the existing 131,072-parameter
+`extension_v30_joint_pair_query` bank: rank 8, alpha 16, Q projections in
+Gemma layers 18--21. Its B matrices are still exact zero at V36 update zero.
+Updates 1--8 train only that bank at `2e-5`. Updates 9--100 jointly train the
+bank, block W_o at `2.5e-5`, and block Q/K/V at `1e-4`, with fresh Adam, zero
+weight decay, and separate gradient clipping. The total authorized surface is
+1,114,112 parameters. A 167-tensor hash includes every nonauthorized tensor
+and all seven persistent core buffers, excluding only the four core matrices
+and eight query-bank tensors.
+
+V36 deliberately reuses V35's exact 100-step schedule and loss, so decoder
+readout is the changed factor. The six validation maps are used only for a
+question-free source-prefix replay; every loss and continuation metric uses
+the 16 training scenes, and `validation.jsonl` is never opened. Update 16
+requires improvement beyond the exact V35 source plus bounded broad NLL and
+residual drift. Update 32 raises the teacher thresholds and requires at least
+one complete book, mirror, and picture unit. Update 64 additionally requires
+train-only greedy completion of at least 6/25 units, every priority family,
+and broad greedy retention. Euclidean separation remains descriptive rather
+than a continuation gate.
+
+```bash
+make gemma4-v36-preflight-joint-block-cross
+make gemma4-v36-train-joint-block-cross
+make gemma4-v36-select-joint-block-cross
+```
+
+The V36 post-training selector is the first process permitted to open validation QA,
+and only after all numbered arms through update 100 and all three train-only
+gates pass. It inspects every tensor and persistent buffer, freshly sanitized
+runtime metadata, and every staged Adam moment before loading Gemma. It scores
+teacher-forced evidence for all 14 arms and bounded greedy evidence only at
+updates 32, 64, and 100. Chat promotion still requires at least 6/12 complete
+development counterfactual units, at least one book, mirror, and picture unit,
+approved-V29 control and aggregate retention, and prefix-invariance/leakage
+attestations. V36 has no final-evaluation or chat bypass.
+
+V36 stopped safely at its first train-only gate after update 16. Teacher-forced
+completion remained `9/25` against a required `10/25`, and complete physical-pair
+coverage was `4/8` against a required `5/8`. Cross-prefix completion improved to
+`16/25`, positive sides to `34/50`, and mean cross-prefix margin to
+`1.4565558433532715`; broad train NLL stayed bounded at `2.915099874138832`
+(`0.9824921284356688x` its source), but those partial gains cannot authorize
+development selection or chat.
+
+The update-16 terminal seal pins all V35 source and V36 update 0/8/16 files,
+full/core/query-bank/frozen tensor hashes, sanitized runtime metadata, and every
+fresh staged-Adam moment. It proves update 8 changed only the eight V30 query-bank
+tensors, update 16 changed only those tensors plus the four block matrices, and
+all 167 nonauthorized tensors stayed bit-exact. The report process loads no Gemma,
+QA, scene maps, oracle metadata, or final scenes and only hashes the protected
+legacy selection artifact:
+
+```bash
+make gemma4-v36-seal-update16
+```
+
+The only conditional successor is a bounded V37 continuation of the already
+learned 30,720-parameter `extension_v23_shared_kv` bank. That rank-4, alpha-8
+bank targets K/V projections only in layers 13 and 14, the last non-shared
+sliding/full K/V producers consumed by Gemma's upper shared-KV layers. No fresh
+bank is legal because duplicate LoRA target paths are forbidden, and layers
+18--21 do not expose operative K/V projection modules. V37 must freeze the V36
+query bank, learned block core, scene stack, composer, Gemma base, and every
+other tensor; start fresh Adam; preserve the exact question-independent scene
+prefix; and pass its preregistered train-only gates before validation can open.
+
+### One-shot held-out final evaluation
+
+The generic final-once controller is dormant until an independent selector
+both selects one exact checkpoint and sets `chat_promotion_eligible: true`.
+Development success or a zero exit status is insufficient. Before any command
+can write scenes 25--30, the controller validates that attestation, the exact
+checkpoint path, standalone runtime config, deferred scene plan, untouched
+final footprint, and development-QA hashes. Preflight is read-only:
+
+```bash
+make gemma4-final-once-preflight \
+  GEMMA4_FINAL_ONCE_SELECTOR_REPORT=reports/gemma4/metrics/v32_microstep_selection.json \
+  GEMMA4_FINAL_ONCE_CHECKPOINT=/exact/selector-chosen/checkpoint
+```
+
+Only after that succeeds, the complete resumable run is:
+
+```bash
+make gemma4-final-once \
+  GEMMA4_FINAL_ONCE_SELECTOR_REPORT=reports/gemma4/metrics/v32_microstep_selection.json \
+  GEMMA4_FINAL_ONCE_CHECKPOINT=/exact/selector-chosen/checkpoint
+```
+
+It atomically seals config chains, code, selector, checkpoint, split plan,
+output paths, and the SHA-256 of every file in the exact pinned local Gemma
+snapshot before invoking Blender. It then generates and renders exactly the six
+deferred scenes, loads Gemma once for all full-image feature extraction, builds
+all maps, creates the scene-disjoint 216-question final split with exactly four
+answer-changing units for each of the three physical counterfactual pairs, and
+creates a questions-only manifest. Final supervision is generated first in an
+isolated evaluation directory; its train/validation bytes must reproduce the
+sealed development hashes, and only test/split artifacts are published. It runs
+complete primary and empty-prefix inference, scores counterfactuals and
+grounding, performs the real oracle-rename
+leakage test, and publishes promotion plus the primary pointer only when the
+primary run beats the empty-prefix control on aggregate text accuracy,
+counterfactual pair accuracy, changed-answer rate, and grounding error. The
+leakage prefix hash must also equal the prefix used by primary evaluation for
+that exact scene. The fail-closed minimums are 50% pair accuracy, 50%
+changed-when-expected rate, 100% grounding coverage, mean grounding error no
+larger than half the room diagonal, and at least 10% lower grounding error than
+the empty-prefix run. Every stage has a SHA-256 receipt. An interrupted command
+may be rerun; changed inputs or outputs fail instead of being mixed. For a bounded
+operator checkpoint, set `GEMMA4_FINAL_ONCE_STOP_AFTER=render` (or another stage)
+and rerun later without that variable. No final-once command should run while
+another process may access `data/oracle`, because the leakage stage deliberately
+renames that directory during inference.
 
 Before a multi-scene adapter run, the deterministic selector treats each
 expected-change counterfactual question as an indivisible two-scene training

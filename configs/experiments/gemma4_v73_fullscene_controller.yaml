@@ -1,0 +1,109 @@
+v73:
+  artifact: gemma4_v73_fullscene_pair_disjoint_numeric_screen
+  seed: 730073
+  device: auto
+  wall_time_budget_seconds: 600
+  training_qa: data_diverse52/qa/train.jsonl
+  prefix_cache: data_gemma4/scene_tokens/v56_question_control_full_prefixes
+  gemma_snapshot: /Users/stevens/.cache/huggingface/hub/models--google--gemma-4-E2B-it/snapshots/3e22461f65e89153144f8adb70e3b8c2cc9845a7
+
+  split:
+    # Historical counterfactual pairs fit both readers.  The eight later
+    # replicated-family pairs remain pair- and scene-disjoint until scoring.
+    train_pair_ids:
+      - pair_000005
+      - pair_000006
+      - pair_000007
+      - pair_000008
+      - pair_000009
+      - pair_000010
+      - pair_000011
+      - pair_000015
+      - pair_000016
+      - pair_000017
+      - pair_000018
+      - pair_000026
+    held_pair_ids:
+      - pair_000019
+      - pair_000020
+      - pair_000021
+      - pair_000022
+      - pair_000023
+      - pair_000024
+      - pair_000025
+      - pair_000027
+
+  architecture:
+    hidden_size: 1536
+    environment_latents: 256
+    control_tokens: 4
+    internal_reader_slots: 8
+    model_dimension: 128
+    head_count: 4
+    feedforward_dimension: 384
+    # The two cross-attention reads are the set reader.  Avoiding an additional
+    # 256x256 scene self-attention block makes the fixed screen inexpensive.
+    scene_encoder_layers: 0
+    scene_cross_attention_layers: 2
+    uniform_floor_mass: 0.10
+    output_basis_rank: 112
+    maximum_control_rms: 0.25
+    initial_control_rms: 0.10
+    output_bias: false
+    question_only_residual_to_output: false
+    full_unchanged_prefix_retained_separately: true
+
+  fit:
+    epochs: 80
+    batch_size: 48
+    pair_batch_size: 10
+    evaluation_batch_size: 48
+    learning_rate: 0.002
+    weight_decay: 0.0001
+    gradient_clip_norm: 1.0
+    prototype_rms: 0.10
+    temperature: 0.20
+    classification_weight: 1.0
+    value_weight: 0.25
+    pair_classification_weight: 1.0
+    pair_value_weight: 0.25
+    pair_delta_weight: 1.0
+    opposite_weight: 6.0
+    opposite_margin: 0.25
+
+  gates:
+    causal_margin_gain: 0.03
+    causal_margin_gain_bootstrap_lower_bound: 0.0
+    additional_positive_sides: 8
+    additional_complete_units: 6
+    prediction_change_units: 13
+    improved_families: 6
+    minimum_family_margin_gain: -0.02
+    maximum_broad_accuracy_drop: 0.02
+    correct_over_wrong_scene_margin: 0.02
+    zero_scene_maximum_absolute_control: 0.0
+
+  absolute_reader_gates:
+    supported_accuracy: 0.80
+    changed_supported_accuracy: 0.65
+    complete_class_units: 8
+    prediction_change_units: 13
+    positive_own_over_opposite_sides: 34
+    mean_own_over_opposite_margin: 0.20
+    correct_over_wrong_scene_margin: 0.02
+    zero_scene_maximum_absolute_control: 0.0
+
+  unsupported_held_class_policy:
+    expected_unsupported_class_count: 1
+    held_rows_with_unseen_training_class_are_excluded_from_class_accuracy: true
+    excluded_rows_remain_counted_as_unsupported: true
+    runtime_promotion_forbidden_until_continuous_teacher_is_verified: true
+
+  scope:
+    training_pool_only: true
+    official_validation_loaded: false
+    official_test_loaded: false
+    deferred_final_loaded: false
+    oracle_loaded: false
+    gemma_generation_used: false
+    checkpoint_published: false

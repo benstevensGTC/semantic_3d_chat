@@ -1,0 +1,142 @@
+_base_: gemma4_diverse20_joint_pair_v30.yaml
+
+# V31 is a fresh development run from the selector-approved V29 update_004.
+# It deliberately does not continue from V30.  Its only data change is adding
+# the four diverse28 training pairs (scenes 31--38); validation remains the
+# untouched scenes 19--24 and final-test scenes 25--30 remain unavailable.
+paths:
+  qa_root: data_diverse28/qa
+
+training:
+  output_namespace: gemma4_v31_diverse28_joint_pair
+  learning_rate: 0.0001
+  lora_learning_rate: 0.0002
+  v30_joint_pair:
+    enabled: true
+    max_optimizer_steps: 8
+    evaluation_interval_steps: 1
+    broad_questions_per_cycle: 64
+    broad_batch_size: 1
+    broad_exclude_expected_change: true
+    pair_repeats_per_cycle: 2
+    pair_units_per_batch: 1
+    broad_nll_weight: 1.0
+    pair_language_nll_weight: 1.0
+    pair_margin_weight: 4.0
+    pair_margin: 0.5
+    sidecar_learning_rate: 0.0001
+    decoder_learning_rate: 0.0002
+    weight_decay: 0.0
+    gradient_clip_norm: 1.0
+    minimum_answer_types: 4
+    trainable_bank: extension_v30_joint_pair_query
+
+# The shared Stage-B loader performs the filesystem-level fail-closed checks.
+# The V31 wrapper independently checks these values against v31_expanded_pair.
+v29_development:
+  schema_version: 1
+  role: scene_disjoint_diverse28_development
+  qa_root: data_diverse28/qa
+  split_fingerprint: c1c1210c47df165909409f96783c714a5e8c0c7c1a29a6ee0b22a5d8c6591ed6
+  train_scene_ids:
+    - scene_000011
+    - scene_000012
+    - scene_000013
+    - scene_000014
+    - scene_000015
+    - scene_000016
+    - scene_000017
+    - scene_000018
+    - scene_000031
+    - scene_000032
+    - scene_000033
+    - scene_000034
+    - scene_000035
+    - scene_000036
+    - scene_000037
+    - scene_000038
+  validation_scene_ids:
+    - scene_000019
+    - scene_000020
+    - scene_000021
+    - scene_000022
+    - scene_000023
+    - scene_000024
+  deferred_test_scene_ids:
+    - scene_000025
+    - scene_000026
+    - scene_000027
+    - scene_000028
+    - scene_000029
+    - scene_000030
+  question_counts:
+    train: 384
+    validation: 216
+  retention_control_config: configs/experiments/gemma4_color_mirror_post_stack_decoder_stage_b_v28.yaml
+  update_zero_validation_reference: current_dataset_exact_zero_fresh_bank
+
+v31_expanded_pair:
+  schema_version: 1
+  role: approved_v29_diverse28_joint_pair_development_v31
+  engine: v30_exact_zero_frozen_state_joint_pair
+  diverse28_config: configs/experiments/diverse28.yaml
+  diverse28_config_sha256: 38e6e030ce27d8b1694c26708a85afa06520d3688d4dca0ae043966dcce0ea10
+  qa_root: data_diverse28/qa
+  split_fingerprint: c1c1210c47df165909409f96783c714a5e8c0c7c1a29a6ee0b22a5d8c6591ed6
+  train_scene_ids:
+    - scene_000011
+    - scene_000012
+    - scene_000013
+    - scene_000014
+    - scene_000015
+    - scene_000016
+    - scene_000017
+    - scene_000018
+    - scene_000031
+    - scene_000032
+    - scene_000033
+    - scene_000034
+    - scene_000035
+    - scene_000036
+    - scene_000037
+    - scene_000038
+  validation_scene_ids:
+    - scene_000019
+    - scene_000020
+    - scene_000021
+    - scene_000022
+    - scene_000023
+    - scene_000024
+  deferred_final_scene_ids:
+    - scene_000025
+    - scene_000026
+    - scene_000027
+    - scene_000028
+    - scene_000029
+    - scene_000030
+  question_counts:
+    train: 384
+    validation: 216
+  train_changed_pair_unit_count: 25
+  train_changed_pair_units_by_type:
+    chair_orientation: 1
+    object_relocation: 4
+    color_swap: 4
+    object_count: 1
+    book_support: 4
+    mirror_lr: 4
+    picture_support: 4
+    object_removal: 3
+  source_selected_update: 4
+  optimizer_cycles: 8
+  checkpoint_every_cycle: true
+  inspect_every_intermediate: true
+  strict_validation_nll_improvement: true
+  old_color_mirror_no_new_negative_retention: true
+  development_changed_complete_pairs_minimum: 1
+  chat_promotion_changed_complete_pairs_minimum: 6
+  chat_promotion_aggregate_exact_no_regression: true
+
+experiment:
+  role: approved_v29_diverse28_joint_pair_development_v31
+  final_test_deferred: true

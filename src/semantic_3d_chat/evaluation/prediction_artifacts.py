@@ -12,17 +12,21 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import re
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Final
 
+from semantic_3d_chat.config import project_path
 from semantic_3d_chat.evaluation.baseline_io import atomic_write_jsonl, read_jsonl, sha256_file
 
-PROVENANCE_SCHEMA_VERSION: Final[int] = 1
+PROVENANCE_SCHEMA_VERSION: Final[int] = 2
+_OPAQUE_SCENE_ID = re.compile(r"scene_[0-9]{6}")
 _CHECKPOINT_INFERENCE_FILES: Final[tuple[str, ...]] = (
     "adapter.safetensors",
     "metadata.json",
+    "runtime_metadata.json",
 )
 
 
@@ -44,13 +48,92 @@ def effective_config_sha256(config: Mapping[str, Any]) -> str:
     return _canonical_json_sha256(stable)
 
 
+def validate_scene_map_manifest(
+    value: object,
+    *,
+    config: Mapping[str, Any] | None = None,
+) -> dict[str, dict[str, int | str]]:
+    """Validate an opaque, path-free identity for every map used by inference."""
+
+    if not isinstance(value, Mapping) or not value:
+        raise ValueError("Scene map manifest must be a nonempty mapping")
+    expected_fields = {"voxel_map_sha256", "voxel_map_size_bytes"}
+    result: dict[str, dict[str, int | str]] = {}
+    for scene_id, raw_entry in value.items():
+        if not isinstance(scene_id, str) or _OPAQUE_SCENE_ID.fullmatch(scene_id) is None:
+            raise ValueError("Scene map manifest keys must be opaque scene IDs")
+        if not isinstance(raw_entry, Mapping) or set(raw_entry) != expected_fields:
+            raise ValueError(f"Scene map manifest entry has invalid fields: {scene_id}")
+        digest = raw_entry.get("voxel_map_sha256")
+        size_bytes = raw_entry.get("voxel_map_size_bytes")
+        if not isinstance(digest, str) or re.fullmatch(r"[0-9a-f]{64}", digest) is None:
+            raise ValueError(f"Scene map manifest {scene_id} digest is invalid")
+        if isinstance(size_bytes, bool) or not isinstance(size_bytes, int) or size_bytes < 1:
+            raise ValueError(f"Scene map manifest {scene_id} size must be positive")
+        result[scene_id] = {
+            "voxel_map_sha256": digest,
+            "voxel_map_size_bytes": size_bytes,
+        }
+    result = {scene_id: result[scene_id] for scene_id in sorted(result)}
+    if config is not None:
+        for scene_id, entry in result.items():
+            map_path = project_path(
+                dict(config), "maps", scene_id, "voxel_map.npz"
+            ).resolve()
+            if not map_path.is_file():
+                raise FileNotFoundError(f"Scene map is missing: {map_path}")
+            observed_size = map_path.stat().st_size
+            observed_sha256 = sha256_file(map_path)
+            if (
+                observed_size != entry["voxel_map_size_bytes"]
+                or observed_sha256 != entry["voxel_map_sha256"]
+            ):
+                raise ValueError(
+                    "Scene map manifest bytes changed: "
+                    f"scene={scene_id} expected_size={entry['voxel_map_size_bytes']} "
+                    f"observed_size={observed_size} "
+                    f"expected_sha256={entry['voxel_map_sha256']} "
+                    f"observed_sha256={observed_sha256}"
+                )
+    return result
+
+
+def build_scene_map_manifest(
+    config: Mapping[str, Any], scene_ids: Sequence[str]
+) -> dict[str, dict[str, int | str]]:
+    """Fingerprint the exact sanitized maps before any prediction is generated."""
+
+    unique_scene_ids = sorted(set(scene_ids))
+    if not unique_scene_ids or len(unique_scene_ids) != len(scene_ids):
+        raise ValueError("Prediction scene IDs must be a nonempty unique sequence")
+    manifest: dict[str, dict[str, int | str]] = {}
+    for scene_id in unique_scene_ids:
+        if _OPAQUE_SCENE_ID.fullmatch(scene_id) is None:
+            raise ValueError(f"Prediction scene ID is not opaque: {scene_id}")
+        map_path = project_path(
+            dict(config), "maps", scene_id, "voxel_map.npz"
+        ).resolve()
+        if not map_path.is_file():
+            raise FileNotFoundError(f"Scene map is missing: {map_path}")
+        manifest[scene_id] = {
+            "voxel_map_sha256": sha256_file(map_path),
+            "voxel_map_size_bytes": map_path.stat().st_size,
+        }
+    return validate_scene_map_manifest(manifest, config=config)
+
+
+def scene_map_manifest_sha256(value: object) -> str:
+    return _canonical_json_sha256(validate_scene_map_manifest(value))
+
+
 def checkpoint_fingerprint(path: str | Path) -> tuple[str, list[dict[str, Any]]]:
     """Hash the inference-relevant contents of an adapter checkpoint.
 
     Optimizer state is deliberately excluded: it cannot affect inference and is
     much larger than the adapter.  A checkpoint directory must contain the
-    adapter weights.  Metadata is included when present because it defines the
-    architecture/load contract.
+    adapter weights and its sanitized ``runtime_metadata.json`` load contract;
+    changing either invalidates cached predictions.  Training metadata remains
+    optional but is also included when present.
     """
 
     source = Path(path).expanduser().resolve()
@@ -61,6 +144,11 @@ def checkpoint_fingerprint(path: str | Path) -> tuple[str, list[dict[str, Any]]]
         adapter = source / "adapter.safetensors"
         if not adapter.is_file():
             raise FileNotFoundError(f"Adapter checkpoint is missing {adapter}")
+        runtime_metadata = source / "runtime_metadata.json"
+        if not runtime_metadata.is_file():
+            raise FileNotFoundError(
+                f"Adapter checkpoint is missing runtime metadata {runtime_metadata}"
+            )
         files = [source / name for name in _CHECKPOINT_INFERENCE_FILES]
         files = [item for item in files if item.is_file()]
         root = source
@@ -90,6 +178,8 @@ class PredictionProvenance:
     checkpoint_files: tuple[dict[str, Any], ...]
     references_path: str
     references_sha256: str
+    scene_map_manifest_sha256: str
+    scene_map_manifest: dict[str, dict[str, int | str]]
     split: str
     run_kind: str
     condition: str | None = None
@@ -103,6 +193,7 @@ class PredictionProvenance:
             "config_file_sha256": self.config_file_sha256,
             "checkpoint_sha256": self.checkpoint_sha256,
             "references_sha256": self.references_sha256,
+            "scene_map_manifest_sha256": self.scene_map_manifest_sha256,
             "split": self.split,
             "run_kind": self.run_kind,
             "condition": self.condition,
@@ -120,6 +211,10 @@ class PredictionProvenance:
             "checkpoint_path": self.checkpoint_path,
             "checkpoint_files": [dict(item) for item in self.checkpoint_files],
             "references_path": self.references_path,
+            "scene_map_manifest": {
+                scene_id: dict(entry)
+                for scene_id, entry in self.scene_map_manifest.items()
+            },
         }
 
 
@@ -129,6 +224,7 @@ def build_prediction_provenance(
     config_path: str | Path,
     checkpoint_path: str | Path,
     references_path: str | Path,
+    scene_ids: Sequence[str],
     split: str,
     run_kind: str,
     condition: str | None = None,
@@ -149,6 +245,7 @@ def build_prediction_provenance(
     if not run_kind:
         raise ValueError("run_kind must be non-empty")
     checkpoint_sha256, checkpoint_files = checkpoint_fingerprint(resolved_checkpoint)
+    scene_map_manifest = build_scene_map_manifest(config, scene_ids)
     return PredictionProvenance(
         config_path=str(resolved_config),
         config_sha256=effective_config_sha256(config),
@@ -158,6 +255,8 @@ def build_prediction_provenance(
         checkpoint_files=tuple(checkpoint_files),
         references_path=str(resolved_references),
         references_sha256=sha256_file(resolved_references),
+        scene_map_manifest_sha256=scene_map_manifest_sha256(scene_map_manifest),
+        scene_map_manifest=scene_map_manifest,
         split=split,
         run_kind=run_kind,
         condition=condition,

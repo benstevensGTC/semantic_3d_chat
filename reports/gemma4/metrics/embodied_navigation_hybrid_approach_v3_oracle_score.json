@@ -1,0 +1,130 @@
+{
+  "all_passed": true,
+  "maximum_bbox_standoff_m": 0.6,
+  "minimum_center_progress_m": 0.25,
+  "passed_count": 2,
+  "runtime_environmental_text_inputs": [],
+  "runtime_evidence_validated_before_oracle_open": true,
+  "runtime_process_read_oracle": false,
+  "scene_count": 2,
+  "scenes": [
+    {
+      "all_action_receipts_successful": true,
+      "checks": {
+        "collision_free": true,
+        "continuous_completion": true,
+        "maximum_oracle_bbox_standoff": true,
+        "minimum_oracle_center_progress": true,
+        "runtime_completed": true,
+        "runtime_contract": true,
+        "stopped": true
+      },
+      "collision": false,
+      "completion_mode": "semantic_standoff",
+      "final_oracle_bbox_standoff_m": 0.35259142696607015,
+      "final_oracle_center_distance_m": 0.6504061562294947,
+      "final_xy_m": [
+        -0.6148174685264836,
+        0.335298804793843
+      ],
+      "initial_oracle_center_distance_m": 1.343577596015541,
+      "initial_xy_m": [
+        0.0,
+        0.0
+      ],
+      "map_version": 5,
+      "numeric_translation_m": 0.7003040825966198,
+      "oracle_center_progress_m": 0.6931714397860462,
+      "oracle_file": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data/oracle/scene_000001/oracle.json",
+      "oracle_file_sha256": "d3b7f56a810ac606964e8218b3150ad0f652edd4c0f139d1d7b8e3cf1882d78c",
+      "oracle_instance_id": "i_000101",
+      "oracle_target_category": "chair",
+      "oracle_target_center_xyz_m": [
+        -1.2374088764190674,
+        0.5234692245721817,
+        0.6299999952316284
+      ],
+      "passed": true,
+      "processed_voxels": 8452,
+      "result_path": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/gemma4/metrics/embodied_conversation_hybrid_approach_chair_v3_scene_000001.json",
+      "result_sha256": "d12bad64211b16d55d905985cf78ff69db6a6f6e8183a0c18bb1e7f9be5a76ba",
+      "runtime_completed": true,
+      "runtime_environmental_text_inputs": [],
+      "runtime_forbidden_access_count": 0,
+      "safe_collision_limited_completion": false,
+      "scene_id": "scene_000001",
+      "semantic_standoff_completed": true,
+      "semantic_target_distance_m": 0.4819971733403751,
+      "semantic_target_standoff_m": 0.5,
+      "semantic_target_xyz_m": [
+        -1.0145249366760254,
+        0.6046595573425293,
+        0.517512321472168
+      ],
+      "step_count": 6,
+      "stopped": true,
+      "termination_reason": "stop"
+    },
+    {
+      "all_action_receipts_successful": true,
+      "checks": {
+        "collision_free": true,
+        "continuous_completion": true,
+        "maximum_oracle_bbox_standoff": true,
+        "minimum_oracle_center_progress": true,
+        "runtime_completed": true,
+        "runtime_contract": true,
+        "stopped": true
+      },
+      "collision": false,
+      "completion_mode": "collision_limited_safe_stop",
+      "final_oracle_bbox_standoff_m": 0.29235282336232515,
+      "final_oracle_center_distance_m": 0.5914750103758452,
+      "final_xy_m": [
+        1.285448404207255,
+        0.058884476797779764
+      ],
+      "initial_oracle_center_distance_m": 1.8636058464833394,
+      "initial_xy_m": [
+        0.0,
+        0.0
+      ],
+      "map_version": 6,
+      "numeric_translation_m": 1.2867964024999163,
+      "oracle_center_progress_m": 1.2721308361074941,
+      "oracle_file": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data/oracle/scene_000031/oracle.json",
+      "oracle_file_sha256": "52e2fdfb35faf9231a2c0600cc9471ab5c1b9f16ca9791a48d6014eb7159f7ac",
+      "oracle_instance_id": "i_000101",
+      "oracle_target_category": "chair",
+      "oracle_target_center_xyz_m": [
+        1.8478012084960938,
+        0.24219299107789993,
+        0.6299999952316284
+      ],
+      "passed": true,
+      "processed_voxels": 8760,
+      "result_path": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/gemma4/metrics/embodied_conversation_hybrid_approach_chair_v3_scene_000031.json",
+      "result_sha256": "495a03ca0385964c3694165c7f99f284dec2d1054593821606347c19f839c68e",
+      "runtime_completed": true,
+      "runtime_environmental_text_inputs": [],
+      "runtime_forbidden_access_count": 0,
+      "safe_collision_limited_completion": true,
+      "scene_id": "scene_000031",
+      "semantic_standoff_completed": false,
+      "semantic_target_distance_m": 0.7627565297837082,
+      "semantic_target_standoff_m": 0.5,
+      "semantic_target_xyz_m": [
+        2.031057119369507,
+        0.21971099078655243,
+        0.5250000953674316
+      ],
+      "step_count": 7,
+      "stopped": true,
+      "termination_reason": "stop"
+    }
+  ],
+  "schema": "semantic_3d_chat.embodied_approach_oracle_score.v1",
+  "scorer_reads_oracle": true,
+  "status": "evaluation_only_oracle_score",
+  "target_category_used_only_by_scorer": "chair"
+}

@@ -1,0 +1,147 @@
+{
+  "artifact": "v43_aggregate_projected_screen_terminal_gate",
+  "conditional_successor_authorization": {
+    "authorization_id": "v44_joint_scene_readout_train_only_pilot",
+    "authorized": true,
+    "authorized_config": "configs/experiments/gemma4_diverse28_joint_scene_readout_v44.yaml",
+    "authorized_output_root": "data_gemma4/checkpoints/gemma4_v44_joint_scene_readout_l14_query",
+    "frozen_excluding_authorized_state_sha256": "31cb215cf0d1623886d4a79203c501912e66537021da53dd711124abdc2e36fa",
+    "objective": {
+      "broad_nll_weight": 0.25,
+      "cross_prefix_flip_margin": 0.1,
+      "cross_prefix_flip_weight": 8.0,
+      "pair_correct_nll_weight": 0.5,
+      "side_hinge_margin": 0.5,
+      "side_hinge_weight": 8.0,
+      "source_prefix_trust_scale": 0.05,
+      "source_prefix_trust_weight": 0.001
+    },
+    "only_exact_action": "one_bounded_v44_joint_scene_readout_training_pilot",
+    "optimizer": {
+      "foreach": false,
+      "fused": false,
+      "implementation": "fresh_torch_adamw_two_groups",
+      "per_group_gradient_clip_norm": 1.0,
+      "query_learning_rate": 2e-05,
+      "scene_readout_learning_rate": 2.5e-05,
+      "source_optimizer_loaded": false,
+      "weight_decay": 0.0
+    },
+    "schedule": {
+      "checkpoint_steps": [
+        0,
+        4,
+        8,
+        16
+      ],
+      "maximum_optimizer_updates": 16,
+      "true_optimizer_step_per_schedule_row": true,
+      "update4_is_diagnostic_only": true,
+      "update8_must_pass_before_updates_9_through_16": true
+    },
+    "schema_version": 1,
+    "scope": {
+      "all_occupied_blocks_processed": true,
+      "final_test_access_authorized": false,
+      "new_terminal_seal_required_after_training": true,
+      "oracle_access_authorized": false,
+      "question_dependent_retrieval": false,
+      "question_dependent_scene_processing": false,
+      "runtime_promotion_authorized": false,
+      "selector_execution_authorized": false,
+      "training_qa_and_maps_only": true,
+      "validation_access_authorized": false
+    },
+    "source_authorized_surface_state_sha256": "b935c7e6ccceb1068f80e679b4159c6ca756f9f81868b954b93ac683e014f5a0",
+    "source_checkpoint": "data_gemma4/checkpoints/gemma4_v41_retry1_diverse28_projected_gradient_l14_query/update_000",
+    "source_file_sha256": {
+      "adapter.safetensors": "b0bdceb7699e9d97467915c69186f433d3b0fac2b09144d38c3078afe1f70cb0",
+      "metadata.json": "331cda3f2ebc1539e8ee27ebbae398be5e19f3fd77d0aa20dde635d569e29d6d",
+      "runtime_metadata.json": "690e790b612e0b75323c1f27f7e9afe87243ccc1564c8cc690e86a442cffbfcd"
+    },
+    "source_full_tensor_state_sha256": "7b951c6d7ae4f7b50603159f0bc4dfb4d50b5b40f9325134d78d1de1dae87fc0",
+    "trainable_surface": {
+      "block_qkv_frozen": true,
+      "gemma_base_and_all_other_lora_banks_frozen": true,
+      "parameter_names": [
+        "block_cross_residual.w_o",
+        "lora_banks.extension_v28_stage_b_query.adapters.1.lora_a",
+        "lora_banks.extension_v28_stage_b_query.adapters.1.lora_b"
+      ],
+      "parameter_shapes": [
+        [
+          256,
+          1536
+        ],
+        [
+          4,
+          1536
+        ],
+        [
+          4096,
+          4
+        ]
+      ],
+      "query_parameter_count": 22528,
+      "scene_readout_parameter_count": 393216,
+      "total_parameter_count": 415744
+    },
+    "update16_gate": {
+      "book_or_picture_complete_units_minimum": 1,
+      "broad_greedy_exact_correct_minimum": 23,
+      "broad_nll_maximum_increase": 0.02,
+      "complete_physical_pair_coverage_minimum": 5,
+      "complete_units_minimum": 10,
+      "cross_prefix_complete_units_minimum": 17,
+      "greedy_complete_units_minimum": 5,
+      "positive_sides_minimum": 35,
+      "priority_side_deficit_minimum_improvement": 0.5,
+      "require_update8_passed": true
+    },
+    "update8_gate": {
+      "both_authorized_parameter_groups_must_change": true,
+      "broad_nll_maximum_increase": 0.02,
+      "complete_units_minimum": 9,
+      "cross_prefix_complete_units_minimum": 17,
+      "frozen_state_must_remain_exact": true,
+      "positive_sides_minimum": 34,
+      "priority_side_deficit_minimum_improvement": 0.5
+    }
+  },
+  "input_sha256": {
+    "data_gemma4/checkpoints/gemma4_v41_retry1_diverse28_projected_gradient_l14_query/update_000/adapter.safetensors": "b0bdceb7699e9d97467915c69186f433d3b0fac2b09144d38c3078afe1f70cb0",
+    "data_gemma4/checkpoints/gemma4_v41_retry1_diverse28_projected_gradient_l14_query/update_000/metadata.json": "331cda3f2ebc1539e8ee27ebbae398be5e19f3fd77d0aa20dde635d569e29d6d",
+    "data_gemma4/checkpoints/gemma4_v41_retry1_diverse28_projected_gradient_l14_query/update_000/runtime_metadata.json": "690e790b612e0b75323c1f27f7e9afe87243ccc1564c8cc690e86a442cffbfcd",
+    "reports/gemma4/metrics/training_selection_gemma4_color_mirror_full_vocab_v11_resume36.json": "c0086f66edbb8854a7938e09c57535bfd47100adbaf3b3c95eeb4b08014ce2f8",
+    "reports/gemma4/metrics/v42_delta_line_terminal_gate.json": "1f4f73c782813fd47d1ea8fd659df3545dffe8143bbcacc0d47c9d40baea59e8",
+    "reports/gemma4/metrics/v43_aggregate_projected_no_step_diagnostic.json": "31c8e1958a7449f48e36524b2161771005d9fc5eba82819f0a3cd99f17a41e6d",
+    "src/semantic_3d_chat/evaluation/v43_aggregate_projected_screen.py": "239083b2143976eeafce6117ce7772d34df2ebdc52e2bb1495c658686d00b196",
+    "tests/test_v43_aggregate_projected_screen.py": "1c02e2474c2168542a275b7d62e5ff37173579da5be0b1aa54bf7e6748a4559b"
+  },
+  "negative_result": {
+    "all_candidates_restored_exact_u0": true,
+    "candidate_count": 8,
+    "fixed_scalar_steps": [
+      -0.008,
+      -0.004,
+      0.0,
+      0.002,
+      0.004,
+      0.008,
+      0.012,
+      0.016
+    ],
+    "gradient_measurement_left_source_exact": true,
+    "no_optimizer_checkpoint_selector_or_restricted_access": true,
+    "teacher_eligible_candidate_count": 0,
+    "update_zero_endpoint_replay_exact": true
+  },
+  "only_exact_successor_authorized": "v44_joint_scene_readout_train_only_pilot",
+  "passed": true,
+  "runtime_promotion_authorized": false,
+  "schema_version": 1,
+  "screen_sha256": "31c8e1958a7449f48e36524b2161771005d9fc5eba82819f0a3cd99f17a41e6d",
+  "selector_execution_authorized": false,
+  "v44_train_only_pilot_authorized": true,
+  "validation_access_authorized": false
+}

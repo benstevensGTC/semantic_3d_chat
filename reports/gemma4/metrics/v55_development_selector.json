@@ -1,0 +1,175 @@
+{
+  "artifact": "v55_one_shot_development_selector",
+  "chat_promotion": {
+    "checks": {
+      "aggregate_validation_exact_accuracy_retained": true,
+      "changed_complete_pair_threshold_met": false,
+      "development_checkpoint_selected": true
+    },
+    "eligible": false,
+    "evaluated": true
+  },
+  "chat_promotion_eligible": false,
+  "development_metrics": {
+    "canonical_type_specific": {
+      "accuracy": 0.42592592592592593,
+      "correct": 92,
+      "scorer": "presence/count/spatial/list canonicalization; normalized exact otherwise",
+      "total": 216
+    },
+    "changed_counterfactual": {
+      "by_family": {
+        "book_support": {
+          "complete_units": 0,
+          "correct_sides": 2,
+          "prediction_changed_units": 0,
+          "unit_count": 4
+        },
+        "mirror_lr": {
+          "complete_units": 1,
+          "correct_sides": 5,
+          "prediction_changed_units": 1,
+          "unit_count": 4
+        },
+        "picture_support": {
+          "complete_units": 0,
+          "correct_sides": 4,
+          "prediction_changed_units": 0,
+          "unit_count": 4
+        }
+      },
+      "canonical_complete_units": 1,
+      "canonical_correct_sides": 11,
+      "canonical_prediction_changed_units": 1,
+      "physical_change_families_with_complete_unit": 1,
+      "physical_change_family_count": 3,
+      "side_count": 24,
+      "unit_count": 12
+    },
+    "count": {
+      "accuracy": 0.6666666666666666,
+      "examples": 42,
+      "mean_absolute_error": 0.2,
+      "prediction_coverage": 0.8333333333333334
+    },
+    "gates": {
+      "canonical_aggregate_correct_at_least_v29_91_of_216": true,
+      "canonical_changed_complete_units_at_least_2_of_12": false,
+      "canonical_changed_correct_sides_at_least_12_of_24": false,
+      "canonical_prediction_changed_units_at_least_2_of_12": false,
+      "count_accuracy_at_least_0_80": false,
+      "full_validation_coverage_216": true,
+      "normalized_exact_accuracy_at_least_0_375": true,
+      "physical_change_families_at_least_2_of_3": false,
+      "presence_f1_at_least_0_15": true,
+      "spatial_relation_accuracy_at_least_0_55": true
+    },
+    "normalized_exact_accuracy": 0.41203703703703703,
+    "presence": {
+      "f1": 0.2222222222222222,
+      "false_negative": 21,
+      "false_positive": 0,
+      "invalid_negative_predictions": 0,
+      "precision": 1.0,
+      "recall": 0.125,
+      "true_negative": 18,
+      "true_positive": 3
+    },
+    "spatial_relation_accuracy": 0.5625
+  },
+  "development_selection_passed": false,
+  "evidence": {
+    "claim_path": "reports/gemma4/metrics/v55_development_launch_claim.json",
+    "claim_sha256": "ae87296fb13b6db79f4f613816feed77e3b7c2c6fc771a5e71acb2ff134837b5",
+    "model_snapshot": {
+      "file_count": 9,
+      "path": "reports/gemma4/metrics/v55_development_model_snapshot.json",
+      "revision": "3e22461f65e89153144f8adb70e3b8c2cc9845a7",
+      "sha256": "92af4ec8ab352189b3c9572f280a9404836604e661d6bc35c9b6acdc66dd59a0",
+      "total_size_bytes": 10278849571,
+      "tree_sha256": "85edc0fb635ff10a25509db05149bbd2bcfe9cb9d091b76d0d04286ca222a6fb"
+    },
+    "predictions": {
+      "path": "reports/gemma4/predictions/v55_development_validation.jsonl",
+      "prediction_count": 216,
+      "prediction_provenance_sha256": "644abde03c05eceedca4a95afbfa9621340155ed571b25b91ba3fbad0224bdc7",
+      "prefix_sha256_by_scene": {
+        "scene_000019": "eb5519dfd167c5aacd751ad98d74abdcb62f86d49a2c505ad2137c783b53dd02",
+        "scene_000020": "7214b10c97bf9b367da2e19533ef0bbbcc00f6ac5646a1c221ea75e106f1532e",
+        "scene_000021": "2b3e4c670735f0d28f3844e5e203036477617eff7e8794a34d73f9c8397db980",
+        "scene_000022": "1aa40124bf205f045b540dbb203ce6522667456a863b4e25da9438484a4925c9",
+        "scene_000023": "969e301167d6510ca7d4e637314f82ba6454f5f2b0a0d8aa8460a6a6355692fc",
+        "scene_000024": "11c4b144c059b89cd1f4ad5502daa8821765e869e359a0962bfc3f96aadbaf35"
+      },
+      "provenance_path": "reports/gemma4/predictions/v55_development_validation.jsonl.provenance.json",
+      "provenance_sha256": "8240ad56aa67083ebef74e1645d50e68a0937ef735e6955cb9b4fba5ab7429dd",
+      "scene_map_manifest": {
+        "scene_000019": {
+          "voxel_map_sha256": "611af72b9606590fec25b0b7a6762022d28acf7de07ee5b2f7160ab397a1126b",
+          "voxel_map_size_bytes": 434649346
+        },
+        "scene_000020": {
+          "voxel_map_sha256": "9c0da2446fbdcd9bda7007514cb8fcdcb309b098abcd1428dde9289649cbdff6",
+          "voxel_map_size_bytes": 434454132
+        },
+        "scene_000021": {
+          "voxel_map_sha256": "b6f8132f2ca1f268e16e8b801c65ba56c01b36c1f0c121541581ff82fc6ac9fb",
+          "voxel_map_size_bytes": 438624312
+        },
+        "scene_000022": {
+          "voxel_map_sha256": "74080614a7c244963747436e97547fccacadb7878cbe873e0ffc506857bc88cc",
+          "voxel_map_size_bytes": 438809248
+        },
+        "scene_000023": {
+          "voxel_map_sha256": "6c96b76054f562b79de9c32012908a4736ba964d517110d024a2c747472c9811",
+          "voxel_map_size_bytes": 429898562
+        },
+        "scene_000024": {
+          "voxel_map_sha256": "3aff892543392a31ec006fea3c37af0aa6af28a6d27d6ccaeacdff9d54bec1fb",
+          "voxel_map_size_bytes": 429231485
+        }
+      },
+      "scene_map_manifest_sha256": "340adac50be4379a72a294b05bc27f7df05a4805a61e0fbac9a4bca167bd9c05",
+      "sha256": "33e7ffdeb414068a4537a5ec67d7028ad091482c1cd2edb2b376d812c01fb778"
+    },
+    "questions": {
+      "path": "reports/gemma4/questions/v55_development_validation.json",
+      "question_count": 216,
+      "questions_sha256": "46517d914868ece84106075c50df0ff1afef1f980f30d8c0f3dd8486bb22ede4",
+      "scene_count": 6,
+      "sha256": "a5b6d66fef341c59b4d6ebf9f7071780b1d43447bc12d6c4805678862746a9c6"
+    },
+    "score_path": "reports/gemma4/metrics/v55_development_score.json",
+    "score_sha256": "6f8e041dd2272684e33df987483a1815effa626c7110a259472043426958f8f9",
+    "terminal_path": "reports/gemma4/metrics/v55_development_terminal.json",
+    "terminal_sha256": "cad249c41fa8d80c1e94bb7c4385295847afa9af30139a99ee3206452b25ce87"
+  },
+  "final_test_scenes_touched": false,
+  "passed": false,
+  "schema_version": 1,
+  "scope": {
+    "candidate_count": 1,
+    "checkpoint_written": false,
+    "final_test_scenes_touched": false,
+    "optimizer_constructed_or_loaded": false,
+    "oracle_loaded": false,
+    "promotion_executed": false,
+    "question_dependent_retrieval": false,
+    "question_or_answer_text_serialized": false,
+    "scene_ids": [
+      "scene_000019",
+      "scene_000020",
+      "scene_000021",
+      "scene_000022",
+      "scene_000023",
+      "scene_000024"
+    ],
+    "scene_prefix_built_before_first_question_for_each_scene": true,
+    "scene_prefix_reused_for_every_question_within_scene": true,
+    "split": "validation",
+    "training_executed": false
+  },
+  "selected_checkpoint": null,
+  "selected_optimizer_step": null,
+  "selected_update": null
+}

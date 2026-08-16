@@ -1,0 +1,67 @@
+_base_: gemma4_color_mirror_post_stack_decoder_stage_b_v28.yaml
+
+# V29 keeps the selected V28 sidecar and inherited Gemma banks frozen, then
+# trains the same exact-zero Stage-B query bank on a genuinely scene-disjoint
+# development tranche.  Scenes 25-30 remain absent until model selection is
+# complete; the older V24/V28 color and mirror pairs remain mandatory causal
+# retention controls through the separate config below.
+paths:
+  qa_root: data_diverse20/qa
+
+training:
+  output_namespace: gemma4_v29_diverse20_post_stack_decoder_stage_b
+  post_stack_decoder_stage_b:
+    enabled: true
+    max_optimizer_steps: 4
+    evaluation_interval_steps: 1
+    batch_size: 1
+    gradient_accumulation: 48
+    learning_rate: 0.0001
+    weight_decay: 0.0
+    gradient_clip_norm: 1.0
+    minimum_answer_types: 4
+    trainable_bank: extension_v28_stage_b_query
+
+v29_development:
+  schema_version: 1
+  role: scene_disjoint_diverse20_development
+  qa_root: data_diverse20/qa
+  split_fingerprint: 10e59073feb1769026f08ddd19fd8ab5f1d0d32f706ec3c8eec2f198a1c7c1bd
+  train_scene_ids:
+    - scene_000011
+    - scene_000012
+    - scene_000013
+    - scene_000014
+    - scene_000015
+    - scene_000016
+    - scene_000017
+    - scene_000018
+  validation_scene_ids:
+    - scene_000019
+    - scene_000020
+    - scene_000021
+    - scene_000022
+    - scene_000023
+    - scene_000024
+  deferred_test_scene_ids:
+    - scene_000025
+    - scene_000026
+    - scene_000027
+    - scene_000028
+    - scene_000029
+    - scene_000030
+  question_counts:
+    train: 192
+    validation: 216
+  retention_control_config: configs/experiments/gemma4_color_mirror_post_stack_decoder_stage_b_v28.yaml
+  update_zero_validation_reference: current_dataset_exact_zero_fresh_bank
+
+experiment:
+  role: scene_disjoint_diverse20_stage_b_v29
+  question_dependent_scene_processing: false
+  question_dependent_retrieval: false
+  runtime_oracle_access: false
+  runtime_category_strings: false
+  runtime_text_prototypes: false
+  decoder_trainable_parameter_count: 36864
+  final_test_deferred: true

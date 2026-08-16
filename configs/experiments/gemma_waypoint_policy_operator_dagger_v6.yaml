@@ -1,0 +1,41 @@
+_base_: gemma_waypoint_policy_operator_dagger_v5.yaml
+
+# V6 is a fresh, unpromoted offline DAgger candidate bound to the exact V5
+# live failure.  The authenticated prefix contains 21 executed Gemma actions
+# followed by its first rejected MOVE_TO at decision 22.  Training-only expert
+# geometry relabels that live-distribution state, completes the remaining
+# clockwise route back to the exact start, and supplies an explicit STOP label.
+# No route, planner, collision map, or expert action is available at runtime.
+gemma_waypoint_traces:
+  profiles:
+    operator:
+      # The inherited singular entry preserves V5's 63 correction rows from
+      # the V4 failure.  This append-only list adds V5's failure without
+      # silently replacing prior live-distribution supervision.
+      additional_live_failure_dagger_augmentations:
+        - enabled: true
+          report_path: reports/gemma4/metrics/gemma_waypoint_dagger_v5_live_acceptance.json
+          report_sha256: 670fd0eb87f471e084ade548d8f9fa78c961aa926b4d79913bccdcd49ba0adc4
+          scene_id: scene_000001
+          instruction: Do a lap around the room.
+          initial_pose_xy_yaw: [-0.5, -0.25, -90.0]
+          checkpoint_sha256: 3f6785f082442c37ccb23db308e0f1e21b31dda28abe1c5f197d7be511baa199
+          scene_prefix_sha256: 52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95
+          first_rejection_step: 22
+          first_rejection_error_code: E_MODEL_COLLISION
+          failed_target_xy_m: [-0.8826844833092204, 0.41691211338913026]
+          failed_target_tolerance_m: 0.000001
+          route_direction: clockwise
+          # The accepted V5 prefix ends 1.8 cm from clockwise waypoint 8.
+          # Resume there, then process waypoints 9..45, whose final point is
+          # the exact initial XY. STOP/return is part of the correction.
+          resume_waypoint_index: 8
+          maximum_total_decisions: 128
+          minimum_path_length_m: 5.0
+          minimum_abs_winding_area_m2: 0.5
+          maximum_return_error_m: 0.35
+
+gemma_waypoint_policy:
+  trace_dataset: data_gemma4/training/gemma_waypoint_policy_v1_operator_dagger_v6
+  hidden_cache: data_gemma4/training/gemma_waypoint_policy_v1_operator_dagger_v6_runtime_aligned_hidden
+  checkpoint_output: data_gemma4/checkpoints/gemma_waypoint_policy_v1_operator_dagger_v6_runtime_aligned

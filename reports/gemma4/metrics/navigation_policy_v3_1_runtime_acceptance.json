@@ -1,0 +1,40 @@
+{
+  "environmental_text_inputs": [],
+  "evidence_hashes": {
+    "reports/gemma4/metrics/llm_navigation_inference_access_learned_v3_1.json": "cf162157f81b270e3a850faae7acc1fc4e39e8c6e1cb8d637b1346d449471128",
+    "reports/gemma4/metrics/llm_navigation_scene_000001_learned_v3_1.json": "9adfb361586a7e17e235eed7b46ad5f0df3ef4e0766d858f3570d99c4fda3775",
+    "reports/gemma4/metrics/navigation_continuous_context_v3_1.json": "952dc89b5312210e99c26c72da18f2e8c5267e2b0b3a0ef957736044f88c83cb",
+    "reports/gemma4/predictions/llm_navigation_scene_000001_learned_v3_1.json": "b83cd1a85cab206d1538a804969e1efae087dda9a572a5b21ef9e40513eaf24b"
+  },
+  "gates": {
+    "continuous_context": true,
+    "previous_five_preserved": true,
+    "runtime_file_isolation": true,
+    "sealed_runtime_source": true,
+    "six_of_six": false,
+    "update_after_scan_checks": false,
+    "update_after_scan_passed": false,
+    "update_after_scan_standoff": false,
+    "v3_1_runtime_declared": true,
+    "zero_action_failures": true,
+    "zero_collisions": true,
+    "zero_policy_rejections": true
+  },
+  "metrics": {
+    "action_failure_count": 0,
+    "collision_count": 0,
+    "executed_action_count": 27,
+    "policy_rejection_count": 0,
+    "success_count": 5,
+    "success_rate": 0.8333333333333334,
+    "task_count": 6
+  },
+  "oracle_inputs_at_runtime": false,
+  "passed": false,
+  "preregistration_path": "reports/gemma4/metrics/navigation_policy_v3_1_runtime_preregistration.json",
+  "preregistration_sha256": "0980784390932b7cde8736b0dde983366909005475a56d7c19ef78e7c5fb60c3",
+  "runtime_promotion_authorized": false,
+  "runtime_version": "v3.1",
+  "schema": "semantic_3d_chat.navigation_policy_v3_1_result.v1",
+  "status": "rejected"
+}

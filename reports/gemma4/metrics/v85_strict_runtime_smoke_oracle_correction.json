@@ -1,0 +1,45 @@
+{
+  "artifact": "gemma4_v85_strict_runtime_smoke_posthoc_oracle_correction_v1",
+  "schema_version": 85,
+  "source_smoke": "reports/gemma4/metrics/v85_strict_runtime_smoke.json",
+  "source_smoke_sha256": "5a21f71bcba460c455ede701f46409683498195610eef91d83d40d7bc09989cb",
+  "oracle_source": "data/oracle/scene_000001/oracle.json",
+  "oracle_source_sha256": "d3b7f56a810ac606964e8218b3150ad0f652edd4c0f139d1d7b8e3cf1882d78c",
+  "training_corroboration_source": "data/qa/train.jsonl",
+  "training_corroboration_source_sha256": "ffa721d57849ade8fdd0811e3e1e62fe807200f710aec780dc4d3dcecd4fb0e0",
+  "training_corroboration_question_id": "q_000014",
+  "sealed_source_mutated": false,
+  "correction_reason": "the predeclared third expected relation reversed subject and reference",
+  "coordinate_convention": "world_x_increases_right",
+  "bowl_x_m": -1.512576,
+  "chair_x_m": -1.237409,
+  "correct_relation_bowl_to_chair": "left",
+  "corroborating_training_fact": "chair is right of bowl",
+  "corrected_behavior": [
+    {
+      "question": "Is there a chair?",
+      "expected": "yes",
+      "observed": "no",
+      "passed": false
+    },
+    {
+      "question": "What color is the bowl?",
+      "expected": "red",
+      "observed": "blue",
+      "passed": false
+    },
+    {
+      "question": "Is the bowl left or right of the chair?",
+      "expected": "left",
+      "observed": "left",
+      "passed": true
+    }
+  ],
+  "correct": 1,
+  "total": 3,
+  "accuracy": 0.3333333333333333,
+  "promotion_threshold_correct": 3,
+  "promotion_gate_passed": false,
+  "promotion_authorized": false,
+  "historical_v75_demo_expected_right_is_also_reversed": true
+}

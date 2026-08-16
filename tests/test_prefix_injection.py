@@ -197,6 +197,42 @@ def test_generic_generation_uses_same_bos_first_layout_as_training() -> None:
     assert torch.equal(captured["attention"], torch.ones(1, 7, dtype=torch.long))
 
 
+def test_generation_temporarily_evaluates_checkpointed_decoder_for_kv_cache() -> None:
+    class TinyModel(nn.Module):
+        def __init__(self) -> None:
+            super().__init__()
+            self.embedding = nn.Embedding(20, 4)
+            self.config = SimpleNamespace(hidden_size=4, bos_token_id=2)
+
+        def get_input_embeddings(self):
+            return self.embedding
+
+    model = TinyModel().train()
+    language = LocalLanguageModel(
+        model=model,
+        tokenizer=SimpleNamespace(bos_token_id=2),
+        device=torch.device("cpu"),
+        decoder_gradient_checkpointing_enabled=True,
+    )
+    observed_training_modes: list[bool] = []
+
+    def fallback(active_model, _inputs, _attention, _maximum, _eos):
+        observed_training_modes.append(active_model.training)
+        return torch.tensor([[7]])
+
+    generated = language.generate_from_scene_prefix(
+        torch.randn(1, 4, 4),
+        torch.tensor([[2, 3, 4]]),
+        max_new_tokens=1,
+        eos_token_ids=None,
+        fallback=fallback,
+    )
+
+    assert torch.equal(generated, torch.tensor([[7]]))
+    assert observed_training_modes == [False]
+    assert model.training
+
+
 def test_prefix_hash_is_question_independent() -> None:
     torch.manual_seed(4)
     composer = ContinuousPrefixComposer(8)

@@ -1,0 +1,71 @@
+{
+  "artifact": "semantic_3d_chat_local_demo_artifacts_v1",
+  "artifacts": [
+    {
+      "path": "data_gemma4/runtime/checkpoints/gemma4_v54_release_v1/adapter.safetensors",
+      "role": "sanitized_runtime_adapter",
+      "sha256": "6c627f0a0d9efb7100489c24cbd4acafe10456b79280a64a85399a21cb541daf",
+      "size_bytes": 55956825
+    },
+    {
+      "path": "data_gemma4/runtime/checkpoints/gemma4_v54_release_v1/runtime_metadata.json",
+      "role": "sanitized_runtime_metadata",
+      "sha256": "807515461c71b08c08dfbd08a184a653e791413748530fa69402512eca6f6fdd",
+      "size_bytes": 15858
+    },
+    {
+      "path": "data_gemma4/runtime/checkpoints/gemma4_v75_nll_control_release_v1/control.safetensors",
+      "role": "promoted_v75_continuous_controller",
+      "sha256": "bb112f42ca5df71b88b4cd7721b9107f9be9b0dc01b612a4ace6212548da669c",
+      "size_bytes": 8356368
+    },
+    {
+      "path": "data_gemma4/runtime/checkpoints/gemma4_v75_nll_control_release_v1/runtime_metadata.json",
+      "role": "sanitized_v75_controller_metadata",
+      "sha256": "a45a192d27336329580612524d43f71f08e3f472e5fe833747ffc1395e2aa2be",
+      "size_bytes": 1853
+    },
+    {
+      "path": "data_gemma4/maps/scene_000001/voxel_map.npz",
+      "role": "sanitized_high_dimensional_scene_map",
+      "sha256": "f17c295223b040615e69cb2b986235a4b28f8156565fe37feaaaa1f52607651c",
+      "size_bytes": 429478923
+    },
+    {
+      "path": "reports/gemma4/figures/scene_000001/map_rgb.png",
+      "role": "human_only_rgb_map_preview",
+      "sha256": "487a1d1020c4d204fc650f34e8731f2d94933aca2939e65668840ab0737d61e9",
+      "size_bytes": 235159
+    },
+    {
+      "path": "reports/gemma4/figures/scene_000001/map_rgb.ply",
+      "role": "human_only_point_cloud",
+      "sha256": "841a75c743aef46625a777635a68a6f045c298acff07e89dadafcac7f2b5caaa",
+      "size_bytes": 2017205
+    },
+    {
+      "path": "reports/gemma4/figures/scan_montage.png",
+      "role": "human_only_scan_montage",
+      "sha256": "696f818fc923c0283d704ac88c5fc8d5be2846caf116cc5f50dfefe12ec6a5dd",
+      "size_bytes": 655090
+    }
+  ],
+  "distribution_url": null,
+  "environmental_text_inputs": [],
+  "model": {
+    "model_id": "google/gemma-4-E2B-it",
+    "required_files": [
+      "config.json",
+      "model.safetensors",
+      "processor_config.json",
+      "tokenizer.json",
+      "tokenizer_config.json",
+      "generation_config.json",
+      "chat_template.jinja"
+    ],
+    "revision": "3e22461f65e89153144f8adb70e3b8c2cc9845a7",
+    "weights_sha256": "2db5482b20d746879bb3ef79b5203e9075a2e2b98f54ec7c2f281c1477ddc550",
+    "weights_size_bytes": 10246621918
+  },
+  "schema_version": 1
+}

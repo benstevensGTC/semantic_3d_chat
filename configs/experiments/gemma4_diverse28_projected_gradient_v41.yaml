@@ -1,0 +1,135 @@
+_base_: gemma4_diverse28_cross_preserving_v40.yaml
+
+# V41 restarts from the exact persisted V40 update-zero state.  Its only
+# trainable tensor is the learned layer-14 q_proj LoRA-B matrix; each raw
+# microstep is projected on CPU/float64 under the immutable V40 terminal seal.
+training:
+  output_namespace: gemma4_v41_diverse28_projected_gradient_l14_query
+  lora_learning_rate: 0.003
+  lora_weight_decay: 0.0
+  v41_projected_gradient:
+    enabled: true
+    optimizer_steps: 41
+    broad_nll_weight: 1.0
+    pair_correct_nll_weight: 0.5
+    side_hinge_weight: 8.0
+    side_hinge_margin: 0.5
+    cross_prefix_flip_weight: 56.0
+    cross_prefix_flip_margin: 0.10
+    residual_penalty_weight: 0.0
+    residual_penalty_scale: 0.05
+    learning_rate: 0.003
+    weight_decay: 0.0
+    gradient_clip_norm: 1.0
+
+v41_projected_gradient:
+  schema_version: 1
+  role: exact_v40_u0_existing_v28_layer14_projected_gradient_v41
+  engine: fresh_cpu_float64_projected_gradient_sgd_existing_layer14_lora_b_true_microsteps
+  v40_terminal_report: reports/gemma4/metrics/v40_update3_terminal_gate.json
+  v40_terminal_report_sha256: d4c30be9e4f685697478b6e5a37f4f55d6e99962484b1cbae5c3c3214c24b35e
+  source_checkpoint: data_gemma4/checkpoints/gemma4_v40_diverse28_cross_preserving_l14_query/update_000
+  source_optimizer_step: 0
+  source_file_sha256:
+    adapter.safetensors: b0bdceb7699e9d97467915c69186f433d3b0fac2b09144d38c3078afe1f70cb0
+    metadata.json: ee74b1572061cae09d20bdf2b07e5f94ce9ef5c3ebfb6908131448bf8e5b484d
+    runtime_metadata.json: 209858f923ffa0916484209aeefad6f56a2cb4902bbd0dacd29decc222245c49
+  source_full_tensor_state_sha256: 7b951c6d7ae4f7b50603159f0bc4dfb4d50b5b40f9325134d78d1de1dae87fc0
+  complete_v28_bank_state_sha256: cc9dfa838bb87f32e2922d675658af4a1085d53a84ccdca6d5bacc6f7097217b
+  frozen_excluding_target_state_sha256: cec01bc088bb87c6bb44e0659eb03aa766f951ddeee706ca9a70edaa080dea5e
+  target_bank_name: extension_v28_stage_b_query
+  target_adapter_index: 1
+  target_module: model.language_model.layers.14.self_attn.q_proj
+  target_parameter_names:
+    - lora_banks.extension_v28_stage_b_query.adapters.1.lora_b
+  target_parameter_shapes:
+    - [4096, 4]
+  target_parameter_count: 16384
+  target_tensor_count: 1
+  target_rank: 4
+  target_alpha: 8.0
+  target_dropout: 0.0
+  target_source_state_sha256: d0834cc588ee2a9edf08aabedfd01e0a6d2b01c6b6ae7e3a3d764eaddf58cc3e
+  source_v23_state_sha256: 5c9233bd96b381e2f63443f8a739a868a21997b28061d90fb407a46d9de2d4cb
+  source_block_core_state_sha256: 92652fd2dbde2406227503f50717b2031baa1bcbc050902a379ddb9ddb52764f
+  source_optimizer_state_loaded: false
+  source_optimizer_file_opened: false
+  validation_qa_loaded_during_training: false
+  continuation_gates_use_training_only: true
+  question_dependent_scene_processing: false
+  question_dependent_retrieval: false
+  priority_pair_ids:
+    book_support: pair_000015
+    mirror_lr: pair_000016
+    picture_support: pair_000017
+  priority_question_keys:
+    - cfq_13b1138d14c52a7c
+    - cfq_1c8b8cd72fcde904
+    - cfq_163eb92339ad35a5
+    - cfq_66aab89cee5bef49
+    - cfq_a1c673a1197a0961
+    - cfq_d469c4ac156ac42d
+    - cfq_ac7ac024c40aaddc
+    - cfq_fa3601dfffa80a0e
+  pair_schedule_sha256: 4e26160c9a36e20ac894ff5e26604e6fad985ff5c84211282fd9807c9e738b3f
+  schedule_sha256: 2e7a2a8136c968739a8aaaa1138be87bec322fefa0fb340e6fb9bc6e07278bea
+  saved_optimizer_steps: [0, 8, 16, 24, 32, 40, 41]
+  per_unit_nll_diagnostics_required_at_steps: [0, 8, 16, 41]
+  priority_side_deficit_margin: 0.5
+  update_zero_expected:
+    floating_absolute_tolerance: 0.000001
+    broad_train_nll: 2.9013306349515915
+    broad_greedy_exact_correct: 23
+    broad_greedy_exact_total: 48
+    priority_book_side_deficit: 16.926229
+    priority_picture_side_deficit: 14.1875001
+    priority_combined_side_deficit: 31.1137291
+    complete_units: 9
+    complete_physical_pair_coverage: 4
+    cross_prefix_complete_units: 17
+    positive_sides: 34
+    mean_cross_prefix_margin: 1.4390720129
+    book_complete_units: 0
+    picture_complete_units: 0
+    mirror_complete_units: 2
+    book_cross_prefix_complete_units: 2
+    picture_cross_prefix_complete_units: 2
+  update8_gate:
+    optimizer_step: 8
+    priority_side_deficit_minimum_improvement: 0.5
+    complete_units_minimum: 9
+    positive_sides_minimum: 34
+    cross_prefix_complete_units_minimum: 17
+    broad_nll_maximum_increase: 0.02
+  update16_gate:
+    optimizer_step: 16
+    require_update8_passed: true
+    priority_side_deficit_minimum_improvement: 3.12
+    complete_units_minimum: 10
+    positive_sides_minimum: 35
+    complete_physical_pair_coverage_minimum: 5
+    book_or_picture_complete_units_minimum: 1
+    cross_prefix_complete_units_minimum: 17
+    broad_nll_maximum_increase: 0.02
+  update41_gate:
+    optimizer_step: 41
+    require_update16_passed: true
+    priority_side_deficit_minimum_improvement: 6.24
+    complete_units_minimum: 12
+    positive_sides_minimum: 37
+    complete_physical_pair_coverage_minimum: 6
+    book_complete_units_minimum: 1
+    picture_complete_units_minimum: 1
+    mirror_complete_units_minimum: 2
+    cross_prefix_complete_units_minimum: 18
+    greedy_complete_units_minimum: 6
+    require_one_greedy_complete_per_priority_family: true
+    broad_greedy_accuracy_must_meet_source: true
+    broad_nll_maximum_increase: 0.02
+  final_test_deferred: true
+
+experiment:
+  role: exact_v40_u0_existing_v28_layer14_lora_b_projected_gradient_v41
+  source_optimizer_step: 0
+  fresh_projected_gradient_sgd: true
+  final_test_deferred: true

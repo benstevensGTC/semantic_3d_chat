@@ -1,0 +1,68 @@
+{
+  "collision": {
+    "count": 0,
+    "maximum_count": 0,
+    "passed": true
+  },
+  "family": "face",
+  "final_pose": {
+    "body_yaw_degrees": 66.92344078354057,
+    "position_xyz_m": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "stopped": true
+  },
+  "heading": {
+    "absolute_error_degrees": 0.14641915347542067,
+    "maximum_error_degrees": 20.0,
+    "signed_error_degrees": 0.14641915347542067
+  },
+  "oracle_only_scorer_attestation": {
+    "evaluation_only": true,
+    "oracle_geometry_loaded_by_scorer_only": true,
+    "runtime_process_read_oracle": false,
+    "runtime_result_modified": false,
+    "runtime_validated_before_oracle_open": true,
+    "scene_oracle_sha256": "d3b7f56a810ac606964e8218b3150ad0f652edd4c0f139d1d7b8e3cf1882d78c",
+    "score_fed_back_to_runtime": false,
+    "scoring_spec_sha256": "586e57cdadddd05287816d55090b0a20da615ddfe45b7e90079565ccc25a9196"
+  },
+  "oracle_target": {
+    "center_xyz_m": [
+      -1.2374088764190674,
+      0.5234692245721817,
+      0.6299999952316284
+    ],
+    "desired_yaw_degrees": 67.06985993701599,
+    "opaque_instance_id": "i_000101"
+  },
+  "passed": true,
+  "runtime_result": {
+    "client_access_audit": {
+      "forbidden_access_count": 0,
+      "loaded_file_count": 93,
+      "passed": true,
+      "path": "reports/gemma4/metrics/conversational_mcp_client_access_scene_000001.json",
+      "sha256": "5546aa339b19ca6c9a53fdd420dc6bee4c1d8e911a26c7495cf0d558c8b53499"
+    },
+    "gemma_native_function_calling_used": false,
+    "learned_v3_action_head_used": false,
+    "official_mcp_sdk_stdio_action_execution": true,
+    "path": "reports/gemma4/metrics/conversational_mcp_face_scene_000001.json",
+    "policy": "selective_gemma_all_voxel_v3_numeric_alignment",
+    "server_access_audit": {
+      "forbidden_access_count": 0,
+      "loaded_file_count": 4185,
+      "passed": true,
+      "path": "reports/gemma4/metrics/conversational_mcp_server_access_scene_000001.json",
+      "sha256": "8336da5848bd7c24d3e719bcebe4f9d3634693406f4e27fff737759c124cae41"
+    },
+    "sha256": "c70878d4a6b527496d76d624251f9f6891fa3599850d8a630b4792f0b1e00295"
+  },
+  "scene_id": "scene_000001",
+  "schema": "semantic_3d_chat.conversational_mcp_face_oracle_score.v1",
+  "status": "passed",
+  "task_id": "nav_000"
+}

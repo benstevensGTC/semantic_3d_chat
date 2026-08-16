@@ -38,3 +38,18 @@ def test_runtime_read_survives_oracle_directory_rename(tmp_path: Path) -> None:
         assert artifact.read_bytes() == b"continuous-scene-memory"
     finally:
         hidden.rename(oracle)
+
+
+def test_strict_audit_blocks_forbidden_read_before_bytes_are_returned(tmp_path: Path) -> None:
+    forbidden = tmp_path / "outside" / "qa" / "answers.jsonl"
+    forbidden.parent.mkdir(parents=True)
+    forbidden.write_text("environmental supervision", encoding="utf-8")
+    audit = FileAccessAudit(
+        forbidden_component_names={"qa", "oracle", "rendered", "features"},
+        block_forbidden=True,
+    )
+
+    with audit, pytest.raises(PermissionError, match="before open"):
+        forbidden.read_text(encoding="utf-8")
+
+    assert str(forbidden.resolve()) in audit.forbidden_accesses()

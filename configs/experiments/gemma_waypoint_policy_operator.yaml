@@ -1,0 +1,29 @@
+_base_: gemma_waypoint_policy_v1.yaml
+
+gemma_waypoint_policy:
+  # Fresh V4 paths combine cumulative FACE execution-drift prefixes, complete
+  # post-rejection continuations, and selected-action-only history encoding.
+  trace_dataset: data_gemma4/training/gemma_waypoint_policy_v1_operator_dagger_v4
+  prefix_cache_root: data_gemma4/scene_tokens/gemma_waypoint_policy_v1_live
+  hidden_cache: data_gemma4/training/gemma_waypoint_policy_v1_operator_dagger_v4_runtime_aligned_hidden
+  checkpoint_output: data_gemma4/checkpoints/gemma_waypoint_policy_v1_operator_dagger_v4_runtime_aligned
+  runtime_aligned_control_config: configs/runtime/gemma4_v56_question_control.yaml
+  runtime_aligned_base_checkpoint: data_gemma4/runtime/checkpoints/gemma4_v54_release_v1
+  runtime_aligned_control_checkpoint: data_gemma4/runtime/checkpoints/gemma4_v75_nll_control_release_v1
+  runtime_aligned_scene_id: scene_000001
+  training_sample_limit: null
+  validation_sample_limit: 96
+  control_sample_limit: 24
+  head_batch_size: 32
+  gradient_accumulation_steps: 1
+  epochs: 200
+  learning_rate: 0.0002
+  heading_loss_weight: 4.0
+  action_class_weight_power: 0.5
+  action_refit_max_iter: 500
+  action_refit_learning_rate: 0.5
+  minimum_training_action_accuracy: 1.0
+  checkpoint_selection: final_training_epoch
+  heading_refit_steps: 1500
+  heading_refit_learning_rate: 0.0005
+  minimum_training_turn_margin_degrees: 3.0

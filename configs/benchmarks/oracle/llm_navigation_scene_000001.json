@@ -1,0 +1,60 @@
+{
+  "schema": "semantic_3d_chat.llm_navigation_oracle.v1",
+  "scene_id": "scene_000001",
+  "task_manifest_sha256": "8a59fd86c4f166e3361ae4204620fc3908b1b3f47d24bf7453526611a5b9c69a",
+  "tasks": [
+    {
+      "task_id": "nav_000",
+      "family": "face",
+      "target_instance_id": "i_000101",
+      "maximum_heading_error_degrees": 20.0,
+      "maximum_collisions": 0,
+      "require_stopped": true
+    },
+    {
+      "task_id": "nav_001",
+      "family": "approach",
+      "target_instance_id": "i_000100",
+      "maximum_target_standoff_m": 0.85,
+      "minimum_target_progress_m": 0.25,
+      "maximum_collisions": 0,
+      "require_stopped": true
+    },
+    {
+      "task_id": "nav_002",
+      "family": "stop",
+      "minimum_displacement_m": 0.20,
+      "maximum_displacement_m": 0.30,
+      "maximum_collisions": 0,
+      "require_stopped": true
+    },
+    {
+      "task_id": "nav_003",
+      "family": "obstacle",
+      "target_instance_id": "i_000103",
+      "obstacle_instance_id": "i_000101",
+      "maximum_target_standoff_m": 0.85,
+      "minimum_target_progress_m": 0.20,
+      "minimum_obstacle_bbox_clearance_m": 0.25,
+      "maximum_collisions": 0,
+      "require_stopped": true
+    },
+    {
+      "task_id": "nav_004",
+      "family": "left_right",
+      "target_instance_id": "i_000103",
+      "maximum_heading_error_degrees": 20.0,
+      "maximum_collisions": 0,
+      "require_stopped": true
+    },
+    {
+      "task_id": "nav_005",
+      "family": "update_after_scan",
+      "target_instance_id": "i_000104",
+      "maximum_target_standoff_m": 0.85,
+      "minimum_target_progress_m": 0.20,
+      "maximum_collisions": 0,
+      "require_stopped": true
+    }
+  ]
+}

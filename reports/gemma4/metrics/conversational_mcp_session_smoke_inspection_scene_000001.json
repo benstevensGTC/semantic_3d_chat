@@ -1,0 +1,74 @@
+{
+  "checks": {
+    "all_navigation_decisions_scored_every_voxel": true,
+    "at_least_one_positive_translation": true,
+    "client_access_audit_zero_forbidden": true,
+    "every_observation_refreshed_map_and_scene_prefix": true,
+    "every_turn_passed": true,
+    "exact_command_order": true,
+    "honest_nonlearned_action_policy": true,
+    "numeric_receipts_have_no_semantic_leak": true,
+    "official_single_persistent_stdio_session": true,
+    "prefix_refresh_count_matches_transcript": true,
+    "read_only_state_queries_preserved_binding": true,
+    "runtime_schema_and_pass": true,
+    "server_access_audit_zero_forbidden": true,
+    "standalone_stop_finally_latched": true,
+    "strict_numeric_receipt_schema": true
+  },
+  "client_access_audit": {
+    "forbidden_access_count": 0,
+    "loaded_file_count": 93,
+    "passed": true,
+    "path": "reports/gemma4/metrics/conversational_mcp_session_smoke_client_access_scene_000001.json",
+    "sha256": "dfce86e8d26c974c7775c18c4ba380f487fa5e0c07e36bfaa59274a0533019eb"
+  },
+  "environmental_text_inputs": [],
+  "oracle_inputs_opened": false,
+  "oracle_target_distance_scoring_deferred": true,
+  "passed": true,
+  "runtime_result": {
+    "path": "reports/gemma4/metrics/conversational_mcp_session_smoke_scene_000001.json",
+    "sha256": "cfde712a853fb99ee2fd6528a3f32c0872ac7f32fa0017a6fe59d0146a5a9a02"
+  },
+  "scene_id": "scene_000001",
+  "schema": "semantic_3d_chat.conversational_mcp_session_inspection.v1",
+  "server_access_audit": {
+    "forbidden_access_count": 0,
+    "loaded_file_count": 4194,
+    "passed": true,
+    "path": "reports/gemma4/metrics/conversational_mcp_session_smoke_server_access_scene_000001.json",
+    "sha256": "e6725133a060fc7cc9a956f4ff414821f98e0f5226b73f92e88005a55d655575"
+  },
+  "status": "passed",
+  "transcript": {
+    "action_sequence": [
+      "scan",
+      "turn",
+      "turn",
+      "get_robot_state",
+      "move_forward",
+      "move_forward",
+      "get_robot_state",
+      "scan",
+      "get_robot_state",
+      "stop",
+      "get_robot_state"
+    ],
+    "collision_count": 0,
+    "command_order": [
+      "face",
+      "approach",
+      "scan",
+      "state",
+      "stop"
+    ],
+    "distance_moved_m": 0.7457224678993225,
+    "final_stopped": true,
+    "move_count": 2,
+    "numeric_receipt_count": 11,
+    "observation_refresh_count": 6,
+    "prefix_binding_refresh_count": 12,
+    "turn_count": 5
+  }
+}

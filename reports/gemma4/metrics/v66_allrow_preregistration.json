@@ -1,0 +1,129 @@
+{
+  "artifact": "v66_allrow_always_on_training_preregistration",
+  "authorization": {
+    "answer_classes": 28,
+    "counterfactual_pairs": 12,
+    "filtered_training_qa_sha256": "84b99385fadc5d06e44465ada5902f56131192298ca1539373dc3b334608cbf1",
+    "training_baseline_lock_sha256": "b1f20e64889116cceb0904ecb3842a6e43fcd6fa3cb0675c32a24f4d278e55e6",
+    "training_rows": 576,
+    "training_scenes": 24
+  },
+  "controls": {
+    "actual_greedy_local_gemma_primary": true,
+    "canonical_type_specific_scoring": true,
+    "cyclic_wrong_complete_scene_prefix_and_signature": true,
+    "same_question_counterfactual_prediction_change_required": true,
+    "saved_runtime_raw_question_token_generation_required": true,
+    "sealed_checkpoint_public_reload_required": true,
+    "unverified_native_answer_embedding_fallback_permitted": false
+  },
+  "frozen_v54_training_baseline": {
+    "canonical_type_specific_exact": 227,
+    "changed_side_exact": 35,
+    "changed_side_total": 80,
+    "changed_unit_total": 40,
+    "complete_changed_units": 5,
+    "per_type": {
+      "attribute": {
+        "exact": 25,
+        "total": 120
+      },
+      "count": {
+        "exact": 56,
+        "total": 96
+      },
+      "metric": {
+        "exact": 0,
+        "total": 24
+      },
+      "orientation": {
+        "exact": 21,
+        "total": 22
+      },
+      "presence": {
+        "exact": 56,
+        "total": 100
+      },
+      "spatial_relation": {
+        "exact": 62,
+        "total": 120
+      },
+      "support": {
+        "exact": 7,
+        "total": 94
+      }
+    },
+    "prediction_change_units": 9,
+    "total": 576
+  },
+  "pair_heldout_inventory": {
+    "every_supported_row_generated_once": true,
+    "fold_codebook_and_basis_built_after_pair_exclusion": true,
+    "fully_supported_changed_units": 35,
+    "held_pair_teacher_sources_used": false,
+    "partly_unsupported_changed_units": 5,
+    "supported_changed_sides": 75,
+    "vocabulary_supported_rows": 571,
+    "vocabulary_unsupported_singleton_rows": 5
+  },
+  "research_change": "all_authorized_rows_train_an_always_on_continuous_full_scene_question_adapter",
+  "schema_version": 1,
+  "scope": {
+    "deferred_final_loaded": false,
+    "fresh_development_loaded": false,
+    "oracle_loaded": false,
+    "scorer_inputs_used": false,
+    "training_only": true,
+    "validation_inputs_used": false
+  },
+  "status": "locked_before_v66_controller_training_or_generation",
+  "thresholds": {
+    "eligible_fold_total": 12,
+    "eligible_folds_with_exact_hit_minimum": 12,
+    "final_complete_unit_minimum": 36,
+    "final_complete_unit_total": 40,
+    "final_exact_minimum": 520,
+    "final_total": 576,
+    "held_changed_side_exact_minimum": 45,
+    "held_changed_side_total": 75,
+    "held_complete_unit_minimum": 15,
+    "held_complete_unit_total": 35,
+    "held_prediction_change_unit_minimum": 20,
+    "held_prediction_change_unit_total": 35,
+    "held_supported_exact_minimum": 300,
+    "held_supported_total": 571,
+    "held_unsupported_total": 5,
+    "per_type_minimum_exact": [
+      [
+        "attribute",
+        35
+      ],
+      [
+        "count",
+        58
+      ],
+      [
+        "metric",
+        3
+      ],
+      [
+        "orientation",
+        20
+      ],
+      [
+        "presence",
+        60
+      ],
+      [
+        "spatial_relation",
+        65
+      ],
+      [
+        "support",
+        35
+      ]
+    ],
+    "wrong_scene_changed_complete_maximum": 10,
+    "wrong_scene_exact_maximum": 250
+  }
+}

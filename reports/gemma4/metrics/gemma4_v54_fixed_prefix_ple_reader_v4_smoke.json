@@ -1,0 +1,48 @@
+{
+  "answer_logit_positions_only": true,
+  "artifact": "gemma4_v54_fixed_prefix_ple_reader_v4_equivalence_gradient_smoke",
+  "changed_margin": 0.03475606441497803,
+  "elapsed_seconds": 12.11855079093948,
+  "environmental_text_inputs": [],
+  "evaluation_microbatch_size": 1,
+  "loss": 0.7322610020637512,
+  "memory": {
+    "mps_current_allocated_bytes": 255325440,
+    "mps_driver_allocated_bytes": 11609686016,
+    "peak_process_rss_bytes": 9174171648
+  },
+  "passed": true,
+  "preregistration_sha256": "34b4576a6ced7003c916c5dc3deabecf8e6e70a0e39bcc8329d039fd00ef3d59",
+  "question_dependent_scene_retrieval": false,
+  "real_one_row_absolute_difference": 2.384185791015625e-07,
+  "real_one_row_full_nll": 0.5079594850540161,
+  "real_one_row_tail_nll": 0.5079597234725952,
+  "real_one_row_tolerance": 1e-06,
+  "retention_logits_to_keep": 1,
+  "retention_self_kl": 1.7583897715667263e-06,
+  "schema_version": 1,
+  "status": "passed",
+  "synthetic_equivalence": {
+    "exact": true,
+    "full": [
+      2.8332133293151855,
+      2.8332133293151855,
+      2.8332133293151855
+    ],
+    "maximum_absolute_difference": 0.0,
+    "selected": [
+      2.8332133293151855,
+      2.8332133293151855,
+      2.8332133293151855
+    ]
+  },
+  "tail_gradient_by_module": {
+    "model.language_model.per_layer_model_projection": {
+      "lora_a": 0.0,
+      "lora_b": 0.2632424235343933,
+      "total_l2": 0.2632424235343933
+    }
+  },
+  "tail_gradient_l2": 0.2632424235343933,
+  "trainable_parameter_count": 41984
+}

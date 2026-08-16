@@ -16,6 +16,17 @@ from semantic_3d_chat.scene_encoder.map_io import load_map_tensors
 
 def _map_arrays() -> dict[str, np.ndarray]:
     count = 4
+    header = {
+        "schema_version": 1,
+        "voxel_size_m": 0.05,
+        "occupied_voxels": count,
+        "feature_dim": 5,
+        "semantic_dtype_on_disk": "float16",
+        "codec": "identity-float16",
+        "total_observations": 10,
+        "max_voxels": count,
+        "metadata": {"scene_id": "scene_000001"},
+    }
     return {
         "voxel_coordinates": np.arange(count * 3, dtype=np.int32).reshape(count, 3),
         "centers_world": np.arange(count * 3, dtype=np.float32).reshape(count, 3) / 10,
@@ -31,7 +42,7 @@ def _map_arrays() -> dict[str, np.ndarray]:
         "view_direction_valid": np.ones(count, dtype=bool),
         "confidence": np.ones(count, dtype=np.float32),
         "last_frame": np.asarray([f"f_{index:06d}" for index in range(count)]),
-        "metadata_json": np.asarray(json.dumps({"schema_version": 1})),
+        "metadata_json": np.asarray(json.dumps(header, sort_keys=True)),
     }
 
 

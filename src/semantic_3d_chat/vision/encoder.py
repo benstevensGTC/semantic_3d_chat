@@ -14,6 +14,7 @@ import hashlib
 import json
 import logging
 import re
+import zipfile
 from collections.abc import Sequence
 from dataclasses import dataclass
 from pathlib import Path
@@ -28,7 +29,11 @@ from semantic_3d_chat.config import PROJECT_ROOT, load_config, project_path
 from semantic_3d_chat.device import safe_dtype, select_device
 from semantic_3d_chat.rendering_io import FrameRecord, iter_frames
 from semantic_3d_chat.vision.model_registry import DenseVisionModelSpec, get_model_spec
-from semantic_3d_chat.vision.patch_features import DensePatchFeatures, extract_clip_streams
+from semantic_3d_chat.vision.patch_features import (
+    FEATURE_CACHE_FORMAT_VERSION,
+    DensePatchFeatures,
+    extract_clip_streams,
+)
 
 LOGGER = logging.getLogger(__name__)
 
@@ -54,6 +59,11 @@ def _image_sha256(image: Image.Image) -> str:
 
 def _resolved_model_revision(model_id: str, requested_revision: str) -> str:
     """Use the downloader's pinned commit when it matches this selection."""
+
+    # An exact Hub commit is already immutable.  Never let an auxiliary report
+    # redirect a config that explicitly pins its model weights.
+    if re.fullmatch(r"[0-9a-f]{40}", requested_revision):
+        return requested_revision
 
     revisions_path = PROJECT_ROOT / "reports" / "metrics" / "model_revisions.json"
     if not revisions_path.is_file():
@@ -303,7 +313,14 @@ class FrameFeatureCache:
         path = self.path_for(frame_id)
         if not path.is_file():
             return None
-        features, metadata = DensePatchFeatures.load(path)
+        try:
+            features, metadata = DensePatchFeatures.load(path)
+        except (EOFError, OSError, ValueError, zipfile.BadZipFile):
+            # A killed extraction can leave only the prior file or a truncated
+            # cache on filesystems without durable rename semantics.  The RGB
+            # source and configured signature are authoritative, so treat an
+            # unreadable cache as a miss and atomically regenerate it.
+            return None
         expected = {
             "cache_signature": self.signature,
             "frame_key": _opaque_frame_key(frame_id),
@@ -326,7 +343,7 @@ class FrameFeatureCache:
         return features.save(
             self.path_for(frame_id),
             metadata={
-                "format_version": "1",
+                "format_version": str(FEATURE_CACHE_FORMAT_VERSION),
                 "cache_signature": self.signature,
                 "frame_key": _opaque_frame_key(frame_id),
                 "source_rgb_sha256": source_sha256,
@@ -388,6 +405,56 @@ def load_dense_image_encoder(
 
         return DenseGemma4Encoder.from_pretrained(spec.model_id, **common)
     raise ValueError(f"Unsupported dense vision architecture: {spec.architecture}")
+
+
+def load_configured_dense_image_encoder(
+    config: dict[str, Any],
+    *,
+    device: torch.device | None = None,
+    local_files_only: bool = False,
+) -> DenseImageEncoder:
+    """Load one encoder from a validated dense-feature configuration.
+
+    Batch extraction uses this helper to keep one frozen vision tower resident
+    while several scenes are processed.  Each individual frame still makes
+    exactly one complete-image vision call through :meth:`encode_image`.
+    """
+
+    vision = config["vision"]
+    spec = get_model_spec(str(vision["model_id"]))
+    configured_size = int(vision.get("input_size", spec.image_size))
+    if configured_size != spec.image_size:
+        raise ValueError(
+            f"Configured input_size={configured_size} disagrees with {spec.model_id} "
+            f"native size {spec.image_size}"
+        )
+    requested_revision = str(vision.get("revision", "main"))
+    revision = _resolved_model_revision(spec.model_id, requested_revision)
+    middle_layer = int(vision.get("middle_layer", spec.default_middle_layer))
+    late_layer = int(vision.get("late_layer", spec.default_late_layer))
+    spec.validate_layers(middle_layer, late_layer)
+    aligned_method = str(
+        vision.get(
+            "aligned_method",
+            "pooled_native_projector_broadcast"
+            if spec.architecture == "gemma4"
+            else "tokenwise_projection",
+        )
+    )
+    storage_dtype = _storage_dtype(
+        str(vision.get("storage_dtype", vision.get("dtype", "float16")))
+    )
+    return load_dense_image_encoder(
+        spec,
+        revision=revision,
+        device=device,
+        requested_dtype=str(vision.get("dtype", "float16")),
+        storage_dtype=storage_dtype,
+        middle_layer=middle_layer,
+        late_layer=late_layer,
+        aligned_method=aligned_method,
+        local_files_only=local_files_only,
+    )
 
 
 def extract_manifest_features(
@@ -506,6 +573,9 @@ def extract_manifest_features(
                 "frame_id": frame.frame_id,
                 "feature_path": path.name,
                 "source_rgb_sha256": source_sha256,
+                "vision_encoder_calls": 1,
+                "complete_image_encoded": True,
+                "manual_crops_or_patch_reencoding": False,
                 "grid_size": list(features.grid_size),
                 "native_middle_late_dim": int(features.native_middle_late.shape[-1]),
                 "clip_aligned_dim": int(features.clip_aligned.shape[-1]),
@@ -524,7 +594,7 @@ def extract_manifest_features(
         )
 
     index = {
-        "format_version": 1,
+        "format_version": FEATURE_CACHE_FORMAT_VERSION,
         "scene_id": scene_id,
         "cache_signature": signature,
         "model_id": spec.model_id,

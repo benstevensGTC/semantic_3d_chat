@@ -1,0 +1,149 @@
+{
+  "execution": {
+    "config_file_sha256": "ba7c47e377d3b1a352e0c8f6348b7c72d39cf372526afea37da3c4dd711212ca",
+    "config_path": "configs/runtime/embodied_v54.yaml",
+    "merged_source_config_sha256": "a3f1de9b9f954c9f28be45746ed381f9ec7a87e576748c808ff3d4c83b931aff",
+    "numeric_runtime_overrides": {
+      "data_root": "isolated temporary directory",
+      "pitch_degrees": 0.0,
+      "samples": 1,
+      "x_m": 0.0,
+      "y_m": 0.0,
+      "yaw_degrees": 0.0
+    },
+    "render_encode_fuse_prefix_seconds": 33.905253,
+    "reproducible_command": ".venv-gemma4/bin/python scripts/run_embodied_runtime_smoke.py --config configs/runtime/embodied_v54.yaml --checkpoint data_gemma4/checkpoints/gemma4_v54_semantic_greedy_gate/update_000 --asset data/runtime_assets/scene_000001/s_000001.blend --robot-state-checkpoint data_gemma4/checkpoints/robot_state_numeric_v1 --scene scene_000001 --samples 1 --output reports/gemma4/metrics/embodied_runtime_smoke_scene_000001.json",
+    "runtime_build_seconds": 19.816753,
+    "total_seconds": 53.769512
+  },
+  "limitations": [
+    "This proves one deterministic simulator pose, not learned navigation success.",
+    "Directional coverage measures world-direction bins, not complete surface coverage.",
+    "The numeric robot-state projection is deterministic and hash-bound but not yet task-trained."
+  ],
+  "map_prefix_transaction": {
+    "active_prefix_sha256": "f8b0032fa202f2bc9ec3f6ec6a9b3f87ef0e2e567630aaa13f726884b058a92c",
+    "binding_sha256": "23417e2f830ef66c3c5eec1f1bc392fcdd801ebaa8df0cd1152d5eb1dacff1b1",
+    "map_sha256": "0ce47997a1409fe4e47e742289a8b35d1950692f37e3cecb231bb52466b27f45",
+    "prefix_after_sha256": "8035572ddfd7a790589922f380b6d3ab78ef041edfbcc460adc6f46cc9a35eb7",
+    "prefix_before_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95",
+    "prefix_built_before_any_user_question": true,
+    "prefix_changed": true,
+    "processed_voxels": 8422,
+    "robot_state_encoder_sha256": "62cfdd2a9edcd0a450da19907009fdf3f5ed96cac4cedafae75f775bb96077c8",
+    "robot_state_sha256": "45933b63e1979594ef5b5c7bbff314b98fdc72acdad43189f6ad25e251d81a71",
+    "robot_tokens_sha256": "9325c1e2d28ac047768bf841c0cf3312c14c5bd22a7fa824aa5852ac553ea33f",
+    "scene_version": 1,
+    "source_voxels": 74897
+  },
+  "models": {
+    "adapter_sha256": "6c627f0a0d9efb7100489c24cbd4acafe10456b79280a64a85399a21cb541daf",
+    "checkpoint_path": "data_gemma4/checkpoints/gemma4_v54_semantic_greedy_gate/update_000",
+    "language_model_id": "google/gemma-4-E2B-it",
+    "language_revision": "3e22461f65e89153144f8adb70e3b8c2cc9845a7",
+    "robot_state_checkpoint_path": "data_gemma4/checkpoints/robot_state_numeric_v1",
+    "robot_state_metadata_sha256": "c48b8748dbde04f2c9294321974b1b13be2d77083970f051ba1c11a9b42d1985",
+    "robot_state_weights_sha256": "5d6aa13208264e0a99755d84e8f68b7727249b274c460e9d4e26541cd8e46938",
+    "runtime_metadata_sha256": "807515461c71b08c08dfbd08a184a653e791413748530fa69402512eca6f6fdd",
+    "vision_model_id": "google/gemma-4-E2B-it",
+    "vision_revision": "3e22461f65e89153144f8adb70e3b8c2cc9845a7"
+  },
+  "observation": {
+    "depth_sha256": "afabdfc5e335750c3246961f75ec0e412b02f6a88988891de8dee4bb29897858",
+    "directional_coverage": 0.09104938271604938,
+    "feature_dim": 3072,
+    "feature_grid_height": 48,
+    "feature_grid_width": 48,
+    "observation_id": "o_000001",
+    "receipt_sha256": "9e5f26531fba41311bec3bdb0377c1e66597eb677580af2ec2b7266dfe81e732",
+    "rgb_sha256": "e48edd54655df81513253e839d11c06a974b7fbe08dd93ea6f110fec0ab47fac",
+    "valid_depth_pixels": 50176,
+    "visible_source_voxels": 0,
+    "vision_encoder_calls": 1
+  },
+  "passed": true,
+  "renderer": {
+    "asset_manifest": {
+      "animation_present": false,
+      "asset_file": "s_000001.blend",
+      "asset_sha256": "5ca5c9a05bf81dfd93c4aaa313f15a3ffada8739397fb5f26fbbd1313df36481",
+      "automation_present": false,
+      "collections": 0,
+      "custom_properties_present": false,
+      "external_assets_present": false,
+      "light_objects": 2,
+      "materials": 11,
+      "mesh_objects": 39,
+      "nested_names_opaque": true,
+      "node_trees": 14,
+      "object_names_opaque": true,
+      "scene_id": "scene_000001",
+      "schema": "semantic_3d_chat.runtime_scene.v2",
+      "strict_nested_datablock_audit_passed": true,
+      "unsupported_datablocks_present": false
+    },
+    "asset_manifest_sha256": "4ac24c0e229419e399584d197af8c4225831158972005c681e7622edb43fd490",
+    "asset_path": "data/runtime_assets/scene_000001/s_000001.blend",
+    "asset_sha256": "5ca5c9a05bf81dfd93c4aaa313f15a3ffada8739397fb5f26fbbd1313df36481",
+    "camera_pose_numeric": [
+      [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.6292068494294654e-07,
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        -1.0,
+        1.6292068494294654e-07,
+        1.2000000476837158
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "complete_rgb_height": 224,
+    "complete_rgb_width": 224,
+    "intrinsics_numeric": [
+      [
+        154.15477509277144,
+        0.0,
+        111.5
+      ],
+      [
+        0.0,
+        154.15477509277144,
+        111.5
+      ],
+      [
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "point_splat_scanner_used": false,
+    "renderer_command_has_forbidden_path_component": false,
+    "renderer_command_sha256": "6814a5f113f8f3b728967e1c3eb8d590c0179242c356d447f68a9d43ca4cf37a",
+    "scanner_class": "SanitizedBlenderScanner",
+    "strict_nested_datablock_audit_passed": true
+  },
+  "runtime_file_audit": {
+    "blocking_enabled": true,
+    "forbidden_accesses": [],
+    "loaded_file_count": 120,
+    "loaded_file_inventory_sha256": "19cc7946a0c5d94149f065773888e8c5a420f8ad0db4def3ec8244a431811812",
+    "oracle_or_qa_loaded": false,
+    "renderer_subprocess_opened_only_authenticated_runtime_asset": true
+  },
+  "scene_id": "scene_000001",
+  "schema": "semantic_3d_chat.embodied_runtime_smoke.v1"
+}

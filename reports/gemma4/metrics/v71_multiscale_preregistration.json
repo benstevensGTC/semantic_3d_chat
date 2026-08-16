@@ -1,0 +1,228 @@
+{
+  "architecture": {
+    "both_branches_process_every_environment_latent": true,
+    "branch_32_moment_indices": [
+      0,
+      32
+    ],
+    "branch_8_moment_indices": [
+      0,
+      8
+    ],
+    "branch_moment_counts": [
+      8,
+      32
+    ],
+    "branches_have_independent_coefficient_and_magnitude_heads": true,
+    "branches_have_independent_question_projections": true,
+    "branches_have_independent_scene_projections": true,
+    "branches_have_independent_trunks": true,
+    "environment_latent_count": 256,
+    "fusion_formula": "w*branch_8+(1-w)*branch_32",
+    "fusion_initial_weight_branch_8": 0.5,
+    "fusion_scalar_trained_only_on_training_fold_rows": true,
+    "fusion_weight_formula": "0.10+0.80*sigmoid(global_trainable_logit)",
+    "held_rows_never_tune_or_select_fusion": true,
+    "question_dependent_scene_retrieval": false,
+    "shared_fold_local_output_basis": true
+  },
+  "artifact": "v71_multiscale_two_branch_preregistration",
+  "behavioral_gates": {
+    "not_executed_by_v71_numeric_screen": true,
+    "thresholds": {
+      "eligible_fold_total": 12,
+      "eligible_folds_with_exact_hit_minimum": 12,
+      "final_complete_unit_minimum": 36,
+      "final_complete_unit_total": 40,
+      "final_exact_minimum": 520,
+      "final_total": 576,
+      "held_changed_side_exact_minimum": 45,
+      "held_changed_side_total": 75,
+      "held_complete_unit_minimum": 15,
+      "held_complete_unit_total": 35,
+      "held_prediction_change_unit_minimum": 20,
+      "held_prediction_change_unit_total": 35,
+      "held_supported_exact_minimum": 300,
+      "held_supported_total": 571,
+      "held_unsupported_total": 5,
+      "paired_opposite_follows_complete_minimum": 25,
+      "paired_opposite_follows_side_minimum": 60,
+      "paired_opposite_original_complete_maximum": 5,
+      "paired_opposite_original_exact_maximum": 20,
+      "paired_opposite_side_total": 80,
+      "paired_opposite_unit_total": 40,
+      "per_type_minimum_exact": [
+        [
+          "attribute",
+          35
+        ],
+        [
+          "count",
+          58
+        ],
+        [
+          "metric",
+          3
+        ],
+        [
+          "orientation",
+          20
+        ],
+        [
+          "presence",
+          60
+        ],
+        [
+          "spatial_relation",
+          65
+        ],
+        [
+          "support",
+          35
+        ]
+      ]
+    },
+    "unchanged_from_v66b": true
+  },
+  "diagnosed_mechanism": {
+    "independent_predictor_errors_may_be_complementary": true,
+    "spectral_band_32_to_63_is_not_the_tested_complement": true,
+    "v69_first_8_positive_own_over_opposite_sides": 50,
+    "v69_first_8_prediction_change_units": 18,
+    "v70_first_32_positive_own_over_opposite_sides": 51,
+    "v70_first_32_prediction_change_units": 16
+  },
+  "failed_predecessor": {
+    "artifact": "v70_low_frequency_moments_numeric_screen_v1",
+    "complete_class_units": 15,
+    "path": "reports/gemma4/metrics/v70_low_frequency_moments_numeric_screen.json",
+    "positive_own_over_opposite_sides": 51,
+    "positive_pair_delta_units": 30,
+    "predecessor_artifact_bytes_modified": false,
+    "prediction_change_units": 16,
+    "preregistration_path": "reports/gemma4/metrics/v70_low_frequency_moments_preregistration.json",
+    "preregistration_sha256": "395cfabf1d82cb552d0f4a828367061c3d3066f914b34c950bc2ccfbedfeb64a",
+    "sha256": "711255b33f8c93133af7c0647234b3296532e574358b3a96a0e053eb894bfe53",
+    "training_identity_sha256": "a3e53d21ea894ebe15cbf7e18a39b4c52f23cf45e30db9b790c4de6cf4248a30"
+  },
+  "implementation_source_hashes": {
+    "scripts/run_gemma4_v71_multiscale.sh": "714a1bce603ec70f03126a130348299110c1499eff3b22435bce5697fe0406fd",
+    "src/semantic_3d_chat/evaluation/v71_multiscale_preregistration.py": "6f5dfccacaafb1b2594a245826615507ac808eea739b3bd0167796b0ee8916ba",
+    "src/semantic_3d_chat/scene_encoder/question_control_v7.py": "a5acd2e7b332b8c511d0daf053d92e4c8b59abb31ad10ccaca7c9276365cc9c6",
+    "src/semantic_3d_chat/scene_encoder/question_control_v71.py": "c921b7e71200396ec00c2b274cbd7db643f27f0392b12f7ed4084fee8131e376",
+    "src/semantic_3d_chat/training/question_control_v67_objective.py": "4f2183efec5278b7399b56c143f965f13057341410786af081519d9141ea1fb4",
+    "src/semantic_3d_chat/training/question_control_v68_objective.py": "36df4669ab46053ff850734bae715e2ea7799b3a1570239285f1512c26165c01",
+    "src/semantic_3d_chat/training/question_control_v69_objective.py": "ac7d37353d79d27b7911bf68285eb9c54410fb94e3587653bf97001b7e03e07f",
+    "src/semantic_3d_chat/training/train_question_control_v63.py": "f3e645c6385e4d2f286ff007e71033a93c25579e043116ee706dd01df7f6d310",
+    "src/semantic_3d_chat/training/train_question_control_v65.py": "e37fa0ac07d14c01f5397502ce26e401db0df182134291afd3668e78fa1e44ea",
+    "src/semantic_3d_chat/training/train_question_control_v66.py": "0c597a143265ab39c3f891a1bf726fa307752fe22f0fc09a7817263874d3b779",
+    "src/semantic_3d_chat/training/train_question_control_v67.py": "2e83be7166e9ff894ca7b9a16aba8a92aaeb331861241b72916555a1298a1e98",
+    "src/semantic_3d_chat/training/train_question_control_v68.py": "23f11bb4e595d0b84a8c3be49a7f83b2c69fc337d134524f17772da48bdfc0a2",
+    "src/semantic_3d_chat/training/train_question_control_v69.py": "1b43d8b6b50782d5bf1193312af85cec35b4565be7d0fd9a1450fede4da1e59e",
+    "src/semantic_3d_chat/training/train_question_control_v71.py": "674acd4deb9ea249906a2b9c7a3eecf6e643cca14affae4c649a64f7b922ff6e"
+  },
+  "numeric_screen": {
+    "all_12_pairs_held_out_once": true,
+    "fold_codebook_and_basis_built_after_exclusion": true,
+    "held_pair_rows_used_for_optimization": false,
+    "held_pair_teacher_sources_used": false,
+    "protocol": "leave_one_counterfactual_pair_out_numeric_only",
+    "question_and_answer_text_serialized": false,
+    "thresholds": {
+      "fully_supported_pair_sides": 70,
+      "held_changed_class_exact_minimum": 45,
+      "held_changed_total": 75,
+      "held_complete_class_units_minimum": 15,
+      "held_complete_unit_total": 35,
+      "held_prediction_change_units_minimum": 20,
+      "held_supported_class_exact_minimum": 300,
+      "held_supported_total": 571,
+      "held_unsupported_total": 5,
+      "mean_own_over_opposite_margin_minimum": 0.02,
+      "mean_pair_delta_cosine_minimum": 0.35,
+      "positive_own_over_opposite_sides_minimum": 53,
+      "positive_pair_delta_units_minimum": 27
+    },
+    "thresholds_unchanged_from_v70_v69_v68_v67": true,
+    "wall_time_budget_seconds": 1200
+  },
+  "preserved_predecessor_hashes": {
+    "reports/gemma4/metrics/v68_regularized_pair_numeric_grid.json": "0584383d4b3806b6a4205cc516e2957ea05b5c76066134335485d5f638c9e609",
+    "reports/gemma4/metrics/v68_regularized_pair_preregistration.json": "6642b16b38e169df0059b2ccfb6aba0f8b1315052f3aad0e2871b30eeda6811f",
+    "reports/gemma4/metrics/v69_pair_augmentation_numeric_grid.json": "6f6a6af8ab0c254bd8ea1704593770c8445aebaad02bbb55478b94f61103e2a8",
+    "reports/gemma4/metrics/v69_pair_augmentation_preregistration.json": "5cd567a129e083600b8913aa0438c0a8115aba83bd70c24c40ce5475a4bcfb3e",
+    "reports/gemma4/metrics/v70_low_frequency_moments_numeric_screen.json": "711255b33f8c93133af7c0647234b3296532e574358b3a96a0e053eb894bfe53",
+    "reports/gemma4/metrics/v70_low_frequency_moments_preregistration.json": "395cfabf1d82cb552d0f4a828367061c3d3066f914b34c950bc2ccfbedfeb64a"
+  },
+  "publication": {
+    "atlas_compilation_never_used_by_numeric_screen": true,
+    "checkpoint_never_written_by_numeric_screen": true,
+    "failing_screen_publishes_no_checkpoint": true,
+    "gemma_generation_never_used_by_numeric_screen": true,
+    "passing_screen_requires_parent_authorization": true,
+    "screen_report_create_once": true
+  },
+  "research_change": "independent_first_8_and_first_32_all_latent_dct_value_branches_with_one_training_fold_learned_bounded_global_fusion_scalar",
+  "schema_version": 1,
+  "scope": {
+    "deferred_final_loaded": false,
+    "fresh_development_loaded": false,
+    "internal_validation_loaded": false,
+    "numeric_teacher_and_prefix_cache_only": true,
+    "oracle_loaded": false,
+    "scorer_inputs_used": false,
+    "training_only": true,
+    "validation_inputs_used": false
+  },
+  "status": "locked_before_v71_numeric_screen",
+  "training_protocol": {
+    "augmentation_arm": {
+      "arm_id": "balanced_extrapolation_010",
+      "augmentation_epochs": 24,
+      "augmentation_learning_rate": 2e-05,
+      "augmentation_repeats": 2,
+      "question_mix_weight": 0.0,
+      "signature_expansion": 0.1
+    },
+    "augmentation_arm_is_exact_v69_balanced_extrapolation_010": true,
+    "branch_seed_offset": 7100032,
+    "foundation_arm": {
+      "anchor_weight": 1.5,
+      "arm_id": "strong_all_value_anchor",
+      "hard_negative_margin": 0.12,
+      "hard_negative_weight": 10.0,
+      "optimizer_scope": "all_value",
+      "pair_classification_weight": 2.0,
+      "pair_delta_weight": 8.0,
+      "pair_learning_rate": 3e-05,
+      "pair_opposite_margin": 0.25,
+      "pair_opposite_weight": 10.0,
+      "pair_refinement_epochs": 70,
+      "pair_refinement_repeats": 4,
+      "pair_value_weight": 1.0,
+      "retention_batches_per_epoch": 4,
+      "retention_weight": 1.5
+    },
+    "no_hyperparameter_search": true,
+    "one_arm_only": true,
+    "v69_common_hyperparameters": {
+      "anchor_scale_floor": 0.0001,
+      "anchor_weight": 2.0,
+      "augmentation_batch_size": 10,
+      "augmentation_classification_weight": 2.0,
+      "augmentation_delta_weight": 8.0,
+      "augmentation_hard_negative_margin": 0.14,
+      "augmentation_hard_negative_weight": 10.0,
+      "augmentation_opposite_margin": 0.28,
+      "augmentation_opposite_weight": 12.0,
+      "augmentation_seed_offset": 9000069,
+      "augmentation_value_weight": 1.0,
+      "gradient_clip_norm": 1.0,
+      "prototype_temperature": 0.07,
+      "retention_batch_size": 48,
+      "retention_batches_per_epoch": 3,
+      "retention_weight": 1.5,
+      "seed": 680068
+    }
+  }
+}

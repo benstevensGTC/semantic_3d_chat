@@ -1,0 +1,25 @@
+# Offline preparation only. This opens the locked historical training pool to
+# derive numeric probes and physically separated predictor/scorer manifests.
+# The resulting probe bank contains no text, answers, labels, or codebook.
+v75_fixed_atlas_prepare:
+  schema_version: 1
+  status: historical_internal_diagnostic_not_promoted
+  source_v73_config: configs/experiments/gemma4_v73_fullscene_controller.yaml
+  output_root: reports/gemma4/artifacts/v75_fixed_atlas_historical_internal_v1
+  expected_source_qa_sha256: 01721bf904b1ab0b65ce8acac6e366287040873cda1356da6c70c4981abe7619
+  expected_v73_config_sha256: d208f28380e3f1810a688be8ea8a263831b6a741f7f90e667795637f39d841f1
+  expected_model_file_sha256: 2db5482b20d746879bb3ef79b5203e9075a2e2b98f54ec7c2f281c1477ddc550
+  expected_model_revision: 3e22461f65e89153144f8adb70e3b8c2cc9845a7
+  probe_count: 96
+  smoke_row_count: 16
+  smoke_scene_count: 16
+  scope:
+    historical_training_pool_only: true
+    pair_disjoint_smoke: true
+    scene_disjoint_smoke: true
+    question_disjoint_smoke: false
+    official_validation_loaded: false
+    official_test_loaded: false
+    deferred_final_loaded: false
+    oracle_loaded: false
+    runtime_promotion_authorized: false

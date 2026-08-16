@@ -1,0 +1,30 @@
+_base_: ../gemma4_e2b.yaml
+
+# PROHIBITED PRIMARY INPUT: this control gives exact textual simulator facts to
+# the local Gemma decoder. It is an evaluation upper bound only and cannot be
+# used as evidence for the continuous 3D scene-memory path.
+experiment:
+  name: gemma4_oracle_text_v55_development_upper_bound
+  evaluation_only: true
+  primary_path_eligible: false
+  prohibited_primary_input: true
+  split: development_validation
+  final_test_deferred: true
+
+runtime:
+  reference_viewpoint:
+    position_m: [0.0, 0.0, 1.4]
+    yaw_degrees: 0.0
+    pitch_degrees: 0.0
+
+evaluation:
+  baselines:
+    oracle_text:
+      max_answer_tokens: 24
+      system_prompt: >-
+        This is an evaluation-only oracle-text upper bound. Answer from all and
+        only the exact scene facts supplied before the question. Relationship
+        subject and object roles are significant. A category absent from the
+        exact inventory has count zero. Reply with only a canonical answer:
+        yes/no, an integer, a color, an object name, or one of left, right,
+        above, below, in front, behind, near, far, on, under, or unknown.

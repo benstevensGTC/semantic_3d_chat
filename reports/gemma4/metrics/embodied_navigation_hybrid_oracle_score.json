@@ -1,0 +1,61 @@
+{
+  "all_passed": true,
+  "passed_count": 2,
+  "runtime_process_read_oracle": false,
+  "scene_count": 2,
+  "scenes": [
+    {
+      "absolute_heading_error_degrees": 6.579150291502685,
+      "collision": false,
+      "final_position_xy_m": [
+        0.0,
+        0.0
+      ],
+      "final_yaw_degrees": 60.490709645513306,
+      "heading_threshold_degrees": 20.0,
+      "oracle_desired_yaw_degrees": 67.06985993701599,
+      "oracle_file": "data/oracle/scene_000001/oracle.json",
+      "oracle_instance_id": "i_000101",
+      "oracle_target_center_xyz_m": [
+        -1.2374088764190674,
+        0.5234692245721817,
+        0.6299999952316284
+      ],
+      "passed": true,
+      "runtime_environmental_text_inputs": [],
+      "runtime_forbidden_access_count": 0,
+      "runtime_result": "reports/gemma4/metrics/embodied_conversation_hybrid_scene_000001.json",
+      "runtime_result_sha256": "80334278e5abc244d9f675bff839ba166fd3b710597dcbe07a35bcfe10c04d53",
+      "scene_id": "scene_000001",
+      "stopped": true
+    },
+    {
+      "absolute_heading_error_degrees": 3.3015028644879436,
+      "collision": false,
+      "final_position_xy_m": [
+        0.0,
+        0.0
+      ],
+      "final_yaw_degrees": -79.23125423501511,
+      "heading_threshold_degrees": 20.0,
+      "oracle_desired_yaw_degrees": -82.53275709950306,
+      "oracle_file": "data/oracle/scene_000031/oracle.json",
+      "oracle_instance_id": "i_000101",
+      "oracle_target_center_xyz_m": [
+        1.8478012084960938,
+        0.24219299107789993,
+        0.6299999952316284
+      ],
+      "passed": true,
+      "runtime_environmental_text_inputs": [],
+      "runtime_forbidden_access_count": 0,
+      "runtime_result": "reports/gemma4/metrics/embodied_conversation_hybrid_scene_000031.json",
+      "runtime_result_sha256": "cd4d59409a2fbc457d0e67da1e7008e2b80fc9cea9d2c81a6534483fe51f3f97",
+      "scene_id": "scene_000031",
+      "stopped": true
+    }
+  ],
+  "schema": "semantic_3d_chat.embodied_hybrid_oracle_score.v1",
+  "scorer_reads_oracle": true,
+  "status": "evaluation_only_oracle_score"
+}

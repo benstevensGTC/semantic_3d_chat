@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 
 from semantic_3d_chat.evaluation.reporting import build_report, collect_report_inputs
+from semantic_3d_chat.mapping.voxel_map import PERSISTED_MAP_CONTENT_HASH_DOMAIN
 
 
 def _write_json(path: Path, payload: dict) -> None:
@@ -154,6 +155,56 @@ def test_report_marks_absent_experiments_without_inventing_results(tmp_path: Pat
     assert (tmp_path / "reports" / "figures" / "training_loss.png").is_file()
     assert (tmp_path / "reports" / "figures" / "semantic_localization_by_category.png").is_file()
     assert not (tmp_path / "reports" / "figures" / "accuracy_by_question_type.png").exists()
+
+
+def test_report_does_not_compare_legacy_semantic_hash_from_unknown_domain(
+    tmp_path: Path,
+) -> None:
+    _populate_core_artifacts(tmp_path)
+    semantic_path = tmp_path / "reports" / "metrics" / "semantic_sanity_scene_000001.json"
+    semantic = json.loads(semantic_path.read_text(encoding="utf-8"))
+    semantic["map_content_hash"] = "reloaded-map-b"
+    _write_json(semantic_path, semantic)
+
+    build_report(tmp_path, _config())
+    report = (tmp_path / "reports" / "final_report.md").read_text(encoding="utf-8")
+
+    assert "Artifact-version warning" not in report
+
+
+def test_report_warns_only_for_comparable_persisted_hashes(tmp_path: Path) -> None:
+    _populate_core_artifacts(tmp_path)
+    metrics = tmp_path / "reports" / "metrics"
+    map_path = metrics / "map_scene_000001.json"
+    semantic_path = metrics / "semantic_sanity_scene_000001.json"
+    mapping = json.loads(map_path.read_text(encoding="utf-8"))
+    mapping["content_hash_domain"] = PERSISTED_MAP_CONTENT_HASH_DOMAIN
+    _write_json(map_path, mapping)
+    semantic = json.loads(semantic_path.read_text(encoding="utf-8"))
+    semantic.update(
+        {
+            "map_content_hash": "reloaded-map-b",
+            "map_content_hash_domain": (
+                "semantic_3d_chat.voxel_map.materialized_numeric_arrays.v1"
+            ),
+            "map_persisted_content_hash": "persisted-map-b",
+            "map_persisted_content_hash_domain": PERSISTED_MAP_CONTENT_HASH_DOMAIN,
+        }
+    )
+    _write_json(semantic_path, semantic)
+
+    build_report(tmp_path, _config())
+    report = (tmp_path / "reports" / "final_report.md").read_text(encoding="utf-8")
+
+    assert "Artifact-version warning" in report
+    assert "persisted numeric-array hash" in report
+    assert "MaskCLIP map rebuild" not in report
+
+    semantic["map_persisted_content_hash"] = "map-a"
+    _write_json(semantic_path, semantic)
+    build_report(tmp_path, _config())
+    synchronized_report = (tmp_path / "reports" / "final_report.md").read_text(encoding="utf-8")
+    assert "Artifact-version warning" not in synchronized_report
 
 
 def test_report_collection_honors_isolated_candidate_roots(tmp_path: Path) -> None:

@@ -1,0 +1,104 @@
+{
+  "artifact": "gemma4_v90_scene1_conversational_cpu_preflight_v1",
+  "config_sha256": "e9d740b53fbd34a7764d039b4cd8e6d7cea4f61543aa3ea820ce57345a385fc4",
+  "memory": {
+    "canonical_prefix_sha256": "a428f5147c815839ae7315a0adab952ab210814fb21dcdc5bf13b167f28a6e37",
+    "compiled_before_question": true,
+    "device": "cpu",
+    "dtype": "torch.bfloat16",
+    "model_loaded": false,
+    "native_boi_preserved": true,
+    "native_eoi_preserved": true,
+    "oracle_loaded": false,
+    "question_inputs_used": false,
+    "questions_or_answers_serialized": false,
+    "scene_id": "scene_000001",
+    "shape": [
+      1,
+      738,
+      1536
+    ],
+    "zero_payload_prefix_sha256": "c455ed77bf3fe841a4e360e89c036ffb4e8cdb8935c97d767f556d25a9f790d8",
+    "zeroed_interior_tokens": 736
+  },
+  "model_loaded": false,
+  "mps_used": false,
+  "optimizer_constructed": false,
+  "oracle_loaded": false,
+  "parent": {
+    "all_release_gates_passed": true,
+    "canonical_correct": 122,
+    "canonical_errors": 16,
+    "fresh_target_disjoint": true,
+    "frozen_adapter_parameter_count": 872448,
+    "frozen_bank_count": 11,
+    "held_out_generalization_claim": false,
+    "promotion_decision": "strict_scene1_experimental_primary",
+    "release_artifact": "gemma4_v89_strict_runtime_release_v1",
+    "runtime_promotion_authorized": true
+  },
+  "preregistration_sha256": "b9ca3a6c9ef228cacf1a75baba51ae94e7fb8448b0ce451cb1c16e82a9650260",
+  "protocol": {
+    "canonical_rows_per_epoch": 138,
+    "checks": {
+      "accumulation_6_exact": true,
+      "canonical_138_exact": true,
+      "conversational_52_exact": true,
+      "fresh_target_disjoint": true,
+      "held_wording_26_excluded_from_training": true,
+      "inventory_hash_exact": true,
+      "micro_rows_1032_exact": true,
+      "optimizer_updates_172_exact": true,
+      "oracle_not_loaded_by_trainer": true,
+      "primary_causal_13_per_epoch_exact": true,
+      "primary_causal_39_total_exact": true,
+      "rows_per_epoch_344_exact": true,
+      "runtime_serializes_no_supervision": true,
+      "schedule_hash_exact": true,
+      "three_epochs_exact": true,
+      "v89_anchors_122_exact": true,
+      "v89_errors_32_exact": true
+    },
+    "conversational_rows_per_epoch": 52,
+    "epochs": 3,
+    "gradient_accumulation_rows": 6,
+    "held_wording_rows": 26,
+    "lora": {
+      "bank_name": "v90_scene1_conversational_bridge",
+      "base_projection_type": "torch.nn.Linear",
+      "base_projection_weight_shape": [
+        1536,
+        2048
+      ],
+      "device": "cpu",
+      "exact_zero_output_at_initialization": true,
+      "full_gemma_model_loaded": false,
+      "initial_state_sha256": "136039ab015a91dce401bae423f14be0277e253cec677c622bece4fd8a0c6f1a",
+      "lora_a_shape": [
+        8,
+        2048
+      ],
+      "lora_b_nonzero_count": 0,
+      "lora_b_shape": [
+        1536,
+        8
+      ],
+      "parameter_count": 28672,
+      "target_modules": [
+        "model.language_model.layers.28.self_attn.o_proj"
+      ]
+    },
+    "optimizer_updates": 172,
+    "parent_correct_anchor_rows_per_epoch": 122,
+    "parent_error_replay_rows_per_epoch": 32,
+    "primary_causal_rows_per_epoch": 13,
+    "rows_per_epoch": 344,
+    "total_micro_rows": 1032,
+    "total_primary_causal_rows": 39,
+    "training_inventory_sha256": "8963085d8276f2000480e11651cbe97fcc5b7eb7711c9c3c2cb3e20090fc9cc7",
+    "training_schedule_sha256": "3c3b199b723d9bf6be6686a421b997fbac2eb209c5886bcd4544a67fd7954643"
+  },
+  "schema_version": 90,
+  "status": "cpu_preflight_pass_training_authorized",
+  "training_authorized": true
+}

@@ -1,0 +1,245 @@
+{
+  "benchmark_feasibility": {
+    "all_progress_criteria_feasible": true,
+    "benchmark_version": 2,
+    "criteria_changed_from_v1": false,
+    "expected_initial_position_xy_m": [
+      0.0,
+      -0.5
+    ],
+    "inference_config_sha256": "5ee4610104f4d8058a5fd739678f0e400c2181d6875e0e223727bbbef40ccb13",
+    "preregistered_numeric_start": true,
+    "progress_tasks": [
+      {
+        "feasible": true,
+        "initial_target_standoff_m": 0.7000051521053386,
+        "minimum_target_progress_m": 0.25,
+        "progress_feasibility_margin_m": 0.45000515210533865,
+        "task_id": "nav_001"
+      },
+      {
+        "feasible": true,
+        "initial_target_standoff_m": 1.3098852605164073,
+        "minimum_target_progress_m": 0.2,
+        "progress_feasibility_margin_m": 1.1098852605164073,
+        "task_id": "nav_003"
+      },
+      {
+        "feasible": true,
+        "initial_target_standoff_m": 2.4013290276872405,
+        "minimum_target_progress_m": 0.2,
+        "progress_feasibility_margin_m": 2.2013290276872404,
+        "task_id": "nav_005"
+      }
+    ]
+  },
+  "by_family": {
+    "approach": {
+      "success_count": 1,
+      "success_rate": 1.0,
+      "task_count": 1
+    },
+    "face": {
+      "success_count": 0,
+      "success_rate": 0.0,
+      "task_count": 1
+    },
+    "left_right": {
+      "success_count": 1,
+      "success_rate": 1.0,
+      "task_count": 1
+    },
+    "obstacle": {
+      "success_count": 1,
+      "success_rate": 1.0,
+      "task_count": 1
+    },
+    "stop": {
+      "success_count": 1,
+      "success_rate": 1.0,
+      "task_count": 1
+    },
+    "update_after_scan": {
+      "success_count": 0,
+      "success_rate": 0.0,
+      "task_count": 1
+    }
+  },
+  "claimed_trained_navigation_policy": true,
+  "limitations": [
+    "The compact controller was supervised on oracle-derived traces, but this six-task benchmark contains only one navigation scene.",
+    "The numeric robot-state token projector is deterministic; task learning occurs in the downstream continuous action controller.",
+    "Object identities and geometric tolerances were available only to this scorer."
+  ],
+  "metrics": {
+    "action_failure_count": 0,
+    "collision_count": 0,
+    "executed_action_count": 24,
+    "policy_rejection_count": 0,
+    "success_count": 4,
+    "success_rate": 0.6666666666666666,
+    "task_count": 6
+  },
+  "navigation_policy_checkpoint_tree_sha256": "8ca5f5278680a5cc2c9c48b170c3f78f6adb973696ad9107779c66a7806b4735",
+  "passed": false,
+  "policy_status": "supervised_continuous_navigation_policy_v1",
+  "scene_id": "scene_000001",
+  "schema": "semantic_3d_chat.llm_navigation_score.v1",
+  "separation": {
+    "inference_journal_validated_before_oracle_open": true,
+    "inference_received_oracle_or_labels": false,
+    "oracle_used_only_by_post_inference_scorer": true,
+    "prediction_journal_sha256": "12a34ca7dd5cbe4f971ee210feaa4806be72bad400fd06aa5643b02e1e092c1f",
+    "scene_oracle_sha256": "d3b7f56a810ac606964e8218b3150ad0f652edd4c0f139d1d7b8e3cf1882d78c",
+    "scoring_spec_sha256": "586e57cdadddd05287816d55090b0a20da615ddfe45b7e90079565ccc25a9196"
+  },
+  "tasks": [
+    {
+      "checks": {
+        "all_executed_actions_succeeded": true,
+        "heading": false,
+        "no_collision": true,
+        "required_stop": true
+      },
+      "episode_sha256": "12aac0a7f007ab1b5bd3260953ee556131ecc1e49655f0b1c74b4296d989f93e",
+      "family": "face",
+      "metrics": {
+        "action_failure_count": 0,
+        "collision_count": 0,
+        "executed_action_count": 3,
+        "final_target_standoff_m": 1.2254443034934448,
+        "heading_error_degrees": 30.99563361903043,
+        "initial_target_standoff_m": 1.2254443034934448,
+        "policy_rejected": false,
+        "stopped": true,
+        "target_progress_m": 0.0
+      },
+      "passed": false,
+      "task_id": "nav_000"
+    },
+    {
+      "checks": {
+        "all_executed_actions_succeeded": true,
+        "no_collision": true,
+        "required_stop": true,
+        "target_progress": true,
+        "target_standoff": true
+      },
+      "episode_sha256": "ddc164ea82880d5b5fa79f343b906523a45b46131c00b9a02b750aa9e70277ae",
+      "family": "approach",
+      "metrics": {
+        "action_failure_count": 0,
+        "collision_count": 0,
+        "executed_action_count": 3,
+        "final_target_standoff_m": 0.4160125945695464,
+        "initial_target_standoff_m": 0.7000051521053386,
+        "policy_rejected": false,
+        "stopped": true,
+        "target_progress_m": 0.2839925575357922
+      },
+      "passed": true,
+      "task_id": "nav_001"
+    },
+    {
+      "checks": {
+        "all_executed_actions_succeeded": true,
+        "displacement": true,
+        "no_collision": true,
+        "required_stop": true
+      },
+      "episode_sha256": "44d3d6b2186aff7eefce118110ddc65a95749db58e1b936c1827da5c33f8b42b",
+      "family": "stop",
+      "metrics": {
+        "action_failure_count": 0,
+        "collision_count": 0,
+        "displacement_m": 0.24432461708784103,
+        "executed_action_count": 2,
+        "first_executed_tool": "move_forward",
+        "maximum_displacement_m": 0.3,
+        "minimum_displacement_m": 0.2,
+        "policy_rejected": false,
+        "stopped": true
+      },
+      "passed": true,
+      "task_id": "nav_002"
+    },
+    {
+      "checks": {
+        "all_executed_actions_succeeded": true,
+        "no_collision": true,
+        "obstacle_clearance": true,
+        "required_stop": true,
+        "target_progress": true,
+        "target_standoff": true
+      },
+      "episode_sha256": "0a33fc4686dfe500905420f43bc53a180cb5fe902e0ba505191707d753ae8025",
+      "family": "obstacle",
+      "metrics": {
+        "action_failure_count": 0,
+        "collision_count": 0,
+        "executed_action_count": 6,
+        "final_target_standoff_m": 0.4732188809541923,
+        "initial_target_standoff_m": 1.3098852605164073,
+        "minimum_obstacle_bbox_clearance_m": 1.1707254451310112,
+        "policy_rejected": false,
+        "stopped": true,
+        "target_progress_m": 0.836666379562215
+      },
+      "passed": true,
+      "task_id": "nav_003"
+    },
+    {
+      "checks": {
+        "all_executed_actions_succeeded": true,
+        "heading": true,
+        "initial_left_right_direction": true,
+        "no_collision": true,
+        "required_stop": true
+      },
+      "episode_sha256": "0d58951351263bc57c9d2635085d0b6f325c342113840194e98af93faaf3421e",
+      "family": "left_right",
+      "metrics": {
+        "action_failure_count": 0,
+        "actual_initial_turn_sign": 1,
+        "collision_count": 0,
+        "executed_action_count": 4,
+        "expected_initial_turn_sign": 1,
+        "final_target_standoff_m": 1.3098852605164073,
+        "heading_error_degrees": 16.52047528425544,
+        "initial_target_standoff_m": 1.3098852605164073,
+        "policy_rejected": false,
+        "stopped": true,
+        "target_progress_m": 0.0
+      },
+      "passed": true,
+      "task_id": "nav_004"
+    },
+    {
+      "checks": {
+        "all_executed_actions_succeeded": true,
+        "no_collision": true,
+        "post_scan_motion": true,
+        "required_stop": true,
+        "successful_scan": true,
+        "target_progress": true,
+        "target_standoff": false,
+        "updated_prefix_consumed": true
+      },
+      "episode_sha256": "29dbd3a766a9889b3049724c4f8cb1f143e92ef4896492a9d4958b5e195ecdbe",
+      "family": "update_after_scan",
+      "metrics": {
+        "action_failure_count": 0,
+        "collision_count": 0,
+        "executed_action_count": 6,
+        "final_target_standoff_m": 1.6042456320402712,
+        "initial_target_standoff_m": 2.4013290276872405,
+        "policy_rejected": false,
+        "stopped": true,
+        "successful_scan_count": 1,
+        "target_progress_m": 0.7970833956469694
+      },
+      "passed": false,
+      "task_id": "nav_005"
+    }
+  ]
+}

@@ -1,0 +1,145 @@
+{
+  "artifact": "gemma4_fixed_prefix_ple_reader_preregistration_v1",
+  "atlas_v2_launch_authorization": {
+    "all_digest_values_required_at_launch": true,
+    "atlas_v2_must_be_accepted_before_training": true,
+    "compile_prefix_before_question": true,
+    "compiler_absent_at_chat_runtime": true,
+    "digest_placeholders_permitted": false,
+    "no_mutable_atlas_v2_source_hash_is_preregistered": true,
+    "required_digests": [
+      "atlas_v2_checkpoint_sha256",
+      "atlas_v2_weights_sha256",
+      "atlas_v2_runtime_metadata_sha256",
+      "atlas_v2_acceptance_report_sha256"
+    ],
+    "reuse_identical_prefix_for_every_unchanged_scene_question": true
+  },
+  "data": {
+    "oracle_fields_allowed_only_in_offline_training_and_scoring": true,
+    "scene_disjoint_splits_required": true,
+    "selection_manifest": "reports/gemma4/questions/v62_internal_validation.json",
+    "selection_sha256": "078f65e1402e6e382a7bfdb2ad4b8a65d58e3164705a8a46cd222503aa201052",
+    "test_manifest": "reports/gemma4/questions/test.json",
+    "test_manifest_unavailable_until_single_final_evaluation": true,
+    "test_sha256": "785f41a071853b82d604cfd3b6906970ad0e3f085c040e9bec74a1c8078735e0",
+    "training_jsonl": "data_gemma4/training/v62_pair_disjoint/train.jsonl",
+    "training_sha256": "84b99385fadc5d06e44465ada5902f56131192298ca1539373dc3b334608cbf1"
+  },
+  "execution": {
+    "checkpoint_published": false,
+    "gemma_generation_executed": false,
+    "implementation_must_be_new_files_or_explicitly_unsealed_before_run": true,
+    "training_executed": false
+  },
+  "hard_promotion_gates": {
+    "all_required_gates_must_pass": true,
+    "empty_prefix_scene_qa_drop_minimum": 0.1,
+    "failed_run_publishes_no_runtime_checkpoint": true,
+    "selection_counterfactual_consistency_not_below_frozen_atlas": true,
+    "selection_exact_accuracy_delta_minimum": 0.02,
+    "selection_wrong_prefix_positive_margin_rate_minimum": 0.7,
+    "text_retention_mean_ce_increase_nats_maximum": 0.03,
+    "text_retention_mean_kl_nats_maximum": 0.02,
+    "text_retention_next_token_top1_agreement_minimum": 0.98,
+    "wrong_scene_prefix_answer_follow_rate_minimum": 0.6
+  },
+  "model": {
+    "gemma4_layers": 35,
+    "local_inference_only": true,
+    "model_id": "google/gemma-4-E2B-it",
+    "ple_dimension_per_layer": 256,
+    "projection_path": "model.language_model.per_layer_model_projection",
+    "projection_shape": [
+      8960,
+      1536
+    ],
+    "revision": "3e22461f65e89153144f8adb70e3b8c2cc9845a7"
+  },
+  "objective": {
+    "answer_token_normalized_ce_weight": 1.0,
+    "labels_before_answer_suffix_are_ignore_index": -100,
+    "question_dependent_retrieval": false,
+    "question_dependent_scene_processing": false,
+    "same_question_wrong_prefix_hinge_weight": 1.0,
+    "same_question_wrong_prefix_margin_nats_per_answer_token": 0.25,
+    "wrong_prefix_changes_only_scene_prefix": true
+  },
+  "optimization": {
+    "adapter_dtype": "float32",
+    "base_dtype": "bfloat16_or_float32_fallback",
+    "batch_size": 1,
+    "early_stopping_patience_validations": 4,
+    "gradient_accumulation": 12,
+    "gradient_clip_l2": 1.0,
+    "learning_rate": 0.0001,
+    "maximum_updates": 96,
+    "mps_safe": {
+      "cpu_fallback_on_unsupported_mps_operation": true,
+      "finite_loss_gradient_and_parameter_checks_each_update": true,
+      "loss_and_log_softmax_float32": true,
+      "no_bitsandbytes": true,
+      "no_cuda_requirement": true
+    },
+    "optimizer": "adamw",
+    "seed": 710071,
+    "validate_every_updates": 8,
+    "weight_decay": 0.0
+  },
+  "required_controls": [
+    "frozen_reader_zero_lora",
+    "correct_prefix",
+    "wrong_scene_prefix",
+    "empty_prefix",
+    "same_prefix_different_questions",
+    "oracle_directory_removed",
+    "non_environmental_text_retention"
+  ],
+  "research_question": "Can a rank-4 adapter on Gemma-4's per-layer model projection learn to read an accepted question-independent continuous 3D atlas prefix?",
+  "runtime_and_leakage": {
+    "environmental_text_inputs": [],
+    "loaded_file_audit_required": true,
+    "one_prefix_hash_per_unchanged_scene_required": true,
+    "oracle_directory_removal_test_required": true,
+    "prefix_hash_before_first_question_required": true,
+    "runtime_may_load": [
+      "sanitized_continuous_fixed_scene_prefix",
+      "reader_lora_weights",
+      "frozen_model_weights",
+      "user_question_tokens"
+    ],
+    "runtime_may_not_load": [
+      "oracle",
+      "training_qa",
+      "evaluation_answers",
+      "scene_labels",
+      "captions",
+      "compiler"
+    ]
+  },
+  "schema_version": 1,
+  "status": "design_locked_training_not_authorized",
+  "text_retention_controls": {
+    "compare_against_exact_frozen_atlas_model": true,
+    "corpus": "frozen_non_environmental_text_retention_set",
+    "corpus_digest_required_before_training": true,
+    "measure_ce_kl_and_next_token_top1_agreement": true,
+    "reason": "The target projection also processes ordinary text-token embeddings.",
+    "scene_questions_or_answers_forbidden_in_retention_corpus": true
+  },
+  "trainable_surface": {
+    "alpha": 8.0,
+    "atlas_frozen": true,
+    "base_model_frozen": true,
+    "dropout": 0.0,
+    "exact_target_modules": [
+      "model.language_model.per_layer_model_projection"
+    ],
+    "no_lora_merge": true,
+    "parameter_count": 41984,
+    "rank": 4,
+    "scene_compiler_frozen": true,
+    "scene_tokenizer_frozen": true,
+    "type": "strict_unmerged_fp32_lora"
+  }
+}

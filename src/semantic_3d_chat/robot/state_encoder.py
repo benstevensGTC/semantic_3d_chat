@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import math
 from dataclasses import dataclass
 
@@ -26,6 +27,22 @@ class NumericRobotState:
 ROBOT_STATE_FEATURE_DIM = 18
 
 
+def robot_state_vector_sha256(state_features: torch.Tensor) -> str:
+    """Hash the canonical float32 numeric state consumed by robot tokens.
+
+    The digest is shared by prefix construction and action-policy verification.
+    Keeping one implementation prevents a policy from silently pairing robot
+    tokens from one pose with numeric target or clearance features from another.
+    """
+
+    value = torch.as_tensor(state_features, dtype=torch.float32).detach().cpu()
+    if value.shape != (ROBOT_STATE_FEATURE_DIM,) or not torch.isfinite(value).all():
+        raise ValueError(
+            f"Robot state features must have shape [{ROBOT_STATE_FEATURE_DIM}] and be finite"
+        )
+    return hashlib.sha256(value.contiguous().numpy().tobytes()).hexdigest()
+
+
 def robot_state_vector(
     state: NumericRobotState,
     room_min_m: torch.Tensor,
@@ -35,13 +52,21 @@ def robot_state_vector(
 ) -> torch.Tensor:
     """Encode state numerically; no pose or observation is converted to prose."""
 
-    room_min = torch.as_tensor(room_min_m, dtype=torch.float32, device=device)
-    room_max = torch.as_tensor(room_max_m, dtype=torch.float32, device=device)
+    # The default is deliberately CPU, even when the persistent map currently
+    # lives on MPS.  This keeps the numeric state digest device-independent and
+    # prevents a CPU pose tensor from being combined with MPS room bounds.
+    target_device = torch.device("cpu") if device is None else torch.device(device)
+    room_min = torch.as_tensor(room_min_m, dtype=torch.float32, device=target_device)
+    room_max = torch.as_tensor(room_max_m, dtype=torch.float32, device=target_device)
     if room_min.shape != (3,) or room_max.shape != (3,) or torch.any(room_max <= room_min):
         raise ValueError("room bounds must be finite three-vectors with max > min")
-    position = torch.tensor(state.position_m, dtype=torch.float32, device=device)
-    movement = torch.tensor(state.last_movement_delta_m, dtype=torch.float32, device=device)
-    velocity = torch.tensor(state.linear_velocity_xy_m, dtype=torch.float32, device=device)
+    position = torch.tensor(state.position_m, dtype=torch.float32, device=target_device)
+    movement = torch.tensor(
+        state.last_movement_delta_m, dtype=torch.float32, device=target_device
+    )
+    velocity = torch.tensor(
+        state.linear_velocity_xy_m, dtype=torch.float32, device=target_device
+    )
     normalized_position = 2.0 * (position - room_min) / (room_max - room_min) - 1.0
     normalized_movement = movement / torch.clamp(room_max - room_min, min=1e-6)
     body_yaw = math.radians(float(state.body_yaw_degrees))
@@ -60,7 +85,7 @@ def robot_state_vector(
                     math.cos(pitch),
                 ],
                 dtype=torch.float32,
-                device=device,
+                device=target_device,
             ),
             velocity,
             torch.tensor(
@@ -69,13 +94,13 @@ def robot_state_vector(
                     float(state.collision),
                 ],
                 dtype=torch.float32,
-                device=device,
+                device=target_device,
             ),
             normalized_movement,
             torch.tensor(
                 [float(state.scan_coverage), float(state.stopped)],
                 dtype=torch.float32,
-                device=device,
+                device=target_device,
             ),
         )
     )
@@ -125,3 +150,27 @@ def append_robot_state_tokens(scene_prefix: torch.Tensor, robot_tokens: torch.Te
     if scene_prefix.shape[2] != robot_tokens.shape[2]:
         raise ValueError("scene and robot hidden dimensions differ")
     return torch.cat((scene_prefix, robot_tokens.to(scene_prefix)), dim=1)
+
+
+def insert_robot_state_tokens(
+    scene_prefix: torch.Tensor,
+    robot_tokens: torch.Tensor,
+) -> torch.Tensor:
+    """Insert state tokens before the scene-end boundary and before user text.
+
+    Both learned and native-Gemma scene prefixes reserve their final token for
+    the end boundary.  Keeping that boundary last preserves the checkpointed
+    scene protocol while allowing a separately checkpointed numeric state
+    encoder to contribute continuous tokens inside the same prefix.
+    """
+
+    if scene_prefix.ndim != 3 or scene_prefix.shape[1] < 2:
+        raise ValueError("scene_prefix must contain start and end boundary tokens")
+    if robot_tokens.ndim != 3:
+        raise ValueError("robot_tokens must be rank-three")
+    if scene_prefix.shape[0] != robot_tokens.shape[0]:
+        raise ValueError("scene and robot token batch sizes differ")
+    if scene_prefix.shape[2] != robot_tokens.shape[2]:
+        raise ValueError("scene and robot hidden dimensions differ")
+    state = robot_tokens.to(scene_prefix)
+    return torch.cat((scene_prefix[:, :-1], state, scene_prefix[:, -1:]), dim=1)

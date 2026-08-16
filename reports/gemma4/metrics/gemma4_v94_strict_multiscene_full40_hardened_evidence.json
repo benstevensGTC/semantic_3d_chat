@@ -1,0 +1,77 @@
+{
+  "artifact": "gemma4_v94_strict_multiscene_evidence_v1",
+  "behavior_gate_passed": false,
+  "behavior_score_present": true,
+  "bundle_sha256": "459fe554890c7b44b4f93672e8b153f827ba39c98b22e93d78ccb0ecfd25782a",
+  "cache_manifest_sha256": "d03bb0b0b1da545d2eef40582fc494f3aea0ec6009e41fb72a9e96e270840591",
+  "cache_postcompile_attestation_sha256": "4c2a4ae11179aa25a38d6cf8d1cc838dda204409a224183680c74aea78367c03",
+  "cache_precompile_attestation_sha256": "dab4467973e71441c375a20094f5d745ea4b1f03311d578a6a7fe1a31fe37273",
+  "candidate_metadata_sha256": "334f2d927494e200d467fbed339d185b752b5953a4062f07c948f3516c5261cc",
+  "candidate_state_sha256": "9f503f0b2c605238a6f32c15740c0600702d46da08a527d867fbc19e6b639452",
+  "candidate_weights_sha256": "574418f9458610a5d0007001c4ba732a0a8a4fd590e3b9bc4fcdd8481a646079",
+  "config_sha256": "3332c00c1650994432b2954166aad9d6489fba3db7b9be32dcfb21cfb07ce8c9",
+  "cpu_preflight_sha256": "5faa0a264fda86baebe8944318569c50a1af32b89ac5f9a324609faa804bbb92",
+  "gates": {
+    "all_prediction_rows_bound_to_exact_memory_and_controls": true,
+    "current_sources_match_sealed_digests": true,
+    "every_evaluation_memory_hash_retained": true,
+    "predictor_access_log_complete_and_label_free": true,
+    "prefix_hash_invariance": true,
+    "sanitized_exact_216_question_keys": true,
+    "score_authenticated_if_present": true,
+    "sealed_config_prereg_cpu_chain": true,
+    "six_complete_memories_authenticated": true,
+    "source_voxel_maps_and_compiler_access_attested": true,
+    "training_and_fixed_final_candidate_bound": true
+  },
+  "memory_sha256": {
+    "scene_000057": "bb74113fe6961ba94b8aab7e9e6b24567ce465a8f2708e7f34c882511d31c059",
+    "scene_000058": "7309d0724ffbe5b8f537331e71f52fbdd25f17b39ec710cafe8a48e295d977fd",
+    "scene_000059": "bf37aa1365738605aa8fedd8fe65a88b45efb464aaf17744feeabbc34986053c",
+    "scene_000060": "99763806c2495e7926a38a9e23632104a4dc691f0b8a266b407c030dc9a207b4",
+    "scene_000061": "0d13267813aa387c64cb1206bd899ca6c2c29f8e24f969f0eb97991019b5c77e",
+    "scene_000062": "63032491ffbc5dd0499cdcd376cba7d816fbb3d3fa1bdbfc86967db2feb91da4"
+  },
+  "passed": true,
+  "posthoc_non_preregistered_diagnostics": {
+    "atlas_value_shuffle_raw_prediction_change_count": 39,
+    "diagnostic_scope": "posthoc_non_preregistered_not_a_promotion_gate",
+    "paired_wrong_direct_pair_comparable_count": 216,
+    "paired_wrong_matches_direct_paired_scene_prediction_count": 216,
+    "paired_wrong_raw_prediction_change_count": 30,
+    "zero_payload_raw_prediction_change_count": 138
+  },
+  "prediction_access_sha256": "edc8ebe00d3556b975dd787387b4a5e592caa95622204d74f30ec800caf557b2",
+  "prediction_keys_sha256": "f038a0c4c5c56075610f9c291d1126bbdfb651b5d6a1cd61e998663f97b66cf2",
+  "prediction_provenance_file_sha256": "406ad09789e5dae66cb14dec09dfc01ecc2d749506e1a654d67c7f782b774851",
+  "prediction_provenance_sha256": "611c340b43dc0bb4e2a7795403fdb1acf6f265d2ba65e168df3f60ef509fa23c",
+  "prediction_row_count": 216,
+  "predictions_sha256": "d28517a1ed97f6b8066fcb34361cd324a8cabc01d42bd9098645047b2db30812",
+  "preregistration_sha256": "31fe29b2854e90dd9eb19233bfc383499861bdbf4bf35e658cc9f68885e19163",
+  "question_manifest_sha256": "74fcfb181bbf809dd6dc3b07800de728558298149e9d76325870c6b4d665b0a2",
+  "questions_sha256": "e468d851e46ad606c9599ac1a8016ed10fa974f9985dfc3add6250f3403f8b25",
+  "schema_version": 1,
+  "score": {
+    "behavior_gate_passed": false,
+    "behavior_gate_results_sha256": "d0906018fc39796976c0975f439e0a8f68e0da40dc4cfd517bb337928088ed9c",
+    "posthoc_non_preregistered_diagnostics": {
+      "atlas_value_shuffle_prediction_change_count": 39,
+      "diagnostic_scope": "posthoc_non_preregistered_not_a_promotion_gate",
+      "paired_wrong": {
+        "atlas_value_shuffle_raw_prediction_change_count": 39,
+        "diagnostic_scope": "posthoc_non_preregistered_not_a_promotion_gate",
+        "paired_wrong_direct_pair_comparable_count": 216,
+        "paired_wrong_matches_direct_paired_scene_prediction_count": 216,
+        "paired_wrong_raw_prediction_change_count": 30,
+        "zero_payload_raw_prediction_change_count": 138
+      },
+      "paired_wrong_label_accuracy_available": false,
+      "paired_wrong_label_accuracy_omission": "the sealed aggregate score did not retain this metric and the evidence process does not open per-row labels",
+      "v94_minus_atlas_value_shuffle_accuracy": -0.02777777777777768,
+      "v94_minus_zero_payload_accuracy": 0.26851851851851855
+    },
+    "score_sha256": "af6433f98c5a7cbdb3c2686fc09d060f164f2b851d7da074736705d86dbab188",
+    "status": "measured_gate_not_passed"
+  },
+  "training_report_sha256": "3fab3f4a29d1d5842e4020f896efda7a4e08e11931adb2d09b661845d971eee7"
+}

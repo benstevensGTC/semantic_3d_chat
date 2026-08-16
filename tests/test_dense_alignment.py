@@ -9,6 +9,7 @@ from torch.nn import functional as F
 from semantic_3d_chat.scene_encoder.dense_alignment import (
     DENSE_ALIGNMENT_ARCHITECTURE_MARKER,
     DENSE_ALIGNMENT_ARCHITECTURE_VERSION,
+    DENSE_ALIGNMENT_COVERAGE_SIDECAR,
     DenseAlignmentResidual,
     construct_dense_alignment,
     dense_alignment_settings,
@@ -169,6 +170,58 @@ def test_settings_constructor_and_state_validation_contract() -> None:
             expected_parameter_count=37,
             context="V25 preflight",
         )
+
+
+def test_coverage_sidecar_preserves_base_tensor_and_exposes_residual() -> None:
+    module = DenseAlignmentResidual(
+        semantic_dim=12,
+        dense_dim=7,
+        aligned_dim=5,
+        rank=3,
+        alpha=6.0,
+        initialization_seed=17,
+        application_mode=DENSE_ALIGNMENT_COVERAGE_SIDECAR,
+        sidecar_scale=0.125,
+    )
+    with torch.no_grad():
+        module.alignment_b.normal_(mean=0.0, std=0.02)
+    semantic = torch.randn(9, 12)
+
+    base, sidecar, scale = module.scene_inputs(semantic)
+
+    assert torch.equal(base, semantic)
+    assert sidecar is not None
+    assert torch.equal(sidecar, module.residual_delta(semantic).to(semantic.dtype))
+    assert scale == 0.125
+    assert module.validate_structural_state()["base_semantic_path_modified"] is False
+
+
+def test_coverage_sidecar_settings_are_explicit_in_contract() -> None:
+    config = {
+        "scene_encoder": {
+            "dense_alignment": {
+                "enabled": True,
+                "dense_dim": 7,
+                "aligned_dim": 5,
+                "rank": 3,
+                "alpha": 6.0,
+                "initialization_seed": 17,
+                "expected_initial_state_sha256": "a" * 64,
+                "application_mode": "coverage_sidecar",
+                "sidecar_scale": 0.25,
+            }
+        }
+    }
+
+    settings = dense_alignment_settings(config)
+    module = construct_dense_alignment(config, semantic_dim=12)
+
+    assert settings.contract()["application_mode"] == "coverage_sidecar"
+    assert settings.contract()["sidecar_scale"] == 0.25
+    assert settings.contract()["base_semantic_path_modified"] is False
+    assert isinstance(module, DenseAlignmentResidual)
+    assert module.application_mode == "coverage_sidecar"
+    assert module.sidecar_scale == 0.25
 
 
 def test_disabled_settings_and_parser_fail_closed() -> None:

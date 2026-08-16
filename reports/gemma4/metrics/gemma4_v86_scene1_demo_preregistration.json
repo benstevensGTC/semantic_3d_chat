@@ -1,0 +1,218 @@
+{
+  "answers_available_to_training_only": true,
+  "answers_or_questions_serialized_in_runtime_candidate": false,
+  "artifact": "gemma4_v86_scene1_demo_preregistration_v1",
+  "authenticated_sources": {
+    "configs/runtime/gemma4_v85_strict_multiscene.yaml": "49d9595e6167fe352dc49f1ca363af396fe3d3be91d50cb430721bc74b130575",
+    "data/qa/train.jsonl": "ffa721d57849ade8fdd0811e3e1e62fe807200f710aec780dc4d3dcecd4fb0e0",
+    "data_gemma4/runtime/scene_memories/v81/scene_000001/memory.safetensors": "3427851432d8f2a3609b6205b18b8c0d9a0fcf68d8f3bf0c98c758ac64209ffb",
+    "data_gemma4/runtime/scene_memories/v81/scene_000001/runtime_metadata.json": "9ca43f9216106668afafe65007b1649621036735b512c07e330358bbeb0bcbcc",
+    "gemma_model_blob_sha256_identity": "2db5482b20d746879bb3ef79b5203e9075a2e2b98f54ec7c2f281c1477ddc550",
+    "reports/gemma4/artifacts/v85_strict_runtime_candidate/adapter.safetensors": "163ceb462bafe4b1d38099c07ca32bcc22944ad93917222b019e75634883fd8d",
+    "reports/gemma4/artifacts/v85_strict_runtime_candidate/runtime_metadata.json": "093d43c80722dd00cd3f7347d55451eca1cc45e416f6bda220157f18024ce0bd",
+    "reports/gemma4/metrics/v85_strict_runtime_equivalence_scene_000039.json": "e75373211d2fecb5e76b37f4901885bf039559ca45dbf1275b749fbf20320383",
+    "src/semantic_3d_chat/evaluation/evaluate_v86_scene1_demo.py": "955e7b88426e1717051d9040e43d4e74346acb8a32b3ae60a127a5128aac0ccc",
+    "src/semantic_3d_chat/evaluation/v86_scene1_demo_preflight.py": "624dd8e027bf22ebcb020270b52fcf83871e1c77752ed68b80ba0b7f24883b8b",
+    "src/semantic_3d_chat/training/train_v86_scene1_demo.py": "64311219d25e53e4fa96fa77f74bc5352a844d418545e94f6bd0f28947f5efb6"
+  },
+  "behavior_scored": false,
+  "bridge": {
+    "alpha": 16.0,
+    "bank_name": "v86_scene1_demo_bridge",
+    "disjoint_from_all_frozen_banks": true,
+    "dropout": 0.0,
+    "expected_initial_state_sha256": "b5ec50969d4ce1d34fca9544248e208e48e74f03445c8efeea1c8e08202c4161",
+    "initialization_algorithm": "cpu_kaiming_uniform_a_exact_zero_b",
+    "initialization_seed": 860086,
+    "rank": 8,
+    "target_in_features": 1536,
+    "target_layer_type": "full_attention",
+    "target_module": "model.language_model.layers.34.mlp.up_proj",
+    "target_out_features": 12288,
+    "trainable_parameter_count": 110592
+  },
+  "config_path": "configs/experiments/gemma4_v86_scene1_strict_demo.yaml",
+  "config_sha256": "ddb7e8f4b02b9912f8adff88dab91868253912b2101d5c1484964740318ea929",
+  "dataset_contract": {
+    "all_scene1_rows_used": true,
+    "answer_metadata_training_only": true,
+    "row_count": 138,
+    "row_inventory_sha256": "9919ff1bee4611dce4132d79fa50f6f6b4ace567a6df780a2e0e21bd88237a8e",
+    "runtime_serializes_questions_or_answers": false,
+    "scene_id": "scene_000001"
+  },
+  "deferred_final_loaded": false,
+  "fixed_gates": {
+    "all_scene1_canonical_accuracy_minimum": 0.8,
+    "causal_correct_memory_mean_nll_below_zero_payload": true,
+    "causal_prediction_change_minimum": 1,
+    "exact_prefix_hash_invariance_required": true,
+    "exact_total_environment_input_invariance_required": true,
+    "exact_training_row_count_required": 138,
+    "forbidden_runtime_read_count_maximum": 0,
+    "live_smoke_minimum_correct": 2,
+    "live_smoke_questions": [
+      {
+        "expected": "yes",
+        "question": "Is there a chair?"
+      },
+      {
+        "expected": "red",
+        "question": "What color is the bowl?"
+      },
+      {
+        "expected": "left",
+        "question": "Is the bowl left or right of the chair?"
+      }
+    ],
+    "live_smoke_total": 3,
+    "oracle_physically_unavailable_during_runtime_required": true,
+    "runtime_promotion_only_after_all_gates": true
+  },
+  "frozen_stack": {
+    "base_gemma_frozen": true,
+    "merged_weights": false,
+    "total_frozen_bank_count": 7,
+    "v54_bank_count": 6,
+    "v85_bank_name": "v85_strict_multiscene_bridge",
+    "v85_bank_state_sha256": "f31b8f99f77f1b7b92dafd74220e5e12ccfa35cbc8630a6d7640f2fe1f93c581"
+  },
+  "full_gemma_model_loaded": false,
+  "lora_cpu_preflight": {
+    "bank_name": "v86_scene1_demo_bridge",
+    "base_projection_weight_shape": [
+      12288,
+      1536
+    ],
+    "exact_zero_output_at_initialization": true,
+    "full_gemma_model_loaded": false,
+    "initial_state_sha256": "b5ec50969d4ce1d34fca9544248e208e48e74f03445c8efeea1c8e08202c4161",
+    "lora_a_shape": [
+      8,
+      1536
+    ],
+    "lora_b_shape": [
+      12288,
+      8
+    ],
+    "parameter_count": 110592,
+    "target_modules": [
+      "model.language_model.layers.34.mlp.up_proj"
+    ]
+  },
+  "official_test_loaded": false,
+  "official_validation_loaded": false,
+  "optimizer_constructed": false,
+  "optimizer_updates": 0,
+  "oracle_loaded": false,
+  "protocol_preflight": {
+    "causal_question_ids": [
+      "q_000080",
+      "q_000108",
+      "q_000014"
+    ],
+    "causal_subset_inventory_sha256": "f1a7b07442a59eba2c6dbfbc4d0ada2066e72bf15bf3b987dd7875d7552a20b3",
+    "first_schedule_keys": [
+      [
+        0,
+        "q_000088"
+      ],
+      [
+        0,
+        "q_000058"
+      ],
+      [
+        0,
+        "q_000097"
+      ]
+    ],
+    "fixed_memory_dtype": "torch.bfloat16",
+    "fixed_memory_prefix_sha256": "a428f5147c815839ae7315a0adab952ab210814fb21dcdc5bf13b167f28a6e37",
+    "fixed_memory_shape": [
+      1,
+      738,
+      1536
+    ],
+    "full_gemma_model_loaded": false,
+    "last_schedule_keys": [
+      [
+        3,
+        "q_000054"
+      ],
+      [
+        3,
+        "q_000003"
+      ],
+      [
+        3,
+        "q_000048"
+      ]
+    ],
+    "memory_compiled_before_question": true,
+    "questions_tokenized": false,
+    "row_count": 138,
+    "row_inventory_sha256": "9919ff1bee4611dce4132d79fa50f6f6b4ace567a6df780a2e0e21bd88237a8e",
+    "row_order_sha256": "8f83098dc620b2576412168712d2e40e4ba6b1c1f5b1ecfa0be36d0402b3268d",
+    "schedule_rows": 552,
+    "zero_payload_nonzero_scalar_count": 0,
+    "zero_payload_prefix_sha256": "c455ed77bf3fe841a4e360e89c036ffb4e8cdb8935c97d767f556d25a9f790d8",
+    "zero_payload_preserves_native_boi": true,
+    "zero_payload_preserves_native_eoi": true,
+    "zero_payload_scalar_count": 1130496,
+    "zero_payload_token_count": 736
+  },
+  "runtime_promotion_authorized": false,
+  "schema_version": 86,
+  "status": "sealed_before_first_v86_full_model_load",
+  "strict_input_contract": {
+    "all_memory_slots_retained": true,
+    "compiled_before_question": true,
+    "control_tokens": 0,
+    "environmental_text_inputs": [],
+    "native_boi_retained": true,
+    "native_eoi_retained": true,
+    "payload_tokens": 736,
+    "question_conditioned_environmental_readout": false,
+    "question_dependent_retrieval": false,
+    "question_dependent_scene_processing": false,
+    "question_derived_environmental_tokens": 0,
+    "reused_byte_identically_across_questions": true,
+    "semantic_or_spatial_top_k_selection": false,
+    "shape": [
+      1,
+      738,
+      1536
+    ],
+    "supplied_directly_to_native_gemma_image_prefix": true
+  },
+  "training_protocol": {
+    "answer_ce_weight": 1.0,
+    "causal_rows_per_epoch": 3,
+    "causal_subset_inventory_sha256": "f1a7b07442a59eba2c6dbfbc4d0ada2066e72bf15bf3b987dd7875d7552a20b3",
+    "causal_subset_question_ids": [
+      "q_000080",
+      "q_000108",
+      "q_000014"
+    ],
+    "checkpoint_selection": "fixed_final_update_92",
+    "epochs": 4,
+    "gradient_accumulation_rows": 6,
+    "gradient_clip_norm": 1.0,
+    "intermediate_behavior_selection": false,
+    "learning_rate": 0.001,
+    "microbatch_size": 1,
+    "optimizer": "AdamW",
+    "optimizer_updates": 92,
+    "row_order": "sorted_then_epoch_seeded_shuffle",
+    "row_order_seed": 860086,
+    "row_order_sha256": "8f83098dc620b2576412168712d2e40e4ba6b1c1f5b1ecfa0be36d0402b3268d",
+    "rows_per_epoch": 138,
+    "total_causal_margin_rows": 12,
+    "weight_decay": 0.0,
+    "zero_payload_margin_weight": 1.0,
+    "zero_payload_preserves_native_boi_eoi": true,
+    "zero_payload_target_margin_nll": 0.5,
+    "zero_payload_zeros_exactly_736_interior_tokens": true
+  },
+  "v85_held_evidence_mutated": false
+}

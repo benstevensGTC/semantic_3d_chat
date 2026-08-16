@@ -1,0 +1,849 @@
+{
+  "accepted_decision_count": 10,
+  "checkpoint": "data_gemma4/checkpoints/gemma_waypoint_policy_v1_operator_safe_turn_runtime_aligned",
+  "checkpoint_weights_sha256": "80b4776475528c144b7ef4b3554e5d049134a8602ae13610f31170c4018f0241",
+  "deterministic_route_planner_used": false,
+  "executed_motion_receipt_count": 9,
+  "failure": "premature_model_stop_before_lap_geometry",
+  "fallback_used": false,
+  "final_position_xy_m": [
+    -0.21638980099167363,
+    1.9492480324962598
+  ],
+  "final_yaw_degrees": 29.548367178859024,
+  "geometry_requirements": {
+    "maximum_return_error_m": 0.35,
+    "minimum_path_length_m": 5.0
+  },
+  "instruction": "Do a lap around the room.",
+  "model_decision_count": 18,
+  "model_decisions": [
+    {
+      "accepted": true,
+      "actual_gemma_causal_forward": true,
+      "deterministic_route_planner_used": false,
+      "error_code": null,
+      "executed": true,
+      "model_action": "face",
+      "model_desired_heading_degrees": -50.00001834800019,
+      "model_selected_every_waypoint_and_heading": true,
+      "model_waypoint_delta_robot_m": [
+        -0.004539798945188522,
+        0.2561678886413574
+      ],
+      "primitive_arguments": {
+        "angle_degrees": 39.9999816519998
+      },
+      "primitive_tool": "turn",
+      "step": 1,
+      "substitution_applied": false,
+      "synthetic_stop_applied": false
+    },
+    {
+      "accepted": true,
+      "actual_gemma_causal_forward": true,
+      "deterministic_route_planner_used": false,
+      "error_code": null,
+      "executed": true,
+      "model_action": "face",
+      "model_desired_heading_degrees": -9.220037927200574,
+      "model_selected_every_waypoint_and_heading": true,
+      "model_waypoint_delta_robot_m": [
+        -0.0036060705315321684,
+        0.29690444469451904
+      ],
+      "primitive_arguments": {
+        "angle_degrees": 40.77998042079963
+      },
+      "primitive_tool": "turn",
+      "step": 2,
+      "substitution_applied": false,
+      "synthetic_stop_applied": false
+    },
+    {
+      "accepted": false,
+      "actual_gemma_causal_forward": true,
+      "deterministic_route_planner_used": false,
+      "error_code": "E_LIMIT",
+      "executed": false,
+      "model_action": "face",
+      "model_desired_heading_degrees": 47.946404254138116,
+      "model_selected_every_waypoint_and_heading": true,
+      "model_waypoint_delta_robot_m": [
+        -0.0068923356011509895,
+        0.29942888021469116
+      ],
+      "primitive_arguments": {
+        "angle_degrees": 57.16644218133868
+      },
+      "primitive_tool": "turn",
+      "step": 3,
+      "substitution_applied": false,
+      "synthetic_stop_applied": false
+    },
+    {
+      "accepted": true,
+      "actual_gemma_causal_forward": true,
+      "deterministic_route_planner_used": false,
+      "error_code": null,
+      "executed": true,
+      "model_action": "move_to",
+      "model_desired_heading_degrees": 55.79481004529388,
+      "model_selected_every_waypoint_and_heading": true,
+      "model_waypoint_delta_robot_m": [
+        -0.020777806639671326,
+        0.4109799265861511
+      ],
+      "primitive_arguments": {
+        "x": -0.45465952645191265,
+        "y": 0.15899933834170066
+      },
+      "primitive_tool": "move_to",
+      "step": 4,
+      "substitution_applied": false,
+      "synthetic_stop_applied": false
+    },
+    {
+      "accepted": true,
+      "actual_gemma_causal_forward": true,
+      "deterministic_route_planner_used": false,
+      "error_code": null,
+      "executed": true,
+      "model_action": "move_to",
+      "model_desired_heading_degrees": 33.14403172849013,
+      "model_selected_every_waypoint_and_heading": true,
+      "model_waypoint_delta_robot_m": [
+        -0.01323257852345705,
+        0.4510916769504547
+      ],
+      "primitive_arguments": {
+        "x": -0.3954443453125952,
+        "y": 0.6063832500674027
+      },
+      "primitive_tool": "move_to",
+      "step": 5,
+      "substitution_applied": false,
+      "synthetic_stop_applied": false
+    },
+    {
+      "accepted": true,
+      "actual_gemma_causal_forward": true,
+      "deterministic_route_planner_used": false,
+      "error_code": null,
+      "executed": true,
+      "model_action": "move_to",
+      "model_desired_heading_degrees": 18.118023038361788,
+      "model_selected_every_waypoint_and_heading": true,
+      "model_waypoint_delta_robot_m": [
+        -0.011121803894639015,
+        0.45591962337493896
+      ],
+      "primitive_arguments": {
+        "x": -0.33337209563261017,
+        "y": 1.0581945307144032
+      },
+      "primitive_tool": "move_to",
+      "step": 6,
+      "substitution_applied": false,
+      "synthetic_stop_applied": false
+    },
+    {
+      "accepted": true,
+      "actual_gemma_causal_forward": true,
+      "deterministic_route_planner_used": false,
+      "error_code": null,
+      "executed": true,
+      "model_action": "move_to",
+      "model_desired_heading_degrees": 32.0520032929834,
+      "model_selected_every_waypoint_and_heading": true,
+      "model_waypoint_delta_robot_m": [
+        -0.014838350005447865,
+        0.4518975615501404
+      ],
+      "primitive_arguments": {
+        "x": -0.2756128158793147,
+        "y": 1.506631202239188
+      },
+      "primitive_tool": "move_to",
+      "step": 7,
+      "substitution_applied": false,
+      "synthetic_stop_applied": false
+    },
+    {
+      "accepted": true,
+      "actual_gemma_causal_forward": true,
+      "deterministic_route_planner_used": false,
+      "error_code": null,
+      "executed": true,
+      "model_action": "move_to",
+      "model_desired_heading_degrees": 31.262198394886024,
+      "model_selected_every_waypoint_and_heading": true,
+      "model_waypoint_delta_robot_m": [
+        -0.012461033649742603,
+        0.4463874399662018
+      ],
+      "primitive_arguments": {
+        "x": -0.21638980099167363,
+        "y": 1.9492480324962598
+      },
+      "primitive_tool": "move_to",
+      "step": 8,
+      "substitution_applied": false,
+      "synthetic_stop_applied": false
+    },
+    {
+      "accepted": false,
+      "actual_gemma_causal_forward": true,
+      "deterministic_route_planner_used": false,
+      "error_code": "E_LIMIT",
+      "executed": false,
+      "model_action": "move_to",
+      "model_desired_heading_degrees": -5.239929118470577,
+      "model_selected_every_waypoint_and_heading": true,
+      "model_waypoint_delta_robot_m": [
+        -0.004070167895406485,
+        0.43436211347579956
+      ],
+      "primitive_arguments": {
+        "x": -0.15081110275892626,
+        "y": 2.3786504617254836
+      },
+      "primitive_tool": "move_to",
+      "step": 9,
+      "substitution_applied": false,
+      "synthetic_stop_applied": false
+    },
+    {
+      "accepted": true,
+      "actual_gemma_causal_forward": true,
+      "deterministic_route_planner_used": false,
+      "error_code": null,
+      "executed": true,
+      "model_action": "face",
+      "model_desired_heading_degrees": 10.695870084981854,
+      "model_selected_every_waypoint_and_heading": true,
+      "model_waypoint_delta_robot_m": [
+        -0.0039110747165977955,
+        0.4178469181060791
+      ],
+      "primitive_arguments": {
+        "angle_degrees": 19.915908012182427
+      },
+      "primitive_tool": "turn",
+      "step": 10,
+      "substitution_applied": false,
+      "synthetic_stop_applied": false
+    },
+    {
+      "accepted": false,
+      "actual_gemma_causal_forward": true,
+      "deterministic_route_planner_used": false,
+      "error_code": "E_LIMIT",
+      "executed": false,
+      "model_action": "move_to",
+      "model_desired_heading_degrees": 13.148348349294949,
+      "model_selected_every_waypoint_and_heading": true,
+      "model_waypoint_delta_robot_m": [
+        -0.017301302403211594,
+        0.41796445846557617
+      ],
+      "primitive_arguments": {
+        "x": -0.3109629564731381,
+        "y": 2.3567398015757695
+      },
+      "primitive_tool": "move_to",
+      "step": 11,
+      "substitution_applied": false,
+      "synthetic_stop_applied": false
+    },
+    {
+      "accepted": false,
+      "actual_gemma_causal_forward": true,
+      "deterministic_route_planner_used": false,
+      "error_code": "E_LIMIT",
+      "executed": false,
+      "model_action": "move_to",
+      "model_desired_heading_degrees": -15.083638032521653,
+      "model_selected_every_waypoint_and_heading": true,
+      "model_waypoint_delta_robot_m": [
+        -0.0005799417267553508,
+        0.4276094436645508
+      ],
+      "primitive_arguments": {
+        "x": -0.2963221783822426,
+        "y": 2.3693206306125907
+      },
+      "primitive_tool": "move_to",
+      "step": 12,
+      "substitution_applied": false,
+      "synthetic_stop_applied": false
+    },
+    {
+      "accepted": true,
+      "actual_gemma_causal_forward": true,
+      "deterministic_route_planner_used": false,
+      "error_code": null,
+      "executed": true,
+      "model_action": "face",
+      "model_desired_heading_degrees": 29.54836717885903,
+      "model_selected_every_waypoint_and_heading": true,
+      "model_waypoint_delta_robot_m": [
+        -0.005054240580648184,
+        0.39980003237724304
+      ],
+      "primitive_arguments": {
+        "angle_degrees": 18.85249709387716
+      },
+      "primitive_tool": "turn",
+      "step": 13,
+      "substitution_applied": false,
+      "synthetic_stop_applied": false
+    },
+    {
+      "accepted": false,
+      "actual_gemma_causal_forward": true,
+      "deterministic_route_planner_used": false,
+      "error_code": "E_LIMIT",
+      "executed": false,
+      "model_action": "face",
+      "model_desired_heading_degrees": -17.787961577071584,
+      "model_selected_every_waypoint_and_heading": true,
+      "model_waypoint_delta_robot_m": [
+        -0.0007532344898208976,
+        0.40203657746315
+      ],
+      "primitive_arguments": {
+        "angle_degrees": -47.336328755930595
+      },
+      "primitive_tool": "turn",
+      "step": 14,
+      "substitution_applied": false,
+      "synthetic_stop_applied": false
+    },
+    {
+      "accepted": false,
+      "actual_gemma_causal_forward": true,
+      "deterministic_route_planner_used": false,
+      "error_code": "E_LIMIT",
+      "executed": false,
+      "model_action": "move_to",
+      "model_desired_heading_degrees": -25.580704944907946,
+      "model_selected_every_waypoint_and_heading": true,
+      "model_waypoint_delta_robot_m": [
+        -0.013336206786334515,
+        0.4069942533969879
+      ],
+      "primitive_arguments": {
+        "x": -0.42870401336562286,
+        "y": 2.2967316320137754
+      },
+      "primitive_tool": "move_to",
+      "step": 15,
+      "substitution_applied": false,
+      "synthetic_stop_applied": false
+    },
+    {
+      "accepted": false,
+      "actual_gemma_causal_forward": true,
+      "deterministic_route_planner_used": false,
+      "error_code": "E_LIMIT",
+      "executed": false,
+      "model_action": "move_to",
+      "model_desired_heading_degrees": -43.39457074904244,
+      "model_selected_every_waypoint_and_heading": true,
+      "model_waypoint_delta_robot_m": [
+        -0.00629836181178689,
+        0.4294759929180145
+      ],
+      "primitive_arguments": {
+        "x": -0.43366856479613336,
+        "y": 2.3197601600360103
+      },
+      "primitive_tool": "move_to",
+      "step": 16,
+      "substitution_applied": false,
+      "synthetic_stop_applied": false
+    },
+    {
+      "accepted": false,
+      "actual_gemma_causal_forward": true,
+      "deterministic_route_planner_used": false,
+      "error_code": "E_LIMIT",
+      "executed": false,
+      "model_action": "move_to",
+      "model_desired_heading_degrees": -56.30627447705965,
+      "model_selected_every_waypoint_and_heading": true,
+      "model_waypoint_delta_robot_m": [
+        -0.01294359564781189,
+        0.4152476191520691
+      ],
+      "primitive_arguments": {
+        "x": -0.43243267960464143,
+        "y": 2.3041051818963787
+      },
+      "primitive_tool": "move_to",
+      "step": 17,
+      "substitution_applied": false,
+      "synthetic_stop_applied": false
+    },
+    {
+      "accepted": true,
+      "actual_gemma_causal_forward": true,
+      "deterministic_route_planner_used": false,
+      "error_code": null,
+      "executed": true,
+      "model_action": "stop",
+      "model_desired_heading_degrees": 2.352278989060419,
+      "model_selected_every_waypoint_and_heading": true,
+      "model_waypoint_delta_robot_m": [
+        -0.017387045547366142,
+        0.3937009871006012
+      ],
+      "primitive_arguments": {},
+      "primitive_tool": "stop",
+      "step": 18,
+      "substitution_applied": false,
+      "synthetic_stop_applied": false
+    }
+  ],
+  "model_selected_terminal_stop": true,
+  "numeric_actions": [
+    {
+      "action_count": 1,
+      "angular_velocity_degrees": 39.9999816519998,
+      "body_yaw_degrees": -50.0000183480002,
+      "camera_position_m": [
+        -0.5,
+        -0.25,
+        1.2
+      ],
+      "camera_yaw_degrees": -50.0000183480002,
+      "collision": false,
+      "distance_moved": 0.0,
+      "error_code": null,
+      "last_movement_delta_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "linear_velocity_xy_m": [
+        0.0,
+        0.0
+      ],
+      "pitch_degrees": 0.0,
+      "position_m": [
+        -0.5,
+        -0.25,
+        0.0
+      ],
+      "scan_count": 0,
+      "scan_coverage": 0.0,
+      "scene_id": "scene_000001",
+      "scene_version": 0,
+      "stopped": false,
+      "success": true,
+      "turn_degrees": 39.9999816519998,
+      "valid_depth_pixels": 0,
+      "visible_voxels": 0
+    },
+    {
+      "action_count": 2,
+      "angular_velocity_degrees": 40.77998042079963,
+      "body_yaw_degrees": -9.220037927200565,
+      "camera_position_m": [
+        -0.5,
+        -0.25,
+        1.2
+      ],
+      "camera_yaw_degrees": -9.220037927200565,
+      "collision": false,
+      "distance_moved": 0.0,
+      "error_code": null,
+      "last_movement_delta_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "linear_velocity_xy_m": [
+        0.0,
+        0.0
+      ],
+      "pitch_degrees": 0.0,
+      "position_m": [
+        -0.5,
+        -0.25,
+        0.0
+      ],
+      "scan_count": 0,
+      "scan_coverage": 0.0,
+      "scene_id": "scene_000001",
+      "scene_version": 0,
+      "stopped": false,
+      "success": true,
+      "turn_degrees": 40.77998042079963,
+      "valid_depth_pixels": 0,
+      "visible_voxels": 0
+    },
+    {
+      "action_count": 3,
+      "angular_velocity_degrees": 0.0,
+      "body_yaw_degrees": -9.220037927200565,
+      "camera_position_m": [
+        -0.45465952645191265,
+        0.15899933834170066,
+        1.2
+      ],
+      "camera_yaw_degrees": -9.220037927200565,
+      "clearance_m": 0.24811386036382,
+      "collision": false,
+      "distance_moved": 0.41150482051309406,
+      "error_code": null,
+      "last_movement_delta_m": [
+        0.045340473548087346,
+        0.40899933834170066,
+        0.0
+      ],
+      "linear_velocity_xy_m": [
+        0.045340473548087346,
+        0.40899933834170066
+      ],
+      "pitch_degrees": 0.0,
+      "position_m": [
+        -0.45465952645191265,
+        0.15899933834170066,
+        0.0
+      ],
+      "scan_count": 0,
+      "scan_coverage": 0.0,
+      "scene_id": "scene_000001",
+      "scene_version": 0,
+      "stopped": false,
+      "success": true,
+      "turn_degrees": 0.0,
+      "valid_depth_pixels": 0,
+      "visible_voxels": 0
+    },
+    {
+      "action_count": 4,
+      "angular_velocity_degrees": 0.0,
+      "body_yaw_degrees": -9.220037927200565,
+      "camera_position_m": [
+        -0.3954443453125952,
+        0.6063832500674027,
+        1.2
+      ],
+      "camera_yaw_degrees": -9.220037927200565,
+      "clearance_m": 0.24606259835992583,
+      "collision": false,
+      "distance_moved": 0.45128572118819904,
+      "error_code": null,
+      "last_movement_delta_m": [
+        0.05921518113931745,
+        0.447383911725702,
+        0.0
+      ],
+      "linear_velocity_xy_m": [
+        0.05921518113931745,
+        0.447383911725702
+      ],
+      "pitch_degrees": 0.0,
+      "position_m": [
+        -0.3954443453125952,
+        0.6063832500674027,
+        0.0
+      ],
+      "scan_count": 0,
+      "scan_coverage": 0.0,
+      "scene_id": "scene_000001",
+      "scene_version": 0,
+      "stopped": false,
+      "success": true,
+      "turn_degrees": 0.0,
+      "valid_depth_pixels": 0,
+      "visible_voxels": 0
+    },
+    {
+      "action_count": 5,
+      "angular_velocity_degrees": 0.0,
+      "body_yaw_degrees": -9.220037927200565,
+      "camera_position_m": [
+        -0.33337209563261017,
+        1.0581945307144032,
+        1.2
+      ],
+      "camera_yaw_degrees": -9.220037927200565,
+      "clearance_m": 0.2299646074435242,
+      "collision": false,
+      "distance_moved": 0.4560552570689401,
+      "error_code": null,
+      "last_movement_delta_m": [
+        0.062072249679985037,
+        0.4518112806470005,
+        0.0
+      ],
+      "linear_velocity_xy_m": [
+        0.062072249679985037,
+        0.4518112806470005
+      ],
+      "pitch_degrees": 0.0,
+      "position_m": [
+        -0.33337209563261017,
+        1.0581945307144032,
+        0.0
+      ],
+      "scan_count": 0,
+      "scan_coverage": 0.0,
+      "scene_id": "scene_000001",
+      "scene_version": 0,
+      "stopped": false,
+      "success": true,
+      "turn_degrees": 0.0,
+      "valid_depth_pixels": 0,
+      "visible_voxels": 0
+    },
+    {
+      "action_count": 6,
+      "angular_velocity_degrees": 0.0,
+      "body_yaw_degrees": -9.220037927200565,
+      "camera_position_m": [
+        -0.2756128158793147,
+        1.506631202239188,
+        1.2
+      ],
+      "camera_yaw_degrees": -9.220037927200565,
+      "clearance_m": 0.23013445872075367,
+      "collision": false,
+      "distance_moved": 0.45214110935176766,
+      "error_code": null,
+      "last_movement_delta_m": [
+        0.05775927975329548,
+        0.4484366715247847,
+        0.0
+      ],
+      "linear_velocity_xy_m": [
+        0.05775927975329548,
+        0.4484366715247847
+      ],
+      "pitch_degrees": 0.0,
+      "position_m": [
+        -0.2756128158793147,
+        1.506631202239188,
+        0.0
+      ],
+      "scan_count": 0,
+      "scan_coverage": 0.0,
+      "scene_id": "scene_000001",
+      "scene_version": 0,
+      "stopped": false,
+      "success": true,
+      "turn_degrees": 0.0,
+      "valid_depth_pixels": 0,
+      "visible_voxels": 0
+    },
+    {
+      "action_count": 7,
+      "angular_velocity_degrees": 0.0,
+      "body_yaw_degrees": -9.220037927200565,
+      "camera_position_m": [
+        -0.21638980099167363,
+        1.9492480324962598,
+        1.2
+      ],
+      "camera_yaw_degrees": -9.220037927200565,
+      "clearance_m": 0.19082982766254192,
+      "collision": false,
+      "distance_moved": 0.44656133276314836,
+      "error_code": null,
+      "last_movement_delta_m": [
+        0.05922301488764106,
+        0.4426168302570719,
+        0.0
+      ],
+      "linear_velocity_xy_m": [
+        0.05922301488764106,
+        0.4426168302570719
+      ],
+      "pitch_degrees": 0.0,
+      "position_m": [
+        -0.21638980099167363,
+        1.9492480324962598,
+        0.0
+      ],
+      "scan_count": 0,
+      "scan_coverage": 0.0,
+      "scene_id": "scene_000001",
+      "scene_version": 0,
+      "stopped": false,
+      "success": true,
+      "turn_degrees": 0.0,
+      "valid_depth_pixels": 0,
+      "visible_voxels": 0
+    },
+    {
+      "action_count": 8,
+      "angular_velocity_degrees": 19.915908012182427,
+      "body_yaw_degrees": 10.695870084981863,
+      "camera_position_m": [
+        -0.21638980099167363,
+        1.9492480324962598,
+        1.2
+      ],
+      "camera_yaw_degrees": 10.695870084981863,
+      "collision": false,
+      "distance_moved": 0.0,
+      "error_code": null,
+      "last_movement_delta_m": [
+        0.05922301488764106,
+        0.4426168302570719,
+        0.0
+      ],
+      "linear_velocity_xy_m": [
+        0.0,
+        0.0
+      ],
+      "pitch_degrees": 0.0,
+      "position_m": [
+        -0.21638980099167363,
+        1.9492480324962598,
+        0.0
+      ],
+      "scan_count": 0,
+      "scan_coverage": 0.0,
+      "scene_id": "scene_000001",
+      "scene_version": 0,
+      "stopped": false,
+      "success": true,
+      "turn_degrees": 19.915908012182427,
+      "valid_depth_pixels": 0,
+      "visible_voxels": 0
+    },
+    {
+      "action_count": 9,
+      "angular_velocity_degrees": 18.85249709387716,
+      "body_yaw_degrees": 29.548367178859024,
+      "camera_position_m": [
+        -0.21638980099167363,
+        1.9492480324962598,
+        1.2
+      ],
+      "camera_yaw_degrees": 29.548367178859024,
+      "collision": false,
+      "distance_moved": 0.0,
+      "error_code": null,
+      "last_movement_delta_m": [
+        0.05922301488764106,
+        0.4426168302570719,
+        0.0
+      ],
+      "linear_velocity_xy_m": [
+        0.0,
+        0.0
+      ],
+      "pitch_degrees": 0.0,
+      "position_m": [
+        -0.21638980099167363,
+        1.9492480324962598,
+        0.0
+      ],
+      "scan_count": 0,
+      "scan_coverage": 0.0,
+      "scene_id": "scene_000001",
+      "scene_version": 0,
+      "stopped": false,
+      "success": true,
+      "turn_degrees": 18.85249709387716,
+      "valid_depth_pixels": 0,
+      "visible_voxels": 0
+    }
+  ],
+  "passed": false,
+  "path_length_m": 2.217548240885149,
+  "rejected_decision_count": 8,
+  "rejected_steps": [
+    {
+      "error_code": "E_LIMIT",
+      "model_action": "face",
+      "primitive_arguments": {
+        "angle_degrees": 57.16644218133868
+      },
+      "primitive_tool": "turn",
+      "step": 3
+    },
+    {
+      "error_code": "E_LIMIT",
+      "model_action": "move_to",
+      "primitive_arguments": {
+        "x": -0.15081110275892626,
+        "y": 2.3786504617254836
+      },
+      "primitive_tool": "move_to",
+      "step": 9
+    },
+    {
+      "error_code": "E_LIMIT",
+      "model_action": "move_to",
+      "primitive_arguments": {
+        "x": -0.3109629564731381,
+        "y": 2.3567398015757695
+      },
+      "primitive_tool": "move_to",
+      "step": 11
+    },
+    {
+      "error_code": "E_LIMIT",
+      "model_action": "move_to",
+      "primitive_arguments": {
+        "x": -0.2963221783822426,
+        "y": 2.3693206306125907
+      },
+      "primitive_tool": "move_to",
+      "step": 12
+    },
+    {
+      "error_code": "E_LIMIT",
+      "model_action": "face",
+      "primitive_arguments": {
+        "angle_degrees": -47.336328755930595
+      },
+      "primitive_tool": "turn",
+      "step": 14
+    },
+    {
+      "error_code": "E_LIMIT",
+      "model_action": "move_to",
+      "primitive_arguments": {
+        "x": -0.42870401336562286,
+        "y": 2.2967316320137754
+      },
+      "primitive_tool": "move_to",
+      "step": 15
+    },
+    {
+      "error_code": "E_LIMIT",
+      "model_action": "move_to",
+      "primitive_arguments": {
+        "x": -0.43366856479613336,
+        "y": 2.3197601600360103
+      },
+      "primitive_tool": "move_to",
+      "step": 16
+    },
+    {
+      "error_code": "E_LIMIT",
+      "model_action": "move_to",
+      "primitive_arguments": {
+        "x": -0.43243267960464143,
+        "y": 2.3041051818963787
+      },
+      "primitive_tool": "move_to",
+      "step": 17
+    }
+  ],
+  "return_error_m": 2.2174595043473087,
+  "schema": "semantic_3d_chat.gemma_waypoint_live_failure.v1",
+  "start_position_xy_m": [
+    -0.5,
+    -0.25
+  ],
+  "synthetic_stop_applied": false
+}

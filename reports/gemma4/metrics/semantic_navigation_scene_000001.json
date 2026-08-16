@@ -1,0 +1,123 @@
+{
+  "artifacts": {
+    "runtime_report": "reports/gemma4/metrics/semantic_navigation_runtime_scene_000001.json",
+    "runtime_report_file_sha256": "a563405184dff73a54fd00208ffe9b50d829d76722ef88df342265edf9343acd"
+  },
+  "limitations": [
+    "This is one deterministic development arrangement used during policy engineering, not held-out navigation generalization.",
+    "The arrival scan reobserves the sanitized map; fresh Blender RGB-D fusion is proven by the separate embodied-runtime smoke report.",
+    "The tied-token semantic stream misses one target in this scene and remains uncalibrated.",
+    "The policy executes a deterministic semantic target instruction, not autonomous multi-turn tool selection by the language model."
+  ],
+  "metrics": {
+    "collision_count": 0,
+    "cyclic_wrong_target_grounding_success_count": 0,
+    "cyclic_wrong_target_grounding_success_rate": 0.0,
+    "grounding_success_count": 8,
+    "grounding_success_rate": 0.8888888888888888,
+    "mean_grounding_bbox_error_m": 0.2763022765711241,
+    "mean_navigation_bbox_standoff_m": 0.6140025664269787,
+    "navigation_success_count": 8,
+    "navigation_success_rate": 0.8888888888888888,
+    "task_count": 9
+  },
+  "passed": true,
+  "scene_id": "scene_000001",
+  "schema": "semantic_3d_chat.semantic_navigation_benchmark.v1",
+  "separation": {
+    "oracle_used_only_by_this_scorer": true,
+    "policy_received_oracle_or_labels": false,
+    "runtime_completed_before_oracle_open": true,
+    "runtime_report_sha256": "8235de7367ee463931fb0a72749782ae9faafff24c3ecb5076c6a599eaca26d8"
+  },
+  "tasks": [
+    {
+      "category": "table",
+      "collision_count": 0,
+      "grounding_bbox_error_m": 0.0,
+      "grounding_success": true,
+      "navigation_bbox_standoff_m": 0.26879646435815185,
+      "navigation_success": true,
+      "task_id": "task_000"
+    },
+    {
+      "category": "chair",
+      "collision_count": 0,
+      "grounding_bbox_error_m": 0.0,
+      "grounding_success": true,
+      "navigation_bbox_standoff_m": 0.46351441242798863,
+      "navigation_success": true,
+      "task_id": "task_001"
+    },
+    {
+      "category": "picture frame",
+      "collision_count": 0,
+      "grounding_bbox_error_m": 0.0,
+      "grounding_success": true,
+      "navigation_bbox_standoff_m": 0.7185314278387147,
+      "navigation_success": true,
+      "task_id": "task_002"
+    },
+    {
+      "category": "bowl",
+      "collision_count": 0,
+      "grounding_bbox_error_m": 0.029360651969909668,
+      "grounding_success": true,
+      "navigation_bbox_standoff_m": 0.23386513209482768,
+      "navigation_success": true,
+      "task_id": "task_003"
+    },
+    {
+      "category": "floor lamp",
+      "collision_count": 0,
+      "grounding_bbox_error_m": 0.0,
+      "grounding_success": true,
+      "navigation_bbox_standoff_m": 0.25818508319837014,
+      "navigation_success": true,
+      "task_id": "task_004"
+    },
+    {
+      "category": "cube",
+      "collision_count": 0,
+      "grounding_bbox_error_m": 0.014999985694885254,
+      "grounding_success": true,
+      "navigation_bbox_standoff_m": 0.6762548023102728,
+      "navigation_success": true,
+      "task_id": "task_005"
+    },
+    {
+      "category": "book",
+      "collision_count": 0,
+      "grounding_bbox_error_m": 0.06639319658279419,
+      "grounding_success": true,
+      "navigation_bbox_standoff_m": 0.4601139327035927,
+      "navigation_success": true,
+      "task_id": "task_006"
+    },
+    {
+      "category": "cabinet",
+      "collision_count": 0,
+      "grounding_bbox_error_m": 2.375966654892528,
+      "grounding_success": false,
+      "navigation_bbox_standoff_m": 2.344291949220518,
+      "navigation_success": false,
+      "task_id": "task_007"
+    },
+    {
+      "category": "plant pot",
+      "collision_count": 0,
+      "grounding_bbox_error_m": 0.0,
+      "grounding_success": true,
+      "navigation_bbox_standoff_m": 0.10246989369037163,
+      "navigation_success": true,
+      "task_id": "task_008"
+    }
+  ],
+  "thresholds": {
+    "grounding_bbox_error_m_maximum": 0.15,
+    "maximum_collisions": 0,
+    "minimum_grounding_successes": 7,
+    "minimum_navigation_successes": 7,
+    "navigation_bbox_standoff_m_maximum": 0.85
+  }
+}

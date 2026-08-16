@@ -1,0 +1,259 @@
+{
+  "benchmark_feasibility": {
+    "all_progress_criteria_feasible": true,
+    "benchmark_version": 2,
+    "criteria_changed_from_v1": false,
+    "expected_initial_position_xy_m": [
+      0.0,
+      -0.5
+    ],
+    "inference_config_sha256": "5ee4610104f4d8058a5fd739678f0e400c2181d6875e0e223727bbbef40ccb13",
+    "preregistered_numeric_start": true,
+    "progress_tasks": [
+      {
+        "feasible": true,
+        "initial_target_standoff_m": 0.7000051521053386,
+        "minimum_target_progress_m": 0.25,
+        "progress_feasibility_margin_m": 0.45000515210533865,
+        "task_id": "nav_001"
+      },
+      {
+        "feasible": true,
+        "initial_target_standoff_m": 1.3098852605164073,
+        "minimum_target_progress_m": 0.2,
+        "progress_feasibility_margin_m": 1.1098852605164073,
+        "task_id": "nav_003"
+      },
+      {
+        "feasible": true,
+        "initial_target_standoff_m": 2.4013290276872405,
+        "minimum_target_progress_m": 0.2,
+        "progress_feasibility_margin_m": 2.2013290276872404,
+        "task_id": "nav_005"
+      }
+    ]
+  },
+  "by_family": {
+    "approach": {
+      "success_count": 1,
+      "success_rate": 1.0,
+      "task_count": 1
+    },
+    "face": {
+      "success_count": 1,
+      "success_rate": 1.0,
+      "task_count": 1
+    },
+    "left_right": {
+      "success_count": 1,
+      "success_rate": 1.0,
+      "task_count": 1
+    },
+    "obstacle": {
+      "success_count": 1,
+      "success_rate": 1.0,
+      "task_count": 1
+    },
+    "stop": {
+      "success_count": 1,
+      "success_rate": 1.0,
+      "task_count": 1
+    },
+    "update_after_scan": {
+      "success_count": 0,
+      "success_rate": 0.0,
+      "task_count": 1
+    }
+  },
+  "claimed_trained_navigation_policy": true,
+  "continuous_context_evidence": {
+    "decision_context_match_count": 27,
+    "environmental_text_inputs": [],
+    "map_update_count": 1,
+    "next_decision_count": 21,
+    "numeric_state_change_count": 27,
+    "oracle_inputs_used": false,
+    "passed": true,
+    "prefix_chain_match_count": 27,
+    "refreshed_context_consumed_count": 21,
+    "robot_token_refresh_count": 27,
+    "scene_prefix_refresh_count": 1,
+    "step_count": 27
+  },
+  "limitations": [
+    "The compact controller was supervised on oracle-derived traces, but this six-task benchmark contains only one navigation scene.",
+    "The numeric robot-state token projector is deterministic; task learning occurs in the downstream continuous action controller.",
+    "Object identities and geometric tolerances were available only to this scorer."
+  ],
+  "metrics": {
+    "action_failure_count": 0,
+    "collision_count": 0,
+    "executed_action_count": 27,
+    "policy_rejection_count": 0,
+    "success_count": 5,
+    "success_rate": 0.8333333333333334,
+    "task_count": 6
+  },
+  "navigation_policy_checkpoint_tree_sha256": "1998d7313d023e65a5bef4c52eee00d867b4006344de51c6830e35c32f7ed1e0",
+  "passed": false,
+  "policy_status": "supervised_continuous_semantic_grounded_navigation_policy_v3",
+  "scene_id": "scene_000001",
+  "schema": "semantic_3d_chat.llm_navigation_score.v1",
+  "separation": {
+    "inference_journal_validated_before_oracle_open": true,
+    "inference_received_oracle_or_labels": false,
+    "oracle_used_only_by_post_inference_scorer": true,
+    "prediction_journal_sha256": "a198d9884754c10cdca7365a75956128be321ec5078eaf513f2209ad0e2f0c62",
+    "scene_oracle_sha256": "d3b7f56a810ac606964e8218b3150ad0f652edd4c0f139d1d7b8e3cf1882d78c",
+    "scoring_spec_sha256": "586e57cdadddd05287816d55090b0a20da615ddfe45b7e90079565ccc25a9196"
+  },
+  "tasks": [
+    {
+      "checks": {
+        "all_executed_actions_succeeded": true,
+        "heading": true,
+        "no_collision": true,
+        "required_stop": true
+      },
+      "episode_sha256": "4c098d0a88399d859696bc3ca280a2f26f8dc0e7b15759c1d92150a10a4c8b4c",
+      "family": "face",
+      "metrics": {
+        "action_failure_count": 0,
+        "collision_count": 0,
+        "executed_action_count": 2,
+        "final_target_standoff_m": 1.2254443034934448,
+        "heading_error_degrees": 6.5613785217204565,
+        "initial_target_standoff_m": 1.2254443034934448,
+        "policy_rejected": false,
+        "stopped": true,
+        "target_progress_m": 0.0
+      },
+      "passed": true,
+      "task_id": "nav_000"
+    },
+    {
+      "checks": {
+        "all_executed_actions_succeeded": true,
+        "no_collision": true,
+        "required_stop": true,
+        "target_progress": true,
+        "target_standoff": true
+      },
+      "episode_sha256": "c84b8e002b6a24b567ea46d6a6b99bb2c9c63c693281dc2fd9b7e222c8c659a0",
+      "family": "approach",
+      "metrics": {
+        "action_failure_count": 0,
+        "collision_count": 0,
+        "executed_action_count": 4,
+        "final_target_standoff_m": 0.2188104416905002,
+        "initial_target_standoff_m": 0.7000051521053386,
+        "policy_rejected": false,
+        "stopped": true,
+        "target_progress_m": 0.4811947104148384
+      },
+      "passed": true,
+      "task_id": "nav_001"
+    },
+    {
+      "checks": {
+        "all_executed_actions_succeeded": true,
+        "displacement": true,
+        "no_collision": true,
+        "required_stop": true
+      },
+      "episode_sha256": "f8d0fa8dbccd05bd187e0b32f52be42752553521e26e84847db13f6af8afd48d",
+      "family": "stop",
+      "metrics": {
+        "action_failure_count": 0,
+        "collision_count": 0,
+        "displacement_m": 0.26177641563117504,
+        "executed_action_count": 2,
+        "first_executed_tool": "move_forward",
+        "maximum_displacement_m": 0.3,
+        "minimum_displacement_m": 0.2,
+        "policy_rejected": false,
+        "stopped": true
+      },
+      "passed": true,
+      "task_id": "nav_002"
+    },
+    {
+      "checks": {
+        "all_executed_actions_succeeded": true,
+        "no_collision": true,
+        "obstacle_clearance": true,
+        "required_stop": true,
+        "target_progress": true,
+        "target_standoff": true
+      },
+      "episode_sha256": "44e0f824ac32164edd644c4a4824d5db43aef64ebcf8de3858abb2c06067f466",
+      "family": "obstacle",
+      "metrics": {
+        "action_failure_count": 0,
+        "collision_count": 0,
+        "executed_action_count": 6,
+        "final_target_standoff_m": 0.4065529784629693,
+        "initial_target_standoff_m": 1.3098852605164073,
+        "minimum_obstacle_bbox_clearance_m": 0.9954852810459592,
+        "policy_rejected": false,
+        "stopped": true,
+        "target_progress_m": 0.903332282053438
+      },
+      "passed": true,
+      "task_id": "nav_003"
+    },
+    {
+      "checks": {
+        "all_executed_actions_succeeded": true,
+        "heading": true,
+        "initial_left_right_direction": true,
+        "no_collision": true,
+        "required_stop": true
+      },
+      "episode_sha256": "3a9dfc290bbef9d94e51c1911fa53524ba61bb5b74aec9180514e3b6d1b84d0e",
+      "family": "left_right",
+      "metrics": {
+        "action_failure_count": 0,
+        "actual_initial_turn_sign": 1,
+        "collision_count": 0,
+        "executed_action_count": 5,
+        "expected_initial_turn_sign": 1,
+        "final_target_standoff_m": 1.3098852605164073,
+        "heading_error_degrees": 11.251565108215516,
+        "initial_target_standoff_m": 1.3098852605164073,
+        "policy_rejected": false,
+        "stopped": true,
+        "target_progress_m": 0.0
+      },
+      "passed": true,
+      "task_id": "nav_004"
+    },
+    {
+      "checks": {
+        "all_executed_actions_succeeded": true,
+        "no_collision": true,
+        "post_scan_motion": true,
+        "required_stop": true,
+        "successful_scan": true,
+        "target_progress": true,
+        "target_standoff": false,
+        "updated_prefix_consumed": true
+      },
+      "episode_sha256": "d903fb480156c5f02f2a07f8fe22bdc2f3dbefb262c754ed5a30997395c936ea",
+      "family": "update_after_scan",
+      "metrics": {
+        "action_failure_count": 0,
+        "collision_count": 0,
+        "executed_action_count": 8,
+        "final_target_standoff_m": 1.431078162886474,
+        "initial_target_standoff_m": 2.4013290276872405,
+        "policy_rejected": false,
+        "stopped": true,
+        "successful_scan_count": 1,
+        "target_progress_m": 0.9702508648007666
+      },
+      "passed": false,
+      "task_id": "nav_005"
+    }
+  ]
+}

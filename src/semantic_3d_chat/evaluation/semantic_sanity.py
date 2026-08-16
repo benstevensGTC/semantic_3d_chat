@@ -25,7 +25,13 @@ from semantic_3d_chat.config import PROJECT_ROOT, load_config, project_path
 from semantic_3d_chat.device import select_device
 from semantic_3d_chat.mapping.depth_projection import project_depth_to_world
 from semantic_3d_chat.mapping.fusion import load_feature_field, sample_spatial_field
-from semantic_3d_chat.mapping.voxel_map import SparseVoxelMap, voxel_coordinates
+from semantic_3d_chat.mapping.voxel_map import (
+    MATERIALIZED_MAP_CONTENT_HASH_DOMAIN,
+    PERSISTED_MAP_CONTENT_HASH_DOMAIN,
+    SparseVoxelMap,
+    persisted_voxel_map_content_hash,
+    voxel_coordinates,
+)
 from semantic_3d_chat.rendering_io import iter_frames
 from semantic_3d_chat.vision.encoder import DenseCLIPEncoder
 from semantic_3d_chat.vision.model_registry import get_model_spec
@@ -811,6 +817,28 @@ def _default_feature_location(config: dict[str, Any], scene_id: str) -> Path:
     return project_path(config, "features", scene_id)
 
 
+def map_hash_provenance(
+    map_path: str | Path,
+    voxel_map: SparseVoxelMap,
+) -> dict[str, str]:
+    """Return explicit persisted and reconstructed-map hash domains.
+
+    ``map_content_hash`` remains the historical reconstructed-map alias so
+    older consumers keep working. New consumers should compare only the
+    explicitly persisted hash across report artifacts.
+    """
+
+    reloaded_hash = voxel_map.content_hash()
+    return {
+        "map_content_hash": reloaded_hash,
+        "map_content_hash_domain": MATERIALIZED_MAP_CONTENT_HASH_DOMAIN,
+        "map_reloaded_content_hash": reloaded_hash,
+        "map_reloaded_content_hash_domain": MATERIALIZED_MAP_CONTENT_HASH_DOMAIN,
+        "map_persisted_content_hash": persisted_voxel_map_content_hash(map_path),
+        "map_persisted_content_hash_domain": PERSISTED_MAP_CONTENT_HASH_DOMAIN,
+    }
+
+
 def _atomic_json(path: Path, payload: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_name(f".{path.name}.tmp")
@@ -965,7 +993,7 @@ def run_semantic_sanity(
         "phase": "semantic_sanity",
         "scene_id": scene_id,
         "map_path": str(selected_map_path),
-        "map_content_hash": voxel_map.content_hash(),
+        **map_hash_provenance(selected_map_path, voxel_map),
         "voxel_count": len(voxel_map),
         "voxel_size_m": voxel_map.voxel_size_m,
         "feature_layout": {

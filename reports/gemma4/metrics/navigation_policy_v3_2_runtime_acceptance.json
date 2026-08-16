@@ -1,0 +1,60 @@
+{
+  "calibration_task_metrics": {
+    "action_failure_count": 0,
+    "collision_count": 0,
+    "executed_action_count": 8,
+    "final_target_standoff_m": 1.431078162886474,
+    "initial_target_standoff_m": 2.4013290276872405,
+    "policy_rejected": false,
+    "stopped": true,
+    "successful_scan_count": 1,
+    "target_progress_m": 0.9702508648007666
+  },
+  "claim_scope": {
+    "development_calibration": true,
+    "generalization_claim": false,
+    "held_out_claim": false,
+    "same_benchmark_used_for_diagnosis": true
+  },
+  "environmental_text_inputs": [],
+  "evidence_hashes": {
+    "reports/gemma4/metrics/llm_navigation_inference_access_learned_v3_2.json": "b0ce1d28326f09f4bc4d6408519e405236f29724f800c1e82b5c593c5298df75",
+    "reports/gemma4/metrics/llm_navigation_scene_000001_learned_v3_2.json": "bf8541c631474cdde80edefd9eaef73ea12783549361ab5be19e58cb1ed55afc",
+    "reports/gemma4/metrics/navigation_continuous_context_v3_2.json": "6a25cefe8050040535d9a81fc46846caf841e80b56701bd11c1ec8349c770d4f",
+    "reports/gemma4/predictions/llm_navigation_scene_000001_learned_v3_2.json": "7646c0c8e312fafc7216969f4ffad41651761552c5071d1507f8e286aecf89d2"
+  },
+  "gates": {
+    "calibration_checks": false,
+    "calibration_standoff": false,
+    "calibration_step_bound": true,
+    "calibration_task_passed": false,
+    "continuous_context": true,
+    "numeric_planner_declared": true,
+    "previous_five_preserved": true,
+    "runtime_file_isolation": true,
+    "sealed_inference_source": true,
+    "sealed_runtime_source": true,
+    "six_of_six": false,
+    "v3_2_runtime_declared": true,
+    "zero_action_failures": true,
+    "zero_collisions": true,
+    "zero_policy_rejections": true
+  },
+  "metrics": {
+    "action_failure_count": 0,
+    "collision_count": 0,
+    "executed_action_count": 27,
+    "policy_rejection_count": 0,
+    "success_count": 5,
+    "success_rate": 0.8333333333333334,
+    "task_count": 6
+  },
+  "oracle_inputs_at_runtime": false,
+  "passed": false,
+  "preregistration_path": "reports/gemma4/metrics/navigation_policy_v3_2_runtime_preregistration.json",
+  "preregistration_sha256": "d626db9291d0250e5c50206596d3d66b4bd4105861d459ed360632f98b89db34",
+  "runtime_promotion_authorized": false,
+  "runtime_version": "v3.2",
+  "schema": "semantic_3d_chat.navigation_policy_v3_2_result.v1",
+  "status": "rejected"
+}

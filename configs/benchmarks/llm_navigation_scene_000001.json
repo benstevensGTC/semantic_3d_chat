@@ -1,0 +1,43 @@
+{
+  "schema": "semantic_3d_chat.llm_navigation_tasks.v1",
+  "scene_id": "scene_000001",
+  "seed": 20260808,
+  "tasks": [
+    {
+      "task_id": "nav_000",
+      "family": "face",
+      "instruction": "Face the chair, then stop.",
+      "max_steps": 6
+    },
+    {
+      "task_id": "nav_001",
+      "family": "approach",
+      "instruction": "Move closer to the table, then stop.",
+      "max_steps": 8
+    },
+    {
+      "task_id": "nav_002",
+      "family": "stop",
+      "instruction": "Move forward 0.25 meters, then stop.",
+      "max_steps": 4
+    },
+    {
+      "task_id": "nav_003",
+      "family": "obstacle",
+      "instruction": "Go around the chair and stop beside the bowl.",
+      "max_steps": 12
+    },
+    {
+      "task_id": "nav_004",
+      "family": "left_right",
+      "instruction": "Turn toward the bowl using the shorter direction, then stop.",
+      "max_steps": 6
+    },
+    {
+      "task_id": "nav_005",
+      "family": "update_after_scan",
+      "instruction": "Scan the room, then move closer to the floor lamp and stop.",
+      "max_steps": 10
+    }
+  ]
+}

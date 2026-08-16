@@ -1,0 +1,38 @@
+{
+  "artifact": "gemma4_v54_fixed_prefix_ple_reader_v3_abort",
+  "checkpoint_absent": true,
+  "checkpoint_published": false,
+  "error": {
+    "function": "token_normalized_nll",
+    "memory": {
+      "attempted_allocation_mib": 642.0,
+      "mps_allocated_gib": 20.32,
+      "mps_max_allowed_gib": 30.19,
+      "other_allocations_gib": 9.51
+    },
+    "message": "MPS backend out of memory while allocating 642.00 MiB for full-sequence vocabulary cross entropy",
+    "operation": "baseline teacher-forced full-vocabulary answer NLL",
+    "source": "src/semantic_3d_chat/training/pair_curriculum.py:718",
+    "type": "RuntimeError"
+  },
+  "failure_scope": {
+    "adapter_update_count": 0,
+    "baseline_forward_pass_started": true,
+    "candidate_evaluation_started": false,
+    "optimizer_constructed": false,
+    "runtime_checkpoint_written": false,
+    "terminal_result_written": false,
+    "training_started": false
+  },
+  "preserved_sources": {
+    "scripts/run_gemma4_v54_fixed_prefix_ple_reader_v3.sh": "b0673af6d284b8ccc227c85b4824f1a78920fc30f1f224d19a7cf9b13e47bb69",
+    "src/semantic_3d_chat/evaluation/fixed_prefix_ple_v54_v3_preregistration.py": "682e4ae3cac8d9881c94e8e56d7763ccc350aee8941c25f0fd22bbbd5faec71b",
+    "src/semantic_3d_chat/training/train_fixed_prefix_ple_v54_v3.py": "23fe6025a3a479aad06b6e99957f59e4b2fd72ef80f87422c4a786dfc9a88770",
+    "tests/test_fixed_prefix_ple_v54_v3.py": "37c7d45b8c0a7bfc40497100e18990bcd4ec0585f577efb9f09b26a2de973385"
+  },
+  "preregistration_sha256": "eff55d288be9bb6337e2a9d9a086359aba7c9c181b105d7188dfa6dbefcea614",
+  "schema_version": 1,
+  "smoke_sha256": "3f2fbb71e7fa69491d606b19984d5207ba5642945bb26e4876b94ead350d12e9",
+  "status": "aborted_before_optimizer_construction_mps_oom_no_checkpoint",
+  "timestamp_utc": "2026-08-12T21:28:20Z"
+}

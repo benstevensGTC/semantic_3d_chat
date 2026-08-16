@@ -1,0 +1,46 @@
+# Structural V2 layout contract only. No accepted sealed controller currently
+# exists, so this config does not authorize compilation, generation, or claims.
+strict_fixed_prefix_atlas:
+  schema_version: 2
+  architecture: fixed_scene_key_value_atlas_v2
+  implementation: semantic_3d_chat.scene_encoder.fixed_prefix_atlas_v2
+  status: structural_layout_only_waiting_for_accepted_sealed_controller
+  compilation_enabled: false
+  source_runtime_config: configs/runtime/gemma4_v54.yaml
+  source_base_checkpoint: data_gemma4/checkpoints/gemma4_v54_semantic_greedy_gate/update_000
+  source_sealed_controller: null
+  output_checkpoint: null
+  probe_count: 96
+  base_environment_latents: 256
+  values_per_probe: 4
+  atlas_memory_tokens: 480
+  language_hidden_size: 1536
+  compiled_fixed_prefix_tokens: 738
+  layout:
+    - boi
+    - all_atlas_key_value_tokens
+    - all_base_scene_latents
+    - eoi
+  compile_before_user_question: true
+  retain_compiler_during_chat: false
+  question_dependent_scene_processing: false
+  question_dependent_retrieval: false
+  semantic_or_spatial_top_k_selection: false
+  preserve_every_base_scene_tensor_exactly: true
+  preserve_every_atlas_tensor_exactly: true
+  runtime_environmental_text_inputs: []
+
+sliding_attention_exposure:
+  model_id: google/gemma-4-E2B-it
+  layer_kind: sliding_attention
+  sliding_window_tokens: 512
+  mask_predicate: key_position > query_position - sliding_window
+  prompt_token_range_including_bos: [57, 64]
+  final_prompt_token_v1_visible_base_latents: 0
+  final_prompt_token_v2_visible_base_latents: 256
+  note: structural_direct_attention_exposure_only_not_behavioral_evidence
+
+evaluation:
+  enabled: false
+  behavioral_accuracy_measured: false
+  behavioral_improvement_claimed: false

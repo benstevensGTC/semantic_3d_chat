@@ -1,0 +1,49 @@
+{
+  "schema": "semantic_3d_chat.gemma_goal_mcp_preflight.v1",
+  "passed": true,
+  "verified_at_local": "2026-08-16T08:01:34-04:00",
+  "status": "model_free_preflight_passed_official_sdk_dispatch_tested_in_process",
+  "server_module": "semantic_3d_chat.mcp_server.gemma_goal_server",
+  "transport_support": [
+    "stdio",
+    "streamable-http"
+  ],
+  "tool_names": [
+    "navigate"
+  ],
+  "tool_count": 1,
+  "direct_motor_tools_exposed": false,
+  "legacy_numeric_mcp_separate": true,
+  "goal_is_passed_verbatim_to_gemma": true,
+  "response_contains_numeric_state_and_model_decision_provenance": true,
+  "response_contains_environmental_text": false,
+  "scene_id": "scene_000001",
+  "model_id": "google/gemma-4-E2B-it",
+  "model_revision": "3e22461f65e89153144f8adb70e3b8c2cc9845a7",
+  "navigation_checkpoint_sha256": "149f5e04de1d8305e642909443f03b96894edc3ece67e4500eacec8f5ca81e7c",
+  "gemma_runtime_binding_sha256": "800110e1545d77c1e374624ab837f6ed82cac54b269bf0359b840030db9e02cf",
+  "scene_token_count": 258,
+  "robot_token_count": 4,
+  "history_feature_dim": 16,
+  "model_selects_every_waypoint_and_heading": true,
+  "model_selects_stop": true,
+  "deterministic_route_planner_allowed_at_runtime": false,
+  "fallback": null,
+  "environmental_text_inputs": [],
+  "checks": {
+    "official_mcp_sdk_tool_dispatch_in_process": true,
+    "extra_tool_arguments_fail_closed": true,
+    "non_model_control_attestations_fail_closed": true,
+    "terminal_success_requires_gemma_stop": true,
+    "focused_mcp_tests_passed": 7,
+    "combined_operator_mcp_tests_passed": 30,
+    "ruff_passed": true,
+    "diff_check_passed": true
+  },
+  "live_scope": {
+    "second_live_gemma_mcp_process_launched_during_blender_session": false,
+    "reason": "The running Blender backend already held the local Gemma model; a second heavy model process was intentionally not loaded.",
+    "same_controller_live_in_blender_verified": true,
+    "live_blender_evidence": "reports/gemma4/metrics/blender_rover_v14_live_acceptance.json"
+  }
+}

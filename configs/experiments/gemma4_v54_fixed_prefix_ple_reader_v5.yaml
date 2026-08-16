@@ -1,0 +1,85 @@
+experiment:
+  schema_version: 1
+  artifact: gemma4_v54_fixed_prefix_ple_reader_v5
+  predecessor: gemma4_v54_fixed_prefix_ple_reader_v4
+  base_runtime_config: configs/runtime/gemma4_v54.yaml
+  base_checkpoint: data_gemma4/checkpoints/gemma4_v54_semantic_greedy_gate/update_000
+  prefix_cache: data_gemma4/scene_tokens/v56_question_control_full_prefixes
+  train_qa: data_gemma4/training/v62_pair_disjoint/train.jsonl
+  validation_questions: reports/gemma4/questions/v62_internal_validation.json
+  validation_references: reports/gemma4/scorer_only/v62_internal_validation_references.json
+  retention_corpus: configs/experiments/gemma4_v54_fixed_prefix_ple_reader_v1_retention.json
+  question_dependent_retrieval: false
+  fixed_prefix_tokens: 258
+  scene_latents: 256
+  scene_hidden_dimension: 1536
+
+adapter:
+  exact_target: model.language_model.per_layer_model_projection
+  rank: 4
+  alpha: 8.0
+  dropout: 0.0
+  dtype: float32
+  trainable_parameter_count: 41984
+  merge: false
+
+objective:
+  pair_correct_answer_ce_weight: 0.5
+  broad_answer_ce_weight: 0.5
+  symmetric_wrong_prefix_hinge_weight: 4.0
+  wrong_prefix_margin_nats_per_token: 0.5
+  retention_kl_weight: 0.5
+  labels_before_answer_suffix: -100
+
+optimization:
+  seed: 720054
+  optimizer: adamw
+  peak_learning_rate: 0.0001
+  minimum_learning_rate: 0.00001
+  linear_warmup_updates: 8
+  cosine_decay_after_warmup: true
+  weight_decay: 0.0
+  maximum_updates: 80
+  pair_cycles: 2
+  gradient_clip_l2: 1.0
+  decoder_gradient_checkpointing: true
+  base_dtype: bfloat16
+  adapter_dtype: float32
+  device: mps_with_cpu_fallback
+
+schedule:
+  pair_units_per_update: 1
+  pair_sides_per_update: 2
+  first_64_updates_broad_rows: 6
+  final_16_updates_broad_rows: 7
+  every_changed_pair_unit_per_cycle: true
+  every_broad_row_exactly_once: true
+  intermediate_selection: false
+  intermediate_checkpoint: false
+  checkpoint_selection: final_state_after_update_80_only
+  best_loss_selection: false
+  post_hoc_state_selection: false
+
+selection:
+  inherited_unchanged_from_v4: true
+  validation_answer_nll_improvement_minimum: 0.03
+  changed_wrong_prefix_positive_margin_rate_minimum: 0.65
+  changed_wrong_prefix_positive_margin_rate_delta_minimum: 0.10
+  changed_pair_complete_unit_delta_minimum: 3
+  greedy_exact_accuracy_delta_minimum: 0.02
+  retention_mean_ce_increase_nats_maximum: 0.03
+  retention_mean_kl_nats_maximum: 0.02
+  retention_next_token_top1_agreement_minimum: 0.98
+  every_gate_required: true
+  failed_run_publishes_no_checkpoint: true
+
+deferred_holdout:
+  scene_ids:
+    - scene_000057
+    - scene_000058
+    - scene_000059
+    - scene_000060
+    - scene_000061
+    - scene_000062
+  evaluate_only_after_internal_selection_passes: true
+  final_scenes_000025_through_000030_forbidden: true

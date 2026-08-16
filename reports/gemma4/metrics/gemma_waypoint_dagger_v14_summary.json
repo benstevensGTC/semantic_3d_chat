@@ -1,0 +1,114 @@
+{
+  "schema": "semantic_3d_chat.gemma_waypoint_release_summary.v1",
+  "created_at_utc": "2026-08-16T11:42:35Z",
+  "scene_id": "scene_000001",
+  "model_id": "google/gemma-4-E2B-it",
+  "model_revision": "3e22461f65e89153144f8adb70e3b8c2cc9845a7",
+  "navigation_checkpoint": "data_gemma4/checkpoints/gemma_waypoint_policy_v2_operator_dagger_v14_runtime_aligned",
+  "navigation_checkpoint_sha256": "149f5e04de1d8305e642909443f03b96894edc3ece67e4500eacec8f5ca81e7c",
+  "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95",
+  "gemma_runtime_binding_sha256": "800110e1545d77c1e374624ab837f6ed82cac54b269bf0359b840030db9e02cf",
+  "runtime_contract": {
+    "local_inference": true,
+    "actual_gemma_causal_forward_every_step": true,
+    "model_selects_every_waypoint_heading_and_stop": true,
+    "deterministic_route_planner_used": false,
+    "fallback_used": false,
+    "substitution_applied": false,
+    "synthetic_stop_applied": false,
+    "oracle_inputs_at_runtime": false,
+    "environmental_text_inputs": [],
+    "question_dependent_scene_retrieval": false
+  },
+  "scene_memory": {
+    "raw_voxel_count": 74699,
+    "processed_voxel_count": 8422,
+    "semantic_feature_dimension": 3072,
+    "scene_token_count": 258,
+    "scene_token_dimension": 1536,
+    "robot_state_token_count": 4
+  },
+  "training": {
+    "dataset_sha256": "e3b9aa0143f8c45847c34d9cf740e797cd3909f54d9cd38eb3fa3d9af63905f7",
+    "training_rows": 7115,
+    "validation_rows_used": 96,
+    "retained_v13_rows": 7112,
+    "new_v14_rows": 3,
+    "shared_action_agreement": 1.0,
+    "new_action_accuracy": 1.0,
+    "maximum_shared_heading_drift_degrees": 0.6084401607513428,
+    "maximum_shared_waypoint_drift_m": 0.004719567950814962,
+    "training_stop_recall": 1.0
+  },
+  "live_gates": {
+    "lap": {
+      "passed": true,
+      "model_decision_count": 76,
+      "face_count": 29,
+      "move_to_count": 46,
+      "stop_count": 1,
+      "rejected_decision_count": 0,
+      "path_length_m": 18.715407828802974,
+      "absolute_winding_area_m2": 4.2729619440952105,
+      "return_error_m": 0.04873323180807962
+    },
+    "approach_chair": {
+      "passed": true,
+      "model_decision_count": 16,
+      "accepted_decision_count": 8,
+      "rejected_collision_decision_count": 8,
+      "model_selected_terminal_stop": true,
+      "center_progress_m": 0.2636740957485727,
+      "bounding_box_standoff_m": 0.43145638539269443
+    },
+    "face_cube": {
+      "passed": true,
+      "model_decision_count": 2,
+      "rejected_decision_count": 0,
+      "model_selected_terminal_stop": true,
+      "oracle_yaw_error_degrees": 0.2015617605461273
+    },
+    "oracle_isolation": {
+      "passed": true,
+      "source_oracle_physically_unavailable": true,
+      "runtime_copy_oracle_and_qa_absent": true,
+      "forbidden_access_count": 0,
+      "source_oracle_restored": true
+    }
+  },
+  "evidence": {
+    "training_report": {
+      "path": "reports/gemma4/metrics/gemma_waypoint_policy_operator_dagger_v14_training.json",
+      "sha256": "239a694a7ab5dcb27499050aa155fa2cd569819a59c9022126c1af411416d1d2"
+    },
+    "lap_report": {
+      "path": "reports/gemma4/metrics/gemma_waypoint_dagger_v14_live_acceptance.json",
+      "sha256": "1b851a0be0925fc691cf3c02343e0f2d75783a04e597d96e69d53750792ee797"
+    },
+    "chair_runtime_report": {
+      "path": "reports/gemma4/metrics/gemma_waypoint_dagger_v14_approach_chair_runtime.json",
+      "sha256": "2ded4bd3a68a257558729b1e16c82cc65c20ef482700e8f63e2fed0017fc9bbc"
+    },
+    "chair_score_report": {
+      "path": "reports/gemma4/metrics/gemma_waypoint_dagger_v14_approach_chair_score.json",
+      "sha256": "b9926788ea3ecae872b9608b67ae8094ccbdd09ce10db80e994c9d2d76af2cf2"
+    },
+    "face_runtime_report": {
+      "path": "reports/gemma4/metrics/gemma_waypoint_dagger_v14_face_cube_runtime.json",
+      "sha256": "4d82a5b3bf2c065f8cd1a67c87f3f6a2a639cde05a34af5741cf77794bbafb36"
+    },
+    "face_score_report": {
+      "path": "reports/gemma4/metrics/gemma_waypoint_dagger_v14_face_cube_score.json",
+      "sha256": "f20dce2cc06ff2d6b8a3609269a07836510a7814ff42df74f800fe430a45509e"
+    },
+    "oracle_isolation_report": {
+      "path": "reports/gemma4/metrics/gemma_waypoint_dagger_v14_oracle_isolation.json",
+      "sha256": "5dc9cfacc0dc03ba4c04aa07e38443d019e4b217a3a3f173a2f30478edf6e7ac"
+    }
+  },
+  "limitations": [
+    "The live waypoint policy is task-trained primarily on scene_000001 and is not evidence of broad unseen-room navigation generalization.",
+    "The chair run passed but required eight safety-rejected model waypoints before Gemma recovered.",
+    "The disjoint validation action control remains weak and is reported separately; it must not be conflated with these live same-room gates."
+  ]
+}

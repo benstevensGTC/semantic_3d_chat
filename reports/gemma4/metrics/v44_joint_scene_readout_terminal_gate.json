@@ -1,0 +1,577 @@
+{
+  "arbitrary_training_authorized": false,
+  "artifact": "v44_joint_scene_readout_terminal_gate",
+  "chat_or_runtime_promotion_authorized": false,
+  "checkpoint_inventory": {
+    "directory_entries": {
+      "update_000": [
+        "adapter.safetensors",
+        "metadata.json",
+        "runtime_metadata.json"
+      ],
+      "update_004": [
+        "adapter.safetensors",
+        "metadata.json",
+        "optimizer.pt",
+        "runtime_metadata.json"
+      ],
+      "update_008": [
+        "adapter.safetensors",
+        "metadata.json",
+        "optimizer.pt",
+        "runtime_metadata.json"
+      ]
+    },
+    "file_sha256": {
+      "update_000/adapter.safetensors": "b0bdceb7699e9d97467915c69186f433d3b0fac2b09144d38c3078afe1f70cb0",
+      "update_000/metadata.json": "db23a9bf89236c6e6ddcf5ffc6aa6b42d23e1e94a3340d781c24ed2d992d38f0",
+      "update_000/runtime_metadata.json": "127772da72ee5bba0f4fe2c5c159ae836683f62b85d06b837764cea5bc0ce356",
+      "update_004/adapter.safetensors": "2e46cedae11cdc85d671ef2ad9c12b203a5cb0d997740c5651264fac96d2f709",
+      "update_004/metadata.json": "0f1c4954488910ed293a03da0c582e01dcd7753c5f6bca12c769a869c86330d3",
+      "update_004/optimizer.pt": "662f3f8061035e757e6d77c82ff666ae0159d30b9f0d1eda43813b0ca47808c3",
+      "update_004/runtime_metadata.json": "c1c0ff8b1229094a54c3d51edb85a58f3699edff86abd893b5b7a225b3a5fdb7",
+      "update_008/adapter.safetensors": "22f7e0276a91d45e31893843345e98e310fbffd14147852c05c5c3bec4dc6589",
+      "update_008/metadata.json": "797fcdb87da3391c5196fda15fca4d352846dda2d5dcc49263ca3f7854fcd1b3",
+      "update_008/optimizer.pt": "cdf9eb0c3560be1bc1542963354444eddb7a89ed0d063ffaa769c45231b9d61a",
+      "update_008/runtime_metadata.json": "59542b55239d64a9c28b9b99ec0a39b47c1dd93839753f61d145722ea7c50acf"
+    },
+    "manifest_sha256": "e426ccdb0c1c2007af70613f7e0598b4f0758c3b34c1f45e6e05ee2d753ec270",
+    "no_update_after_eight_persisted": true,
+    "root": "data_gemma4/checkpoints/gemma4_v44_joint_scene_readout_l14_query",
+    "root_entries": [
+      "update_000",
+      "update_004",
+      "update_008"
+    ]
+  },
+  "conditional_successor_authorization": {
+    "authorization_id": "v45_train_only_retention_repair_pilot",
+    "authorized": true,
+    "authorized_config": "configs/experiments/gemma4_diverse28_retention_repair_v45.yaml",
+    "authorized_output_root": "data_gemma4/checkpoints/gemma4_v45_retention_repair_l14_query",
+    "objective": {
+      "broad_nll_weight": 0.25,
+      "pair_correct_nll_weight": 0.5,
+      "retention_formula": "mean(relu(0.125-fragile_side_margin),8)+mean(relu(0.025-book_cross_prefix_margin),4)",
+      "retention_weight": 8.0,
+      "target_cross_prefix_hinge_margin": 0.1,
+      "target_cross_prefix_hinge_weight": 8.0,
+      "target_side_hinge_margin": 0.5,
+      "target_side_hinge_weight": 8.0,
+      "u8_prefix_reference_computed_before_optimizer_step_one": true,
+      "u8_prefix_trust_scale": 0.05,
+      "u8_prefix_trust_weight": 0.001
+    },
+    "only_exact_action": "one_bounded_v45_train_only_retention_repair_pilot",
+    "optimizer": {
+      "foreach": false,
+      "fused": false,
+      "implementation": "fresh_torch_adamw_two_groups",
+      "per_group_gradient_clip_norm": 1.0,
+      "query_learning_rate": 8e-06,
+      "scene_readout_learning_rate": 1e-05,
+      "source_optimizer_loaded": false,
+      "weight_decay": 0.0
+    },
+    "reference_baselines": {
+      "broad_nll_maximum": 2.9213306349515915,
+      "original_v41_update_zero_broad_nll": 2.9013306349515915,
+      "original_v41_update_zero_priority_side_deficit": 31.113729119300842,
+      "prefix_trust_reference": "exact_v44_update_008_full_scene_prefixes"
+    },
+    "retention_control": {
+      "applied_at_every_optimizer_update": true,
+      "book_cross_constraint_count": 4,
+      "book_cross_constraints": [
+        {
+          "pair_id": "pair_000015",
+          "question_key": "cfq_13b1138d14c52a7c",
+          "retention_floor": 0.025,
+          "side_index": 0,
+          "source_margin": 0.1605992317199707
+        },
+        {
+          "pair_id": "pair_000015",
+          "question_key": "cfq_13b1138d14c52a7c",
+          "retention_floor": 0.025,
+          "side_index": 1,
+          "source_margin": 0.026900842785835266
+        },
+        {
+          "pair_id": "pair_000015",
+          "question_key": "cfq_a1c673a1197a0961",
+          "retention_floor": 0.025,
+          "side_index": 0,
+          "source_margin": 0.030324697494506836
+        },
+        {
+          "pair_id": "pair_000015",
+          "question_key": "cfq_a1c673a1197a0961",
+          "retention_floor": 0.025,
+          "side_index": 1,
+          "source_margin": 0.03217540681362152
+        }
+      ],
+      "book_cross_floor": 0.025,
+      "book_cross_hinges_mean_normalized_separately": true,
+      "fragile_side_constraint_count": 8,
+      "fragile_side_constraints": [
+        {
+          "pair_id": "pair_000005",
+          "question_key": "cfq_a578dc166be9a217",
+          "retention_floor": 0.125,
+          "side_index": 0,
+          "source_margin": 0.4687870144844055
+        },
+        {
+          "pair_id": "pair_000006",
+          "question_key": "cfq_0a79d507273195ef",
+          "retention_floor": 0.125,
+          "side_index": 0,
+          "source_margin": 0.125
+        },
+        {
+          "pair_id": "pair_000006",
+          "question_key": "cfq_5c84a2c27d2be251",
+          "retention_floor": 0.125,
+          "side_index": 0,
+          "source_margin": 0.125
+        },
+        {
+          "pair_id": "pair_000007",
+          "question_key": "cfq_736067b51ce93c49",
+          "retention_floor": 0.125,
+          "side_index": 0,
+          "source_margin": 0.0625
+        },
+        {
+          "pair_id": "pair_000007",
+          "question_key": "cfq_997610c185204121",
+          "retention_floor": 0.125,
+          "side_index": 0,
+          "source_margin": 0.25
+        },
+        {
+          "pair_id": "pair_000016",
+          "question_key": "cfq_699675ceeaf65406",
+          "retention_floor": 0.125,
+          "side_index": 0,
+          "source_margin": 0.5
+        },
+        {
+          "pair_id": "pair_000016",
+          "question_key": "cfq_699675ceeaf65406",
+          "retention_floor": 0.125,
+          "side_index": 1,
+          "source_margin": 0.25
+        },
+        {
+          "pair_id": "pair_000018",
+          "question_key": "cfq_90b3d9852a93ce2a",
+          "retention_floor": 0.125,
+          "side_index": 1,
+          "source_margin": 0.125
+        }
+      ],
+      "fragile_side_floor": 0.125,
+      "fragile_side_hinges_mean_normalized_separately": true,
+      "lost_side_gate4_constraints": [
+        {
+          "gate4_required_relation": "strictly_greater_than_zero",
+          "pair_id": "pair_000006",
+          "question_key": "cfq_5c84a2c27d2be251",
+          "side_index": 0,
+          "update8_margin": 0.0
+        },
+        {
+          "gate4_required_relation": "strictly_greater_than_zero",
+          "pair_id": "pair_000016",
+          "question_key": "cfq_699675ceeaf65406",
+          "side_index": 1,
+          "update8_margin": 0.0
+        }
+      ],
+      "source_is_exact_original_v41_update_zero_pair_metrics": true,
+      "two_normalized_means_summed_before_single_weight": true
+    },
+    "schedule": {
+      "checkpoint_steps": [
+        0,
+        2,
+        4,
+        6,
+        8
+      ],
+      "gate4_must_pass_before_updates_five_through_eight": true,
+      "maximum_optimizer_updates": 8,
+      "target_schedule_is_fixed_and_nonadaptive": true,
+      "true_optimizer_step_per_target_schedule_row": true
+    },
+    "schema_version": 1,
+    "scope": {
+      "all_occupied_blocks_processed": true,
+      "chat_promotion_authorized": false,
+      "final_test_access_authorized": false,
+      "new_terminal_seal_required_after_training": true,
+      "oracle_access_authorized": false,
+      "question_dependent_retrieval": false,
+      "question_dependent_scene_processing": false,
+      "runtime_promotion_authorized": false,
+      "selector_execution_authorized": false,
+      "training_qa_and_maps_only": true,
+      "validation_access_authorized": false
+    },
+    "source_adapter_tensor_count": 179,
+    "source_authorized_surface_state_sha256": "f56fdc4ce31a3e97c80e9a214948b6855fd87ae3b7f96ebf1f152229cf833e02",
+    "source_checkpoint": "data_gemma4/checkpoints/gemma4_v44_joint_scene_readout_l14_query/update_008",
+    "source_checkpoint_file_sha256": {
+      "adapter.safetensors": "22f7e0276a91d45e31893843345e98e310fbffd14147852c05c5c3bec4dc6589",
+      "metadata.json": "797fcdb87da3391c5196fda15fca4d352846dda2d5dcc49263ca3f7854fcd1b3",
+      "optimizer.pt": "cdf9eb0c3560be1bc1542963354444eddb7a89ed0d063ffaa769c45231b9d61a",
+      "runtime_metadata.json": "59542b55239d64a9c28b9b99ec0a39b47c1dd93839753f61d145722ea7c50acf"
+    },
+    "source_frozen_excluding_authorized_state_sha256": "31cb215cf0d1623886d4a79203c501912e66537021da53dd711124abdc2e36fa",
+    "source_full_tensor_state_sha256": "ad9b2227e68020ae785084666c9dca58c3d479e5b1e3e4c13461539fcb19c6fb",
+    "source_optimizer_policy": {
+      "fresh_optimizer_required": true,
+      "source_optimizer_deserialization_authorized": false,
+      "source_optimizer_file_open_authorized_by_v45": false,
+      "source_optimizer_file_present_and_authenticated": true,
+      "source_optimizer_state_loading_authorized": false
+    },
+    "target_schedule": [
+      {
+        "optimizer_update": 1,
+        "question_key": "cfq_5c84a2c27d2be251"
+      },
+      {
+        "optimizer_update": 2,
+        "question_key": "cfq_699675ceeaf65406"
+      },
+      {
+        "optimizer_update": 3,
+        "question_key": "cfq_5c84a2c27d2be251"
+      },
+      {
+        "optimizer_update": 4,
+        "question_key": "cfq_699675ceeaf65406"
+      },
+      {
+        "optimizer_update": 5,
+        "question_key": "cfq_163eb92339ad35a5"
+      },
+      {
+        "optimizer_update": 6,
+        "question_key": "cfq_163eb92339ad35a5"
+      },
+      {
+        "optimizer_update": 7,
+        "question_key": "cfq_163eb92339ad35a5"
+      },
+      {
+        "optimizer_update": 8,
+        "question_key": "cfq_163eb92339ad35a5"
+      }
+    ],
+    "trainable_surface": {
+      "block_qkv_frozen": true,
+      "every_other_tensor_and_buffer_frozen": true,
+      "gemma_base_and_all_other_lora_banks_frozen": true,
+      "parameter_counts": [
+        393216,
+        6144,
+        16384
+      ],
+      "parameter_names": [
+        "block_cross_residual.w_o",
+        "lora_banks.extension_v28_stage_b_query.adapters.1.lora_a",
+        "lora_banks.extension_v28_stage_b_query.adapters.1.lora_b"
+      ],
+      "parameter_shapes": [
+        [
+          256,
+          1536
+        ],
+        [
+          4,
+          1536
+        ],
+        [
+          4096,
+          4
+        ]
+      ],
+      "query_parameter_count": 22528,
+      "scene_readout_parameter_count": 393216,
+      "total_parameter_count": 415744
+    },
+    "update4_gate": {
+      "both_authorized_parameter_groups_must_change": true,
+      "broad_nll_maximum": 2.9213306349515915,
+      "complete_physical_pair_id_coverage_minimum": 4,
+      "complete_units_minimum": 9,
+      "cross_prefix_complete_units_minimum": 17,
+      "frozen_state_must_remain_exact": true,
+      "lost_side_margins_must_both_be_strictly_positive": [
+        {
+          "pair_id": "pair_000006",
+          "question_key": "cfq_5c84a2c27d2be251",
+          "side_index": 0
+        },
+        {
+          "pair_id": "pair_000016",
+          "question_key": "cfq_699675ceeaf65406",
+          "side_index": 1
+        }
+      ],
+      "positive_sides_minimum": 34,
+      "priority_side_deficit_minimum_improvement_vs_original_v41_u0": 0.5
+    },
+    "update8_gate": {
+      "book_complete_units_minimum": 1,
+      "book_cross_prefix_complete_units_minimum": 1,
+      "both_authorized_parameter_groups_must_change": true,
+      "broad_greedy_exact_correct_minimum": 23,
+      "broad_greedy_row_count_exact": 48,
+      "broad_nll_maximum": 2.9213306349515915,
+      "complete_physical_pair_id_coverage_minimum": 5,
+      "complete_units_minimum": 10,
+      "cross_prefix_complete_units_minimum": 17,
+      "frozen_state_must_remain_exact": true,
+      "lost_side_margins_must_remain_strictly_positive": [
+        {
+          "pair_id": "pair_000006",
+          "question_key": "cfq_5c84a2c27d2be251",
+          "side_index": 0
+        },
+        {
+          "pair_id": "pair_000016",
+          "question_key": "cfq_699675ceeaf65406",
+          "side_index": 1
+        }
+      ],
+      "mirror_complete_units_minimum": 2,
+      "positive_sides_minimum": 35,
+      "priority_side_deficit_minimum_improvement_vs_original_v41_u0": 0.5,
+      "require_recorded_update4_gate_passed": true,
+      "train_greedy_complete_units_minimum": 5,
+      "u8_prefix_trust_rms_maximum": 0.002
+    }
+  },
+  "embodied_agent_promotion_authorized": false,
+  "execution_conclusion": {
+    "final_test_loaded": false,
+    "frozen_state_exact": true,
+    "oracle_loaded": false,
+    "runtime_promoted": false,
+    "selector_executed": false,
+    "update16_checkpoint_or_gate_present": false,
+    "update8_checkpoint_persisted": true,
+    "update8_gate_passed": false,
+    "update_nine_executed": false,
+    "updates_one_through_eight_executed": true,
+    "validation_loaded": false
+  },
+  "final_test_access_authorized": false,
+  "history_audit": {
+    "checkpoint_steps_persisted": [
+      0,
+      4,
+      8
+    ],
+    "history_frozen_hash_exact_every_step": true,
+    "history_prefixes_bit_exact": true,
+    "no_update_after_eight_persisted": true,
+    "optimizer_updates_executed": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ]
+  },
+  "input_integrity": {
+    "file_sha256": {
+      "configs/experiments/gemma4_diverse28_joint_scene_readout_v44.yaml": "a3f3b65dc3a32612060a679cbcc40c115e5b0c4d014670c9a8f7f752e4a7abb7",
+      "reports/gemma4/metrics/training_selection_gemma4_color_mirror_full_vocab_v11_resume36.json": "c0086f66edbb8854a7938e09c57535bfd47100adbaf3b3c95eeb4b08014ce2f8",
+      "reports/gemma4/metrics/v43_aggregate_projected_screen_terminal_gate.json": "013fbe79ac42e842e83989e33f132b9ff3529746a8045feb212ded32e50a2cc2",
+      "src/semantic_3d_chat/training/train_joint_scene_readout_v44.py": "300e7a1c130ef4be862d3b1357d58f9db17e9db4bba26ccbf24ea662cb248f5d",
+      "tests/test_train_joint_scene_readout_v44.py": "577b5d69b53b2351f4ad3d640b302ae0686d4824263efb4219ec6d4488b302dd"
+    },
+    "normalized_config_hash": "6c5ebf1ac65c",
+    "protected_report_access": "bytes_hashed_only"
+  },
+  "only_exact_successor_authorized": "v45_train_only_retention_repair_pilot",
+  "oracle_access_authorized": false,
+  "passed": true,
+  "resume_v44_training_authorized": false,
+  "runtime_metadata_audit": {
+    "update_000": {
+      "optimizer_step": 0,
+      "runtime_metadata_sha256": "127772da72ee5bba0f4fe2c5c159ae836683f62b85d06b837764cea5bc0ce356",
+      "sanitized_runtime_exact": true,
+      "training_history_qa_and_gate_fields_absent": true
+    },
+    "update_004": {
+      "optimizer_step": 4,
+      "runtime_metadata_sha256": "c1c0ff8b1229094a54c3d51edb85a58f3699edff86abd893b5b7a225b3a5fdb7",
+      "sanitized_runtime_exact": true,
+      "training_history_qa_and_gate_fields_absent": true
+    },
+    "update_008": {
+      "optimizer_step": 8,
+      "runtime_metadata_sha256": "59542b55239d64a9c28b9b99ec0a39b47c1dd93839753f61d145722ea7c50acf",
+      "sanitized_runtime_exact": true,
+      "training_history_qa_and_gate_fields_absent": true
+    }
+  },
+  "schema_version": 1,
+  "selector_execution_authorized": false,
+  "tensor_transition": {
+    "all_tensors_finite": true,
+    "authorized_parameter_count": 415744,
+    "authorized_parameter_counts": [
+      393216,
+      6144,
+      16384
+    ],
+    "authorized_parameter_names": [
+      "block_cross_residual.w_o",
+      "lora_banks.extension_v28_stage_b_query.adapters.1.lora_a",
+      "lora_banks.extension_v28_stage_b_query.adapters.1.lora_b"
+    ],
+    "authorized_parameter_shapes": [
+      [
+        256,
+        1536
+      ],
+      [
+        4,
+        1536
+      ],
+      [
+        4096,
+        4
+      ]
+    ],
+    "changed_tensor_names": {
+      "update_004": [
+        "block_cross_residual.w_o",
+        "lora_banks.extension_v28_stage_b_query.adapters.1.lora_a",
+        "lora_banks.extension_v28_stage_b_query.adapters.1.lora_b"
+      ],
+      "update_008": [
+        "block_cross_residual.w_o",
+        "lora_banks.extension_v28_stage_b_query.adapters.1.lora_a",
+        "lora_banks.extension_v28_stage_b_query.adapters.1.lora_b"
+      ]
+    },
+    "frozen_state_bit_exact_through_update_eight": true,
+    "only_three_authorized_tensors_changed": true,
+    "state_sha256": {
+      "update_000": {
+        "authorized": "b935c7e6ccceb1068f80e679b4159c6ca756f9f81868b954b93ac683e014f5a0",
+        "frozen": "31cb215cf0d1623886d4a79203c501912e66537021da53dd711124abdc2e36fa",
+        "full": "7b951c6d7ae4f7b50603159f0bc4dfb4d50b5b40f9325134d78d1de1dae87fc0"
+      },
+      "update_004": {
+        "authorized": "d12d65cefb2addd8fc1f10f5c7ece6190f79caeb055adbfaceb07572674b374f",
+        "frozen": "31cb215cf0d1623886d4a79203c501912e66537021da53dd711124abdc2e36fa",
+        "full": "6367a95d443b3c8908cd6ddf12f03bf75621a460e9d8818cae46e74ff4ce306d"
+      },
+      "update_008": {
+        "authorized": "f56fdc4ce31a3e97c80e9a214948b6855fd87ae3b7f96ebf1f152229cf833e02",
+        "frozen": "31cb215cf0d1623886d4a79203c501912e66537021da53dd711124abdc2e36fa",
+        "full": "ad9b2227e68020ae785084666c9dca58c3d479e5b1e3e4c13461539fcb19c6fb"
+      }
+    },
+    "tensor_count_each_checkpoint": 179
+  },
+  "terminal_conclusion": "update8_train_only_gate_failed_stop_is_final",
+  "terminal_process_access_audit": {
+    "adapter_tensors_loaded_on_cpu_for_hash_and_equality_audit": true,
+    "final_test_loaded": false,
+    "gemma_loaded": false,
+    "maps_loaded": false,
+    "optimizer_deserialized": false,
+    "optimizer_step_executed": false,
+    "oracle_loaded": false,
+    "protected_report_access": "bytes_hashed_only",
+    "qa_loaded": false,
+    "validation_loaded": false
+  },
+  "update8_gate_replay": {
+    "both_authorized_groups_changed": true,
+    "broad_nll_delta": -0.003102913498878479,
+    "complete_physical_pair_coverage": 3,
+    "complete_units": 7,
+    "complete_units_by_family": {
+      "book_support": 0,
+      "mirror_lr": 1,
+      "picture_support": 0
+    },
+    "cross_prefix_complete_units": 18,
+    "cross_prefix_complete_units_by_family": {
+      "book_support": 0,
+      "mirror_lr": 4,
+      "picture_support": 3
+    },
+    "failed_checks": [
+      "teacher_complete_units_at_least_9",
+      "teacher_positive_sides_at_least_34"
+    ],
+    "frozen_state_exact": true,
+    "passed": false,
+    "passing_checks": [
+      "both_authorized_parameter_groups_changed",
+      "broad_nll_within_source_plus_0_02",
+      "frozen_state_exact",
+      "priority_teacher_deficit_improved_at_least_0_5",
+      "query_state_changed",
+      "scene_readout_state_changed",
+      "teacher_cross_complete_units_at_least_17"
+    ],
+    "positive_sides": 32,
+    "priority_side_deficit_improvement": 1.1890941858291626,
+    "source_broad_nll": 2.9013306349515915,
+    "source_priority_side_deficit": 31.113729119300842,
+    "stopped_before_update_nine": true,
+    "update16_gate_absent": true,
+    "update8_broad_nll": 2.898227721452713,
+    "update8_priority_side_deficit": 29.92463493347168,
+    "update8_source_prefix_trust_rms": 0.004081375896930695
+  },
+  "v44_provenance": {
+    "exact_train_scene_count": 16,
+    "exact_train_scene_ids": [
+      "scene_000011",
+      "scene_000012",
+      "scene_000013",
+      "scene_000014",
+      "scene_000015",
+      "scene_000016",
+      "scene_000017",
+      "scene_000018",
+      "scene_000031",
+      "scene_000032",
+      "scene_000033",
+      "scene_000034",
+      "scene_000035",
+      "scene_000036",
+      "scene_000037",
+      "scene_000038"
+    ],
+    "question_dependent_scene_processing_or_retrieval": false,
+    "same_exact_v43_authorization_at_updates_zero_four_eight": true,
+    "source_optimizer_files_or_states_loaded": false,
+    "train_changed_pair_unit_count": 25,
+    "train_question_count": 384,
+    "v43_terminal_sha256": "013fbe79ac42e842e83989e33f132b9ff3529746a8045feb212ded32e50a2cc2",
+    "validation_oracle_and_final_access": false
+  },
+  "v45_train_only_retention_repair_pilot_authorized": true,
+  "validation_access_authorized": false
+}

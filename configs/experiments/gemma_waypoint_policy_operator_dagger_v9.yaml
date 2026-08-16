@@ -1,0 +1,136 @@
+_base_: gemma_waypoint_policy_operator_dagger_v8.yaml
+
+# V9 changes the runtime-aligned numeric history contract. Every trace is
+# regenerated from exact numeric action receipts with the shared goal-scoped
+# progress ledger; no V1 hidden state may be reused. The four appended values
+# expose accepted path length, signed swept area, return distance, and the
+# rejection streak. They select no waypoint, heading, route, recovery, or STOP.
+gemma_waypoint_traces:
+  history_parameterization: selected_action_parameters_goal_progress_v2
+  history_feature_dim: 16
+  profiles:
+    operator:
+      # YAML lists replace inherited lists, so preserve V5/V6/V7 explicitly
+      # and append the sealed V8 d27 collision receipt. The inherited singular
+      # source remains V4. All planners below exist only to label offline rows.
+      additional_live_failure_dagger_augmentations:
+        - enabled: true
+          report_path: reports/gemma4/metrics/gemma_waypoint_dagger_v5_live_acceptance.json
+          report_sha256: 670fd0eb87f471e084ade548d8f9fa78c961aa926b4d79913bccdcd49ba0adc4
+          scene_id: scene_000001
+          instruction: Do a lap around the room.
+          initial_pose_xy_yaw: [-0.5, -0.25, -90.0]
+          checkpoint_sha256: 3f6785f082442c37ccb23db308e0f1e21b31dda28abe1c5f197d7be511baa199
+          scene_prefix_sha256: 52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95
+          first_rejection_step: 22
+          first_rejection_error_code: E_MODEL_COLLISION
+          failed_target_xy_m: [-0.8826844833092204, 0.41691211338913026]
+          failed_target_tolerance_m: 0.000001
+          route_direction: clockwise
+          resume_waypoint_index: 8
+          maximum_total_decisions: 128
+          minimum_path_length_m: 5.0
+          minimum_abs_winding_area_m2: 0.5
+          maximum_return_error_m: 0.35
+        - enabled: true
+          report_path: reports/gemma4/metrics/gemma_waypoint_dagger_v6_live_acceptance.json
+          report_sha256: a3ccd49891451d8e5863d90ef89718ed3489a6822abea725f3423dd43902ee97
+          scene_id: scene_000001
+          instruction: Do a lap around the room.
+          initial_pose_xy_yaw: [-0.5, -0.25, -90.0]
+          checkpoint_sha256: 7366fced7601b726c7e0d03483446aef4e41bc7bd5bcad224176a3c2543f428a
+          scene_prefix_sha256: 52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95
+          first_rejection_step: 47
+          first_rejection_error_code: E_MODEL_COLLISION
+          failed_target_xy_m: [0.23210880891888863, 0.15496964295076576]
+          failed_target_tolerance_m: 0.000001
+          route_direction: clockwise
+          resume_waypoint_index: 25
+          maximum_total_decisions: 128
+          minimum_path_length_m: 5.0
+          minimum_abs_winding_area_m2: 0.5
+          maximum_return_error_m: 0.35
+          pre_divergence_dagger_augmentation:
+            enabled: true
+            branch_id: pre_d45_move_wp25
+            correction_decision_step: 45
+            observed_model_action: face
+            expected_pose_xy_yaw: [-0.20516896210234745, 0.1940730574124565, 149.9997329711914]
+            expected_input_sha256: 53715d5e69edb7542cfb6c76c9eaa3d69f5178ad39328ee6f97289c5e4ae9ad0
+            resume_waypoint_index: 25
+            maximum_total_decisions: 128
+        - enabled: true
+          report_path: reports/gemma4/metrics/gemma_waypoint_dagger_v7_live_acceptance.json
+          report_sha256: 2c6e556de9459a8e2db4539781fe8e9b294cfc450cca7fde4f34865f930197db
+          scene_id: scene_000001
+          instruction: Do a lap around the room.
+          initial_pose_xy_yaw: [-0.5, -0.25, -90.0]
+          checkpoint_sha256: 8d373c09d8e15edeffde154540b156abd33f72997715a0c3593e0b1f92d126cc
+          scene_prefix_sha256: 52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95
+          first_rejection_step: 15
+          first_rejection_error_code: E_MODEL_COLLISION
+          failed_target_xy_m: [-1.576410768628845, 0.21046962982599612]
+          failed_target_tolerance_m: 0.000001
+          route_direction: clockwise
+          resume_waypoint_index: 5
+          maximum_total_decisions: 128
+          minimum_path_length_m: 5.0
+          minimum_abs_winding_area_m2: 0.5
+          maximum_return_error_m: 0.35
+          pre_divergence_dagger_augmentation:
+            enabled: true
+            branch_id: pre_d14_move_wp05
+            correction_decision_step: 14
+            observed_model_action: face
+            expected_pose_xy_yaw: [-1.8917434156060955, -0.06519614902193381, -90.00435638427734]
+            expected_input_sha256: 58657829ce495fa132bf4c60ca99c26fc5962839ee943bb0f3192a32268f4004
+            resume_waypoint_index: 5
+            maximum_total_decisions: 128
+        - enabled: true
+          report_path: reports/gemma4/metrics/gemma_waypoint_dagger_v8_live_acceptance.json
+          report_sha256: 1f09d852bb59c2f99cf3b3f049b02512a763a34cee293f030b38677ce2abf5ec
+          scene_id: scene_000001
+          instruction: Do a lap around the room.
+          initial_pose_xy_yaw: [-0.5, -0.25, -90.0]
+          checkpoint_sha256: e4bf7bf22921f9ad5c2548e036a07c0eb8f3740c8c2b529915c9f5c7e3cb1af4
+          scene_prefix_sha256: 52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95
+          first_rejection_step: 27
+          first_rejection_error_code: E_MODEL_COLLISION
+          failed_target_xy_m: [-0.6394124801943619, 2.1924296820709825]
+          failed_target_tolerance_m: 0.000001
+          route_direction: clockwise
+          resume_waypoint_index: 10
+          maximum_total_decisions: 128
+          minimum_path_length_m: 5.0
+          minimum_abs_winding_area_m2: 0.5
+          maximum_return_error_m: 0.35
+          # A single sealed rollout contributes two distinct accepted-class
+          # corrections. Keeping a list prevents the later d72 STOP branch
+          # from replacing the earlier d21 MOVE_TO-vs-FACE branch.
+          pre_divergence_dagger_augmentations:
+            - enabled: true
+              branch_id: pre_d21_face_wp10
+              correction_decision_step: 21
+              observed_model_action: move_to
+              expected_expert_first_action: FACE
+              expected_pose_xy_yaw: [-0.5094012310985867, 0.7536466421432864, -10.016735076904297]
+              expected_input_sha256: e189a520c86951efe41b735c7059ccf273c24de40e91e983560a9c94427fa243
+              resume_waypoint_index: 10
+              maximum_total_decisions: 128
+            - enabled: true
+              branch_id: pre_d72_face_recover_wp43
+              correction_decision_step: 72
+              observed_model_action: stop
+              expected_expert_first_action: FACE
+              expected_pose_xy_yaw: [-1.3990058852065077, -1.9595794292964281, 54.19050669670105]
+              expected_input_sha256: 9fad78458c78a8e26ff3bea9bdc88c7eee06e015671d3b269fbabf36f0448c33
+              resume_waypoint_index: 43
+              recovery_plan_to_resume: true
+              maximum_total_decisions: 128
+
+gemma_waypoint_policy:
+  trace_dataset: data_gemma4/training/gemma_waypoint_policy_v2_operator_dagger_v9
+  hidden_cache: data_gemma4/training/gemma_waypoint_policy_v2_operator_dagger_v9_runtime_aligned_hidden
+  checkpoint_output: data_gemma4/checkpoints/gemma_waypoint_policy_v2_operator_dagger_v9_runtime_aligned
+  history_dim: 16
+  history_parameterization: selected_action_parameters_goal_progress_v2

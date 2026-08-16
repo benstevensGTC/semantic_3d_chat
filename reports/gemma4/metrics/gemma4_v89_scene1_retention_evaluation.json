@@ -1,0 +1,325 @@
+{
+  "artifact": "gemma4_v89_scene1_retention_evaluation_v1",
+  "automatic_runtime_promotion": false,
+  "checkpoint_selection_after_scoring": false,
+  "config_sha256": "6781126de7e378a27e9a4140d2e47efb7b673c8a0b3522dd762fea5214312e2c",
+  "cpu_preflight_sha256": "bc063b1cbad1d05a53e0044bfcc80f6d52f994e1ef85e0b5ed351469a987e256",
+  "deferred_final_loaded": false,
+  "development_known_smoke_trained": true,
+  "elapsed_seconds": 248.96837891708128,
+  "evaluation_predictions_path": "reports/gemma4/predictions/gemma4_v89_scene1_retention_evaluation.json",
+  "evaluation_predictions_sha256": "49ff7b9fd4010f6d3201c5ee22ca25ed11d035617910b722a53c52956b9df640",
+  "fixed_checkpoint_selected_before_scoring": true,
+  "frozen_source": {
+    "fresh_initial_state_sha256": "5686d458589b7b39599eb9e865d08ef709a43e7ca36b7496d212b1f7581dc83d",
+    "frozen_bank_count": 10,
+    "parents": {
+      "v86_scene1_demo_bridge": {
+        "metadata_sha256": "ad9534737bbe1cb443960159461f5ec9c78609cb1f2d311d05b245261f6ac54d",
+        "state_sha256": "8b6bd801716132c8aac50c6288b9ba588417dc5e6a7c2c15dd9515892f714260",
+        "weights_sha256": "3e4db9a621e915da341ba2163b7c541863c067eafc5abc55e53a50f594476015"
+      },
+      "v87_scene1_balanced_bridge": {
+        "metadata_sha256": "f82bed9eef8f215187730de036a34a50afa6e5ed88bf65e639f5fe3d6b11c136",
+        "state_sha256": "618c03e102d9a9eb98d405d5a040cd8285194539b5a4043d34f16356ac08769e",
+        "weights_sha256": "3dc027ec236347b09feeb1052476078e8a577f9df4b65b13a29a41d4b959578f"
+      },
+      "v88_scene1_augmented_bridge": {
+        "metadata_sha256": "670ef58de0ac3b9d1e9a141292ffea900848cc512b77fc12c69d9def706d3d41",
+        "state_sha256": "ff311624150056c67ad1c0a06752a77af2de89878778049ae886aa59db3376aa",
+        "weights_sha256": "95d4aaf9c42cbf796dc047b3e622cf92247c898987ab159570944861ef698cf1"
+      }
+    },
+    "v85_adapter_sha256": "163ceb462bafe4b1d38099c07ca32bcc22944ad93917222b019e75634883fd8d",
+    "v85_bank_state_sha256": {
+      "extension_v13": "4eb90fb9b0bea579d14cfcb0f61ebd5b6d566fd600bd3d5e1bfe5177a39e1b34",
+      "extension_v23_shared_kv": "5c9233bd96b381e2f63443f8a739a868a21997b28061d90fb407a46d9de2d4cb",
+      "extension_v24_shared_query": "6db2807476506b947bbaf01837490e97c12e57b1906bab671ef7c82ed36d6399",
+      "extension_v28_stage_b_query": "ac90fc60e944b792d41fc18a21daca3ed87a7ec634a7a5c8594339371b0631e9",
+      "extension_v30_joint_pair_query": "050706c300e6fb0ac8e4cc02e26c565b54a9a89505104302d4ffcedc02124c64",
+      "inherited_v12": "dec768bed654c8c4e16da0318857543ad54d8f5f68f4d24a9a87cd19ec706594",
+      "v85_strict_multiscene_bridge": "f31b8f99f77f1b7b92dafd74220e5e12ccfa35cbc8630a6d7640f2fe1f93c581"
+    },
+    "v85_metadata_sha256": "093d43c80722dd00cd3f7347d55451eca1cc45e416f6bda220157f18024ce0bd"
+  },
+  "held_out_generalization_claim": false,
+  "held_out_smoke_claim": false,
+  "leakage": {
+    "loaded_file_count": 87,
+    "loaded_file_inventory_sha256": "b0d1412ab68c80181fbcb735b30cc918a573221748a7c172a0d8dc31a3677e4c",
+    "oracle_loaded": false,
+    "protected_read_count": 0,
+    "protected_reads": []
+  },
+  "metrics": {
+    "answer_token_mean_nll": 0.1700063263987797,
+    "automatic_runtime_promotion": false,
+    "canonical_accuracy_by_answer_type": {
+      "attribute": {
+        "accuracy": 0.8333333333333334,
+        "correct": 15,
+        "total": 18
+      },
+      "count": {
+        "accuracy": 1.0,
+        "correct": 9,
+        "total": 9
+      },
+      "metric": {
+        "accuracy": 1.0,
+        "correct": 1,
+        "total": 1
+      },
+      "presence": {
+        "accuracy": 1.0,
+        "correct": 22,
+        "total": 22
+      },
+      "spatial_relation": {
+        "accuracy": 0.8604651162790697,
+        "correct": 74,
+        "total": 86
+      },
+      "support": {
+        "accuracy": 0.5,
+        "correct": 1,
+        "total": 2
+      }
+    },
+    "canonical_type_specific": {
+      "accuracy": 0.8840579710144928,
+      "correct": 122,
+      "total": 138
+    },
+    "causal_control": {
+      "canonical_prediction_changes": 2,
+      "mean_correct_memory_nll": 0.5105967409908772,
+      "mean_zero_minus_correct_nll": 2.028001558035612,
+      "mean_zero_payload_nll": 2.5385982990264893,
+      "records": [
+        {
+          "answer_type": "presence",
+          "correct_mean_nll": 0.04721107706427574,
+          "correct_memory_sha256": "a428f5147c815839ae7315a0adab952ab210814fb21dcdc5bf13b167f28a6e37",
+          "correct_prediction": "yes",
+          "question_id": "q_000080",
+          "reference_answer": "yes",
+          "scene_id": "scene_000001",
+          "zero_layout_audit": {
+            "answer_only_supervision": true,
+            "answer_tokens": 2,
+            "control_tokens": 0,
+            "memory_supplied_directly": true,
+            "memory_tokens": 738,
+            "prepared_tokens": 799,
+            "prompt_tokens": 59,
+            "question_derived_environmental_tokens": 0
+          },
+          "zero_mean_nll": 2.714301586151123,
+          "zero_minus_correct_nll": 2.6670905090868473,
+          "zero_payload_memory_sha256": "c455ed77bf3fe841a4e360e89c036ffb4e8cdb8935c97d767f556d25a9f790d8",
+          "zero_prediction": "no"
+        },
+        {
+          "answer_type": "attribute",
+          "correct_mean_nll": 0.6210207939147949,
+          "correct_memory_sha256": "a428f5147c815839ae7315a0adab952ab210814fb21dcdc5bf13b167f28a6e37",
+          "correct_prediction": "red",
+          "question_id": "q_000108",
+          "reference_answer": "red",
+          "scene_id": "scene_000001",
+          "zero_layout_audit": {
+            "answer_only_supervision": true,
+            "answer_tokens": 2,
+            "control_tokens": 0,
+            "memory_supplied_directly": true,
+            "memory_tokens": 738,
+            "prepared_tokens": 797,
+            "prompt_tokens": 57,
+            "question_derived_environmental_tokens": 0
+          },
+          "zero_mean_nll": 2.024285316467285,
+          "zero_minus_correct_nll": 1.4032645225524902,
+          "zero_payload_memory_sha256": "c455ed77bf3fe841a4e360e89c036ffb4e8cdb8935c97d767f556d25a9f790d8",
+          "zero_prediction": "inconclusive"
+        },
+        {
+          "answer_type": "spatial_relation",
+          "correct_mean_nll": 0.8635583519935608,
+          "correct_memory_sha256": "a428f5147c815839ae7315a0adab952ab210814fb21dcdc5bf13b167f28a6e37",
+          "correct_prediction": "left",
+          "question_id": "q_000014",
+          "reference_answer": "right",
+          "scene_id": "scene_000001",
+          "zero_layout_audit": {
+            "answer_only_supervision": true,
+            "answer_tokens": 2,
+            "control_tokens": 0,
+            "memory_supplied_directly": true,
+            "memory_tokens": 738,
+            "prepared_tokens": 801,
+            "prompt_tokens": 61,
+            "question_derived_environmental_tokens": 0
+          },
+          "zero_mean_nll": 2.8772079944610596,
+          "zero_minus_correct_nll": 2.013649642467499,
+          "zero_payload_memory_sha256": "c455ed77bf3fe841a4e360e89c036ffb4e8cdb8935c97d767f556d25a9f790d8",
+          "zero_prediction": "left"
+        }
+      ],
+      "row_count": 3
+    },
+    "generic_smoke": {
+      "accuracy": 1.0,
+      "correct": 3,
+      "development_known_and_trained": true,
+      "held_out": false,
+      "records": [
+        {
+          "development_known_and_trained": true,
+          "exact_correct": true,
+          "expected": "yes",
+          "held_out": false,
+          "normalized_prediction": "yes",
+          "prediction": "yes",
+          "question": "Is there a chair?",
+          "question_id": "v89_smoke_00",
+          "scene_memory_sha256": "a428f5147c815839ae7315a0adab952ab210814fb21dcdc5bf13b167f28a6e37"
+        },
+        {
+          "development_known_and_trained": true,
+          "exact_correct": true,
+          "expected": "red",
+          "held_out": false,
+          "normalized_prediction": "red",
+          "prediction": "red",
+          "question": "What color is the bowl?",
+          "question_id": "v89_smoke_01",
+          "scene_memory_sha256": "a428f5147c815839ae7315a0adab952ab210814fb21dcdc5bf13b167f28a6e37"
+        },
+        {
+          "development_known_and_trained": true,
+          "exact_correct": true,
+          "expected": "left",
+          "held_out": false,
+          "normalized_prediction": "left",
+          "prediction": "left",
+          "question": "Is the bowl left or right of the chair?",
+          "question_id": "v89_smoke_02",
+          "scene_memory_sha256": "a428f5147c815839ae7315a0adab952ab210814fb21dcdc5bf13b167f28a6e37"
+        }
+      ],
+      "total": 3
+    },
+    "model_acceptance_gate_passed": true,
+    "model_acceptance_gates": {
+      "all_scene1_canonical_accuracy_at_least_0_80": true,
+      "attribute_accuracy_at_least_0_50": true,
+      "causal_correct_memory_mean_nll_below_zero_payload": true,
+      "causal_prediction_change_at_least_1": true,
+      "exact_prefix_hash_invariance": true,
+      "exact_total_environment_input_invariance": true,
+      "exact_training_row_count_138": true,
+      "generic_live_smoke_exactly_3_of_3": true,
+      "presence_accuracy_at_least_0_75": true,
+      "protected_read_count_zero": true,
+      "spatial_relation_accuracy_at_least_0_60": true
+    },
+    "runtime_file_audit_gate_pending": true,
+    "runtime_oracle_unavailable_gate_pending": true,
+    "runtime_promotion_authorized": false,
+    "separate_runtime_packaging_authorized": true,
+    "strict_normalized_exact": {
+      "accuracy": 0.8840579710144928,
+      "correct": 122,
+      "total": 138
+    }
+  },
+  "official_test_loaded": false,
+  "official_validation_loaded": false,
+  "oracle_loaded": false,
+  "parent_v85_v86_v87_v88_mutated": false,
+  "preregistered_gates": {
+    "all_scene1_canonical_accuracy_minimum": 0.8,
+    "attribute_accuracy_minimum": 0.5,
+    "causal_correct_memory_mean_nll_below_zero_payload": true,
+    "causal_prediction_change_minimum": 1,
+    "exact_prefix_hash_invariance_required": true,
+    "exact_total_environment_input_invariance_required": true,
+    "exact_training_row_count_required": 138,
+    "forbidden_runtime_read_count_maximum": 0,
+    "live_smoke_is_development_known_and_trained": true,
+    "live_smoke_is_held_out": false,
+    "live_smoke_questions": [
+      {
+        "expected": "yes",
+        "question": "Is there a chair?"
+      },
+      {
+        "expected": "red",
+        "question": "What color is the bowl?"
+      },
+      {
+        "expected": "left",
+        "question": "Is the bowl left or right of the chair?"
+      }
+    ],
+    "live_smoke_required_correct": 3,
+    "live_smoke_total": 3,
+    "oracle_physically_unavailable_during_runtime_required": true,
+    "presence_accuracy_minimum": 0.75,
+    "runtime_promotion_only_after_all_gates": true,
+    "spatial_relation_accuracy_minimum": 0.6
+  },
+  "preregistration_sha256": "493208eb96b6bfe14267ebc05612441457a2b52751f0ca06e4fb90fab84d94a9",
+  "runtime_file_audit_gate_pending": true,
+  "runtime_oracle_unavailable_gate_pending": true,
+  "runtime_promotion_authorized": false,
+  "scene_memory": {
+    "compiled_before_question_tokenization": true,
+    "prefix_hash_invariant": true,
+    "prefix_sha256_after": "a428f5147c815839ae7315a0adab952ab210814fb21dcdc5bf13b167f28a6e37",
+    "prefix_sha256_before": "a428f5147c815839ae7315a0adab952ab210814fb21dcdc5bf13b167f28a6e37",
+    "question_conditioned_environmental_readout": false,
+    "question_dependent_retrieval": false,
+    "question_dependent_scene_processing": false,
+    "question_derived_environmental_tokens": 0,
+    "same_prefix_reused_for_every_question": true,
+    "shape": [
+      1,
+      738,
+      1536
+    ],
+    "zero_payload_prefix_sha256_after": "c455ed77bf3fe841a4e360e89c036ffb4e8cdb8935c97d767f556d25a9f790d8",
+    "zero_payload_prefix_sha256_before": "c455ed77bf3fe841a4e360e89c036ffb4e8cdb8935c97d767f556d25a9f790d8"
+  },
+  "schema_version": 89,
+  "separate_runtime_packaging_authorized": true,
+  "source_hashes": {
+    "configs/experiments/gemma4_v88_scene1_augmented_demo.yaml": "c9812271b5834f605fc7158b0fdcf5c6eab269efbc1e8fa0b5aec62c7e9b20fb",
+    "configs/runtime/gemma4_v85_strict_multiscene.yaml": "49d9595e6167fe352dc49f1ca363af396fe3d3be91d50cb430721bc74b130575",
+    "data/qa/train.jsonl": "ffa721d57849ade8fdd0811e3e1e62fe807200f710aec780dc4d3dcecd4fb0e0",
+    "data_gemma4/runtime/scene_memories/v81/scene_000001/memory.safetensors": "3427851432d8f2a3609b6205b18b8c0d9a0fcf68d8f3bf0c98c758ac64209ffb",
+    "data_gemma4/runtime/scene_memories/v81/scene_000001/runtime_metadata.json": "9ca43f9216106668afafe65007b1649621036735b512c07e330358bbeb0bcbcc",
+    "gemma_model_blob_sha256_identity": "2db5482b20d746879bb3ef79b5203e9075a2e2b98f54ec7c2f281c1477ddc550",
+    "reports/gemma4/artifacts/v85_strict_runtime_candidate/adapter.safetensors": "163ceb462bafe4b1d38099c07ca32bcc22944ad93917222b019e75634883fd8d",
+    "reports/gemma4/artifacts/v85_strict_runtime_candidate/runtime_metadata.json": "093d43c80722dd00cd3f7347d55451eca1cc45e416f6bda220157f18024ce0bd",
+    "reports/gemma4/artifacts/v86_scene1_demo_final/bridge.safetensors": "3e4db9a621e915da341ba2163b7c541863c067eafc5abc55e53a50f594476015",
+    "reports/gemma4/artifacts/v86_scene1_demo_final/runtime_metadata.json": "ad9534737bbe1cb443960159461f5ec9c78609cb1f2d311d05b245261f6ac54d",
+    "reports/gemma4/artifacts/v87_scene1_balanced_final/bridge.safetensors": "3dc027ec236347b09feeb1052476078e8a577f9df4b65b13a29a41d4b959578f",
+    "reports/gemma4/artifacts/v87_scene1_balanced_final/runtime_metadata.json": "f82bed9eef8f215187730de036a34a50afa6e5ed88bf65e639f5fe3d6b11c136",
+    "reports/gemma4/artifacts/v88_scene1_augmented_final/bridge.safetensors": "95d4aaf9c42cbf796dc047b3e622cf92247c898987ab159570944861ef698cf1",
+    "reports/gemma4/artifacts/v88_scene1_augmented_final/runtime_metadata.json": "670ef58de0ac3b9d1e9a141292ffea900848cc512b77fc12c69d9def706d3d41",
+    "reports/gemma4/metrics/gemma4_v88_scene1_augmented_cpu_preflight.json": "0d352bc80c6537351ccd1d5cea83d029eff12af14757a8ff1e7ac5ceea1d4fd5",
+    "reports/gemma4/metrics/gemma4_v88_scene1_augmented_evaluation.json": "40b4c591d84a3b1ae99c301d017e9c6212308203a319e3c511f22583e5a78641",
+    "reports/gemma4/metrics/gemma4_v88_scene1_augmented_preregistration.json": "765db3b7420d6bf8b1c4a9122ca211497ab9985ca8a85ae7bd524ca523c0657d",
+    "reports/gemma4/metrics/gemma4_v88_scene1_augmented_training.json": "d356e641d84de01aa89484f5ec4b7034b3dadc3719a9a2488696537ad5b05d43",
+    "reports/gemma4/predictions/gemma4_v87_scene1_balanced_evaluation.json": "588fd19952f8f5d4ed42e26b9b377dfb008d8e92466ccce2567282263db3ad23",
+    "reports/gemma4/predictions/gemma4_v88_scene1_augmented_evaluation.json": "a7c815fde05383aa2f4aa07ec0127ab7950470d91b1f34f5b171e5f688850f56",
+    "src/semantic_3d_chat/evaluation/evaluate_v89_scene1_retention.py": "de2ba05a30e7a3d3a1bc77e2b6a30f1c2c8240c4729b5a5f4dfdb1f9dcd00c1d",
+    "src/semantic_3d_chat/evaluation/v89_scene1_retention_preflight.py": "c64d63309676fae32df10f38debaa0131409347822c1f5578690a09b0c345e29",
+    "src/semantic_3d_chat/training/train_v89_scene1_retention.py": "51e13fbd1109f4f28d2775fa0c03868be8e4ea50590a8e854b9c4fa436c55c07"
+  },
+  "status": "model_gates_pass_separate_runtime_packaging_required",
+  "training_report_sha256": "1980a694bca8268056ca7485c755127c9fc94fd2cd377de3e5556ccaba887ea6"
+}

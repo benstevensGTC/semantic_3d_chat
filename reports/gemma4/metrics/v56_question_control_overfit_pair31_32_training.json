@@ -1,0 +1,161 @@
+{
+  "architecture": {
+    "attention_dim": 256,
+    "control_tokens": 4,
+    "hidden_size": 1536,
+    "name": "full_scene_question_control_v1",
+    "output_scale": 0.25,
+    "parameter_count": 3287552,
+    "uniform_floor": 0.05
+  },
+  "artifact": "v56_question_control_training",
+  "base": {
+    "checkpoint_files": [
+      {
+        "path": "adapter.safetensors",
+        "sha256": "6c627f0a0d9efb7100489c24cbd4acafe10456b79280a64a85399a21cb541daf",
+        "size_bytes": 55956825
+      },
+      {
+        "path": "metadata.json",
+        "sha256": "db1435f8d38ca587e34dcd55dc4d37532efc0504bfb62bc115838dc0ab7a7ece",
+        "size_bytes": 459323
+      },
+      {
+        "path": "runtime_metadata.json",
+        "sha256": "807515461c71b08c08dfbd08a184a653e791413748530fa69402512eca6f6fdd",
+        "size_bytes": 15858
+      }
+    ],
+    "checkpoint_sha256": "3e128b40c1b73bb32750285679cda6b1bea364e67465e986a94a81dfc95e81e8",
+    "runtime_config_effective_sha256": "714c60ce9ccb1dff69c72f6618f8afb6f31bc60a830b5ee0fb794fedaa8a321e",
+    "runtime_config_file_sha256": "7cef35a5acbc0da740f79c61e0684fff329713836a4034d4fda024d6bf5372d0"
+  },
+  "checkpoint": {
+    "runtime_metadata_sha256": "8edf692061d556833319da19ddab49cd6ad5d8553e5f999b586485f91f9c5e37",
+    "weights_sha256": "9ac0e8113913a27619657108df5f6f4c3af02ec9d4bb0ff21fe2e4a2bfa2bd96"
+  },
+  "curriculum": {
+    "changed_pair_unit_count": 4,
+    "paired_two_side_optimizer_steps": true,
+    "schedule_sha256": "4169fae0eda8686d6f3363c642862e31057a81c554ce6ec5d44b35e3547010d5",
+    "step_count": 400,
+    "steps_by_kind": {
+      "broad": 160,
+      "changed_pair": 160,
+      "count_replay": 80
+    }
+  },
+  "inputs": {
+    "prefix_cache_created": false,
+    "prefix_cache_manifest_sha256": "87bab021b151ea0a5b58b929642e64c2f4f7de4bdf80c4c39aec7578b04f989f",
+    "prefix_sha256_by_scene": {
+      "scene_000031": "8aeb5ee07bfc955b41f5793d58d8a92f9a16836d86987468e901caa129917b58",
+      "scene_000032": "3da64e27df1035d8b7304675c2917e3a9308b3a81ae8e949de8b43513623b3c4"
+    },
+    "training_qa_sha256": "01721bf904b1ab0b65ce8acac6e366287040873cda1356da6c70c4981abe7619",
+    "training_record_count": 48,
+    "training_scene_ids": [
+      "scene_000031",
+      "scene_000032"
+    ]
+  },
+  "optimization": {
+    "device": "mps",
+    "elapsed_seconds": 981.8897984169889,
+    "epoch_loss": [
+      {
+        "epoch": 0,
+        "maximum_answer_ce": 6.864362716674805,
+        "mean_answer_ce": 1.5511494939681143,
+        "minimum_answer_ce": 0.0041441540233790874,
+        "steps": 40
+      },
+      {
+        "epoch": 1,
+        "maximum_answer_ce": 2.7401134967803955,
+        "mean_answer_ce": 0.6048190814151895,
+        "minimum_answer_ce": 0.0023891429882496595,
+        "steps": 40
+      },
+      {
+        "epoch": 2,
+        "maximum_answer_ce": 3.1076972484588623,
+        "mean_answer_ce": 0.508329643344041,
+        "minimum_answer_ce": 0.0021893056109547615,
+        "steps": 40
+      },
+      {
+        "epoch": 3,
+        "maximum_answer_ce": 1.3480877876281738,
+        "mean_answer_ce": 0.36528399458766214,
+        "minimum_answer_ce": 0.0005880375974811614,
+        "steps": 40
+      },
+      {
+        "epoch": 4,
+        "maximum_answer_ce": 1.1378214359283447,
+        "mean_answer_ce": 0.28239982468367086,
+        "minimum_answer_ce": 0.0006075105629861355,
+        "steps": 40
+      },
+      {
+        "epoch": 5,
+        "maximum_answer_ce": 1.2676739692687988,
+        "mean_answer_ce": 0.266641625041666,
+        "minimum_answer_ce": 0.0005750807467848063,
+        "steps": 40
+      },
+      {
+        "epoch": 6,
+        "maximum_answer_ce": 2.7756991386413574,
+        "mean_answer_ce": 0.2548951201759337,
+        "minimum_answer_ce": 0.0004019009356852621,
+        "steps": 40
+      },
+      {
+        "epoch": 7,
+        "maximum_answer_ce": 1.156387209892273,
+        "mean_answer_ce": 0.25920604170896694,
+        "minimum_answer_ce": 0.00025722431018948555,
+        "steps": 40
+      },
+      {
+        "epoch": 8,
+        "maximum_answer_ce": 0.8214174509048462,
+        "mean_answer_ce": 0.20333943696896312,
+        "minimum_answer_ce": 0.00025712751084938645,
+        "steps": 40
+      },
+      {
+        "epoch": 9,
+        "maximum_answer_ce": 1.0078152418136597,
+        "mean_answer_ce": 0.18707281808019616,
+        "minimum_answer_ce": 0.0002926635788753629,
+        "steps": 40
+      }
+    ],
+    "epochs": 10,
+    "gradient_clip_norm": 1.0,
+    "learning_rate": 0.0003,
+    "maximum_preclip_gradient_norm": 166.36962890625,
+    "optimizer_steps": 400,
+    "seed": 56056,
+    "weight_decay": 0.0
+  },
+  "passed": true,
+  "schema_version": 1,
+  "scope": {
+    "answer_only_cross_entropy": true,
+    "base_parameter_count": 5118259098,
+    "base_scene_stack_frozen": true,
+    "deferred_final_loaded": false,
+    "fresh_development_loaded": false,
+    "only_control_head_optimized": true,
+    "optimizer_state_saved": false,
+    "oracle_loaded": false,
+    "paired_two_side_optimizer_steps": true,
+    "question_dependent_scene_retrieval": false,
+    "question_inputs_to_scene_prefix_cache": false
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "acceptance_gates": {
+    "continuous_context_audit_required": true,
+    "maximum_action_failure_count": 0,
+    "maximum_collision_count": 0,
+    "maximum_policy_rejection_count": 0,
+    "minimum_success_count": 6,
+    "oracle_and_qa_runtime_file_count": 0,
+    "previously_passing_tasks_must_remain_passing": [
+      "nav_000",
+      "nav_001",
+      "nav_002",
+      "nav_003",
+      "nav_004"
+    ],
+    "task_count": 6,
+    "update_after_scan_maximum_target_standoff_m": 0.85,
+    "update_after_scan_required_checks": [
+      "all_executed_actions_succeeded",
+      "no_collision",
+      "post_scan_motion",
+      "required_stop",
+      "successful_scan",
+      "target_progress",
+      "target_standoff",
+      "updated_prefix_consumed"
+    ],
+    "update_after_scan_task": "nav_005"
+  },
+  "authorized_change": {
+    "collision_interlock_changed": false,
+    "environmental_text_inputs": [],
+    "kind": "bounded_runtime_interlock_grammar_correction",
+    "learned_checkpoint_changed": false,
+    "object_vocabulary_added": false,
+    "only_behavior_change": "recognize_action_only_scan_or_look_preamble_before_terminal_approach",
+    "oracle_inputs_at_runtime": false,
+    "policy_architecture_changed": false,
+    "scoring_spec_changed": false,
+    "training_data_changed": false
+  },
+  "benchmark_rerun_completed": false,
+  "created_at_utc": "2026-08-13T20:14:46.597912+00:00",
+  "full_gemma_model_loaded_by_preregistration": false,
+  "implementation_source_hashes": {
+    "Makefile": "fb06a58a750616ba65ef7c5b6e1ff7ad37472ea245901b453cfb951acb05015e",
+    "scripts/audit_navigation_continuous_context.py": "e9bbdc283d30396d01fb14168f4e156d8a889db22437bb0bc267a61a07c9aac8",
+    "scripts/run_learned_navigation_benchmark.sh": "5946a66b4449bbbcb982dacdb7c5c499ac53786b40a0b8880da24ed13b4b5daf",
+    "scripts/run_llm_navigation_inference.py": "a9314e60045e13247b6465b25463294868c3f644c48277b01d44d579ca777c64",
+    "scripts/score_llm_navigation.py": "34a57dace3121e4d77f7e848c14c185ae351c8ff85789578608db8230184edd2",
+    "src/semantic_3d_chat/evaluation/llm_navigation_benchmark.py": "abb05f9d427fa57f83ebd3edf3f62329fc40d41e1230fc9a59ded715113fc8c8",
+    "src/semantic_3d_chat/evaluation/navigation_policy_v3_1_preregistration.py": "0f5d372755a4b8415acd18a247599224d0b7e221a09a7314ffcb15aed557e3bc",
+    "src/semantic_3d_chat/robot/action_context.py": "47c263e74c3df6dea0deb25eb66da1c6826ce513b0459cf122be1a69511f4979",
+    "src/semantic_3d_chat/robot/conversation_cli.py": "318f5b85aa4b16b585768fdc70d8516559af68422517427170835a95fff15b62",
+    "src/semantic_3d_chat/robot/navigation_policy_v3.py": "f79740d4add945d29913b6e0d956fc53454532b2af1f16540babfae848924665",
+    "src/semantic_3d_chat/robot/runtime_refresh.py": "d0b0be78e8ad948f8e2d2abfcc01ab6a9a496517f7eb2613fb94dff204a2681a",
+    "src/semantic_3d_chat/robot/state_encoder.py": "914079ddef0a156756c35ae8be49f82b4b8d45e51da993b2fb39412def8d5c1b"
+  },
+  "input_artifact_hashes": {
+    "configs/benchmarks/llm_navigation_v2_scene_000001.json": "29bd12966f28b0b9ecc4ba444af25bde712b98512d7c74e322cbc7019e4f5e07",
+    "configs/benchmarks/oracle/llm_navigation_v2_scene_000001.json": "586e57cdadddd05287816d55090b0a20da615ddfe45b7e90079565ccc25a9196",
+    "configs/runtime/embodied_navigation_v2.yaml": "5ee4610104f4d8058a5fd739678f0e400c2181d6875e0e223727bbbef40ccb13",
+    "data_gemma4/checkpoints/navigation_policy_v3/policy.safetensors": "975c7c6c5e103dd1bb055feb2eceff6cc7fe9ab82a3f7f492a8fbdb5a26cc87c",
+    "data_gemma4/checkpoints/navigation_policy_v3/runtime_metadata.json": "1350fb92e667a793088c7f4e4a3063f3aad0b218f50fff10c418ae850e5cc6d8",
+    "reports/gemma4/metrics/llm_navigation_inference_access_learned_v3.json": "33fe6fd2356f9d4363c3aab57ac83acadb2df72e50950c46b6affe69e4d0c4a6",
+    "reports/gemma4/metrics/llm_navigation_scene_000001_learned_v3.json": "e62e8375cdc9d7e1a80e43fed5b02861e0e9d3f08325af287cee2bb957d6126e",
+    "reports/gemma4/predictions/llm_navigation_scene_000001_learned_v3.json": "d5768be296ecc26bae02162b9dd564064fa62247966f98a132051068e1a6eed3"
+  },
+  "parent_result": {
+    "collision_count": 0,
+    "failed_check": "target_standoff",
+    "failed_task_id": "nav_005",
+    "final_target_standoff_m": 1.6304395335850022,
+    "status": "historical_v3_5_of_6_target_standoff_failure",
+    "success_count": 5,
+    "task_count": 6
+  },
+  "runtime_promotion_authorized": false,
+  "runtime_version": "v3.1",
+  "schema": "semantic_3d_chat.navigation_policy_v3_1_preregistration.v1",
+  "status": "sealed_before_v3_1_live_successor_run",
+  "successor_outputs": {
+    "continuous_context_audit": "reports/gemma4/metrics/navigation_continuous_context_v3_1.json",
+    "inference_audit": "reports/gemma4/metrics/llm_navigation_inference_access_learned_v3_1.json",
+    "journal": "reports/gemma4/predictions/llm_navigation_scene_000001_learned_v3_1.json",
+    "score": "reports/gemma4/metrics/llm_navigation_scene_000001_learned_v3_1.json"
+  },
+  "successor_outputs_absent_at_preregistration": true
+}

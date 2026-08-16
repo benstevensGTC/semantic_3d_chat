@@ -1,0 +1,212 @@
+{
+  "acceptance_gates": {
+    "maximum_validation_argument_mae": 0.16,
+    "minimum_collision_risk_accuracy": 0.9,
+    "minimum_shuffled_clearance_family_drop": 0.1,
+    "minimum_unsafe_motion_rejection": 0.95,
+    "minimum_validation_action_accuracy": 0.9,
+    "minimum_validation_stop_recall": 0.88,
+    "minimum_validation_turn_sign_accuracy": 0.92,
+    "minimum_validation_update_after_scan_accuracy": 0.87,
+    "minimum_wrong_target_turn_sign_drop": 0.05,
+    "minimum_zero_target_targeted_accuracy_drop": 0.8
+  },
+  "architecture_contract": {
+    "all_map_voxels_scored_for_navigation_grounding": true,
+    "clearance_coordinate_frame": "robot",
+    "clearance_from_sanitized_anonymous_geometry_only": true,
+    "clearance_max_range_m": 1.0,
+    "clearance_ray_count": 24,
+    "exact_collision_mask_authoritative": true,
+    "final_collision_interlock": true,
+    "navigation_target_grounding_query_dependent": true,
+    "primary_static_qa_retrieval": false,
+    "ray_zero": "forward",
+    "risk_probe_distances_m": [
+      0.125,
+      0.25,
+      0.375,
+      0.5
+    ],
+    "static_scene_prefix_computed_before_question": true,
+    "static_scene_prefix_question_independent": true,
+    "unsafe_motion_fallback": "highest_safe_nonterminal_action"
+  },
+  "controls": {
+    "held_out_primary": true,
+    "live_six_task_run_only_after_all_offline_gates_pass": true,
+    "shuffled_clearance": true,
+    "unsafe_motion_mask": true,
+    "validation_scenes_never_receive_gradients": true,
+    "wrong_target": true,
+    "zero_clearance": true,
+    "zero_target": true
+  },
+  "data": {
+    "benchmark_oracle_used_for_training_or_selection": false,
+    "clearance_and_collision_targets_from_numeric_maps_only": true,
+    "live_benchmark_used_for_training_or_selection": false,
+    "map_sha256": {
+      "scene_000011": "5af3a345d0a3157332eb86a7af9a3e8d629470d58c57f77f2e8bd8833ef0fa13",
+      "scene_000012": "d4bb0aae80746b50d6e7e78f65a0f43471e536f112eb4e6637be19c97085914e",
+      "scene_000013": "278fb23c36438e5b853688c0651330827e4b2507fee3f29d2c37ec406c047bf5",
+      "scene_000014": "2d49925ae607bcfce529878ee5af8714bb9caef2379ab511a9375911b5f5ff06",
+      "scene_000015": "b93d7e27ea2203f5ea77bb0d30cb3cd647219a66cdcecf48430529260e702870",
+      "scene_000016": "ff2499555a28325bc7106dd8115f99dd4af6d43a4ad5b0b93de498319e506e4f",
+      "scene_000017": "7541e794e698b44078460125f97f4742af91ea8679187f730d9c7056cc40343b",
+      "scene_000018": "4a87c7ec0f1da5de131f6e9e0a1d8b29e3a307eaf42c5e4104561671f03e7067",
+      "scene_000019": "611af72b9606590fec25b0b7a6762022d28acf7de07ee5b2f7160ab397a1126b",
+      "scene_000020": "9c0da2446fbdcd9bda7007514cb8fcdcb309b098abcd1428dde9289649cbdff6",
+      "scene_000021": "b6f8132f2ca1f268e16e8b801c65ba56c01b36c1f0c121541581ff82fc6ac9fb",
+      "scene_000022": "74080614a7c244963747436e97547fccacadb7878cbe873e0ffc506857bc88cc",
+      "scene_000023": "6c96b76054f562b79de9c32012908a4736ba964d517110d024a2c747472c9811",
+      "scene_000024": "3aff892543392a31ec006fea3c37af0aa6af28a6d27d6ccaeacdff9d54bec1fb",
+      "scene_000031": "a707ee29f6e39fac004cc18b33dcfefbc6a28b6824e036c02fa304128892c8fb",
+      "scene_000032": "70b94ea60748e3a50845fc8bebe43cc32927955a97135d7a892b2f7c0bf3ca71",
+      "scene_000033": "eb20224a51cb930e81eef5d128c01b873a0c4b0323ce21d81a497eddda3ede9c",
+      "scene_000034": "4abed7f4d7f21ada04145435a1676937fab1d3b98aa08db7f488053e7be5691e",
+      "scene_000035": "26cb816d1f7bd29ad4da0151e92b4a1e21813335f4f9a1d132507dbdf8c50d5e",
+      "scene_000036": "304774e4ba2ad94e8765f191616f1820e85b9578371b9afd43cefe2d485b9a65",
+      "scene_000037": "6c1f754c745d8a8f3e688cf8d3ec082a2d26284fc88024d029bf0a671c2ed824",
+      "scene_000039": "3477bd444659e0a1c7564426bcb6dff2618fe1f90bf5023e63995310bacf42a6"
+    },
+    "oracle_coordinates_used_only_in_blocked_training_target_state": true,
+    "prepared_v4_dataset_sha256": "c1a383b27bbfb114354c083fc90a7f92eaefc445d2bf8f71b818bd66826ea8ec",
+    "scene_splits_disjoint": true,
+    "source_v3_dataset_sha256": "d8d97ac248a5821eb971301efb742c25c996627bae22d6417c02755e61d50f9d",
+    "train_scene_count": 14,
+    "train_scene_ids": [
+      "scene_000011",
+      "scene_000012",
+      "scene_000013",
+      "scene_000014",
+      "scene_000015",
+      "scene_000016",
+      "scene_000017",
+      "scene_000018",
+      "scene_000019",
+      "scene_000020",
+      "scene_000021",
+      "scene_000022",
+      "scene_000023",
+      "scene_000024"
+    ],
+    "validation_scene_count": 8,
+    "validation_scene_ids": [
+      "scene_000031",
+      "scene_000032",
+      "scene_000033",
+      "scene_000034",
+      "scene_000035",
+      "scene_000036",
+      "scene_000037",
+      "scene_000039"
+    ]
+  },
+  "diagnosed_predecessor_failure": {
+    "failed_task_id": "nav_005",
+    "failure": "an_unsafe_forward_move_was_postprocessed_directly_to_stop_outside_the_required_target_standoff",
+    "live_success_count": 5,
+    "live_task_count": 6,
+    "predecessor": "navigation_policy_v3",
+    "semantic_target_xy_error_m": 0.157,
+    "v3_artifacts_modified": false
+  },
+  "frozen_v3_initialization": {
+    "architecture": "continuous_semantic_grounded_navigation_controller_v3",
+    "checkpoint_tree_sha256": "1998d7313d023e65a5bef4c52eee00d867b4006344de51c6830e35c32f7ed1e0",
+    "environmental_text_inputs": [],
+    "runtime_oracle_inputs": false,
+    "schema_version": 3,
+    "task_trained": true,
+    "training_dataset_sha256": "d8d97ac248a5821eb971301efb742c25c996627bae22d6417c02755e61d50f9d",
+    "weights_sha256": "975c7c6c5e103dd1bb055feb2eceff6cc7fe9ab82a3f7f492a8fbdb5a26cc87c"
+  },
+  "implementation_source_hashes": {
+    "scripts/audit_navigation_policy_v4_runtime.py": "09408ab74fb60926d3e9b4292ce08e97acf312edfa5f4018672740313adc66c8",
+    "scripts/evaluate_navigation_policy_v4.py": "792f53c79463e18e9b6f1d703bf52236ca34981d2f5748a75f3d4e375b22faf7",
+    "scripts/preregister_navigation_policy_v4.py": "beffda4a1dfa8d26bcc09252215b455e086aafffbbd5bb97d0ed596b432dfa87",
+    "scripts/run_llm_navigation_inference.py": "4ea17f443fed4fb822889d2704bc712ee98d431d031a1169f74f0ffd8ba62233",
+    "scripts/train_navigation_policy_v4.py": "c664cac220b91e03dd7a53f52cbedca7443b870840ed7b34eb8f6d4f488b880a",
+    "src/semantic_3d_chat/evaluation/llm_navigation_benchmark.py": "085f86994ed13e244b951e4ad41680bba0b77f88bb3a3d3c7c880aa852535ad2",
+    "src/semantic_3d_chat/evaluation/navigation_policy_v4_preregistration.py": "135b8c84f7ab18be330defc0b7498f1d36d50837ec1db0e2fb93c4c00955ee18",
+    "src/semantic_3d_chat/robot/collision.py": "c88c8fdf4dd9377f829991c122f2639be35a7824db18edf48a4baa23151b6e3d",
+    "src/semantic_3d_chat/robot/conversation_cli.py": "a4deb2a6d3fa2344d3cd003f7274196caeeec98c7ca7a3d50eb5ff39be3fea0f",
+    "src/semantic_3d_chat/robot/llm_tool_policy.py": "c07dfb2a088c1863ec4060da6e4c118f15998fca1e19f9a65073a4408410fef1",
+    "src/semantic_3d_chat/robot/navigation_policy_v4.py": "33e1ff9ff82d0dc25b844676a0f45d71c17502c69e2504edea29f9ece1fd3d08",
+    "src/semantic_3d_chat/scene_encoder/map_io.py": "10c53adf865caf4d2323c919e807ed05781202e9c6395e9ea54f02fa6c456047",
+    "src/semantic_3d_chat/training/train_navigation_policy_v4.py": "45df6b41e0ef56378413d0b302a4f35252e180e11e776af73e7d6728607ce518"
+  },
+  "input_artifact_hashes": {
+    "configs/experiments/navigation_policy_v3.yaml": "9daf6bdbf2d059064a5b447c984b0cd394cb647c2994499110060dd90ebaea3a",
+    "configs/experiments/navigation_policy_v4.yaml": "a6ab85e71b53268e8caa0aa55238a18dc636ec0430a52d0b7ad0f93ec3758962",
+    "configs/runtime/embodied_v54.yaml": "ba7c47e377d3b1a352e0c8f6348b7c72d39cf372526afea37da3c4dd711212ca",
+    "configs/runtime/gemma4_v54.yaml": "891c58faaaa5fcd2ed76c7e3871f14c5d8c5ae2e05d9fa4ddd5193773d40e56b",
+    "data_gemma4/checkpoints/navigation_policy_v3/policy.safetensors": "975c7c6c5e103dd1bb055feb2eceff6cc7fe9ab82a3f7f492a8fbdb5a26cc87c",
+    "data_gemma4/checkpoints/navigation_policy_v3/runtime_metadata.json": "1350fb92e667a793088c7f4e4a3063f3aad0b218f50fff10c418ae850e5cc6d8",
+    "data_gemma4/checkpoints/robot_state_numeric_v1/runtime_metadata.json": "c48b8748dbde04f2c9294321974b1b13be2d77083970f051ba1c11a9b42d1985",
+    "data_gemma4/checkpoints/robot_state_numeric_v1/state.safetensors": "5d6aa13208264e0a99755d84e8f68b7727249b274c460e9d4e26541cd8e46938",
+    "data_gemma4/scene_tokens/v56_question_control_full_prefixes/manifest.json": "5a288a7fef65a957ba7b20132c63380cfadc7edbc37b32c1885037f939b9db61",
+    "data_gemma4/training/navigation_policy_v3/manifest.json": "005756918c54fbffbb7c6db45e2170174d85f87f278e755e538418d6eb880243",
+    "data_gemma4/training/navigation_policy_v3/traces.jsonl": "72434178ff1cf23c2dfeb98d52cb7b4c443fcc8715c1dd4ee883d87ae127e7ad"
+  },
+  "merged_config_sha256": "ce05862663d12161745c4d62a587a41f6e804c813c0d0233cb99406220e8f2aa",
+  "publication": {
+    "checkpoint_written_only_if_every_gate_passes": true,
+    "no_posthoc_threshold_change": true,
+    "rejected_arm_publishes_no_checkpoint": true,
+    "training_report_create_once": true
+  },
+  "research_change": "frozen_v3_plus_anonymous_24_ray_robot_frame_clearance_residual_collision_risk_head_and_exact_safe_nonterminal_action_mask",
+  "runtime_separation": {
+    "checkpoint_inventory": [
+      "policy.safetensors",
+      "runtime_metadata.json"
+    ],
+    "environmental_text_inputs": [],
+    "labels_or_object_ids": false,
+    "oracle_inputs": false,
+    "preregistration_is_not_a_runtime_input": true
+  },
+  "schema": "semantic_3d_chat.navigation_policy_v4_preregistration.v1",
+  "single_arm": {
+    "frozen_v3_base": true,
+    "hyperparameter_search": false,
+    "hyperparameters": {
+      "argument_loss_weight": 0.5,
+      "batch_size": 32,
+      "clearance_change_loss_weight": 0.05,
+      "clearance_change_margin": 0.08,
+      "clearance_max_range_m": 1.0,
+      "clearance_ray_count": 24,
+      "collision_probe_distances_m": [
+        0.125,
+        0.25,
+        0.375,
+        0.5
+      ],
+      "collision_risk_loss_weight": 0.25,
+      "device": "cpu",
+      "early_stopping_patience": 10,
+      "epochs": 48,
+      "gradient_clip_norm": 1.0,
+      "hidden_size": 1536,
+      "learning_rate": 0.0003,
+      "model_dim": 128,
+      "robot_token_count": 4,
+      "scene_token_count": 258,
+      "seed": 20260813,
+      "turn_sign_loss_weight": 0.25,
+      "weight_decay": 0.0001
+    },
+    "one_arm_only": true,
+    "seed": 20260813,
+    "trainable_components": [
+      "clearance_encoder",
+      "action_delta",
+      "argument_delta",
+      "collision_risk_head"
+    ]
+  },
+  "status": "sealed_before_optimizer_or_live_v4_benchmark"
+}

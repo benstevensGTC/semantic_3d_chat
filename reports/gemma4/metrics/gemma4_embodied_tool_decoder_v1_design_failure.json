@@ -1,0 +1,63 @@
+{
+  "artifact": "gemma4_embodied_tool_decoder_v1_design_failure",
+  "checkpoint": {
+    "ignored_checkpoint_tensor_shapes": {
+      "model.language_model.layers.34.self_attn.k_proj.weight": [
+        512,
+        1536
+      ],
+      "model.language_model.layers.34.self_attn.v_proj.weight": [
+        512,
+        1536
+      ]
+    },
+    "model_id": "google/gemma-4-E2B-it",
+    "model_revision": "3e22461f65e89153144f8adb70e3b8c2cc9845a7",
+    "model_safetensors_sha256": "2db5482b20d746879bb3ef79b5203e9075a2e2b98f54ec7c2f281c1477ddc550",
+    "weights_present_in_archive": true
+  },
+  "design": {
+    "config_path": "configs/experiments/gemma4_embodied_tool_decoder_v1.yaml",
+    "config_sha256": "5154334157a4741bdc46bfdec889aa149e62e8ca6f06605779242609fee22f0d",
+    "preregistration_path": "reports/gemma4/metrics/gemma4_embodied_tool_decoder_preregistration_v1.json",
+    "preregistration_sha256": "b86a767eccb72ed8a64009ef5878a4024525fdbd4d09266a7e78df08cc7c2b3a",
+    "source_path": "src/semantic_3d_chat/language/gemma4_tool_decoder_v1.py",
+    "source_sha256": "367ffbd07d32d299eebeab8ecbead60da46a218e50e1bea2ed29038711c15ff2"
+  },
+  "execution": {
+    "checkpoint_published": false,
+    "full_checkpoint_loaded": false,
+    "full_model_generation_executed": false,
+    "mps_used": false,
+    "multi_update_training_executed": false,
+    "optimizer_steps": 0,
+    "training_executed": false
+  },
+  "failure": {
+    "exception_message": "LoRA target must be torch.nn.Linear: model.language_model.layers.34.self_attn.k_proj (<missing>)",
+    "exception_type": "TypeError",
+    "failed_operation": "install_lora_adapters",
+    "reproduction": "PYTHONPATH=src .venv-gemma4/bin/python -c 'from semantic_3d_chat.evaluation.gemma4_tool_decoder_preregistration_v1 import run_tiny_cpu_backward_smoke; run_tiny_cpu_backward_smoke()'",
+    "structural_smoke_device": "cpu",
+    "structural_smoke_full_checkpoint_loaded": false
+  },
+  "finding": {
+    "first_kv_shared_layer_index": 15,
+    "layer_34_attention_type": "full_attention",
+    "layer_34_is_kv_shared_layer": true,
+    "layer_34_loaded_k_proj_present": false,
+    "layer_34_loaded_v_proj_present": false,
+    "num_hidden_layers": 35,
+    "num_kv_shared_layers": 20,
+    "reason": "Transformers intentionally omits K/V modules on Gemma-4 layers 15 through 34 because those layers consume shared K/V states. The corresponding checkpoint tensors are explicitly ignored as unexpected keys and cannot form a trainable runtime adapter surface.",
+    "transformers_version": "5.14.1"
+  },
+  "resolution": {
+    "successor": "gemma4_embodied_tool_decoder_v2",
+    "successor_target": "model.language_model.layers.34.mlp.down_proj",
+    "v1_must_not_be_used_for_training": true,
+    "v1_preregistration_preserved_as_failed_design_evidence": true
+  },
+  "schema_version": 1,
+  "status": "terminal_design_failure_before_training"
+}

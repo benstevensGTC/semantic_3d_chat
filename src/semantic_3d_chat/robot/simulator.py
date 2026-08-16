@@ -7,14 +7,14 @@ import os
 import re
 import tempfile
 from collections import deque
-from collections.abc import Callable
+from collections.abc import Callable, Mapping
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
 import numpy as np
 
-from semantic_3d_chat.config import PROJECT_ROOT
+from semantic_3d_chat.config import PROJECT_ROOT, project_path
 from semantic_3d_chat.robot.collision import CollisionCheck, NumericCollisionMap
 from semantic_3d_chat.robot.state_encoder import NumericRobotState
 
@@ -95,6 +95,7 @@ class NumericMapScanner:
             self.centers_world = archive["centers_world"].astype(np.float32)
             self.mean_rgb = archive["mean_rgb"].astype(np.float32)
             self.observation_count = archive["observation_count"].astype(np.int64)
+        self._initial_observation_count = self.observation_count.copy()
         count = len(self.centers_world)
         if (
             self.centers_world.shape != (count, 3)
@@ -209,6 +210,20 @@ class NumericMapScanner:
             observed_mask[indices] = True
         return len(indices)
 
+    def reset_episode(self) -> None:
+        """Restore scanner-local numeric coverage for a deterministic reset."""
+
+        self.observation_count = self._initial_observation_count.copy()
+
+    def snapshot_episode_state(self) -> np.ndarray:
+        return self.observation_count.copy()
+
+    def restore_episode_state(self, state: np.ndarray) -> None:
+        value = np.asarray(state, dtype=np.int64)
+        if value.shape != self.observation_count.shape:
+            raise ValueError("Scanner episode snapshot shape changed")
+        self.observation_count = value.copy()
+
 
 @dataclass
 class RobotState:
@@ -225,6 +240,7 @@ class RobotState:
     scan_coverage: float = 0.0
     scan_count: int = 0
     scene_version: int = 0
+    map_sha256: str | None = None
     action_count: int = 0
     stopped: bool = False
 
@@ -239,7 +255,20 @@ class RobotState:
         return _normalize_degrees(self.body_yaw_degrees + self.camera_yaw_offset_degrees)
 
 
-MapUpdateHook = Callable[[NumericObservation, int], None]
+@dataclass(frozen=True)
+class PreparedSceneReset:
+    """Side-effect-free numerical scene state ready for one atomic swap."""
+
+    scene_id: str
+    seed: int
+    collision_map: NumericCollisionMap
+    scanner: NumericMapScanner
+    observed_mask: np.ndarray
+    position_xy_m: np.ndarray
+    body_yaw_degrees: float
+
+
+MapUpdateHook = Callable[[NumericObservation, int], Mapping[str, Any] | None]
 
 
 class EmbodiedCameraSimulator:
@@ -275,8 +304,8 @@ class EmbodiedCameraSimulator:
     def _map_path(self, scene_id: str) -> Path:
         if not _OPAQUE_SCENE_ID.fullmatch(scene_id):
             raise ValueError("scene_id must match scene_ followed by six digits")
-        path = (self.data_root / "maps" / scene_id / "voxel_map.npz").resolve()
-        expected_parent = (self.data_root / "maps" / scene_id).resolve()
+        path = project_path(self.config, "maps", scene_id, "voxel_map.npz").resolve()
+        expected_parent = project_path(self.config, "maps", scene_id).resolve()
         if path.parent != expected_parent or not path.is_file():
             raise FileNotFoundError(f"Numeric map is unavailable for {scene_id}")
         return path
@@ -362,6 +391,7 @@ class EmbodiedCameraSimulator:
         distance_moved: float = 0.0,
         turn_degrees: float = 0.0,
         visible_voxels: int = 0,
+        valid_depth_pixels: int = 0,
         observation_id: str | None = None,
         clearance_m: float | None = None,
         record: bool = True,
@@ -397,11 +427,14 @@ class EmbodiedCameraSimulator:
             "scan_coverage": float(self.state.scan_coverage),
             "scan_count": int(self.state.scan_count),
             "visible_voxels": int(visible_voxels),
+            "valid_depth_pixels": int(valid_depth_pixels),
             "observation_id": observation_id,
             "clearance_m": None if clearance_m is None else float(clearance_m),
             "action_count": int(self.state.action_count),
             "stopped": bool(self.state.stopped),
         }
+        if self.state.map_sha256 is not None:
+            result["map_sha256"] = self.state.map_sha256
         if record:
             self.history.append(result.copy())
         return result
@@ -533,21 +566,56 @@ class EmbodiedCameraSimulator:
             yaw_degrees=self.state.camera_yaw_degrees,
             pitch_degrees=self.state.pitch_degrees,
         )
-        visible = self.scanner.integrate(observation, self.observed_mask)
+        valid_depth_pixels = int(np.count_nonzero(observation.depth_m > 0))
+        # Point-splat observations carry exact source-voxel indices.  A fresh
+        # renderer has no such identity channel, so do not mislabel its valid
+        # depth pixels as visible map voxels.
+        visible_voxels = len(observation.visible_voxel_indices)
+        proposed_version = self.state.scene_version + int(bool(valid_depth_pixels))
+        update_result: Mapping[str, Any] | None = None
+        if valid_depth_pixels and self.map_update_hook is not None:
+            try:
+                update_result = self.map_update_hook(observation, proposed_version)
+                if update_result is not None:
+                    returned_version = update_result.get("map_version")
+                    returned_hash = update_result.get("map_sha256")
+                    if returned_version != proposed_version or (
+                        not isinstance(returned_hash, str)
+                        or re.fullmatch(r"[0-9a-f]{64}", returned_hash) is None
+                    ):
+                        raise ValueError("Map update hook returned an invalid receipt")
+            except (OSError, RuntimeError, TypeError, ValueError):
+                # The observation is a disposable sanitized artifact.  Map,
+                # coverage, scan count, and scene version remain unchanged so
+                # the same numeric pose can retry safely.
+                self.state.action_count += 1
+                self.state.linear_velocity_xy_m = np.zeros(2, dtype=np.float64)
+                self.state.angular_velocity_degrees = 0.0
+                self.state.collision = False
+                return self._result(False, error_code="E_MAP_UPDATE")
+        integrated = self.scanner.integrate(observation, self.observed_mask)
+        if integrated != valid_depth_pixels:
+            raise RuntimeError("Numeric observation integration count changed")
         self.state.scan_count = observation_index
         self.state.action_count += 1
         self.state.linear_velocity_xy_m = np.zeros(2, dtype=np.float64)
         self.state.angular_velocity_degrees = 0.0
         self.state.collision = False
-        if visible:
-            self.state.scene_version += 1
-            self.state.scan_coverage = float(np.mean(self.observed_mask))
-            if self.map_update_hook is not None:
-                self.map_update_hook(observation, self.state.scene_version)
+        if valid_depth_pixels:
+            self.state.scene_version = proposed_version
+            if update_result is not None:
+                self.state.map_sha256 = str(update_result["map_sha256"])
+            directional_coverage = getattr(self.scanner, "directional_coverage", None)
+            self.state.scan_coverage = (
+                float(directional_coverage)
+                if directional_coverage is not None
+                else float(np.mean(self.observed_mask))
+            )
         return self._result(
-            bool(visible),
-            error_code=None if visible else "E_EMPTY_SCAN",
-            visible_voxels=visible,
+            bool(valid_depth_pixels),
+            error_code=None if valid_depth_pixels else "E_EMPTY_SCAN",
+            visible_voxels=visible_voxels,
+            valid_depth_pixels=valid_depth_pixels,
             observation_id=observation.observation_id,
         )
 
@@ -570,15 +638,61 @@ class EmbodiedCameraSimulator:
                 return self._protocol_failure("E_NUMERIC")
             raise
         try:
-            collision_map, scanner, observed_mask = self._build_scene_runtime(scene_id)
-            position = self._safe_initial_xy(seed_value, collision_map)
+            prepared = self.prepare_scene_reset(scene_id, seed_value)
         except (FileNotFoundError, ValueError, RuntimeError):
             if hasattr(self, "state"):
                 return self._protocol_failure("E_SCENE_UNAVAILABLE")
             raise
-        self.collision_map = collision_map
+        return self.commit_scene_reset(prepared)
+
+    def prepare_scene_reset(self, scene_id: str, seed: Any) -> PreparedSceneReset:
+        """Validate and build a replacement episode without mutating current state."""
+
+        if not isinstance(scene_id, str) or not _OPAQUE_SCENE_ID.fullmatch(scene_id):
+            raise ValueError("scene_id must match scene_ followed by six digits")
+        seed_value = _seed(seed)
+        collision_map, scanner, observed_mask = self._build_scene_runtime(scene_id)
+        position = self._safe_initial_xy(seed_value, collision_map)
+        body_yaw_degrees = _normalize_degrees(
+            _number(
+                self.settings.get("initial_body_yaw_degrees", 0.0),
+                name="initial_body_yaw_degrees",
+            )
+        )
+        return PreparedSceneReset(
+            scene_id=scene_id,
+            seed=seed_value,
+            collision_map=collision_map,
+            scanner=scanner,
+            observed_mask=observed_mask,
+            position_xy_m=position,
+            body_yaw_degrees=body_yaw_degrees,
+        )
+
+    def commit_scene_reset(
+        self,
+        prepared: PreparedSceneReset,
+        *,
+        scanner_override: Any | None = None,
+        reset_scanner: bool = True,
+    ) -> dict[str, Any]:
+        """Commit a prepared reset, optionally retaining a sanitized renderer."""
+
+        if not isinstance(prepared, PreparedSceneReset):
+            raise TypeError("prepared reset has an invalid type")
+        scanner = prepared.scanner if scanner_override is None else scanner_override
+        if reset_scanner:
+            reset_episode = getattr(scanner, "reset_episode", None)
+            if callable(reset_episode):
+                reset_episode()
+        self.collision_map = prepared.collision_map
         self.scanner = scanner
-        self.observed_mask = observed_mask
-        self.state = RobotState(scene_id=scene_id, seed=seed_value, position_xy_m=position)
+        self.observed_mask = prepared.observed_mask.copy()
+        self.state = RobotState(
+            scene_id=prepared.scene_id,
+            seed=prepared.seed,
+            position_xy_m=prepared.position_xy_m.copy(),
+            body_yaw_degrees=prepared.body_yaw_degrees,
+        )
         self.history.clear()
         return self._result(True)

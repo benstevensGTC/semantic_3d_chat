@@ -1,0 +1,62 @@
+{
+  "artifact": "v59_authorized_multiscene_train_gate",
+  "baseline_sha256": "d20d5928df4dbe492570fe900b1fbd9c38e4c92485a4c4a3498174aaeb89b907",
+  "checks": {
+    "anchor_canonical": false,
+    "anchor_changed_units": false,
+    "anchor_complete_units": false,
+    "anchor_exact": false,
+    "changed_rows_use_continuous_control": true,
+    "control_audit_global_bounded_no_softmax": true,
+    "expansion_canonical": false,
+    "expansion_changed_units": false,
+    "expansion_complete_units": false,
+    "expansion_exact": false,
+    "retention_canonical": true,
+    "retention_exact": true,
+    "retention_exact_no_control_output_identity": true,
+    "retention_preserves_every_no_control_correct_key": true,
+    "retention_rows_use_exact_no_control_route": true
+  },
+  "deferred_final_loaded": false,
+  "fresh_development_loaded": false,
+  "metrics": {
+    "anchor_changed": {
+      "canonical": 0,
+      "changed_units": 2,
+      "complete_units": 0,
+      "exact": 0,
+      "total": 8,
+      "unit_total": 4
+    },
+    "expansion_changed": {
+      "canonical": 3,
+      "changed_units": 3,
+      "complete_units": 0,
+      "exact": 3,
+      "total": 14,
+      "unit_total": 7
+    },
+    "predictions_sha256": "2e4b0d55b78b98afbd5095534d54e66586d7a984ad4d55c4d0e660ff30b07435",
+    "retention": {
+      "canonical": 15,
+      "exact": 15,
+      "total": 40
+    }
+  },
+  "passed": false,
+  "schema_version": 1,
+  "thresholds": {
+    "anchor_canonical": 8,
+    "anchor_changed_units": 4,
+    "anchor_complete_units": 4,
+    "anchor_exact": 8,
+    "expansion_canonical": 9,
+    "expansion_changed_units": 5,
+    "expansion_complete_units": 2,
+    "expansion_exact": 9,
+    "maximum_control_rms": 0.2,
+    "retention_canonical": 15,
+    "retention_exact": 15
+  }
+}

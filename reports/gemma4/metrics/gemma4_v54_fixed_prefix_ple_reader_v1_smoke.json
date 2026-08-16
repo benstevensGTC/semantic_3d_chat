@@ -1,0 +1,37 @@
+{
+  "artifact": "gemma4_v54_fixed_prefix_ple_reader_v1_gradient_smoke",
+  "base_dtype": "torch.bfloat16",
+  "correct_answer_nll": 0.5170166492462158,
+  "device": "mps",
+  "elapsed_seconds": 13.114532332867384,
+  "environmental_text_inputs": [],
+  "gradient_by_module": {
+    "model.language_model.per_layer_model_projection": {
+      "lora_a": 0.0,
+      "lora_b": 0.2632919251918793,
+      "total_l2": 0.2632919251918793
+    }
+  },
+  "gradient_l2": 0.2632919251918793,
+  "initial_adapter_state_sha256": "313ffb9e69f7afdf78830dbc6113ecc3d84dedbffc66bae6bf199160bd825c76",
+  "initial_retention_kl": 1.7583897715667263e-06,
+  "initial_wrong_prefix_margin": 0.0347561240196228,
+  "loss": 0.7322608828544617,
+  "memory": {
+    "mps_current_allocated_bytes": 254571520,
+    "mps_driver_allocated_bytes": 15845965824,
+    "peak_process_rss_bytes": 7890731008
+  },
+  "passed": false,
+  "prefix_shape": [
+    1,
+    258,
+    1536
+  ],
+  "preregistration_sha256": "07c28a95badf87c08692532ed1b8f9064af37763f11bc8c469581dae147bff52",
+  "question_dependent_scene_retrieval": false,
+  "schema_version": 1,
+  "status": "failed",
+  "trainable_parameter_count": 41984,
+  "wrong_answer_nll": 0.5517727732658386
+}

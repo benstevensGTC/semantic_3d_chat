@@ -1,0 +1,407 @@
+{
+  "answers_questions_or_oracle_serialized": false,
+  "artifact": "v94_strong_causal_label_isolated_score_v1",
+  "automatic_runtime_promotion": false,
+  "candidate_state_sha256": "9f503f0b2c605238a6f32c15740c0600702d46da08a527d867fbc19e6b639452",
+  "candidate_weights_sha256": "574418f9458610a5d0007001c4ba732a0a8a4fd590e3b9bc4fcdd8481a646079",
+  "cannot_alter_v94_gates": true,
+  "cannot_authorize_packaging": true,
+  "cannot_authorize_promotion": true,
+  "channel_identifiability": {
+    "normal": {
+      "available_in_sealed_evaluation_artifact": false,
+      "excluded_control": "remove_normals",
+      "included_control": null,
+      "independently_identifiable_before_scene_tokenization": true,
+      "observed_nonzero_value_count_across_six_scenes": 0,
+      "reason": "all six sealed coarsened normal tensors are exactly zero; remove_normals would produce identical input and is not evidence"
+    },
+    "rgb": {
+      "included_control": "remove_rgb",
+      "independently_identifiable_before_scene_tokenization": true
+    },
+    "semantic_features": {
+      "included_control": "semantic_payload_shuffle",
+      "independently_identifiable_before_scene_tokenization": true
+    },
+    "viewpoint": {
+      "included_control": null,
+      "independently_identifiable_before_scene_tokenization": false,
+      "reason": "view_direction is present in the fused NPZ but load_map_tensors does not expose it and PointTokenProjection does not consume it; zeroing it would produce an identical direct memory"
+    },
+    "xyz_position": {
+      "included_control": "position_spatial_shuffle",
+      "independently_identifiable_before_scene_tokenization": true
+    }
+  },
+  "conditions": [
+    "primary",
+    "zero_full_scene",
+    "wrong_scene_swap",
+    "full_interior_token_permutation",
+    "position_spatial_shuffle",
+    "remove_rgb",
+    "semantic_payload_shuffle"
+  ],
+  "control_cache_manifest_sha256": "83bcbffb2f41efc6caa645e629696bd08ce8d552fc90b8e0a415a2c036b11433",
+  "correct_cache_manifest_sha256": "d03bb0b0b1da545d2eef40582fc494f3aea0ec6009e41fb72a9e96e270840591",
+  "evaluation_profile": "full",
+  "labels_opened_only_by_separate_scorer": true,
+  "limitations": [
+    "These are posthoc interventions, not preregistered V94 promotion gates; they cannot authorize runtime release.",
+    "The full-interior permutation preserves all 736 token rows and native BOI/EOI but intentionally scrambles both atlas and base-latent ordering; it is a broad causal destruction control, not a channel-isolated one.",
+    "Semantic and position controls isolate explicit voxel input channels, but the recompiled 738-token memories nonlinearly mix those channels.",
+    "RGB removal is a valid pre-tokenizer channel control, but color information may also be redundantly encoded in visual semantics.",
+    "Normal removal is excluded: every normal value in all six sealed evaluation maps is already zero, so the proposed arm is an input-identical no-op.",
+    "View direction is not consumed by the current point tokenizer, so a viewpoint-removal arm is unsupported rather than reported as evidence.",
+    "No answer-token NLL is measured by this model-free scorer.",
+    "The representative-core profile is a label-blind 36-question screen of four direct-memory arms; targeted voxel-channel controls are measured only by the full profile."
+  ],
+  "metrics": {
+    "arms": {
+      "full_interior_token_permutation": {
+        "accuracy": 0.6620370370370371,
+        "by_answer_type": {
+          "attribute": {
+            "accuracy": 0.3333333333333333,
+            "correct": 16,
+            "total": 48
+          },
+          "count": {
+            "accuracy": 0.9523809523809523,
+            "correct": 40,
+            "total": 42
+          },
+          "metric": {
+            "accuracy": 1.0,
+            "correct": 6,
+            "total": 6
+          },
+          "orientation": {
+            "accuracy": 1.0,
+            "correct": 6,
+            "total": 6
+          },
+          "presence": {
+            "accuracy": 0.8095238095238095,
+            "correct": 34,
+            "total": 42
+          },
+          "spatial_relation": {
+            "accuracy": 0.5208333333333334,
+            "correct": 25,
+            "total": 48
+          },
+          "support": {
+            "accuracy": 0.6666666666666666,
+            "correct": 16,
+            "total": 24
+          }
+        },
+        "correct": 143,
+        "total": 216
+      },
+      "position_spatial_shuffle": {
+        "accuracy": 0.6111111111111112,
+        "by_answer_type": {
+          "attribute": {
+            "accuracy": 0.16666666666666666,
+            "correct": 8,
+            "total": 48
+          },
+          "count": {
+            "accuracy": 1.0,
+            "correct": 42,
+            "total": 42
+          },
+          "metric": {
+            "accuracy": 1.0,
+            "correct": 6,
+            "total": 6
+          },
+          "orientation": {
+            "accuracy": 1.0,
+            "correct": 6,
+            "total": 6
+          },
+          "presence": {
+            "accuracy": 0.7142857142857143,
+            "correct": 30,
+            "total": 42
+          },
+          "spatial_relation": {
+            "accuracy": 0.5208333333333334,
+            "correct": 25,
+            "total": 48
+          },
+          "support": {
+            "accuracy": 0.625,
+            "correct": 15,
+            "total": 24
+          }
+        },
+        "correct": 132,
+        "total": 216
+      },
+      "primary": {
+        "accuracy": 0.6620370370370371,
+        "by_answer_type": {
+          "attribute": {
+            "accuracy": 0.375,
+            "correct": 18,
+            "total": 48
+          },
+          "count": {
+            "accuracy": 0.9761904761904762,
+            "correct": 41,
+            "total": 42
+          },
+          "metric": {
+            "accuracy": 1.0,
+            "correct": 6,
+            "total": 6
+          },
+          "orientation": {
+            "accuracy": 1.0,
+            "correct": 6,
+            "total": 6
+          },
+          "presence": {
+            "accuracy": 0.7619047619047619,
+            "correct": 32,
+            "total": 42
+          },
+          "spatial_relation": {
+            "accuracy": 0.5208333333333334,
+            "correct": 25,
+            "total": 48
+          },
+          "support": {
+            "accuracy": 0.625,
+            "correct": 15,
+            "total": 24
+          }
+        },
+        "correct": 143,
+        "total": 216
+      },
+      "remove_rgb": {
+        "accuracy": 0.6805555555555556,
+        "by_answer_type": {
+          "attribute": {
+            "accuracy": 0.4166666666666667,
+            "correct": 20,
+            "total": 48
+          },
+          "count": {
+            "accuracy": 0.9761904761904762,
+            "correct": 41,
+            "total": 42
+          },
+          "metric": {
+            "accuracy": 1.0,
+            "correct": 6,
+            "total": 6
+          },
+          "orientation": {
+            "accuracy": 1.0,
+            "correct": 6,
+            "total": 6
+          },
+          "presence": {
+            "accuracy": 0.7857142857142857,
+            "correct": 33,
+            "total": 42
+          },
+          "spatial_relation": {
+            "accuracy": 0.5416666666666666,
+            "correct": 26,
+            "total": 48
+          },
+          "support": {
+            "accuracy": 0.625,
+            "correct": 15,
+            "total": 24
+          }
+        },
+        "correct": 147,
+        "total": 216
+      },
+      "semantic_payload_shuffle": {
+        "accuracy": 0.6064814814814815,
+        "by_answer_type": {
+          "attribute": {
+            "accuracy": 0.16666666666666666,
+            "correct": 8,
+            "total": 48
+          },
+          "count": {
+            "accuracy": 1.0,
+            "correct": 42,
+            "total": 42
+          },
+          "metric": {
+            "accuracy": 1.0,
+            "correct": 6,
+            "total": 6
+          },
+          "orientation": {
+            "accuracy": 1.0,
+            "correct": 6,
+            "total": 6
+          },
+          "presence": {
+            "accuracy": 0.7142857142857143,
+            "correct": 30,
+            "total": 42
+          },
+          "spatial_relation": {
+            "accuracy": 0.4791666666666667,
+            "correct": 23,
+            "total": 48
+          },
+          "support": {
+            "accuracy": 0.6666666666666666,
+            "correct": 16,
+            "total": 24
+          }
+        },
+        "correct": 131,
+        "total": 216
+      },
+      "wrong_scene_swap": {
+        "accuracy": 0.6481481481481481,
+        "by_answer_type": {
+          "attribute": {
+            "accuracy": 0.375,
+            "correct": 18,
+            "total": 48
+          },
+          "count": {
+            "accuracy": 0.9761904761904762,
+            "correct": 41,
+            "total": 42
+          },
+          "metric": {
+            "accuracy": 1.0,
+            "correct": 6,
+            "total": 6
+          },
+          "orientation": {
+            "accuracy": 1.0,
+            "correct": 6,
+            "total": 6
+          },
+          "presence": {
+            "accuracy": 0.7619047619047619,
+            "correct": 32,
+            "total": 42
+          },
+          "spatial_relation": {
+            "accuracy": 0.5208333333333334,
+            "correct": 25,
+            "total": 48
+          },
+          "support": {
+            "accuracy": 0.5,
+            "correct": 12,
+            "total": 24
+          }
+        },
+        "correct": 140,
+        "total": 216
+      },
+      "zero_full_scene": {
+        "accuracy": 0.39351851851851855,
+        "by_answer_type": {
+          "attribute": {
+            "accuracy": 0.16666666666666666,
+            "correct": 8,
+            "total": 48
+          },
+          "count": {
+            "accuracy": 0.7619047619047619,
+            "correct": 32,
+            "total": 42
+          },
+          "metric": {
+            "accuracy": 0.0,
+            "correct": 0,
+            "total": 6
+          },
+          "orientation": {
+            "accuracy": 0.0,
+            "correct": 0,
+            "total": 6
+          },
+          "presence": {
+            "accuracy": 0.47619047619047616,
+            "correct": 20,
+            "total": 42
+          },
+          "spatial_relation": {
+            "accuracy": 0.3958333333333333,
+            "correct": 19,
+            "total": 48
+          },
+          "support": {
+            "accuracy": 0.25,
+            "correct": 6,
+            "total": 24
+          }
+        },
+        "correct": 85,
+        "total": 216
+      }
+    },
+    "comparisons": {
+      "full_interior_token_permutation": {
+        "accuracy_drop_from_primary": 0.0,
+        "prediction_change_count": 57,
+        "prediction_change_rate": 0.2638888888888889
+      },
+      "position_spatial_shuffle": {
+        "accuracy_drop_from_primary": 0.05092592592592593,
+        "prediction_change_count": 72,
+        "prediction_change_rate": 0.3333333333333333
+      },
+      "remove_rgb": {
+        "accuracy_drop_from_primary": -0.01851851851851849,
+        "prediction_change_count": 8,
+        "prediction_change_rate": 0.037037037037037035
+      },
+      "semantic_payload_shuffle": {
+        "accuracy_drop_from_primary": 0.05555555555555558,
+        "prediction_change_count": 73,
+        "prediction_change_rate": 0.33796296296296297
+      },
+      "wrong_scene_swap": {
+        "accuracy_drop_from_primary": 0.01388888888888895,
+        "prediction_change_count": 30,
+        "prediction_change_rate": 0.1388888888888889
+      },
+      "zero_full_scene": {
+        "accuracy_drop_from_primary": 0.26851851851851855,
+        "prediction_change_count": 138,
+        "prediction_change_rate": 0.6388888888888888
+      }
+    },
+    "diagnostic_scope": "posthoc_non_preregistered_not_a_promotion_gate",
+    "evaluation_profile": "full",
+    "runtime_promotion_authorized": false
+  },
+  "prediction_access_sha256": "1a586a3ab94afd0093d9d67f13968e22353b3b3551891cd0906fa27edfe813a4",
+  "prediction_bundle_authenticated_before_labels_opened": true,
+  "prediction_completion_sha256": "83232c1820ff8696acff8e4d669fde5a8a330bc9b3420e9e4b5ddbc5a9854e4d",
+  "prediction_sha256": "38a9917951e1be5989175de298d7b89b8896c93962db20a3a59967d5c8403660",
+  "question_manifest_sha256": "74fcfb181bbf809dd6dc3b07800de728558298149e9d76325870c6b4d665b0a2",
+  "reference_sha256": "30ed9006ed442198b3e2444e0c3cdda73cb77c01e7285f31000709b94bb8acad",
+  "row_count": 216,
+  "runtime_promotion_authorized": false,
+  "scene_count": 6,
+  "schema_version": 1,
+  "scorer_loaded_model": false,
+  "source_chain_sha256": "7305afcd0fcd9009f76f2b27d85b4734351fb095cd47d9ab9f099e01effc7ce5",
+  "status": "terminal_measured_posthoc_diagnostic_non_promotable",
+  "terminal_diagnostic_only": true
+}

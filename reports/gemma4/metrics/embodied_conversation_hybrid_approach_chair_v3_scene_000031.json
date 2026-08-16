@@ -1,0 +1,3028 @@
+{
+  "audit_report": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/gemma4/metrics/embodied_conversation_hybrid_approach_chair_v3_access_scene_000031.json",
+  "environmental_text_inputs": [],
+  "forbidden_access_count": 0,
+  "loaded_file_count": 137,
+  "passed_runtime_audit": true,
+  "scene_id": "scene_000031",
+  "schema": "semantic_3d_chat.embodied_conversation_result.v1",
+  "startup": {
+    "bounded_action_protocol": true,
+    "environmental_text_inputs": [],
+    "gemma_tool_decoder": {
+      "adapter_inactive_outside_tool_generation": false,
+      "checkpoint": null,
+      "collision_interlock_required": false,
+      "complete_scene_prefix_required": false,
+      "continuous_target_tokens_required": false,
+      "enabled": false,
+      "environmental_text_inputs": [],
+      "numeric_clearance_tokens_required": false,
+      "numeric_robot_tokens_required": false,
+      "oracle_inputs_at_runtime": false,
+      "promoted_runtime": false,
+      "question_independent_static_scene_prefix_required": false,
+      "saved_runtime_execution_gate_passed": false,
+      "task_trained": false,
+      "training_status": null
+    },
+    "learned_navigation_closed_loop": {
+      "enabled": true,
+      "max_steps": 12,
+      "reselects_after_each_refreshed_prefix": true,
+      "termination_conditions": [
+        "stop",
+        "numeric_alignment_goal_converged",
+        "numeric_approach_goal_converged",
+        "action_failure",
+        "policy_rejection",
+        "max_steps"
+      ]
+    },
+    "llm_tool_policy": {
+      "backend": "learned_navigation_v3",
+      "continuous_scene_and_robot_prefix": true,
+      "enabled": true,
+      "fallback_policy": "fail_closed",
+      "local_inference": true,
+      "malformed_output_executes": false,
+      "max_retries": 1,
+      "training_status": "supervised_continuous_semantic_grounded_navigation_policy_v3"
+    },
+    "local_inference": true,
+    "navigation_policy": {
+      "all_map_voxels_scored_for_grounding": true,
+      "checkpoint": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/checkpoints/navigation_policy_v3",
+      "complete_scene_prefix_required": true,
+      "continuous_semantic_grounding": true,
+      "enabled": true,
+      "environmental_text_inputs": [],
+      "every_scene_token_processed": true,
+      "exact_collision_mask": false,
+      "grounding_performed_at_startup": false,
+      "numeric_alignment_convergence_interlock": {
+        "action_modes": [
+          "face",
+          "turn_toward",
+          "turn_to_face",
+          "look_at"
+        ],
+        "approach": {
+          "action_modes": [
+            "move_closer",
+            "approach",
+            "move_toward"
+          ],
+          "collision_limited_safe_stop": true,
+          "explicit_terminal_stop_required": true,
+          "fresh_grounding_required_before_stop": true,
+          "heading_deadband_degrees": 15.0,
+          "minimum_progress_m": 0.15,
+          "minimum_safe_step_m": 0.02,
+          "numeric_translation_required_before_stop": true,
+          "target_standoff_m": 0.5
+        },
+        "bounded_by_max_turn_degrees": true,
+        "deadband_degrees": 3.0,
+        "enabled": true,
+        "environmental_text_inputs": [],
+        "explicit_terminal_stop_required": true,
+        "fresh_grounding_required_before_stop": true,
+        "oracle_inputs_at_runtime": false,
+        "remaining_angle_source": "continuous_target_xyz_and_numeric_robot_yaw",
+        "stalled_turn_degrees": 1.0
+      },
+      "numeric_clearance_state": false,
+      "numeric_robot_tokens_required": true,
+      "oracle_inputs_at_runtime": false,
+      "query_dependent_grounding_navigation_only": true,
+      "task_trained": true,
+      "training_status": "supervised_continuous_semantic_grounded_navigation_policy_v3",
+      "version": 3
+    },
+    "phase": "embodied_conversation_ready",
+    "prefix_binding": {
+      "active_binding_sha256": "cc02185ef0e980c2432ae8194ff8980cacd5921385573bcaa62c82b9f1449ee4",
+      "active_prefix_sha256": "1de20cbe907a74343082aa86a70edee5998ee4259eaf8368b56e1512f04f1b37",
+      "binding_sha256": "33d957dfa4e528321c6551ccc43e0d0048f02fea22fd2e036cd8694f61a8e23c",
+      "map_sha256": "4c6349ec362cbcdc7111242e047d2798838c54e4b0e2ec72c9b145de05fa5918",
+      "map_version": 0,
+      "processed_voxels": 8709,
+      "robot_state_encoder_sha256": "62cfdd2a9edcd0a450da19907009fdf3f5ed96cac4cedafae75f775bb96077c8",
+      "robot_state_sha256": "e4fe503c367d94240e91466d201db103553b9effbf90b82104c10ab7a1530049",
+      "robot_tokens_sha256": "6be3c46661e78deee1995bf83c95b9585931c8282bf9a9eb0b6810185da758e0",
+      "scene_control_signature_sha256": "dabbf14203bd6868254615e033d180a1622b29827cde82e9b916d3493895eb40",
+      "scene_id": "scene_000031",
+      "scene_prefix_sha256": "8aeb5ee07bfc955b41f5793d58d8a92f9a16836d86987468e901caa129917b58",
+      "schema": "semantic_3d_chat.scene_prefix_binding.v2",
+      "source_voxels": 76407
+    },
+    "question_conditioned_scene_readout_tokens": true,
+    "runtime": {
+      "all_voxels_transformed": true,
+      "answer_class_codebook_runtime_loaded": false,
+      "answer_text_runtime_loaded": false,
+      "block_cross_application_order": "after_v33_dense_sidecar_before_prefix_composer",
+      "block_cross_input_attestation": {
+        "all_occupied_block_tokens_accounted": true,
+        "all_scene_slots_accounted": true,
+        "all_voxels_covered": true,
+        "block_positions_match_normalized_centers": true,
+        "block_token_count": 6204,
+        "normalized_block_positions_used": true,
+        "occupied_block_indices_match_map": true,
+        "occupied_blocks": 3102,
+        "question_dependent_scene_processing": false,
+        "residual_processed_every_block_token": true,
+        "residual_question_inputs_used": false,
+        "voxel_count": 8709,
+        "voxel_to_block_assignments_match_map": true
+      },
+      "block_cross_residual": {
+        "architecture_version": "all_block_fp32_cross_residual_zero_output_v1",
+        "attention": "custom_fp32_all_block_cross_attention",
+        "attention_dim": 256,
+        "base_normalization": "non_affine_layer_norm",
+        "block_dim": 384,
+        "block_normalization": "mean_center_then_non_affine_layer_norm",
+        "enabled": true,
+        "environmental_metadata_inputs": false,
+        "expected_initial_state_sha256": "72ae7f492f5953e58d809b6782d559dc64669637d5d6a79ae98f3a31296a12cd",
+        "head_dim": 64,
+        "heads": 4,
+        "initialization_seed": 35035,
+        "latent_count": 256,
+        "output_projection_initialization": "exact_zero",
+        "parameter_count": 983040,
+        "question_dependent_inputs": false,
+        "residual_scale": 0.25,
+        "scene_dim": 1536,
+        "schema_version": 1,
+        "spatial_temperature": 0.2,
+        "uniform_floor": 0.01
+      },
+      "block_cross_residual_attention_minimum": 1.6118632402140065e-06,
+      "block_cross_residual_delta_rms": 0.011064667254686356,
+      "block_cross_residual_initial_state_sha256": "72ae7f492f5953e58d809b6782d559dc64669637d5d6a79ae98f3a31296a12cd",
+      "block_cross_residual_parameter_count": 983040,
+      "block_cross_residual_state_sha256": "6dfec95d4319d12f87c8d6ca76375718426abc3fa66fd2966809dd3de23c71f0",
+      "block_cross_residual_zero_output_equivalence": {
+        "all_occupied_block_tokens_accounted": true,
+        "all_scene_slots_accounted": true,
+        "all_voxels_covered": true,
+        "application_order": "after_v33_dense_sidecar_before_prefix_composer",
+        "base": "exact_v33_update64_post_sidecar_scene_tokens",
+        "normalized_block_positions_used": true,
+        "question_dependent_scene_processing": false,
+        "verified": true
+      },
+      "checkpoint": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/runtime/checkpoints/gemma4_v54_release_v1",
+      "control_architecture": "dense_full_scene_continuous_control_v75",
+      "control_schema_version": 75,
+      "dense_alignment": {
+        "aligned_dim": 1536,
+        "alpha": 16.0,
+        "application_mode": "coverage_sidecar",
+        "architecture_version": "middle_late_to_aligned_tail_low_rank_v1",
+        "base_semantic_path_modified": false,
+        "dense_dim": 1536,
+        "enabled": true,
+        "environmental_metadata_inputs": false,
+        "every_voxel_retained": true,
+        "expected_initial_state_sha256": "bdff604538cfc82ba16ce5a701a573a4a64de486791c6e4ae7c4d5faba094874",
+        "initialization_algorithm": "cpu_kaiming_uniform_a_exact_zero_b",
+        "initialization_seed": 25025,
+        "layer_norm_elementwise_affine": false,
+        "question_dependent_inputs": false,
+        "rank": 8,
+        "scale": 2.0,
+        "schema_version": 1,
+        "sidecar_scale": 0.0,
+        "spatial_reduction": "none"
+      },
+      "dense_alignment_initial_state_sha256": "bdff604538cfc82ba16ce5a701a573a4a64de486791c6e4ae7c4d5faba094874",
+      "dense_alignment_parameter_count": 24576,
+      "dense_alignment_state_sha256": "5c8721fd1ff789b7a8a55e82f31fd7faae54b8114616d3a29efd8605190bad6e",
+      "dense_alignment_transformed_voxels": 8709,
+      "dense_sidecar_adapter": {
+        "application_point": "post_frozen_scene_stack",
+        "architecture_version": "post_stack_dense_sidecar_zero_output_v1",
+        "base_identity_path": true,
+        "channel_gain_initialization": "exact_zero",
+        "direct_route": "full_dimensional_tanh_bounded",
+        "enabled": true,
+        "environmental_metadata_inputs": false,
+        "expected_initial_state_sha256": "fd8abd78bed2d04ac2f83d70564028285c361729c62591a05e3eddcbb8794d02",
+        "fourier_bands": 8,
+        "initialization_seed": 28028,
+        "max_direct_scale": 0.25,
+        "normalization": "separate_affine_layer_norm",
+        "output_projection_initialization": "exact_zero",
+        "question_dependent_inputs": false,
+        "schema_version": 1,
+        "width": 128
+      },
+      "dense_sidecar_adapter_delta_rms": 0.04273536801338196,
+      "dense_sidecar_adapter_parameter_count": 604416,
+      "dense_sidecar_adapter_state_sha256": "82a8472d0f0eff3290a67f3ed06e3dd5f5ffc3ca0e5d3d4ef90518ef91c8db20",
+      "dense_sidecar_application_order": "after_global_and_signed_x_before_prefix_composer",
+      "device": "mps",
+      "environment_conditioned_input_sha256": "8aeb5ee07bfc955b41f5793d58d8a92f9a16836d86987468e901caa129917b58",
+      "environmental_text_inputs": [],
+      "frozen_block_cross_source_stack_state_sha256": "ce059b3be41abe24775500edb3c3113a768d440f3bef9c2660dad640f4f06b24",
+      "frozen_global_scene_residual_state_sha256": "ce3bf864eed6dd4a50f1b67296981e144d6a79e9cf192ad9a9230f2ae18208dc",
+      "gemma4_native_image_contract": {
+        "boi_token_id": 255999,
+        "bos_token_id": 2,
+        "eoi_token_id": 258882,
+        "image_token_id": 258880,
+        "model_revision": "3e22461f65e89153144f8adb70e3b8c2cc9845a7",
+        "pad_token_id": 0,
+        "schema_version": 1,
+        "use_bidirectional_attention": null
+      },
+      "global_scene_residual": {
+        "architecture_version": "zero_spatial_mean_content_gate_v1",
+        "content_gate": "bias_free_scalar_sigmoid_centered_content",
+        "enabled": true,
+        "expected_initial_state_sha256": "f7f6353edb6216029bd155e2baab1b5051c85f297a0e6d6b63210354fe0ff0e0",
+        "fourier_bands": 4,
+        "gate_temperature": 1.0,
+        "initialization_seed": 18018,
+        "schema_version": 2,
+        "spatial_centering": "all_slots_fp32",
+        "width": 128
+      },
+      "global_scene_residual_state_sha256": "ce3bf864eed6dd4a50f1b67296981e144d6a79e9cf192ad9a9230f2ae18208dc",
+      "language_backend": "gemma4",
+      "language_hidden_dim": 1536,
+      "lora": {
+        "adapter_parameter_count": 509952,
+        "banks": [
+          {
+            "adapter_parameter_count": 45056,
+            "alpha": 8.0,
+            "dropout": 0.0,
+            "expected_initial_state_sha256": "dec768bed654c8c4e16da0318857543ad54d8f5f68f4d24a9a87cd19ec706594",
+            "initialization_algorithm": "checkpoint_overwrite",
+            "initialization_seed": null,
+            "name": "inherited_v12",
+            "rank": 4,
+            "target_modules": [
+              "model.language_model.layers.34.self_attn.q_proj",
+              "model.language_model.layers.34.self_attn.o_proj"
+            ],
+            "trainable": false
+          },
+          {
+            "adapter_parameter_count": 229376,
+            "alpha": 16.0,
+            "dropout": 0.0,
+            "expected_initial_state_sha256": "4eb90fb9b0bea579d14cfcb0f61ebd5b6d566fd600bd3d5e1bfe5177a39e1b34",
+            "initialization_algorithm": "checkpoint_overwrite",
+            "initialization_seed": null,
+            "name": "extension_v13",
+            "rank": 8,
+            "target_modules": [
+              "model.language_model.layers.30.self_attn.q_proj",
+              "model.language_model.layers.30.self_attn.o_proj",
+              "model.language_model.layers.31.self_attn.q_proj",
+              "model.language_model.layers.31.self_attn.o_proj",
+              "model.language_model.layers.32.self_attn.q_proj",
+              "model.language_model.layers.32.self_attn.o_proj",
+              "model.language_model.layers.33.self_attn.q_proj",
+              "model.language_model.layers.33.self_attn.o_proj"
+            ],
+            "trainable": false
+          },
+          {
+            "adapter_parameter_count": 30720,
+            "alpha": 8.0,
+            "dropout": 0.0,
+            "expected_initial_state_sha256": "5c9233bd96b381e2f63443f8a739a868a21997b28061d90fb407a46d9de2d4cb",
+            "initialization_algorithm": "checkpoint_overwrite",
+            "initialization_seed": null,
+            "name": "extension_v23_shared_kv",
+            "rank": 4,
+            "target_modules": [
+              "model.language_model.layers.13.self_attn.k_proj",
+              "model.language_model.layers.13.self_attn.v_proj",
+              "model.language_model.layers.14.self_attn.k_proj",
+              "model.language_model.layers.14.self_attn.v_proj"
+            ],
+            "trainable": false
+          },
+          {
+            "adapter_parameter_count": 36864,
+            "alpha": 8.0,
+            "dropout": 0.0,
+            "expected_initial_state_sha256": "6db2807476506b947bbaf01837490e97c12e57b1906bab671ef7c82ed36d6399",
+            "initialization_algorithm": "checkpoint_overwrite",
+            "initialization_seed": null,
+            "name": "extension_v24_shared_query",
+            "rank": 4,
+            "target_modules": [
+              "model.language_model.layers.28.self_attn.q_proj",
+              "model.language_model.layers.29.self_attn.q_proj"
+            ],
+            "trainable": false
+          },
+          {
+            "adapter_parameter_count": 36864,
+            "alpha": 8.0,
+            "dropout": 0.0,
+            "expected_initial_state_sha256": null,
+            "initialization_algorithm": "checkpoint_overwrite",
+            "initialization_seed": null,
+            "name": "extension_v28_stage_b_query",
+            "rank": 4,
+            "target_modules": [
+              "model.language_model.layers.13.self_attn.q_proj",
+              "model.language_model.layers.14.self_attn.q_proj"
+            ],
+            "trainable": false
+          },
+          {
+            "adapter_parameter_count": 131072,
+            "alpha": 16.0,
+            "dropout": 0.0,
+            "expected_initial_state_sha256": "050706c300e6fb0ac8e4cc02e26c565b54a9a89505104302d4ffcedc02124c64",
+            "initialization_algorithm": "checkpoint_overwrite",
+            "initialization_seed": null,
+            "name": "extension_v30_joint_pair_query",
+            "rank": 8,
+            "target_modules": [
+              "model.language_model.layers.18.self_attn.q_proj",
+              "model.language_model.layers.19.self_attn.q_proj",
+              "model.language_model.layers.20.self_attn.q_proj",
+              "model.language_model.layers.21.self_attn.q_proj"
+            ],
+            "trainable": false
+          }
+        ],
+        "enabled": true,
+        "schema_version": 2,
+        "trainable_adapter_parameter_count": 0
+      },
+      "occupied_blocks": 3102,
+      "optional_v78_grounding": null,
+      "phase": "scene_ready",
+      "prefix_build_seconds": 1.1011887080967426,
+      "prefix_hash": "8aeb5ee07bfc955b41f5793d58d8a92f9a16836d86987468e901caa129917b58",
+      "prefix_shape": [
+        1,
+        258,
+        1536
+      ],
+      "prequestion_scene_key_value_cache": true,
+      "processed_voxels": 8709,
+      "question_conditioned_scene_readout_tokens": true,
+      "question_dependent_scene_processing": false,
+      "question_dependent_scene_retrieval": false,
+      "questions_answered": 0,
+      "runtime_kind": "continuous_scene_question_control",
+      "scene_boundary_mode": "gemma4_native_image",
+      "scene_control_signature_sha256": "dabbf14203bd6868254615e033d180a1622b29827cde82e9b916d3493895eb40",
+      "scene_id": "scene_000031",
+      "scene_latents": 256,
+      "scene_prefix_after_bos": true,
+      "scene_prefix_computed_before_question": true,
+      "scene_prefix_hash": "8aeb5ee07bfc955b41f5793d58d8a92f9a16836d86987468e901caa129917b58",
+      "signed_x_scene_residual": {
+        "architecture_version": "signed_x_local_field_v2",
+        "enabled": true,
+        "expected_initial_state_sha256": "3f249307901df75ba07a758a7dc5b02c7c6ff9bbb969987741a106b8d8977ce1",
+        "schema_version": 1,
+        "spatial_centering": "all_slots_fp32",
+        "spatial_reduction": "none",
+        "spatial_statistic": "centered_local_content_times_unit_rms_signed_x",
+        "trainable_surface": "bias_free_output_projection_only"
+      },
+      "signed_x_scene_residual_initial_state_sha256": "3f249307901df75ba07a758a7dc5b02c7c6ff9bbb969987741a106b8d8977ce1",
+      "signed_x_scene_residual_state_sha256": "e8dabc69627f60723b89520b02dfee985e49b7b7e35fdd1213cc79f7b8164f58",
+      "source_voxels": 76407,
+      "strict_fixed_environment_embedding_input": false,
+      "warnings": [
+        "Full config hash differs from training, but all inference architecture fields match: checkpoint=9c79d3cb5af0 runtime=714c60ce9ccb"
+      ]
+    },
+    "scene_id": "scene_000031",
+    "scene_prefix_computed_before_question": true,
+    "strict_fixed_environment_embedding_input": false
+  },
+  "turns": [
+    {
+      "action_receipts": [
+        {
+          "action_count": 2,
+          "active_binding_sha256": "8da80768c3a5ac37afdab5ff062a1f5423e2384b8672e10a6f05d82200e57c52",
+          "active_prefix_sha256": "c378892ad33d2c1eb72878526526b6f6fa8d964adc028ff7d032b9b5eca345bf",
+          "angular_velocity_degrees": 0.0,
+          "binding_sha256": "360a3857eb4c28df8b601741fd37149ee95d1b3246de270d3a34c0d3deef3b38",
+          "body_yaw_degrees": -44.99931335449219,
+          "camera_position_m": [
+            0.0,
+            0.0,
+            1.2
+          ],
+          "camera_yaw_degrees": -44.99931335449219,
+          "clearance_m": null,
+          "collision": false,
+          "distance_moved": 0.0,
+          "error_code": null,
+          "last_movement_delta_m": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "linear_velocity_xy_m": [
+            0.0,
+            0.0
+          ],
+          "map_sha256": "6507cd8755c94e3c75f219dbd789b2bc3329fc2d0f7a1fca3bc3b2eec670b34f",
+          "map_version": 1,
+          "observation_id": "o_000001",
+          "pitch_degrees": 0.0,
+          "position_m": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "processed_voxels": 8716,
+          "robot_state_encoder_sha256": "62cfdd2a9edcd0a450da19907009fdf3f5ed96cac4cedafae75f775bb96077c8",
+          "robot_state_sha256": "9be9b2a7d6f11c68d37958428664d5e8385e303fd41efac50575b24645e913e7",
+          "robot_tokens_sha256": "b4596b1bd15fe170d28214900c598e8fb9b934a705b6d3570fe20988358f54f3",
+          "scan_count": 1,
+          "scan_coverage": 0.09104938271604938,
+          "scene_control_signature_sha256": "796ff1f7abe28a8ec664ee54f7ae92e544bdad02509b5bd81836fabf6af45ea5",
+          "scene_id": "scene_000031",
+          "scene_prefix_sha256": "440cf39581af070cc1334642bcc623b509401074d5690e97ca9580a29137eda9",
+          "scene_version": 1,
+          "schema": "semantic_3d_chat.scene_prefix_binding.v2",
+          "seed": 20260808,
+          "source_voxels": 77133,
+          "stopped": false,
+          "success": true,
+          "turn_degrees": -44.99931335449219,
+          "valid_depth_pixels": 50176,
+          "visible_voxels": 0
+        },
+        {
+          "action_count": 4,
+          "active_binding_sha256": "bb853a8bbfaa236b5390385811f239d3b08c6af181752fe617c480e0f417221d",
+          "active_prefix_sha256": "1b9968d4fff9ac62e6e3002d5e3aaa042c164a99df677bdd6781d8ce9c9d2d5d",
+          "angular_velocity_degrees": 0.0,
+          "binding_sha256": "18b487a17e25906bd67a8c05af4af4e6166f3f2d2fabae9676f5315651824bdb",
+          "body_yaw_degrees": -87.37719923257828,
+          "camera_position_m": [
+            0.0,
+            0.0,
+            1.2
+          ],
+          "camera_yaw_degrees": -87.37719923257828,
+          "clearance_m": null,
+          "collision": false,
+          "distance_moved": 0.0,
+          "error_code": null,
+          "last_movement_delta_m": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "linear_velocity_xy_m": [
+            0.0,
+            0.0
+          ],
+          "map_sha256": "bd5ee72817fdd2e3acd6546d783d1da895bf50515549c9ecde23cdf770e7e508",
+          "map_version": 2,
+          "observation_id": "o_000002",
+          "pitch_degrees": 0.0,
+          "position_m": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "processed_voxels": 8723,
+          "robot_state_encoder_sha256": "62cfdd2a9edcd0a450da19907009fdf3f5ed96cac4cedafae75f775bb96077c8",
+          "robot_state_sha256": "455e56088c9df1b212813e665382c0cda2f0243650dc68f2b16886a221f74617",
+          "robot_tokens_sha256": "11aad43bf13e1b13c0d1188254ec076f03395030e816a751c5ef83279f42dfc9",
+          "scan_count": 2,
+          "scan_coverage": 0.1396604938271605,
+          "scene_control_signature_sha256": "5e64304821099217a152ca7ff83648a7b4d2bd2386682863e0bc0735228be389",
+          "scene_id": "scene_000031",
+          "scene_prefix_sha256": "2e7c07eb000a516219d2d325fa5561e3cac995f4af184cb156b25016c3c10245",
+          "scene_version": 2,
+          "schema": "semantic_3d_chat.scene_prefix_binding.v2",
+          "seed": 20260808,
+          "source_voxels": 77564,
+          "stopped": false,
+          "success": true,
+          "turn_degrees": -42.37788587808609,
+          "valid_depth_pixels": 50176,
+          "visible_voxels": 0
+        },
+        {
+          "action_count": 6,
+          "active_binding_sha256": "b73be81de375778e268b9ec82ac7c8b2dd47cbe0041280a907f657a81885fe1a",
+          "active_prefix_sha256": "0780df986ce067b16b0f16fb6a197040c94031de1f2b90f51be3f96bb5c1e260",
+          "angular_velocity_degrees": 0.0,
+          "binding_sha256": "31d3af90d855cfd9612a360229e646aa09b98c285220e862dc0ddd3b2ae5b38a",
+          "body_yaw_degrees": -87.37719923257828,
+          "camera_position_m": [
+            0.42018194431519146,
+            0.019247909033060385,
+            1.2
+          ],
+          "camera_yaw_degrees": -87.37719923257828,
+          "clearance_m": 0.3207712517826121,
+          "collision": false,
+          "distance_moved": 0.4206225723028183,
+          "error_code": null,
+          "last_movement_delta_m": [
+            0.42018194431519146,
+            0.019247909033060385,
+            0.0
+          ],
+          "linear_velocity_xy_m": [
+            0.0,
+            0.0
+          ],
+          "map_sha256": "ddb431c141d9b7c4a3ee84c0080c434824a7126ba097ce05e9e4b9c3b451956d",
+          "map_version": 3,
+          "observation_id": "o_000003",
+          "pitch_degrees": 0.0,
+          "position_m": [
+            0.42018194431519146,
+            0.019247909033060385,
+            0.0
+          ],
+          "processed_voxels": 8725,
+          "robot_state_encoder_sha256": "62cfdd2a9edcd0a450da19907009fdf3f5ed96cac4cedafae75f775bb96077c8",
+          "robot_state_sha256": "c2d983f85e583644923452542507c9e0e505e04b71f39ad602423e4dd0140c5c",
+          "robot_tokens_sha256": "132d620b9dd30d6243c739c46ecb4c0a254e7cc2234d3433b1aa11dcb1a67930",
+          "scan_count": 3,
+          "scan_coverage": 0.1396604938271605,
+          "scene_control_signature_sha256": "5a96802277f175070e427804836094d571a6c676fb2b6d6a079f14b559d8df4a",
+          "scene_id": "scene_000031",
+          "scene_prefix_sha256": "e1dca10bb4905f6997846dd70cb1a4f794f5ab6a0538f551f0e388aecd3724d4",
+          "scene_version": 3,
+          "schema": "semantic_3d_chat.scene_prefix_binding.v2",
+          "seed": 20260808,
+          "source_voxels": 77765,
+          "stopped": false,
+          "success": true,
+          "turn_degrees": 0.0,
+          "valid_depth_pixels": 50176,
+          "visible_voxels": 0
+        },
+        {
+          "action_count": 8,
+          "active_binding_sha256": "e1debbe0eb4fb7a535b1cf4e2962ce7da241e71ce68624a6ac637d35ee68ee9f",
+          "active_prefix_sha256": "3f294c5089fdb838ea19dec0cde3f57fdb7b58b2d9270015b9f4ebc8d5a47cb5",
+          "angular_velocity_degrees": 0.0,
+          "binding_sha256": "75395fb9da59b7426af7a902ccfd7cca9a63c5348ace1498406515546bc6221e",
+          "body_yaw_degrees": -87.37719923257828,
+          "camera_position_m": [
+            0.8489400203921567,
+            0.038888677888489376,
+            1.2
+          ],
+          "camera_yaw_degrees": -87.37719923257828,
+          "clearance_m": 0.31760902579079,
+          "collision": false,
+          "distance_moved": 0.42920769751071924,
+          "error_code": null,
+          "last_movement_delta_m": [
+            0.4287580760769652,
+            0.01964076885542899,
+            0.0
+          ],
+          "linear_velocity_xy_m": [
+            0.0,
+            0.0
+          ],
+          "map_sha256": "36929e1d7cce0969ca914d527afe1998f4694475f3e4e03a636c09d3e0502b77",
+          "map_version": 4,
+          "observation_id": "o_000004",
+          "pitch_degrees": 0.0,
+          "position_m": [
+            0.8489400203921567,
+            0.038888677888489376,
+            0.0
+          ],
+          "processed_voxels": 8740,
+          "robot_state_encoder_sha256": "62cfdd2a9edcd0a450da19907009fdf3f5ed96cac4cedafae75f775bb96077c8",
+          "robot_state_sha256": "6d76af07af3eed5d276a69ca25823cd7a914170610c0fb781ec8b2769c124ca6",
+          "robot_tokens_sha256": "6c7c3fe63c61c7d9c7925d4ee694f83f8ae21de25cbbb6fee1b49535cd6c00e7",
+          "scan_count": 4,
+          "scan_coverage": 0.1396604938271605,
+          "scene_control_signature_sha256": "4aff84771795be17a1e0f22bcc8e623069a85daf6948c30dddbaf3c257611647",
+          "scene_id": "scene_000031",
+          "scene_prefix_sha256": "63f50f0128508a8701bad1b32c0803b26e126e887cabdd7c2000fcd2af152618",
+          "scene_version": 4,
+          "schema": "semantic_3d_chat.scene_prefix_binding.v2",
+          "seed": 20260808,
+          "source_voxels": 77919,
+          "stopped": false,
+          "success": true,
+          "turn_degrees": 0.0,
+          "valid_depth_pixels": 50176,
+          "visible_voxels": 0
+        },
+        {
+          "action_count": 10,
+          "active_binding_sha256": "2179c35d9090a6106fb72aa677b7d46020991a8d597b21f04e039d3e21f83df8",
+          "active_prefix_sha256": "d329a488cc44146ee8a0b0dcc43655a05c2e24798ca370f0df79bc50867252b9",
+          "angular_velocity_degrees": 0.0,
+          "binding_sha256": "a45be6ea5a1dcbe921cb1c61d033aa1560792fc035e9a7fe979a5024a0dfdbc4",
+          "body_yaw_degrees": -87.37719923257828,
+          "camera_position_m": [
+            1.218962993256166,
+            0.055838879148176215,
+            1.2
+          ],
+          "camera_yaw_degrees": -87.37719923257828,
+          "clearance_m": 0.07155228619650356,
+          "collision": false,
+          "distance_moved": 0.37041100114583986,
+          "error_code": null,
+          "last_movement_delta_m": [
+            0.3700229728640094,
+            0.01695020125968684,
+            0.0
+          ],
+          "linear_velocity_xy_m": [
+            0.0,
+            0.0
+          ],
+          "map_sha256": "501e40572b4306b3855613e24036f7ec53d5fce50137324dde72c01aea99aeb0",
+          "map_version": 5,
+          "observation_id": "o_000005",
+          "pitch_degrees": 0.0,
+          "position_m": [
+            1.218962993256166,
+            0.055838879148176215,
+            0.0
+          ],
+          "processed_voxels": 8760,
+          "robot_state_encoder_sha256": "62cfdd2a9edcd0a450da19907009fdf3f5ed96cac4cedafae75f775bb96077c8",
+          "robot_state_sha256": "73b43d7f7179c4691a6ad0d0a437e64c9211a5025978184697bf0bcef3229f4e",
+          "robot_tokens_sha256": "4e0bacc47afaeb0fd4e3ab39fce02617344a7edeed3ba55eda1968e5c39c3300",
+          "scan_count": 5,
+          "scan_coverage": 0.1396604938271605,
+          "scene_control_signature_sha256": "d10021398d55ff3a597a63915e918554a57294960c1f9acde943262f0a8d3540",
+          "scene_id": "scene_000031",
+          "scene_prefix_sha256": "29fafed141145a60e6d0444cf7b6c355ede6887077a04619e19e10d1d68e207d",
+          "scene_version": 5,
+          "schema": "semantic_3d_chat.scene_prefix_binding.v2",
+          "seed": 20260808,
+          "source_voxels": 78130,
+          "stopped": false,
+          "success": true,
+          "turn_degrees": 0.0,
+          "valid_depth_pixels": 50176,
+          "visible_voxels": 0
+        },
+        {
+          "action_count": 12,
+          "active_binding_sha256": "6630f7c7f7ab919f453052729a8818a898145fbbb2454ce4bb3419e5d86ccde5",
+          "active_prefix_sha256": "31279004fb7e192cdd8fa32fd133c794a13bc2854bd0ec7632000e4f2b5c7f37",
+          "angular_velocity_degrees": 0.0,
+          "binding_sha256": "a2800a2b2c170712fb19b536accef608b54c964d45b599ca66db75414b45b388",
+          "body_yaw_degrees": -87.37719923257828,
+          "camera_position_m": [
+            1.285448404207255,
+            0.058884476797779764,
+            1.2
+          ],
+          "camera_yaw_degrees": -87.37719923257828,
+          "clearance_m": 0.00499976624827958,
+          "collision": false,
+          "distance_moved": 0.0665551315405389,
+          "error_code": null,
+          "last_movement_delta_m": [
+            0.06648541095108884,
+            0.0030455976496035486,
+            0.0
+          ],
+          "linear_velocity_xy_m": [
+            0.0,
+            0.0
+          ],
+          "map_sha256": "cc5423ab05523cf4a691e43463e9cd767641459277169c10c246ce738bfd7800",
+          "map_version": 6,
+          "observation_id": "o_000006",
+          "pitch_degrees": 0.0,
+          "position_m": [
+            1.285448404207255,
+            0.058884476797779764,
+            0.0
+          ],
+          "processed_voxels": 8760,
+          "robot_state_encoder_sha256": "62cfdd2a9edcd0a450da19907009fdf3f5ed96cac4cedafae75f775bb96077c8",
+          "robot_state_sha256": "e983b835178c70f30b126bf426001f4de4aa4a91656acfc4bef353096509f51d",
+          "robot_tokens_sha256": "c1326d18767928e9a53ace1fc4b26b2243e8b59bb5bd122caf84ce1b76637392",
+          "scan_count": 6,
+          "scan_coverage": 0.1396604938271605,
+          "scene_control_signature_sha256": "2b882ebc59f8b5f6be6d6a445fbaeb58b938c8cd637962fd8399d9fd8eee2696",
+          "scene_id": "scene_000031",
+          "scene_prefix_sha256": "4b8638c228a1cd9333f2d0ef1eceeb5bbb87ba7746c62f289f29dfbc968be0a7",
+          "scene_version": 6,
+          "schema": "semantic_3d_chat.scene_prefix_binding.v2",
+          "seed": 20260808,
+          "source_voxels": 78188,
+          "stopped": false,
+          "success": true,
+          "turn_degrees": 0.0,
+          "valid_depth_pixels": 50176,
+          "visible_voxels": 0
+        },
+        {
+          "action_count": 13,
+          "active_binding_sha256": "5a33d018e8cbc20f68fe3400fef749b0233cbb46a86f660c2d898a5d7d23f6bf",
+          "active_prefix_sha256": "61d20410aec627481c52bc6a50c05fd9d0faaa102b67875672900e1f43e30b1d",
+          "angular_velocity_degrees": 0.0,
+          "binding_sha256": "a2800a2b2c170712fb19b536accef608b54c964d45b599ca66db75414b45b388",
+          "body_yaw_degrees": -87.37719923257828,
+          "camera_position_m": [
+            1.285448404207255,
+            0.058884476797779764,
+            1.2
+          ],
+          "camera_yaw_degrees": -87.37719923257828,
+          "clearance_m": null,
+          "collision": false,
+          "distance_moved": 0.0,
+          "error_code": null,
+          "last_movement_delta_m": [
+            0.06648541095108884,
+            0.0030455976496035486,
+            0.0
+          ],
+          "linear_velocity_xy_m": [
+            0.0,
+            0.0
+          ],
+          "map_sha256": "cc5423ab05523cf4a691e43463e9cd767641459277169c10c246ce738bfd7800",
+          "map_version": 6,
+          "observation_id": null,
+          "pitch_degrees": 0.0,
+          "position_m": [
+            1.285448404207255,
+            0.058884476797779764,
+            0.0
+          ],
+          "processed_voxels": 8760,
+          "robot_state_encoder_sha256": "62cfdd2a9edcd0a450da19907009fdf3f5ed96cac4cedafae75f775bb96077c8",
+          "robot_state_sha256": "62e330651385cad436bfc50c2be93f824af73b606a7c4d62473c2f828acc2607",
+          "robot_tokens_sha256": "d521c7ed59b9379739c8be42a274e2c3acf669c7c573b7973ac665a19195c2ca",
+          "scan_count": 6,
+          "scan_coverage": 0.1396604938271605,
+          "scene_control_signature_sha256": "2b882ebc59f8b5f6be6d6a445fbaeb58b938c8cd637962fd8399d9fd8eee2696",
+          "scene_id": "scene_000031",
+          "scene_prefix_sha256": "4b8638c228a1cd9333f2d0ef1eceeb5bbb87ba7746c62f289f29dfbc968be0a7",
+          "scene_version": 6,
+          "schema": "semantic_3d_chat.scene_prefix_binding.v2",
+          "seed": 20260808,
+          "source_voxels": 78188,
+          "stopped": true,
+          "success": true,
+          "turn_degrees": 0.0,
+          "valid_depth_pixels": 0,
+          "visible_voxels": 0
+        }
+      ],
+      "continuous_grounding_attestations": [
+        {
+          "all_map_voxels_scored": true,
+          "eligible_voxels": 41596,
+          "environmental_text_inputs": [],
+          "map_sha256": "4c6349ec362cbcdc7111242e047d2798838c54e4b0e2ec72c9b145de05fa5918",
+          "numeric_alignment_interlock": {
+            "angular_residual_degrees": -84.94166704440777,
+            "corrected_turn_degrees": null,
+            "correction_applied": false,
+            "deadband_degrees": 3.0,
+            "desired_yaw_degrees": -84.94166704440777,
+            "enabled": true,
+            "environmental_text_inputs": [],
+            "learned_tool": "turn",
+            "learned_turn_degrees": -44.99931335449219,
+            "numeric_target_state_only": true,
+            "oracle_inputs_at_runtime": false,
+            "reason": "not_terminal_alignment",
+            "robot_position_xy_m": [
+              0.0,
+              0.0
+            ],
+            "robot_yaw_degrees": 0.0,
+            "schema": "semantic_3d_chat.numeric_alignment_interlock.v1",
+            "stalled_turn_degrees": 1.0,
+            "stop_applied": false,
+            "target_available": true,
+            "target_xyz_m": [
+              2.9994702339172363,
+              0.2654970586299896,
+              0.2221750169992447
+            ],
+            "terminal_alignment_requested": false
+          },
+          "numeric_approach_interlock": {
+            "actual_progress_m": 0.0,
+            "angular_residual_degrees": -84.94166704440777,
+            "collision_limited_interlock": {
+              "collision_predicted": false,
+              "enabled": true,
+              "environmental_text_inputs": [],
+              "executed_safe_distance_m": null,
+              "maximum_collision_free_distance_m": null,
+              "minimum_safe_step_m": 0.02,
+              "numeric_collision_map_only": true,
+              "oracle_inputs_at_runtime": false,
+              "reason": "not_applicable",
+              "requested_distance_m": null,
+              "safe_closest_reachable": false,
+              "schema": "semantic_3d_chat.collision_limited_approach_interlock.v1"
+            },
+            "collision_precheck_predicted_rejection": false,
+            "collision_rejection_deferred_to_exact_simulator": false,
+            "completion_mode": null,
+            "completion_satisfied": false,
+            "corrected_arguments": null,
+            "corrected_tool": null,
+            "correction_applied": false,
+            "desired_yaw_degrees": -84.94166704440777,
+            "enabled": true,
+            "environmental_text_inputs": [],
+            "goal_satisfied": false,
+            "heading_deadband_degrees": 15.0,
+            "initial_robot_position_xy_m": [
+              0.0,
+              0.0
+            ],
+            "learned_tool": "turn",
+            "learned_turn_degrees": -44.99931335449219,
+            "minimum_progress_m": 0.15,
+            "numeric_target_state_only": true,
+            "oracle_inputs_at_runtime": false,
+            "reason": "learned_action_not_stalled",
+            "robot_position_xy_m": [
+              0.0,
+              0.0
+            ],
+            "robot_yaw_degrees": 0.0,
+            "schema": "semantic_3d_chat.numeric_approach_interlock.v1",
+            "stop_applied": false,
+            "target_available": true,
+            "target_distance_m": 3.011197498055665,
+            "target_standoff_m": 0.5,
+            "target_xyz_m": [
+              2.9994702339172363,
+              0.2654970586299896,
+              0.2221750169992447
+            ],
+            "terminal_approach_requested": true
+          },
+          "oracle_inputs_at_runtime": false,
+          "query_embedding_sha256": "0f780477f599a107fe7f1382060cb69ce3242168b39dd149b57eda416b10095f",
+          "scored_voxels": 76407,
+          "target_available": true,
+          "target_state_sha256": "34be2810d3132ffdd50e8d78f713227b2d7cb2875a5ce0450e4df743bbd3f2e9",
+          "target_xyz_m": [
+            2.9994702339172363,
+            0.2654970586299896,
+            0.2221750169992447
+          ]
+        },
+        {
+          "all_map_voxels_scored": true,
+          "eligible_voxels": 41986,
+          "environmental_text_inputs": [],
+          "map_sha256": "6507cd8755c94e3c75f219dbd789b2bc3329fc2d0f7a1fca3bc3b2eec670b34f",
+          "numeric_alignment_interlock": {
+            "angular_residual_degrees": -39.94235368991558,
+            "corrected_turn_degrees": null,
+            "correction_applied": false,
+            "deadband_degrees": 3.0,
+            "desired_yaw_degrees": -84.94166704440777,
+            "enabled": true,
+            "environmental_text_inputs": [],
+            "learned_tool": "turn",
+            "learned_turn_degrees": -42.37788587808609,
+            "numeric_target_state_only": true,
+            "oracle_inputs_at_runtime": false,
+            "reason": "not_terminal_alignment",
+            "robot_position_xy_m": [
+              0.0,
+              0.0
+            ],
+            "robot_yaw_degrees": -44.99931335449219,
+            "schema": "semantic_3d_chat.numeric_alignment_interlock.v1",
+            "stalled_turn_degrees": 1.0,
+            "stop_applied": false,
+            "target_available": true,
+            "target_xyz_m": [
+              2.9994702339172363,
+              0.2654970586299896,
+              0.2221750169992447
+            ],
+            "terminal_alignment_requested": false
+          },
+          "numeric_approach_interlock": {
+            "actual_progress_m": 0.0,
+            "angular_residual_degrees": -39.94235368991558,
+            "collision_limited_interlock": {
+              "collision_predicted": false,
+              "enabled": true,
+              "environmental_text_inputs": [],
+              "executed_safe_distance_m": null,
+              "maximum_collision_free_distance_m": null,
+              "minimum_safe_step_m": 0.02,
+              "numeric_collision_map_only": true,
+              "oracle_inputs_at_runtime": false,
+              "reason": "not_applicable",
+              "requested_distance_m": null,
+              "safe_closest_reachable": false,
+              "schema": "semantic_3d_chat.collision_limited_approach_interlock.v1"
+            },
+            "collision_precheck_predicted_rejection": false,
+            "collision_rejection_deferred_to_exact_simulator": false,
+            "completion_mode": null,
+            "completion_satisfied": false,
+            "corrected_arguments": null,
+            "corrected_tool": null,
+            "correction_applied": false,
+            "desired_yaw_degrees": -84.94166704440777,
+            "enabled": true,
+            "environmental_text_inputs": [],
+            "goal_satisfied": false,
+            "heading_deadband_degrees": 15.0,
+            "initial_robot_position_xy_m": [
+              0.0,
+              0.0
+            ],
+            "learned_tool": "turn",
+            "learned_turn_degrees": -42.37788587808609,
+            "minimum_progress_m": 0.15,
+            "numeric_target_state_only": true,
+            "oracle_inputs_at_runtime": false,
+            "reason": "learned_action_not_stalled",
+            "robot_position_xy_m": [
+              0.0,
+              0.0
+            ],
+            "robot_yaw_degrees": -44.99931335449219,
+            "schema": "semantic_3d_chat.numeric_approach_interlock.v1",
+            "stop_applied": false,
+            "target_available": true,
+            "target_distance_m": 3.011197498055665,
+            "target_standoff_m": 0.5,
+            "target_xyz_m": [
+              2.9994702339172363,
+              0.2654970586299896,
+              0.2221750169992447
+            ],
+            "terminal_approach_requested": true
+          },
+          "oracle_inputs_at_runtime": false,
+          "query_embedding_sha256": "0f780477f599a107fe7f1382060cb69ce3242168b39dd149b57eda416b10095f",
+          "scored_voxels": 77133,
+          "target_available": true,
+          "target_state_sha256": "ca4d133e982e879d8a4a4f9ca8b154d9e046b8706792e0d0f625c900ead9ce7b",
+          "target_xyz_m": [
+            2.9994702339172363,
+            0.2654970586299896,
+            0.2221750169992447
+          ]
+        },
+        {
+          "all_map_voxels_scored": true,
+          "eligible_voxels": 42199,
+          "environmental_text_inputs": [],
+          "map_sha256": "bd5ee72817fdd2e3acd6546d783d1da895bf50515549c9ecde23cdf770e7e508",
+          "numeric_alignment_interlock": {
+            "angular_residual_degrees": 2.4879707790830423,
+            "corrected_turn_degrees": null,
+            "correction_applied": false,
+            "deadband_degrees": 3.0,
+            "desired_yaw_degrees": -84.88922845349524,
+            "enabled": true,
+            "environmental_text_inputs": [],
+            "learned_tool": "move_forward",
+            "learned_turn_degrees": null,
+            "numeric_target_state_only": true,
+            "oracle_inputs_at_runtime": false,
+            "reason": "not_terminal_alignment",
+            "robot_position_xy_m": [
+              0.0,
+              0.0
+            ],
+            "robot_yaw_degrees": -87.37719923257828,
+            "schema": "semantic_3d_chat.numeric_alignment_interlock.v1",
+            "stalled_turn_degrees": 1.0,
+            "stop_applied": false,
+            "target_available": true,
+            "target_xyz_m": [
+              3.0006649494171143,
+              0.2683708369731903,
+              0.22745943069458008
+            ],
+            "terminal_alignment_requested": false
+          },
+          "numeric_approach_interlock": {
+            "actual_progress_m": 0.0,
+            "angular_residual_degrees": 2.4879707790830423,
+            "collision_limited_interlock": {
+              "collision_predicted": false,
+              "enabled": true,
+              "environmental_text_inputs": [],
+              "executed_safe_distance_m": null,
+              "maximum_collision_free_distance_m": null,
+              "minimum_safe_step_m": 0.02,
+              "numeric_collision_map_only": true,
+              "oracle_inputs_at_runtime": false,
+              "reason": "full_step_collision_free",
+              "requested_distance_m": 0.4206225723028183,
+              "safe_closest_reachable": false,
+              "schema": "semantic_3d_chat.collision_limited_approach_interlock.v1"
+            },
+            "collision_precheck_predicted_rejection": false,
+            "collision_rejection_deferred_to_exact_simulator": false,
+            "completion_mode": null,
+            "completion_satisfied": false,
+            "corrected_arguments": null,
+            "corrected_tool": null,
+            "correction_applied": false,
+            "desired_yaw_degrees": -84.88922845349524,
+            "enabled": true,
+            "environmental_text_inputs": [],
+            "goal_satisfied": false,
+            "heading_deadband_degrees": 15.0,
+            "initial_robot_position_xy_m": [
+              0.0,
+              0.0
+            ],
+            "learned_tool": "move_forward",
+            "learned_turn_degrees": null,
+            "minimum_progress_m": 0.15,
+            "numeric_target_state_only": true,
+            "oracle_inputs_at_runtime": false,
+            "reason": "learned_action_not_stalled",
+            "robot_position_xy_m": [
+              0.0,
+              0.0
+            ],
+            "robot_yaw_degrees": -87.37719923257828,
+            "schema": "semantic_3d_chat.numeric_approach_interlock.v1",
+            "stop_applied": false,
+            "target_available": true,
+            "target_distance_m": 3.0126422032491846,
+            "target_standoff_m": 0.5,
+            "target_xyz_m": [
+              3.0006649494171143,
+              0.2683708369731903,
+              0.22745943069458008
+            ],
+            "terminal_approach_requested": true
+          },
+          "oracle_inputs_at_runtime": false,
+          "query_embedding_sha256": "0f780477f599a107fe7f1382060cb69ce3242168b39dd149b57eda416b10095f",
+          "scored_voxels": 77564,
+          "target_available": true,
+          "target_state_sha256": "fdb5bcd7521c09f7039ec96f6e57d15addcd1add8ec14adf783f2074312b3d57",
+          "target_xyz_m": [
+            3.0006649494171143,
+            0.2683708369731903,
+            0.22745943069458008
+          ]
+        },
+        {
+          "all_map_voxels_scored": true,
+          "eligible_voxels": 42327,
+          "environmental_text_inputs": [],
+          "map_sha256": "ddb431c141d9b7c4a3ee84c0080c434824a7126ba097ce05e9e4b9c3b451956d",
+          "numeric_alignment_interlock": {
+            "angular_residual_degrees": 9.368683287391107,
+            "corrected_turn_degrees": null,
+            "correction_applied": false,
+            "deadband_degrees": 3.0,
+            "desired_yaw_degrees": -78.00851594518717,
+            "enabled": true,
+            "environmental_text_inputs": [],
+            "learned_tool": "move_forward",
+            "learned_turn_degrees": null,
+            "numeric_target_state_only": true,
+            "oracle_inputs_at_runtime": false,
+            "reason": "not_terminal_alignment",
+            "robot_position_xy_m": [
+              0.42018194431519146,
+              0.019247909033060385
+            ],
+            "robot_yaw_degrees": -87.37719923257828,
+            "schema": "semantic_3d_chat.numeric_alignment_interlock.v1",
+            "stalled_turn_degrees": 1.0,
+            "stop_applied": false,
+            "target_available": true,
+            "target_xyz_m": [
+              3.009793758392334,
+              0.5692846179008484,
+              0.20236770808696747
+            ],
+            "terminal_alignment_requested": false
+          },
+          "numeric_approach_interlock": {
+            "actual_progress_m": 0.4206225723028183,
+            "angular_residual_degrees": 9.368683287391107,
+            "collision_limited_interlock": {
+              "collision_predicted": false,
+              "enabled": true,
+              "environmental_text_inputs": [],
+              "executed_safe_distance_m": null,
+              "maximum_collision_free_distance_m": null,
+              "minimum_safe_step_m": 0.02,
+              "numeric_collision_map_only": true,
+              "oracle_inputs_at_runtime": false,
+              "reason": "full_step_collision_free",
+              "requested_distance_m": 0.4292076975107193,
+              "safe_closest_reachable": false,
+              "schema": "semantic_3d_chat.collision_limited_approach_interlock.v1"
+            },
+            "collision_precheck_predicted_rejection": false,
+            "collision_rejection_deferred_to_exact_simulator": false,
+            "completion_mode": null,
+            "completion_satisfied": false,
+            "corrected_arguments": null,
+            "corrected_tool": null,
+            "correction_applied": false,
+            "desired_yaw_degrees": -78.00851594518717,
+            "enabled": true,
+            "environmental_text_inputs": [],
+            "goal_satisfied": false,
+            "heading_deadband_degrees": 15.0,
+            "initial_robot_position_xy_m": [
+              0.0,
+              0.0
+            ],
+            "learned_tool": "move_forward",
+            "learned_turn_degrees": null,
+            "minimum_progress_m": 0.15,
+            "numeric_target_state_only": true,
+            "oracle_inputs_at_runtime": false,
+            "reason": "learned_action_not_stalled",
+            "robot_position_xy_m": [
+              0.42018194431519146,
+              0.019247909033060385
+            ],
+            "robot_yaw_degrees": -87.37719923257828,
+            "schema": "semantic_3d_chat.numeric_approach_interlock.v1",
+            "stop_applied": false,
+            "target_available": true,
+            "target_distance_m": 2.6473816741660086,
+            "target_standoff_m": 0.5,
+            "target_xyz_m": [
+              3.009793758392334,
+              0.5692846179008484,
+              0.20236770808696747
+            ],
+            "terminal_approach_requested": true
+          },
+          "oracle_inputs_at_runtime": false,
+          "query_embedding_sha256": "0f780477f599a107fe7f1382060cb69ce3242168b39dd149b57eda416b10095f",
+          "scored_voxels": 77765,
+          "target_available": true,
+          "target_state_sha256": "2cc89a6fb1f7ab245d9d5c42d1136e5d4d211472646965866a2acb4f6a43b7a6",
+          "target_xyz_m": [
+            3.009793758392334,
+            0.5692846179008484,
+            0.20236770808696747
+          ]
+        },
+        {
+          "all_map_voxels_scored": true,
+          "eligible_voxels": 42457,
+          "environmental_text_inputs": [],
+          "map_sha256": "36929e1d7cce0969ca914d527afe1998f4694475f3e4e03a636c09d3e0502b77",
+          "numeric_alignment_interlock": {
+            "angular_residual_degrees": 6.074025041732497,
+            "corrected_turn_degrees": null,
+            "correction_applied": false,
+            "deadband_degrees": 3.0,
+            "desired_yaw_degrees": -81.30317419084578,
+            "enabled": true,
+            "environmental_text_inputs": [],
+            "learned_tool": "move_forward",
+            "learned_turn_degrees": null,
+            "numeric_target_state_only": true,
+            "oracle_inputs_at_runtime": false,
+            "reason": "not_terminal_alignment",
+            "robot_position_xy_m": [
+              0.8489400203921567,
+              0.038888677888489376
+            ],
+            "robot_yaw_degrees": -87.37719923257828,
+            "schema": "semantic_3d_chat.numeric_alignment_interlock.v1",
+            "stalled_turn_degrees": 1.0,
+            "stop_applied": false,
+            "target_available": true,
+            "target_xyz_m": [
+              2.031057119369507,
+              0.21971099078655243,
+              0.5250000953674316
+            ],
+            "terminal_alignment_requested": false
+          },
+          "numeric_approach_interlock": {
+            "actual_progress_m": 0.8498302698135375,
+            "angular_residual_degrees": 6.074025041732497,
+            "collision_limited_interlock": {
+              "collision_predicted": false,
+              "enabled": true,
+              "environmental_text_inputs": [],
+              "executed_safe_distance_m": null,
+              "maximum_collision_free_distance_m": null,
+              "minimum_safe_step_m": 0.02,
+              "numeric_collision_map_only": true,
+              "oracle_inputs_at_runtime": false,
+              "reason": "full_step_collision_free",
+              "requested_distance_m": 0.3704110011458397,
+              "safe_closest_reachable": false,
+              "schema": "semantic_3d_chat.collision_limited_approach_interlock.v1"
+            },
+            "collision_precheck_predicted_rejection": false,
+            "collision_rejection_deferred_to_exact_simulator": false,
+            "completion_mode": null,
+            "completion_satisfied": false,
+            "corrected_arguments": null,
+            "corrected_tool": null,
+            "correction_applied": false,
+            "desired_yaw_degrees": -81.30317419084578,
+            "enabled": true,
+            "environmental_text_inputs": [],
+            "goal_satisfied": false,
+            "heading_deadband_degrees": 15.0,
+            "initial_robot_position_xy_m": [
+              0.0,
+              0.0
+            ],
+            "learned_tool": "move_forward",
+            "learned_turn_degrees": null,
+            "minimum_progress_m": 0.15,
+            "numeric_target_state_only": true,
+            "oracle_inputs_at_runtime": false,
+            "reason": "learned_action_not_stalled",
+            "robot_position_xy_m": [
+              0.8489400203921567,
+              0.038888677888489376
+            ],
+            "robot_yaw_degrees": -87.37719923257828,
+            "schema": "semantic_3d_chat.numeric_approach_interlock.v1",
+            "stop_applied": false,
+            "target_available": true,
+            "target_distance_m": 1.1958668590342452,
+            "target_standoff_m": 0.5,
+            "target_xyz_m": [
+              2.031057119369507,
+              0.21971099078655243,
+              0.5250000953674316
+            ],
+            "terminal_approach_requested": true
+          },
+          "oracle_inputs_at_runtime": false,
+          "query_embedding_sha256": "0f780477f599a107fe7f1382060cb69ce3242168b39dd149b57eda416b10095f",
+          "scored_voxels": 77919,
+          "target_available": true,
+          "target_state_sha256": "aaabe87e4d5e8f5164ccd360391675a4e41fd71be003aea94a43f50a4180f22d",
+          "target_xyz_m": [
+            2.031057119369507,
+            0.21971099078655243,
+            0.5250000953674316
+          ]
+        },
+        {
+          "all_map_voxels_scored": true,
+          "eligible_voxels": 42629,
+          "environmental_text_inputs": [],
+          "map_sha256": "501e40572b4306b3855613e24036f7ec53d5fce50137324dde72c01aea99aeb0",
+          "numeric_alignment_interlock": {
+            "angular_residual_degrees": 8.785687980319778,
+            "corrected_turn_degrees": null,
+            "correction_applied": false,
+            "deadband_degrees": 3.0,
+            "desired_yaw_degrees": -78.5915112522585,
+            "enabled": true,
+            "environmental_text_inputs": [],
+            "learned_tool": "move_forward",
+            "learned_turn_degrees": null,
+            "numeric_target_state_only": true,
+            "oracle_inputs_at_runtime": false,
+            "reason": "not_terminal_alignment",
+            "robot_position_xy_m": [
+              1.218962993256166,
+              0.055838879148176215
+            ],
+            "robot_yaw_degrees": -87.37719923257828,
+            "schema": "semantic_3d_chat.numeric_alignment_interlock.v1",
+            "stalled_turn_degrees": 1.0,
+            "stop_applied": false,
+            "target_available": true,
+            "target_xyz_m": [
+              2.031057119369507,
+              0.21971099078655243,
+              0.5250000953674316
+            ],
+            "terminal_alignment_requested": false
+          },
+          "numeric_approach_interlock": {
+            "actual_progress_m": 1.2202412709593775,
+            "angular_residual_degrees": 8.785687980319778,
+            "collision_limited_interlock": {
+              "collision_predicted": true,
+              "enabled": true,
+              "environmental_text_inputs": [],
+              "executed_safe_distance_m": 0.06655513154053894,
+              "maximum_collision_free_distance_m": 0.07155513154053894,
+              "minimum_safe_step_m": 0.02,
+              "numeric_collision_map_only": true,
+              "oracle_inputs_at_runtime": false,
+              "reason": "clipped_to_collision_free_step",
+              "requested_distance_m": 0.33981745690107346,
+              "safe_closest_reachable": false,
+              "schema": "semantic_3d_chat.collision_limited_approach_interlock.v1"
+            },
+            "collision_precheck_predicted_rejection": true,
+            "collision_rejection_deferred_to_exact_simulator": false,
+            "completion_mode": null,
+            "completion_satisfied": false,
+            "corrected_arguments": {
+              "distance_meters": 0.06655513154053894
+            },
+            "corrected_tool": "move_forward",
+            "correction_applied": true,
+            "desired_yaw_degrees": -78.5915112522585,
+            "enabled": true,
+            "environmental_text_inputs": [],
+            "goal_satisfied": false,
+            "heading_deadband_degrees": 15.0,
+            "initial_robot_position_xy_m": [
+              0.0,
+              0.0
+            ],
+            "learned_tool": "move_forward",
+            "learned_turn_degrees": null,
+            "minimum_progress_m": 0.15,
+            "numeric_target_state_only": true,
+            "oracle_inputs_at_runtime": false,
+            "reason": "collision_limited_safe_progress",
+            "robot_position_xy_m": [
+              1.218962993256166,
+              0.055838879148176215
+            ],
+            "robot_yaw_degrees": -87.37719923257828,
+            "schema": "semantic_3d_chat.numeric_approach_interlock.v1",
+            "stop_applied": false,
+            "target_available": true,
+            "target_distance_m": 0.8284629977498157,
+            "target_standoff_m": 0.5,
+            "target_xyz_m": [
+              2.031057119369507,
+              0.21971099078655243,
+              0.5250000953674316
+            ],
+            "terminal_approach_requested": true
+          },
+          "oracle_inputs_at_runtime": false,
+          "query_embedding_sha256": "0f780477f599a107fe7f1382060cb69ce3242168b39dd149b57eda416b10095f",
+          "scored_voxels": 78130,
+          "target_available": true,
+          "target_state_sha256": "738286cddf59aa9a1d7873d8b6fcfd605872aca478d27876a31ee035482d2519",
+          "target_xyz_m": [
+            2.031057119369507,
+            0.21971099078655243,
+            0.5250000953674316
+          ]
+        },
+        {
+          "all_map_voxels_scored": true,
+          "eligible_voxels": 42682,
+          "environmental_text_inputs": [],
+          "map_sha256": "cc5423ab05523cf4a691e43463e9cd767641459277169c10c246ce738bfd7800",
+          "numeric_alignment_interlock": {
+            "angular_residual_degrees": 9.549314474641733,
+            "corrected_turn_degrees": null,
+            "correction_applied": false,
+            "deadband_degrees": 3.0,
+            "desired_yaw_degrees": -77.82788475793654,
+            "enabled": true,
+            "environmental_text_inputs": [],
+            "learned_tool": "move_forward",
+            "learned_turn_degrees": null,
+            "numeric_target_state_only": true,
+            "oracle_inputs_at_runtime": false,
+            "reason": "not_terminal_alignment",
+            "robot_position_xy_m": [
+              1.285448404207255,
+              0.058884476797779764
+            ],
+            "robot_yaw_degrees": -87.37719923257828,
+            "schema": "semantic_3d_chat.numeric_alignment_interlock.v1",
+            "stalled_turn_degrees": 1.0,
+            "stop_applied": false,
+            "target_available": true,
+            "target_xyz_m": [
+              2.031057119369507,
+              0.21971099078655243,
+              0.5250000953674316
+            ],
+            "terminal_alignment_requested": false
+          },
+          "numeric_approach_interlock": {
+            "actual_progress_m": 1.2867964024999163,
+            "angular_residual_degrees": 9.549314474641733,
+            "collision_limited_interlock": {
+              "collision_predicted": true,
+              "enabled": true,
+              "environmental_text_inputs": [],
+              "executed_safe_distance_m": null,
+              "maximum_collision_free_distance_m": 0.004999992032761913,
+              "minimum_safe_step_m": 0.02,
+              "numeric_collision_map_only": true,
+              "oracle_inputs_at_runtime": false,
+              "reason": "no_material_collision_free_step_remains",
+              "requested_distance_m": 0.340796135365963,
+              "safe_closest_reachable": true,
+              "schema": "semantic_3d_chat.collision_limited_approach_interlock.v1"
+            },
+            "collision_precheck_predicted_rejection": true,
+            "collision_rejection_deferred_to_exact_simulator": false,
+            "completion_mode": "collision_limited_safe_stop",
+            "completion_satisfied": true,
+            "corrected_arguments": {},
+            "corrected_tool": "stop",
+            "correction_applied": true,
+            "desired_yaw_degrees": -77.82788475793654,
+            "enabled": true,
+            "environmental_text_inputs": [],
+            "goal_satisfied": false,
+            "heading_deadband_degrees": 15.0,
+            "initial_robot_position_xy_m": [
+              0.0,
+              0.0
+            ],
+            "learned_tool": "move_forward",
+            "learned_turn_degrees": null,
+            "minimum_progress_m": 0.15,
+            "numeric_target_state_only": true,
+            "oracle_inputs_at_runtime": false,
+            "reason": "collision_limited_safe_stop",
+            "robot_position_xy_m": [
+              1.285448404207255,
+              0.058884476797779764
+            ],
+            "robot_yaw_degrees": -87.37719923257828,
+            "schema": "semantic_3d_chat.numeric_approach_interlock.v1",
+            "stop_applied": true,
+            "target_available": true,
+            "target_distance_m": 0.7627565297837082,
+            "target_standoff_m": 0.5,
+            "target_xyz_m": [
+              2.031057119369507,
+              0.21971099078655243,
+              0.5250000953674316
+            ],
+            "terminal_approach_requested": true
+          },
+          "oracle_inputs_at_runtime": false,
+          "query_embedding_sha256": "0f780477f599a107fe7f1382060cb69ce3242168b39dd149b57eda416b10095f",
+          "scored_voxels": 78188,
+          "target_available": true,
+          "target_state_sha256": "ba046bbb1f12cd2847de6119a86ca8712678b08780333e2734833455dfda715e",
+          "target_xyz_m": [
+            2.031057119369507,
+            0.21971099078655243,
+            0.5250000953674316
+          ]
+        }
+      ],
+      "environmental_text_inputs": [],
+      "kind": "learned_navigation_closed_loop",
+      "max_steps": 12,
+      "prefix_binding": {
+        "active_binding_sha256": "5a33d018e8cbc20f68fe3400fef749b0233cbb46a86f660c2d898a5d7d23f6bf",
+        "active_prefix_sha256": "61d20410aec627481c52bc6a50c05fd9d0faaa102b67875672900e1f43e30b1d",
+        "binding_sha256": "a2800a2b2c170712fb19b536accef608b54c964d45b599ca66db75414b45b388",
+        "map_sha256": "cc5423ab05523cf4a691e43463e9cd767641459277169c10c246ce738bfd7800",
+        "map_version": 6,
+        "processed_voxels": 8760,
+        "robot_state_encoder_sha256": "62cfdd2a9edcd0a450da19907009fdf3f5ed96cac4cedafae75f775bb96077c8",
+        "robot_state_sha256": "62e330651385cad436bfc50c2be93f824af73b606a7c4d62473c2f828acc2607",
+        "robot_tokens_sha256": "d521c7ed59b9379739c8be42a274e2c3acf669c7c573b7973ac665a19195c2ca",
+        "scene_control_signature_sha256": "2b882ebc59f8b5f6be6d6a445fbaeb58b938c8cd637962fd8399d9fd8eee2696",
+        "scene_id": "scene_000031",
+        "scene_prefix_sha256": "4b8638c228a1cd9333f2d0ef1eceeb5bbb87ba7746c62f289f29dfbc968be0a7",
+        "schema": "semantic_3d_chat.scene_prefix_binding.v2",
+        "source_voxels": 78188
+      },
+      "prefix_refresh_verified": true,
+      "primary_static_scene_retrieval": false,
+      "question_dependent_navigation_grounding": true,
+      "request_sha256": "1ec51fbd34749a31f003082e8c14ca5266520200bccdeb6cc1e0f220db6ab49f",
+      "static_scene_prefix_question_independent": true,
+      "step_count": 7,
+      "steps": [
+        {
+          "action_receipts": [
+            {
+              "action_count": 2,
+              "active_binding_sha256": "8da80768c3a5ac37afdab5ff062a1f5423e2384b8672e10a6f05d82200e57c52",
+              "active_prefix_sha256": "c378892ad33d2c1eb72878526526b6f6fa8d964adc028ff7d032b9b5eca345bf",
+              "angular_velocity_degrees": 0.0,
+              "binding_sha256": "360a3857eb4c28df8b601741fd37149ee95d1b3246de270d3a34c0d3deef3b38",
+              "body_yaw_degrees": -44.99931335449219,
+              "camera_position_m": [
+                0.0,
+                0.0,
+                1.2
+              ],
+              "camera_yaw_degrees": -44.99931335449219,
+              "clearance_m": null,
+              "collision": false,
+              "distance_moved": 0.0,
+              "error_code": null,
+              "last_movement_delta_m": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "linear_velocity_xy_m": [
+                0.0,
+                0.0
+              ],
+              "map_sha256": "6507cd8755c94e3c75f219dbd789b2bc3329fc2d0f7a1fca3bc3b2eec670b34f",
+              "map_version": 1,
+              "observation_id": "o_000001",
+              "pitch_degrees": 0.0,
+              "position_m": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "processed_voxels": 8716,
+              "robot_state_encoder_sha256": "62cfdd2a9edcd0a450da19907009fdf3f5ed96cac4cedafae75f775bb96077c8",
+              "robot_state_sha256": "9be9b2a7d6f11c68d37958428664d5e8385e303fd41efac50575b24645e913e7",
+              "robot_tokens_sha256": "b4596b1bd15fe170d28214900c598e8fb9b934a705b6d3570fe20988358f54f3",
+              "scan_count": 1,
+              "scan_coverage": 0.09104938271604938,
+              "scene_control_signature_sha256": "796ff1f7abe28a8ec664ee54f7ae92e544bdad02509b5bd81836fabf6af45ea5",
+              "scene_id": "scene_000031",
+              "scene_prefix_sha256": "440cf39581af070cc1334642bcc623b509401074d5690e97ca9580a29137eda9",
+              "scene_version": 1,
+              "schema": "semantic_3d_chat.scene_prefix_binding.v2",
+              "seed": 20260808,
+              "source_voxels": 77133,
+              "stopped": false,
+              "success": true,
+              "turn_degrees": -44.99931335449219,
+              "valid_depth_pixels": 50176,
+              "visible_voxels": 0
+            }
+          ],
+          "closed_loop_step": 1,
+          "command": "turn",
+          "continuous_grounding": {
+            "all_map_voxels_scored": true,
+            "eligible_voxels": 41596,
+            "environmental_text_inputs": [],
+            "map_sha256": "4c6349ec362cbcdc7111242e047d2798838c54e4b0e2ec72c9b145de05fa5918",
+            "numeric_alignment_interlock": {
+              "angular_residual_degrees": -84.94166704440777,
+              "corrected_turn_degrees": null,
+              "correction_applied": false,
+              "deadband_degrees": 3.0,
+              "desired_yaw_degrees": -84.94166704440777,
+              "enabled": true,
+              "environmental_text_inputs": [],
+              "learned_tool": "turn",
+              "learned_turn_degrees": -44.99931335449219,
+              "numeric_target_state_only": true,
+              "oracle_inputs_at_runtime": false,
+              "reason": "not_terminal_alignment",
+              "robot_position_xy_m": [
+                0.0,
+                0.0
+              ],
+              "robot_yaw_degrees": 0.0,
+              "schema": "semantic_3d_chat.numeric_alignment_interlock.v1",
+              "stalled_turn_degrees": 1.0,
+              "stop_applied": false,
+              "target_available": true,
+              "target_xyz_m": [
+                2.9994702339172363,
+                0.2654970586299896,
+                0.2221750169992447
+              ],
+              "terminal_alignment_requested": false
+            },
+            "numeric_approach_interlock": {
+              "actual_progress_m": 0.0,
+              "angular_residual_degrees": -84.94166704440777,
+              "collision_limited_interlock": {
+                "collision_predicted": false,
+                "enabled": true,
+                "environmental_text_inputs": [],
+                "executed_safe_distance_m": null,
+                "maximum_collision_free_distance_m": null,
+                "minimum_safe_step_m": 0.02,
+                "numeric_collision_map_only": true,
+                "oracle_inputs_at_runtime": false,
+                "reason": "not_applicable",
+                "requested_distance_m": null,
+                "safe_closest_reachable": false,
+                "schema": "semantic_3d_chat.collision_limited_approach_interlock.v1"
+              },
+              "collision_precheck_predicted_rejection": false,
+              "collision_rejection_deferred_to_exact_simulator": false,
+              "completion_mode": null,
+              "completion_satisfied": false,
+              "corrected_arguments": null,
+              "corrected_tool": null,
+              "correction_applied": false,
+              "desired_yaw_degrees": -84.94166704440777,
+              "enabled": true,
+              "environmental_text_inputs": [],
+              "goal_satisfied": false,
+              "heading_deadband_degrees": 15.0,
+              "initial_robot_position_xy_m": [
+                0.0,
+                0.0
+              ],
+              "learned_tool": "turn",
+              "learned_turn_degrees": -44.99931335449219,
+              "minimum_progress_m": 0.15,
+              "numeric_target_state_only": true,
+              "oracle_inputs_at_runtime": false,
+              "reason": "learned_action_not_stalled",
+              "robot_position_xy_m": [
+                0.0,
+                0.0
+              ],
+              "robot_yaw_degrees": 0.0,
+              "schema": "semantic_3d_chat.numeric_approach_interlock.v1",
+              "stop_applied": false,
+              "target_available": true,
+              "target_distance_m": 3.011197498055665,
+              "target_standoff_m": 0.5,
+              "target_xyz_m": [
+                2.9994702339172363,
+                0.2654970586299896,
+                0.2221750169992447
+              ],
+              "terminal_approach_requested": true
+            },
+            "oracle_inputs_at_runtime": false,
+            "query_embedding_sha256": "0f780477f599a107fe7f1382060cb69ce3242168b39dd149b57eda416b10095f",
+            "scored_voxels": 76407,
+            "target_available": true,
+            "target_state_sha256": "34be2810d3132ffdd50e8d78f713227b2d7cb2875a5ce0450e4df743bbd3f2e9",
+            "target_xyz_m": [
+              2.9994702339172363,
+              0.2654970586299896,
+              0.2221750169992447
+            ]
+          },
+          "environmental_text_inputs": [],
+          "groundings": [],
+          "kind": "navigation",
+          "navigation": null,
+          "prefix_binding": {
+            "active_binding_sha256": "8da80768c3a5ac37afdab5ff062a1f5423e2384b8672e10a6f05d82200e57c52",
+            "active_prefix_sha256": "c378892ad33d2c1eb72878526526b6f6fa8d964adc028ff7d032b9b5eca345bf",
+            "binding_sha256": "360a3857eb4c28df8b601741fd37149ee95d1b3246de270d3a34c0d3deef3b38",
+            "map_sha256": "6507cd8755c94e3c75f219dbd789b2bc3329fc2d0f7a1fca3bc3b2eec670b34f",
+            "map_version": 1,
+            "processed_voxels": 8716,
+            "robot_state_encoder_sha256": "62cfdd2a9edcd0a450da19907009fdf3f5ed96cac4cedafae75f775bb96077c8",
+            "robot_state_sha256": "9be9b2a7d6f11c68d37958428664d5e8385e303fd41efac50575b24645e913e7",
+            "robot_tokens_sha256": "b4596b1bd15fe170d28214900c598e8fb9b934a705b6d3570fe20988358f54f3",
+            "scene_control_signature_sha256": "796ff1f7abe28a8ec664ee54f7ae92e544bdad02509b5bd81836fabf6af45ea5",
+            "scene_id": "scene_000031",
+            "scene_prefix_sha256": "440cf39581af070cc1334642bcc623b509401074d5690e97ca9580a29137eda9",
+            "schema": "semantic_3d_chat.scene_prefix_binding.v2",
+            "source_voxels": 77133
+          },
+          "question_dependent_scene_retrieval": false,
+          "request_sha256": "1ec51fbd34749a31f003082e8c14ca5266520200bccdeb6cc1e0f220db6ab49f",
+          "success": true,
+          "target_count": 0,
+          "tool_selection": {
+            "accepted": true,
+            "active_prefix_sha256": "1de20cbe907a74343082aa86a70edee5998ee4259eaf8368b56e1512f04f1b37",
+            "attempts": 1,
+            "call": {
+              "arguments": {
+                "angle_degrees": -44.99931335449219
+              },
+              "tool": "turn"
+            },
+            "call_sha256": "919ee360964c977ae7a2fa039ffd7d34f37e18e89de3dd4904ef0b530a6398c6",
+            "environmental_text_inputs": [],
+            "fallback_policy": "fail_closed",
+            "local_inference": true,
+            "proposal_sha256": [
+              "919ee360964c977ae7a2fa039ffd7d34f37e18e89de3dd4904ef0b530a6398c6"
+            ],
+            "raw_model_output_logged": false,
+            "retries": 0,
+            "robot_tokens_sha256": "6be3c46661e78deee1995bf83c95b9585931c8282bf9a9eb0b6810185da758e0",
+            "scene_prefix_sha256": "8aeb5ee07bfc955b41f5793d58d8a92f9a16836d86987468e901caa129917b58",
+            "schema": "semantic_3d_chat.local_gemma_tool_decision.v1",
+            "training_status": "supervised_continuous_semantic_grounded_navigation_policy_v3",
+            "used_continuous_robot_tokens": true,
+            "used_continuous_scene_prefix": true,
+            "validation_errors": []
+          },
+          "tool_selection_fallback_used": false
+        },
+        {
+          "action_receipts": [
+            {
+              "action_count": 4,
+              "active_binding_sha256": "bb853a8bbfaa236b5390385811f239d3b08c6af181752fe617c480e0f417221d",
+              "active_prefix_sha256": "1b9968d4fff9ac62e6e3002d5e3aaa042c164a99df677bdd6781d8ce9c9d2d5d",
+              "angular_velocity_degrees": 0.0,
+              "binding_sha256": "18b487a17e25906bd67a8c05af4af4e6166f3f2d2fabae9676f5315651824bdb",
+              "body_yaw_degrees": -87.37719923257828,
+              "camera_position_m": [
+                0.0,
+                0.0,
+                1.2
+              ],
+              "camera_yaw_degrees": -87.37719923257828,
+              "clearance_m": null,
+              "collision": false,
+              "distance_moved": 0.0,
+              "error_code": null,
+              "last_movement_delta_m": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "linear_velocity_xy_m": [
+                0.0,
+                0.0
+              ],
+              "map_sha256": "bd5ee72817fdd2e3acd6546d783d1da895bf50515549c9ecde23cdf770e7e508",
+              "map_version": 2,
+              "observation_id": "o_000002",
+              "pitch_degrees": 0.0,
+              "position_m": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "processed_voxels": 8723,
+              "robot_state_encoder_sha256": "62cfdd2a9edcd0a450da19907009fdf3f5ed96cac4cedafae75f775bb96077c8",
+              "robot_state_sha256": "455e56088c9df1b212813e665382c0cda2f0243650dc68f2b16886a221f74617",
+              "robot_tokens_sha256": "11aad43bf13e1b13c0d1188254ec076f03395030e816a751c5ef83279f42dfc9",
+              "scan_count": 2,
+              "scan_coverage": 0.1396604938271605,
+              "scene_control_signature_sha256": "5e64304821099217a152ca7ff83648a7b4d2bd2386682863e0bc0735228be389",
+              "scene_id": "scene_000031",
+              "scene_prefix_sha256": "2e7c07eb000a516219d2d325fa5561e3cac995f4af184cb156b25016c3c10245",
+              "scene_version": 2,
+              "schema": "semantic_3d_chat.scene_prefix_binding.v2",
+              "seed": 20260808,
+              "source_voxels": 77564,
+              "stopped": false,
+              "success": true,
+              "turn_degrees": -42.37788587808609,
+              "valid_depth_pixels": 50176,
+              "visible_voxels": 0
+            }
+          ],
+          "closed_loop_step": 2,
+          "command": "turn",
+          "continuous_grounding": {
+            "all_map_voxels_scored": true,
+            "eligible_voxels": 41986,
+            "environmental_text_inputs": [],
+            "map_sha256": "6507cd8755c94e3c75f219dbd789b2bc3329fc2d0f7a1fca3bc3b2eec670b34f",
+            "numeric_alignment_interlock": {
+              "angular_residual_degrees": -39.94235368991558,
+              "corrected_turn_degrees": null,
+              "correction_applied": false,
+              "deadband_degrees": 3.0,
+              "desired_yaw_degrees": -84.94166704440777,
+              "enabled": true,
+              "environmental_text_inputs": [],
+              "learned_tool": "turn",
+              "learned_turn_degrees": -42.37788587808609,
+              "numeric_target_state_only": true,
+              "oracle_inputs_at_runtime": false,
+              "reason": "not_terminal_alignment",
+              "robot_position_xy_m": [
+                0.0,
+                0.0
+              ],
+              "robot_yaw_degrees": -44.99931335449219,
+              "schema": "semantic_3d_chat.numeric_alignment_interlock.v1",
+              "stalled_turn_degrees": 1.0,
+              "stop_applied": false,
+              "target_available": true,
+              "target_xyz_m": [
+                2.9994702339172363,
+                0.2654970586299896,
+                0.2221750169992447
+              ],
+              "terminal_alignment_requested": false
+            },
+            "numeric_approach_interlock": {
+              "actual_progress_m": 0.0,
+              "angular_residual_degrees": -39.94235368991558,
+              "collision_limited_interlock": {
+                "collision_predicted": false,
+                "enabled": true,
+                "environmental_text_inputs": [],
+                "executed_safe_distance_m": null,
+                "maximum_collision_free_distance_m": null,
+                "minimum_safe_step_m": 0.02,
+                "numeric_collision_map_only": true,
+                "oracle_inputs_at_runtime": false,
+                "reason": "not_applicable",
+                "requested_distance_m": null,
+                "safe_closest_reachable": false,
+                "schema": "semantic_3d_chat.collision_limited_approach_interlock.v1"
+              },
+              "collision_precheck_predicted_rejection": false,
+              "collision_rejection_deferred_to_exact_simulator": false,
+              "completion_mode": null,
+              "completion_satisfied": false,
+              "corrected_arguments": null,
+              "corrected_tool": null,
+              "correction_applied": false,
+              "desired_yaw_degrees": -84.94166704440777,
+              "enabled": true,
+              "environmental_text_inputs": [],
+              "goal_satisfied": false,
+              "heading_deadband_degrees": 15.0,
+              "initial_robot_position_xy_m": [
+                0.0,
+                0.0
+              ],
+              "learned_tool": "turn",
+              "learned_turn_degrees": -42.37788587808609,
+              "minimum_progress_m": 0.15,
+              "numeric_target_state_only": true,
+              "oracle_inputs_at_runtime": false,
+              "reason": "learned_action_not_stalled",
+              "robot_position_xy_m": [
+                0.0,
+                0.0
+              ],
+              "robot_yaw_degrees": -44.99931335449219,
+              "schema": "semantic_3d_chat.numeric_approach_interlock.v1",
+              "stop_applied": false,
+              "target_available": true,
+              "target_distance_m": 3.011197498055665,
+              "target_standoff_m": 0.5,
+              "target_xyz_m": [
+                2.9994702339172363,
+                0.2654970586299896,
+                0.2221750169992447
+              ],
+              "terminal_approach_requested": true
+            },
+            "oracle_inputs_at_runtime": false,
+            "query_embedding_sha256": "0f780477f599a107fe7f1382060cb69ce3242168b39dd149b57eda416b10095f",
+            "scored_voxels": 77133,
+            "target_available": true,
+            "target_state_sha256": "ca4d133e982e879d8a4a4f9ca8b154d9e046b8706792e0d0f625c900ead9ce7b",
+            "target_xyz_m": [
+              2.9994702339172363,
+              0.2654970586299896,
+              0.2221750169992447
+            ]
+          },
+          "environmental_text_inputs": [],
+          "groundings": [],
+          "kind": "navigation",
+          "navigation": null,
+          "prefix_binding": {
+            "active_binding_sha256": "bb853a8bbfaa236b5390385811f239d3b08c6af181752fe617c480e0f417221d",
+            "active_prefix_sha256": "1b9968d4fff9ac62e6e3002d5e3aaa042c164a99df677bdd6781d8ce9c9d2d5d",
+            "binding_sha256": "18b487a17e25906bd67a8c05af4af4e6166f3f2d2fabae9676f5315651824bdb",
+            "map_sha256": "bd5ee72817fdd2e3acd6546d783d1da895bf50515549c9ecde23cdf770e7e508",
+            "map_version": 2,
+            "processed_voxels": 8723,
+            "robot_state_encoder_sha256": "62cfdd2a9edcd0a450da19907009fdf3f5ed96cac4cedafae75f775bb96077c8",
+            "robot_state_sha256": "455e56088c9df1b212813e665382c0cda2f0243650dc68f2b16886a221f74617",
+            "robot_tokens_sha256": "11aad43bf13e1b13c0d1188254ec076f03395030e816a751c5ef83279f42dfc9",
+            "scene_control_signature_sha256": "5e64304821099217a152ca7ff83648a7b4d2bd2386682863e0bc0735228be389",
+            "scene_id": "scene_000031",
+            "scene_prefix_sha256": "2e7c07eb000a516219d2d325fa5561e3cac995f4af184cb156b25016c3c10245",
+            "schema": "semantic_3d_chat.scene_prefix_binding.v2",
+            "source_voxels": 77564
+          },
+          "question_dependent_scene_retrieval": false,
+          "request_sha256": "1ec51fbd34749a31f003082e8c14ca5266520200bccdeb6cc1e0f220db6ab49f",
+          "success": true,
+          "target_count": 0,
+          "tool_selection": {
+            "accepted": true,
+            "active_prefix_sha256": "c378892ad33d2c1eb72878526526b6f6fa8d964adc028ff7d032b9b5eca345bf",
+            "attempts": 1,
+            "call": {
+              "arguments": {
+                "angle_degrees": -42.37788587808609
+              },
+              "tool": "turn"
+            },
+            "call_sha256": "ffc4fa36b24d3d2c562b4dc49fc7825612c47ff58468151e76be5323339dc7d0",
+            "environmental_text_inputs": [],
+            "fallback_policy": "fail_closed",
+            "local_inference": true,
+            "proposal_sha256": [
+              "ffc4fa36b24d3d2c562b4dc49fc7825612c47ff58468151e76be5323339dc7d0"
+            ],
+            "raw_model_output_logged": false,
+            "retries": 0,
+            "robot_tokens_sha256": "b4596b1bd15fe170d28214900c598e8fb9b934a705b6d3570fe20988358f54f3",
+            "scene_prefix_sha256": "440cf39581af070cc1334642bcc623b509401074d5690e97ca9580a29137eda9",
+            "schema": "semantic_3d_chat.local_gemma_tool_decision.v1",
+            "training_status": "supervised_continuous_semantic_grounded_navigation_policy_v3",
+            "used_continuous_robot_tokens": true,
+            "used_continuous_scene_prefix": true,
+            "validation_errors": []
+          },
+          "tool_selection_fallback_used": false
+        },
+        {
+          "action_receipts": [
+            {
+              "action_count": 6,
+              "active_binding_sha256": "b73be81de375778e268b9ec82ac7c8b2dd47cbe0041280a907f657a81885fe1a",
+              "active_prefix_sha256": "0780df986ce067b16b0f16fb6a197040c94031de1f2b90f51be3f96bb5c1e260",
+              "angular_velocity_degrees": 0.0,
+              "binding_sha256": "31d3af90d855cfd9612a360229e646aa09b98c285220e862dc0ddd3b2ae5b38a",
+              "body_yaw_degrees": -87.37719923257828,
+              "camera_position_m": [
+                0.42018194431519146,
+                0.019247909033060385,
+                1.2
+              ],
+              "camera_yaw_degrees": -87.37719923257828,
+              "clearance_m": 0.3207712517826121,
+              "collision": false,
+              "distance_moved": 0.4206225723028183,
+              "error_code": null,
+              "last_movement_delta_m": [
+                0.42018194431519146,
+                0.019247909033060385,
+                0.0
+              ],
+              "linear_velocity_xy_m": [
+                0.0,
+                0.0
+              ],
+              "map_sha256": "ddb431c141d9b7c4a3ee84c0080c434824a7126ba097ce05e9e4b9c3b451956d",
+              "map_version": 3,
+              "observation_id": "o_000003",
+              "pitch_degrees": 0.0,
+              "position_m": [
+                0.42018194431519146,
+                0.019247909033060385,
+                0.0
+              ],
+              "processed_voxels": 8725,
+              "robot_state_encoder_sha256": "62cfdd2a9edcd0a450da19907009fdf3f5ed96cac4cedafae75f775bb96077c8",
+              "robot_state_sha256": "c2d983f85e583644923452542507c9e0e505e04b71f39ad602423e4dd0140c5c",
+              "robot_tokens_sha256": "132d620b9dd30d6243c739c46ecb4c0a254e7cc2234d3433b1aa11dcb1a67930",
+              "scan_count": 3,
+              "scan_coverage": 0.1396604938271605,
+              "scene_control_signature_sha256": "5a96802277f175070e427804836094d571a6c676fb2b6d6a079f14b559d8df4a",
+              "scene_id": "scene_000031",
+              "scene_prefix_sha256": "e1dca10bb4905f6997846dd70cb1a4f794f5ab6a0538f551f0e388aecd3724d4",
+              "scene_version": 3,
+              "schema": "semantic_3d_chat.scene_prefix_binding.v2",
+              "seed": 20260808,
+              "source_voxels": 77765,
+              "stopped": false,
+              "success": true,
+              "turn_degrees": 0.0,
+              "valid_depth_pixels": 50176,
+              "visible_voxels": 0
+            }
+          ],
+          "closed_loop_step": 3,
+          "command": "move_forward",
+          "continuous_grounding": {
+            "all_map_voxels_scored": true,
+            "eligible_voxels": 42199,
+            "environmental_text_inputs": [],
+            "map_sha256": "bd5ee72817fdd2e3acd6546d783d1da895bf50515549c9ecde23cdf770e7e508",
+            "numeric_alignment_interlock": {
+              "angular_residual_degrees": 2.4879707790830423,
+              "corrected_turn_degrees": null,
+              "correction_applied": false,
+              "deadband_degrees": 3.0,
+              "desired_yaw_degrees": -84.88922845349524,
+              "enabled": true,
+              "environmental_text_inputs": [],
+              "learned_tool": "move_forward",
+              "learned_turn_degrees": null,
+              "numeric_target_state_only": true,
+              "oracle_inputs_at_runtime": false,
+              "reason": "not_terminal_alignment",
+              "robot_position_xy_m": [
+                0.0,
+                0.0
+              ],
+              "robot_yaw_degrees": -87.37719923257828,
+              "schema": "semantic_3d_chat.numeric_alignment_interlock.v1",
+              "stalled_turn_degrees": 1.0,
+              "stop_applied": false,
+              "target_available": true,
+              "target_xyz_m": [
+                3.0006649494171143,
+                0.2683708369731903,
+                0.22745943069458008
+              ],
+              "terminal_alignment_requested": false
+            },
+            "numeric_approach_interlock": {
+              "actual_progress_m": 0.0,
+              "angular_residual_degrees": 2.4879707790830423,
+              "collision_limited_interlock": {
+                "collision_predicted": false,
+                "enabled": true,
+                "environmental_text_inputs": [],
+                "executed_safe_distance_m": null,
+                "maximum_collision_free_distance_m": null,
+                "minimum_safe_step_m": 0.02,
+                "numeric_collision_map_only": true,
+                "oracle_inputs_at_runtime": false,
+                "reason": "full_step_collision_free",
+                "requested_distance_m": 0.4206225723028183,
+                "safe_closest_reachable": false,
+                "schema": "semantic_3d_chat.collision_limited_approach_interlock.v1"
+              },
+              "collision_precheck_predicted_rejection": false,
+              "collision_rejection_deferred_to_exact_simulator": false,
+              "completion_mode": null,
+              "completion_satisfied": false,
+              "corrected_arguments": null,
+              "corrected_tool": null,
+              "correction_applied": false,
+              "desired_yaw_degrees": -84.88922845349524,
+              "enabled": true,
+              "environmental_text_inputs": [],
+              "goal_satisfied": false,
+              "heading_deadband_degrees": 15.0,
+              "initial_robot_position_xy_m": [
+                0.0,
+                0.0
+              ],
+              "learned_tool": "move_forward",
+              "learned_turn_degrees": null,
+              "minimum_progress_m": 0.15,
+              "numeric_target_state_only": true,
+              "oracle_inputs_at_runtime": false,
+              "reason": "learned_action_not_stalled",
+              "robot_position_xy_m": [
+                0.0,
+                0.0
+              ],
+              "robot_yaw_degrees": -87.37719923257828,
+              "schema": "semantic_3d_chat.numeric_approach_interlock.v1",
+              "stop_applied": false,
+              "target_available": true,
+              "target_distance_m": 3.0126422032491846,
+              "target_standoff_m": 0.5,
+              "target_xyz_m": [
+                3.0006649494171143,
+                0.2683708369731903,
+                0.22745943069458008
+              ],
+              "terminal_approach_requested": true
+            },
+            "oracle_inputs_at_runtime": false,
+            "query_embedding_sha256": "0f780477f599a107fe7f1382060cb69ce3242168b39dd149b57eda416b10095f",
+            "scored_voxels": 77564,
+            "target_available": true,
+            "target_state_sha256": "fdb5bcd7521c09f7039ec96f6e57d15addcd1add8ec14adf783f2074312b3d57",
+            "target_xyz_m": [
+              3.0006649494171143,
+              0.2683708369731903,
+              0.22745943069458008
+            ]
+          },
+          "environmental_text_inputs": [],
+          "groundings": [],
+          "kind": "navigation",
+          "navigation": null,
+          "prefix_binding": {
+            "active_binding_sha256": "b73be81de375778e268b9ec82ac7c8b2dd47cbe0041280a907f657a81885fe1a",
+            "active_prefix_sha256": "0780df986ce067b16b0f16fb6a197040c94031de1f2b90f51be3f96bb5c1e260",
+            "binding_sha256": "31d3af90d855cfd9612a360229e646aa09b98c285220e862dc0ddd3b2ae5b38a",
+            "map_sha256": "ddb431c141d9b7c4a3ee84c0080c434824a7126ba097ce05e9e4b9c3b451956d",
+            "map_version": 3,
+            "processed_voxels": 8725,
+            "robot_state_encoder_sha256": "62cfdd2a9edcd0a450da19907009fdf3f5ed96cac4cedafae75f775bb96077c8",
+            "robot_state_sha256": "c2d983f85e583644923452542507c9e0e505e04b71f39ad602423e4dd0140c5c",
+            "robot_tokens_sha256": "132d620b9dd30d6243c739c46ecb4c0a254e7cc2234d3433b1aa11dcb1a67930",
+            "scene_control_signature_sha256": "5a96802277f175070e427804836094d571a6c676fb2b6d6a079f14b559d8df4a",
+            "scene_id": "scene_000031",
+            "scene_prefix_sha256": "e1dca10bb4905f6997846dd70cb1a4f794f5ab6a0538f551f0e388aecd3724d4",
+            "schema": "semantic_3d_chat.scene_prefix_binding.v2",
+            "source_voxels": 77765
+          },
+          "question_dependent_scene_retrieval": false,
+          "request_sha256": "1ec51fbd34749a31f003082e8c14ca5266520200bccdeb6cc1e0f220db6ab49f",
+          "success": true,
+          "target_count": 0,
+          "tool_selection": {
+            "accepted": true,
+            "active_prefix_sha256": "1b9968d4fff9ac62e6e3002d5e3aaa042c164a99df677bdd6781d8ce9c9d2d5d",
+            "attempts": 1,
+            "call": {
+              "arguments": {
+                "distance_meters": 0.4206225723028183
+              },
+              "tool": "move_forward"
+            },
+            "call_sha256": "9a44a49609bd3711e6db6e68ed1e76dc44532c30dc589040e1d62d5cb3c4036f",
+            "environmental_text_inputs": [],
+            "fallback_policy": "fail_closed",
+            "local_inference": true,
+            "proposal_sha256": [
+              "9a44a49609bd3711e6db6e68ed1e76dc44532c30dc589040e1d62d5cb3c4036f"
+            ],
+            "raw_model_output_logged": false,
+            "retries": 0,
+            "robot_tokens_sha256": "11aad43bf13e1b13c0d1188254ec076f03395030e816a751c5ef83279f42dfc9",
+            "scene_prefix_sha256": "2e7c07eb000a516219d2d325fa5561e3cac995f4af184cb156b25016c3c10245",
+            "schema": "semantic_3d_chat.local_gemma_tool_decision.v1",
+            "training_status": "supervised_continuous_semantic_grounded_navigation_policy_v3",
+            "used_continuous_robot_tokens": true,
+            "used_continuous_scene_prefix": true,
+            "validation_errors": []
+          },
+          "tool_selection_fallback_used": false
+        },
+        {
+          "action_receipts": [
+            {
+              "action_count": 8,
+              "active_binding_sha256": "e1debbe0eb4fb7a535b1cf4e2962ce7da241e71ce68624a6ac637d35ee68ee9f",
+              "active_prefix_sha256": "3f294c5089fdb838ea19dec0cde3f57fdb7b58b2d9270015b9f4ebc8d5a47cb5",
+              "angular_velocity_degrees": 0.0,
+              "binding_sha256": "75395fb9da59b7426af7a902ccfd7cca9a63c5348ace1498406515546bc6221e",
+              "body_yaw_degrees": -87.37719923257828,
+              "camera_position_m": [
+                0.8489400203921567,
+                0.038888677888489376,
+                1.2
+              ],
+              "camera_yaw_degrees": -87.37719923257828,
+              "clearance_m": 0.31760902579079,
+              "collision": false,
+              "distance_moved": 0.42920769751071924,
+              "error_code": null,
+              "last_movement_delta_m": [
+                0.4287580760769652,
+                0.01964076885542899,
+                0.0
+              ],
+              "linear_velocity_xy_m": [
+                0.0,
+                0.0
+              ],
+              "map_sha256": "36929e1d7cce0969ca914d527afe1998f4694475f3e4e03a636c09d3e0502b77",
+              "map_version": 4,
+              "observation_id": "o_000004",
+              "pitch_degrees": 0.0,
+              "position_m": [
+                0.8489400203921567,
+                0.038888677888489376,
+                0.0
+              ],
+              "processed_voxels": 8740,
+              "robot_state_encoder_sha256": "62cfdd2a9edcd0a450da19907009fdf3f5ed96cac4cedafae75f775bb96077c8",
+              "robot_state_sha256": "6d76af07af3eed5d276a69ca25823cd7a914170610c0fb781ec8b2769c124ca6",
+              "robot_tokens_sha256": "6c7c3fe63c61c7d9c7925d4ee694f83f8ae21de25cbbb6fee1b49535cd6c00e7",
+              "scan_count": 4,
+              "scan_coverage": 0.1396604938271605,
+              "scene_control_signature_sha256": "4aff84771795be17a1e0f22bcc8e623069a85daf6948c30dddbaf3c257611647",
+              "scene_id": "scene_000031",
+              "scene_prefix_sha256": "63f50f0128508a8701bad1b32c0803b26e126e887cabdd7c2000fcd2af152618",
+              "scene_version": 4,
+              "schema": "semantic_3d_chat.scene_prefix_binding.v2",
+              "seed": 20260808,
+              "source_voxels": 77919,
+              "stopped": false,
+              "success": true,
+              "turn_degrees": 0.0,
+              "valid_depth_pixels": 50176,
+              "visible_voxels": 0
+            }
+          ],
+          "closed_loop_step": 4,
+          "command": "move_forward",
+          "continuous_grounding": {
+            "all_map_voxels_scored": true,
+            "eligible_voxels": 42327,
+            "environmental_text_inputs": [],
+            "map_sha256": "ddb431c141d9b7c4a3ee84c0080c434824a7126ba097ce05e9e4b9c3b451956d",
+            "numeric_alignment_interlock": {
+              "angular_residual_degrees": 9.368683287391107,
+              "corrected_turn_degrees": null,
+              "correction_applied": false,
+              "deadband_degrees": 3.0,
+              "desired_yaw_degrees": -78.00851594518717,
+              "enabled": true,
+              "environmental_text_inputs": [],
+              "learned_tool": "move_forward",
+              "learned_turn_degrees": null,
+              "numeric_target_state_only": true,
+              "oracle_inputs_at_runtime": false,
+              "reason": "not_terminal_alignment",
+              "robot_position_xy_m": [
+                0.42018194431519146,
+                0.019247909033060385
+              ],
+              "robot_yaw_degrees": -87.37719923257828,
+              "schema": "semantic_3d_chat.numeric_alignment_interlock.v1",
+              "stalled_turn_degrees": 1.0,
+              "stop_applied": false,
+              "target_available": true,
+              "target_xyz_m": [
+                3.009793758392334,
+                0.5692846179008484,
+                0.20236770808696747
+              ],
+              "terminal_alignment_requested": false
+            },
+            "numeric_approach_interlock": {
+              "actual_progress_m": 0.4206225723028183,
+              "angular_residual_degrees": 9.368683287391107,
+              "collision_limited_interlock": {
+                "collision_predicted": false,
+                "enabled": true,
+                "environmental_text_inputs": [],
+                "executed_safe_distance_m": null,
+                "maximum_collision_free_distance_m": null,
+                "minimum_safe_step_m": 0.02,
+                "numeric_collision_map_only": true,
+                "oracle_inputs_at_runtime": false,
+                "reason": "full_step_collision_free",
+                "requested_distance_m": 0.4292076975107193,
+                "safe_closest_reachable": false,
+                "schema": "semantic_3d_chat.collision_limited_approach_interlock.v1"
+              },
+              "collision_precheck_predicted_rejection": false,
+              "collision_rejection_deferred_to_exact_simulator": false,
+              "completion_mode": null,
+              "completion_satisfied": false,
+              "corrected_arguments": null,
+              "corrected_tool": null,
+              "correction_applied": false,
+              "desired_yaw_degrees": -78.00851594518717,
+              "enabled": true,
+              "environmental_text_inputs": [],
+              "goal_satisfied": false,
+              "heading_deadband_degrees": 15.0,
+              "initial_robot_position_xy_m": [
+                0.0,
+                0.0
+              ],
+              "learned_tool": "move_forward",
+              "learned_turn_degrees": null,
+              "minimum_progress_m": 0.15,
+              "numeric_target_state_only": true,
+              "oracle_inputs_at_runtime": false,
+              "reason": "learned_action_not_stalled",
+              "robot_position_xy_m": [
+                0.42018194431519146,
+                0.019247909033060385
+              ],
+              "robot_yaw_degrees": -87.37719923257828,
+              "schema": "semantic_3d_chat.numeric_approach_interlock.v1",
+              "stop_applied": false,
+              "target_available": true,
+              "target_distance_m": 2.6473816741660086,
+              "target_standoff_m": 0.5,
+              "target_xyz_m": [
+                3.009793758392334,
+                0.5692846179008484,
+                0.20236770808696747
+              ],
+              "terminal_approach_requested": true
+            },
+            "oracle_inputs_at_runtime": false,
+            "query_embedding_sha256": "0f780477f599a107fe7f1382060cb69ce3242168b39dd149b57eda416b10095f",
+            "scored_voxels": 77765,
+            "target_available": true,
+            "target_state_sha256": "2cc89a6fb1f7ab245d9d5c42d1136e5d4d211472646965866a2acb4f6a43b7a6",
+            "target_xyz_m": [
+              3.009793758392334,
+              0.5692846179008484,
+              0.20236770808696747
+            ]
+          },
+          "environmental_text_inputs": [],
+          "groundings": [],
+          "kind": "navigation",
+          "navigation": null,
+          "prefix_binding": {
+            "active_binding_sha256": "e1debbe0eb4fb7a535b1cf4e2962ce7da241e71ce68624a6ac637d35ee68ee9f",
+            "active_prefix_sha256": "3f294c5089fdb838ea19dec0cde3f57fdb7b58b2d9270015b9f4ebc8d5a47cb5",
+            "binding_sha256": "75395fb9da59b7426af7a902ccfd7cca9a63c5348ace1498406515546bc6221e",
+            "map_sha256": "36929e1d7cce0969ca914d527afe1998f4694475f3e4e03a636c09d3e0502b77",
+            "map_version": 4,
+            "processed_voxels": 8740,
+            "robot_state_encoder_sha256": "62cfdd2a9edcd0a450da19907009fdf3f5ed96cac4cedafae75f775bb96077c8",
+            "robot_state_sha256": "6d76af07af3eed5d276a69ca25823cd7a914170610c0fb781ec8b2769c124ca6",
+            "robot_tokens_sha256": "6c7c3fe63c61c7d9c7925d4ee694f83f8ae21de25cbbb6fee1b49535cd6c00e7",
+            "scene_control_signature_sha256": "4aff84771795be17a1e0f22bcc8e623069a85daf6948c30dddbaf3c257611647",
+            "scene_id": "scene_000031",
+            "scene_prefix_sha256": "63f50f0128508a8701bad1b32c0803b26e126e887cabdd7c2000fcd2af152618",
+            "schema": "semantic_3d_chat.scene_prefix_binding.v2",
+            "source_voxels": 77919
+          },
+          "question_dependent_scene_retrieval": false,
+          "request_sha256": "1ec51fbd34749a31f003082e8c14ca5266520200bccdeb6cc1e0f220db6ab49f",
+          "success": true,
+          "target_count": 0,
+          "tool_selection": {
+            "accepted": true,
+            "active_prefix_sha256": "0780df986ce067b16b0f16fb6a197040c94031de1f2b90f51be3f96bb5c1e260",
+            "attempts": 1,
+            "call": {
+              "arguments": {
+                "distance_meters": 0.4292076975107193
+              },
+              "tool": "move_forward"
+            },
+            "call_sha256": "83a89f8d85c76ea6c7f1b60cc179c4f846eebc5004db65ab4b05c09dd4fb51e5",
+            "environmental_text_inputs": [],
+            "fallback_policy": "fail_closed",
+            "local_inference": true,
+            "proposal_sha256": [
+              "83a89f8d85c76ea6c7f1b60cc179c4f846eebc5004db65ab4b05c09dd4fb51e5"
+            ],
+            "raw_model_output_logged": false,
+            "retries": 0,
+            "robot_tokens_sha256": "132d620b9dd30d6243c739c46ecb4c0a254e7cc2234d3433b1aa11dcb1a67930",
+            "scene_prefix_sha256": "e1dca10bb4905f6997846dd70cb1a4f794f5ab6a0538f551f0e388aecd3724d4",
+            "schema": "semantic_3d_chat.local_gemma_tool_decision.v1",
+            "training_status": "supervised_continuous_semantic_grounded_navigation_policy_v3",
+            "used_continuous_robot_tokens": true,
+            "used_continuous_scene_prefix": true,
+            "validation_errors": []
+          },
+          "tool_selection_fallback_used": false
+        },
+        {
+          "action_receipts": [
+            {
+              "action_count": 10,
+              "active_binding_sha256": "2179c35d9090a6106fb72aa677b7d46020991a8d597b21f04e039d3e21f83df8",
+              "active_prefix_sha256": "d329a488cc44146ee8a0b0dcc43655a05c2e24798ca370f0df79bc50867252b9",
+              "angular_velocity_degrees": 0.0,
+              "binding_sha256": "a45be6ea5a1dcbe921cb1c61d033aa1560792fc035e9a7fe979a5024a0dfdbc4",
+              "body_yaw_degrees": -87.37719923257828,
+              "camera_position_m": [
+                1.218962993256166,
+                0.055838879148176215,
+                1.2
+              ],
+              "camera_yaw_degrees": -87.37719923257828,
+              "clearance_m": 0.07155228619650356,
+              "collision": false,
+              "distance_moved": 0.37041100114583986,
+              "error_code": null,
+              "last_movement_delta_m": [
+                0.3700229728640094,
+                0.01695020125968684,
+                0.0
+              ],
+              "linear_velocity_xy_m": [
+                0.0,
+                0.0
+              ],
+              "map_sha256": "501e40572b4306b3855613e24036f7ec53d5fce50137324dde72c01aea99aeb0",
+              "map_version": 5,
+              "observation_id": "o_000005",
+              "pitch_degrees": 0.0,
+              "position_m": [
+                1.218962993256166,
+                0.055838879148176215,
+                0.0
+              ],
+              "processed_voxels": 8760,
+              "robot_state_encoder_sha256": "62cfdd2a9edcd0a450da19907009fdf3f5ed96cac4cedafae75f775bb96077c8",
+              "robot_state_sha256": "73b43d7f7179c4691a6ad0d0a437e64c9211a5025978184697bf0bcef3229f4e",
+              "robot_tokens_sha256": "4e0bacc47afaeb0fd4e3ab39fce02617344a7edeed3ba55eda1968e5c39c3300",
+              "scan_count": 5,
+              "scan_coverage": 0.1396604938271605,
+              "scene_control_signature_sha256": "d10021398d55ff3a597a63915e918554a57294960c1f9acde943262f0a8d3540",
+              "scene_id": "scene_000031",
+              "scene_prefix_sha256": "29fafed141145a60e6d0444cf7b6c355ede6887077a04619e19e10d1d68e207d",
+              "scene_version": 5,
+              "schema": "semantic_3d_chat.scene_prefix_binding.v2",
+              "seed": 20260808,
+              "source_voxels": 78130,
+              "stopped": false,
+              "success": true,
+              "turn_degrees": 0.0,
+              "valid_depth_pixels": 50176,
+              "visible_voxels": 0
+            }
+          ],
+          "closed_loop_step": 5,
+          "command": "move_forward",
+          "continuous_grounding": {
+            "all_map_voxels_scored": true,
+            "eligible_voxels": 42457,
+            "environmental_text_inputs": [],
+            "map_sha256": "36929e1d7cce0969ca914d527afe1998f4694475f3e4e03a636c09d3e0502b77",
+            "numeric_alignment_interlock": {
+              "angular_residual_degrees": 6.074025041732497,
+              "corrected_turn_degrees": null,
+              "correction_applied": false,
+              "deadband_degrees": 3.0,
+              "desired_yaw_degrees": -81.30317419084578,
+              "enabled": true,
+              "environmental_text_inputs": [],
+              "learned_tool": "move_forward",
+              "learned_turn_degrees": null,
+              "numeric_target_state_only": true,
+              "oracle_inputs_at_runtime": false,
+              "reason": "not_terminal_alignment",
+              "robot_position_xy_m": [
+                0.8489400203921567,
+                0.038888677888489376
+              ],
+              "robot_yaw_degrees": -87.37719923257828,
+              "schema": "semantic_3d_chat.numeric_alignment_interlock.v1",
+              "stalled_turn_degrees": 1.0,
+              "stop_applied": false,
+              "target_available": true,
+              "target_xyz_m": [
+                2.031057119369507,
+                0.21971099078655243,
+                0.5250000953674316
+              ],
+              "terminal_alignment_requested": false
+            },
+            "numeric_approach_interlock": {
+              "actual_progress_m": 0.8498302698135375,
+              "angular_residual_degrees": 6.074025041732497,
+              "collision_limited_interlock": {
+                "collision_predicted": false,
+                "enabled": true,
+                "environmental_text_inputs": [],
+                "executed_safe_distance_m": null,
+                "maximum_collision_free_distance_m": null,
+                "minimum_safe_step_m": 0.02,
+                "numeric_collision_map_only": true,
+                "oracle_inputs_at_runtime": false,
+                "reason": "full_step_collision_free",
+                "requested_distance_m": 0.3704110011458397,
+                "safe_closest_reachable": false,
+                "schema": "semantic_3d_chat.collision_limited_approach_interlock.v1"
+              },
+              "collision_precheck_predicted_rejection": false,
+              "collision_rejection_deferred_to_exact_simulator": false,
+              "completion_mode": null,
+              "completion_satisfied": false,
+              "corrected_arguments": null,
+              "corrected_tool": null,
+              "correction_applied": false,
+              "desired_yaw_degrees": -81.30317419084578,
+              "enabled": true,
+              "environmental_text_inputs": [],
+              "goal_satisfied": false,
+              "heading_deadband_degrees": 15.0,
+              "initial_robot_position_xy_m": [
+                0.0,
+                0.0
+              ],
+              "learned_tool": "move_forward",
+              "learned_turn_degrees": null,
+              "minimum_progress_m": 0.15,
+              "numeric_target_state_only": true,
+              "oracle_inputs_at_runtime": false,
+              "reason": "learned_action_not_stalled",
+              "robot_position_xy_m": [
+                0.8489400203921567,
+                0.038888677888489376
+              ],
+              "robot_yaw_degrees": -87.37719923257828,
+              "schema": "semantic_3d_chat.numeric_approach_interlock.v1",
+              "stop_applied": false,
+              "target_available": true,
+              "target_distance_m": 1.1958668590342452,
+              "target_standoff_m": 0.5,
+              "target_xyz_m": [
+                2.031057119369507,
+                0.21971099078655243,
+                0.5250000953674316
+              ],
+              "terminal_approach_requested": true
+            },
+            "oracle_inputs_at_runtime": false,
+            "query_embedding_sha256": "0f780477f599a107fe7f1382060cb69ce3242168b39dd149b57eda416b10095f",
+            "scored_voxels": 77919,
+            "target_available": true,
+            "target_state_sha256": "aaabe87e4d5e8f5164ccd360391675a4e41fd71be003aea94a43f50a4180f22d",
+            "target_xyz_m": [
+              2.031057119369507,
+              0.21971099078655243,
+              0.5250000953674316
+            ]
+          },
+          "environmental_text_inputs": [],
+          "groundings": [],
+          "kind": "navigation",
+          "navigation": null,
+          "prefix_binding": {
+            "active_binding_sha256": "2179c35d9090a6106fb72aa677b7d46020991a8d597b21f04e039d3e21f83df8",
+            "active_prefix_sha256": "d329a488cc44146ee8a0b0dcc43655a05c2e24798ca370f0df79bc50867252b9",
+            "binding_sha256": "a45be6ea5a1dcbe921cb1c61d033aa1560792fc035e9a7fe979a5024a0dfdbc4",
+            "map_sha256": "501e40572b4306b3855613e24036f7ec53d5fce50137324dde72c01aea99aeb0",
+            "map_version": 5,
+            "processed_voxels": 8760,
+            "robot_state_encoder_sha256": "62cfdd2a9edcd0a450da19907009fdf3f5ed96cac4cedafae75f775bb96077c8",
+            "robot_state_sha256": "73b43d7f7179c4691a6ad0d0a437e64c9211a5025978184697bf0bcef3229f4e",
+            "robot_tokens_sha256": "4e0bacc47afaeb0fd4e3ab39fce02617344a7edeed3ba55eda1968e5c39c3300",
+            "scene_control_signature_sha256": "d10021398d55ff3a597a63915e918554a57294960c1f9acde943262f0a8d3540",
+            "scene_id": "scene_000031",
+            "scene_prefix_sha256": "29fafed141145a60e6d0444cf7b6c355ede6887077a04619e19e10d1d68e207d",
+            "schema": "semantic_3d_chat.scene_prefix_binding.v2",
+            "source_voxels": 78130
+          },
+          "question_dependent_scene_retrieval": false,
+          "request_sha256": "1ec51fbd34749a31f003082e8c14ca5266520200bccdeb6cc1e0f220db6ab49f",
+          "success": true,
+          "target_count": 0,
+          "tool_selection": {
+            "accepted": true,
+            "active_prefix_sha256": "3f294c5089fdb838ea19dec0cde3f57fdb7b58b2d9270015b9f4ebc8d5a47cb5",
+            "attempts": 1,
+            "call": {
+              "arguments": {
+                "distance_meters": 0.3704110011458397
+              },
+              "tool": "move_forward"
+            },
+            "call_sha256": "cf4dae724665406ac55b87d52da5baf9616580a6b70b14d6efe41c291b8814f1",
+            "environmental_text_inputs": [],
+            "fallback_policy": "fail_closed",
+            "local_inference": true,
+            "proposal_sha256": [
+              "cf4dae724665406ac55b87d52da5baf9616580a6b70b14d6efe41c291b8814f1"
+            ],
+            "raw_model_output_logged": false,
+            "retries": 0,
+            "robot_tokens_sha256": "6c7c3fe63c61c7d9c7925d4ee694f83f8ae21de25cbbb6fee1b49535cd6c00e7",
+            "scene_prefix_sha256": "63f50f0128508a8701bad1b32c0803b26e126e887cabdd7c2000fcd2af152618",
+            "schema": "semantic_3d_chat.local_gemma_tool_decision.v1",
+            "training_status": "supervised_continuous_semantic_grounded_navigation_policy_v3",
+            "used_continuous_robot_tokens": true,
+            "used_continuous_scene_prefix": true,
+            "validation_errors": []
+          },
+          "tool_selection_fallback_used": false
+        },
+        {
+          "action_receipts": [
+            {
+              "action_count": 12,
+              "active_binding_sha256": "6630f7c7f7ab919f453052729a8818a898145fbbb2454ce4bb3419e5d86ccde5",
+              "active_prefix_sha256": "31279004fb7e192cdd8fa32fd133c794a13bc2854bd0ec7632000e4f2b5c7f37",
+              "angular_velocity_degrees": 0.0,
+              "binding_sha256": "a2800a2b2c170712fb19b536accef608b54c964d45b599ca66db75414b45b388",
+              "body_yaw_degrees": -87.37719923257828,
+              "camera_position_m": [
+                1.285448404207255,
+                0.058884476797779764,
+                1.2
+              ],
+              "camera_yaw_degrees": -87.37719923257828,
+              "clearance_m": 0.00499976624827958,
+              "collision": false,
+              "distance_moved": 0.0665551315405389,
+              "error_code": null,
+              "last_movement_delta_m": [
+                0.06648541095108884,
+                0.0030455976496035486,
+                0.0
+              ],
+              "linear_velocity_xy_m": [
+                0.0,
+                0.0
+              ],
+              "map_sha256": "cc5423ab05523cf4a691e43463e9cd767641459277169c10c246ce738bfd7800",
+              "map_version": 6,
+              "observation_id": "o_000006",
+              "pitch_degrees": 0.0,
+              "position_m": [
+                1.285448404207255,
+                0.058884476797779764,
+                0.0
+              ],
+              "processed_voxels": 8760,
+              "robot_state_encoder_sha256": "62cfdd2a9edcd0a450da19907009fdf3f5ed96cac4cedafae75f775bb96077c8",
+              "robot_state_sha256": "e983b835178c70f30b126bf426001f4de4aa4a91656acfc4bef353096509f51d",
+              "robot_tokens_sha256": "c1326d18767928e9a53ace1fc4b26b2243e8b59bb5bd122caf84ce1b76637392",
+              "scan_count": 6,
+              "scan_coverage": 0.1396604938271605,
+              "scene_control_signature_sha256": "2b882ebc59f8b5f6be6d6a445fbaeb58b938c8cd637962fd8399d9fd8eee2696",
+              "scene_id": "scene_000031",
+              "scene_prefix_sha256": "4b8638c228a1cd9333f2d0ef1eceeb5bbb87ba7746c62f289f29dfbc968be0a7",
+              "scene_version": 6,
+              "schema": "semantic_3d_chat.scene_prefix_binding.v2",
+              "seed": 20260808,
+              "source_voxels": 78188,
+              "stopped": false,
+              "success": true,
+              "turn_degrees": 0.0,
+              "valid_depth_pixels": 50176,
+              "visible_voxels": 0
+            }
+          ],
+          "closed_loop_step": 6,
+          "command": "move_forward",
+          "continuous_grounding": {
+            "all_map_voxels_scored": true,
+            "eligible_voxels": 42629,
+            "environmental_text_inputs": [],
+            "map_sha256": "501e40572b4306b3855613e24036f7ec53d5fce50137324dde72c01aea99aeb0",
+            "numeric_alignment_interlock": {
+              "angular_residual_degrees": 8.785687980319778,
+              "corrected_turn_degrees": null,
+              "correction_applied": false,
+              "deadband_degrees": 3.0,
+              "desired_yaw_degrees": -78.5915112522585,
+              "enabled": true,
+              "environmental_text_inputs": [],
+              "learned_tool": "move_forward",
+              "learned_turn_degrees": null,
+              "numeric_target_state_only": true,
+              "oracle_inputs_at_runtime": false,
+              "reason": "not_terminal_alignment",
+              "robot_position_xy_m": [
+                1.218962993256166,
+                0.055838879148176215
+              ],
+              "robot_yaw_degrees": -87.37719923257828,
+              "schema": "semantic_3d_chat.numeric_alignment_interlock.v1",
+              "stalled_turn_degrees": 1.0,
+              "stop_applied": false,
+              "target_available": true,
+              "target_xyz_m": [
+                2.031057119369507,
+                0.21971099078655243,
+                0.5250000953674316
+              ],
+              "terminal_alignment_requested": false
+            },
+            "numeric_approach_interlock": {
+              "actual_progress_m": 1.2202412709593775,
+              "angular_residual_degrees": 8.785687980319778,
+              "collision_limited_interlock": {
+                "collision_predicted": true,
+                "enabled": true,
+                "environmental_text_inputs": [],
+                "executed_safe_distance_m": 0.06655513154053894,
+                "maximum_collision_free_distance_m": 0.07155513154053894,
+                "minimum_safe_step_m": 0.02,
+                "numeric_collision_map_only": true,
+                "oracle_inputs_at_runtime": false,
+                "reason": "clipped_to_collision_free_step",
+                "requested_distance_m": 0.33981745690107346,
+                "safe_closest_reachable": false,
+                "schema": "semantic_3d_chat.collision_limited_approach_interlock.v1"
+              },
+              "collision_precheck_predicted_rejection": true,
+              "collision_rejection_deferred_to_exact_simulator": false,
+              "completion_mode": null,
+              "completion_satisfied": false,
+              "corrected_arguments": {
+                "distance_meters": 0.06655513154053894
+              },
+              "corrected_tool": "move_forward",
+              "correction_applied": true,
+              "desired_yaw_degrees": -78.5915112522585,
+              "enabled": true,
+              "environmental_text_inputs": [],
+              "goal_satisfied": false,
+              "heading_deadband_degrees": 15.0,
+              "initial_robot_position_xy_m": [
+                0.0,
+                0.0
+              ],
+              "learned_tool": "move_forward",
+              "learned_turn_degrees": null,
+              "minimum_progress_m": 0.15,
+              "numeric_target_state_only": true,
+              "oracle_inputs_at_runtime": false,
+              "reason": "collision_limited_safe_progress",
+              "robot_position_xy_m": [
+                1.218962993256166,
+                0.055838879148176215
+              ],
+              "robot_yaw_degrees": -87.37719923257828,
+              "schema": "semantic_3d_chat.numeric_approach_interlock.v1",
+              "stop_applied": false,
+              "target_available": true,
+              "target_distance_m": 0.8284629977498157,
+              "target_standoff_m": 0.5,
+              "target_xyz_m": [
+                2.031057119369507,
+                0.21971099078655243,
+                0.5250000953674316
+              ],
+              "terminal_approach_requested": true
+            },
+            "oracle_inputs_at_runtime": false,
+            "query_embedding_sha256": "0f780477f599a107fe7f1382060cb69ce3242168b39dd149b57eda416b10095f",
+            "scored_voxels": 78130,
+            "target_available": true,
+            "target_state_sha256": "738286cddf59aa9a1d7873d8b6fcfd605872aca478d27876a31ee035482d2519",
+            "target_xyz_m": [
+              2.031057119369507,
+              0.21971099078655243,
+              0.5250000953674316
+            ]
+          },
+          "environmental_text_inputs": [],
+          "groundings": [],
+          "kind": "navigation",
+          "navigation": null,
+          "prefix_binding": {
+            "active_binding_sha256": "6630f7c7f7ab919f453052729a8818a898145fbbb2454ce4bb3419e5d86ccde5",
+            "active_prefix_sha256": "31279004fb7e192cdd8fa32fd133c794a13bc2854bd0ec7632000e4f2b5c7f37",
+            "binding_sha256": "a2800a2b2c170712fb19b536accef608b54c964d45b599ca66db75414b45b388",
+            "map_sha256": "cc5423ab05523cf4a691e43463e9cd767641459277169c10c246ce738bfd7800",
+            "map_version": 6,
+            "processed_voxels": 8760,
+            "robot_state_encoder_sha256": "62cfdd2a9edcd0a450da19907009fdf3f5ed96cac4cedafae75f775bb96077c8",
+            "robot_state_sha256": "e983b835178c70f30b126bf426001f4de4aa4a91656acfc4bef353096509f51d",
+            "robot_tokens_sha256": "c1326d18767928e9a53ace1fc4b26b2243e8b59bb5bd122caf84ce1b76637392",
+            "scene_control_signature_sha256": "2b882ebc59f8b5f6be6d6a445fbaeb58b938c8cd637962fd8399d9fd8eee2696",
+            "scene_id": "scene_000031",
+            "scene_prefix_sha256": "4b8638c228a1cd9333f2d0ef1eceeb5bbb87ba7746c62f289f29dfbc968be0a7",
+            "schema": "semantic_3d_chat.scene_prefix_binding.v2",
+            "source_voxels": 78188
+          },
+          "question_dependent_scene_retrieval": false,
+          "request_sha256": "1ec51fbd34749a31f003082e8c14ca5266520200bccdeb6cc1e0f220db6ab49f",
+          "success": true,
+          "target_count": 0,
+          "tool_selection": {
+            "accepted": true,
+            "active_prefix_sha256": "d329a488cc44146ee8a0b0dcc43655a05c2e24798ca370f0df79bc50867252b9",
+            "attempts": 1,
+            "call": {
+              "arguments": {
+                "distance_meters": 0.06655513154053894
+              },
+              "tool": "move_forward"
+            },
+            "call_sha256": "ccfa1336e990a8a229716d92098f6897c856222cdd40a0e149aca34665861d88",
+            "environmental_text_inputs": [],
+            "fallback_policy": "fail_closed",
+            "local_inference": true,
+            "proposal_sha256": [
+              "ccfa1336e990a8a229716d92098f6897c856222cdd40a0e149aca34665861d88"
+            ],
+            "raw_model_output_logged": false,
+            "retries": 0,
+            "robot_tokens_sha256": "4e0bacc47afaeb0fd4e3ab39fce02617344a7edeed3ba55eda1968e5c39c3300",
+            "scene_prefix_sha256": "29fafed141145a60e6d0444cf7b6c355ede6887077a04619e19e10d1d68e207d",
+            "schema": "semantic_3d_chat.local_gemma_tool_decision.v1",
+            "training_status": "supervised_continuous_semantic_grounded_navigation_policy_v3",
+            "used_continuous_robot_tokens": true,
+            "used_continuous_scene_prefix": true,
+            "validation_errors": []
+          },
+          "tool_selection_fallback_used": false
+        },
+        {
+          "action_receipts": [
+            {
+              "action_count": 13,
+              "active_binding_sha256": "5a33d018e8cbc20f68fe3400fef749b0233cbb46a86f660c2d898a5d7d23f6bf",
+              "active_prefix_sha256": "61d20410aec627481c52bc6a50c05fd9d0faaa102b67875672900e1f43e30b1d",
+              "angular_velocity_degrees": 0.0,
+              "binding_sha256": "a2800a2b2c170712fb19b536accef608b54c964d45b599ca66db75414b45b388",
+              "body_yaw_degrees": -87.37719923257828,
+              "camera_position_m": [
+                1.285448404207255,
+                0.058884476797779764,
+                1.2
+              ],
+              "camera_yaw_degrees": -87.37719923257828,
+              "clearance_m": null,
+              "collision": false,
+              "distance_moved": 0.0,
+              "error_code": null,
+              "last_movement_delta_m": [
+                0.06648541095108884,
+                0.0030455976496035486,
+                0.0
+              ],
+              "linear_velocity_xy_m": [
+                0.0,
+                0.0
+              ],
+              "map_sha256": "cc5423ab05523cf4a691e43463e9cd767641459277169c10c246ce738bfd7800",
+              "map_version": 6,
+              "observation_id": null,
+              "pitch_degrees": 0.0,
+              "position_m": [
+                1.285448404207255,
+                0.058884476797779764,
+                0.0
+              ],
+              "processed_voxels": 8760,
+              "robot_state_encoder_sha256": "62cfdd2a9edcd0a450da19907009fdf3f5ed96cac4cedafae75f775bb96077c8",
+              "robot_state_sha256": "62e330651385cad436bfc50c2be93f824af73b606a7c4d62473c2f828acc2607",
+              "robot_tokens_sha256": "d521c7ed59b9379739c8be42a274e2c3acf669c7c573b7973ac665a19195c2ca",
+              "scan_count": 6,
+              "scan_coverage": 0.1396604938271605,
+              "scene_control_signature_sha256": "2b882ebc59f8b5f6be6d6a445fbaeb58b938c8cd637962fd8399d9fd8eee2696",
+              "scene_id": "scene_000031",
+              "scene_prefix_sha256": "4b8638c228a1cd9333f2d0ef1eceeb5bbb87ba7746c62f289f29dfbc968be0a7",
+              "scene_version": 6,
+              "schema": "semantic_3d_chat.scene_prefix_binding.v2",
+              "seed": 20260808,
+              "source_voxels": 78188,
+              "stopped": true,
+              "success": true,
+              "turn_degrees": 0.0,
+              "valid_depth_pixels": 0,
+              "visible_voxels": 0
+            }
+          ],
+          "closed_loop_step": 7,
+          "command": "stop",
+          "continuous_grounding": {
+            "all_map_voxels_scored": true,
+            "eligible_voxels": 42682,
+            "environmental_text_inputs": [],
+            "map_sha256": "cc5423ab05523cf4a691e43463e9cd767641459277169c10c246ce738bfd7800",
+            "numeric_alignment_interlock": {
+              "angular_residual_degrees": 9.549314474641733,
+              "corrected_turn_degrees": null,
+              "correction_applied": false,
+              "deadband_degrees": 3.0,
+              "desired_yaw_degrees": -77.82788475793654,
+              "enabled": true,
+              "environmental_text_inputs": [],
+              "learned_tool": "move_forward",
+              "learned_turn_degrees": null,
+              "numeric_target_state_only": true,
+              "oracle_inputs_at_runtime": false,
+              "reason": "not_terminal_alignment",
+              "robot_position_xy_m": [
+                1.285448404207255,
+                0.058884476797779764
+              ],
+              "robot_yaw_degrees": -87.37719923257828,
+              "schema": "semantic_3d_chat.numeric_alignment_interlock.v1",
+              "stalled_turn_degrees": 1.0,
+              "stop_applied": false,
+              "target_available": true,
+              "target_xyz_m": [
+                2.031057119369507,
+                0.21971099078655243,
+                0.5250000953674316
+              ],
+              "terminal_alignment_requested": false
+            },
+            "numeric_approach_interlock": {
+              "actual_progress_m": 1.2867964024999163,
+              "angular_residual_degrees": 9.549314474641733,
+              "collision_limited_interlock": {
+                "collision_predicted": true,
+                "enabled": true,
+                "environmental_text_inputs": [],
+                "executed_safe_distance_m": null,
+                "maximum_collision_free_distance_m": 0.004999992032761913,
+                "minimum_safe_step_m": 0.02,
+                "numeric_collision_map_only": true,
+                "oracle_inputs_at_runtime": false,
+                "reason": "no_material_collision_free_step_remains",
+                "requested_distance_m": 0.340796135365963,
+                "safe_closest_reachable": true,
+                "schema": "semantic_3d_chat.collision_limited_approach_interlock.v1"
+              },
+              "collision_precheck_predicted_rejection": true,
+              "collision_rejection_deferred_to_exact_simulator": false,
+              "completion_mode": "collision_limited_safe_stop",
+              "completion_satisfied": true,
+              "corrected_arguments": {},
+              "corrected_tool": "stop",
+              "correction_applied": true,
+              "desired_yaw_degrees": -77.82788475793654,
+              "enabled": true,
+              "environmental_text_inputs": [],
+              "goal_satisfied": false,
+              "heading_deadband_degrees": 15.0,
+              "initial_robot_position_xy_m": [
+                0.0,
+                0.0
+              ],
+              "learned_tool": "move_forward",
+              "learned_turn_degrees": null,
+              "minimum_progress_m": 0.15,
+              "numeric_target_state_only": true,
+              "oracle_inputs_at_runtime": false,
+              "reason": "collision_limited_safe_stop",
+              "robot_position_xy_m": [
+                1.285448404207255,
+                0.058884476797779764
+              ],
+              "robot_yaw_degrees": -87.37719923257828,
+              "schema": "semantic_3d_chat.numeric_approach_interlock.v1",
+              "stop_applied": true,
+              "target_available": true,
+              "target_distance_m": 0.7627565297837082,
+              "target_standoff_m": 0.5,
+              "target_xyz_m": [
+                2.031057119369507,
+                0.21971099078655243,
+                0.5250000953674316
+              ],
+              "terminal_approach_requested": true
+            },
+            "oracle_inputs_at_runtime": false,
+            "query_embedding_sha256": "0f780477f599a107fe7f1382060cb69ce3242168b39dd149b57eda416b10095f",
+            "scored_voxels": 78188,
+            "target_available": true,
+            "target_state_sha256": "ba046bbb1f12cd2847de6119a86ca8712678b08780333e2734833455dfda715e",
+            "target_xyz_m": [
+              2.031057119369507,
+              0.21971099078655243,
+              0.5250000953674316
+            ]
+          },
+          "environmental_text_inputs": [],
+          "groundings": [],
+          "kind": "navigation",
+          "navigation": null,
+          "prefix_binding": {
+            "active_binding_sha256": "5a33d018e8cbc20f68fe3400fef749b0233cbb46a86f660c2d898a5d7d23f6bf",
+            "active_prefix_sha256": "61d20410aec627481c52bc6a50c05fd9d0faaa102b67875672900e1f43e30b1d",
+            "binding_sha256": "a2800a2b2c170712fb19b536accef608b54c964d45b599ca66db75414b45b388",
+            "map_sha256": "cc5423ab05523cf4a691e43463e9cd767641459277169c10c246ce738bfd7800",
+            "map_version": 6,
+            "processed_voxels": 8760,
+            "robot_state_encoder_sha256": "62cfdd2a9edcd0a450da19907009fdf3f5ed96cac4cedafae75f775bb96077c8",
+            "robot_state_sha256": "62e330651385cad436bfc50c2be93f824af73b606a7c4d62473c2f828acc2607",
+            "robot_tokens_sha256": "d521c7ed59b9379739c8be42a274e2c3acf669c7c573b7973ac665a19195c2ca",
+            "scene_control_signature_sha256": "2b882ebc59f8b5f6be6d6a445fbaeb58b938c8cd637962fd8399d9fd8eee2696",
+            "scene_id": "scene_000031",
+            "scene_prefix_sha256": "4b8638c228a1cd9333f2d0ef1eceeb5bbb87ba7746c62f289f29dfbc968be0a7",
+            "schema": "semantic_3d_chat.scene_prefix_binding.v2",
+            "source_voxels": 78188
+          },
+          "question_dependent_scene_retrieval": false,
+          "request_sha256": "1ec51fbd34749a31f003082e8c14ca5266520200bccdeb6cc1e0f220db6ab49f",
+          "success": true,
+          "target_count": 0,
+          "tool_selection": {
+            "accepted": true,
+            "active_prefix_sha256": "31279004fb7e192cdd8fa32fd133c794a13bc2854bd0ec7632000e4f2b5c7f37",
+            "attempts": 1,
+            "call": {
+              "arguments": {},
+              "tool": "stop"
+            },
+            "call_sha256": "eff8d85a0f118c66d3e832de5d0ff559f771063b545dbbc031a91eb7f2f2e0f8",
+            "environmental_text_inputs": [],
+            "fallback_policy": "fail_closed",
+            "local_inference": true,
+            "proposal_sha256": [
+              "eff8d85a0f118c66d3e832de5d0ff559f771063b545dbbc031a91eb7f2f2e0f8"
+            ],
+            "raw_model_output_logged": false,
+            "retries": 0,
+            "robot_tokens_sha256": "c1326d18767928e9a53ace1fc4b26b2243e8b59bb5bd122caf84ce1b76637392",
+            "scene_prefix_sha256": "4b8638c228a1cd9333f2d0ef1eceeb5bbb87ba7746c62f289f29dfbc968be0a7",
+            "schema": "semantic_3d_chat.local_gemma_tool_decision.v1",
+            "training_status": "supervised_continuous_semantic_grounded_navigation_policy_v3",
+            "used_continuous_robot_tokens": true,
+            "used_continuous_scene_prefix": true,
+            "validation_errors": []
+          },
+          "tool_selection_fallback_used": false
+        }
+      ],
+      "success": true,
+      "termination_reason": "stop"
+    }
+  ]
+}

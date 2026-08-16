@@ -1,0 +1,24 @@
+_base_: gemma4_diverse28_projected_gradient_v41.yaml
+
+# Isolated retry of the unchanged V41 experiment after a pre-step MPS
+# conversion bug.  The original failed root remains immutable evidence.
+training:
+  output_namespace: gemma4_v41_retry1_diverse28_projected_gradient_l14_query
+
+v41_retry1:
+  schema_version: 1
+  role: v41_retry1_cpu_first_mps_conversion
+  terminal_report: reports/gemma4/metrics/v41_update1_conversion_terminal_gate.json
+  terminal_report_sha256: cefe759791e1d97557f0a230d6605a1ae079d5f32be7fac3e2b806adaf82eef8
+  predecessor_root: data_gemma4/checkpoints/gemma4_v41_diverse28_projected_gradient_l14_query
+  predecessor_file_sha256:
+    update_000/adapter.safetensors: b0bdceb7699e9d97467915c69186f433d3b0fac2b09144d38c3078afe1f70cb0
+    update_000/metadata.json: b1e66cec1aba693a3ffa6d5fd91dea78da4eb925db14c37b79171fd5bf94e4d8
+    update_000/runtime_metadata.json: 0037ac30ce329dc7041f0b18369ee56b947ff67780421cbaa4d72cbf01a4f1e2
+    guard_failure_update_001.json: b416bd598832c7fcd07a1d098e03e29a50648489b486591158867e4dc586c53d
+  authorized_output_root: data_gemma4/checkpoints/gemma4_v41_retry1_diverse28_projected_gradient_l14_query
+  cpu_first_mps_conversion_required: true
+  validation_access_authorized: false
+  oracle_access_authorized: false
+  final_test_access_authorized: false
+  selector_execution_authorized: false

@@ -1,0 +1,129 @@
+_base_: gemma4_diverse28_block_cross_v35.yaml
+
+# V36 is a bounded decoder-readout isolation. It loads the learned block core
+# from the exact stopped V35 update 32, preserves the inherited V33 stack, and
+# starts fresh Adam state. The already-present V30 query bank remains exact
+# zero-output at update zero; no new language surface is introduced.
+training:
+  output_namespace: gemma4_v36_diverse28_joint_block_cross
+  v36_joint_block_cross:
+    enabled: true
+    optimizer_steps: 100
+    checkpoint_interval_steps: 8
+    broad_nll_weight: 0.25
+    pair_correct_nll_weight: 0.5
+    side_hinge_weight: 4.0
+    side_hinge_margin: 0.5
+    cross_prefix_flip_weight: 8.0
+    cross_prefix_flip_margin: 0.25
+    residual_penalty_weight: 0.001
+    residual_penalty_scale: 0.05
+    qkv_learning_rate: 0.0001
+    output_learning_rate: 0.000025
+    decoder_learning_rate: 0.00002
+    weight_decay: 0.0
+    qkv_gradient_clip_norm: 0.5
+    output_gradient_clip_norm: 1.0
+    decoder_gradient_clip_norm: 1.0
+
+v36_joint_block_cross:
+  schema_version: 1
+  role: exact_v35_u32_block_cross_plus_zero_query_lora_v36
+  engine: fresh_adam_joint_learned_block_cross_and_zero_query_lora_true_microsteps
+  v35_terminal_gate_report: reports/gemma4/metrics/v35_update32_terminal_gate.json
+  v35_terminal_gate_report_sha256: 88205d018de14fc0518fe695bf7420c44ac832a1ee95eea0e2ae1f41deff4a27
+  source_checkpoint: data_gemma4/checkpoints/gemma4_v35_diverse28_block_cross/update_032
+  source_optimizer_step: 32
+  source_file_sha256:
+    adapter.safetensors: 4ecd5d9a38f4610387f96d36fca6111d2e248d206fd029e471cce0b1114afda0
+    metadata.json: 0f106ecf5dccbe49ae1a15977d45610b560042d7f21a7b0b7ea0bf4ebea6af77
+    runtime_metadata.json: fc06bd605b101ef9a64bf5e38cc83e91cdb8a9a37f8825e6e89c0e6a2ebfd7f1
+    optimizer.pt: add72932ce8cd8b58260068472ba0b2486d7011c283b4ce6785ae0f99b12b497
+  source_v35_tensor_state_sha256: 1fe8f278460faeb1e13d9da09051a497965a566565c79a4f6ea28c56a9120326
+  inherited_v33_tensor_state_sha256: cb7bb3b48ace60212ee5c7f326839bf2ddd993810417de45c9a9cbc666313fe6
+  source_block_core_state_sha256: 75af995833d9387e3eb01fb022eaade7327e44960466671123a51aa43afa4cf3
+  decoder_bank_name: extension_v30_joint_pair_query
+  decoder_bank_parameter_count: 131072
+  decoder_bank_initial_state_sha256: 2b1d89fbb9189ac551bf12905cf94036ebaa84696449b31c2b37b69d478fb70d
+  block_core_parameter_count: 983040
+  joint_trainable_parameter_count: 1114112
+  frozen_nonauthorized_state_sha256: b394d502f0c32a694c2d1a448cdf3849c47efc4058cb1f1331fe4a97d381b1dc
+  train_scene_ids:
+    - scene_000011
+    - scene_000012
+    - scene_000013
+    - scene_000014
+    - scene_000015
+    - scene_000016
+    - scene_000017
+    - scene_000018
+    - scene_000031
+    - scene_000032
+    - scene_000033
+    - scene_000034
+    - scene_000035
+    - scene_000036
+    - scene_000037
+    - scene_000038
+  validation_scene_ids:
+    - scene_000019
+    - scene_000020
+    - scene_000021
+    - scene_000022
+    - scene_000023
+    - scene_000024
+  deferred_final_scene_ids:
+    - scene_000025
+    - scene_000026
+    - scene_000027
+    - scene_000028
+    - scene_000029
+    - scene_000030
+  validation_qa_loaded_during_training: false
+  continuation_gates_use_training_only: true
+  source_v35_learned_core_loaded: true
+  source_v35_optimizer_state_loaded: false
+  question_dependent_scene_processing: false
+  saved_optimizer_steps: [0, 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96, 100]
+  update16_gate:
+    optimizer_step: 16
+    complete_units_minimum: 10
+    cross_prefix_complete_units_minimum: 16
+    positive_sides_minimum: 34
+    mean_cross_prefix_margin_strict_minimum: 1.32265043258667
+    complete_physical_pair_coverage_minimum: 5
+    unchanged_broad_nll_ratio_maximum: 1.02
+    residual_rms_maximum: 0.075
+    decoder_bank_state_must_change: true
+    frozen_nonauthorized_state_must_remain_exact: true
+  update32_gate:
+    optimizer_step: 32
+    require_update16_passed: true
+    complete_units_minimum: 12
+    cross_prefix_complete_units_minimum: 18
+    positive_sides_minimum: 37
+    mean_cross_prefix_margin_minimum: 1.37265043258667
+    complete_physical_pair_coverage_minimum: 6
+    require_one_complete_per_priority_family: true
+    unchanged_broad_nll_ratio_maximum: 1.03
+    residual_rms_maximum: 0.075
+  update64_gate:
+    optimizer_step: 64
+    require_update32_passed: true
+    complete_units_minimum: 15
+    cross_prefix_complete_units_minimum: 20
+    positive_sides_minimum: 40
+    complete_physical_pair_coverage_minimum: 7
+    require_one_complete_per_priority_family: true
+    greedy_complete_units_minimum: 6
+    require_one_greedy_complete_per_priority_family: true
+    broad_greedy_exact_accuracy_maximum_drop: 0.02
+    residual_rms_maximum: 0.10
+  selector_uses_validation_only_after_complete_training: true
+  final_test_deferred: true
+
+experiment:
+  role: exact_v35_u32_block_cross_plus_zero_query_lora_v36
+  source_optimizer_step: 32
+  fresh_adam: true
+  final_test_deferred: true

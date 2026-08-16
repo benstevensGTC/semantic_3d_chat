@@ -8,6 +8,10 @@ from torch import nn
 
 from semantic_3d_chat.language.prefix_injection import ContinuousPrefixComposer
 from semantic_3d_chat.scene_encoder.dense_alignment import DenseAlignmentResidual
+from semantic_3d_chat.scene_encoder.dense_sidecar_adapter import (
+    DenseSidecarAdapter,
+    apply_dense_sidecar_adapter,
+)
 from semantic_3d_chat.scene_encoder.global_residual import (
     ZERO_SPATIAL_MEAN_CONTENT_GATE_V1,
     GlobalSceneResidual,
@@ -57,6 +61,25 @@ class _TinySceneTokenizer(nn.Module):
         )
 
 
+class _TinySidecarTokenizer(_TinySceneTokenizer):
+    def forward(self, *args, aligned_sidecar=None, aligned_sidecar_scale=0.0, **kwargs):
+        output = super().forward(*args, **kwargs)
+        if aligned_sidecar is None:
+            return output
+        sidecar_tokens = aligned_sidecar.mean(dim=0).reshape(1, 1, -1)
+        sidecar_tokens = sidecar_tokens.expand(1, self.latents, -1)
+        scene_tokens = output.scene_tokens
+        if aligned_sidecar_scale > 0:
+            scene_tokens = scene_tokens + aligned_sidecar_scale * sidecar_tokens
+        return SceneTokenizerOutput(
+            scene_tokens=scene_tokens,
+            native_latents=output.native_latents,
+            block_tokens=output.block_tokens,
+            audit=output.audit,
+            aligned_sidecar_tokens=sidecar_tokens,
+        )
+
+
 def _map() -> MapTensorData:
     generator = torch.Generator().manual_seed(9)
     semantic = torch.randn(7, 6, generator=generator)
@@ -83,6 +106,29 @@ def _dense() -> DenseAlignmentResidual:
         alpha=4.0,
         initialization_seed=25,
     )
+
+
+def _sidecar_dense() -> DenseAlignmentResidual:
+    module = DenseAlignmentResidual(
+        semantic_dim=8,
+        dense_dim=4,
+        aligned_dim=4,
+        rank=2,
+        alpha=4.0,
+        initialization_seed=25,
+        application_mode="coverage_sidecar",
+        sidecar_scale=0.0,
+    )
+    with torch.no_grad():
+        module.alignment_b.fill_(0.05)
+    return module
+
+
+def _sidecar_map() -> MapTensorData:
+    data = _map()
+    generator = torch.Generator().manual_seed(91)
+    data.semantic = torch.randn(7, 8, generator=generator)
+    return data
 
 
 def test_map_forward_applies_dense_alignment_without_mutating_map() -> None:
@@ -124,6 +170,48 @@ def test_training_map_forward_routes_gradient_only_to_dense_surface() -> None:
     assert dense.alignment_b.grad is not None
     assert float(dense.alignment_b.grad.norm()) > 0.0
     assert torch.equal(data.semantic, _map().semantic)
+
+
+def test_post_stack_sidecar_application_order_and_frozen_gradient_boundary() -> None:
+    data = _sidecar_map()
+    tokenizer = _TinySidecarTokenizer(semantic_dim=8)
+    tokenizer.requires_grad_(False)
+    dense = _sidecar_dense().requires_grad_(False)
+    adapter = DenseSidecarAdapter(
+        scene_dim=4,
+        latent_count=2,
+        width=3,
+        fourier_bands=1,
+        initialization_seed=28,
+    )
+    with torch.no_grad():
+        adapter.output_projection.weight.fill_(0.02)
+
+    base = map_forward(tokenizer, data, dense_aligner=dense)
+    adapted = map_forward(
+        tokenizer,
+        data,
+        dense_aligner=dense,
+        dense_sidecar_adapter=adapter,
+    )
+    expected = apply_dense_sidecar_adapter(base, adapter)
+
+    assert torch.equal(adapted.scene_tokens, expected.scene_tokens)
+    assert not torch.equal(adapted.scene_tokens, base.scene_tokens)
+
+    adapter.zero_grad(set_to_none=True)
+    trained = training_map_forward(
+        tokenizer,
+        data,
+        freeze_scene_adapter=True,
+        dense_aligner=dense,
+        dense_sidecar_adapter=adapter,
+    )
+    trained.scene_tokens.square().mean().backward()
+    assert adapter.output_projection.weight.grad is not None
+    assert float(adapter.output_projection.weight.grad.norm()) > 0.0
+    assert all(parameter.grad is None for parameter in tokenizer.parameters())
+    assert all(parameter.grad is None for parameter in dense.parameters())
 
 
 def test_dense_optimizer_is_the_only_authorized_surface() -> None:

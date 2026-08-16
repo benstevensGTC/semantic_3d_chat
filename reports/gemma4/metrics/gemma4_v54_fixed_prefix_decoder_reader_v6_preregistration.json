@@ -1,0 +1,37 @@
+{
+  "artifact": "gemma4_v54_fixed_prefix_decoder_reader_v6_sealed_preregistration",
+  "authorization": {
+    "checkpoint_write_authorized": false,
+    "full_model_mps_smoke_authorized": false,
+    "joint_runtime_smoke_authorized": false,
+    "multi_update_training_authorized": false,
+    "optimizer_construction_authorized": false,
+    "sealed": true
+  },
+  "frozen_proposal": {
+    "actual_model_bytes_streamed": true,
+    "canonical_proposal_sha256": "fd2a85ae8f29e56a710fe6c3c63970c5c1593ea4d7aa12b9a815bbf0a9edfa14",
+    "local_model_weights_sha256": "2db5482b20d746879bb3ef79b5203e9075a2e2b98f54ec7c2f281c1477ddc550",
+    "local_model_weights_size_bytes": 10246621918,
+    "source_sha256": {
+      "configs/experiments/gemma4_v54_fixed_prefix_decoder_reader_v6.yaml": "cad5f0af664021b6e5c2bacb2ad1261d3222862e916b320effffe75ae6ab5cf0",
+      "src/semantic_3d_chat/evaluation/fixed_prefix_decoder_reader_v6_preregistration.py": "b347df8a9cd52c50a76b9a4455fae04be0ffc4fc250256f0f9cff5bf3cc5ef56",
+      "src/semantic_3d_chat/language/fixed_prefix_decoder_reader_v6.py": "4214846092f1fe0ca16a2c4e8cc369fad47598453e12c62c429fcc6e698a9627",
+      "tests/test_fixed_prefix_decoder_reader_v6.py": "62195e460be667bdf3fad83ab203eec7e0d4cac77cbb24e5c9b92bf9a6560a3b"
+    }
+  },
+  "independent_audit": {
+    "all_40_prefix_files_authenticated": true,
+    "deferred_or_final_qa_accessed": false,
+    "full_model_blob_independently_streamed": true,
+    "schedule_updates": 96,
+    "status": "passed",
+    "train_answer_varying_rows": 288,
+    "train_rows": 576,
+    "validation_answer_varying_rows": 170,
+    "validation_rows": 384
+  },
+  "required_next_stage": "separate_create_once_mps_smoke_release",
+  "schema_version": 1,
+  "status": "sealed_before_real_mps_smokes_training_not_authorized"
+}

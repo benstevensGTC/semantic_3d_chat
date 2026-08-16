@@ -1,14 +1,14 @@
 from __future__ import annotations
 
-import hashlib
 import json
 from pathlib import Path
 
 import numpy as np
 import pytest
 
+from scripts import demo_check as demo_check_module
 from scripts.demo_check import inspect_manifest, inspect_map, inspect_promotion, resolve_checkpoint
-from semantic_3d_chat.config import config_hash
+from semantic_3d_chat.chat.runtime_config import load_runtime_config
 
 ALIGNED_BYPASS_CONTRACT = {
     "language_aligned_tail_dim": 128,
@@ -122,32 +122,58 @@ def test_resolve_checkpoint_rejects_aligned_bypass_value_mismatch(tmp_path: Path
 def test_behavioral_promotion_is_explicit_and_bound_to_checkpoint_and_config(
     tmp_path: Path,
 ) -> None:
-    config = _config(tmp_path / "data")
-    checkpoint = tmp_path / "data" / "checkpoints" / "prepared" / "best"
-    _checkpoint(checkpoint, config, architecture="spatial_coverage_resampler_v2")
+    config = load_runtime_config("configs/runtime/gemma4_primary.yaml")
+    checkpoint = tmp_path / "checkpoint"
+    checkpoint.mkdir()
+    (checkpoint / "adapter.safetensors").write_bytes(b"prepared")
+    (checkpoint / "runtime_metadata.json").write_text("{}\n", encoding="utf-8")
 
     with pytest.raises(FileNotFoundError, match="promotion.json"):
         inspect_promotion(checkpoint, config)
 
-    def sha256(path: Path) -> str:
-        return hashlib.sha256(path.read_bytes()).hexdigest()
 
-    promotion = {
-        "schema_version": 1,
-        "status": "accepted",
-        "config_hash": config_hash(config),
-        "checkpoint_metadata_sha256": sha256(checkpoint / "metadata.json"),
-        "checkpoint_adapter_sha256": sha256(checkpoint / "adapter.safetensors"),
-        "evidence": ["reports/metrics/accepted_gate.json"],
-    }
-    (checkpoint / "promotion.json").write_text(json.dumps(promotion), encoding="utf-8")
-    inspected = inspect_promotion(checkpoint, config)
-    assert inspected["status"] == "accepted"
+def test_demo_config_rejects_experiment_and_path_alias_before_yaml_load(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    opened: list[Path] = []
 
-    promotion["checkpoint_adapter_sha256"] = "0" * 64
-    (checkpoint / "promotion.json").write_text(json.dumps(promotion), encoding="utf-8")
-    with pytest.raises(ValueError, match="checkpoint_adapter_sha256"):
-        inspect_promotion(checkpoint, config)
+    def unexpected_loader(path: str | Path) -> dict[str, object]:
+        opened.append(Path(path))
+        raise AssertionError("config loader must not run")
+
+    monkeypatch.setattr(demo_check_module, "load_config", unexpected_loader)
+    monkeypatch.setattr(demo_check_module, "load_runtime_config", unexpected_loader)
+    with pytest.raises(ValueError, match="before opening"):
+        demo_check_module.load_demo_config(
+            "configs/experiments/gemma4_diverse28_microstep_v32.yaml"
+        )
+
+    copied_alias = tmp_path / "copied.yaml"
+    copied_alias.write_text("environmental: supervision\n", encoding="utf-8")
+    with pytest.raises(ValueError, match="explicit legacy"):
+        demo_check_module.load_demo_config(copied_alias)
+
+    runtime_config = Path("configs/runtime/gemma4_primary.yaml").resolve()
+    config_alias = tmp_path / "runtime-alias.yaml"
+    config_alias.symlink_to(runtime_config)
+    parent_alias = tmp_path / "runtime-parent"
+    parent_alias.symlink_to(runtime_config.parent, target_is_directory=True)
+    for candidate in (config_alias, parent_alias / runtime_config.name):
+        with pytest.raises(ValueError, match="symbolic-link path components"):
+            demo_check_module.load_demo_config(candidate)
+    assert opened == []
+
+
+def test_demo_config_uses_strict_runtime_loader_for_production_config(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    def reject_generic(_path: str | Path) -> dict[str, object]:
+        raise AssertionError("generic inherited-config loader must not run")
+
+    monkeypatch.setattr(demo_check_module, "load_config", reject_generic)
+    config = demo_check_module.load_demo_config("configs/runtime/gemma4_primary.yaml")
+    assert config["_runtime_safe_config"] is True
 
 
 def test_inspect_map_reads_shapes_from_headers(tmp_path: Path) -> None:

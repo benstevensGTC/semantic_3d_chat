@@ -1,0 +1,126 @@
+{
+  "artifact": "oracle_text_upper_bound_v55_development",
+  "baseline": "oracle_text_upper_bound",
+  "claim": "Textual oracle facts were deliberately exposed to local Gemma; this is an evaluation upper bound and cannot satisfy the primary continuous-memory goal.",
+  "evaluation_only": true,
+  "inputs": {
+    "inference_provenance_sha256": "c24d3892ed5662fe00661429a1e0696b40d471a53eb0037d5dabad903d5be268",
+    "inference_report_path": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/gemma4/evaluation_only/oracle_text_upper_bound/v55_predictions.jsonl.report.json",
+    "inference_report_sha256": "21cd8b028a962c3d6d17f691f700804ba67bb08ab578c08cc20bd3daa22c671e",
+    "prediction_provenance_file_sha256": "198eda09e9f13044a710a6cccb94ab0ff33edab17ae2f39194b65042ba086205",
+    "prediction_provenance_path": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/gemma4/evaluation_only/oracle_text_upper_bound/v55_predictions.jsonl.provenance.json",
+    "predictions_path": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/gemma4/evaluation_only/oracle_text_upper_bound/v55_predictions.jsonl",
+    "predictions_sha256": "facfc9fb3b962ffb39b1f6a8bf43c7cf7b39ed48344a7f6314f449c1dbcd292d",
+    "references_path": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_diverse28/qa/validation.jsonl",
+    "references_sha256": "67fb14685b3f4cb43f2409db7eb84220ec89d6390205b7bb86eb148b4d4e68b2"
+  },
+  "metrics": {
+    "count": {
+      "accuracy": 1.0,
+      "examples": 42,
+      "mean_absolute_error": 0.0,
+      "prediction_coverage": 1.0
+    },
+    "counterfactual": {
+      "changed_when_expected_rate": 0.5,
+      "eligible_pairs": 108,
+      "expected_change_pairs": 12,
+      "invariant_pairs": 96,
+      "invariant_when_expected_rate": 0.9375,
+      "malformed_pair_groups": 0,
+      "pair_accuracy": 0.6666666666666666
+    },
+    "extra_prediction_count": 0,
+    "grounding": {
+      "coverage": 0.0,
+      "mean_coordinate_error_m": null,
+      "median_coordinate_error_m": null,
+      "prediction_count": 0,
+      "rmse_coordinate_error_m": null,
+      "target_count": 132,
+      "within_0_25m_accuracy": null,
+      "within_0_50m_accuracy": null,
+      "within_1_00m_accuracy": null
+    },
+    "list_order_insensitive_accuracy": 0.3333333333333333,
+    "matched_prediction_count": 216,
+    "missing_prediction_count": 0,
+    "normalized_exact_accuracy": 0.7222222222222222,
+    "per_type": {
+      "attribute": {
+        "normalized_exact_accuracy": 1.0,
+        "total": 48
+      },
+      "count": {
+        "normalized_exact_accuracy": 1.0,
+        "total": 42
+      },
+      "metric": {
+        "normalized_exact_accuracy": 0.0,
+        "total": 6
+      },
+      "orientation": {
+        "normalized_exact_accuracy": 1.0,
+        "total": 6
+      },
+      "presence": {
+        "normalized_exact_accuracy": 0.9047619047619048,
+        "total": 42
+      },
+      "spatial_relation": {
+        "normalized_exact_accuracy": 0.2916666666666667,
+        "total": 48
+      },
+      "support": {
+        "list_order_insensitive_accuracy": 0.3333333333333333,
+        "normalized_exact_accuracy": 0.3333333333333333,
+        "total": 24
+      }
+    },
+    "prediction_count": 216,
+    "presence": {
+      "f1": 0.9090909090909091,
+      "false_negative": 4,
+      "false_positive": 0,
+      "invalid_negative_predictions": 0,
+      "precision": 1.0,
+      "recall": 0.8333333333333334,
+      "true_negative": 18,
+      "true_positive": 20
+    },
+    "reference_count": 216,
+    "spatial_relation_accuracy": 0.4166666666666667
+  },
+  "primary_path_eligible": false,
+  "prohibited_primary_input": true,
+  "schema": "semantic_3d_chat.oracle_text_score.v1",
+  "schema_version": 1,
+  "scope": {
+    "answer_bearing_references_loaded_by_scorer": true,
+    "local_gemma_inference_authenticated": true,
+    "model_loaded_by_scorer": false,
+    "oracle_loaded_by_scorer": false,
+    "question_count": 216,
+    "question_or_answer_text_serialized_in_report": false,
+    "scene_ids": [
+      "scene_000019",
+      "scene_000020",
+      "scene_000021",
+      "scene_000022",
+      "scene_000023",
+      "scene_000024"
+    ],
+    "split": "development_validation"
+  },
+  "scoring_identity": {
+    "baseline": "oracle_text_upper_bound",
+    "evaluation_only": true,
+    "inference_provenance_sha256": "c24d3892ed5662fe00661429a1e0696b40d471a53eb0037d5dabad903d5be268",
+    "predictions_sha256": "facfc9fb3b962ffb39b1f6a8bf43c7cf7b39ed48344a7f6314f449c1dbcd292d",
+    "primary_path_eligible": false,
+    "prohibited_primary_input": true,
+    "references_sha256": "67fb14685b3f4cb43f2409db7eb84220ec89d6390205b7bb86eb148b4d4e68b2",
+    "scoring_implementation_sha256": "a063e0de970aeedf397cec86db5c440db5a16ea39308273bf2a5358ebebbba93"
+  },
+  "scoring_sha256": "638866ae87b238c2c7125843afe5800cff0708a2bb34cd79e68044fd7ea9143c"
+}

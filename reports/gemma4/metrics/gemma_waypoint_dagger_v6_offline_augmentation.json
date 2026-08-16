@@ -1,0 +1,78 @@
+{
+  "schema": "semantic_3d_chat.gemma_waypoint_offline_dagger_augmentation.v2",
+  "candidate": "operator_dagger_v6",
+  "generated_at_date": "2026-08-16",
+  "gemma_inference_run_during_generation": false,
+  "runtime_expert_available": false,
+  "offline_numeric_expert_labels_only": true,
+  "purpose": "Append the exact V5 live-distribution rejection state, a complete safe clockwise return, and a model-labeled STOP without dropping the V4 live-failure correction source.",
+  "config": {
+    "path": "configs/experiments/gemma_waypoint_policy_operator_dagger_v6.yaml",
+    "sha256": "fe82ca0056e2afd26304de1a6000cf573617f04dd5fc4c38771115611bc089e4"
+  },
+  "generator": {
+    "path": "src/semantic_3d_chat/training/gemma_waypoint_trace_generator.py",
+    "sha256": "0f509762446e15c53964a73ab19f2203ea6d3723bbc9e8b8a9586f3bf07b8af8"
+  },
+  "dataset": {
+    "path": "data_gemma4/training/gemma_waypoint_policy_v1_operator_dagger_v6",
+    "manifest_file_sha256": "0aac05ce78cbe7a3d15eccfd4a1d402b994a5012cf581a31bc7c327582f0d577",
+    "dataset_sha256": "68ca090b9ea87ed9b65b515230fa9826d8f7d83dc2bb83eaf4d13754688d42a9",
+    "traces_sha256": "212c4a5c1fe28b7c0a2a6dbbc1261842861529358f88a98675366ffbb7b0ac8c",
+    "sample_count": 7334,
+    "train_sample_count": 6623,
+    "validation_sample_count": 711,
+    "scene_splits_disjoint": true,
+    "train_scene_ids": [
+      "scene_000001"
+    ],
+    "validation_scene_ids": [
+      "scene_000031",
+      "scene_000032"
+    ],
+    "contradictory_exact_input_label_count": 0
+  },
+  "cumulative_live_failure_sources": [
+    {
+      "source_iteration": "v4",
+      "report_sha256": "3ec5458d763cd7d27533e981d309fb2e4ea58da592f6d5f980f6a7cc80c5680f",
+      "checkpoint_sha256": "b28642f2ccb3ef440ada4636566b5b5e237985ce50d9323196679780d626b2f1",
+      "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95",
+      "correction_sample_count": 63,
+      "model_labeled_stop_count": 1
+    },
+    {
+      "source_iteration": "v5",
+      "report_path": "reports/gemma4/metrics/gemma_waypoint_dagger_v5_live_acceptance.json",
+      "report_sha256": "670fd0eb87f471e084ade548d8f9fa78c961aa926b4d79913bccdcd49ba0adc4",
+      "checkpoint_sha256": "3f6785f082442c37ccb23db308e0f1e21b31dda28abe1c5f197d7be511baa199",
+      "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95",
+      "exact_prefix_transition_count": 22,
+      "first_rejection_step": 22,
+      "first_rejection_error_code": "E_MODEL_COLLISION",
+      "first_rejected_target_xy_m": [
+        -0.8826844833092204,
+        0.41691211338913026
+      ],
+      "first_recovery_input_sha256": "f74d3fe6dfdd0b428c9a8d5d6492005cc3f040cc33712cd468ae2500c7757e60",
+      "correction_sample_count": 60,
+      "face_sample_count": 21,
+      "move_to_sample_count": 38,
+      "model_labeled_stop_count": 1,
+      "total_decision_count_with_live_prefix": 82,
+      "path_length_m": 18.780196819653675,
+      "signed_winding_area_m2": -4.215435562419672,
+      "return_error_m": 0.0,
+      "minimum_expert_padded_map_clearance_m": 0.012784024478080025,
+      "minimum_runtime_map_clearance_m": 0.06278402447808001,
+      "maximum_move_distance_m": 0.4808846015417849,
+      "maximum_face_delta_degrees": 40.0
+    }
+  ],
+  "cumulative_live_failure_sample_count": 123,
+  "cumulative_live_failure_episode_count": 2,
+  "all_cumulative_sources_retained": true,
+  "test_command": "PYTHONPATH=src .venv-gemma4/bin/python -m pytest -q tests/test_gemma_waypoint_live_failure_dagger.py",
+  "test_result": "9 passed",
+  "cache_command": "PYTHONPATH=src TRANSFORMERS_OFFLINE=1 HF_HUB_OFFLINE=1 .venv-gemma4/bin/python scripts/cache_gemma_waypoint_hidden.py --config configs/experiments/gemma_waypoint_policy_operator_dagger_v6.yaml --reuse-dataset data_gemma4/training/gemma_waypoint_policy_v1_operator_dagger_v5 --reuse-cache data_gemma4/training/gemma_waypoint_policy_v1_operator_dagger_v5_runtime_aligned_hidden --forward-chunk-size 512 --gemma-batch-size 4"
+}

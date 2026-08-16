@@ -1,0 +1,174 @@
+# One-arm preregistration for a bounded learned reader over the immutable V75
+# V2 atlas.  This file is intentionally diagnostic-only: the gradient smoke is
+# a mandatory stop/go boundary and even a passing held smoke cannot publish a
+# runtime checkpoint.
+v80:
+  schema_version: 1
+  artifact: gemma4_v80_v75_atlas_attention_reader
+  status: preregistered_preflight_only_model_bearing_run_not_yet_authorized
+  seed: 800080
+  wall_time_budget_seconds: 1800
+
+  inputs:
+    source_v73_config: configs/experiments/gemma4_v73_fullscene_controller.yaml
+    source_v73_config_sha256: d208f28380e3f1810a688be8ea8a263831b6a741f7f90e667795637f39d841f1
+    historical_training_qa: data_diverse52/qa/train.jsonl
+    historical_training_qa_sha256: 01721bf904b1ab0b65ce8acac6e366287040873cda1356da6c70c4981abe7619
+    runtime_config: configs/runtime/gemma4_v54.yaml
+    runtime_config_sha256: 891c58faaaa5fcd2ed76c7e3871f14c5d8c5ae2e05d9fa4ddd5193773d40e56b
+    base_checkpoint: data_gemma4/runtime/checkpoints/gemma4_v54_release_v1
+    base_adapter_sha256: 6c627f0a0d9efb7100489c24cbd4acafe10456b79280a64a85399a21cb541daf
+    atlas_controller: data_gemma4/runtime/checkpoints/gemma4_v75_nll_control_release_v1
+    atlas_controller_weights_sha256: bb112f42ca5df71b88b4cd7721b9107f9be9b0dc01b612a4ace6212548da669c
+    base_prefix_cache: data_gemma4/scene_tokens/v56_question_control_full_prefixes
+    numeric_probe_bank: reports/gemma4/artifacts/v75_fixed_atlas_historical_internal_v1/probe_bank
+    numeric_probe_file_sha256: fb32c687dd787f108fab03e9745eefb2273891c2be990d0acf50ca111eb637e8
+    model_id: google/gemma-4-E2B-it
+    model_revision: 3e22461f65e89153144f8adb70e3b8c2cc9845a7
+    model_file_sha256: 2db5482b20d746879bb3ef79b5203e9075a2e2b98f54ec7c2f281c1477ddc550
+
+  atlas_contract:
+    architecture: fixed_scene_key_value_atlas_v75_v2
+    layout: [boi, all_480_atlas_key_value_tokens, all_256_base_scene_latents, eoi]
+    fixed_prefix_tokens: 738
+    atlas_memory_tokens: 480
+    base_environment_latents: 256
+    hidden_size: 1536
+    compile_every_scene_before_any_question_preparation: true
+    same_scene_prefix_reused_for_all_questions: true
+    question_dependent_scene_processing: false
+    question_dependent_retrieval: false
+    semantic_or_spatial_top_k_selection: false
+    every_prefix_token_retained: true
+
+  split:
+    train_pair_count: 12
+    train_scene_count: 24
+    train_row_count: 576
+    train_changed_unit_count: 40
+    held_pair_count: 8
+    held_scene_count: 16
+    held_row_count: 384
+    held_smoke_unit_count: 8
+    held_smoke_side_count: 16
+    pair_disjoint: true
+    scene_disjoint: true
+    question_disjoint: false
+    held_smoke_selection: first_changed_unit_in_each_of_eight_sorted_change_families
+    held_smoke_inventory_sha256: cd898bbf859fe1a5d5f798229813a2eec3fcc9f2d2de2eea1ed1ae81fc476056
+    broad_train_row_count: 16
+    broad_train_inventory_sha256: d4adb3a3f781e45a5465172439146f1ab07a1de3eb28337d08cea453866b8f93
+    broad_held_row_count: 16
+    broad_held_inventory_sha256: 70580e40feba49c1896bddea3c3676433be6d492178d08793554916e49a8890a
+
+  reader:
+    adapter_type: outer_additive_fp32_lora
+    rank: 8
+    alpha: 16.0
+    dropout: 0.0
+    exact_zero_output_initialization: true
+    trainable_parameter_count: 122880
+    target_modules:
+      - model.language_model.layers.14.self_attn.k_proj
+      - model.language_model.layers.14.self_attn.v_proj
+      - model.language_model.layers.34.self_attn.q_proj
+      - model.language_model.layers.34.self_attn.o_proj
+    target_shapes_out_in:
+      model.language_model.layers.14.self_attn.k_proj: [512, 1536]
+      model.language_model.layers.14.self_attn.v_proj: [512, 1536]
+      model.language_model.layers.34.self_attn.q_proj: [4096, 1536]
+      model.language_model.layers.34.self_attn.o_proj: [1536, 4096]
+    layer_14_attention: full_attention
+    layer_34_attention: full_attention
+    layer_34_kv_source: physical_layer_14_full_attention_kv
+    all_other_parameters_frozen: true
+    base_weights_merged: false
+
+  forward_contract:
+    full_huggingface_model_forward_for_every_branch: true
+    prepared_hidden_state_shortcut: false
+    answer_tail_only_lm_head_via_native_logits_to_keep: true
+    answer_tail_token_normalized_nll: true
+    use_cache: false
+    question_tokens_can_attend_every_fixed_prefix_token_at_layers_14_and_34: true
+
+  optimization:
+    optimizer: AdamW
+    updates: 16
+    changed_units_consumed_exactly_once: true
+    changed_units_per_update: [3, 3, 3, 3, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2, 2, 2]
+    schedule_sha256: be4375143a23cda3bd9ad765c253b6532ed920f0ce51f6434215c23eb383056a
+    learning_rate: 0.00002
+    weight_decay: 0.0
+    gradient_clip_l2: 0.5
+    margin_target_nats: 0.5
+    correct_answer_nll_weight: 0.20
+    wrong_paired_scene_softplus_weight: 1.0
+    broad_answer_nll_weight: 0.20
+    retention_kl_weight: 0.25
+    retention_source: frozen_base_answer_tail_distribution_on_broad_train_row
+    intermediate_selection_or_checkpoint: false
+
+  memory_safety:
+    host_unified_memory_bytes: 25769803776
+    minimum_host_available_bytes: 4294967296
+    maximum_mps_driver_allocated_bytes: 19000000000
+    maximum_process_rss_bytes: 9663676416
+    sequential_microbranches_only: true
+    maximum_live_teacher_forced_batch_size: 1
+    duplicate_model_instances: false
+    persistent_atlas_device_cache: false
+    persistent_teacher_logit_device_cache: false
+    gradient_checkpointing: false
+    use_cache: false
+    checkpoint_writer_present: false
+    memory_checked_before_and_after_every_microbranch: true
+    hard_wall_timer: true
+
+  mandatory_zero_step_gate:
+    held_atlas_baseline_measured_before_gradient: true
+    exact_zero_adapter_output_max_abs: 0.0
+    exact_baseline_answer_nll_max_abs_delta: 0.0
+    every_residual_a_gradient_l2: 0.0
+    every_residual_b_gradient_l2_strictly_positive: true
+    finite_total_gradient: true
+    only_four_target_adapters_trainable: true
+    optimizer_constructed_before_gate: false
+    fail_closes_without_training: true
+
+  held_smoke_gates:
+    mean_wrong_scene_margin_gain_nats_minimum: 0.03
+    mean_wrong_scene_softplus_delta_nats_maximum: -0.015
+    mean_correct_answer_nll_delta_nats_maximum: -0.005
+    additional_positive_margin_sides_minimum: 2
+    additional_complete_units_minimum: 1
+    minimum_change_family_margin_delta_nats: -0.05
+    broad_held_mean_answer_nll_delta_nats_maximum: 0.02
+    retention_mean_kl_nats_maximum: 0.005
+    retention_maximum_kl_nats_maximum: 0.02
+    retention_answer_token_top1_agreement_minimum: 1.0
+
+  publication:
+    gradient_smoke_sufficient_for_training: true
+    held_smoke_sufficient_for_runtime_promotion: false
+    checkpoint_publication_authorized: false
+    runtime_publication_authorized: false
+    official_validation_authorized: false
+    official_test_authorized: false
+    deferred_final_authorized: false
+    oracle_authorized: false
+
+  scope:
+    historical_v73_training_pool_only: true
+    official_validation_loaded: false
+    official_test_loaded: false
+    deferred_final_loaded: false
+    oracle_loaded: false
+    cloud_inference: false
+
+  outputs:
+    preregistration: reports/gemma4/metrics/gemma4_v80_v75_atlas_attention_reader_preregistration.json
+    cpu_preflight: reports/gemma4/metrics/gemma4_v80_v75_atlas_attention_reader_cpu_preflight.json
+    gradient_smoke: reports/gemma4/metrics/gemma4_v80_v75_atlas_attention_reader_gradient_smoke.json
+    bounded_screen: reports/gemma4/metrics/gemma4_v80_v75_atlas_attention_reader_bounded_screen.json
+    prohibited_checkpoint: data_gemma4/checkpoints/gemma4_v80_v75_atlas_attention_reader

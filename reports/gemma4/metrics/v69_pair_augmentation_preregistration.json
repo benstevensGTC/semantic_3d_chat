@@ -1,0 +1,234 @@
+{
+  "arm_selection": {
+    "best_metric_cherry_picking": false,
+    "full_mode_requires_exact_selected_arm_authorization": true,
+    "greedy_generation_during_selection": false,
+    "later_arms_skipped_after_first_pass": true,
+    "rule": "run_in_declared_order_and_select_first_all_gate_pass"
+  },
+  "artifact": "v69_transition_balanced_pair_augmentation_preregistration",
+  "augmentation_contract": {
+    "changed_units_bucketed_by_ordered_opaque_numeric_class_transition": true,
+    "every_transition_oversampled_to_fold_local_maximum_bucket_size": true,
+    "held_pair_questions_used_for_augmentation": false,
+    "held_pair_rows_used_for_augmentation": false,
+    "held_pair_teacher_sources_used": false,
+    "natural_language_serialized": false,
+    "pair_midpoint_preserved_by_symmetric_signature_extrapolation": true,
+    "question_mix_partner_has_identical_ordered_numeric_transition": true,
+    "singleton_transition_questions_unchanged": true
+  },
+  "behavioral_gates": {
+    "actual_greedy_local_gemma_required_after_numeric_pass": true,
+    "exact_paired_opposite_scene_dependence_required": true,
+    "saved_runtime_raw_question_token_generation_required": true,
+    "sealed_checkpoint_public_reload_required": true,
+    "thresholds": {
+      "eligible_fold_total": 12,
+      "eligible_folds_with_exact_hit_minimum": 12,
+      "final_complete_unit_minimum": 36,
+      "final_complete_unit_total": 40,
+      "final_exact_minimum": 520,
+      "final_total": 576,
+      "held_changed_side_exact_minimum": 45,
+      "held_changed_side_total": 75,
+      "held_complete_unit_minimum": 15,
+      "held_complete_unit_total": 35,
+      "held_prediction_change_unit_minimum": 20,
+      "held_prediction_change_unit_total": 35,
+      "held_supported_exact_minimum": 300,
+      "held_supported_total": 571,
+      "held_unsupported_total": 5,
+      "paired_opposite_follows_complete_minimum": 25,
+      "paired_opposite_follows_side_minimum": 60,
+      "paired_opposite_original_complete_maximum": 5,
+      "paired_opposite_original_exact_maximum": 20,
+      "paired_opposite_side_total": 80,
+      "paired_opposite_unit_total": 40,
+      "per_type_minimum_exact": [
+        [
+          "attribute",
+          35
+        ],
+        [
+          "count",
+          58
+        ],
+        [
+          "metric",
+          3
+        ],
+        [
+          "orientation",
+          20
+        ],
+        [
+          "presence",
+          60
+        ],
+        [
+          "spatial_relation",
+          65
+        ],
+        [
+          "support",
+          35
+        ]
+      ]
+    },
+    "unchanged_from_v68_v67_and_v66b": true
+  },
+  "common_hyperparameters": {
+    "anchor_scale_floor": 0.0001,
+    "anchor_weight": 2.0,
+    "augmentation_batch_size": 10,
+    "augmentation_classification_weight": 2.0,
+    "augmentation_delta_weight": 8.0,
+    "augmentation_hard_negative_margin": 0.14,
+    "augmentation_hard_negative_weight": 10.0,
+    "augmentation_opposite_margin": 0.28,
+    "augmentation_opposite_weight": 12.0,
+    "augmentation_seed_offset": 9000069,
+    "augmentation_value_weight": 1.0,
+    "gradient_clip_norm": 1.0,
+    "prototype_temperature": 0.07,
+    "retention_batch_size": 48,
+    "retention_batches_per_epoch": 3,
+    "retention_weight": 1.5,
+    "seed": 680068
+  },
+  "diagnosed_mechanism": {
+    "collapsed_opposite_scene_predictions_remain": true,
+    "mean_pair_delta_and_positive_delta_gates_pass": true,
+    "ordinary_supported_class_gate_has_large_headroom": true,
+    "remaining_failures_are_discrete_pair_sensitivity_gates": true,
+    "transition_imbalance_and_local_boundary_width_are_training_only_hypotheses": true
+  },
+  "failed_predecessor": {
+    "artifact": "v68_regularized_pair_numeric_grid_v1",
+    "held_changed_side_exact": 53,
+    "held_changed_side_total": 75,
+    "held_complete_units_observed": 14,
+    "held_complete_units_required": 15,
+    "held_positive_margins_observed": 50,
+    "held_positive_margins_required": 53,
+    "held_prediction_changes_observed": 17,
+    "held_prediction_changes_required": 20,
+    "held_supported_exact": 489,
+    "held_supported_total": 571,
+    "mean_own_over_opposite_margin": 0.09664462506771088,
+    "mean_pair_delta_cosine": 0.3996151571694229,
+    "path": "reports/gemma4/metrics/v68_regularized_pair_numeric_grid.json",
+    "predecessor_artifact_bytes_modified": false,
+    "preregistration_sha256": "6642b16b38e169df0059b2ccfb6aba0f8b1315052f3aad0e2871b30eeda6811f",
+    "selected_diagnostic_arm": "strong_all_value_anchor",
+    "selected_for_new_research_reason": "highest_held_changed_complete_and_prediction_change_counts",
+    "sha256": "0584383d4b3806b6a4205cc516e2957ea05b5c76066134335485d5f638c9e609"
+  },
+  "foundation_arm": {
+    "anchor_weight": 1.5,
+    "arm_id": "strong_all_value_anchor",
+    "hard_negative_margin": 0.12,
+    "hard_negative_weight": 10.0,
+    "optimizer_scope": "all_value",
+    "pair_classification_weight": 2.0,
+    "pair_delta_weight": 8.0,
+    "pair_learning_rate": 3e-05,
+    "pair_opposite_margin": 0.25,
+    "pair_opposite_weight": 10.0,
+    "pair_refinement_epochs": 70,
+    "pair_refinement_repeats": 4,
+    "pair_value_weight": 1.0,
+    "retention_batches_per_epoch": 4,
+    "retention_weight": 1.5
+  },
+  "implementation_source_hashes": {
+    "scripts/run_gemma4_v69_pair_augmentation.sh": "c498484d7d95b10583fd06d62f2eebd18fd4960fcfc740bfb6535c2729eb0c78",
+    "src/semantic_3d_chat/evaluation/v69_pair_augmentation_preregistration.py": "3473d57afa96f6c245ac5b595a8429af9334f87f9d4b38c2b53ba0911373dff3",
+    "src/semantic_3d_chat/scene_encoder/question_control_v7.py": "a5acd2e7b332b8c511d0daf053d92e4c8b59abb31ad10ccaca7c9276365cc9c6",
+    "src/semantic_3d_chat/training/question_control_v67_objective.py": "4f2183efec5278b7399b56c143f965f13057341410786af081519d9141ea1fb4",
+    "src/semantic_3d_chat/training/question_control_v68_objective.py": "36df4669ab46053ff850734bae715e2ea7799b3a1570239285f1512c26165c01",
+    "src/semantic_3d_chat/training/question_control_v69_objective.py": "ac7d37353d79d27b7911bf68285eb9c54410fb94e3587653bf97001b7e03e07f",
+    "src/semantic_3d_chat/training/train_question_control_v63.py": "f3e645c6385e4d2f286ff007e71033a93c25579e043116ee706dd01df7f6d310",
+    "src/semantic_3d_chat/training/train_question_control_v65.py": "e37fa0ac07d14c01f5397502ce26e401db0df182134291afd3668e78fa1e44ea",
+    "src/semantic_3d_chat/training/train_question_control_v66.py": "0c597a143265ab39c3f891a1bf726fa307752fe22f0fc09a7817263874d3b779",
+    "src/semantic_3d_chat/training/train_question_control_v67.py": "2e83be7166e9ff894ca7b9a16aba8a92aaeb331861241b72916555a1298a1e98",
+    "src/semantic_3d_chat/training/train_question_control_v68.py": "23f11bb4e595d0b84a8c3be49a7f83b2c69fc337d134524f17772da48bdfc0a2",
+    "src/semantic_3d_chat/training/train_question_control_v69.py": "1b43d8b6b50782d5bf1193312af85cec35b4565be7d0fd9a1450fede4da1e59e"
+  },
+  "numeric_screen": {
+    "all_12_pairs_held_out_once_per_executed_arm": true,
+    "fold_codebook_and_basis_built_after_exclusion": true,
+    "protocol": "leave_one_counterfactual_pair_out_numeric_only",
+    "question_and_answer_text_serialized": false,
+    "thresholds": {
+      "fully_supported_pair_sides": 70,
+      "held_changed_class_exact_minimum": 45,
+      "held_changed_total": 75,
+      "held_complete_class_units_minimum": 15,
+      "held_complete_unit_total": 35,
+      "held_prediction_change_units_minimum": 20,
+      "held_supported_class_exact_minimum": 300,
+      "held_supported_total": 571,
+      "held_unsupported_total": 5,
+      "mean_own_over_opposite_margin_minimum": 0.02,
+      "mean_pair_delta_cosine_minimum": 0.35,
+      "positive_own_over_opposite_sides_minimum": 53,
+      "positive_pair_delta_units_minimum": 27
+    },
+    "thresholds_unchanged_from_v68_v67": true
+  },
+  "ordered_arm_grid": [
+    {
+      "arm_id": "balanced_extrapolation_010",
+      "augmentation_epochs": 24,
+      "augmentation_learning_rate": 2e-05,
+      "augmentation_repeats": 2,
+      "question_mix_weight": 0.0,
+      "signature_expansion": 0.1
+    },
+    {
+      "arm_id": "balanced_extrapolation_010_question_mix_010",
+      "augmentation_epochs": 28,
+      "augmentation_learning_rate": 2e-05,
+      "augmentation_repeats": 2,
+      "question_mix_weight": 0.1,
+      "signature_expansion": 0.1
+    },
+    {
+      "arm_id": "balanced_extrapolation_020_question_mix_015",
+      "augmentation_epochs": 32,
+      "augmentation_learning_rate": 1.5e-05,
+      "augmentation_repeats": 2,
+      "question_mix_weight": 0.15,
+      "signature_expansion": 0.2
+    }
+  ],
+  "preserved_v68_path_hashes": {
+    "reports/gemma4/metrics/v68_regularized_pair_numeric_grid.json": "0584383d4b3806b6a4205cc516e2957ea05b5c76066134335485d5f638c9e609",
+    "reports/gemma4/metrics/v68_regularized_pair_preregistration.json": "6642b16b38e169df0059b2ccfb6aba0f8b1315052f3aad0e2871b30eeda6811f",
+    "scripts/run_gemma4_v68_regularized_pair.sh": "b5d43262dc7debdd18267add9abb1c6a6e51849234c7ba69966927f25c0f80f3",
+    "src/semantic_3d_chat/training/question_control_v68_objective.py": "36df4669ab46053ff850734bae715e2ea7799b3a1570239285f1512c26165c01",
+    "src/semantic_3d_chat/training/train_question_control_v68.py": "23f11bb4e595d0b84a8c3be49a7f83b2c69fc337d134524f17772da48bdfc0a2"
+  },
+  "publication": {
+    "checkpoint_absent_on_all_arm_screen_failure": true,
+    "checkpoint_absent_on_behavior_failure": true,
+    "checkpoint_absent_on_paired_opposite_failure": true,
+    "screen_pass_authorization_required_for_full_run": true,
+    "screen_report_create_once": true,
+    "training_codebook_or_answer_text_in_checkpoint": false
+  },
+  "research_change": "strong_v68_foundation_plus_transition_balanced_continuous_question_and_pair_signature_augmentation",
+  "schema_version": 1,
+  "scope": {
+    "deferred_final_loaded": false,
+    "fresh_development_loaded": false,
+    "internal_validation_loaded": false,
+    "oracle_loaded": false,
+    "scorer_inputs_used": false,
+    "training_only": true,
+    "validation_inputs_used": false
+  },
+  "status": "locked_before_v69_training_screen_or_generation"
+}

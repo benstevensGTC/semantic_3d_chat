@@ -1,0 +1,138 @@
+{
+  "architecture": {
+    "boundary_tokens_excluded": true,
+    "control_values_scene_question_bilinear": true,
+    "gate_parameter_count": 17473,
+    "gate_scene_question_conditioned": true,
+    "inherited_value_state_frozen": true,
+    "name": "scene_conditioned_gate_teacher_basis_control_v4",
+    "question_dependent_scene_retrieval": false,
+    "saved_parameter_count": 366356,
+    "scene_signature_shape": [
+      1,
+      8,
+      1536
+    ],
+    "softmax_scene_attention_used": false
+  },
+  "artifact": "v61_scene_conditioned_gate_training",
+  "base": {
+    "checkpoint_files": [
+      {
+        "path": "adapter.safetensors",
+        "sha256": "6c627f0a0d9efb7100489c24cbd4acafe10456b79280a64a85399a21cb541daf",
+        "size_bytes": 55956825
+      },
+      {
+        "path": "metadata.json",
+        "sha256": "db1435f8d38ca587e34dcd55dc4d37532efc0504bfb62bc115838dc0ab7a7ece",
+        "size_bytes": 459323
+      },
+      {
+        "path": "runtime_metadata.json",
+        "sha256": "807515461c71b08c08dfbd08a184a653e791413748530fa69402512eca6f6fdd",
+        "size_bytes": 15858
+      }
+    ],
+    "checkpoint_sha256": "3e128b40c1b73bb32750285679cda6b1bea364e67465e986a94a81dfc95e81e8",
+    "runtime_config_effective_sha256": "714c60ce9ccb1dff69c72f6618f8afb6f31bc60a830b5ee0fb794fedaa8a321e",
+    "runtime_config_file_sha256": "7cef35a5acbc0da740f79c61e0684fff329713836a4034d4fda024d6bf5372d0"
+  },
+  "checkpoint": {
+    "inherited_value_state_sha256": "8ee3d575ba472e917f04649e40fd1927cac7b7b67a423c02102a8655ae35cfc8",
+    "runtime_metadata_sha256": "2ffaa5683f7e5172748603faebc731479b73e07d989aff308933426cd453b4e0",
+    "weights_sha256": "abdf71ec04abda233c23d29386940981cbc0a57849bdbe4dc84e5bea37792f27"
+  },
+  "inputs": {
+    "changed_record_count": 22,
+    "prefix_cache_manifest_sha256": "b288dfd88677d18ad5fb3b0c287cf0a6881c194d39566a41161c68bc90dc324d",
+    "prefix_shape": [
+      1,
+      258,
+      1536
+    ],
+    "training_qa_sha256": "01721bf904b1ab0b65ce8acac6e366287040873cda1356da6c70c4981abe7619",
+    "training_record_count": 144,
+    "training_scene_ids": [
+      "scene_000031",
+      "scene_000032",
+      "scene_000033",
+      "scene_000034",
+      "scene_000037",
+      "scene_000038"
+    ],
+    "v61_baseline_lock_loaded": false,
+    "v61_generalization_gate_loaded": false,
+    "v61_preregistration_loaded": false
+  },
+  "offline_checks": {
+    "all_144_training_routes_exact": true,
+    "inherited_state_sha256_unchanged": true,
+    "inherited_tensors_exact_after_training": true,
+    "inherited_tensors_exact_before_training": true,
+    "minimum_signed_logit_margin": true,
+    "only_gate_trainable": true,
+    "retained_v60_mean_pair_delta_cosine": true,
+    "retained_v60_mean_prompt_cosine": true,
+    "retained_v60_mean_rms_absolute_error": true,
+    "retained_v60_minimum_prompt_cosine": true,
+    "strict_saved_runtime_reload_exact": true,
+    "value_outputs_exact_on_all_144": true
+  },
+  "offline_checks_passed": true,
+  "optimization": {
+    "completed_epochs": 325,
+    "configured_epochs": 4000,
+    "elapsed_seconds": 0.2072412921115756,
+    "maximum_preclip_gradient_norm": 2.124025344848633,
+    "minimum_signed_logit_margin": 4.278526782989502,
+    "route_metrics": {
+      "anchor_changed": {
+        "correct": 8,
+        "maximum_probability": 0.9999914169311523,
+        "minimum_probability": 0.996615469455719,
+        "total": 8
+      },
+      "expansion_changed": {
+        "correct": 14,
+        "maximum_probability": 0.9998375177383423,
+        "minimum_probability": 0.9955762624740601,
+        "total": 14
+      },
+      "retention": {
+        "correct": 122,
+        "maximum_probability": 0.013673513196408749,
+        "minimum_probability": 8.901166665964411e-07,
+        "total": 122
+      }
+    }
+  },
+  "promotion_eligible": false,
+  "saved_runtime_generation_gate_required": true,
+  "schema_version": 1,
+  "scope": {
+    "base_scene_stack_frozen": true,
+    "cached_v60_values_only": true,
+    "complete_scene_prefix_retained": true,
+    "deferred_final_loaded": false,
+    "fresh_development_loaded": false,
+    "gemma_backward_used": false,
+    "gemma_generation_used": false,
+    "only_scene_question_gate_trained": true,
+    "oracle_loaded": false,
+    "question_dependent_scene_retrieval": false,
+    "runtime_teacher_access": false
+  },
+  "source": {
+    "retained_prompt_metrics": {
+      "mean_pair_delta_cosine": 0.9962511496110396,
+      "mean_prompt_cosine": 0.9924739917570894,
+      "mean_rms_absolute_error": 0.001876611601222645,
+      "minimum_prompt_cosine": 0.9747506976127625
+    },
+    "v60_checkpoint_sha256": "a6dd154540075f1c0a095b339532e161a65b1a77068779d1b58f814a6608508c",
+    "v60_report_sha256": "846b202040edaedf784a0df850286fb6b7f783b43639322b954530572b9acdcf",
+    "v60_state_sha256": "8ee3d575ba472e917f04649e40fd1927cac7b7b67a423c02102a8655ae35cfc8",
+    "v60_weights_sha256": "5aa794f5d5368a330329337b67e54e59a419961af7c1f5de6d1c1fa698499371"
+  }
+}

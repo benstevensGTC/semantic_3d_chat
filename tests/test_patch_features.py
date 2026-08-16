@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 
 import numpy as np
@@ -69,16 +70,59 @@ def test_dense_patch_artifact_retains_named_components_and_fusion_layout(tmp_pat
     assert metadata == {"cache_signature": "abc123", "frame_key": "frame_000000"}
 
     with np.load(output, allow_pickle=False) as archive:
-        assert {
+        assert set(archive.files) == {
             SPATIAL_FEATURE_KEY,
-            NATIVE_FEATURE_KEY,
-            MIDDLE_FEATURE_KEY,
-            LATE_FEATURE_KEY,
-            ALIGNED_FEATURE_KEY,
             "component_names",
             "component_offsets",
             "metadata_json",
-        } <= set(archive.files)
+        }
         assert archive[SPATIAL_FEATURE_KEY].shape == (14, 14, 2048)
         assert tuple(archive["component_names"].tolist()) == COMPONENT_NAMES
         assert tuple(archive["component_offsets"].tolist()) == (0, 768, 1536, 2048)
+
+
+def test_dense_patch_loader_is_backward_compatible_with_schema_v1(tmp_path: Path) -> None:
+    features = _features()
+    output = tmp_path / "legacy_frame.npz"
+    metadata = {"format_version": "1", "cache_signature": "legacy"}
+    np.savez(
+        output,
+        **{
+            SPATIAL_FEATURE_KEY: features.spatial_features.numpy(),
+            NATIVE_FEATURE_KEY: features.native_middle_late.numpy(),
+            MIDDLE_FEATURE_KEY: features.native_middle.numpy(),
+            LATE_FEATURE_KEY: features.native_late.numpy(),
+            ALIGNED_FEATURE_KEY: features.clip_aligned.numpy(),
+            "component_names": np.asarray(COMPONENT_NAMES),
+            "component_offsets": np.asarray(features.component_offsets, dtype=np.int32),
+            "metadata_json": np.asarray(
+                json.dumps(metadata, sort_keys=True, separators=(",", ":"))
+            ),
+        },
+    )
+
+    loaded, loaded_metadata = DensePatchFeatures.load(output)
+
+    assert torch.equal(loaded.spatial_features, features.spatial_features)
+    assert loaded_metadata == metadata
+
+
+def test_schema_v2_stores_full_width_feature_values_exactly_once(tmp_path: Path) -> None:
+    features = _features()
+    output = tmp_path / "schema_v2.npz"
+
+    features.save(output, {"format_version": "2"})
+
+    with np.load(output, allow_pickle=False) as archive:
+        numeric_feature_bytes = sum(
+            archive[key].nbytes
+            for key in archive.files
+            if key in {
+                SPATIAL_FEATURE_KEY,
+                NATIVE_FEATURE_KEY,
+                MIDDLE_FEATURE_KEY,
+                LATE_FEATURE_KEY,
+                ALIGNED_FEATURE_KEY,
+            }
+        )
+        assert numeric_feature_bytes == features.spatial_features.numpy().nbytes

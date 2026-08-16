@@ -1,0 +1,87 @@
+{
+  "all_release_gates_passed": true,
+  "artifact": "gemma4_v89_strict_runtime_release_v1",
+  "bindings": {
+    "cpu_preflight_sha256": "bc063b1cbad1d05a53e0044bfcc80f6d52f994e1ef85e0b5ed351469a987e256",
+    "development_known_smoke_trained": true,
+    "evaluation_predictions_sha256": "49ff7b9fd4010f6d3201c5ee22ca25ed11d035617910b722a53c52956b9df640",
+    "experiment_config_sha256": "6781126de7e378a27e9a4140d2e47efb7b673c8a0b3522dd762fea5214312e2c",
+    "held_out_generalization_claim": false,
+    "held_out_smoke_claim": false,
+    "model_acceptance_gate_passed": true,
+    "model_gate_report_authenticated": true,
+    "model_gate_report_sha256": "c880c0707c6c87783a20134984914e4a0c6cace4d4d70c7d202ee2a527ee87a2",
+    "preregistration_sha256": "493208eb96b6bfe14267ebc05612441457a2b52751f0ca06e4fb90fab84d94a9",
+    "runtime_smoke_sha256": "99e9cf6e631ceb0cbdc4d26adc5218c7d84fcd3d78f23e050d6a486e07c0c0b3",
+    "schema_version": 89,
+    "training_report_sha256": "1980a694bca8268056ca7485c755127c9fc94fd2cd377de3e5556ccaba887ea6",
+    "v85_adapter_sha256": "163ceb462bafe4b1d38099c07ca32bcc22944ad93917222b019e75634883fd8d",
+    "v86_bridge_file_sha256": "3e4db9a621e915da341ba2163b7c541863c067eafc5abc55e53a50f594476015",
+    "v86_bridge_state_sha256": "8b6bd801716132c8aac50c6288b9ba588417dc5e6a7c2c15dd9515892f714260",
+    "v87_bridge_file_sha256": "3dc027ec236347b09feeb1052476078e8a577f9df4b65b13a29a41d4b959578f",
+    "v87_bridge_state_sha256": "618c03e102d9a9eb98d405d5a040cd8285194539b5a4043d34f16356ac08769e",
+    "v88_bridge_file_sha256": "95d4aaf9c42cbf796dc047b3e622cf92247c898987ab159570944861ef698cf1",
+    "v88_bridge_state_sha256": "ff311624150056c67ad1c0a06752a77af2de89878778049ae886aa59db3376aa",
+    "v89_bridge_file_sha256": "570e6e582664d21964e110e93036cfb24f35aff59f598f049f87008bffda89b6",
+    "v89_bridge_metadata_sha256": "dcc62e09e83ae4649c6f30b2a350047a8077e57355258580f5ddc802a2ffa727",
+    "v89_bridge_state_sha256": "de2388828b4a95770e6e55639baa4538a8360ab1323b68b05ab915aaaba68bd8"
+  },
+  "chat_runtime_loads_training_or_evaluation_reports": false,
+  "checkpoint": {
+    "adapter_sha256": "78856650751f8c700a651553e02d95ac389be53e12a56c39576a6d2f23d7d386",
+    "candidate_adapter_bytes_reused_exactly": true,
+    "checkpoint_files": [
+      {
+        "path": "adapter.safetensors",
+        "sha256": "78856650751f8c700a651553e02d95ac389be53e12a56c39576a6d2f23d7d386",
+        "size_bytes": 57408073
+      },
+      {
+        "path": "runtime_metadata.json",
+        "sha256": "c375d729d0a23e515eef979129a7032479fe153ad1b5491d594bf61a9f1f9a72",
+        "size_bytes": 22249
+      }
+    ],
+    "checkpoint_sha256": "9408092e589834671c79394260b67198262e4d2a4f1fe01f3f772fed6b4c2b1b",
+    "exact_two_file_checkpoint": true,
+    "runtime_metadata_sha256": "c375d729d0a23e515eef979129a7032479fe153ad1b5491d594bf61a9f1f9a72"
+  },
+  "development_known_smoke_trained": true,
+  "held_out_generalization_claim": false,
+  "held_out_smoke_claim": false,
+  "promotion_decision": "strict_scene1_experimental_primary",
+  "promotion_scope": "strict_direct_continuous_scene_memory_scene1_chat",
+  "runtime_checkpoint_contains_environmental_text": false,
+  "runtime_checkpoint_contains_supervision": false,
+  "runtime_config": "configs/runtime/gemma4_v89_strict_scene1.yaml",
+  "runtime_config_sha256": "63b50a102c483836e6be5d6f2c53d8cbb850d5506363e257a3d6894031f4a410",
+  "scene_id": "scene_000001",
+  "scene_memory": {
+    "canonical_prefix_sha256": "a428f5147c815839ae7315a0adab952ab210814fb21dcdc5bf13b167f28a6e37",
+    "exact_two_file_scene_memory": true,
+    "memory_tensor_file_bytes_unchanged": true,
+    "metadata_only_rebinding": true,
+    "packaged_memory_tensor_file_sha256": "3427851432d8f2a3609b6205b18b8c0d9a0fcf68d8f3bf0c98c758ac64209ffb",
+    "question_data_used_for_rebinding": false,
+    "source_memory_tensor_file_sha256": "3427851432d8f2a3609b6205b18b8c0d9a0fcf68d8f3bf0c98c758ac64209ffb"
+  },
+  "scene_memory_metadata_only_rebinding": true,
+  "scene_memory_tensor_bytes_unchanged": true,
+  "schema_version": 89,
+  "strict_input_contract": {
+    "compiled_before_question": true,
+    "continuous_environment_payload_tokens": 736,
+    "environmental_text_inputs": [],
+    "native_boi_eoi_retained": true,
+    "question_conditioned_environmental_readout": false,
+    "question_dependent_retrieval": false,
+    "question_derived_environmental_tokens": 0,
+    "same_exact_memory_reused_for_every_question": true,
+    "shape": [
+      1,
+      738,
+      1536
+    ]
+  },
+  "v75_comparator_retained": true
+}

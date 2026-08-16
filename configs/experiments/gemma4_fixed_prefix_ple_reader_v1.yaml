@@ -1,0 +1,35 @@
+# Future experiment only. The accepted atlas-v2 digests are intentionally not
+# placeholders here: a separate launch authorization must provide them after
+# atlas-v2 has passed its sealed gates.
+experiment:
+  schema_version: 1
+  status: design_locked_training_not_authorized
+  preregistration: reports/gemma4/metrics/gemma4_fixed_prefix_ple_reader_preregistration_v1.json
+  model_id: google/gemma-4-E2B-it
+  model_revision: 3e22461f65e89153144f8adb70e3b8c2cc9845a7
+  target_module: model.language_model.per_layer_model_projection
+  rank: 4
+  alpha: 8.0
+  dropout: 0.0
+  trainable_parameter_count: 41984
+  atlas_v2_launch_authorization_required: true
+  compile_prefix_before_question: true
+  question_dependent_retrieval: false
+  oracle_free_runtime: true
+
+objective:
+  answer_token_normalized_ce_weight: 1.0
+  same_question_wrong_prefix_hinge_weight: 1.0
+  same_question_wrong_prefix_margin_nats_per_answer_token: 0.25
+
+optimization:
+  seed: 710071
+  learning_rate: 0.0001
+  weight_decay: 0.0
+  batch_size: 1
+  gradient_accumulation: 12
+  gradient_clip_l2: 1.0
+  maximum_updates: 96
+  adapter_dtype: float32
+  base_dtype: bfloat16_or_float32_fallback
+  no_bitsandbytes: true

@@ -1,0 +1,85 @@
+{
+  "schema": "semantic_3d_chat.runtime_scene_v2_verification.v1",
+  "passed": true,
+  "scene_id": "scene_000001",
+  "offline_export": {
+    "command": "make export-runtime-scene SCENE=scene_000001",
+    "blender_version": "5.2.0 LTS",
+    "autoexec_disabled": true,
+    "python_failure_exit_code_enabled": true,
+    "authorized_source_scope": "one training scene",
+    "runtime_reads_source_asset": false
+  },
+  "runtime_asset": {
+    "path": "data/runtime_assets/scene_000001/s_000001.blend",
+    "asset_sha256": "5ca5c9a05bf81dfd93c4aaa313f15a3ffada8739397fb5f26fbbd1313df36481",
+    "asset_bytes": 134662,
+    "manifest_path": "data/runtime_assets/scene_000001/s_000001.json",
+    "manifest_sha256": "4ac24c0e229419e399584d197af8c4225831158972005c681e7622edb43fd490",
+    "manifest_bytes": 593,
+    "gitignored_runtime_only_location": true,
+    "outside_oracle_and_qa": true
+  },
+  "strict_attestation": {
+    "runtime_scene_schema": "semantic_3d_chat.runtime_scene.v2",
+    "object_names_opaque": true,
+    "nested_names_opaque": true,
+    "custom_properties_present": false,
+    "external_assets_present": false,
+    "automation_present": false,
+    "animation_present": false,
+    "unsupported_datablocks_present": false,
+    "strict_nested_datablock_audit_passed": true,
+    "mesh_objects": 39,
+    "light_objects": 2,
+    "materials": 11,
+    "collections": 0,
+    "node_trees": 14,
+    "saved_asset_reopened_and_reaudited_before_promotion": true,
+    "render_process_reaudits_nested_contract": true,
+    "render_process_authenticates_asset_sha256": true
+  },
+  "code": {
+    "blender/runtime_scene_contract.py": "aa1df0d662859c973bcf3bcaa33b5897d484b243c2b9b4612873d7a49295a0c9",
+    "blender/export_runtime_scene.py": "e5725fbf84c0c1c208d23f1993a999646b79ca919f0fb6c7abcfaeb3d8acbf59",
+    "blender/render_runtime_observation.py": "c37a8fcf18ae7617682fd4a98034b13e6cbe881fccfd3df78c4cc90ef55ad280",
+    "src/semantic_3d_chat/robot/blender_scanner.py": "67e63922fac75e51252cc5c2184c2f4b2a1517e18cb0b505d69671aa68436381"
+  },
+  "same_pose_runtime_render": {
+    "resolution": [64, 64],
+    "camera_position_m": [0.0, 0.0, 1.2],
+    "yaw_degrees": 0.0,
+    "pitch_degrees": 0.0,
+    "valid_depth_pixels": 4096,
+    "depth_min_m": 0.5453094840049744,
+    "depth_max_m": 2.5000007152557373,
+    "rgb_file_sha256": "8eb4d67ced4d4455f257b5f7edf09eed8503c74ee0bbe82399da8d73c8037c71",
+    "depth_file_sha256": "16b637dd0d584e8990e4464a2a4a072ec8dab0b520f2d6191f20de449fb9520c",
+    "two_v2_renders_rgb_identical": true,
+    "two_v2_renders_depth_identical": true,
+    "two_v2_renders_intrinsics_identical": true,
+    "two_v2_renders_pose_identical": true,
+    "matches_pre_v2_rgb_file_sha256": true,
+    "matches_pre_v2_depth_file_sha256": true,
+    "renderer_runtime_command_contains_oracle_or_qa_path": false
+  },
+  "tests": {
+    "strict_scanner_and_blender_contract": {
+      "passed": 6,
+      "failed": 0
+    },
+    "embodied_mapping_prefix_regression": {
+      "passed": 33,
+      "failed": 0
+    },
+    "robot_and_mcp_regression": {
+      "passed": 7,
+      "failed": 0
+    },
+    "ruff": "passed",
+    "py_compile": "passed",
+    "forbidden_modifier_fixture_exited_nonzero": true
+  },
+  "full_gemma_smoke_rerun": false,
+  "full_gemma_smoke_rerun_reason": "deferred by explicit integration instruction because v2 renders are byte-identical to the proven pre-v2 observation"
+}

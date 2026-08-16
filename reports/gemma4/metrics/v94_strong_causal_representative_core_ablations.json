@@ -1,0 +1,258 @@
+{
+  "answers_questions_or_oracle_serialized": false,
+  "artifact": "v94_strong_causal_label_isolated_score_v1",
+  "automatic_runtime_promotion": false,
+  "candidate_state_sha256": "9f503f0b2c605238a6f32c15740c0600702d46da08a527d867fbc19e6b639452",
+  "candidate_weights_sha256": "574418f9458610a5d0007001c4ba732a0a8a4fd590e3b9bc4fcdd8481a646079",
+  "cannot_alter_v94_gates": true,
+  "cannot_authorize_packaging": true,
+  "cannot_authorize_promotion": true,
+  "channel_identifiability": {
+    "normal": {
+      "included_control": "remove_normals",
+      "independently_identifiable_before_scene_tokenization": true
+    },
+    "rgb": {
+      "included_control": "remove_rgb",
+      "independently_identifiable_before_scene_tokenization": true
+    },
+    "semantic_features": {
+      "included_control": "semantic_payload_shuffle",
+      "independently_identifiable_before_scene_tokenization": true
+    },
+    "viewpoint": {
+      "included_control": null,
+      "independently_identifiable_before_scene_tokenization": false,
+      "reason": "view_direction is present in the fused NPZ but load_map_tensors does not expose it and PointTokenProjection does not consume it; zeroing it would produce an identical direct memory"
+    },
+    "xyz_position": {
+      "included_control": "position_spatial_shuffle",
+      "independently_identifiable_before_scene_tokenization": true
+    }
+  },
+  "conditions": [
+    "primary",
+    "zero_full_scene",
+    "wrong_scene_swap",
+    "full_interior_token_permutation"
+  ],
+  "control_cache_manifest_sha256": null,
+  "correct_cache_manifest_sha256": "d03bb0b0b1da545d2eef40582fc494f3aea0ec6009e41fb72a9e96e270840591",
+  "evaluation_profile": "representative-core",
+  "labels_opened_only_by_separate_scorer": true,
+  "limitations": [
+    "These are posthoc interventions, not preregistered V94 promotion gates; they cannot authorize runtime release.",
+    "The full-interior permutation preserves all 736 token rows and native BOI/EOI but intentionally scrambles both atlas and base-latent ordering; it is a broad causal destruction control, not a channel-isolated one.",
+    "Semantic and position controls isolate explicit voxel input channels, but the recompiled 738-token memories nonlinearly mix those channels.",
+    "RGB and normal removal are valid pre-tokenizer channel controls; their information may also be redundantly encoded in visual semantics.",
+    "View direction is not consumed by the current point tokenizer, so a viewpoint-removal arm is unsupported rather than reported as evidence.",
+    "No answer-token NLL is measured by this model-free scorer.",
+    "The representative-core profile is a label-blind 36-question screen of four direct-memory arms; targeted voxel-channel controls are measured only by the full profile."
+  ],
+  "metrics": {
+    "arms": {
+      "full_interior_token_permutation": {
+        "accuracy": 0.75,
+        "by_answer_type": {
+          "attribute": {
+            "accuracy": 0.5555555555555556,
+            "correct": 5,
+            "total": 9
+          },
+          "count": {
+            "accuracy": 0.75,
+            "correct": 3,
+            "total": 4
+          },
+          "metric": {
+            "accuracy": 1.0,
+            "correct": 1,
+            "total": 1
+          },
+          "orientation": {
+            "accuracy": 1.0,
+            "correct": 3,
+            "total": 3
+          },
+          "presence": {
+            "accuracy": 1.0,
+            "correct": 7,
+            "total": 7
+          },
+          "spatial_relation": {
+            "accuracy": 0.5555555555555556,
+            "correct": 5,
+            "total": 9
+          },
+          "support": {
+            "accuracy": 1.0,
+            "correct": 3,
+            "total": 3
+          }
+        },
+        "correct": 27,
+        "total": 36
+      },
+      "primary": {
+        "accuracy": 0.6666666666666666,
+        "by_answer_type": {
+          "attribute": {
+            "accuracy": 0.5555555555555556,
+            "correct": 5,
+            "total": 9
+          },
+          "count": {
+            "accuracy": 1.0,
+            "correct": 4,
+            "total": 4
+          },
+          "metric": {
+            "accuracy": 1.0,
+            "correct": 1,
+            "total": 1
+          },
+          "orientation": {
+            "accuracy": 1.0,
+            "correct": 3,
+            "total": 3
+          },
+          "presence": {
+            "accuracy": 0.7142857142857143,
+            "correct": 5,
+            "total": 7
+          },
+          "spatial_relation": {
+            "accuracy": 0.4444444444444444,
+            "correct": 4,
+            "total": 9
+          },
+          "support": {
+            "accuracy": 0.6666666666666666,
+            "correct": 2,
+            "total": 3
+          }
+        },
+        "correct": 24,
+        "total": 36
+      },
+      "wrong_scene_swap": {
+        "accuracy": 0.6388888888888888,
+        "by_answer_type": {
+          "attribute": {
+            "accuracy": 0.4444444444444444,
+            "correct": 4,
+            "total": 9
+          },
+          "count": {
+            "accuracy": 1.0,
+            "correct": 4,
+            "total": 4
+          },
+          "metric": {
+            "accuracy": 1.0,
+            "correct": 1,
+            "total": 1
+          },
+          "orientation": {
+            "accuracy": 1.0,
+            "correct": 3,
+            "total": 3
+          },
+          "presence": {
+            "accuracy": 0.7142857142857143,
+            "correct": 5,
+            "total": 7
+          },
+          "spatial_relation": {
+            "accuracy": 0.4444444444444444,
+            "correct": 4,
+            "total": 9
+          },
+          "support": {
+            "accuracy": 0.6666666666666666,
+            "correct": 2,
+            "total": 3
+          }
+        },
+        "correct": 23,
+        "total": 36
+      },
+      "zero_full_scene": {
+        "accuracy": 0.3333333333333333,
+        "by_answer_type": {
+          "attribute": {
+            "accuracy": 0.2222222222222222,
+            "correct": 2,
+            "total": 9
+          },
+          "count": {
+            "accuracy": 0.5,
+            "correct": 2,
+            "total": 4
+          },
+          "metric": {
+            "accuracy": 0.0,
+            "correct": 0,
+            "total": 1
+          },
+          "orientation": {
+            "accuracy": 0.0,
+            "correct": 0,
+            "total": 3
+          },
+          "presence": {
+            "accuracy": 0.2857142857142857,
+            "correct": 2,
+            "total": 7
+          },
+          "spatial_relation": {
+            "accuracy": 0.5555555555555556,
+            "correct": 5,
+            "total": 9
+          },
+          "support": {
+            "accuracy": 0.3333333333333333,
+            "correct": 1,
+            "total": 3
+          }
+        },
+        "correct": 12,
+        "total": 36
+      }
+    },
+    "comparisons": {
+      "full_interior_token_permutation": {
+        "accuracy_drop_from_primary": -0.08333333333333337,
+        "prediction_change_count": 8,
+        "prediction_change_rate": 0.2222222222222222
+      },
+      "wrong_scene_swap": {
+        "accuracy_drop_from_primary": 0.02777777777777779,
+        "prediction_change_count": 1,
+        "prediction_change_rate": 0.027777777777777776
+      },
+      "zero_full_scene": {
+        "accuracy_drop_from_primary": 0.3333333333333333,
+        "prediction_change_count": 28,
+        "prediction_change_rate": 0.7777777777777778
+      }
+    },
+    "diagnostic_scope": "posthoc_non_preregistered_not_a_promotion_gate",
+    "evaluation_profile": "representative-core",
+    "runtime_promotion_authorized": false
+  },
+  "prediction_access_sha256": "bc5b5e3a8f1379944a16515080ee7eb51e28093b73617eae6d3722e63db7b2e2",
+  "prediction_bundle_authenticated_before_labels_opened": true,
+  "prediction_completion_sha256": "dc238acf1aa21ebd574c76b6d91a4ffe32119f85213154224d3b2735487394ea",
+  "prediction_sha256": "31d787314988d202f87817db652de173e156422bd95d0c5e25988ed00ec3620d",
+  "question_manifest_sha256": "74fcfb181bbf809dd6dc3b07800de728558298149e9d76325870c6b4d665b0a2",
+  "reference_sha256": "30ed9006ed442198b3e2444e0c3cdda73cb77c01e7285f31000709b94bb8acad",
+  "row_count": 36,
+  "runtime_promotion_authorized": false,
+  "scene_count": 6,
+  "schema_version": 1,
+  "scorer_loaded_model": false,
+  "source_chain_sha256": "7305afcd0fcd9009f76f2b27d85b4734351fb095cd47d9ab9f099e01effc7ce5",
+  "status": "terminal_measured_posthoc_diagnostic_non_promotable",
+  "terminal_diagnostic_only": true
+}

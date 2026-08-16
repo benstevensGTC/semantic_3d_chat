@@ -1,0 +1,243 @@
+{
+  "all_memory_slots_retained": true,
+  "artifact": "gemma4_v84_strict_bridge_cpu_preflight_v1",
+  "authenticated_sources": {
+    "configs/experiments/gemma4_v73_fullscene_controller.yaml": "d208f28380e3f1810a688be8ea8a263831b6a741f7f90e667795637f39d841f1",
+    "configs/runtime/gemma4_v54.yaml": "891c58faaaa5fcd2ed76c7e3871f14c5d8c5ae2e05d9fa4ddd5193773d40e56b",
+    "data_diverse52/qa/train.jsonl": "01721bf904b1ab0b65ce8acac6e366287040873cda1356da6c70c4981abe7619",
+    "data_gemma4/runtime/checkpoints/gemma4_v54_release_v1/adapter.safetensors": "6c627f0a0d9efb7100489c24cbd4acafe10456b79280a64a85399a21cb541daf",
+    "data_gemma4/runtime/checkpoints/gemma4_v54_release_v1/runtime_metadata.json": "807515461c71b08c08dfbd08a184a653e791413748530fa69402512eca6f6fdd",
+    "gemma_model_blob_sha256_identity": "2db5482b20d746879bb3ef79b5203e9075a2e2b98f54ec7c2f281c1477ddc550",
+    "reports/gemma4/artifacts/v82_strict_dense_reader/development_cache/metadata.json": "58b988b03d33c93110083e22a98f050059e44e8356391a78fb761fd74254d1dd",
+    "reports/gemma4/artifacts/v82_strict_dense_reader/development_cache/training_tensors.safetensors": "71222bdc34fc836015ea4449622491545515222a7df99c321c1bf7a22fa2b659",
+    "reports/gemma4/artifacts/v82_strict_dense_reader/train_cache/metadata.json": "b0e26f2c3e44d868e4f54556f9304d990d0c664d862d1a2a760a714fcdb4a257",
+    "reports/gemma4/artifacts/v82_strict_dense_reader/train_cache/training_tensors.safetensors": "417492a08ac669210b4bdcaf8dafa0122fa0cf7ed6753489e55fd93bee150a2d",
+    "src/semantic_3d_chat/chat/v83_direct_scene_memory_runtime.py": "988d7b1751c0f6b158675a86781178bc6bb3626bab8cf3643f5ff3b22716dd22"
+  },
+  "config_sha256": "7ac74708f0404e6aae84cc3f90dfb82a88acf8ea15b4e6eff2c4c7cf1b07a2f0",
+  "fixed_memory_compiled_before_questions": true,
+  "full_gemma_model_loaded": false,
+  "lora_preflight": {
+    "base_projection_materialized_for_cpu_shape_preflight_only": true,
+    "base_projection_shape": [
+      1536,
+      12288
+    ],
+    "exact_zero_output_at_initialization": true,
+    "initial_state_sha256": "1ec186d64cab68a3ea2000968a0ca643e591cc32669c6b1b7138deb365cc5cc1",
+    "parameter_count": 55296,
+    "target_modules": [
+      "model.language_model.layers.34.mlp.down_proj"
+    ]
+  },
+  "optimizer_constructed": false,
+  "optimizer_updates": 0,
+  "oracle_loaded": false,
+  "passed": true,
+  "preregistration_path": "reports/gemma4/metrics/gemma4_v84_strict_bridge_preregistration.json",
+  "preregistration_sha256": "a0f100abc05b3bcbc5c052e005e41797425df2d48dcd71d14c4b7e4842a96faa",
+  "protected_or_sealed_behavior_artifacts_opened": [],
+  "question_conditioned_environmental_readout": false,
+  "question_derived_environmental_tokens": 0,
+  "runtime_promotion_authorized": false,
+  "schema_version": 84,
+  "split_preflight": {
+    "development_memory_shape": [
+      16,
+      738,
+      1536
+    ],
+    "development_rows": 384,
+    "development_scenes": [
+      "scene_000039",
+      "scene_000040",
+      "scene_000041",
+      "scene_000042",
+      "scene_000043",
+      "scene_000044",
+      "scene_000045",
+      "scene_000046",
+      "scene_000047",
+      "scene_000048",
+      "scene_000049",
+      "scene_000050",
+      "scene_000051",
+      "scene_000052",
+      "scene_000055",
+      "scene_000056"
+    ],
+    "development_selection": [
+      {
+        "change_type": "book_support",
+        "pair_id": "pair_000023",
+        "question_key": "cfq_2eb01335fec924e8",
+        "row_inventory": [
+          [
+            "scene_000047",
+            "q_000069"
+          ],
+          [
+            "scene_000048",
+            "q_000003"
+          ]
+        ]
+      },
+      {
+        "change_type": "chair_orientation",
+        "pair_id": "pair_000019",
+        "question_key": "cfq_3fbad439a2d61e05",
+        "row_inventory": [
+          [
+            "scene_000039",
+            "q_000110"
+          ],
+          [
+            "scene_000040",
+            "q_000048"
+          ]
+        ]
+      },
+      {
+        "change_type": "color_swap",
+        "pair_id": "pair_000021",
+        "question_key": "cfq_2ad7f34ccb9f2bf4",
+        "row_inventory": [
+          [
+            "scene_000043",
+            "q_000009"
+          ],
+          [
+            "scene_000044",
+            "q_000115"
+          ]
+        ]
+      },
+      {
+        "change_type": "mirror_lr",
+        "pair_id": "pair_000024",
+        "question_key": "cfq_3396e3594c5ff2f0",
+        "row_inventory": [
+          [
+            "scene_000049",
+            "q_000034"
+          ],
+          [
+            "scene_000050",
+            "q_000057"
+          ]
+        ]
+      },
+      {
+        "change_type": "object_count",
+        "pair_id": "pair_000022",
+        "question_key": "cfq_893d24fb972258f9",
+        "row_inventory": [
+          [
+            "scene_000045",
+            "q_000113"
+          ],
+          [
+            "scene_000046",
+            "q_000054"
+          ]
+        ]
+      },
+      {
+        "change_type": "object_relocation",
+        "pair_id": "pair_000020",
+        "question_key": "cfq_5d863f5d4e3b4670",
+        "row_inventory": [
+          [
+            "scene_000041",
+            "q_000117"
+          ],
+          [
+            "scene_000042",
+            "q_000055"
+          ]
+        ]
+      },
+      {
+        "change_type": "object_removal",
+        "pair_id": "pair_000027",
+        "question_key": "cfq_02c5d7faf43ac066",
+        "row_inventory": [
+          [
+            "scene_000055",
+            "q_000122"
+          ],
+          [
+            "scene_000056",
+            "q_000059"
+          ]
+        ]
+      },
+      {
+        "change_type": "picture_support",
+        "pair_id": "pair_000025",
+        "question_key": "cfq_0a06555a2c264ecc",
+        "row_inventory": [
+          [
+            "scene_000051",
+            "q_000061"
+          ],
+          [
+            "scene_000052",
+            "q_000096"
+          ]
+        ]
+      }
+    ],
+    "pair_and_scene_disjoint": true,
+    "train_memory_shape": [
+      24,
+      738,
+      1536
+    ],
+    "train_rows": 576,
+    "train_scenes": [
+      "scene_000011",
+      "scene_000012",
+      "scene_000013",
+      "scene_000014",
+      "scene_000015",
+      "scene_000016",
+      "scene_000017",
+      "scene_000018",
+      "scene_000019",
+      "scene_000020",
+      "scene_000021",
+      "scene_000022",
+      "scene_000023",
+      "scene_000024",
+      "scene_000031",
+      "scene_000032",
+      "scene_000033",
+      "scene_000034",
+      "scene_000035",
+      "scene_000036",
+      "scene_000037",
+      "scene_000038",
+      "scene_000053",
+      "scene_000054"
+    ],
+    "wiring_unit": {
+      "answer_text_serialized": false,
+      "change_type": "book_support",
+      "pair_id": "pair_000009",
+      "question_key": "cfq_5611adccccae59f1",
+      "question_sha256": "6814a2d1df181bdc66709937305cd3d652b5c83fb27b0a37dad4ba12b70dc122",
+      "row_inventory": [
+        [
+          "scene_000019",
+          "q_000130"
+        ],
+        [
+          "scene_000020",
+          "q_000001"
+        ]
+      ]
+    }
+  },
+  "status": "passed"
+}

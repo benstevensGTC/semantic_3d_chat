@@ -1,0 +1,75 @@
+_base_: gemma_waypoint_policy_operator_dagger_v12.yaml
+
+# V13 preserves every V4--V12 row and appends one authenticated training-only
+# correction from the sealed V12 chair-approach failure. D1 was a valid Gemma
+# FACE action. At the resulting D2 pose Gemma selected MOVE_TO, while the exact
+# collision-safe continuous-geometry expert requires another FACE. The deployed
+# controller still selects every action, waypoint, heading, and terminal STOP.
+gemma_waypoint_traces:
+  profiles:
+    operator:
+      # YAML list overrides replace inherited lists, so repeat the V11 D7 source
+      # before appending V12 D2. The V10 D2 source remains the inherited primary
+      # `live_object_goal_dagger_augmentation` from V11.
+      additional_live_object_goal_dagger_augmentations:
+        - enabled: true
+          runtime_report_path: reports/gemma4/metrics/gemma_waypoint_dagger_v11_approach_chair_runtime.json
+          runtime_report_sha256: a853478a05e07ef5e1b8acec14f014fec41172dcf676ac8eeb8a30e46ee52aad
+          score_report_path: reports/gemma4/metrics/gemma_waypoint_dagger_v11_approach_chair_score.json
+          score_report_sha256: a757800363e06789665504bfc91d91f427fd1f8c95ef12720d86eeb6f7ab31d5
+          scene_id: scene_000001
+          goal_id: approach_chair
+          instruction: Move close to the chair, then stop.
+          initial_pose_xy_yaw: [-0.5, -0.25, -90.0]
+          checkpoint_sha256: dcc8eb080c2a418d2ae1b6de8fc4665387ccf90f56f2add3bb1873a998606368
+          scene_prefix_sha256: 52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95
+          correction_decision_step: 7
+          observed_model_action: move_to
+          observed_action_accepted: false
+          expected_pose_xy_yaw: [-1.3479610430683904, -0.01765689076636459, 67.99934768676758]
+          expected_input_sha256: e3fefe1dd9d1cd43364715ee9f4b4e25ce3ea72028abab6ac23ef597840fd190
+          expected_expert_first_action: STOP
+          stop_position_neighborhood_offsets_m:
+            - [-0.015, 0.0]
+            - [0.015, 0.0]
+            - [0.0, -0.015]
+            - [0.0, 0.005]
+          target_category: chair
+          target_instance_id: i_000101
+          maximum_total_decisions: 32
+          minimum_center_progress_m: 0.25
+          maximum_bbox_standoff_m: 0.60
+        - enabled: true
+          runtime_report_path: reports/gemma4/metrics/gemma_waypoint_dagger_v12_approach_chair_runtime.json
+          runtime_report_sha256: a9d4069ce16ac4863260f6537db49c00828cdec95921c5c5b31bea217488d9de
+          score_report_path: reports/gemma4/metrics/gemma_waypoint_dagger_v12_approach_chair_score.json
+          score_report_sha256: cb714a7b64f9c7f39fd8e2f8b7552019946f6f6d60294b2a55ce70129bed3e17
+          scene_id: scene_000001
+          goal_id: approach_chair
+          instruction: Move close to the chair, then stop.
+          initial_pose_xy_yaw: [-0.5, -0.25, -90.0]
+          checkpoint_sha256: 95bbc0cd68a73f81dc0bc1d5875993cdcb7b6ccf092d4f13811f005e8ca1e9be
+          scene_prefix_sha256: 52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95
+          correction_decision_step: 2
+          observed_model_action: move_to
+          observed_action_accepted: true
+          expected_pose_xy_yaw: [-0.5, -0.25, -52.9210205078125]
+          expected_input_sha256: f690c67f625b2165c32a8f8634aa9e69f91332045c8a23a4d33ece25aeadccec
+          expected_expert_first_action: FACE
+          target_category: chair
+          target_instance_id: i_000101
+          maximum_total_decisions: 32
+          minimum_center_progress_m: 0.25
+          maximum_bbox_standoff_m: 0.60
+
+gemma_waypoint_policy:
+  trace_dataset: data_gemma4/training/gemma_waypoint_policy_v2_operator_dagger_v13
+  hidden_cache: data_gemma4/training/gemma_waypoint_policy_v2_operator_dagger_v13_runtime_aligned_hidden_branch_refit_v1
+  checkpoint_output: data_gemma4/checkpoints/gemma_waypoint_policy_v2_operator_dagger_v13_runtime_aligned
+  # V12 is the sealed live policy that completed the lap and selected the
+  # correct first chair-facing action. Retain all 7,105 V12 training rows and
+  # warm-start its exact numeric heads; the seven V13 rows are the only new
+  # rows. Referencing V10 here would silently turn all 37 V11/V12 rows back
+  # into unconstrained "new" samples and would discard the proven V12 policy.
+  retention_reference_checkpoint: data_gemma4/checkpoints/gemma_waypoint_policy_v2_operator_dagger_v12_runtime_aligned
+  retention_reference_trace_dataset: data_gemma4/training/gemma_waypoint_policy_v2_operator_dagger_v12

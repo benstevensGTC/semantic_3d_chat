@@ -1,0 +1,120 @@
+{
+  "architecture": {
+    "boundary_tokens_excluded": true,
+    "initial_control_rms": 0.075,
+    "interaction_dim": 24,
+    "maximum_control_rms": 0.2,
+    "moment_count": 8,
+    "name": "bounded_global_scene_question_control_v2",
+    "output_rank": 64,
+    "scene_signature_shape": [
+      1,
+      8,
+      1536
+    ],
+    "softmax_scene_attention_used": false,
+    "trainable_parameter_count": 337194
+  },
+  "artifact": "v59_bounded_global_scene_question_control_training",
+  "base": {
+    "anchor_teacher_source_control_checkpoint_sha256": "5e017f2c70817dadafc2d18a434209cfe905385649886af002848970c9f50180",
+    "checkpoint_files": [
+      {
+        "path": "adapter.safetensors",
+        "sha256": "6c627f0a0d9efb7100489c24cbd4acafe10456b79280a64a85399a21cb541daf",
+        "size_bytes": 55956825
+      },
+      {
+        "path": "metadata.json",
+        "sha256": "db1435f8d38ca587e34dcd55dc4d37532efc0504bfb62bc115838dc0ab7a7ece",
+        "size_bytes": 459323
+      },
+      {
+        "path": "runtime_metadata.json",
+        "sha256": "807515461c71b08c08dfbd08a184a653e791413748530fa69402512eca6f6fdd",
+        "size_bytes": 15858
+      }
+    ],
+    "checkpoint_sha256": "3e128b40c1b73bb32750285679cda6b1bea364e67465e986a94a81dfc95e81e8",
+    "runtime_config_effective_sha256": "714c60ce9ccb1dff69c72f6618f8afb6f31bc60a830b5ee0fb794fedaa8a321e",
+    "runtime_config_file_sha256": "7cef35a5acbc0da740f79c61e0684fff329713836a4034d4fda024d6bf5372d0",
+    "source_control_checkpoint_sha256": "97901b45ba81574f8824baf12f2c1ef454de0249942c5faab9f86f5f9afd10b5"
+  },
+  "checkpoint": {
+    "runtime_metadata_sha256": "3acb64b909760372cb2aba0559ab0f7606fa0e72f6cecadf651905dd2ef55521",
+    "weights_sha256": "fa2299015fcaa78456ccc7cc47bf0c2c282b10857ee52532a5c6ab14ee79daa3"
+  },
+  "distillation": {
+    "changed_route_all_on": true,
+    "elapsed_seconds": 29.47423341590911,
+    "epochs": 80,
+    "maximum_preclip_gradient_norm": 15052.4033203125,
+    "mean_pair_delta_cosine": 0.2814184698191556,
+    "optimizer_steps": 2000,
+    "prompt_metrics": {
+      "anchor_changed_cosine": 0.05883629433810711,
+      "expansion_changed_cosine": 0.22577910870313644
+    },
+    "retention_route_all_off": false,
+    "route_metrics": {
+      "anchor_changed_correct": 1.0,
+      "anchor_changed_probability": 0.9999993294477463,
+      "expansion_changed_correct": 1.0,
+      "expansion_changed_probability": 1.0,
+      "retention_correct": 0.9836065573770492,
+      "retention_probability": 0.01776129384896649
+    }
+  },
+  "inputs": {
+    "anchor_changed_count": 8,
+    "expansion_changed_count": 14,
+    "prefix_cache_created": true,
+    "prefix_cache_manifest_sha256": "b288dfd88677d18ad5fb3b0c287cf0a6881c194d39566a41161c68bc90dc324d",
+    "prefix_shape": [
+      1,
+      258,
+      1536
+    ],
+    "training_qa_sha256": "01721bf904b1ab0b65ce8acac6e366287040873cda1356da6c70c4981abe7619",
+    "training_record_count": 144,
+    "training_scene_ids": [
+      "scene_000031",
+      "scene_000032",
+      "scene_000033",
+      "scene_000034",
+      "scene_000037",
+      "scene_000038"
+    ]
+  },
+  "promotion_eligible": false,
+  "saved_runtime_gate_required": true,
+  "schema_version": 1,
+  "scope": {
+    "base_scene_stack_frozen": true,
+    "complete_scene_prefix_retained": true,
+    "deferred_final_loaded": false,
+    "fresh_development_loaded": false,
+    "only_controller_saved": true,
+    "oracle_loaded": false,
+    "question_dependent_scene_retrieval": false,
+    "runtime_teacher_access": false
+  },
+  "teacher": {
+    "artifact": {
+      "metadata_sha256": "583039acd0168e451281fdc9dd1773e9d84e4f62eaf1f545089a866c6aa9c528",
+      "weights_sha256": "63c44f0b71606249aa7bb5c9237f401d7041c49abfe3a01a6df104109b2c3396"
+    },
+    "cache_reused": false,
+    "elapsed_seconds": 249.0899182499852,
+    "greedy_exact": 14,
+    "greedy_total": 14,
+    "mean_final_nll": 0.0007523320527980104,
+    "total_forward_steps": 178
+  },
+  "teacher_target_rms": {
+    "maximum": 0.16096213459968567,
+    "mean": 0.08553845130584457,
+    "minimum": 0.04605088010430336
+  },
+  "training_objectives_met": false
+}

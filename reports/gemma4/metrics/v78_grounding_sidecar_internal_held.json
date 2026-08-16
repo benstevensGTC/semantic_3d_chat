@@ -1,0 +1,251 @@
+{
+  "artifact": "v78_historical_training_grounding_repair_report_v1",
+  "attention_audit": {
+    "held": {
+      "every_scene_token_positive_weight": true,
+      "maximum_attention_weight": 0.8923673033714294,
+      "minimum_attention_weight": 1.6745709230077746e-14
+    },
+    "question_only_coordinate_path_exists": false,
+    "train": {
+      "every_scene_token_positive_weight": true,
+      "maximum_attention_weight": 0.9630692005157471,
+      "minimum_attention_weight": 2.264399435916286e-15
+    },
+    "zero_scene": {
+      "every_scene_token_positive_weight": true,
+      "maximum_attention_weight": 0.00390625,
+      "minimum_attention_weight": 0.00390625
+    },
+    "zero_scene_exact_room_center": true
+  },
+  "baseline_predictions_sha256": "001789f1e5791444c0aa2794a2ec0b1ac09369677e5f72bea8c54121f69f3a98",
+  "candidate": {
+    "directory": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/gemma4/artifacts/v78_grounding_sidecar_diagnostic",
+    "files": [
+      "grounding.safetensors",
+      "metadata.json"
+    ],
+    "metadata": {
+      "all_scene_tokens_scored": true,
+      "answer_text_serialized": false,
+      "architecture": "zero_preserving_all_scene_token_query_attention_v1",
+      "artifact": "continuous_full_scene_grounding_sidecar_v78",
+      "coordinate_hidden_dim": 256,
+      "embedding_tensor_key": "model.language_model.embed_tokens.weight",
+      "environmental_text_inputs": [],
+      "initialization_seed": 78078,
+      "maximum_residual": 0.5,
+      "model_id": "google/gemma-4-E2B-it",
+      "model_revision": "3e22461f65e89153144f8adb70e3b8c2cc9845a7",
+      "object_ids_serialized": false,
+      "official_test_loaded": false,
+      "official_validation_loaded": false,
+      "oracle_runtime_loaded": false,
+      "positive_softmax_attention": true,
+      "question_adapter_rank": 64,
+      "question_dependent_scene_retrieval": false,
+      "question_only_coordinate_path_exists": false,
+      "question_text_serialized": false,
+      "room_max_m": [
+        3.0,
+        2.5,
+        3.0
+      ],
+      "room_min_m": [
+        -3.0,
+        -2.5,
+        0.0
+      ],
+      "runtime_promotion_authorized": false,
+      "scene_dim": 1536,
+      "scene_latent_count": 256,
+      "schema_version": 1,
+      "source_prefix_manifest_sha256": "8c278aac6d8dbd3e28c91282db67334d11af9db6320c30f7f5ed6a41be013940",
+      "target_coordinates_serialized": false,
+      "training_metadata_runtime_loaded": false,
+      "weights_sha256": "3c7914a61e63d80617e7fcfca122e02eec30d15af5a43e910daa0cd6c0b501c4",
+      "zero_scene_produces_exact_room_center": true
+    },
+    "metadata_sha256": "ee0f13d6ce6cfa7499671b74022fdf15a0f69b4389ee48dde20732142e48b92b",
+    "weights_sha256": "3c7914a61e63d80617e7fcfca122e02eec30d15af5a43e910daa0cd6c0b501c4"
+  },
+  "continuous_scene_source": {
+    "complete_scene_prefixes": true,
+    "every_scene_token_scored": true,
+    "manifest_sha256": "8c278aac6d8dbd3e28c91282db67334d11af9db6320c30f7f5ed6a41be013940",
+    "question_independent": true,
+    "scene_dim": 1536,
+    "scene_latent_count": 256
+  },
+  "deferred_final_loaded": false,
+  "elapsed_seconds": 10.721142457798123,
+  "environmental_text_inputs": [],
+  "limitations": [
+    "This is a historical train-pool, scene-disjoint internal evaluation, not official validation.",
+    "The candidate is not wired into chat and is not authorized for runtime promotion.",
+    "Grounding uses the full cached scene prefix rather than raw voxel-resolution features."
+  ],
+  "material_internal_improvement": true,
+  "metrics": {
+    "historical_internal_held": {
+      "count": 94,
+      "maximum_coordinate_error_m": 1.6053792238235474,
+      "mean_coordinate_error_m": 0.5270832777023315,
+      "median_coordinate_error_m": 0.4752248227596283,
+      "rmse_m": 0.6093636751174927,
+      "within_0_50m_accuracy": 0.5319148898124695,
+      "within_1m_accuracy": 0.9255319237709045
+    },
+    "historical_internal_train": {
+      "count": 286,
+      "maximum_coordinate_error_m": 0.9668450951576233,
+      "mean_coordinate_error_m": 0.26768893003463745,
+      "median_coordinate_error_m": 0.23728229105472565,
+      "rmse_m": 0.3124958276748657,
+      "within_0_50m_accuracy": 0.9230769276618958,
+      "within_1m_accuracy": 1.0
+    },
+    "paired_scene_causal": {
+      "changed_target_sides": 10,
+      "correct_scene_closer_to_original_fraction": 0.9,
+      "correct_scene_mean_error_to_original_target_m": 0.5431539334356785,
+      "paired_scene_follows_paired_target_fraction": 0.5,
+      "paired_scene_mean_error_to_original_target_m": 0.6054038800299167,
+      "paired_scene_mean_error_to_paired_target_m": 0.5431539334356785
+    },
+    "paired_wrong_scene": {
+      "count": 94,
+      "maximum_coordinate_error_m": 1.6053792238235474,
+      "mean_coordinate_error_m": 0.5337055921554565,
+      "median_coordinate_error_m": 0.4752248227596283,
+      "rmse_m": 0.6144288778305054,
+      "within_0_50m_accuracy": 0.521276593208313,
+      "within_1m_accuracy": 0.9255319237709045
+    },
+    "question_embedding_shuffle": {
+      "count": 94,
+      "maximum_coordinate_error_m": 4.619380474090576,
+      "mean_coordinate_error_m": 2.2324836254119873,
+      "median_coordinate_error_m": 2.3415279388427734,
+      "rmse_m": 2.49497127532959,
+      "within_0_50m_accuracy": 0.10638298094272614,
+      "within_1m_accuracy": 0.20212766528129578
+    },
+    "scene_token_position_shuffle": {
+      "count": 94,
+      "maximum_coordinate_error_m": 3.6374757289886475,
+      "mean_coordinate_error_m": 2.1771116256713867,
+      "median_coordinate_error_m": 2.099965810775757,
+      "rmse_m": 2.2551939487457275,
+      "within_0_50m_accuracy": 0.0,
+      "within_1m_accuracy": 0.010638297535479069
+    },
+    "v54_same_historical_internal_held": {
+      "count": 94,
+      "maximum_coordinate_error_m": 2.8417110443115234,
+      "mean_coordinate_error_m": 2.0265073776245117,
+      "median_coordinate_error_m": 2.1803128719329834,
+      "rmse_m": 2.089442491531372,
+      "within_0_50m_accuracy": 0.0,
+      "within_1m_accuracy": 0.0
+    },
+    "zero_scene_same_historical_internal_held": {
+      "count": 94,
+      "maximum_coordinate_error_m": 3.004925489425659,
+      "mean_coordinate_error_m": 2.0218212604522705,
+      "median_coordinate_error_m": 2.056678533554077,
+      "rmse_m": 2.089716672897339,
+      "within_0_50m_accuracy": 0.0,
+      "within_1m_accuracy": 0.0
+    }
+  },
+  "official_test_loaded": false,
+  "official_validation_loaded": false,
+  "optimization": {
+    "anchor_weight": 0.15,
+    "device": "cpu",
+    "epochs": 120,
+    "gradient_clip_norm": 1.0,
+    "held_partition_used_for_optimization": false,
+    "learning_rate": 0.002,
+    "seed": 78078,
+    "train_loss_final": 0.16793183899588054,
+    "train_loss_initial": 0.972007907099194,
+    "train_loss_minimum": 0.16793183899588054,
+    "weight_decay": 0.0001
+  },
+  "oracle_files_loaded": false,
+  "question_embedding_source": {
+    "full_language_model_loaded": false,
+    "model_id": "google/gemma-4-E2B-it",
+    "model_revision": "3e22461f65e89153144f8adb70e3b8c2cc9845a7",
+    "question_text_serialized_in_candidate": false,
+    "selective_embedding_rows_only": true,
+    "tensor_key": "model.language_model.embed_tokens.weight",
+    "unique_token_rows_read": 43
+  },
+  "runtime_promotion_authorized": false,
+  "schema_version": 1,
+  "split": {
+    "algorithm": "lexicographic_pair_index_modulo",
+    "held_grounded_rows": 94,
+    "held_pairs": [
+      "pair_000008",
+      "pair_000015",
+      "pair_000026"
+    ],
+    "held_remainder": 3,
+    "held_scenes": [
+      "scene_000017",
+      "scene_000018",
+      "scene_000031",
+      "scene_000032",
+      "scene_000053",
+      "scene_000054"
+    ],
+    "modulo": 4,
+    "pair_disjoint": true,
+    "scene_disjoint": true,
+    "train_grounded_rows": 286,
+    "train_pairs": [
+      "pair_000005",
+      "pair_000006",
+      "pair_000007",
+      "pair_000009",
+      "pair_000010",
+      "pair_000011",
+      "pair_000016",
+      "pair_000017",
+      "pair_000018"
+    ],
+    "train_scenes": [
+      "scene_000011",
+      "scene_000012",
+      "scene_000013",
+      "scene_000014",
+      "scene_000015",
+      "scene_000016",
+      "scene_000019",
+      "scene_000020",
+      "scene_000021",
+      "scene_000022",
+      "scene_000023",
+      "scene_000024",
+      "scene_000033",
+      "scene_000034",
+      "scene_000035",
+      "scene_000036",
+      "scene_000037",
+      "scene_000038"
+    ]
+  },
+  "status": "internal_historical_diagnostic_only",
+  "training_source": {
+    "answers_used": false,
+    "grounded_rows": 380,
+    "sha256": "84b99385fadc5d06e44465ada5902f56131192298ca1539373dc3b334608cbf1",
+    "target_instance_ids_used": false,
+    "target_xyz_training_only": true
+  }
+}

@@ -1,0 +1,123 @@
+_base_: gemma4_diverse20_post_stack_decoder_stage_b_v29.yaml
+
+# V30 is a separate, bounded repair experiment for V29's observed
+# counterfactual invariance.  It starts only from the selector-approved V29
+# update, keeps every inherited tensor frozen except the two already-audited
+# post-stack sidecar output surfaces, and adds one disjoint exact-zero decoder
+# bank.  Training metadata/QA remain evaluation-only; chat runtime receives
+# only the continuous map and learned parameters.
+language:
+  lora_banks:
+    extension_v28_stage_b_query:
+      trainable: false
+      rank: 4
+      alpha: 8.0
+      dropout: 0.0
+      target_modules:
+        - model.language_model.layers.13.self_attn.q_proj
+        - model.language_model.layers.14.self_attn.q_proj
+      initialization_algorithm: checkpoint_overwrite
+      initialization_seed: null
+      expected_initial_state_sha256: cc9dfa838bb87f32e2922d675658af4a1085d53a84ccdca6d5bacc6f7097217b
+    extension_v30_joint_pair_query:
+      trainable: true
+      rank: 8
+      alpha: 16.0
+      dropout: 0.0
+      target_modules:
+        - model.language_model.layers.18.self_attn.q_proj
+        - model.language_model.layers.19.self_attn.q_proj
+        - model.language_model.layers.20.self_attn.q_proj
+        - model.language_model.layers.21.self_attn.q_proj
+      initialization_algorithm: cpu_kaiming_uniform_a_exact_zero_b
+      initialization_seed: 30030
+      expected_initial_state_sha256: 2b1d89fbb9189ac551bf12905cf94036ebaa84696449b31c2b37b69d478fb70d
+
+training:
+  output_namespace: gemma4_v30_diverse20_joint_pair
+  learning_rate: 0.000025
+  weight_decay: 0.0
+  lora_learning_rate: 0.00005
+  lora_weight_decay: 0.0
+  post_stack_decoder_stage_b:
+    enabled: false
+    max_optimizer_steps: 4
+    evaluation_interval_steps: 1
+    batch_size: 1
+    gradient_accumulation: 48
+    learning_rate: 0.00005
+    weight_decay: 0.0
+    gradient_clip_norm: 1.0
+    minimum_answer_types: 4
+    trainable_bank: extension_v30_joint_pair_query
+  v30_joint_pair:
+    enabled: true
+    max_optimizer_steps: 4
+    evaluation_interval_steps: 1
+    broad_questions_per_cycle: 48
+    broad_batch_size: 1
+    broad_exclude_expected_change: true
+    pair_repeats_per_cycle: 3
+    pair_units_per_batch: 1
+    broad_nll_weight: 1.0
+    pair_language_nll_weight: 1.0
+    pair_margin_weight: 4.0
+    pair_margin: 0.5
+    sidecar_learning_rate: 0.000025
+    decoder_learning_rate: 0.00005
+    weight_decay: 0.0
+    gradient_clip_norm: 1.0
+    minimum_answer_types: 4
+    trainable_bank: extension_v30_joint_pair_query
+
+v30_joint_pair:
+  schema_version: 1
+  role: approved_v29_joint_sidecar_decoder_counterfactual_repair
+  source_config: configs/experiments/gemma4_diverse20_post_stack_decoder_stage_b_v29.yaml
+  source_selection_report: reports/gemma4/metrics/v29_diverse_stage_b_selection.json
+  source_selection_report_sha256: d7acbd7173f079f257619510df36ad3c73f953e7cf0123b7bd383ad01ddfe91a
+  source_checkpoint_root: data_gemma4/checkpoints/gemma4_v29_diverse20_post_stack_decoder_stage_b
+  source_selected_update: 4
+  source_adapter_sha256: 3cedada0b685d62aea533a298428b28e46c58601ec9748f80986faf0070fbbe8
+  source_runtime_metadata_sha256: c5bd5fc737ad639528a03a8518a769ec08d40f8fc1c5655437f5c539655326b9
+  source_sidecar_state_sha256: 2b5cd4d555543cd2f023e72ea2413a0fc07875c5710bdf0c4516b9dceb848c3d
+  source_v28_bank_state_sha256: cc9dfa838bb87f32e2922d675658af4a1085d53a84ccdca6d5bacc6f7097217b
+  fresh_bank: extension_v30_joint_pair_query
+  fresh_bank_parameter_count: 131072
+  fresh_bank_initial_state_sha256: 2b1d89fbb9189ac551bf12905cf94036ebaa84696449b31c2b37b69d478fb70d
+  sidecar_trainable_parameter_names:
+    - output_projection.weight
+    - channel_gain
+  sidecar_trainable_parameter_count: 198144
+  joint_trainable_parameter_count: 329216
+  update_zero_validation_nll_absolute_tolerance: 1.0e-7
+  validation_pair_unit_count: 12
+  selection_requires:
+    color_full_vocab_sides: 12
+    mirror_full_vocab_sides: 10
+    no_new_negative_sides: true
+    source_v29_validation_nll_must_improve: true
+    validation_pair_unit_count: 12
+    minimum_pair_margin: -10.0
+    minimum_mean_margin_improvement: 0.01
+    minimum_passed_unit_improvement: 1
+    greedy_changed_row_count: 24
+    minimum_greedy_complete_units_correct: 1
+    broad_retention_subset_size: 48
+    broad_exact_accuracy_no_regression: true
+  promotion_requires:
+    validation_changed_complete_pairs_minimum: 6
+    aggregate_validation_exact_accuracy_no_regression: true
+    label: chat_promotion_not_merely_development_progress
+
+experiment:
+  role: approved_v29_joint_pair_repair_v30
+  question_dependent_scene_processing: false
+  question_dependent_retrieval: false
+  runtime_oracle_access: false
+  runtime_category_strings: false
+  runtime_text_prototypes: false
+  decoder_trainable_parameter_count: 131072
+  sidecar_trainable_parameter_count: 198144
+  joint_trainable_parameter_count: 329216
+  final_test_deferred: true

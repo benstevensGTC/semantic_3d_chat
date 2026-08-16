@@ -1,0 +1,22 @@
+{
+  "artifact": "semantic_3d_chat_local_demo_runtime_release_v1",
+  "environmental_text_inputs": [],
+  "files": {
+    "adapter.safetensors": {
+      "sha256": "6c627f0a0d9efb7100489c24cbd4acafe10456b79280a64a85399a21cb541daf",
+      "size_bytes": 55956825
+    },
+    "runtime_metadata.json": {
+      "sha256": "807515461c71b08c08dfbd08a184a653e791413748530fa69402512eca6f6fdd",
+      "size_bytes": 15858
+    }
+  },
+  "inference_inventory": [
+    "adapter.safetensors",
+    "runtime_metadata.json"
+  ],
+  "runtime_checkpoint": "data_gemma4/runtime/checkpoints/gemma4_v54_release_v1",
+  "schema_version": 1,
+  "source_checkpoint": "data_gemma4/checkpoints/gemma4_v54_semantic_greedy_gate/update_000",
+  "training_metadata_included": false
+}

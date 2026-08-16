@@ -63,7 +63,21 @@ class FakeRuntime:
             "occupied_blocks": 3_019,
             "device": "mps",
             "prefix_build_seconds": 3.2,
+            "scene_prefix_computed_before_question": True,
+            "strict_fixed_environment_embedding_input": True,
+            "environment_conditioned_input_sha256": self.scene_prefix_hash,
+            "question_conditioned_scene_readout_tokens": False,
+            "question_dependent_scene_retrieval": False,
             "checkpoint": "/private/checkpoint/path",
+        }
+
+
+class FakeQuestionConditionedRuntime(FakeRuntime):
+    def startup_summary(self) -> dict[str, Any]:
+        return {
+            **super().startup_summary(),
+            "strict_fixed_environment_embedding_input": False,
+            "question_conditioned_scene_readout_tokens": True,
         }
 
 
@@ -108,6 +122,20 @@ def test_web_chat_reuses_one_prefix_for_multiple_questions(tmp_path: Path) -> No
     assert second.json()["questions_answered"] == 2
     assert runtime.answer_calls == 2
     assert runtime.prefix_checks >= 6
+
+
+def test_web_never_mislabels_question_conditioned_runtime_as_strict(tmp_path: Path) -> None:
+    runtime = FakeQuestionConditionedRuntime()
+    app = create_web_app(runtime, tiny_config(), project_root=tmp_path)
+
+    with TestClient(app) as client:
+        state = client.get("/api/state").json()
+        answer = client.post("/api/chat", json={"question": "Where is it?"}).json()
+
+    for payload in (state, answer):
+        assert payload["strict_fixed_environment_embedding_input"] is False
+        assert payload["question_conditioned_scene_readout_tokens"] is True
+        assert payload["question_dependent_retrieval"] is False
 
 
 def test_web_assets_are_allowlisted_and_audited_without_forbidden_reads(tmp_path: Path) -> None:

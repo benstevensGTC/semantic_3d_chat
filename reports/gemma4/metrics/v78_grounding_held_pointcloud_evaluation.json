@@ -1,0 +1,2583 @@
+{
+  "architecture_audit": {
+    "complete_question_independent_scene_prefix": true,
+    "every_scene_token_scored": true,
+    "grounding_readout_is_question_conditioned": true,
+    "maximum_attention_weight": 0.8923673033714294,
+    "minimum_attention_weight": 1.6745709230077746e-14,
+    "question_dependent_scene_retrieval": false,
+    "scene_dimension": 1536,
+    "scene_latent_count": 256,
+    "strict_identical_total_environment_conditioned_input": false,
+    "top_k_scene_selection": false
+  },
+  "artifact": "v78_historical_held_pointcloud_evaluation_v1",
+  "embedding_read": {
+    "full_language_model_loaded": false,
+    "loaded_parameter_keys": [
+      "model.language_model.embed_tokens.weight"
+    ],
+    "model_id": "google/gemma-4-E2B-it",
+    "model_revision": "3e22461f65e89153144f8adb70e3b8c2cc9845a7",
+    "unique_token_rows_read": 43
+  },
+  "limitations": [
+    "This is a historical training-pool holdout, not official validation or test.",
+    "The sidecar's readout is question-conditioned even though its complete scene prefix is fixed.",
+    "The point-cloud overlay visualizes predicted coordinates; it is not evidence that Gemma generated a correct language answer."
+  ],
+  "numeric_map_support": {
+    "count": 94,
+    "maximum_nearest_voxel_distance_m": 0.48381193964376173,
+    "mean_nearest_voxel_distance_m": 0.17940254182473217,
+    "within_0_25m_fraction": 0.7340425531914894
+  },
+  "per_example": [
+    {
+      "coordinate_error_m": 0.4833963215351105,
+      "map_support": {
+        "distance_m": 0.16088480529126664,
+        "nearest_voxel_confidence": 0.8645563721656799,
+        "nearest_voxel_xyz_m": [
+          0.625,
+          0.574999988079071,
+          0.824999988079071
+        ]
+      },
+      "predicted_xyz_m": [
+        0.6027603149414062,
+        0.5965142250061035,
+        0.6671188473701477
+      ],
+      "question": "Tell me the table's color.",
+      "question_id": "q_000090",
+      "scene_id": "scene_000017",
+      "target_xyz_m": [
+        0.9545727670192719,
+        0.7994764894247055,
+        0.4050000011920929
+      ]
+    },
+    {
+      "coordinate_error_m": 0.18279747664928436,
+      "map_support": {
+        "distance_m": 0.048770034105222335,
+        "nearest_voxel_confidence": 0.7226200699806213,
+        "nearest_voxel_xyz_m": [
+          -1.524999976158142,
+          -1.0750000476837158,
+          0.17499999701976776
+        ]
+      },
+      "predicted_xyz_m": [
+        -1.5139966011047363,
+        -1.1156823635101318,
+        0.19954365491867065
+      ],
+      "question": "Is the bowl on the floor or on the table?",
+      "question_id": "q_000055",
+      "scene_id": "scene_000017",
+      "target_xyz_m": [
+        -1.4492623805999756,
+        -1.2456581592559814,
+        0.08849999774247408
+      ]
+    },
+    {
+      "coordinate_error_m": 0.5364179015159607,
+      "map_support": {
+        "distance_m": 0.11101958024394802,
+        "nearest_voxel_confidence": 0.8648402690887451,
+        "nearest_voxel_xyz_m": [
+          0.574999988079071,
+          0.574999988079071,
+          0.824999988079071
+        ]
+      },
+      "predicted_xyz_m": [
+        0.5953524112701416,
+        0.5531268119812012,
+        0.718076229095459
+      ],
+      "question": "What is on the table?",
+      "question_id": "q_000101",
+      "scene_id": "scene_000017",
+      "target_xyz_m": [
+        0.9545727670192719,
+        0.7994764894247055,
+        0.4050000011920929
+      ]
+    },
+    {
+      "coordinate_error_m": 0.706680953502655,
+      "map_support": {
+        "distance_m": 0.08816279493204787,
+        "nearest_voxel_confidence": 0.8600714206695557,
+        "nearest_voxel_xyz_m": [
+          0.574999988079071,
+          0.675000011920929,
+          0.824999988079071
+        ]
+      },
+      "predicted_xyz_m": [
+        0.5926690101623535,
+        0.7370007038116455,
+        0.7648634910583496
+      ],
+      "question": "Is the book in front of or behind the plant pot?",
+      "question_id": "q_000107",
+      "scene_id": "scene_000017",
+      "target_xyz_m": [
+        1.2945728302001953,
+        0.7194765210151672,
+        0.8450000286102295
+      ]
+    },
+    {
+      "coordinate_error_m": 0.3860646188259125,
+      "map_support": {
+        "distance_m": 0.1572187868464099,
+        "nearest_voxel_confidence": 0.7035569548606873,
+        "nearest_voxel_xyz_m": [
+          -1.6750000715255737,
+          -1.3250000476837158,
+          0.17499999701976776
+        ]
+      },
+      "predicted_xyz_m": [
+        -1.762324333190918,
+        -1.455695629119873,
+        0.17170071601867676
+      ],
+      "question": "Is the bowl left or right of the cabinet?",
+      "question_id": "q_000099",
+      "scene_id": "scene_000017",
+      "target_xyz_m": [
+        -1.4492623805999756,
+        -1.2456581592559814,
+        0.08849999774247408
+      ]
+    },
+    {
+      "coordinate_error_m": 0.551749587059021,
+      "map_support": {
+        "distance_m": 0.2378266076022156,
+        "nearest_voxel_confidence": 0.8680194020271301,
+        "nearest_voxel_xyz_m": [
+          0.22500000894069672,
+          0.675000011920929,
+          0.824999988079071
+        ]
+      },
+      "predicted_xyz_m": [
+        0.10810279846191406,
+        0.6709432601928711,
+        1.032075047492981
+      ],
+      "question": "Which object is closest to the camera?",
+      "question_id": "q_000111",
+      "scene_id": "scene_000017",
+      "target_xyz_m": [
+        0.6345728039741516,
+        0.8194764852523804,
+        0.9599999785423279
+      ]
+    },
+    {
+      "coordinate_error_m": 0.5745310187339783,
+      "map_support": {
+        "distance_m": 0.48381193964376173,
+        "nearest_voxel_confidence": 0.6528646945953369,
+        "nearest_voxel_xyz_m": [
+          -1.875,
+          1.725000023841858,
+          1.774999976158142
+        ]
+      },
+      "predicted_xyz_m": [
+        -1.8289356231689453,
+        1.9134202003479004,
+        1.331773281097412
+      ],
+      "question": "Is the floor lamp above or below the plant pot?",
+      "question_id": "q_000043",
+      "scene_id": "scene_000017",
+      "target_xyz_m": [
+        -2.1039742827415466,
+        1.4533284902572632,
+        1.125
+      ]
+    },
+    {
+      "coordinate_error_m": 0.3595779240131378,
+      "map_support": {
+        "distance_m": 0.09799292844221005,
+        "nearest_voxel_confidence": 0.8642743229866028,
+        "nearest_voxel_xyz_m": [
+          0.32500001788139343,
+          0.675000011920929,
+          0.824999988079071
+        ]
+      },
+      "predicted_xyz_m": [
+        0.30182838439941406,
+        0.689455509185791,
+        0.9191101789474487
+      ],
+      "question": "Tell me the cube's color.",
+      "question_id": "q_000132",
+      "scene_id": "scene_000017",
+      "target_xyz_m": [
+        0.6345728039741516,
+        0.8194764852523804,
+        0.9599999785423279
+      ]
+    },
+    {
+      "coordinate_error_m": 0.27407702803611755,
+      "map_support": {
+        "distance_m": 0.07708726123516214,
+        "nearest_voxel_confidence": 0.7029193043708801,
+        "nearest_voxel_xyz_m": [
+          -0.7250000238418579,
+          2.424999952316284,
+          1.774999976158142
+        ]
+      },
+      "predicted_xyz_m": [
+        -0.7162344455718994,
+        2.5,
+        1.759488582611084
+      ],
+      "question": "Is the picture frame on the wall or on the floor?",
+      "question_id": "q_000140",
+      "scene_id": "scene_000017",
+      "target_xyz_m": [
+        -0.44999998807907104,
+        2.448249936103821,
+        1.7200000882148743
+      ]
+    },
+    {
+      "coordinate_error_m": 1.3476216793060303,
+      "map_support": {
+        "distance_m": 0.06757408383612983,
+        "nearest_voxel_confidence": 0.7961655259132385,
+        "nearest_voxel_xyz_m": [
+          1.024999976158142,
+          0.925000011920929,
+          0.824999988079071
+        ]
+      },
+      "predicted_xyz_m": [
+        1.0154142379760742,
+        0.9022531509399414,
+        0.7620956897735596
+      ],
+      "question": "What color is the plant pot?",
+      "question_id": "q_000011",
+      "scene_id": "scene_000017",
+      "target_xyz_m": [
+        2.1926189064979553,
+        1.557155728340149,
+        0.7249999642372131
+      ]
+    },
+    {
+      "coordinate_error_m": 0.3788730502128601,
+      "map_support": {
+        "distance_m": 0.07556875717049386,
+        "nearest_voxel_confidence": 0.6973125338554382,
+        "nearest_voxel_xyz_m": [
+          -0.824999988079071,
+          2.424999952316284,
+          1.774999976158142
+        ]
+      },
+      "predicted_xyz_m": [
+        -0.8224806785583496,
+        2.5,
+        1.7660958766937256
+      ],
+      "question": "Is the picture frame in front of or behind the bowl?",
+      "question_id": "q_000072",
+      "scene_id": "scene_000017",
+      "target_xyz_m": [
+        -0.44999998807907104,
+        2.448249936103821,
+        1.7200000882148743
+      ]
+    },
+    {
+      "coordinate_error_m": 0.4490204155445099,
+      "map_support": {
+        "distance_m": 0.07702945860545699,
+        "nearest_voxel_confidence": 0.6912411451339722,
+        "nearest_voxel_xyz_m": [
+          -0.875,
+          2.424999952316284,
+          1.774999976158142
+        ]
+      },
+      "predicted_xyz_m": [
+        -0.8921160697937012,
+        2.5,
+        1.7789459228515625
+      ],
+      "question": "Is the picture frame left or right of the floor lamp?",
+      "question_id": "q_000091",
+      "scene_id": "scene_000017",
+      "target_xyz_m": [
+        -0.44999998807907104,
+        2.448249936103821,
+        1.7200000882148743
+      ]
+    },
+    {
+      "coordinate_error_m": 0.7232755422592163,
+      "map_support": {
+        "distance_m": 0.22058280905950384,
+        "nearest_voxel_confidence": 0.856848418712616,
+        "nearest_voxel_xyz_m": [
+          0.675000011920929,
+          0.375,
+          0.7250000238418579
+        ]
+      },
+      "predicted_xyz_m": [
+        0.6612272262573242,
+        0.5193204879760742,
+        0.5587511658668518
+      ],
+      "question": "What color is the book?",
+      "question_id": "q_000064",
+      "scene_id": "scene_000017",
+      "target_xyz_m": [
+        1.2945728302001953,
+        0.7194765210151672,
+        0.8450000286102295
+      ]
+    },
+    {
+      "coordinate_error_m": 0.3932722508907318,
+      "map_support": {
+        "distance_m": 0.07583489740368524,
+        "nearest_voxel_confidence": 0.6973125338554382,
+        "nearest_voxel_xyz_m": [
+          -0.824999988079071,
+          2.424999952316284,
+          1.774999976158142
+        ]
+      },
+      "predicted_xyz_m": [
+        -0.8361415863037109,
+        2.5,
+        1.7736623287200928
+      ],
+      "question": "What color is the picture frame?",
+      "question_id": "q_000040",
+      "scene_id": "scene_000017",
+      "target_xyz_m": [
+        -0.44999998807907104,
+        2.448249936103821,
+        1.7200000882148743
+      ]
+    },
+    {
+      "coordinate_error_m": 0.6635850667953491,
+      "map_support": {
+        "distance_m": 0.3451554142663699,
+        "nearest_voxel_confidence": 0.7752230167388916,
+        "nearest_voxel_xyz_m": [
+          0.875,
+          0.574999988079071,
+          0.02500000037252903
+        ]
+      },
+      "predicted_xyz_m": [
+        0.8559055328369141,
+        0.5714261531829834,
+        0.3696083128452301
+      ],
+      "question": "Is the book on the table or under the table?",
+      "question_id": "q_000088",
+      "scene_id": "scene_000017",
+      "target_xyz_m": [
+        1.2945728302001953,
+        0.7194765210151672,
+        0.8450000286102295
+      ]
+    },
+    {
+      "coordinate_error_m": 0.5440882444381714,
+      "map_support": {
+        "distance_m": 0.47473099870524826,
+        "nearest_voxel_confidence": 0.6913251280784607,
+        "nearest_voxel_xyz_m": [
+          -2.075000047683716,
+          1.475000023841858,
+          1.3250000476837158
+        ]
+      },
+      "predicted_xyz_m": [
+        -1.8168702125549316,
+        1.8733553886413574,
+        1.317822813987732
+      ],
+      "question": "Is the floor lamp above or below the plant pot?",
+      "question_id": "q_000116",
+      "scene_id": "scene_000018",
+      "target_xyz_m": [
+        -2.1039742827415466,
+        1.4533284902572632,
+        1.125
+      ]
+    },
+    {
+      "coordinate_error_m": 0.4390440583229065,
+      "map_support": {
+        "distance_m": 0.10372327367825937,
+        "nearest_voxel_confidence": 0.8777568340301514,
+        "nearest_voxel_xyz_m": [
+          0.2750000059604645,
+          0.574999988079071,
+          0.824999988079071
+        ]
+      },
+      "predicted_xyz_m": [
+        0.2620377540588379,
+        0.5895190238952637,
+        0.9268807768821716
+      ],
+      "question": "Tell me the cube's color.",
+      "question_id": "q_000105",
+      "scene_id": "scene_000018",
+      "target_xyz_m": [
+        0.6345728039741516,
+        0.8194764852523804,
+        0.9599999785423279
+      ]
+    },
+    {
+      "coordinate_error_m": 0.39416831731796265,
+      "map_support": {
+        "distance_m": 0.075965594511664,
+        "nearest_voxel_confidence": 0.6973125338554382,
+        "nearest_voxel_xyz_m": [
+          -0.824999988079071,
+          2.424999952316284,
+          1.774999976158142
+        ]
+      },
+      "predicted_xyz_m": [
+        -0.8370223045349121,
+        2.5,
+        1.7738916873931885
+      ],
+      "question": "What color is the picture frame?",
+      "question_id": "q_000029",
+      "scene_id": "scene_000018",
+      "target_xyz_m": [
+        -0.44999998807907104,
+        2.448249936103821,
+        1.7200000882148743
+      ]
+    },
+    {
+      "coordinate_error_m": 0.2754291296005249,
+      "map_support": {
+        "distance_m": 0.07697308289086366,
+        "nearest_voxel_confidence": 0.7029193043708801,
+        "nearest_voxel_xyz_m": [
+          -0.7250000238418579,
+          2.424999952316284,
+          1.774999976158142
+        ]
+      },
+      "predicted_xyz_m": [
+        -0.7176508903503418,
+        2.5,
+        1.7593207359313965
+      ],
+      "question": "Is the picture frame on the wall or on the floor?",
+      "question_id": "q_000001",
+      "scene_id": "scene_000018",
+      "target_xyz_m": [
+        -0.44999998807907104,
+        2.448249936103821,
+        1.7200000882148743
+      ]
+    },
+    {
+      "coordinate_error_m": 0.5453343391418457,
+      "map_support": {
+        "distance_m": 0.11979643024522767,
+        "nearest_voxel_confidence": 0.868484377861023,
+        "nearest_voxel_xyz_m": [
+          0.574999988079071,
+          0.5250000357627869,
+          0.824999988079071
+        ]
+      },
+      "predicted_xyz_m": [
+        0.5893657207489014,
+        0.5286679267883301,
+        0.7061246037483215
+      ],
+      "question": "What is on the table?",
+      "question_id": "q_000090",
+      "scene_id": "scene_000018",
+      "target_xyz_m": [
+        0.9545727670192719,
+        0.7994764894247055,
+        0.4050000011920929
+      ]
+    },
+    {
+      "coordinate_error_m": 0.7489003539085388,
+      "map_support": {
+        "distance_m": 0.2188154209191825,
+        "nearest_voxel_confidence": 0.856848418712616,
+        "nearest_voxel_xyz_m": [
+          0.675000011920929,
+          0.375,
+          0.7250000238418579
+        ]
+      },
+      "predicted_xyz_m": [
+        0.6593151092529297,
+        0.4763057231903076,
+        0.5316833853721619
+      ],
+      "question": "What color is the book?",
+      "question_id": "q_000016",
+      "scene_id": "scene_000018",
+      "target_xyz_m": [
+        1.2945728302001953,
+        0.7194765210151672,
+        0.8450000286102295
+      ]
+    },
+    {
+      "coordinate_error_m": 1.6053792238235474,
+      "map_support": {
+        "distance_m": 0.08221329746417864,
+        "nearest_voxel_confidence": 0.8415868878364563,
+        "nearest_voxel_xyz_m": [
+          0.925000011920929,
+          0.574999988079071,
+          0.824999988079071
+        ]
+      },
+      "predicted_xyz_m": [
+        0.9323887825012207,
+        0.562821626663208,
+        0.7440301179885864
+      ],
+      "question": "What color is the plant pot?",
+      "question_id": "q_000074",
+      "scene_id": "scene_000018",
+      "target_xyz_m": [
+        2.1926189064979553,
+        1.557155728340149,
+        0.7249999642372131
+      ]
+    },
+    {
+      "coordinate_error_m": 0.27212750911712646,
+      "map_support": {
+        "distance_m": 0.029856118816184794,
+        "nearest_voxel_confidence": 0.7396606206893921,
+        "nearest_voxel_xyz_m": [
+          -1.274999976158142,
+          -1.0750000476837158,
+          0.17499999701976776
+        ]
+      },
+      "predicted_xyz_m": [
+        -1.257834792137146,
+        -1.0634791851043701,
+        0.15345901250839233
+      ],
+      "question": "Is the bowl on the floor or on the table?",
+      "question_id": "q_000000",
+      "scene_id": "scene_000018",
+      "target_xyz_m": [
+        -1.4492623805999756,
+        -1.2456581592559814,
+        0.08849999774247408
+      ]
+    },
+    {
+      "coordinate_error_m": 0.37985217571258545,
+      "map_support": {
+        "distance_m": 0.07574404591063831,
+        "nearest_voxel_confidence": 0.6973125338554382,
+        "nearest_voxel_xyz_m": [
+          -0.824999988079071,
+          2.424999952316284,
+          1.774999976158142
+        ]
+      },
+      "predicted_xyz_m": [
+        -0.8236708641052246,
+        2.5,
+        1.764493465423584
+      ],
+      "question": "Is the picture frame in front of or behind the bowl?",
+      "question_id": "q_000078",
+      "scene_id": "scene_000018",
+      "target_xyz_m": [
+        -0.44999998807907104,
+        2.448249936103821,
+        1.7200000882148743
+      ]
+    },
+    {
+      "coordinate_error_m": 0.4489302933216095,
+      "map_support": {
+        "distance_m": 0.07701257884771152,
+        "nearest_voxel_confidence": 0.6912411451339722,
+        "nearest_voxel_xyz_m": [
+          -0.875,
+          2.424999952316284,
+          1.774999976158142
+        ]
+      },
+      "predicted_xyz_m": [
+        -0.8920044898986816,
+        2.5,
+        1.779096007347107
+      ],
+      "question": "Is the picture frame left or right of the floor lamp?",
+      "question_id": "q_000083",
+      "scene_id": "scene_000018",
+      "target_xyz_m": [
+        -0.44999998807907104,
+        2.448249936103821,
+        1.7200000882148743
+      ]
+    },
+    {
+      "coordinate_error_m": 0.751645565032959,
+      "map_support": {
+        "distance_m": 0.060394606013277306,
+        "nearest_voxel_confidence": 0.8626850247383118,
+        "nearest_voxel_xyz_m": [
+          0.5250000357627869,
+          0.675000011920929,
+          0.824999988079071
+        ]
+      },
+      "predicted_xyz_m": [
+        0.5482728481292725,
+        0.6716487407684326,
+        0.7693703770637512
+      ],
+      "question": "Is the book in front of or behind the plant pot?",
+      "question_id": "q_000102",
+      "scene_id": "scene_000018",
+      "target_xyz_m": [
+        1.2945728302001953,
+        0.7194765210151672,
+        0.8450000286102295
+      ]
+    },
+    {
+      "coordinate_error_m": 0.16532112658023834,
+      "map_support": {
+        "distance_m": 0.019486360510184,
+        "nearest_voxel_confidence": 0.7022354602813721,
+        "nearest_voxel_xyz_m": [
+          -1.524999976158142,
+          -1.375,
+          0.17499999701976776
+        ]
+      },
+      "predicted_xyz_m": [
+        -1.5325186252593994,
+        -1.3706855773925781,
+        0.1575479507446289
+      ],
+      "question": "Is the bowl left or right of the cabinet?",
+      "question_id": "q_000050",
+      "scene_id": "scene_000018",
+      "target_xyz_m": [
+        -1.4492623805999756,
+        -1.2456581592559814,
+        0.08849999774247408
+      ]
+    },
+    {
+      "coordinate_error_m": 0.6762893199920654,
+      "map_support": {
+        "distance_m": 0.31657023608571305,
+        "nearest_voxel_confidence": 0.7752230167388916,
+        "nearest_voxel_xyz_m": [
+          0.875,
+          0.574999988079071,
+          0.02500000037252903
+        ]
+      },
+      "predicted_xyz_m": [
+        0.8707859516143799,
+        0.564183235168457,
+        0.3413573205471039
+      ],
+      "question": "Is the book on the table or under the table?",
+      "question_id": "q_000069",
+      "scene_id": "scene_000018",
+      "target_xyz_m": [
+        1.2945728302001953,
+        0.7194765210151672,
+        0.8450000286102295
+      ]
+    },
+    {
+      "coordinate_error_m": 0.5220727920532227,
+      "map_support": {
+        "distance_m": 0.16533139314356363,
+        "nearest_voxel_confidence": 0.868484377861023,
+        "nearest_voxel_xyz_m": [
+          0.574999988079071,
+          0.5250000357627869,
+          0.824999988079071
+        ]
+      },
+      "predicted_xyz_m": [
+        0.5793209075927734,
+        0.5417413711547852,
+        0.6605751514434814
+      ],
+      "question": "Tell me the table's color.",
+      "question_id": "q_000017",
+      "scene_id": "scene_000018",
+      "target_xyz_m": [
+        0.9545727670192719,
+        0.7994764894247055,
+        0.4050000011920929
+      ]
+    },
+    {
+      "coordinate_error_m": 0.5606322288513184,
+      "map_support": {
+        "distance_m": 0.23998449072415826,
+        "nearest_voxel_confidence": 0.8740025758743286,
+        "nearest_voxel_xyz_m": [
+          0.22500000894069672,
+          0.625,
+          0.824999988079071
+        ]
+      },
+      "predicted_xyz_m": [
+        0.11705541610717773,
+        0.6189689636230469,
+        1.039252519607544
+      ],
+      "question": "Which object is closest to the camera?",
+      "question_id": "q_000040",
+      "scene_id": "scene_000018",
+      "target_xyz_m": [
+        0.6345728039741516,
+        0.8194764852523804,
+        0.9599999785423279
+      ]
+    },
+    {
+      "coordinate_error_m": 0.7003516554832458,
+      "map_support": {
+        "distance_m": 0.4433786342297502,
+        "nearest_voxel_confidence": 0.7209539413452148,
+        "nearest_voxel_xyz_m": [
+          2.125,
+          0.42500001192092896,
+          0.625
+        ]
+      },
+      "predicted_xyz_m": [
+        2.167191982269287,
+        0.8614664077758789,
+        0.5594139099121094
+      ],
+      "question": "Is the chair left or right of the floor lamp?",
+      "question_id": "q_000139",
+      "scene_id": "scene_000031",
+      "target_xyz_m": [
+        1.8478012084960938,
+        0.24219299107789993,
+        0.6299999952316284
+      ]
+    },
+    {
+      "coordinate_error_m": 0.7522183656692505,
+      "map_support": {
+        "distance_m": 0.3282460601157725,
+        "nearest_voxel_confidence": 0.8034735918045044,
+        "nearest_voxel_xyz_m": [
+          -0.02500000037252903,
+          1.0750000476837158,
+          0.02500000037252903
+        ]
+      },
+      "predicted_xyz_m": [
+        -0.016376018524169922,
+        1.0541634559631348,
+        0.3524705171585083
+      ],
+      "question": "Is the book above or below the cabinet?",
+      "question_id": "q_000053",
+      "scene_id": "scene_000031",
+      "target_xyz_m": [
+        -0.575353741645813,
+        0.9502835273742676,
+        0.8450000286102295
+      ]
+    },
+    {
+      "coordinate_error_m": 0.5884950757026672,
+      "map_support": {
+        "distance_m": 0.3664035117486631,
+        "nearest_voxel_confidence": 0.8015157580375671,
+        "nearest_voxel_xyz_m": [
+          -0.22500000894069672,
+          0.925000011920929,
+          0.02500000037252903
+        ]
+      },
+      "predicted_xyz_m": [
+        -0.20192956924438477,
+        0.9434752464294434,
+        0.39020946621894836
+      ],
+      "question": "Is the book on the table or under the table?",
+      "question_id": "q_000039",
+      "scene_id": "scene_000031",
+      "target_xyz_m": [
+        -0.575353741645813,
+        0.9502835273742676,
+        0.8450000286102295
+      ]
+    },
+    {
+      "coordinate_error_m": 0.454593688249588,
+      "map_support": {
+        "distance_m": 0.1569241109444091,
+        "nearest_voxel_confidence": 0.6427710652351379,
+        "nearest_voxel_xyz_m": [
+          -1.774999976158142,
+          -1.725000023841858,
+          0.02500000037252903
+        ]
+      },
+      "predicted_xyz_m": [
+        -1.7521659135818481,
+        -1.7036033868789673,
+        0.1787724494934082
+      ],
+      "question": "Tell me the bowl's color.",
+      "question_id": "q_000065",
+      "scene_id": "scene_000031",
+      "target_xyz_m": [
+        -1.3067277669906616,
+        -1.694055199623108,
+        0.08849999774247408
+      ]
+    },
+    {
+      "coordinate_error_m": 0.1785757690668106,
+      "map_support": {
+        "distance_m": 0.06786796565298338,
+        "nearest_voxel_confidence": 0.7502054572105408,
+        "nearest_voxel_xyz_m": [
+          1.8250000476837158,
+          0.2750000059604645,
+          0.5250000357627869
+        ]
+      },
+      "predicted_xyz_m": [
+        1.8224687576293945,
+        0.280301570892334,
+        0.4573868215084076
+      ],
+      "question": "Is the chair upright or upside down?",
+      "question_id": "q_000004",
+      "scene_id": "scene_000031",
+      "target_xyz_m": [
+        1.8478012084960938,
+        0.24219299107789993,
+        0.6299999952316284
+      ]
+    },
+    {
+      "coordinate_error_m": 0.34921661019325256,
+      "map_support": {
+        "distance_m": 0.1519796417129313,
+        "nearest_voxel_confidence": 0.8376771211624146,
+        "nearest_voxel_xyz_m": [
+          -0.375,
+          1.024999976158142,
+          0.875
+        ]
+      },
+      "predicted_xyz_m": [
+        -0.2641324996948242,
+        1.0457026958465576,
+        0.9768705368041992
+      ],
+      "question": "Which object is closest to the camera?",
+      "question_id": "q_000067",
+      "scene_id": "scene_000031",
+      "target_xyz_m": [
+        0.08464627340435982,
+        1.0502835512161255,
+        0.9599999785423279
+      ]
+    },
+    {
+      "coordinate_error_m": 0.4119095206260681,
+      "map_support": {
+        "distance_m": 0.15436818808252856,
+        "nearest_voxel_confidence": 0.7155142426490784,
+        "nearest_voxel_xyz_m": [
+          -1.475000023841858,
+          -1.3250000476837158,
+          0.02500000037252903
+        ]
+      },
+      "predicted_xyz_m": [
+        -1.4589779376983643,
+        -1.3220494985580444,
+        0.17850610613822937
+      ],
+      "question": "Is the bowl on the floor or on the table?",
+      "question_id": "q_000090",
+      "scene_id": "scene_000031",
+      "target_xyz_m": [
+        -1.3067277669906616,
+        -1.694055199623108,
+        0.08849999774247408
+      ]
+    },
+    {
+      "coordinate_error_m": 0.1555863916873932,
+      "map_support": {
+        "distance_m": 0.027141993937161234,
+        "nearest_voxel_confidence": 0.7566404938697815,
+        "nearest_voxel_xyz_m": [
+          1.725000023841858,
+          0.2750000059604645,
+          0.5250000357627869
+        ]
+      },
+      "predicted_xyz_m": [
+        1.7402477264404297,
+        0.2536139488220215,
+        0.5181566476821899
+      ],
+      "question": "What color is the chair?",
+      "question_id": "q_000027",
+      "scene_id": "scene_000031",
+      "target_xyz_m": [
+        1.8478012084960938,
+        0.24219299107789993,
+        0.6299999952316284
+      ]
+    },
+    {
+      "coordinate_error_m": 0.5258291363716125,
+      "map_support": {
+        "distance_m": 0.21164168120355276,
+        "nearest_voxel_confidence": 0.6687690019607544,
+        "nearest_voxel_xyz_m": [
+          -2.2250001430511475,
+          -1.3250000476837158,
+          0.5250000357627869
+        ]
+      },
+      "predicted_xyz_m": [
+        -2.235353708267212,
+        -1.1136960983276367,
+        0.5190296173095703
+      ],
+      "question": "Tell me the cabinet's color.",
+      "question_id": "q_000097",
+      "scene_id": "scene_000031",
+      "target_xyz_m": [
+        -2.306934177875519,
+        -1.6331661939620972,
+        0.47999998927116394
+      ]
+    },
+    {
+      "coordinate_error_m": 0.19172947108745575,
+      "map_support": {
+        "distance_m": 0.304135671351803,
+        "nearest_voxel_confidence": 0.8019266724586487,
+        "nearest_voxel_xyz_m": [
+          -0.07500000298023224,
+          1.0750000476837158,
+          0.02500000037252903
+        ]
+      },
+      "predicted_xyz_m": [
+        -0.06524348258972168,
+        1.0754883289337158,
+        0.3289787471294403
+      ],
+      "question": "Is the table above or below the book?",
+      "question_id": "q_000050",
+      "scene_id": "scene_000031",
+      "target_xyz_m": [
+        -0.23535370826721191,
+        1.0302835702896118,
+        0.4050000011920929
+      ]
+    },
+    {
+      "coordinate_error_m": 0.3510138690471649,
+      "map_support": {
+        "distance_m": 0.1430727367336552,
+        "nearest_voxel_confidence": 0.6791951060295105,
+        "nearest_voxel_xyz_m": [
+          -0.07500000298023224,
+          2.424999952316284,
+          1.5750000476837158
+        ]
+      },
+      "predicted_xyz_m": [
+        -0.07161951065063477,
+        2.282327651977539,
+        1.5851486921310425
+      ],
+      "question": "Is the picture frame in front of or behind the bowl?",
+      "question_id": "q_000008",
+      "scene_id": "scene_000031",
+      "target_xyz_m": [
+        -0.34999997913837433,
+        2.448249936103821,
+        1.7200000882148743
+      ]
+    },
+    {
+      "coordinate_error_m": 1.136764645576477,
+      "map_support": {
+        "distance_m": 0.44083814065184507,
+        "nearest_voxel_confidence": 0.8631524443626404,
+        "nearest_voxel_xyz_m": [
+          0.4749999940395355,
+          0.625,
+          0.7250000238418579
+        ]
+      },
+      "predicted_xyz_m": [
+        0.8556642532348633,
+        0.7949700355529785,
+        0.5816711187362671
+      ],
+      "question": "Is the chair in front of or behind the cube?",
+      "question_id": "q_000131",
+      "scene_id": "scene_000031",
+      "target_xyz_m": [
+        1.8478012084960938,
+        0.24219299107789993,
+        0.6299999952316284
+      ]
+    },
+    {
+      "coordinate_error_m": 0.2770576477050781,
+      "map_support": {
+        "distance_m": 0.0436420363492437,
+        "nearest_voxel_confidence": 0.6812448501586914,
+        "nearest_voxel_xyz_m": [
+          -0.07500000298023224,
+          2.424999952316284,
+          1.6750000715255737
+        ]
+      },
+      "predicted_xyz_m": [
+        -0.07580900192260742,
+        2.4674301147460938,
+        1.6851811408996582
+      ],
+      "question": "Is the picture frame on the wall or on the floor?",
+      "question_id": "q_000137",
+      "scene_id": "scene_000031",
+      "target_xyz_m": [
+        -0.34999997913837433,
+        2.448249936103821,
+        1.7200000882148743
+      ]
+    },
+    {
+      "coordinate_error_m": 0.07896155118942261,
+      "map_support": {
+        "distance_m": 0.3435732741475707,
+        "nearest_voxel_confidence": 0.8469034433364868,
+        "nearest_voxel_xyz_m": [
+          -0.22500000894069672,
+          1.024999976158142,
+          0.824999988079071
+        ]
+      },
+      "predicted_xyz_m": [
+        -0.21609783172607422,
+        1.0287761688232422,
+        0.4815628230571747
+      ],
+      "question": "What is on the table?",
+      "question_id": "q_000057",
+      "scene_id": "scene_000031",
+      "target_xyz_m": [
+        -0.23535370826721191,
+        1.0302835702896118,
+        0.4050000011920929
+      ]
+    },
+    {
+      "coordinate_error_m": 0.36194461584091187,
+      "map_support": {
+        "distance_m": 0.08665051477563483,
+        "nearest_voxel_confidence": 0.6491247415542603,
+        "nearest_voxel_xyz_m": [
+          -1.975000023841858,
+          1.6750000715255737,
+          0.7750000357627869
+        ]
+      },
+      "predicted_xyz_m": [
+        -1.9045490026474,
+        1.6284523010253906,
+        0.7944492101669312
+      ],
+      "question": "Tell me the plant pot's color.",
+      "question_id": "q_000047",
+      "scene_id": "scene_000031",
+      "target_xyz_m": [
+        -2.2527096271514893,
+        1.6989142894744873,
+        0.7249999642372131
+      ]
+    },
+    {
+      "coordinate_error_m": 0.23681505024433136,
+      "map_support": {
+        "distance_m": 0.03730000320526345,
+        "nearest_voxel_confidence": 0.6882932782173157,
+        "nearest_voxel_xyz_m": [
+          -0.125,
+          2.424999952316284,
+          1.6750000715255737
+        ]
+      },
+      "predicted_xyz_m": [
+        -0.12717795372009277,
+        2.3888344764709473,
+        1.6661341190338135
+      ],
+      "question": "Tell me the picture frame's color.",
+      "question_id": "q_000048",
+      "scene_id": "scene_000031",
+      "target_xyz_m": [
+        -0.34999997913837433,
+        2.448249936103821,
+        1.7200000882148743
+      ]
+    },
+    {
+      "coordinate_error_m": 0.3391341269016266,
+      "map_support": {
+        "distance_m": 0.07204981781325337,
+        "nearest_voxel_confidence": 0.8426535725593567,
+        "nearest_voxel_xyz_m": [
+          -0.17499999701976776,
+          1.0750000476837158,
+          0.824999988079071
+        ]
+      },
+      "predicted_xyz_m": [
+        -0.1828899383544922,
+        1.0780980587005615,
+        0.7534505128860474
+      ],
+      "question": "Which object is closest to the camera?",
+      "question_id": "q_000079",
+      "scene_id": "scene_000032",
+      "target_xyz_m": [
+        0.08464627340435982,
+        1.0502835512161255,
+        0.9599999785423279
+      ]
+    },
+    {
+      "coordinate_error_m": 0.3273715078830719,
+      "map_support": {
+        "distance_m": 0.036836168790743355,
+        "nearest_voxel_confidence": 0.691390335559845,
+        "nearest_voxel_xyz_m": [
+          -0.02500000037252903,
+          2.424999952316284,
+          1.6750000715255737
+        ]
+      },
+      "predicted_xyz_m": [
+        -0.026018619537353516,
+        2.461822032928467,
+        1.6750112771987915
+      ],
+      "question": "Is the picture frame on the wall or on the floor?",
+      "question_id": "q_000033",
+      "scene_id": "scene_000032",
+      "target_xyz_m": [
+        -0.34999997913837433,
+        2.448249936103821,
+        1.7200000882148743
+      ]
+    },
+    {
+      "coordinate_error_m": 0.31510454416275024,
+      "map_support": {
+        "distance_m": 0.03705852385663424,
+        "nearest_voxel_confidence": 0.6491247415542603,
+        "nearest_voxel_xyz_m": [
+          -1.975000023841858,
+          1.6750000715255737,
+          0.7750000357627869
+        ]
+      },
+      "predicted_xyz_m": [
+        -1.9463449716567993,
+        1.6526989936828613,
+        0.7824084162712097
+      ],
+      "question": "Tell me the plant pot's color.",
+      "question_id": "q_000012",
+      "scene_id": "scene_000032",
+      "target_xyz_m": [
+        -2.2527096271514893,
+        1.6989142894744873,
+        0.7249999642372131
+      ]
+    },
+    {
+      "coordinate_error_m": 0.2207031548023224,
+      "map_support": {
+        "distance_m": 0.23246050167786794,
+        "nearest_voxel_confidence": 0.7831898927688599,
+        "nearest_voxel_xyz_m": [
+          -0.07500000298023224,
+          1.024999976158142,
+          0.02500000037252903
+        ]
+      },
+      "predicted_xyz_m": [
+        -0.0712735652923584,
+        1.028104305267334,
+        0.2574099004268646
+      ],
+      "question": "Is the table above or below the book?",
+      "question_id": "q_000069",
+      "scene_id": "scene_000032",
+      "target_xyz_m": [
+        -0.23535370826721191,
+        1.0302835702896118,
+        0.4050000011920929
+      ]
+    },
+    {
+      "coordinate_error_m": 1.3649617433547974,
+      "map_support": {
+        "distance_m": 0.3101794775597032,
+        "nearest_voxel_confidence": 0.8372494578361511,
+        "nearest_voxel_xyz_m": [
+          0.42500001192092896,
+          0.675000011920929,
+          0.42500001192092896
+        ]
+      },
+      "predicted_xyz_m": [
+        0.6600522994995117,
+        0.8765368461608887,
+        0.40643566846847534
+      ],
+      "question": "Is the chair in front of or behind the cube?",
+      "question_id": "q_000086",
+      "scene_id": "scene_000032",
+      "target_xyz_m": [
+        1.8478012084960938,
+        0.24219299107789993,
+        0.6299999952316284
+      ]
+    },
+    {
+      "coordinate_error_m": 0.6450346112251282,
+      "map_support": {
+        "distance_m": 0.32974524255818266,
+        "nearest_voxel_confidence": 0.6687690019607544,
+        "nearest_voxel_xyz_m": [
+          -2.2250001430511475,
+          -1.3250000476837158,
+          0.5250000357627869
+        ]
+      },
+      "predicted_xyz_m": [
+        -2.2066164016723633,
+        -0.9964344501495361,
+        0.504056990146637
+      ],
+      "question": "Tell me the cabinet's color.",
+      "question_id": "q_000035",
+      "scene_id": "scene_000032",
+      "target_xyz_m": [
+        -2.306934177875519,
+        -1.6331661939620972,
+        0.47999998927116394
+      ]
+    },
+    {
+      "coordinate_error_m": 0.2088351547718048,
+      "map_support": {
+        "distance_m": 0.08928469854406337,
+        "nearest_voxel_confidence": 0.7472965717315674,
+        "nearest_voxel_xyz_m": [
+          1.774999976158142,
+          0.2750000059604645,
+          0.5250000357627869
+        ]
+      },
+      "predicted_xyz_m": [
+        1.782689094543457,
+        0.2887747287750244,
+        0.4371200501918793
+      ],
+      "question": "Is the chair upright or upside down?",
+      "question_id": "q_000078",
+      "scene_id": "scene_000032",
+      "target_xyz_m": [
+        1.8478012084960938,
+        0.24219299107789993,
+        0.6299999952316284
+      ]
+    },
+    {
+      "coordinate_error_m": 0.325623482465744,
+      "map_support": {
+        "distance_m": 0.029305283995630486,
+        "nearest_voxel_confidence": 0.691390335559845,
+        "nearest_voxel_xyz_m": [
+          -0.02500000037252903,
+          2.424999952316284,
+          1.6750000715255737
+        ]
+      },
+      "predicted_xyz_m": [
+        -0.02830362319946289,
+        2.4536633491516113,
+        1.6698721647262573
+      ],
+      "question": "Tell me the picture frame's color.",
+      "question_id": "q_000016",
+      "scene_id": "scene_000032",
+      "target_xyz_m": [
+        -0.34999997913837433,
+        2.448249936103821,
+        1.7200000882148743
+      ]
+    },
+    {
+      "coordinate_error_m": 0.6092846393585205,
+      "map_support": {
+        "distance_m": 0.14064271245185805,
+        "nearest_voxel_confidence": 0.7024739980697632,
+        "nearest_voxel_xyz_m": [
+          -1.274999976158142,
+          -1.0750000476837158,
+          0.02500000037252903
+        ]
+      },
+      "predicted_xyz_m": [
+        -1.2763569355010986,
+        -1.0903301239013672,
+        0.16479814052581787
+      ],
+      "question": "Is the bowl on the floor or on the table?",
+      "question_id": "q_000094",
+      "scene_id": "scene_000032",
+      "target_xyz_m": [
+        -1.3067277669906616,
+        -1.694055199623108,
+        0.08849999774247408
+      ]
+    },
+    {
+      "coordinate_error_m": 0.6741940379142761,
+      "map_support": {
+        "distance_m": 0.4313299055572981,
+        "nearest_voxel_confidence": 0.7250065803527832,
+        "nearest_voxel_xyz_m": [
+          2.075000047683716,
+          0.42500001192092896,
+          0.5250000357627869
+        ]
+      },
+      "predicted_xyz_m": [
+        2.117513656616211,
+        0.8538699150085449,
+        0.5425695180892944
+      ],
+      "question": "Is the chair left or right of the floor lamp?",
+      "question_id": "q_000091",
+      "scene_id": "scene_000032",
+      "target_xyz_m": [
+        1.8478012084960938,
+        0.24219299107789993,
+        0.6299999952316284
+      ]
+    },
+    {
+      "coordinate_error_m": 0.5894240140914917,
+      "map_support": {
+        "distance_m": 0.2251100729140491,
+        "nearest_voxel_confidence": 0.7733114957809448,
+        "nearest_voxel_xyz_m": [
+          -0.02500000037252903,
+          1.024999976158142,
+          0.02500000037252903
+        ]
+      },
+      "predicted_xyz_m": [
+        -0.03181934356689453,
+        1.0262079238891602,
+        0.25000351667404175
+      ],
+      "question": "Is the book above or below the cabinet?",
+      "question_id": "q_000034",
+      "scene_id": "scene_000032",
+      "target_xyz_m": [
+        -0.575353741645813,
+        0.9502835273742676,
+        0.03500000014901161
+      ]
+    },
+    {
+      "coordinate_error_m": 0.44957053661346436,
+      "map_support": {
+        "distance_m": 0.15455342263575006,
+        "nearest_voxel_confidence": 0.6720299124717712,
+        "nearest_voxel_xyz_m": [
+          -1.725000023841858,
+          -1.6750000715255737,
+          0.02500000037252903
+        ]
+      },
+      "predicted_xyz_m": [
+        -1.7469701766967773,
+        -1.6768800020217896,
+        0.17797234654426575
+      ],
+      "question": "Tell me the bowl's color.",
+      "question_id": "q_000048",
+      "scene_id": "scene_000032",
+      "target_xyz_m": [
+        -1.3067277669906616,
+        -1.694055199623108,
+        0.08849999774247408
+      ]
+    },
+    {
+      "coordinate_error_m": 0.48683586716651917,
+      "map_support": {
+        "distance_m": 0.27667575890522744,
+        "nearest_voxel_confidence": 0.8025031685829163,
+        "nearest_voxel_xyz_m": [
+          -0.17499999701976776,
+          0.925000011920929,
+          0.02500000037252903
+        ]
+      },
+      "predicted_xyz_m": [
+        -0.1683206558227539,
+        0.9325356483459473,
+        0.30149245262145996
+      ],
+      "question": "Is the book on the table or under the table?",
+      "question_id": "q_000065",
+      "scene_id": "scene_000032",
+      "target_xyz_m": [
+        -0.575353741645813,
+        0.9502835273742676,
+        0.03500000014901161
+      ]
+    },
+    {
+      "coordinate_error_m": 0.450100839138031,
+      "map_support": {
+        "distance_m": 0.19412499384781903,
+        "nearest_voxel_confidence": 0.69001305103302,
+        "nearest_voxel_xyz_m": [
+          -0.02500000037252903,
+          2.424999952316284,
+          1.524999976158142
+        ]
+      },
+      "predicted_xyz_m": [
+        -0.007172107696533203,
+        2.2316956520080566,
+        1.5246436595916748
+      ],
+      "question": "Is the picture frame in front of or behind the bowl?",
+      "question_id": "q_000134",
+      "scene_id": "scene_000032",
+      "target_xyz_m": [
+        -0.34999997913837433,
+        2.448249936103821,
+        1.7200000882148743
+      ]
+    },
+    {
+      "coordinate_error_m": 0.21040433645248413,
+      "map_support": {
+        "distance_m": 0.03357059873478582,
+        "nearest_voxel_confidence": 0.7639394402503967,
+        "nearest_voxel_xyz_m": [
+          1.6750000715255737,
+          0.2750000059604645,
+          0.5250000357627869
+        ]
+      },
+      "predicted_xyz_m": [
+        1.6889119148254395,
+        0.2698812484741211,
+        0.4948795437812805
+      ],
+      "question": "What color is the chair?",
+      "question_id": "q_000001",
+      "scene_id": "scene_000032",
+      "target_xyz_m": [
+        1.8478012084960938,
+        0.24219299107789993,
+        0.6299999952316284
+      ]
+    },
+    {
+      "coordinate_error_m": 0.6862539649009705,
+      "map_support": {
+        "distance_m": 0.3001749410281808,
+        "nearest_voxel_confidence": 0.7866356372833252,
+        "nearest_voxel_xyz_m": [
+          -0.17499999701976776,
+          1.024999976158142,
+          0.02500000037252903
+        ]
+      },
+      "predicted_xyz_m": [
+        -0.17517566680908203,
+        1.0329933166503906,
+        0.3250684440135956
+      ],
+      "question": "What is on the table?",
+      "question_id": "q_000003",
+      "scene_id": "scene_000032",
+      "target_xyz_m": [
+        0.08464627340435982,
+        1.0502835512161255,
+        0.9599999785423279
+      ]
+    },
+    {
+      "coordinate_error_m": 0.08831561356782913,
+      "map_support": {
+        "distance_m": 0.35977527086779854,
+        "nearest_voxel_confidence": 0.7853658199310303,
+        "nearest_voxel_xyz_m": [
+          0.824999988079071,
+          0.7750000357627869,
+          0.02500000037252903
+        ]
+      },
+      "predicted_xyz_m": [
+        0.8494715690612793,
+        0.7605533599853516,
+        0.3836511969566345
+      ],
+      "question": "What is on the table?",
+      "question_id": "q_000125",
+      "scene_id": "scene_000053",
+      "target_xyz_m": [
+        0.7860308587551117,
+        0.8181654959917068,
+        0.4050000011920929
+      ]
+    },
+    {
+      "coordinate_error_m": 0.14631986618041992,
+      "map_support": {
+        "distance_m": 0.36644963797444646,
+        "nearest_voxel_confidence": 0.8011861443519592,
+        "nearest_voxel_xyz_m": [
+          0.7250000238418579,
+          0.824999988079071,
+          0.02500000037252903
+        ]
+      },
+      "predicted_xyz_m": [
+        0.7244188785552979,
+        0.9463882446289062,
+        0.37075987458229065
+      ],
+      "question": "Is the table in front of or behind the cabinet?",
+      "question_id": "q_000060",
+      "scene_id": "scene_000053",
+      "target_xyz_m": [
+        0.7860308587551117,
+        0.8181654959917068,
+        0.4050000011920929
+      ]
+    },
+    {
+      "coordinate_error_m": 1.0857625007629395,
+      "map_support": {
+        "distance_m": 0.08691745432586084,
+        "nearest_voxel_confidence": 0.7543877363204956,
+        "nearest_voxel_xyz_m": [
+          -0.02500000037252903,
+          1.5750000476837158,
+          0.125
+        ]
+      },
+      "predicted_xyz_m": [
+        0.03956031799316406,
+        1.5747790336608887,
+        0.18319416046142578
+      ],
+      "question": "Is the table left or right of the picture frame?",
+      "question_id": "q_000094",
+      "scene_id": "scene_000053",
+      "target_xyz_m": [
+        0.7860308587551117,
+        0.8181654959917068,
+        0.4050000011920929
+      ]
+    },
+    {
+      "coordinate_error_m": 0.7766579389572144,
+      "map_support": {
+        "distance_m": 0.20297828087535108,
+        "nearest_voxel_confidence": 0.8037965297698975,
+        "nearest_voxel_xyz_m": [
+          -0.4749999940395355,
+          0.625,
+          0.02500000037252903
+        ]
+      },
+      "predicted_xyz_m": [
+        -0.4732041358947754,
+        0.6341936588287354,
+        0.22776201367378235
+      ],
+      "question": "Is the chair left or right of the cabinet?",
+      "question_id": "q_000108",
+      "scene_id": "scene_000053",
+      "target_xyz_m": [
+        -1.1033310890197754,
+        0.4236177057027817,
+        0.6299999952316284
+      ]
+    },
+    {
+      "coordinate_error_m": 0.15079987049102783,
+      "map_support": {
+        "distance_m": 0.0779722932208318,
+        "nearest_voxel_confidence": 0.8712807297706604,
+        "nearest_voxel_xyz_m": [
+          0.42500001192092896,
+          0.675000011920929,
+          0.875
+        ]
+      },
+      "predicted_xyz_m": [
+        0.4037456512451172,
+        0.7477374076843262,
+        0.8566369414329529
+      ],
+      "question": "Which object is closest to the camera?",
+      "question_id": "q_000075",
+      "scene_id": "scene_000053",
+      "target_xyz_m": [
+        0.46603089570999146,
+        0.8381654620170593,
+        0.9599999785423279
+      ]
+    },
+    {
+      "coordinate_error_m": 0.2937096357345581,
+      "map_support": {
+        "distance_m": 0.1865654277486708,
+        "nearest_voxel_confidence": 0.6956675052642822,
+        "nearest_voxel_xyz_m": [
+          -2.125,
+          1.4250000715255737,
+          1.3250000476837158
+        ]
+      },
+      "predicted_xyz_m": [
+        -2.30863881111145,
+        1.4468426704406738,
+        1.3496241569519043
+      ],
+      "question": "What color is the floor lamp?",
+      "question_id": "q_000102",
+      "scene_id": "scene_000053",
+      "target_xyz_m": [
+        -2.119405210018158,
+        1.446917176246643,
+        1.125
+      ]
+    },
+    {
+      "coordinate_error_m": 0.4752248227596283,
+      "map_support": {
+        "distance_m": 0.16081675280628013,
+        "nearest_voxel_confidence": 0.7433061003684998,
+        "nearest_voxel_xyz_m": [
+          -0.9750000238418579,
+          -1.125,
+          0.02500000037252903
+        ]
+      },
+      "predicted_xyz_m": [
+        -0.9863929748535156,
+        -1.1262645721435547,
+        0.18540769815444946
+      ],
+      "question": "Tell me the bowl's color.",
+      "question_id": "q_000140",
+      "scene_id": "scene_000053",
+      "target_xyz_m": [
+        -1.4502785205841064,
+        -1.1617292165756226,
+        0.08849999774247408
+      ]
+    },
+    {
+      "coordinate_error_m": 0.6471053957939148,
+      "map_support": {
+        "distance_m": 0.20214256180392454,
+        "nearest_voxel_confidence": 0.7784067988395691,
+        "nearest_voxel_xyz_m": [
+          0.925000011920929,
+          0.675000011920929,
+          0.02500000037252903
+        ]
+      },
+      "predicted_xyz_m": [
+        0.9456360340118408,
+        0.684685468673706,
+        0.2258530855178833
+      ],
+      "question": "Is the book on the table or under the table?",
+      "question_id": "q_000027",
+      "scene_id": "scene_000053",
+      "target_xyz_m": [
+        1.1260309517383575,
+        0.7381654381752014,
+        0.8450000286102295
+      ]
+    },
+    {
+      "coordinate_error_m": 0.5403581857681274,
+      "map_support": {
+        "distance_m": 0.3001281476403167,
+        "nearest_voxel_confidence": 0.8396992087364197,
+        "nearest_voxel_xyz_m": [
+          0.824999988079071,
+          0.42500001192092896,
+          0.7250000238418579
+        ]
+      },
+      "predicted_xyz_m": [
+        0.815201997756958,
+        0.5421247482299805,
+        0.44884300231933594
+      ],
+      "question": "What color is the book?",
+      "question_id": "q_000042",
+      "scene_id": "scene_000053",
+      "target_xyz_m": [
+        1.1260309517383575,
+        0.7381654381752014,
+        0.8450000286102295
+      ]
+    },
+    {
+      "coordinate_error_m": 0.2769942581653595,
+      "map_support": {
+        "distance_m": 0.041994979695989365,
+        "nearest_voxel_confidence": 0.7106726169586182,
+        "nearest_voxel_xyz_m": [
+          -0.824999988079071,
+          1.875,
+          0.07500000298023224
+        ]
+      },
+      "predicted_xyz_m": [
+        -0.8146414756774902,
+        1.8955354690551758,
+        0.11013650894165039
+      ],
+      "question": "Is the picture frame on the wall or on the floor?",
+      "question_id": "q_000134",
+      "scene_id": "scene_000053",
+      "target_xyz_m": [
+        -0.550000011920929,
+        1.8200000524520874,
+        0.07874999940395355
+      ]
+    },
+    {
+      "coordinate_error_m": 0.821711540222168,
+      "map_support": {
+        "distance_m": 0.26660005987167734,
+        "nearest_voxel_confidence": 0.7068250775337219,
+        "nearest_voxel_xyz_m": [
+          -1.875,
+          -0.4749999940395355,
+          0.02500000037252903
+        ]
+      },
+      "predicted_xyz_m": [
+        -1.8598777055740356,
+        -0.47881340980529785,
+        0.2911435067653656
+      ],
+      "question": "Is the bowl in front of or behind the floor lamp?",
+      "question_id": "q_000110",
+      "scene_id": "scene_000053",
+      "target_xyz_m": [
+        -1.4502785205841064,
+        -1.1617292165756226,
+        0.08849999774247408
+      ]
+    },
+    {
+      "coordinate_error_m": 0.9039226174354553,
+      "map_support": {
+        "distance_m": 0.13455494029567544,
+        "nearest_voxel_confidence": 0.7783485054969788,
+        "nearest_voxel_xyz_m": [
+          -1.024999976158142,
+          -0.375,
+          0.02500000037252903
+        ]
+      },
+      "predicted_xyz_m": [
+        -1.002425193786621,
+        -0.3795955181121826,
+        0.1575680673122406
+      ],
+      "question": "Is the bowl on the floor or on the table?",
+      "question_id": "q_000056",
+      "scene_id": "scene_000053",
+      "target_xyz_m": [
+        -1.4502785205841064,
+        -1.1617292165756226,
+        0.08849999774247408
+      ]
+    },
+    {
+      "coordinate_error_m": 0.9989510178565979,
+      "map_support": {
+        "distance_m": 0.41727249557201446,
+        "nearest_voxel_confidence": 0.6940911412239075,
+        "nearest_voxel_xyz_m": [
+          2.075000047683716,
+          -0.22500000894069672,
+          0.02500000037252903
+        ]
+      },
+      "predicted_xyz_m": [
+        2.0650510787963867,
+        -0.21518230438232422,
+        0.44203832745552063
+      ],
+      "question": "Tell me the cabinet's color.",
+      "question_id": "q_000095",
+      "scene_id": "scene_000053",
+      "target_xyz_m": [
+        2.1127113699913025,
+        -1.212273359298706,
+        0.47999998927116394
+      ]
+    },
+    {
+      "coordinate_error_m": 0.61415034532547,
+      "map_support": {
+        "distance_m": 0.19707105746165193,
+        "nearest_voxel_confidence": 0.8034735918045044,
+        "nearest_voxel_xyz_m": [
+          -0.625,
+          0.4749999940395355,
+          0.02500000037252903
+        ]
+      },
+      "predicted_xyz_m": [
+        -0.6476736068725586,
+        0.44875431060791016,
+        0.21899503469467163
+      ],
+      "question": "Is the chair upright or upside down?",
+      "question_id": "q_000074",
+      "scene_id": "scene_000053",
+      "target_xyz_m": [
+        -1.1033310890197754,
+        0.4236177057027817,
+        0.6299999952316284
+      ]
+    },
+    {
+      "coordinate_error_m": 0.2052438110113144,
+      "map_support": {
+        "distance_m": 0.0560024196389656,
+        "nearest_voxel_confidence": 0.7167721390724182,
+        "nearest_voxel_xyz_m": [
+          -0.7250000238418579,
+          1.875,
+          0.07500000298023224
+        ]
+      },
+      "predicted_xyz_m": [
+        -0.7391047477722168,
+        1.882190227508545,
+        0.1287180483341217
+      ],
+      "question": "What color is the picture frame?",
+      "question_id": "q_000006",
+      "scene_id": "scene_000053",
+      "target_xyz_m": [
+        -0.550000011920929,
+        1.8200000524520874,
+        0.07874999940395355
+      ]
+    },
+    {
+      "coordinate_error_m": 0.35886213183403015,
+      "map_support": {
+        "distance_m": 0.33468942900150833,
+        "nearest_voxel_confidence": 0.7907784581184387,
+        "nearest_voxel_xyz_m": [
+          0.574999988079071,
+          0.824999988079071,
+          0.02500000037252903
+        ]
+      },
+      "predicted_xyz_m": [
+        0.5586848258972168,
+        1.0578596591949463,
+        0.2648482918739319
+      ],
+      "question": "Is the table above or below the cube?",
+      "question_id": "q_000029",
+      "scene_id": "scene_000053",
+      "target_xyz_m": [
+        0.7860308587551117,
+        0.8181654959917068,
+        0.4050000011920929
+      ]
+    },
+    {
+      "coordinate_error_m": 0.5462363362312317,
+      "map_support": {
+        "distance_m": 0.1080811631254509,
+        "nearest_voxel_confidence": 0.8579522371292114,
+        "nearest_voxel_xyz_m": [
+          0.675000011920929,
+          0.42500001192092896,
+          0.7250000238418579
+        ]
+      },
+      "predicted_xyz_m": [
+        0.6953058242797852,
+        0.47770071029663086,
+        0.6328487992286682
+      ],
+      "question": "What color is the book?",
+      "question_id": "q_000071",
+      "scene_id": "scene_000054",
+      "target_xyz_m": [
+        1.1260309517383575,
+        0.7381654381752014,
+        0.8450000286102295
+      ]
+    },
+    {
+      "coordinate_error_m": 0.5218958258628845,
+      "map_support": {
+        "distance_m": 0.09419518080838869,
+        "nearest_voxel_confidence": 0.855790913105011,
+        "nearest_voxel_xyz_m": [
+          0.625,
+          0.625,
+          0.824999988079071
+        ]
+      },
+      "predicted_xyz_m": [
+        0.6314113140106201,
+        0.6164050102233887,
+        0.7314171195030212
+      ],
+      "question": "What is on the table?",
+      "question_id": "q_000062",
+      "scene_id": "scene_000054",
+      "target_xyz_m": [
+        1.1260309517383575,
+        0.7381654381752014,
+        0.8450000286102295
+      ]
+    },
+    {
+      "coordinate_error_m": 0.7094293832778931,
+      "map_support": {
+        "distance_m": 0.14131523532934365,
+        "nearest_voxel_confidence": 0.8034735918045044,
+        "nearest_voxel_xyz_m": [
+          -0.625,
+          0.4749999940395355,
+          0.02500000037252903
+        ]
+      },
+      "predicted_xyz_m": [
+        -0.5779244899749756,
+        0.4400925636291504,
+        0.1535899043083191
+      ],
+      "question": "Is the chair upright or upside down?",
+      "question_id": "q_000106",
+      "scene_id": "scene_000054",
+      "target_xyz_m": [
+        -1.1033310890197754,
+        0.4236177057027817,
+        0.6299999952316284
+      ]
+    },
+    {
+      "coordinate_error_m": 1.080156922340393,
+      "map_support": {
+        "distance_m": 0.07634703106056787,
+        "nearest_voxel_confidence": 0.7645151615142822,
+        "nearest_voxel_xyz_m": [
+          -0.02500000037252903,
+          1.475000023841858,
+          0.125
+        ]
+      },
+      "predicted_xyz_m": [
+        -0.03359627723693848,
+        1.490910530090332,
+        0.19917431473731995
+      ],
+      "question": "Is the table left or right of the picture frame?",
+      "question_id": "q_000060",
+      "scene_id": "scene_000054",
+      "target_xyz_m": [
+        0.7860308587551117,
+        0.8181654959917068,
+        0.4050000011920929
+      ]
+    },
+    {
+      "coordinate_error_m": 0.793114185333252,
+      "map_support": {
+        "distance_m": 0.2575820613448262,
+        "nearest_voxel_confidence": 0.6909287571907043,
+        "nearest_voxel_xyz_m": [
+          -1.875,
+          -0.5250000357627869,
+          0.02500000037252903
+        ]
+      },
+      "predicted_xyz_m": [
+        -1.8578513860702515,
+        -0.5093079805374146,
+        0.28153109550476074
+      ],
+      "question": "Is the bowl in front of or behind the floor lamp?",
+      "question_id": "q_000099",
+      "scene_id": "scene_000054",
+      "target_xyz_m": [
+        -1.4502785205841064,
+        -1.1617292165756226,
+        0.08849999774247408
+      ]
+    },
+    {
+      "coordinate_error_m": 0.9230367541313171,
+      "map_support": {
+        "distance_m": 0.13382754595719498,
+        "nearest_voxel_confidence": 0.7837521433830261,
+        "nearest_voxel_xyz_m": [
+          -0.9750000238418579,
+          -0.375,
+          0.02500000037252903
+        ]
+      },
+      "predicted_xyz_m": [
+        -0.9802639484405518,
+        -0.370424747467041,
+        0.15864568948745728
+      ],
+      "question": "Is the bowl on the floor or on the table?",
+      "question_id": "q_000086",
+      "scene_id": "scene_000054",
+      "target_xyz_m": [
+        -1.4502785205841064,
+        -1.1617292165756226,
+        0.08849999774247408
+      ]
+    },
+    {
+      "coordinate_error_m": 0.8941113948822021,
+      "map_support": {
+        "distance_m": 0.4046147951967366,
+        "nearest_voxel_confidence": 0.673233687877655,
+        "nearest_voxel_xyz_m": [
+          2.125,
+          -0.32500001788139343,
+          0.02500000037252903
+        ]
+      },
+      "predicted_xyz_m": [
+        2.113279342651367,
+        -0.3195946216583252,
+        0.42940887808799744
+      ],
+      "question": "Tell me the cabinet's color.",
+      "question_id": "q_000073",
+      "scene_id": "scene_000054",
+      "target_xyz_m": [
+        2.1127113699913025,
+        -1.212273359298706,
+        0.47999998927116394
+      ]
+    },
+    {
+      "coordinate_error_m": 0.509324848651886,
+      "map_support": {
+        "distance_m": 0.1642811724812418,
+        "nearest_voxel_confidence": 0.751141369342804,
+        "nearest_voxel_xyz_m": [
+          -0.9750000238418579,
+          -1.0750000476837158,
+          0.02500000037252903
+        ]
+      },
+      "predicted_xyz_m": [
+        -0.9545955657958984,
+        -1.097558617591858,
+        0.1864406168460846
+      ],
+      "question": "Tell me the bowl's color.",
+      "question_id": "q_000063",
+      "scene_id": "scene_000054",
+      "target_xyz_m": [
+        -1.4502785205841064,
+        -1.1617292165756226,
+        0.08849999774247408
+      ]
+    },
+    {
+      "coordinate_error_m": 0.8158942461013794,
+      "map_support": {
+        "distance_m": 0.16199549587761203,
+        "nearest_voxel_confidence": 0.8037965297698975,
+        "nearest_voxel_xyz_m": [
+          -0.4749999940395355,
+          0.625,
+          0.02500000037252903
+        ]
+      },
+      "predicted_xyz_m": [
+        -0.4429352283477783,
+        0.582658052444458,
+        0.178041011095047
+      ],
+      "question": "Is the chair left or right of the cabinet?",
+      "question_id": "q_000049",
+      "scene_id": "scene_000054",
+      "target_xyz_m": [
+        -1.1033310890197754,
+        0.4236177057027817,
+        0.6299999952316284
+      ]
+    },
+    {
+      "coordinate_error_m": 0.2966162860393524,
+      "map_support": {
+        "distance_m": 0.1912240543147515,
+        "nearest_voxel_confidence": 0.6956675052642822,
+        "nearest_voxel_xyz_m": [
+          -2.125,
+          1.4250000715255737,
+          1.3250000476837158
+        ]
+      },
+      "predicted_xyz_m": [
+        -2.313652992248535,
+        1.4448320865631104,
+        1.3491532802581787
+      ],
+      "question": "What color is the floor lamp?",
+      "question_id": "q_000065",
+      "scene_id": "scene_000054",
+      "target_xyz_m": [
+        -2.119405210018158,
+        1.446917176246643,
+        1.125
+      ]
+    },
+    {
+      "coordinate_error_m": 0.1503535509109497,
+      "map_support": {
+        "distance_m": 0.31813357442813106,
+        "nearest_voxel_confidence": 0.8404855728149414,
+        "nearest_voxel_xyz_m": [
+          0.675000011920929,
+          0.7750000357627869,
+          0.824999988079071
+        ]
+      },
+      "predicted_xyz_m": [
+        0.6780657768249512,
+        0.7982804775238037,
+        0.5077341794967651
+      ],
+      "question": "Is the table in front of or behind the cabinet?",
+      "question_id": "q_000110",
+      "scene_id": "scene_000054",
+      "target_xyz_m": [
+        0.7860308587551117,
+        0.8181654959917068,
+        0.4050000011920929
+      ]
+    },
+    {
+      "coordinate_error_m": 1.4883391857147217,
+      "map_support": {
+        "distance_m": 0.15777464523774865,
+        "nearest_voxel_confidence": 0.8642743229866028,
+        "nearest_voxel_xyz_m": [
+          0.32500001788139343,
+          0.675000011920929,
+          0.824999988079071
+        ]
+      },
+      "predicted_xyz_m": [
+        0.3214845657348633,
+        0.6699676513671875,
+        0.9826551675796509
+      ],
+      "question": "Which object is closest to the camera?",
+      "question_id": "q_000084",
+      "scene_id": "scene_000054",
+      "target_xyz_m": [
+        -1.1033310890197754,
+        0.4236177057027817,
+        0.6299999952316284
+      ]
+    },
+    {
+      "coordinate_error_m": 0.3099692761898041,
+      "map_support": {
+        "distance_m": 0.3044584060854879,
+        "nearest_voxel_confidence": 0.821100652217865,
+        "nearest_voxel_xyz_m": [
+          0.4749999940395355,
+          0.675000011920929,
+          0.22500000894069672
+        ]
+      },
+      "predicted_xyz_m": [
+        0.49345922470092773,
+        0.9205465316772461,
+        0.4040561020374298
+      ],
+      "question": "Is the table above or below the cube?",
+      "question_id": "q_000116",
+      "scene_id": "scene_000054",
+      "target_xyz_m": [
+        0.7860308587551117,
+        0.8181654959917068,
+        0.4050000011920929
+      ]
+    },
+    {
+      "coordinate_error_m": 0.3303178548812866,
+      "map_support": {
+        "distance_m": 0.02740824842197516,
+        "nearest_voxel_confidence": 0.7094276547431946,
+        "nearest_voxel_xyz_m": [
+          -0.875,
+          1.875,
+          0.07500000298023224
+        ]
+      },
+      "predicted_xyz_m": [
+        -0.8731293678283691,
+        1.8850126266479492,
+        0.10044524073600769
+      ],
+      "question": "Is the picture frame on the wall or on the floor?",
+      "question_id": "q_000034",
+      "scene_id": "scene_000054",
+      "target_xyz_m": [
+        -0.550000011920929,
+        1.8200000524520874,
+        0.07874999940395355
+      ]
+    },
+    {
+      "coordinate_error_m": 0.30517444014549255,
+      "map_support": {
+        "distance_m": 0.046781411223754066,
+        "nearest_voxel_confidence": 0.7106726169586182,
+        "nearest_voxel_xyz_m": [
+          -0.824999988079071,
+          1.875,
+          0.07500000298023224
+        ]
+      },
+      "predicted_xyz_m": [
+        -0.8492250442504883,
+        1.868189811706543,
+        0.11443689465522766
+      ],
+      "question": "What color is the picture frame?",
+      "question_id": "q_000009",
+      "scene_id": "scene_000054",
+      "target_xyz_m": [
+        -0.550000011920929,
+        1.8200000524520874,
+        0.07874999940395355
+      ]
+    },
+    {
+      "coordinate_error_m": 0.4937085211277008,
+      "map_support": {
+        "distance_m": 0.2225033289668991,
+        "nearest_voxel_confidence": 0.8502122759819031,
+        "nearest_voxel_xyz_m": [
+          0.7250000238418579,
+          0.42500001192092896,
+          0.7250000238418579
+        ]
+      },
+      "predicted_xyz_m": [
+        0.743415355682373,
+        0.5860474109649658,
+        0.5725784301757812
+      ],
+      "question": "Is the book on the table or under the table?",
+      "question_id": "q_000008",
+      "scene_id": "scene_000054",
+      "target_xyz_m": [
+        1.1260309517383575,
+        0.7381654381752014,
+        0.8450000286102295
+      ]
+    }
+  ],
+  "reproduced_metrics": {
+    "count": 94,
+    "maximum_coordinate_error_m": 1.6053792238235474,
+    "mean_coordinate_error_m": 0.5270832777023315,
+    "median_coordinate_error_m": 0.4752248227596283,
+    "rmse_m": 0.6093636751174927,
+    "within_0_50m_accuracy": 0.5319148898124695,
+    "within_1m_accuracy": 0.9255319237709045
+  },
+  "schema_version": 1,
+  "scope": {
+    "deferred_final_loaded": false,
+    "environmental_text_inputs_to_primary_runtime": [],
+    "full_gemma_model_loaded": false,
+    "historical_internal_held_only": true,
+    "official_test_loaded": false,
+    "official_validation_loaded": false,
+    "oracle_or_qa_loaded_by_primary_runtime": false,
+    "oracle_target_coordinates_loaded_by_evaluator": true,
+    "post_seal_optimization_or_tuning": false,
+    "runtime_artifacts_written": [],
+    "runtime_path_executed": false,
+    "runtime_promotion_authorized": false,
+    "selective_frozen_input_embedding_rows_only": true
+  },
+  "sealed_metric_absolute_deltas": {
+    "count": 0.0,
+    "maximum_coordinate_error_m": 0.0,
+    "mean_coordinate_error_m": 0.0,
+    "median_coordinate_error_m": 0.0,
+    "rmse_m": 0.0,
+    "within_0_50m_accuracy": 0.0,
+    "within_1m_accuracy": 0.0
+  },
+  "sealed_metrics_reproduced_within_1e_7": true,
+  "sources": {
+    "candidate_metadata_sha256": "ee0f13d6ce6cfa7499671b74022fdf15a0f69b4389ee48dde20732142e48b92b",
+    "candidate_weights_sha256": "3c7914a61e63d80617e7fcfca122e02eec30d15af5a43e910daa0cd6c0b501c4",
+    "historical_training_qa_evaluation_only": {
+      "path": "data_gemma4/training/v62_pair_disjoint/train.jsonl",
+      "sha256": "84b99385fadc5d06e44465ada5902f56131192298ca1539373dc3b334608cbf1"
+    },
+    "numeric_rgb_maps": {
+      "scene_000017": {
+        "confidence_sha256": "dc11bd62124563a3c768965ce889d5a612a443a7bcfecdf72e9f882d57f6c2cd",
+        "metadata_json_loaded": false,
+        "path": "data_gemma4/maps/scene_000017/voxel_map.npz",
+        "rgb_sha256": "4f7006b80c0364d40175fb0f235dc65e23c0caa9528c6c008fa1a6dd4aebb896",
+        "semantic_features_loaded": false,
+        "voxel_count": 75188,
+        "xyz_sha256": "11eaa953002ab93ed7694515cc6da4bbae458deac70ca2c6539e15869107b45b"
+      },
+      "scene_000018": {
+        "confidence_sha256": "615f6e41f8c7b60bd19faaf9041008803420e436876fce7417b30c0452ab16cc",
+        "metadata_json_loaded": false,
+        "path": "data_gemma4/maps/scene_000018/voxel_map.npz",
+        "rgb_sha256": "7febadc905b0428df845fbf39fbab2ce312bdcdbaea0bc311b2f47e5bea1fb46",
+        "semantic_features_loaded": false,
+        "voxel_count": 74358,
+        "xyz_sha256": "2fa3bf774e03ca4e4e4b89b462b87a9c016172247c04e700c300bbbfcae7fffc"
+      },
+      "scene_000031": {
+        "confidence_sha256": "737984dd4856e43cefec8bdd1be71004a7f87505b616823eb8e91331908553ca",
+        "metadata_json_loaded": false,
+        "path": "data_gemma4/maps/scene_000031/voxel_map.npz",
+        "rgb_sha256": "1fb4dd762aaa8fbce9aadb170fadab731ef63051bde98385d935fefca760d174",
+        "semantic_features_loaded": false,
+        "voxel_count": 76407,
+        "xyz_sha256": "a286fa10c1337eede7acae7869f422245930cea14f328db47a7e98c133cd4fa8"
+      },
+      "scene_000032": {
+        "confidence_sha256": "39fa7215bd0d751eb7b8a44b6188c5ebe411bd0f9962dd8eac8fa4a69ee527a7",
+        "metadata_json_loaded": false,
+        "path": "data_gemma4/maps/scene_000032/voxel_map.npz",
+        "rgb_sha256": "5857ddee64e76a3033c60abe29ba28b393cc209c8dfac61f929a8293b836269e",
+        "semantic_features_loaded": false,
+        "voxel_count": 76387,
+        "xyz_sha256": "4101e4c569101725a5061a190abddae0e273278e2cec5d05cabacb0c27091f8a"
+      },
+      "scene_000053": {
+        "confidence_sha256": "417274ecffcdd52ce2a98e10a0606abd03175dad3b27381a41e83934784bf279",
+        "metadata_json_loaded": false,
+        "path": "data_gemma4/maps/scene_000053/voxel_map.npz",
+        "rgb_sha256": "9fd76d7c64362ba81dff38f83cc88b8792e3c7c3142b0540066f0fada5d67cb9",
+        "semantic_features_loaded": false,
+        "voxel_count": 74671,
+        "xyz_sha256": "bbfa6d5a2659743304c82d0c80112caf9bd623bda35ed5851f4b1da37361beee"
+      },
+      "scene_000054": {
+        "confidence_sha256": "521173644fda6b464c0ae84a15e32d4da5f98de55cbff06aa5f86e14fa794900",
+        "metadata_json_loaded": false,
+        "path": "data_gemma4/maps/scene_000054/voxel_map.npz",
+        "rgb_sha256": "0301c3c7b03fccd6e263e58af41fb7dc7c6017afa396a853cb8c34e0db68196d",
+        "semantic_features_loaded": false,
+        "voxel_count": 75019,
+        "xyz_sha256": "a8a33b1ffdc834ae17ce01200e0508f2334b10544640462afa08fc63848a6ed2"
+      }
+    },
+    "prefix_manifest_sha256": "8c278aac6d8dbd3e28c91282db67334d11af9db6320c30f7f5ed6a41be013940",
+    "sealed_report": {
+      "path": "reports/gemma4/metrics/v78_grounding_sidecar_internal_held.json",
+      "sha256": "557cc497dd12bd74f45cecd3624e18649ddc548af091ed719c22c7998942b84b"
+    }
+  },
+  "split": {
+    "algorithm": "lexicographic_pair_index_modulo",
+    "held_grounded_rows": 94,
+    "held_pairs": [
+      "pair_000008",
+      "pair_000015",
+      "pair_000026"
+    ],
+    "held_remainder": 3,
+    "held_scenes": [
+      "scene_000017",
+      "scene_000018",
+      "scene_000031",
+      "scene_000032",
+      "scene_000053",
+      "scene_000054"
+    ],
+    "modulo": 4,
+    "pair_disjoint": true,
+    "scene_disjoint": true,
+    "train_grounded_rows": 286,
+    "train_pairs": [
+      "pair_000005",
+      "pair_000006",
+      "pair_000007",
+      "pair_000009",
+      "pair_000010",
+      "pair_000011",
+      "pair_000016",
+      "pair_000017",
+      "pair_000018"
+    ],
+    "train_scenes": [
+      "scene_000011",
+      "scene_000012",
+      "scene_000013",
+      "scene_000014",
+      "scene_000015",
+      "scene_000016",
+      "scene_000019",
+      "scene_000020",
+      "scene_000021",
+      "scene_000022",
+      "scene_000023",
+      "scene_000024",
+      "scene_000033",
+      "scene_000034",
+      "scene_000035",
+      "scene_000036",
+      "scene_000037",
+      "scene_000038"
+    ]
+  },
+  "status": "internal_historical_evaluation_only",
+  "visualization": {
+    "oracle_markers_evaluation_only": true,
+    "path": "reports/gemma4/figures/v78_grounding_held_pointcloud_examples.png",
+    "sanitized_pointcloud_fields": [
+      "centers_world",
+      "mean_rgb",
+      "confidence"
+    ],
+    "selected_count": 6,
+    "selected_scene_question_ids": [
+      [
+        "scene_000017",
+        "q_000011"
+      ],
+      [
+        "scene_000018",
+        "q_000000"
+      ],
+      [
+        "scene_000031",
+        "q_000004"
+      ],
+      [
+        "scene_000032",
+        "q_000001"
+      ],
+      [
+        "scene_000053",
+        "q_000006"
+      ],
+      [
+        "scene_000054",
+        "q_000008"
+      ]
+    ],
+    "selection_rule": "lexicographically smallest question_id in each held scene; selected before inspecting predictions or coordinate errors",
+    "sha256": "8289bfa9d40097336c834a00555f43aef2e51dfe9b7cd04113f1e81876b0bfb2"
+  }
+}

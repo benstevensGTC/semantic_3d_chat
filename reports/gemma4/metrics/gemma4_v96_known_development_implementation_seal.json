@@ -1,0 +1,58 @@
+{
+  "artifact": "gemma4_v96_known_development_implementation_seal_v1",
+  "contract_source_count": 3,
+  "contract_source_inventory_sha256": "8966df7c3f862ade5d01ff0ed3bc5b0399514414cf803872d8b5253e5f33ec84",
+  "contract_sources": {
+    "config": {
+      "path": "configs/experiments/gemma4_v96_atomic_pair_repair.yaml",
+      "sha256": "435eaf63844175c26ecd541d60fb46bfefea6789a9602d884e8b176d2861645d"
+    },
+    "preflight": {
+      "path": "src/semantic_3d_chat/evaluation/v96_atomic_pair_repair_preflight.py",
+      "sha256": "551604bcb21208a2aab091d60efaa0a8475d769fd1ac51dd75c3706917807e01"
+    },
+    "trainer": {
+      "path": "src/semantic_3d_chat/training/train_v96_atomic_pair_repair.py",
+      "sha256": "de7fad4c1a4c7d74bbeef37e1d71374d8fb29bc7dfed8d3c0c046ab341a59b69"
+    }
+  },
+  "known_development_outputs_present_before_seal": [],
+  "labels_opened": false,
+  "model_loaded": false,
+  "questions_opened": false,
+  "runtime_promotion_authorized": false,
+  "schema_version": 96,
+  "source_count": 7,
+  "source_inventory_sha256": "5a184073a22ad993d812dd3369ff8d2c19bf9ecdfd762aca5477a1c503838c30",
+  "sources": {
+    "authenticate": {
+      "path": "src/semantic_3d_chat/evaluation/authenticate_v96_known_development.py",
+      "sha256": "52c907b550606a530906eb22300de55e754a34446ff458d126d04e452dd917e4"
+    },
+    "common": {
+      "path": "src/semantic_3d_chat/evaluation/v96_known_development_common.py",
+      "sha256": "702462ef32fd5c797030f738aa02ae583e9e5b3e1676f500b8af934c8669cd74"
+    },
+    "implementation_guard": {
+      "path": "src/semantic_3d_chat/evaluation/v96_known_development_implementation.py",
+      "sha256": "fc71d5d77e8e644107f1d8ea0cbb4721fc25b036bdb5f2b300a24d380bfacd5d"
+    },
+    "nll": {
+      "path": "src/semantic_3d_chat/evaluation/nll_v96_known_development.py",
+      "sha256": "65553ead4d1ad79d4bbd44991205563fa1470db210f25c99fdd0298c6534e5cc"
+    },
+    "predict": {
+      "path": "src/semantic_3d_chat/evaluation/predict_v96_known_development.py",
+      "sha256": "b6e1ec1612eff3c66647ec0a79426d8b22a901fde4bc84e7f51a3b541b8e6e80"
+    },
+    "score": {
+      "path": "src/semantic_3d_chat/evaluation/score_v96_known_development.py",
+      "sha256": "dbf5a7cdec59493bc34de11264f32319737c89644aa5755d28d8fd37c9beed3a"
+    },
+    "seal": {
+      "path": "src/semantic_3d_chat/evaluation/seal_v96_known_development.py",
+      "sha256": "3e6ec893e33ee3ab0d51d559c37b486f7f3abb971c7d6fea9ab9826fd63abefa"
+    }
+  },
+  "status": "sealed_before_known_development_evaluation"
+}

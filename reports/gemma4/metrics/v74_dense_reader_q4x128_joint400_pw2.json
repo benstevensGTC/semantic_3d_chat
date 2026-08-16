@@ -1,0 +1,58 @@
+{
+  "all_256_latents_receive_positive_attention_floor": true,
+  "artifact": "v74_dense_all_latent_train_pool_diagnostic_v1",
+  "checkpoint_published": false,
+  "device": "mps",
+  "elapsed_seconds": 7.266043500043452,
+  "epochs": 400,
+  "held": {
+    "changed_supported_accuracy": 0.62,
+    "complete_class_units": 5,
+    "family_mean_margins": {
+      "book_support": 0.0029351115226745605,
+      "chair_orientation": 0.13547658920288086,
+      "color_swap": -0.14164108037948608,
+      "mirror_lr": 2.7086280584335327,
+      "object_count": 0.09497785568237305,
+      "object_relocation": 0.005042731761932373,
+      "object_removal": -0.03979190190633138,
+      "picture_support": 4.902094006538391
+    },
+    "mean_correct_over_wrong_scene_margin": 2.401545124053955,
+    "mean_own_over_opposite_margin": 1.2007725620269776,
+    "positive_own_over_opposite_sides": 30,
+    "prediction_change_units": 5,
+    "supported_accuracy": 0.7963446475195822
+  },
+  "immutable_prefix_manifest_sha256": "3e128b40c1b73bb32750285679cda6b1bea364e67465e986a94a81dfc95e81e8",
+  "minimum_attention_weight": 0.0001953125,
+  "official_test_loaded": false,
+  "official_validation_loaded": false,
+  "oracle_loaded": false,
+  "pair_softplus_weight": 2.0,
+  "question_dependent_retrieval": false,
+  "question_only_output_path": false,
+  "seed": 730074,
+  "train": {
+    "changed_supported_accuracy": 0.8125,
+    "complete_class_units": 25,
+    "family_mean_margins": {
+      "book_support": 0.0031049251556396484,
+      "chair_orientation": 7.088700294494629,
+      "color_swap": 7.1491071581840515,
+      "cube_support": 0.014545440673828125,
+      "mirror_lr": 6.038459450006485,
+      "object_count": 8.542344093322754,
+      "object_relocation": 0.012196123600006104,
+      "object_removal": 7.7201658089955645,
+      "picture_support": 7.111872553825378
+    },
+    "mean_correct_over_wrong_scene_margin": 8.63539433479309,
+    "mean_own_over_opposite_margin": 4.317697167396545,
+    "positive_own_over_opposite_sides": 65,
+    "prediction_change_units": 25,
+    "supported_accuracy": 0.9565972222222222
+  },
+  "trainable_parameters": 1193984,
+  "zero_scene_maximum_absolute_logit": 0.0
+}

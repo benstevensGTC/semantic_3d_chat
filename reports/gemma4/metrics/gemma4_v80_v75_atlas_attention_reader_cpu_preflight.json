@@ -1,0 +1,201 @@
+{
+  "artifact": "gemma4_v80_v75_atlas_attention_reader_cpu_preflight_v1",
+  "checkpoint_published": false,
+  "checks": {
+    "all_738_prefix_tokens_visible": true,
+    "full_gemma_not_loaded": true,
+    "historical_split_exact": true,
+    "input_hashes_authenticated": true,
+    "no_selection_or_top_k": true,
+    "optimizer_updates_on_real_model": true,
+    "runtime_publication_forbidden": true,
+    "shape_faithful_cpu_update_light": true,
+    "single_locked_arm": true
+  },
+  "config_sha256": "8e086d3d46b9723338cc249dcfcaeb663f19e4b4cb220a2255ec36644dbd7e6f",
+  "cpu_update_light": {
+    "all_a_gradients_positive_on_second_update": true,
+    "artifact": "gemma4_v80_v75_atlas_attention_reader_cpu_update_light_v1",
+    "device": "cpu",
+    "full_gemma_loaded": false,
+    "optimizer_updates": 2,
+    "parameter_count": 122880,
+    "passed": true,
+    "postupdate_output_max_abs_delta": 0.00014171749353408813,
+    "trace": [
+      {
+        "preupdate_gradient_l2": {
+          "model.language_model.layers.14.self_attn.k_proj": {
+            "residual_a": 0.0,
+            "residual_b": 0.5196800827980042
+          },
+          "model.language_model.layers.14.self_attn.v_proj": {
+            "residual_a": 0.0,
+            "residual_b": 0.5654554963111877
+          },
+          "model.language_model.layers.34.self_attn.o_proj": {
+            "residual_a": 0.0,
+            "residual_b": 0.1250511258840561
+          },
+          "model.language_model.layers.34.self_attn.q_proj": {
+            "residual_a": 0.0,
+            "residual_b": 0.23215143382549286
+          }
+        },
+        "update": 1
+      },
+      {
+        "preupdate_gradient_l2": {
+          "model.language_model.layers.14.self_attn.k_proj": {
+            "residual_a": 0.00025895427097566426,
+            "residual_b": 0.5196614861488342
+          },
+          "model.language_model.layers.14.self_attn.v_proj": {
+            "residual_a": 0.0002379436045885086,
+            "residual_b": 0.5654538869857788
+          },
+          "model.language_model.layers.34.self_attn.o_proj": {
+            "residual_a": 0.0005131447105668485,
+            "residual_b": 0.12505213916301727
+          },
+          "model.language_model.layers.34.self_attn.q_proj": {
+            "residual_a": 0.0003890350053552538,
+            "residual_b": 0.2321518510580063
+          }
+        },
+        "update": 2
+      }
+    ],
+    "zero_output_max_abs_delta": 0.0,
+    "zero_step_checks": {
+      "all_a_gradients_exact_zero": true,
+      "all_b_gradients_finite_positive": true,
+      "exact_zero_output": true
+    },
+    "zero_step_gradient_norms": {
+      "model.language_model.layers.14.self_attn.k_proj": {
+        "residual_a": 0.0,
+        "residual_b": 0.5196800827980042
+      },
+      "model.language_model.layers.14.self_attn.v_proj": {
+        "residual_a": 0.0,
+        "residual_b": 0.5654554963111877
+      },
+      "model.language_model.layers.34.self_attn.o_proj": {
+        "residual_a": 0.0,
+        "residual_b": 0.1250511258840561
+      },
+      "model.language_model.layers.34.self_attn.q_proj": {
+        "residual_a": 0.0,
+        "residual_b": 0.23215143382549286
+      }
+    }
+  },
+  "deferred_final_loaded": false,
+  "historical_inventory": {
+    "all_rows": 960,
+    "broad_held_rows": 16,
+    "broad_held_sha256": "70580e40feba49c1896bddea3c3676433be6d492178d08793554916e49a8890a",
+    "broad_train_rows": 16,
+    "broad_train_sha256": "d4adb3a3f781e45a5465172439146f1ab07a1de3eb28337d08cea453866b8f93",
+    "held_pairs": 8,
+    "held_rows": 384,
+    "held_scenes": 16,
+    "held_smoke_sha256": "cd898bbf859fe1a5d5f798229813a2eec3fcc9f2d2de2eea1ed1ae81fc476056",
+    "held_smoke_sides": 16,
+    "held_smoke_units": 8,
+    "pair_disjoint": true,
+    "scene_disjoint": true,
+    "schedule_sha256": "be4375143a23cda3bd9ad765c253b6532ed920f0ce51f6434215c23eb383056a",
+    "train_changed_units": 40,
+    "train_pairs": 12,
+    "train_rows": 576,
+    "train_scenes": 24
+  },
+  "inputs": {
+    "base_prefix_manifest_sha256": "5a288a7fef65a957ba7b20132c63380cfadc7edbc37b32c1885037f939b9db61",
+    "base_prefix_scene_count": 40,
+    "file_sha256": {
+      "configs/experiments/gemma4_v73_fullscene_controller.yaml": "d208f28380e3f1810a688be8ea8a263831b6a741f7f90e667795637f39d841f1",
+      "configs/runtime/gemma4_v54.yaml": "891c58faaaa5fcd2ed76c7e3871f14c5d8c5ae2e05d9fa4ddd5193773d40e56b",
+      "data_diverse52/qa/train.jsonl": "01721bf904b1ab0b65ce8acac6e366287040873cda1356da6c70c4981abe7619",
+      "data_gemma4/runtime/checkpoints/gemma4_v54_release_v1/adapter.safetensors": "6c627f0a0d9efb7100489c24cbd4acafe10456b79280a64a85399a21cb541daf",
+      "data_gemma4/runtime/checkpoints/gemma4_v75_nll_control_release_v1/control.safetensors": "bb112f42ca5df71b88b4cd7721b9107f9be9b0dc01b612a4ace6212548da669c",
+      "reports/gemma4/artifacts/v75_fixed_atlas_historical_internal_v1/probe_bank/probes.safetensors": "fb32c687dd787f108fab03e9745eefb2273891c2be990d0acf50ca111eb637e8"
+    },
+    "prior_evidence_authenticated": [
+      "v6",
+      "v6_1",
+      "v6_2",
+      "v6_3",
+      "v6_4",
+      "v75_atlas"
+    ]
+  },
+  "model_metadata": {
+    "first_kv_shared_layer": 15,
+    "full_model_loaded": false,
+    "ignored_physical_layer34_kv_shapes": {
+      "model.language_model.layers.34.self_attn.k_proj": [
+        512,
+        1536
+      ],
+      "model.language_model.layers.34.self_attn.v_proj": [
+        512,
+        1536
+      ]
+    },
+    "layer_14_stores_full_length_full_attention_kv": true,
+    "layer_34_reuses_full_attention_kv_from_layer_14": true,
+    "model_blob_sha256_identity": "2db5482b20d746879bb3ef79b5203e9075a2e2b98f54ec7c2f281c1477ddc550",
+    "model_id": "google/gemma-4-E2B-it",
+    "revision": "3e22461f65e89153144f8adb70e3b8c2cc9845a7",
+    "target_shapes_out_in": {
+      "model.language_model.layers.14.self_attn.k_proj": [
+        512,
+        1536
+      ],
+      "model.language_model.layers.14.self_attn.v_proj": [
+        512,
+        1536
+      ],
+      "model.language_model.layers.34.self_attn.o_proj": [
+        1536,
+        4096
+      ],
+      "model.language_model.layers.34.self_attn.q_proj": [
+        4096,
+        1536
+      ]
+    }
+  },
+  "official_test_loaded": false,
+  "official_validation_loaded": false,
+  "oracle_loaded": false,
+  "passed": true,
+  "real_model": {
+    "gradient_smoke_run": false,
+    "loaded": false,
+    "optimizer_constructed": false,
+    "optimizer_updates": 0
+  },
+  "runtime_promotion_authorized": false,
+  "schema_version": 1,
+  "status": "cpu_preflight_pass_model_bearing_gradient_smoke_still_required",
+  "visibility": {
+    "all_prefix_tokens_visible": true,
+    "attention_type": "full_attention",
+    "first_prefix_position": 1,
+    "first_question_position": 739,
+    "last_answer_position": 834,
+    "last_prefix_position": 738,
+    "prefix_tokens": 738,
+    "selection_or_top_k": false,
+    "sequence_tokens": 835,
+    "target_layers": [
+      14,
+      34
+    ],
+    "visible_prefix_token_count_per_text_query": 738
+  }
+}

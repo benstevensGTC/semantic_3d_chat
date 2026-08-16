@@ -1,0 +1,226 @@
+{
+  "after_exact_zero_audit": {
+    "all_environment_latents_attended": true,
+    "architecture_version": "v75",
+    "exact_zero_scene_verified": true,
+    "question_dependent_retrieval": false,
+    "question_only_output_path_exists": false,
+    "zero_scene_nonzero_controls": 0
+  },
+  "artifact": "v77_all_historical_answer_repair_screen_v1",
+  "base_freeze_audit": {
+    "all_parameters_frozen": true,
+    "parameter_count": 5118259098
+  },
+  "canonical_negative_sampling": {
+    "answer_type_count": 7,
+    "answer_values_serialized": false,
+    "correct_answer_excluded": true,
+    "deterministic_hash_sampling": true,
+    "same_answer_type_only": true
+  },
+  "diagnostic_candidate": {
+    "exact_zero_audit": {
+      "all_environment_latents_attended": true,
+      "architecture_version": "v75",
+      "exact_zero_scene_verified": true,
+      "question_dependent_retrieval": false,
+      "question_only_output_path_exists": false,
+      "zero_scene_nonzero_controls": 0
+    },
+    "metadata": {
+      "all_256_environment_latents_attended": "true",
+      "answer_codebook_serialized": "false",
+      "artifact": "v77_all_historical_answer_repair_diagnostic_v1",
+      "controller_architecture": "v75",
+      "cycles": "1",
+      "deferred_final_loaded": "false",
+      "environmental_text_inputs_at_inference": "0",
+      "exact_zero_scene_verified": "true",
+      "exhaustive_576_row_selection": "false",
+      "held_optimization_rows": "0",
+      "historical_train_pairs_only": "true",
+      "negative_answer_codebook_serialized": "false",
+      "official_test_loaded": "false",
+      "official_validation_loaded": "false",
+      "optimizer_steps": "9",
+      "oracle_loaded": "false",
+      "question_dependent_retrieval": "false",
+      "question_only_output_path_exists": "false",
+      "questions_or_answers_serialized": "false",
+      "runtime_promotion_forbidden_until_gemma_gate": "true",
+      "runtime_publication_artifact": "false",
+      "selected_historical_rows": "72",
+      "source_candidate_sha256": "d01275538489b3493a8e1ff080109d1db46832be6ca2a26f6d89d161c597188a",
+      "training_pool_only": "true"
+    },
+    "path": "reports/gemma4/artifacts/v77_v75_r72_historical_repair_diagnostic.safetensors",
+    "sha256": "64cecd2e900ffd1763ce04b3ed51b20da8daa147830f402c5d5a561d50437256",
+    "size_bytes": 8357320
+  },
+  "elapsed_training_seconds": 299.79922316689044,
+  "exclusive_trainable_audit": {
+    "architecture_version": "v75",
+    "base_parameter_count": 5104807456,
+    "base_trainable_parameter_count": 0,
+    "controller_parameter_count": 1916928,
+    "controller_trainable_parameter_count": 1916928,
+    "only_dense_reader_trainable": true
+  },
+  "final_source_weight_anchor_l2": 5.634848490587707e-11,
+  "fit_history": [
+    {
+      "changed_pair_auxiliary_sides": 1,
+      "cycle": 1,
+      "mean_chunk_loss": 3.8704475388731225,
+      "optimizer_step": 1,
+      "preclip_gradient_norm": 4047.094970703125,
+      "row_updates_completed": 8,
+      "row_updates_total": 72,
+      "source_weight_anchor_l2": 0.0
+    },
+    {
+      "changed_pair_auxiliary_sides": 0,
+      "cycle": 1,
+      "mean_chunk_loss": 0.851807622486831,
+      "optimizer_step": 8,
+      "preclip_gradient_norm": 68.32194519042969,
+      "row_updates_completed": 64,
+      "row_updates_total": 72,
+      "source_weight_anchor_l2": 4.1600212857817453e-11
+    },
+    {
+      "changed_pair_auxiliary_sides": 2,
+      "cycle": 1,
+      "mean_chunk_loss": 3.199539249060763,
+      "optimizer_step": 9,
+      "preclip_gradient_norm": 523.8690795898438,
+      "row_updates_completed": 72,
+      "row_updates_total": 72,
+      "source_weight_anchor_l2": 4.8826526155565375e-11
+    }
+  ],
+  "loss_settings": {
+    "answer_nll_weight": 1.0,
+    "changed_pair_margin": 0.5,
+    "changed_pair_margin_weight": 0.25,
+    "negative_margin": 0.5,
+    "negative_margin_weight": 0.25,
+    "source_output_anchor_weight": 0.05,
+    "source_weight_anchor_weight": 0.01
+  },
+  "measurement": {
+    "after": {
+      "changed_pair_margin_satisfied_sides": 7,
+      "changed_pair_side_count": 7,
+      "mean_changed_pair_answer_margin": 6.100695203776662,
+      "mean_correct_answer_nll": 1.604625632111644,
+      "mean_negative_answer_margin": 7.248878702775225,
+      "mean_negative_answer_nll": 8.85350433488687,
+      "mean_source_output_mse": 4.342232200767644e-06,
+      "negative_margin_satisfied_rows": 23,
+      "row_count": 24
+    },
+    "balanced_row_count": 24,
+    "before": {
+      "changed_pair_margin_satisfied_sides": 7,
+      "changed_pair_side_count": 7,
+      "mean_changed_pair_answer_margin": 4.535312252679432,
+      "mean_correct_answer_nll": 2.5182164262887454,
+      "mean_negative_answer_margin": 6.7364180881622815,
+      "mean_negative_answer_nll": 9.254634514451027,
+      "mean_source_output_mse": 0.0,
+      "negative_margin_satisfied_rows": 24,
+      "row_count": 24
+    },
+    "mean_correct_answer_nll_delta": -0.9135907941771013,
+    "mean_negative_answer_margin_delta": 0.5124606146129436
+  },
+  "optimizer": {
+    "gradient_clip_norm": 1.0,
+    "learning_rate": 2e-06,
+    "name": "AdamW",
+    "weight_decay": 0.0001
+  },
+  "prefix_manifest_base_checkpoint_sha256": "3e128b40c1b73bb32750285679cda6b1bea364e67465e986a94a81dfc95e81e8",
+  "schedule": {
+    "answer_class_round_robin": true,
+    "cycles": 1,
+    "deterministic_seed": 770177,
+    "each_selected_row_once_per_cycle": true,
+    "gradient_accumulation_rows": 8,
+    "optimizer_steps": 9,
+    "row_updates": 72,
+    "template_round_robin_within_answer_class": true
+  },
+  "scope": {
+    "available_historical_optimization_rows": 576,
+    "checkpoint_published": false,
+    "deferred_final_loaded": false,
+    "historical_internal_held_optimization_rows": 0,
+    "historical_training_pool_only": true,
+    "official_test_loaded": false,
+    "official_validation_loaded": false,
+    "oracle_loaded": false,
+    "runtime_promotion_authorized": false,
+    "selected_historical_optimization_rows": 72
+  },
+  "selection": {
+    "answer_class_values_serialized": false,
+    "answer_type_counts": {
+      "attribute": 21,
+      "count": 5,
+      "metric": 3,
+      "orientation": 4,
+      "presence": 6,
+      "spatial_relation": 17,
+      "support": 16
+    },
+    "distinct_answer_classes": 28,
+    "distinct_question_templates": 47,
+    "maximum_rows_per_observed_answer_class": 3,
+    "maximum_rows_per_observed_template": 6,
+    "minimum_rows_per_observed_answer_class": 1,
+    "minimum_rows_per_observed_template": 1,
+    "negative_sampling_salt": "semantic_3d_chat.v77.canonical_negative.v1",
+    "question_template_text_serialized": false,
+    "schedule_salt": "semantic_3d_chat.v77.answer_template_balanced.v1",
+    "selected_rows": 72
+  },
+  "source_candidate": {
+    "metadata": {
+      "answer_codebook_serialized": "false",
+      "artifact": "v75_historical_train_gemma_nll_diagnostic_v1",
+      "controller_architecture": "v75",
+      "environmental_text_inputs": "0",
+      "exact_zero_scene_verified": "true",
+      "held_optimization_rows": "0",
+      "historical_train_pairs_only": "true",
+      "numeric_gate_passed": "unverified_after_gemma_nll",
+      "official_test_loaded": "false",
+      "official_validation_loaded": "false",
+      "optimizer_steps": "54",
+      "oracle_loaded": "false",
+      "question_only_output_path_exists": "false",
+      "runtime_promotion_forbidden_until_gemma_gate": "true",
+      "runtime_publication_artifact": "false",
+      "source_candidate_sha256": "182481dd77645cd2a467b3585dd7b060fcea578cc013eebc21486e1915ce9c17",
+      "train_behavior_improved": "true",
+      "training_pool_only": "true"
+    },
+    "path": "reports/gemma4/artifacts/v75_gemma_nll_balanced_train_diagnostic.safetensors",
+    "sha256": "d01275538489b3493a8e1ff080109d1db46832be6ca2a26f6d89d161c597188a"
+  },
+  "source_exact_zero_audit": {
+    "all_environment_latents_attended": true,
+    "architecture_version": "v75",
+    "exact_zero_scene_verified": true,
+    "question_dependent_retrieval": false,
+    "question_only_output_path_exists": false,
+    "zero_scene_nonzero_controls": 0
+  },
+  "training_online": {
+    "mean_preupdate_correct_answer_nll": 1.9197500689658935,
+    "mean_preupdate_negative_answer_margin": 7.025398201412624
+  }
+}

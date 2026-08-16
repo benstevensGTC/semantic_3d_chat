@@ -1,0 +1,31 @@
+{
+  "artifact": "gemma4_v54_fixed_prefix_ple_reader_v2_abort",
+  "checkpoint_absent": true,
+  "checkpoint_published": false,
+  "error": {
+    "function": "evaluate_teacher_forcing",
+    "message": "keys must be str, int, float, bool or None, not tuple",
+    "operation": "diagnostic correct_nll_sha256 serialization",
+    "source": "src/semantic_3d_chat/training/train_fixed_prefix_ple_v54.py:654",
+    "type": "TypeError"
+  },
+  "failure_scope": {
+    "adapter_update_count": 0,
+    "baseline_forward_pass_completed": true,
+    "optimizer_constructed": false,
+    "runtime_checkpoint_written": false,
+    "terminal_result_written": false,
+    "training_started": false
+  },
+  "preserved_sources": {
+    "scripts/run_gemma4_v54_fixed_prefix_ple_reader_v2.sh": "ecce536d3a886e2d681066e0c895df0d2922ba843354ef07f684e3fdd5b9e1bc",
+    "src/semantic_3d_chat/evaluation/fixed_prefix_ple_v54_v2_preregistration.py": "9d026b5d41848809ab223d064a1b212ca99744453040d584e42674da3b7aa339",
+    "src/semantic_3d_chat/training/train_fixed_prefix_ple_v54_v2.py": "95728dc82b0577dae2c6262b53f3267312a487c61bc544688b27e6852cef042f",
+    "tests/test_fixed_prefix_ple_v54_v2.py": "fc3cdd24d1e50c0ecc228a52b0abc8e2558c758abed77a2fd87f73890f1c1203"
+  },
+  "preregistration_sha256": "b82163a0e3fe030f84403e10822944a52a8c3c99ef215d7a67a90dcb88d6d8fd",
+  "schema_version": 1,
+  "smoke_sha256": "f7daaf2df2f052d0dad45fdf5cacff3c21652c99b953adc12f0361072ba189f0",
+  "status": "aborted_before_optimizer_construction_no_checkpoint",
+  "timestamp_utc": "2026-08-12T21:08:04Z"
+}

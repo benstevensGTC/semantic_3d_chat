@@ -1,0 +1,51 @@
+_base_: gemma4_v54.yaml
+
+seed: 20260808
+
+# Inference-only additions required for deterministic embodied observations.
+# The model and scene-token architecture remain inherited from the standalone
+# runtime checkpoint contract above.
+vision:
+  input_size: 224
+  middle_layer: 8
+  late_layer: 16
+  feature_mode: middle_late_projected
+  aligned_method: pooled_native_projector_broadcast
+  dtype: bfloat16
+  storage_dtype: float16
+  batch_size: 1
+
+render:
+  resolution: [224, 224]
+  horizontal_fov_degrees: 72.0
+  engine: BLENDER_EEVEE_NEXT
+  samples: 1
+
+mapping:
+  voxel_size_m: 0.05
+  depth_min_m: 0.1
+  depth_max_m: 10.0
+  pixel_stride: 2
+  max_voxels: 120000
+  confidence_distance_scale_m: 6.0
+
+robot:
+  radius_m: 0.25
+  camera_height_m: 1.2
+  initial_position_xy_m: [0.0, 0.0]
+  max_move_m: 0.5
+  max_move_to_m: 1.0
+  max_turn_degrees: 45.0
+  max_look_delta_degrees: 45.0
+  max_camera_yaw_offset_degrees: 90.0
+  max_pitch_degrees: 45.0
+  collision_z_min_m: 0.12
+  collision_z_max_m: 1.8
+  surface_padding_m: 0.035
+  scan_resolution: [224, 224]
+  scan_horizontal_fov_degrees: 72.0
+  scan_depth_min_m: 0.1
+  scan_depth_max_m: 10.0
+  history_length: 64
+  state_token_count: 4
+  state_encoder_hidden_dim: 256

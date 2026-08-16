@@ -10,7 +10,7 @@ import shlex
 import shutil
 import subprocess
 import sys
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
 from pathlib import Path
 from typing import Any
 
@@ -18,7 +18,12 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
 from semantic_3d_chat.config import load_config
-from semantic_3d_chat.data.scene_variants import ScenePlan, batch_scene_plans
+from semantic_3d_chat.data.scene_variants import (
+    ScenePlan,
+    batch_scene_plans,
+    batch_scene_splits,
+    validate_visibility_evidence,
+)
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -26,7 +31,21 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--config", default="configs/experiments/multiscene.yaml")
     parser.add_argument("--stage", choices=("generate", "render", "all"), default="all")
     parser.add_argument("--blender", help="Blender executable; defaults to PATH lookup")
-    parser.add_argument("--scene", action="append", help="Limit work to an opaque scene ID")
+    selection = parser.add_mutually_exclusive_group()
+    selection.add_argument(
+        "--scene", action="append", help="Limit work to an opaque scene ID"
+    )
+    selection.add_argument(
+        "--split",
+        action="append",
+        choices=("train", "validation", "test"),
+        help="Limit work to one or more explicit pair-atomic dataset splits",
+    )
+    parser.add_argument(
+        "--include-deferred-test",
+        action="store_true",
+        help="Explicitly unlock splits declared in batch.deferred_splits",
+    )
     parser.add_argument("--limit", type=int, help="Limit the selected plan for a small smoke run")
     parser.add_argument("--force", action="store_true", help="Regenerate existing artifacts")
     parser.add_argument("--dry-run", action="store_true", help="Print commands without writing")
@@ -85,6 +104,18 @@ def _generate_command(
         plan.color_variant,
         "--layout-variant",
         plan.layout_variant,
+        "--plan-version",
+        str(plan.plan_version),
+        "--chair-count",
+        str(plan.chair_count),
+        "--chair-orientation",
+        plan.chair_orientation,
+        "--picture-placement",
+        plan.picture_placement,
+        "--bowl-placement",
+        plan.bowl_placement,
+        "--book-placement",
+        plan.book_placement,
     ]
     for instance_id in plan.remove_instance_ids:
         command.extend(("--remove-instance", instance_id))
@@ -144,14 +175,123 @@ def _oracle_matches_plan(path: Path, plan: ScenePlan) -> bool:
     return generation == expected and oracle.get("validation", {}).get("inside_room") is True
 
 
+def _visibility_evidence_matches(path: Path, scene_id: str) -> bool:
+    try:
+        evidence = json.loads(path.read_text(encoding="utf-8"))
+        validate_visibility_evidence(evidence)
+    except (OSError, json.JSONDecodeError, TypeError, ValueError):
+        return False
+    return evidence.get("scene_id") == scene_id
+
+
+def _require_generation_artifacts(
+    blend_path: Path, oracle_path: Path, plan: ScenePlan
+) -> None:
+    """Fail closed when Blender masks an exception behind exit status zero."""
+
+    if not (blend_path.is_file() and _oracle_matches_plan(oracle_path, plan)):
+        raise RuntimeError(
+            "Blender generation did not produce a validated scene: " f"{plan.scene_id}"
+        )
+
+
+def _require_render_artifacts(
+    manifest_path: Path,
+    visibility_path: Path,
+    plan: ScenePlan,
+    *,
+    visibility_required: bool,
+) -> None:
+    """Require the sanitized manifest and, when configured, exact ray evidence."""
+
+    if not (
+        manifest_path.is_file()
+        and (
+            not visibility_required
+            or _visibility_evidence_matches(visibility_path, plan.scene_id)
+        )
+    ):
+        raise RuntimeError(
+            "Blender rendering did not produce validated RGB-D artifacts: "
+            f"{plan.scene_id}"
+        )
+
+
+def _select_plans(
+    config: dict[str, Any],
+    all_plans: Sequence[ScenePlan],
+    *,
+    requested_scenes: Sequence[str] | None,
+    requested_splits: Sequence[str] | None,
+    include_deferred: bool,
+) -> list[ScenePlan]:
+    """Select plans while requiring an explicit unlock for held-out splits."""
+
+    splits = batch_scene_splits(config, tuple(all_plans))
+    raw_deferred = config["batch"].get("deferred_splits", [])
+    if isinstance(raw_deferred, str) or not isinstance(raw_deferred, (list, tuple)):
+        raise TypeError("batch.deferred_splits must be a list")
+    deferred = {str(value) for value in raw_deferred}
+    if deferred - {"train", "validation", "test"}:
+        raise ValueError(f"Unknown deferred split names: {sorted(deferred)}")
+    if deferred and splits is None:
+        raise ValueError("batch.deferred_splits requires explicit batch.splits")
+
+    known = {plan.scene_id for plan in all_plans}
+    if requested_scenes:
+        requested = set(requested_scenes)
+        unknown = requested - known
+        if unknown:
+            raise ValueError(f"Requested scenes are not in the batch plan: {sorted(unknown)}")
+        if not include_deferred and splits is not None:
+            locked = {
+                scene_id
+                for split_name in deferred
+                for scene_id in splits[split_name]
+            }
+            forbidden = requested & locked
+            if forbidden:
+                raise ValueError(
+                    "Deferred test scenes require --include-deferred-test: "
+                    f"{sorted(forbidden)}"
+                )
+        return [plan for plan in all_plans if plan.scene_id in requested]
+
+    if requested_splits:
+        if splits is None:
+            raise ValueError("--split requires explicit batch.splits in the configuration")
+        selected_split_names = set(requested_splits)
+        locked = selected_split_names & deferred
+        if locked and not include_deferred:
+            raise ValueError(
+                "Deferred splits require --include-deferred-test: "
+                f"{sorted(locked)}"
+            )
+        selected_ids = {
+            scene_id
+            for split_name in selected_split_names
+            for scene_id in splits[split_name]
+        }
+        return [plan for plan in all_plans if plan.scene_id in selected_ids]
+
+    if include_deferred or not deferred or splits is None:
+        return list(all_plans)
+    locked_ids = {
+        scene_id for split_name in deferred for scene_id in splits[split_name]
+    }
+    return [plan for plan in all_plans if plan.scene_id not in locked_ids]
+
+
 def _write_batch_oracle_manifest(
     path: Path,
     plans: Sequence[ScenePlan],
     *,
     base_config: Path,
+    splits: Mapping[str, list[str]] | None = None,
+    deferred_splits: Sequence[str] = (),
 ) -> None:
     payload = {
-        "schema_version": 1,
+        "schema_version": 2 if splits is not None else 1,
         "base_config": str(base_config.relative_to(PROJECT_ROOT)),
         "scene_count": len(plans),
         "scenes": [
@@ -159,6 +299,9 @@ def _write_batch_oracle_manifest(
             for plan in plans
         ],
     }
+    if splits is not None:
+        payload["splits"] = dict(splits)
+        payload["deferred_splits"] = list(deferred_splits)
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_name(f".{path.name}.{os.getpid()}.tmp")
     try:
@@ -178,14 +321,14 @@ def main(argv: Sequence[str] | None = None) -> int:
     expected_count = int(config["batch"].get("expected_scene_count", len(all_plans)))
     if len(all_plans) != expected_count:
         raise ValueError(f"Expected {expected_count} batch scenes, found {len(all_plans)}")
-    plans = list(all_plans)
-    if args.scene:
-        requested = set(args.scene)
-        available = {plan.scene_id for plan in plans}
-        unknown = requested - available
-        if unknown:
-            raise ValueError(f"Requested scenes are not in the batch plan: {sorted(unknown)}")
-        plans = [plan for plan in plans if plan.scene_id in requested]
+    splits = batch_scene_splits(config, tuple(all_plans))
+    plans = _select_plans(
+        config,
+        all_plans,
+        requested_scenes=args.scene,
+        requested_splits=args.split,
+        include_deferred=args.include_deferred_test,
+    )
     if args.limit is not None:
         if args.limit < 1:
             raise ValueError("--limit must be positive")
@@ -200,6 +343,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     for plan in plans:
         oracle_path = data_root / "oracle" / plan.scene_id / "oracle.json"
         blend_path = data_root / "oracle" / plan.scene_id / "scene.blend"
+        visibility_path = data_root / "oracle" / plan.scene_id / "visibility.json"
         manifest_path = data_root / "rendered" / plan.scene_id / "manifest.json"
 
         generated_this_run = False
@@ -210,13 +354,25 @@ def main(argv: Sequence[str] | None = None) -> int:
                 skipped += 1
             else:
                 _run(_generate_command(blender, base_config, plan), dry_run=args.dry_run)
+                # Blender can exit with status zero even when a Python script
+                # raises.  Treat the validated artifacts, not its process exit
+                # code, as the generation success signal.
+                if not args.dry_run:
+                    _require_generation_artifacts(blend_path, oracle_path, plan)
                 generated += 1
                 generated_this_run = not args.dry_run
 
         if args.stage in {"render", "all"}:
             if not blend_path.is_file() and not args.dry_run and args.stage == "render":
                 raise FileNotFoundError(f"Scene must be generated before rendering: {blend_path}")
-            if manifest_path.is_file() and not args.force and not generated_this_run:
+            visibility_required = bool(
+                config["batch"].get("require_visibility_evidence", False)
+            )
+            render_complete = manifest_path.is_file() and (
+                not visibility_required
+                or _visibility_evidence_matches(visibility_path, plan.scene_id)
+            )
+            if render_complete and not args.force and not generated_this_run:
                 print(f"BATCH_SKIP stage=render scene={plan.scene_id} reason=cache", flush=True)
                 skipped += 1
             else:
@@ -224,13 +380,25 @@ def main(argv: Sequence[str] | None = None) -> int:
                     _render_command(blender, base_config, data_root, plan),
                     dry_run=args.dry_run,
                 )
+                if not args.dry_run:
+                    _require_render_artifacts(
+                        manifest_path,
+                        visibility_path,
+                        plan,
+                        visibility_required=visibility_required,
+                    )
                 rendered += 1
 
     if not args.dry_run:
+        manifest_name = str(config["batch"].get("manifest_name", "multiscene"))
+        if not manifest_name or Path(manifest_name).name != manifest_name:
+            raise ValueError("batch.manifest_name must be one plain path component")
         _write_batch_oracle_manifest(
-            data_root / "oracle" / "batches" / "multiscene.json",
+            data_root / "oracle" / "batches" / f"{manifest_name}.json",
             all_plans,
             base_config=base_config,
+            splits=splits,
+            deferred_splits=tuple(config["batch"].get("deferred_splits", [])),
         )
     print(
         "BATCH_COMPLETE "

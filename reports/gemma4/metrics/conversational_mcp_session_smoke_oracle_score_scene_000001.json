@@ -1,0 +1,88 @@
+{
+  "collision": {
+    "collision_count": 0,
+    "maximum_collisions": 0,
+    "receipt_count": 11
+  },
+  "distance": {
+    "face_target_distance_m": 1.343577596015541,
+    "face_xy_m": [
+      0.0,
+      0.0
+    ],
+    "final_target_distance_m": 0.5978606003207539,
+    "final_xy_m": [
+      -0.6860511973869192,
+      0.2922939508334555
+    ],
+    "initial_target_distance_m": 1.343577596015541,
+    "initial_xy_m": [
+      0.0,
+      0.0
+    ],
+    "maximum_final_target_standoff_m": 0.85,
+    "minimum_target_progress_m": 0.25,
+    "robot_displacement_m": 0.7457224678993225,
+    "target_progress_m": 0.745716995694787
+  },
+  "gates": {
+    "collision_count_within_bound": true,
+    "face_heading_within_bound": true,
+    "final_heading_within_bound": true,
+    "final_stop_latched": true,
+    "final_target_standoff_within_bound": true,
+    "runtime_and_inspection_authenticated_before_oracle_open": true,
+    "target_progress_above_minimum": true
+  },
+  "heading": {
+    "face_absolute_error_degrees": 0.14641915347542067,
+    "face_body_yaw_degrees": 66.92344078354057,
+    "face_desired_yaw_degrees": 67.06985993701599,
+    "face_signed_error_degrees": 0.14641915347542067,
+    "final_absolute_error_degrees": 0.32905055362542157,
+    "final_body_yaw_degrees": 66.92344078354057,
+    "final_desired_yaw_degrees": 67.25249133716599,
+    "final_signed_error_degrees": 0.32905055362542157,
+    "maximum_face_error_degrees": 20.0,
+    "maximum_final_error_degrees": 20.0
+  },
+  "oracle_only_scorer_attestation": {
+    "evaluation_only": true,
+    "inspection_result_modified": false,
+    "oracle_geometry_loaded_by_scorer_only": true,
+    "runtime_and_inspection_validated_before_oracle_open": true,
+    "runtime_process_read_oracle": false,
+    "runtime_result_modified": false,
+    "scene_oracle_path": "data/oracle/scene_000001/oracle.json",
+    "scene_oracle_sha256": "d3b7f56a810ac606964e8218b3150ad0f652edd4c0f139d1d7b8e3cf1882d78c",
+    "score_fed_back_to_runtime": false,
+    "scoring_spec_path": "configs/benchmarks/oracle/conversational_mcp_session_scene_000001.json",
+    "scoring_spec_sha256": "b458dfe96670ee8ce206ef816d164bbddd90ad9bd2885b228e2279bd7acb993f"
+  },
+  "oracle_target": {
+    "center_xyz_m": [
+      -1.2374088764190674,
+      0.5234692245721817,
+      0.6299999952316284
+    ],
+    "opaque_instance_id": "i_000101"
+  },
+  "passed": true,
+  "runtime_evidence": {
+    "client_access_audit_sha256": "dfce86e8d26c974c7775c18c4ba380f487fa5e0c07e36bfaa59274a0533019eb",
+    "client_forbidden_access_count": 0,
+    "gemma_native_function_calling_used": false,
+    "inspection_path": "reports/gemma4/metrics/conversational_mcp_session_smoke_inspection_scene_000001.json",
+    "inspection_runtime_sha256": "cfde712a853fb99ee2fd6528a3f32c0872ac7f32fa0017a6fe59d0146a5a9a02",
+    "inspection_sha256": "09dcd47721f58840a9041911b924f4fabe1f7ed95b0a558abc866fd36f067461",
+    "learned_v3_action_head_used": false,
+    "official_single_persistent_stdio_session": true,
+    "runtime_result_path": "reports/gemma4/metrics/conversational_mcp_session_smoke_scene_000001.json",
+    "runtime_result_sha256": "cfde712a853fb99ee2fd6528a3f32c0872ac7f32fa0017a6fe59d0146a5a9a02",
+    "server_access_audit_sha256": "e6725133a060fc7cc9a956f4ff414821f98e0f5226b73f92e88005a55d655575",
+    "server_forbidden_access_count": 0
+  },
+  "scene_id": "scene_000001",
+  "schema": "semantic_3d_chat.conversational_mcp_session_oracle_score.v1",
+  "status": "passed"
+}

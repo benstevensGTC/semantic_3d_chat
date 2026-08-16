@@ -8,18 +8,25 @@ CONFIG="configs/default.yaml"
 CONFIG_EXPLICIT=0
 SCENE="scene_000001"
 CHECKPOINT=""
+PRIMARY_POINTER=""
 MODE="interactive"
 
 usage() {
   cat <<'EOF'
 Usage: ./scripts/run_full_demo.sh [OPTIONS]
 
+With no stack-selection options, this delegates to the promoted strict Gemma
+V89 `make demo` entry point. Supplying --config keeps the preserved
+legacy/configurable launcher behavior.
+
 Options:
-  --config PATH          YAML configuration (default: legacy configs/default.yaml)
+  --config PATH          Explicit legacy/configurable YAML
   --scene ID             Opaque scene ID (default: scene_000001)
   --checkpoint PATH      Adapter checkpoint; required explicitly for Gemma
-  --check                Offline static preflight only; no model inference or device tensor
-  --non-interactive      Run the finite oracle-isolation/prefix-invariance inference check
+  --primary-pointer PATH Promotion-bound Gemma runtime pointer
+  --check                Model-free V89 + V3.3 + embodied MCP readiness gate
+  --non-interactive      Run the finite three-question strict V89 demonstration
+  --leakage              Authenticate the oracle-unavailable/prefix-invariance proof
   -h, --help             Show this help
 EOF
 }
@@ -36,14 +43,46 @@ while [[ $# -gt 0 ]]; do
     --config) require_value "$@"; CONFIG="$2"; CONFIG_EXPLICIT=1; shift 2 ;;
     --scene) require_value "$@"; SCENE="$2"; shift 2 ;;
     --checkpoint) require_value "$@"; CHECKPOINT="$2"; shift 2 ;;
+    --primary-pointer) require_value "$@"; PRIMARY_POINTER="$2"; shift 2 ;;
     --check) MODE="check"; shift ;;
-    --non-interactive) MODE="leakage"; shift ;;
+    --non-interactive) MODE="finite"; shift ;;
+    --leakage) MODE="leakage"; shift ;;
     -h|--help) usage; exit 0 ;;
     *) echo "Unknown argument: $1" >&2; exit 2 ;;
   esac
 done
 
-LANGUAGE_BACKEND="$(PYTHONPATH=src .venv/bin/python -c 'import sys; from semantic_3d_chat.config import load_config; print(load_config(sys.argv[1]).get("language", {}).get("backend", "auto"))' "$CONFIG")"
+# Keep the canonical script name aligned with the canonical Make target. The
+# explicit --config and --primary-pointer forms below remain available for the
+# preserved configurable launcher and never recurse back through `make demo`.
+if [[ "$CONFIG_EXPLICIT" -eq 0 && -z "$CHECKPOINT" && -z "$PRIMARY_POINTER" ]]; then
+  case "$MODE" in
+    interactive) exec make --no-print-directory demo SCENE="$SCENE" ;;
+    check) exec make --no-print-directory demo-check SCENE="$SCENE" ;;
+    finite) exec make --no-print-directory demo-smoke SCENE="$SCENE" ;;
+    leakage) exec make --no-print-directory demo-leakage SCENE="$SCENE" ;;
+  esac
+fi
+
+if [[ -n "$PRIMARY_POINTER" ]]; then
+  if [[ "$CONFIG_EXPLICIT" -eq 1 || -n "$CHECKPOINT" ]]; then
+    echo "--primary-pointer cannot be combined with --config or --checkpoint" >&2
+    exit 2
+  fi
+  PRIMARY_JSON="$(PYTHONPATH=src .venv/bin/python -m semantic_3d_chat.chat.promotion resolve-primary --primary-pointer "$PRIMARY_POINTER")"
+  CONFIG="$(PYTHONPATH=src .venv/bin/python -c 'import json,sys; print(json.load(sys.stdin)["runtime_config"])' <<<"$PRIMARY_JSON")"
+  CHECKPOINT="$(PYTHONPATH=src .venv/bin/python -c 'import json,sys; print(json.load(sys.stdin)["checkpoint"])' <<<"$PRIMARY_JSON")"
+  CONFIG_EXPLICIT=1
+fi
+
+if ! CONFIG_INFO="$(PYTHONPATH=src .venv/bin/python scripts/demo_check.py \
+  --config "$CONFIG" --scene "$SCENE" --describe-config)"; then
+  echo "Demo config classification failed before launch." >&2
+  exit 4
+fi
+CONFIG="$(PYTHONPATH=src .venv/bin/python -c 'import json,sys; print(json.load(sys.stdin)["config"])' <<<"$CONFIG_INFO")"
+LANGUAGE_BACKEND="$(PYTHONPATH=src .venv/bin/python -c 'import json,sys; print(json.load(sys.stdin)["language_backend"])' <<<"$CONFIG_INFO")"
+IS_RUNTIME_SAFE="$(PYTHONPATH=src .venv/bin/python -c 'import json,sys; print(str(json.load(sys.stdin)["runtime_safe"]).lower())' <<<"$CONFIG_INFO")"
 DEMO_PYTHON=".venv/bin/python"
 PROMOTION_ARG=""
 if [[ "$LANGUAGE_BACKEND" == "gemma4" ]]; then
@@ -60,9 +99,9 @@ if [[ ! -x "$DEMO_PYTHON" ]]; then
   exit 2
 fi
 
-RENDER_MANIFEST="$(PYTHONPATH=src "$DEMO_PYTHON" -c 'import sys; from semantic_3d_chat.config import load_config, project_path; print(project_path(load_config(sys.argv[1]), "rendered", sys.argv[2], "manifest.json"))' "$CONFIG" "$SCENE")"
-MAP_PATH="$(PYTHONPATH=src "$DEMO_PYTHON" -c 'import sys; from semantic_3d_chat.config import load_config, project_path; print(project_path(load_config(sys.argv[1]), "maps", sys.argv[2], "voxel_map.npz"))' "$CONFIG" "$SCENE")"
-REPORTS_ROOT="$(PYTHONPATH=src "$DEMO_PYTHON" -c 'import sys; from semantic_3d_chat.config import load_config, reports_root; print(reports_root(load_config(sys.argv[1])))' "$CONFIG")"
+RENDER_MANIFEST="$(PYTHONPATH=src .venv/bin/python -c 'import json,sys; print(json.load(sys.stdin)["render_manifest"])' <<<"$CONFIG_INFO")"
+MAP_PATH="$(PYTHONPATH=src .venv/bin/python -c 'import json,sys; print(json.load(sys.stdin)["map_path"])' <<<"$CONFIG_INFO")"
+REPORTS_ROOT="$(PYTHONPATH=src .venv/bin/python -c 'import json,sys; print(json.load(sys.stdin)["reports_root"])' <<<"$CONFIG_INFO")"
 RENDER_ROOT="$(dirname "$RENDER_MANIFEST")"
 
 if [[ "$MODE" == "check" ]]; then
@@ -90,9 +129,17 @@ if [[ "$MODE" == "check" ]]; then
 fi
 
 if [[ ! -f "$RENDER_MANIFEST" ]]; then
+  if [[ "$IS_RUNTIME_SAFE" == "true" ]]; then
+    echo "Promoted runtime requires a prepared sanitized render manifest: $RENDER_MANIFEST" >&2
+    exit 3
+  fi
   make CONFIG="$CONFIG" SCENE="$SCENE" render-smoke-scan
 fi
 if [[ ! -f "$MAP_PATH" ]]; then
+  if [[ "$IS_RUNTIME_SAFE" == "true" ]]; then
+    echo "Promoted runtime requires a prepared continuous voxel map: $MAP_PATH" >&2
+    exit 3
+  fi
   if [[ "$LANGUAGE_BACKEND" == "gemma4" ]]; then
     make GEMMA4_CONFIG="$CONFIG" SCENE="$SCENE" build-gemma4-map
   else
@@ -124,7 +171,7 @@ else
   echo "Legacy local visual chat UI: make CONFIG=$CONFIG SCENE=$SCENE web"
 fi
 echo "Robot MCP server: make CONFIG=$CONFIG SCENE=$SCENE mcp"
-if [[ "$MODE" == "leakage" ]]; then
+if [[ "$MODE" == "leakage" || "$MODE" == "finite" ]]; then
   PYTHONPATH=src "$DEMO_PYTHON" -m semantic_3d_chat.evaluation.leakage \
     --config "$CONFIG" \
     --scene "$SCENE" \

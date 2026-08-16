@@ -1,0 +1,301 @@
+{
+  "absolute_reader_gates": {
+    "dct40": {
+      "checks": {
+        "changed_supported_accuracy": false,
+        "complete_class_units": false,
+        "mean_own_over_opposite_margin": false,
+        "positive_own_over_opposite_sides": false,
+        "prediction_change_units": true,
+        "supported_accuracy": false,
+        "wrong_scene_control": true,
+        "zero_scene_control": true
+      },
+      "passed": false,
+      "thresholds": {
+        "changed_supported_accuracy": 0.65,
+        "complete_class_units": 8,
+        "correct_over_wrong_scene_margin": 0.02,
+        "mean_own_over_opposite_margin": 0.2,
+        "positive_own_over_opposite_sides": 34,
+        "prediction_change_units": 13,
+        "supported_accuracy": 0.8,
+        "zero_scene_maximum_absolute_control": 0.0
+      }
+    },
+    "full_scene": {
+      "checks": {
+        "changed_supported_accuracy": false,
+        "complete_class_units": false,
+        "mean_own_over_opposite_margin": false,
+        "positive_own_over_opposite_sides": false,
+        "prediction_change_units": false,
+        "supported_accuracy": false,
+        "wrong_scene_control": false,
+        "zero_scene_control": true
+      },
+      "passed": false,
+      "thresholds": {
+        "changed_supported_accuracy": 0.65,
+        "complete_class_units": 8,
+        "correct_over_wrong_scene_margin": 0.02,
+        "mean_own_over_opposite_margin": 0.2,
+        "positive_own_over_opposite_sides": 34,
+        "prediction_change_units": 13,
+        "supported_accuracy": 0.8,
+        "zero_scene_maximum_absolute_control": 0.0
+      }
+    }
+  },
+  "architecture": {
+    "dct40_trainable_parameters": 921600,
+    "full_scene": {
+      "control_token_count": 4,
+      "dct_scene_bottleneck_used": false,
+      "environment_latent_count": 256,
+      "environmental_text_inputs": 0,
+      "every_environment_latent_processed": true,
+      "full_prefix_retained_separately_for_language_model": true,
+      "hidden_size": 1536,
+      "internal_reader_slots": 8,
+      "latent_selection_or_top_k_used": false,
+      "maximum_control_rms": 0.042820364236831665,
+      "minimum_cross_attention_weight": 0.0003906250058207661,
+      "model_dimension": 128,
+      "output_computed_only_from_scene_value_contexts": true,
+      "question_conditioned_continuous_attention": true,
+      "question_dependent_retrieval": false,
+      "question_only_output_path_exists": false,
+      "required_cross_attention_weight": 0.000390625,
+      "scene_cross_attention_layers": 2,
+      "scene_encoder_layers": 0,
+      "scene_memory_tokens": 256,
+      "scene_prefix_tokens": 258,
+      "uniform_floor_mass": 0.1,
+      "zero_scene_produces_exact_zero_controls": true
+    },
+    "full_scene_trainable_parameters": 949248,
+    "immutable_full_prefix_retained_separately": true,
+    "native_output_shape": [
+      4,
+      1536
+    ],
+    "output_basis_rank": 112,
+    "question_only_output_path_exists": false
+  },
+  "artifact": "v73_fullscene_pair_disjoint_numeric_screen_v1",
+  "checkpoint_published": false,
+  "comparison": {
+    "checks": {
+      "additional_complete_units": false,
+      "additional_positive_sides": false,
+      "broad_accuracy_retention": false,
+      "causal_margin_gain": false,
+      "causal_margin_gain_bootstrap_lower_bound": false,
+      "improved_families": false,
+      "minimum_family_margin_gain": false,
+      "prediction_change_units": false,
+      "wrong_scene_control": false,
+      "zero_scene_control": true
+    },
+    "metrics": {
+      "additional_complete_units": -3,
+      "additional_positive_sides": -2,
+      "broad_accuracy_drop": 0.05744125326370758,
+      "causal_margin_gain": -0.024621111154556275,
+      "causal_margin_gain_bootstrap_lower_bound": -0.06187891483306885,
+      "correct_over_wrong_scene_margin": 7.929325103759765e-05,
+      "family_margin_gains": {
+        "book_support": -0.020394403487443924,
+        "chair_orientation": 0.007195726037025452,
+        "color_swap": 3.725290298461914e-09,
+        "mirror_lr": -0.13082506880164146,
+        "object_count": 0.005840495228767395,
+        "object_relocation": 0.020383287221193314,
+        "object_removal": -0.009545822938283285,
+        "picture_support": -0.019145451486110687
+      },
+      "improved_families": 4,
+      "minimum_family_margin_gain": -0.13082506880164146,
+      "prediction_change_units": 0,
+      "zero_scene_maximum_absolute_control": 0.0
+    },
+    "passed": false
+  },
+  "fit": {
+    "dct40": {
+      "elapsed_seconds": 51.86757400003262,
+      "last_loss": 4.650414943695068,
+      "maximum_preclip_gradient_norm": 68.89103698730469,
+      "optimizer_steps": 1280
+    },
+    "full_scene": {
+      "elapsed_seconds": 56.506915709003806,
+      "last_loss": 6.16994047164917,
+      "maximum_preclip_gradient_norm": 66.41044616699219,
+      "optimizer_steps": 1280
+    }
+  },
+  "full_scene_advantage_demonstrated": false,
+  "gemma_generation_used": false,
+  "held_metrics": {
+    "dct40": {
+      "changed_class_exact": 8,
+      "changed_supported_accuracy": 0.16,
+      "changed_supported_sides": 50,
+      "complete_class_units": 3,
+      "complete_unit_total": 26,
+      "environmental_text_inputs": 0,
+      "family_mean_margins": {
+        "book_support": 0.020404968410730362,
+        "chair_orientation": -0.007183641195297241,
+        "color_swap": 3.725290298461914e-09,
+        "mirror_lr": 0.13090749457478523,
+        "object_count": -0.005838632583618164,
+        "object_relocation": -0.02037811279296875,
+        "object_removal": 0.009534597396850586,
+        "picture_support": 0.019300002604722977
+      },
+      "inventory_total": 384,
+      "mean_correct_over_wrong_scene_margin": 0.049321515560150145,
+      "mean_own_over_opposite_margin": 0.024660757780075072,
+      "mean_pair_delta_cosine": 0.0990849930047989,
+      "positive_own_over_opposite_sides": 27,
+      "positive_pair_delta_units": 15,
+      "prediction_change_units": 18,
+      "question_or_answer_text_serialized": false,
+      "supported_accuracy": 0.2193211488250653,
+      "supported_class_exact": 84,
+      "supported_total": 383,
+      "unsupported_total": 1,
+      "zero_scene_maximum_absolute_control": 0.0
+    },
+    "full_scene": {
+      "changed_class_exact": 2,
+      "changed_supported_accuracy": 0.04,
+      "changed_supported_sides": 50,
+      "complete_class_units": 0,
+      "complete_unit_total": 26,
+      "environmental_text_inputs": 0,
+      "family_mean_margins": {
+        "book_support": 1.0564923286437988e-05,
+        "chair_orientation": 1.208484172821045e-05,
+        "color_swap": 7.450580596923828e-09,
+        "mirror_lr": 8.242577314376831e-05,
+        "object_count": 1.862645149230957e-06,
+        "object_relocation": 5.174428224563599e-06,
+        "object_removal": -1.1225541432698568e-05,
+        "picture_support": 0.00015455111861228943
+      },
+      "inventory_total": 384,
+      "mean_correct_over_wrong_scene_margin": 7.929325103759765e-05,
+      "mean_own_over_opposite_margin": 3.9646625518798826e-05,
+      "mean_pair_delta_cosine": 0.054951808378100396,
+      "positive_own_over_opposite_sides": 25,
+      "positive_pair_delta_units": 17,
+      "prediction_change_units": 0,
+      "question_or_answer_text_serialized": false,
+      "supported_accuracy": 0.1618798955613577,
+      "supported_class_exact": 62,
+      "supported_total": 383,
+      "unsupported_total": 1,
+      "zero_scene_maximum_absolute_control": 0.0
+    }
+  },
+  "numeric_causality_demonstrated": false,
+  "passed": false,
+  "preflight": {
+    "absolute_reader_gates": {
+      "changed_supported_accuracy": 0.65,
+      "complete_class_units": 8,
+      "correct_over_wrong_scene_margin": 0.02,
+      "mean_own_over_opposite_margin": 0.2,
+      "positive_own_over_opposite_sides": 34,
+      "prediction_change_units": 13,
+      "supported_accuracy": 0.8,
+      "zero_scene_maximum_absolute_control": 0.0
+    },
+    "artifact": "v73_fullscene_numeric_preflight_v1",
+    "base_checkpoint_sha256": "3e128b40c1b73bb32750285679cda6b1bea364e67465e986a94a81dfc95e81e8",
+    "checkpoint_published": false,
+    "gemma_generation_used": false,
+    "gemma_model_file_sha256": "2db5482b20d746879bb3ef79b5203e9075a2e2b98f54ec7c2f281c1477ddc550",
+    "held_changed_sides": 52,
+    "held_changed_units": 26,
+    "held_pairs": [
+      "pair_000019",
+      "pair_000020",
+      "pair_000021",
+      "pair_000022",
+      "pair_000023",
+      "pair_000024",
+      "pair_000025",
+      "pair_000027"
+    ],
+    "held_rows": 384,
+    "held_scenes": 16,
+    "numeric_gates": {
+      "additional_complete_units": 6,
+      "additional_positive_sides": 8,
+      "causal_margin_gain": 0.03,
+      "causal_margin_gain_bootstrap_lower_bound": 0.0,
+      "correct_over_wrong_scene_margin": 0.02,
+      "improved_families": 6,
+      "maximum_broad_accuracy_drop": 0.02,
+      "minimum_family_margin_gain": -0.02,
+      "prediction_change_units": 13,
+      "zero_scene_maximum_absolute_control": 0.0
+    },
+    "official_test_loaded": false,
+    "official_validation_loaded": false,
+    "oracle_loaded": false,
+    "pair_count": 20,
+    "prefix_manifest_sha256": "5a288a7fef65a957ba7b20132c63380cfadc7edbc37b32c1885037f939b9db61",
+    "row_count": 960,
+    "scene_count": 40,
+    "train_held_pair_disjoint": true,
+    "train_held_scene_disjoint": true,
+    "training_changed_units": 40,
+    "training_pairs": [
+      "pair_000005",
+      "pair_000006",
+      "pair_000007",
+      "pair_000008",
+      "pair_000009",
+      "pair_000010",
+      "pair_000011",
+      "pair_000015",
+      "pair_000016",
+      "pair_000017",
+      "pair_000018",
+      "pair_000026"
+    ],
+    "training_qa_sha256": "01721bf904b1ab0b65ce8acac6e366287040873cda1356da6c70c4981abe7619",
+    "training_rows": 576,
+    "training_scenes": 24
+  },
+  "promotion_blocker": "unverified_held_only_continuous_answer_class",
+  "promotion_eligible": false,
+  "provenance": {
+    "embedding_dtype": "torch.bfloat16",
+    "embedding_shape": [
+      262144,
+      1536
+    ],
+    "embedding_tensor_name": "model.language_model.embed_tokens.weight",
+    "gemma_model_file_sha256": "2db5482b20d746879bb3ef79b5203e9075a2e2b98f54ec7c2f281c1477ddc550",
+    "question_or_answer_text_serialized": false
+  },
+  "schema_version": 1,
+  "scope": {
+    "checkpoint_published": false,
+    "deferred_final_loaded": false,
+    "gemma_generation_used": false,
+    "official_test_loaded": false,
+    "official_validation_loaded": false,
+    "oracle_loaded": false,
+    "training_pool_only": true
+  },
+  "selected_reader_for_continuation": "dct40",
+  "total_wall_time_seconds": 116.80155750014819
+}

@@ -1,0 +1,311 @@
+# V81 is a low-memory, fixed-memory reader.  The complete V75-V2 atlas is
+# compiled once before any question and remains byte-identical.  Stage A uses
+# deterministic dense cosine addressing over all 96 atlas groups.  Stage B is
+# a separately gated, CPU-fit post-decoder residual and is not authorized here.
+v81:
+  schema_version: 1
+  artifact: gemma4_v81_strict_fixed_prefix_reader
+  status: preregistered_model_free_preflight_only_no_fit_or_gemma_load_authorized
+  seed: 810081
+
+  inputs:
+    v80_terminal: reports/gemma4/metrics/gemma4_v80_v75_atlas_attention_reader_gradient_smoke.json
+    v80_terminal_sha256: 41fdbfbc2fec970abe2dd1ac35b55947d3caf73788e7ef40d59a41db1c0448a0
+    v73_config: configs/experiments/gemma4_v73_fullscene_controller.yaml
+    v73_config_sha256: d208f28380e3f1810a688be8ea8a263831b6a741f7f90e667795637f39d841f1
+    historical_training_qa: data_diverse52/qa/train.jsonl
+    historical_training_qa_sha256: 01721bf904b1ab0b65ce8acac6e366287040873cda1356da6c70c4981abe7619
+    v75_direct_candidate: reports/gemma4/artifacts/v75_gemma_nll_balanced_train_diagnostic.safetensors
+    v75_direct_candidate_sha256: d01275538489b3493a8e1ff080109d1db46832be6ca2a26f6d89d161c597188a
+    v75_direct_candidate_size_bytes: 8357096
+    v75_numeric_probe_bank: reports/gemma4/artifacts/v75_fixed_atlas_historical_internal_v1/probe_bank/probes.safetensors
+    v75_numeric_probe_bank_sha256: fb32c687dd787f108fab03e9745eefb2273891c2be990d0acf50ca111eb637e8
+    v75_numeric_probe_tensor_sha256: 5731bbabc15b501007af85254a6bf45dbb0de269469348412196c3f24dce8929
+    v75_numeric_probe_metadata: reports/gemma4/artifacts/v75_fixed_atlas_historical_internal_v1/probe_bank/runtime_metadata.json
+    v75_numeric_probe_metadata_sha256: 3e736940f4c83b55e96aa5e36f6774fd007454508722f5b25ddc44f298c2518d
+    v54_prefix_cache: data_gemma4/scene_tokens/v56_question_control_full_prefixes
+    v54_prefix_manifest_sha256: 5a288a7fef65a957ba7b20132c63380cfadc7edbc37b32c1885037f939b9db61
+    runtime_config: configs/runtime/gemma4_v54.yaml
+    runtime_config_sha256: 891c58faaaa5fcd2ed76c7e3871f14c5d8c5ae2e05d9fa4ddd5193773d40e56b
+    v54_checkpoint: data_gemma4/runtime/checkpoints/gemma4_v54_release_v1
+    v54_adapter_sha256: 6c627f0a0d9efb7100489c24cbd4acafe10456b79280a64a85399a21cb541daf
+    v54_runtime_metadata_sha256: 807515461c71b08c08dfbd08a184a653e791413748530fa69402512eca6f6fdd
+    model_id: google/gemma-4-E2B-it
+    model_revision: 3e22461f65e89153144f8adb70e3b8c2cc9845a7
+    model_file_sha256_identity: 2db5482b20d746879bb3ef79b5203e9075a2e2b98f54ec7c2f281c1477ddc550
+    v73_numeric_baseline: reports/gemma4/metrics/v73_fullscene_numeric_screen.json
+    v73_numeric_baseline_sha256: 933b94fb69b22642a303dd77948bf2a1e8d68d14e761126b5043639a90878dc4
+    v75_held_smoke_baseline: reports/gemma4/metrics/v75_gemma_nll_balanced_held_smoke.json
+    v75_held_smoke_baseline_sha256: 330b8e48ec2c2a92d040dcce6acda74525bead9c99941ff1e5de68ffca703e0b
+    v75_fixed_atlas_score: reports/gemma4/metrics/v75_fixed_atlas_historical_internal_score.json
+    v75_fixed_atlas_score_sha256: 224886019172c5080f2bd976de74477d40e37db9a5635aae9c9b7697db53dfd2
+    v78_dense_reader_evidence: reports/gemma4/metrics/v78_grounding_sidecar_internal_held.json
+    v78_dense_reader_evidence_sha256: 557cc497dd12bd74f45cecd3624e18649ddc548af091ed719c22c7998942b84b
+
+  split:
+    source: exact_v73_historical_pair_split
+    train_pair_count: 12
+    train_scene_count: 24
+    train_row_count: 576
+    held_pair_count: 8
+    held_scene_count: 16
+    held_row_count: 384
+    supported_held_row_count: 383
+    unsupported_held_row_count: 1
+    held_changed_unit_count: 26
+    held_changed_side_count: 52
+    supported_held_changed_side_count: 50
+    pair_disjoint: true
+    scene_disjoint: true
+    question_disjoint: false
+    shared_question_text_count: 62
+    unseen_held_question_text_count: 18
+    unseen_held_question_row_count: 44
+    unseen_held_changed_row_count: 8
+    held_smoke_selection: first_changed_unit_in_each_of_eight_sorted_change_families
+    held_smoke_unit_count: 8
+    held_smoke_side_count: 16
+    broad_held_selection: first_stable_row_per_held_scene
+    broad_held_row_count: 16
+
+  fixed_memory_contract:
+    source_layout: v75_v2
+    exact_layout: [boi, 96_groups_each_probe_key_plus_four_scene_values, all_256_v54_environment_latents, eoi]
+    fixed_prefix_tokens: 738
+    atlas_group_count: 96
+    tokens_per_atlas_group: 5
+    atlas_memory_tokens: 480
+    probe_key_tokens: 96
+    atlas_scene_value_tokens: 384
+    base_environment_latents: 256
+    boundary_tokens: 2
+    hidden_size: 1536
+    compiled_before_question: true
+    same_738_tokens_reused_byte_identically_for_every_question: true
+    prequestion_hash_bound: true
+    boi_eoi_retained_and_hash_audited: true
+    boi_eoi_are_payload: false
+    probe_keys_are_payload: false
+    question_queries_are_payload: false
+    only_atlas_values_and_base_latents_are_payload: true
+    stage_a_positive_floor_value_influence_applies_to_384_atlas_values: true
+    stage_a_probe_keys_participate_in_all_96_dense_scores: true
+    base_latents_use_native_frozen_gemma_causal_path_in_stage_a: true
+    strict_positive_payload_influence_claim_for_all_738_tokens: false
+    question_dependent_environment_selection: false
+    question_dependent_retrieval: false
+    semantic_or_spatial_top_k_selection: false
+
+  stage_a_deterministic_reader:
+    architecture: normalized_query_probe_cosine_dense_read_v81
+    fit_required: false
+    atlas_logit_scale: 160.0
+    atlas_uniform_floor_mass: 0.05
+    minimum_weight_each_of_96_groups: 0.0005208333333333333
+    all_96_groups_positive: true
+    shared_weights_across_four_aligned_value_banks: true
+    direct_four_control_tokens_exposed_before_any_fusion: true
+    query_shapes_weights_only: true
+    probe_keys_address_only: true
+    value_payload_source: four_atlas_scene_value_banks_only
+    zero_atlas_values_produce_exact_zero_controls: true
+    learned_query_or_key_enabled: false
+    learned_query_or_key_requires_new_explicit_approval_if_deterministic_read_is_inadequate: true
+    train_only_scale_selection:
+      scale_candidate_grid: [10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 70.0, 80.0, 100.0, 120.0, 160.0]
+      row_scope: all_576_v73_train_rows
+      selection_metric: mean_direct_v75_control_cosine
+      selection_rule: argmax_then_smallest_scale_tie_break
+      selected_scale: 160.0
+      per_candidate_scores_recorded_here: false
+    post_selection_full_held_development_evidence:
+      preregistered_gate: false
+      row_scope: all_384_pair_scene_disjoint_held_rows
+      mean_control_cosine: 0.991421
+      normalized_mse: 0.02954
+      seen_question_rows: 340
+      seen_question_mean_cosine: 0.999745
+      seen_question_normalized_mse: 0.00214
+      unseen_question_rows: 44
+      unseen_question_mean_cosine: 0.92710
+      unseen_question_normalized_mse: 0.24127
+    development_acceptance_thresholds:
+      retroactively_preregistered: false
+      row_count: 384
+      mean_control_cosine_minimum: 0.99
+      normalized_mse_maximum: 0.04
+      seen_question_mean_cosine_minimum: 0.99
+      unseen_question_mean_cosine_minimum: 0.92
+      minimum_attention_weight: 0.000520833
+      exact_direct_control_shape: [1, 4, 1536]
+
+  latest_user_query_contract:
+    source: latest_user_question_only
+    tokenization: existing_question_token_ids
+    add_special_tokens: false
+    include_system_prompt: false
+    include_conversation_history: false
+    include_assistant_answer: false
+    pooling: mean_of_complete_nonempty_token_embedding_sequence
+    input_embedding_source: frozen_gemma_input_embedding_rows
+    input_embedding_tensor_name: model.language_model.embed_tokens.weight
+    model_blob_identity: 2db5482b20d746879bb3ef79b5203e9075a2e2b98f54ec7c2f281c1477ddc550
+    output_dtype: float32
+    detached: true
+    maximum_question_tokens_source: runtime_config_language_max_question_tokens
+    prequestion_hashes_bound_before_tokenization: [fixed_738_prefix, atlas_memory, base_258_prefix]
+    bound_hashes_reasserted_before_each_dense_read: true
+
+  stage_b_optional_postdecoder_fusion:
+    authorized_now: false
+    activation_condition: deterministic_read_deemed_inadequate_and_new_explicit_approval
+    architecture: structured_dual_bank_dense_atlas_sidecar_v81
+    internal_dimension: 128
+    atlas_uniform_floor_mass: 0.05
+    base_uniform_floor_mass: 0.10
+    minimum_weight_each_of_96_groups: 0.0005208333333333333
+    minimum_weight_each_of_256_base_latents: 0.000390625
+    all_atlas_groups_positive: true
+    all_base_latents_positive: true
+    bias: false
+    decoder_hidden_detached: true
+    frozen_question_embedding_detached: true
+    residual_location: after_frozen_decoder_before_frozen_lm_head
+    gemma_backward: false
+    residual_output_exact_zero_initialized: true
+    zero_environmental_payload_produces_exact_zero_residual: true
+    trainable_parameter_count: 2752514
+    candidate_tensor_names:
+      - atlas_logit_scale
+      - base_logit_scale
+      - atlas_query.weight
+      - atlas_key.weight
+      - atlas_value_projections.0.weight
+      - atlas_value_projections.1.weight
+      - atlas_value_projections.2.weight
+      - atlas_value_projections.3.weight
+      - base_query.weight
+      - base_key.weight
+      - base_value.weight
+      - residual_output.weight
+
+  training_only_teacher_contract:
+    authorized_now: false
+    rows: historical_v73_train_576_only
+    held_rows_used_for_fit: 0
+    stage_a_target: direct_v75_four_control_tokens
+    stage_b_target: detached_teacher_prehead_hidden_or_logit_delta
+    frozen_model_instances: 1
+    gradients_enabled_for_gemma: false
+    sequential_teacher_extraction: true
+    full_vocabulary_logits_cached: false
+    teacher_cache_training_only: true
+    teacher_cache_serialized_in_candidate: false
+    direct_v75_control_loss:
+      cosine_weight: 1.0
+      normalized_mse_weight: 1.0
+    detached_teacher_distillation_loss:
+      hidden_delta_cosine_weight: 1.0
+      hidden_delta_normalized_mse_weight: 1.0
+    optimizer: AdamW
+    optimizer_updates_maximum: 64
+    device: cpu
+    intermediate_selection_or_checkpoint: false
+
+  internal_held_gates:
+    pair_disjoint: true
+    scene_disjoint: true
+    seen_and_unseen_question_subgroups_reported: true
+    supported_prototype_top1_accuracy_minimum: 0.30
+    changed_supported_prototype_top1_accuracy_minimum: 0.20
+    positive_own_over_opposite_sides_minimum: 30
+    complete_changed_units_minimum: 4
+    prediction_changing_units_minimum: 13
+    mean_pair_delta_cosine_minimum: 0.15
+    mean_correct_over_paired_wrong_scene_margin_minimum: 0.03
+    question_shuffle_accuracy_drop_minimum: 0.08
+    minimum_change_family_margin: -0.05
+    zero_environmental_payload_maximum_absolute_residual: 0.0
+    minimum_atlas_attention_weight: 0.000520833
+    minimum_base_attention_weight: 0.000390625
+
+  predictor_scorer_isolation:
+    predictions_create_once_before_scorer_open: true
+    answer_references_unavailable_to_predictor: true
+    canonical_scorer_loaded_only_after_prediction_hash_sealed: true
+    score_artifact_binds_prediction_sha256: true
+    no_retry_or_selection_after_scoring: true
+
+  conditional_gemma_smoke:
+    authorized_now: false
+    requires_new_explicit_approval_after_recorded_development_evidence: true
+    primary_arm: exact_v54_base258_plus_four_dense_reconstructed_control_activations
+    exact_scene_prefix_layout: [boi, all_256_v54_environment_latents, eoi]
+    exact_scene_prefix_tokens: 258
+    reader_activation_layout: four_continuous_activations_appended_after_complete_prompt_before_answer
+    reader_activation_count: 4
+    reader_activation_ple_identity: native_pad_token_ple
+    reader_activation_modality_id: 0
+    full_738_memory_remains_bound_and_hash_audited_as_sidecar_source: true
+    excluded_redundant_arm: exact_738_plus_four_reconstructed_controls
+    excluded_arm_reason: redundant_atlas_in_causal_sequence_degraded_to_11_of_16_direct_arm_agreement
+    direct_v75_comparator_correct: 9
+    frozen_v54_comparator_correct: 6
+    held_smoke_rows: 16
+    candidate_correct_minimum: 9
+    correct_gain_over_v54_minimum: 3
+    exact_or_canonically_equivalent_prediction_agreement_with_direct_v75_minimum: 14
+    prediction_changing_units_minimum: 2
+    correct_minus_wrong_scene_count_minimum: 2
+    complete_changed_units_minimum: 2
+    broad_held_stable_rows: 16
+    broad_held_mean_answer_nll_delta_maximum: 0.03
+    prefix_hash_before_after_every_question_exact: true
+    gradients_enabled: false
+    gemma_backward: false
+
+  memory_safety:
+    model_free_preflight_device: cpu
+    fit_device: cpu
+    maximum_fit_process_rss_bytes: 3221225472
+    gemma_load_forbidden_in_preflight: true
+    fit_forbidden_in_preflight: true
+    mps_use_forbidden_in_preflight: true
+    future_gemma_smoke_requires_separate_explicit_approval: true
+    future_gemma_smoke_full_model_instances: 1
+    future_gemma_smoke_gradients_enabled: false
+    future_gemma_smoke_maximum_mps_driver_bytes: 14302241095
+    future_gemma_smoke_minimum_host_available_bytes: 6442450944
+    v80_full_gemma_backpropagation_forbidden: true
+
+  candidate_artifact_policy:
+    numeric_weights_only: true
+    sanitized_metadata_only: true
+    probe_bank_serialized: false
+    atlas_values_serialized: false
+    base_latents_serialized: false
+    environmental_prefix_cache_serialized: false
+    questions_serialized: false
+    answers_serialized: false
+    prototypes_serialized: false
+    class_ids_serialized: false
+    teacher_cache_serialized: false
+    environmental_text_serialized: false
+    checkpoint_publication_authorized: false
+    runtime_publication_authorized: false
+
+  scope:
+    historical_v73_training_pool_only: true
+    official_validation_loaded: false
+    official_test_loaded: false
+    deferred_final_loaded: false
+    oracle_loaded: false
+    cloud_inference: false
+
+  outputs:
+    preregistration: reports/gemma4/metrics/gemma4_v81_strict_fixed_prefix_reader_preregistration.json
+    cpu_preflight: reports/gemma4/metrics/gemma4_v81_strict_fixed_prefix_reader_cpu_preflight.json
+    future_prediction_artifact: reports/gemma4/predictions/gemma4_v81_strict_fixed_prefix_reader_held_smoke.jsonl
+    future_score_artifact: reports/gemma4/metrics/gemma4_v81_strict_fixed_prefix_reader_held_smoke_score.json
+    future_diagnostic_candidate: reports/gemma4/artifacts/gemma4_v81_strict_fixed_prefix_reader_diagnostic.safetensors
+    prohibited_runtime_checkpoint: data_gemma4/checkpoints/gemma4_v81_strict_fixed_prefix_reader

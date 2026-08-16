@@ -1,0 +1,60 @@
+_base_: ../runtime/embodied_v54.yaml
+
+# Oracle-derived traces are written only to the blocked training tree.  The
+# deployable checkpoint is written separately under checkpoints and contains
+# no trace rows, labels, target IDs, category inventory, or oracle paths.
+navigation_policy:
+  train_scene_ids:
+    - scene_000011
+    - scene_000012
+    - scene_000013
+    - scene_000014
+    - scene_000015
+    - scene_000016
+    - scene_000017
+    - scene_000018
+    - scene_000019
+    - scene_000020
+    - scene_000021
+    - scene_000022
+    - scene_000023
+    - scene_000024
+  validation_scene_ids:
+    - scene_000031
+    - scene_000032
+    - scene_000033
+    - scene_000034
+    - scene_000035
+    - scene_000036
+    - scene_000037
+    - scene_000039
+  oracle_root: data/oracle
+  map_root: data_gemma4/maps
+  prefix_cache_root: data_gemma4/scene_tokens/v56_question_control_full_prefixes
+  trace_output: data_gemma4/training/navigation_policy_v1
+  checkpoint_output: data_gemma4/checkpoints/navigation_policy_v1
+  robot_state_checkpoint: data_gemma4/checkpoints/robot_state_numeric_v1
+  start_pose_count: 1
+  initial_yaw_degrees: [0.0, -90.0, 90.0, 180.0]
+  planner_grid_resolution_m: 0.15
+  planner_standoff_m: 0.60
+  planner_standoff_tolerance_m: 0.20
+  planner_angular_samples: 48
+  scene_token_count: 258
+  robot_token_count: 4
+  hidden_size: 1536
+  model_dim: 128
+  batch_size: 32
+  epochs: 50
+  learning_rate: 0.0005
+  weight_decay: 0.0001
+  argument_loss_weight: 0.5
+  turn_sign_loss_weight: 0.25
+  gradient_clip_norm: 1.0
+  early_stopping_patience: 10
+  minimum_validation_action_accuracy: 0.60
+  minimum_validation_stop_recall: 0.80
+  minimum_validation_turn_sign_accuracy: 0.70
+  maximum_validation_argument_mae: 0.35
+  seed: 20260812
+  device: cpu

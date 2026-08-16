@@ -1,0 +1,231 @@
+{
+  "arm_selection": {
+    "best_metric_cherry_picking": false,
+    "full_mode_requires_exact_selected_arm_authorization": true,
+    "greedy_generation_during_selection": false,
+    "later_arms_skipped_after_first_pass": true,
+    "rule": "run_in_declared_order_and_select_first_all_gate_pass"
+  },
+  "artifact": "v68_regularized_pair_grid_preregistration",
+  "behavioral_gates": {
+    "actual_greedy_local_gemma_required_after_numeric_pass": true,
+    "exact_paired_opposite_scene_dependence_required": true,
+    "saved_runtime_raw_question_token_generation_required": true,
+    "sealed_checkpoint_public_reload_required": true,
+    "thresholds": {
+      "eligible_fold_total": 12,
+      "eligible_folds_with_exact_hit_minimum": 12,
+      "final_complete_unit_minimum": 36,
+      "final_complete_unit_total": 40,
+      "final_exact_minimum": 520,
+      "final_total": 576,
+      "held_changed_side_exact_minimum": 45,
+      "held_changed_side_total": 75,
+      "held_complete_unit_minimum": 15,
+      "held_complete_unit_total": 35,
+      "held_prediction_change_unit_minimum": 20,
+      "held_prediction_change_unit_total": 35,
+      "held_supported_exact_minimum": 300,
+      "held_supported_total": 571,
+      "held_unsupported_total": 5,
+      "paired_opposite_follows_complete_minimum": 25,
+      "paired_opposite_follows_side_minimum": 60,
+      "paired_opposite_original_complete_maximum": 5,
+      "paired_opposite_original_exact_maximum": 20,
+      "paired_opposite_side_total": 80,
+      "paired_opposite_unit_total": 40,
+      "per_type_minimum_exact": [
+        [
+          "attribute",
+          35
+        ],
+        [
+          "count",
+          58
+        ],
+        [
+          "metric",
+          3
+        ],
+        [
+          "orientation",
+          20
+        ],
+        [
+          "presence",
+          60
+        ],
+        [
+          "spatial_relation",
+          65
+        ],
+        [
+          "support",
+          35
+        ]
+      ]
+    },
+    "unchanged_from_v67_and_v66b": true
+  },
+  "common_hyperparameters": {
+    "anchor_scale_floor": 0.0001,
+    "base_batch_size": 48,
+    "base_epochs": 160,
+    "base_learning_rate": 0.0003,
+    "base_weight_decay": 0.0001,
+    "basis_rank": 112,
+    "gradient_clip_norm": 1.0,
+    "initial_control_rms": 0.075,
+    "interaction_dim": 32,
+    "maximum_control_rms": 0.25,
+    "moment_count": 8,
+    "pair_unit_batch_size": 10,
+    "prototype_classification_epochs": 40,
+    "prototype_classification_temperature": 0.07,
+    "prototype_classification_weight": 1.0,
+    "prototype_value_preservation_weight": 1.0,
+    "retention_batch_size": 48,
+    "seed": 680068,
+    "trunk_dim": 192
+  },
+  "diagnosed_mechanism": {
+    "fold_local_hardest_wrong_class_not_explicitly_margined": true,
+    "held_pair_three_gate_shortfall": true,
+    "overfitting_risk_from_unanchored_all_value_refinement": true,
+    "seen_pair_delta_cosine_near_one": true,
+    "seen_pair_own_over_opposite_fraction_one": true
+  },
+  "failed_predecessor": {
+    "artifact": "v67_pair_objective_numeric_screen_v1",
+    "fully_supported_pair_sides": 70,
+    "held_changed_side_exact": 52,
+    "held_changed_side_total": 75,
+    "held_complete_unit_total": 35,
+    "held_complete_units": 13,
+    "held_complete_units_observed": 13,
+    "held_complete_units_required": 15,
+    "held_positive_margins_observed": 47,
+    "held_positive_margins_required": 53,
+    "held_prediction_change_units": 14,
+    "held_prediction_changes_observed": 14,
+    "held_prediction_changes_required": 20,
+    "held_supported_exact": 482,
+    "held_supported_total": 571,
+    "path": "reports/gemma4/metrics/v67_pair_objective_numeric_screen.json",
+    "positive_own_over_opposite_sides": 47,
+    "predecessor_artifact_bytes_modified": false,
+    "preregistration_sha256": "a87ad59102c48da95390659839b76707c3d32af726034ab930fae5e01ba7ab8f",
+    "promotion_eligible": false,
+    "sha256": "d2e0085857a4647f518e3906d2a1a4c02826d314d021da80f7cf380065328304",
+    "terminal_reason": "numeric_screen_failed_no_generation_or_checkpoint_authorized"
+  },
+  "implementation_source_hashes": {
+    "scripts/run_gemma4_v68_regularized_pair.sh": "b5d43262dc7debdd18267add9abb1c6a6e51849234c7ba69966927f25c0f80f3",
+    "src/semantic_3d_chat/evaluation/v68_regularized_pair_preregistration.py": "2f0ddac791e997534af2f04a5227eb353fe2bdf608201a37ce47614c39f029bc",
+    "src/semantic_3d_chat/scene_encoder/question_control_v7.py": "a5acd2e7b332b8c511d0daf053d92e4c8b59abb31ad10ccaca7c9276365cc9c6",
+    "src/semantic_3d_chat/training/question_control_v67_objective.py": "4f2183efec5278b7399b56c143f965f13057341410786af081519d9141ea1fb4",
+    "src/semantic_3d_chat/training/question_control_v68_objective.py": "36df4669ab46053ff850734bae715e2ea7799b3a1570239285f1512c26165c01",
+    "src/semantic_3d_chat/training/train_question_control_v63.py": "f3e645c6385e4d2f286ff007e71033a93c25579e043116ee706dd01df7f6d310",
+    "src/semantic_3d_chat/training/train_question_control_v65.py": "e37fa0ac07d14c01f5397502ce26e401db0df182134291afd3668e78fa1e44ea",
+    "src/semantic_3d_chat/training/train_question_control_v66.py": "0c597a143265ab39c3f891a1bf726fa307752fe22f0fc09a7817263874d3b779",
+    "src/semantic_3d_chat/training/train_question_control_v67.py": "2e83be7166e9ff894ca7b9a16aba8a92aaeb331861241b72916555a1298a1e98",
+    "src/semantic_3d_chat/training/train_question_control_v68.py": "23f11bb4e595d0b84a8c3be49a7f83b2c69fc337d134524f17772da48bdfc0a2"
+  },
+  "numeric_screen": {
+    "all_12_pairs_held_out_once_per_executed_arm": true,
+    "fold_codebook_and_basis_built_after_exclusion": true,
+    "held_pair_rows_used_for_optimization": false,
+    "held_pair_teacher_sources_used": false,
+    "protocol": "leave_one_counterfactual_pair_out_numeric_only",
+    "question_and_answer_text_serialized": false,
+    "thresholds": {
+      "fully_supported_pair_sides": 70,
+      "held_changed_class_exact_minimum": 45,
+      "held_changed_total": 75,
+      "held_complete_class_units_minimum": 15,
+      "held_complete_unit_total": 35,
+      "held_prediction_change_units_minimum": 20,
+      "held_supported_class_exact_minimum": 300,
+      "held_supported_total": 571,
+      "held_unsupported_total": 5,
+      "mean_own_over_opposite_margin_minimum": 0.02,
+      "mean_pair_delta_cosine_minimum": 0.35,
+      "positive_own_over_opposite_sides_minimum": 53,
+      "positive_pair_delta_units_minimum": 27
+    },
+    "thresholds_unchanged_from_v67": true
+  },
+  "ordered_arm_grid": [
+    {
+      "anchor_weight": 0.5,
+      "arm_id": "balanced_all_value_anchor",
+      "hard_negative_margin": 0.08,
+      "hard_negative_weight": 6.0,
+      "optimizer_scope": "all_value",
+      "pair_classification_weight": 2.0,
+      "pair_delta_weight": 6.0,
+      "pair_learning_rate": 5e-05,
+      "pair_opposite_margin": 0.2,
+      "pair_opposite_weight": 8.0,
+      "pair_refinement_epochs": 45,
+      "pair_refinement_repeats": 3,
+      "pair_value_weight": 1.0,
+      "retention_batches_per_epoch": 3,
+      "retention_weight": 1.0
+    },
+    {
+      "anchor_weight": 0.75,
+      "arm_id": "interaction_only_anchor",
+      "hard_negative_margin": 0.1,
+      "hard_negative_weight": 8.0,
+      "optimizer_scope": "interaction_only",
+      "pair_classification_weight": 2.0,
+      "pair_delta_weight": 8.0,
+      "pair_learning_rate": 7.5e-05,
+      "pair_opposite_margin": 0.2,
+      "pair_opposite_weight": 8.0,
+      "pair_refinement_epochs": 60,
+      "pair_refinement_repeats": 4,
+      "pair_value_weight": 1.0,
+      "retention_batches_per_epoch": 3,
+      "retention_weight": 1.0
+    },
+    {
+      "anchor_weight": 1.5,
+      "arm_id": "strong_all_value_anchor",
+      "hard_negative_margin": 0.12,
+      "hard_negative_weight": 10.0,
+      "optimizer_scope": "all_value",
+      "pair_classification_weight": 2.0,
+      "pair_delta_weight": 8.0,
+      "pair_learning_rate": 3e-05,
+      "pair_opposite_margin": 0.25,
+      "pair_opposite_weight": 10.0,
+      "pair_refinement_epochs": 70,
+      "pair_refinement_repeats": 4,
+      "pair_value_weight": 1.0,
+      "retention_batches_per_epoch": 4,
+      "retention_weight": 1.5
+    }
+  ],
+  "publication": {
+    "checkpoint_absent_on_all_arm_screen_failure": true,
+    "checkpoint_absent_on_behavior_failure": true,
+    "checkpoint_absent_on_paired_opposite_failure": true,
+    "screen_pass_authorization_required_for_full_run": true,
+    "screen_report_create_once": true,
+    "training_codebook_or_answer_text_in_checkpoint": false
+  },
+  "research_change": "ordered_regularized_pair_grid_with_fold_local_hard_negative_prototype_margin_and_base_parameter_anchor",
+  "schema_version": 1,
+  "scope": {
+    "deferred_final_loaded": false,
+    "fresh_development_loaded": false,
+    "internal_validation_loaded": false,
+    "oracle_loaded": false,
+    "scorer_inputs_used": false,
+    "training_only": true,
+    "validation_inputs_used": false
+  },
+  "status": "locked_before_v68_training_screen_or_generation"
+}

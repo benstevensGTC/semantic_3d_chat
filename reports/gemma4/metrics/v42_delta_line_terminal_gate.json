@@ -1,0 +1,90 @@
+{
+  "artifact": "v42_delta_line_terminal_gate",
+  "conditional_successor_authorization": {
+    "authorization_id": "v43_aggregate_projected_train_only_no_step_screen",
+    "authorized": true,
+    "authorized_output": "reports/gemma4/metrics/v43_aggregate_projected_no_step_diagnostic.json",
+    "diagnostic_scope": {
+      "all_25_pair_and_48_broad_rows_per_candidate": true,
+      "checkpoint_write_authorized": false,
+      "exact_u0_restoration_after_every_candidate": true,
+      "final_test_access_authorized": false,
+      "optimizer_construction_or_load_authorized": false,
+      "optimizer_step_authorized": false,
+      "oracle_access_authorized": false,
+      "runtime_promotion_authorized": false,
+      "selector_execution_authorized": false,
+      "temporary_target_substitution_authorized": true,
+      "training_qa_and_maps_only": true,
+      "validation_access_authorized": false
+    },
+    "gradient_surface": {
+      "answer_component": "mean_8_priority_pair_answer_nll_times_0.5",
+      "autograd_api": "torch.autograd.grad",
+      "broad_component": "mean_48_unchanged_rows_times_1",
+      "cross_component": "mean_all_25_pair_cross_hinge_times_56",
+      "optimizer_authorized": false,
+      "parameter_grad_accumulation_authorized": false,
+      "side_component": "mean_8_priority_pair_side_hinge_times_8",
+      "target_parameter_count": 16384,
+      "target_tensor": "layer14_q_proj_lora_b_only"
+    },
+    "new_terminal_seal_required_after_screen": true,
+    "only_exact_action": "one_v43_aggregate_projected_response_screen",
+    "projection": {
+      "adaptive_refinement_authorized": false,
+      "candidate_formula": "float32(B0 - scalar_step * clipped_projected_gradient)",
+      "candidate_hashes_must_be_fixed_before_candidate_forward_evaluation": true,
+      "fixed_scalar_steps": [
+        -0.008,
+        -0.004,
+        0.0,
+        0.002,
+        0.004,
+        0.008,
+        0.012,
+        0.016
+      ],
+      "implementation": "v41_cpu_float64_active_set_qp",
+      "scalar_clip_norm": 1.0
+    },
+    "schema_version": 1,
+    "source_frozen_state_sha256": "cec01bc088bb87c6bb44e0659eb03aa766f951ddeee706ca9a70edaa080dea5e",
+    "source_full_state_sha256": "7b951c6d7ae4f7b50603159f0bc4dfb4d50b5b40f9325134d78d1de1dae87fc0",
+    "source_target_state_sha256": "d0834cc588ee2a9edf08aabedfd01e0a6d2b01c6b6ae7e3a3d764eaddf58cc3e"
+  },
+  "input_sha256": {
+    "reports/gemma4/metrics/training_selection_gemma4_color_mirror_full_vocab_v11_resume36.json": "c0086f66edbb8854a7938e09c57535bfd47100adbaf3b3c95eeb4b08014ce2f8",
+    "reports/gemma4/metrics/v41_retry1_update8_terminal_gate.json": "16cd37d91ceb911904737d8b306a308c9a12984fd13d78ee10842f36c8b771fd",
+    "reports/gemma4/metrics/v42_v41_retry1_update8_no_step_diagnostic.json": "b325b8b4b1c616185dacc4a2f5d8f2f591b92f7f03e30a5968793a8edc2e6f32",
+    "src/semantic_3d_chat/evaluation/v42_delta_line_screen.py": "96181438d5523a9df25e44446805357f0cbd6e8bb335af5c760eb2e8f5f6eb7f",
+    "tests/test_v42_delta_line_screen.py": "9bb0ee7ba722b43b09af3f601c8761c9fec14635036720366dd8889f945a84f8"
+  },
+  "negative_result": {
+    "all_candidates_restored_u0": true,
+    "candidate_count": 9,
+    "endpoint_replay_exact": true,
+    "fixed_alpha_grid": [
+      -1.0,
+      -0.5,
+      -0.25,
+      0.0,
+      0.25,
+      0.5,
+      0.75,
+      1.0,
+      1.25
+    ],
+    "no_optimizer_gradient_checkpoint_or_restricted_access": true,
+    "teacher_eligible_candidate_count": 0
+  },
+  "only_exact_successor_authorized": "v43_aggregate_projected_train_only_no_step_screen",
+  "passed": true,
+  "runtime_promotion_authorized": false,
+  "schema_version": 1,
+  "screen_sha256": "b325b8b4b1c616185dacc4a2f5d8f2f591b92f7f03e30a5968793a8edc2e6f32",
+  "selector_execution_authorized": false,
+  "training_authorized": false,
+  "v43_screen_authorized": true,
+  "validation_access_authorized": false
+}

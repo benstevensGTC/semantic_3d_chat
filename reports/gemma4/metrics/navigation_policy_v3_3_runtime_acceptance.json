@@ -1,0 +1,78 @@
+{
+  "calibration_family_must_stop": false,
+  "calibration_task_calls": [
+    "scan",
+    "move_to",
+    "move_to",
+    "move_to",
+    "move_to",
+    "move_to",
+    "move_to",
+    "move_to",
+    "stop"
+  ],
+  "calibration_task_metrics": {
+    "action_failure_count": 0,
+    "collision_count": 0,
+    "executed_action_count": 9,
+    "final_target_standoff_m": 0.28686400627712905,
+    "initial_target_standoff_m": 2.4013290276872405,
+    "policy_rejected": false,
+    "stopped": true,
+    "successful_scan_count": 1,
+    "target_progress_m": 2.1144650214101115
+  },
+  "claim_scope": {
+    "development_calibration": true,
+    "generalization_claim": false,
+    "held_out_claim": false,
+    "same_benchmark_used_for_diagnosis": true,
+    "stop_calibration_family_if_rejected": true
+  },
+  "environmental_text_inputs": [],
+  "evidence_hashes": {
+    "reports/gemma4/metrics/llm_navigation_inference_access_learned_v3_3.json": "f36677fd9d4075b380a27635102ef351e3bfa93d5fdfc293848843c56909686f",
+    "reports/gemma4/metrics/llm_navigation_scene_000001_learned_v3_3.json": "c4354c82124bab25a9acd10816ff92c9fa74769a6eac29236fa9ddbbb7d734c5",
+    "reports/gemma4/metrics/navigation_continuous_context_v3_3.json": "705a7c29424b50df9a0badff96c6d9f71326ad1cd2ce0aad664d2337e5c5fb0f",
+    "reports/gemma4/predictions/llm_navigation_scene_000001_learned_v3_3.json": "e9db17df1bb4d12a235492a24c34c8eb60d803a35d3512b86c671146c7238337"
+  },
+  "gates": {
+    "calibration_checks": true,
+    "calibration_standoff": true,
+    "calibration_step_bound": true,
+    "calibration_task_passed": true,
+    "continuous_context": true,
+    "corrected_routing_declared": true,
+    "numeric_planner_declared": true,
+    "numeric_planner_exercised": true,
+    "previous_five_preserved": true,
+    "runtime_file_isolation": true,
+    "sealed_inference_source": true,
+    "sealed_runtime_source": true,
+    "six_of_six": true,
+    "v3_3_runtime_declared": true,
+    "zero_action_failures": true,
+    "zero_collisions": true,
+    "zero_policy_rejections": true
+  },
+  "metrics": {
+    "action_failure_count": 0,
+    "collision_count": 0,
+    "executed_action_count": 28,
+    "policy_rejection_count": 0,
+    "success_count": 6,
+    "success_rate": 1.0,
+    "task_count": 6
+  },
+  "oracle_inputs_at_runtime": false,
+  "passed": true,
+  "preregistration_path": "reports/gemma4/metrics/navigation_policy_v3_3_runtime_preregistration.json",
+  "preregistration_sha256": "c2b1664155af169bf15e88629d5c44bbd3ceda936511b44185f9069a749162bc",
+  "runtime_output_hashes": {
+    "data_gemma4/robot_benchmark_learned_v3_3/scene_000001/semantic_map.npz": "f642a9535facd092069737d2672810c3ec9fdae06b5d51e0f31962747b7d8ed4"
+  },
+  "runtime_promotion_authorized": true,
+  "runtime_version": "v3.3",
+  "schema": "semantic_3d_chat.navigation_policy_v3_3_result.v1",
+  "status": "accepted_development_calibration"
+}

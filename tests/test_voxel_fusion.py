@@ -5,7 +5,11 @@ import pytest
 
 from semantic_3d_chat.mapping.fusion import fuse_frame, sample_spatial_field
 from semantic_3d_chat.mapping.semantic_codec import IdentitySemanticCodec
-from semantic_3d_chat.mapping.voxel_map import SparseVoxelMap, voxel_coordinates
+from semantic_3d_chat.mapping.voxel_map import (
+    SparseVoxelMap,
+    persisted_voxel_map_content_hash,
+    voxel_coordinates,
+)
 
 
 def test_negative_world_coordinates_use_floor_voxel_assignment() -> None:
@@ -63,6 +67,7 @@ def test_map_save_load_and_previews_are_safe_and_reproducible(tmp_path: Path) ->
     )
     expected_hash = voxel_map.content_hash()
     map_path = voxel_map.save(tmp_path / "map.npz", metadata={"scene_id": "scene_000001"})
+    assert persisted_voxel_map_content_hash(map_path) == expected_hash
     loaded = SparseVoxelMap.load(map_path)
     assert loaded.content_hash() == expected_hash
     assert np.allclose(

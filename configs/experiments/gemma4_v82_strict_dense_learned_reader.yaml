@@ -1,0 +1,110 @@
+v82:
+  schema_version: 82
+  artifact: gemma4_v82_strict_dense_learned_reader_v1
+  status: implemented_model_free_preflight_only_fit_not_executed
+  seed: 820082
+
+  sources:
+    v73_config: configs/experiments/gemma4_v73_fullscene_controller.yaml
+    v73_config_sha256: d208f28380e3f1810a688be8ea8a263831b6a741f7f90e667795637f39d841f1
+    historical_qa: data_diverse52/qa/train.jsonl
+    historical_qa_sha256: 01721bf904b1ab0b65ce8acac6e366287040873cda1356da6c70c4981abe7619
+    prefix_cache: data_gemma4/scene_tokens/v56_question_control_full_prefixes
+    prefix_manifest_sha256: 5a288a7fef65a957ba7b20132c63380cfadc7edbc37b32c1885037f939b9db61
+    v75_controller: data_gemma4/runtime/checkpoints/gemma4_v75_nll_control_release_v1
+    v75_controller_weights_sha256: bb112f42ca5df71b88b4cd7721b9107f9be9b0dc01b612a4ace6212548da669c
+    v75_controller_metadata_sha256: a45a192d27336329580612524d43f71f08e3f472e5fe833747ffc1395e2aa2be
+    probe_bank: reports/gemma4/artifacts/v75_fixed_atlas_historical_internal_v1/probe_bank
+    probe_tensor_file_sha256: fb32c687dd787f108fab03e9745eefb2273891c2be990d0acf50ca111eb637e8
+    probe_metadata_sha256: 3e736940f4c83b55e96aa5e36f6774fd007454508722f5b25ddc44f298c2518d
+
+  immutable_memory:
+    layout: [boi, 96_groups_each_probe_key_plus_four_scene_values, all_256_base_latents, eoi]
+    shape: [1, 738, 1536]
+    compiled_before_question: true
+    reused_byte_identically_across_questions: true
+    atlas_groups: 96
+    atlas_values: 384
+    base_environment_latents: 256
+    boi_eoi_are_payload: false
+    probe_keys_are_payload: false
+    strict_positive_payload_claim_for_all_738_tokens: false
+    question_dependent_scene_processing: false
+    question_dependent_retrieval: false
+    semantic_or_spatial_top_k_selection: false
+    environmental_text_inputs: []
+
+  reader:
+    architecture: positive_floor_dual_bank_reader_v82
+    internal_dimension: 64
+    trainable_parameter_count: 688130
+    atlas_uniform_floor_mass: 0.05
+    atlas_minimum_weight: 0.0005208333333333333
+    base_uniform_floor_mass: 0.10
+    base_minimum_weight: 0.000390625
+    atlas_direct_mix: 0.99
+    base_direct_mix: 0.01
+    inherited_v81_atlas_logit_scale: 160.0
+    learned_atlas_logit_residual_initially_zero: true
+    learned_output_residual_initially_zero: true
+    bias_free: true
+    zero_environment_produces_exact_zero_controls: true
+    every_atlas_value_participates_with_positive_coefficient: true
+    every_base_latent_participates_with_positive_coefficient: true
+
+  split:
+    source: exact_v73_historical_pair_split
+    train_pair_count: 12
+    train_scene_count: 24
+    train_row_count: 576
+    development_pair_count: 8
+    development_scene_count: 16
+    development_row_count: 384
+    pair_disjoint: true
+    scene_disjoint: true
+    official_validation_loaded: false
+    official_test_loaded: false
+    deferred_final_loaded: false
+    oracle_loaded: false
+
+  cache:
+    training_output: reports/gemma4/artifacts/v82_strict_dense_reader/train_cache
+    development_output: reports/gemma4/artifacts/v82_strict_dense_reader/development_cache
+    questions_or_answers_serialized: false
+    environmental_text_serialized: false
+    create_once: true
+
+  fit:
+    candidate_output: reports/gemma4/artifacts/v82_strict_dense_reader/candidate
+    device: cpu
+    epochs: 1
+    batch_size: 12
+    optimizer_updates_maximum: 48
+    learning_rate: 0.0005
+    weight_decay: 0.0001
+    gradient_clip_norm: 1.0
+    cosine_weight: 1.0
+    normalized_mse_weight: 1.0
+    wrong_scene_contrast_weight: 0.5
+    wrong_scene_margin: 0.05
+    source_anchor_weight: 0.0001
+    training_fold_only: true
+    intermediate_selection: false
+    runtime_promotion_authorized: false
+
+  grounding:
+    enabled: false
+    reason: existing_v78_grounding_sidecar_is_independent_and_no_new_grounding_target_is_needed_for_the_smallest_reader_fit
+
+  evaluation:
+    output: reports/gemma4/metrics/v82_strict_dense_reader_development.json
+    model_free: true
+    candidate_selection_after_development_scoring: false
+    metrics:
+      - mean_control_cosine
+      - normalized_mse
+      - changed_wrong_scene_preference
+      - zero_environment_maximum_absolute_control
+      - shuffled_atlas_control_delta
+      - minimum_atlas_attention_weight
+      - minimum_base_attention_weight

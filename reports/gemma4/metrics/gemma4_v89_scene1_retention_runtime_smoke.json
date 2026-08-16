@@ -1,0 +1,67 @@
+{
+  "artifact": "gemma4_v89_strict_runtime_smoke_v1",
+  "behavior": [
+    {
+      "expected": "yes",
+      "observed": "yes",
+      "passed": true,
+      "question": "Is there a chair?"
+    },
+    {
+      "expected": "red",
+      "observed": "red",
+      "passed": true,
+      "question": "What color is the bowl?"
+    },
+    {
+      "expected": "left",
+      "observed": "left",
+      "passed": true,
+      "question": "Is the bowl left or right of the chair?"
+    }
+  ],
+  "behavior_assertions_applied_after_chat_process_exit": true,
+  "candidate_adapter_sha256": "78856650751f8c700a651553e02d95ac389be53e12a56c39576a6d2f23d7d386",
+  "candidate_checkpoint_sha256": "17c4e9c4b785ba48b32814870d6885cfb370e70dce6b14bb0525d525293c22e4",
+  "candidate_memory_tensor_sha256": "3427851432d8f2a3609b6205b18b8c0d9a0fcf68d8f3bf0c98c758ac64209ffb",
+  "chat_log_sha256": "f6f87c131aedf04dad155b32ecb5bcb4704ef6590978d9e8864122e0005172bb",
+  "chat_process_stderr_sha256": "e62496e08a63f8360a7c6aa65510551416ec988a07b661889ae2e97717c76c94",
+  "chat_process_stdout_sha256": "1f5dcd91a13bd83b29e82240100c040e48c8d3e944613a63be547c0907b38b94",
+  "development_known_smoke_trained": true,
+  "environment_conditioned_input_hashes": [
+    "a428f5147c815839ae7315a0adab952ab210814fb21dcdc5bf13b167f28a6e37",
+    "a428f5147c815839ae7315a0adab952ab210814fb21dcdc5bf13b167f28a6e37",
+    "a428f5147c815839ae7315a0adab952ab210814fb21dcdc5bf13b167f28a6e37"
+  ],
+  "expected_behavior_not_loaded_by_chat_runtime": true,
+  "file_audit_sha256": "adf71c8afd7c327302bb5c905d5caeb9a2a3af5171270aea6f059a64e4a7a00e",
+  "gates": {
+    "child_audit_completion_passed": true,
+    "child_loaded_no_training_or_evaluation_report": true,
+    "child_reported_oracle_unavailable_at_start": true,
+    "child_used_exact_eleven_frozen_banks": true,
+    "expected_immutable_scene_prefix": true,
+    "file_audit_forbidden_read_count_zero": true,
+    "model_acceptance_gate_authenticated_and_passed": true,
+    "oracle_physically_unavailable": true,
+    "oracle_restored_after_runtime": true,
+    "prefix_and_environment_input_identical": true,
+    "prefix_hash_identical_for_every_question": true,
+    "runtime_process_exit_zero": true,
+    "source_memory_bytes_unchanged": true,
+    "three_behavior_assertions_pass": true,
+    "total_environment_conditioned_input_identical": true
+  },
+  "held_out_generalization_claim": false,
+  "held_out_smoke_claim": false,
+  "model_gate_report_sha256": "c880c0707c6c87783a20134984914e4a0c6cace4d4d70c7d202ee2a527ee87a2",
+  "passed": true,
+  "prefix_hashes": [
+    "a428f5147c815839ae7315a0adab952ab210814fb21dcdc5bf13b167f28a6e37",
+    "a428f5147c815839ae7315a0adab952ab210814fb21dcdc5bf13b167f28a6e37",
+    "a428f5147c815839ae7315a0adab952ab210814fb21dcdc5bf13b167f28a6e37"
+  ],
+  "promotion_authorized": true,
+  "schema_version": 89,
+  "v89_bridge_state_sha256": "de2388828b4a95770e6e55639baa4538a8360ab1323b68b05ab915aaaba68bd8"
+}

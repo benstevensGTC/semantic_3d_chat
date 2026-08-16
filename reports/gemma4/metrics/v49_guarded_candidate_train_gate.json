@@ -1,0 +1,305 @@
+{
+  "access_audit": {
+    "final_test_loaded": false,
+    "forbidden_file_accesses": [],
+    "loaded_file_count": 152,
+    "loaded_file_inventory_sha256": "63b6e3eb1b1af499cb5aea30b91ef4dd9a804ac1b9a925dd17e0e9983d67f6d3",
+    "optimizer_file_reads": [],
+    "oracle_loaded": false,
+    "passed": true,
+    "training_map_count": 16,
+    "training_map_inventory_sha256": "b2c3e28d95e1def158792f9fcf873eeeb523cd37dda3b985ea07f7201a98435f",
+    "validation_qa_loaded": false
+  },
+  "artifact": "v49_guarded_candidate_train_gate",
+  "authorization": {
+    "authorization_id": "v49_guarded_alpha2_train_candidate_gate",
+    "checks": {
+      "action": true,
+      "artifact": true,
+      "authorization_id": true,
+      "authorized": true,
+      "candidate": true,
+      "checkpoint": true,
+      "cli": true,
+      "config": true,
+      "config_hash": true,
+      "explicit_sha": true,
+      "greedy_iff": true,
+      "greedy_skip": true,
+      "hashes_complete": true,
+      "no_embedded_sha": true,
+      "passed": true,
+      "persistence": true,
+      "pre_gate_contract": true,
+      "pre_gate_failure": true,
+      "pre_gate_first": true,
+      "prefix_authorized": true,
+      "prefix_checkpoint": true,
+      "prefix_files": true,
+      "prefix_frozen": true,
+      "prefix_full": true,
+      "prefix_scope": true,
+      "report": true,
+      "scope": true,
+      "script": true,
+      "script_hash": true,
+      "source_authorized": true,
+      "source_checkpoint": true,
+      "source_files": true,
+      "source_frozen": true,
+      "source_full": true,
+      "source_optimizer_forbidden": true,
+      "successor": true,
+      "terminal_auth": true,
+      "terminal_path": true,
+      "terminal_ready": true,
+      "test": true,
+      "test_hash": true,
+      "thresholds": true,
+      "v48_report": true
+    },
+    "terminal_path": "reports/gemma4/metrics/v48_v47_u4_dual_margin_terminal_gate.json",
+    "terminal_sha256": "406becf0ec94c7b59ffa0acdef6441dab224d279b2cdccc86645c6048a8ef6f3"
+  },
+  "candidate_reconstruction": {
+    "all_16_training_maps_cached": true,
+    "all_parameter_gradients_absent_before_forward": true,
+    "alpha": 2.0,
+    "authorized_surface_state_sha256": "f43e1b2a84006c8188adeff9f206ba864ae3d51b6567cad679f6d2e5f3610cf2",
+    "candidate_id": "guarded_both_sign_alpha_2p0",
+    "candidate_selection_performed": false,
+    "direction_audit_sha256": "2d325cebd47fe03e3f021f4a2cd150f51d4448b88046e4a1fc370bd1a19d55bf",
+    "direction_id": "guarded_both_sign",
+    "frozen_state_sha256": "31cb215cf0d1623886d4a79203c501912e66537021da53dd711124abdc2e36fa",
+    "full_tensor_state_sha256": "69c5471d141ab56397969e2aac5f1097676f6ea328a3d5577e816c3aef6f3387",
+    "gradient_audit_sha256": "a7bcdbcfb51cf03648abb178157973dcf5d4c8940e1e1704d92467726bd301dd",
+    "loader_transition": {
+      "bank_names_bit_exact": true,
+      "construction_copy_serialized_to_metadata": false,
+      "construction_used_v30_compatible_copy": true,
+      "state_hashes_bit_exact": true,
+      "target_paths_bit_exact": true,
+      "v41_frozen_v23_bank": "extension_v23_shared_kv",
+      "v41_manually_trainable_adapter": "extension_v28_stage_b_query.adapters.1.lora_b",
+      "v41_trainable_bank": null,
+      "v41_trainable_parameter_count": 16384
+    },
+    "prefix_reference": {
+      "authorized_surface_state_sha256": "d60b665d9a970433b2ed59e6769b9114468bef608b98eae828268101d39db56c",
+      "candidate_id": "g5_both_sign_alpha_1p0",
+      "checkpoint": "data_gemma4/checkpoints/gemma4_v47_book_continuation_l14_query/update_000",
+      "directory_inventory": [
+        "adapter.safetensors",
+        "metadata.json",
+        "runtime_metadata.json"
+      ],
+      "file_sha256": {
+        "adapter.safetensors": "c47bbb9bacbb5bc8178e9a1797ec47b04ee4a3709042c6b30f6935eacc4686f0",
+        "metadata.json": "e76e8a905af53fb082684000a6a6e16845b79e0795b6dbb047a2703245198574",
+        "runtime_metadata.json": "01e645b82c5e533dd2319ef8a97171437b149c4e1ef86201f83fdb22de047987"
+      },
+      "frozen_state_sha256": "31cb215cf0d1623886d4a79203c501912e66537021da53dd711124abdc2e36fa",
+      "full_tensor_state_sha256": "1d5adc1fb0d7a895056b77d38c8a12aba95c9997ec8a94edf68673f9c58fb954",
+      "scene_count": 16
+    },
+    "prefix_reference_computed_before_candidate_evaluation": true,
+    "prefix_reference_hash_inventory_sha256": "42960ef8a0dadd58f5b39a7ae6b5f0c8cd996dc0a3770d913689aaa35014ed66",
+    "qa_audit": {
+      "deferred_final_qa_loaded": false,
+      "loaded_files": [
+        "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_diverse28/qa/splits.json",
+        "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_diverse28/qa/train.jsonl"
+      ],
+      "oracle_environment_files_loaded": false,
+      "qa_root": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_diverse28/qa",
+      "schema_version": 1,
+      "train_changed_pair_unit_count": 25,
+      "train_question_count": 384,
+      "train_scene_ids": [
+        "scene_000011",
+        "scene_000012",
+        "scene_000013",
+        "scene_000014",
+        "scene_000015",
+        "scene_000016",
+        "scene_000017",
+        "scene_000018",
+        "scene_000031",
+        "scene_000032",
+        "scene_000033",
+        "scene_000034",
+        "scene_000035",
+        "scene_000036",
+        "scene_000037",
+        "scene_000038"
+      ],
+      "validation_qa_loaded": false,
+      "validation_qa_path": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_diverse28/qa/validation.jsonl",
+      "validation_scene_ids_from_pinned_contract": [
+        "scene_000019",
+        "scene_000020",
+        "scene_000021",
+        "scene_000022",
+        "scene_000023",
+        "scene_000024"
+      ]
+    },
+    "query_state_changed": true,
+    "scene_readout_state_changed": true,
+    "schedule_audit_sha256": "1aacefbdbf3a562683bc212d3b6a85b820579e03c04f0279613e05b59f38b590",
+    "single_candidate_reconstructed": true,
+    "source_audit": {
+      "authorized_surface_state_sha256": "a23de4988774a966c0d7aac378ede5d15a3fa1d96093c5039f181a62b0bb09b0",
+      "checkpoint": "data_gemma4/checkpoints/gemma4_v47_book_continuation_l14_query/update_004",
+      "directory_inventory": [
+        "adapter.safetensors",
+        "metadata.json",
+        "optimizer.pt",
+        "runtime_metadata.json"
+      ],
+      "frozen_state_sha256": "31cb215cf0d1623886d4a79203c501912e66537021da53dd711124abdc2e36fa",
+      "full_tensor_state_sha256": "adfc0400d1a3bb49b278cd3012ab571d01465f2380881f986c085a25474276e5",
+      "optimizer_file_opened": false,
+      "optimizer_file_sha256_provenance": "fe66be9cae13951fbfc217e0c512e43366c347181457c9e551230a9d6001db80",
+      "optimizer_state_deserialized": false,
+      "optimizer_state_loaded": false,
+      "readable_file_sha256": {
+        "adapter.safetensors": "8f903f5d1ba93d37ccd6204e3b58c9a5529ff9ee2b74edca0787ecb5a2c62c66",
+        "metadata.json": "c6affe7f60c094580e2ea5f5d1330f475bf359e0a3a58bfc3bf3b3ada1de0be1",
+        "runtime_metadata.json": "4e3a1af91642c9f2adb0b3e43997455a1aea31f86bf45618459d6005a68d4bbf"
+      },
+      "v47_final_train_only_gate_passed": false
+    },
+    "source_v47_u4_exact_before_reconstruction": true
+  },
+  "candidate_selection_performed": false,
+  "chat_promotion_executed": false,
+  "checkpoint": {
+    "inventory": null,
+    "optimizer_file_written": false,
+    "path": "data_gemma4/checkpoints/gemma4_v49_guarded_alpha2_train_gate/update_000",
+    "staged_after_behavioral_gate": false,
+    "write_iff_final_gate_passed": true,
+    "written": false
+  },
+  "embodied_promotion_executed": false,
+  "final_test_scenes_touched": false,
+  "final_train_gate": {
+    "access_audit_passed": true,
+    "execution_error": null,
+    "greedy_gate_passed": false,
+    "passed": false,
+    "pre_gate_passed": false,
+    "source_restored_exact": true
+  },
+  "greedy_gate": {
+    "authorized": false,
+    "checks": {},
+    "evidence": null,
+    "executed": false,
+    "greedy_skipped_due_pre_gate": true,
+    "passed": false
+  },
+  "non_greedy_pre_gate": {
+    "checks": {
+      "book_complete_units_at_least_1": true,
+      "book_cross_prefix_complete_units_at_least_1": true,
+      "both_lost_sides_strictly_positive": true,
+      "broad_nll_at_most_v45_maximum": true,
+      "complete_physical_pair_coverage_at_least_5": true,
+      "frozen_state_exact": true,
+      "mirror_complete_units_at_least_2": true,
+      "original_v46_candidate_relative_prefix_trust_rms_at_most_0_002": false,
+      "priority_deficit_improvement_at_least_0_5_vs_original_v41_u0": true,
+      "query_state_changed": true,
+      "reconstructed_candidate_authorized_surface_state_exact": true,
+      "reconstructed_candidate_full_tensor_state_exact": true,
+      "scene_readout_state_changed": true,
+      "source_v47_u4_exact_before_reconstruction": true,
+      "teacher_complete_units_at_least_10": true,
+      "teacher_cross_prefix_complete_units_at_least_17": true,
+      "teacher_positive_sides_at_least_35": true
+    },
+    "evaluated_first": true,
+    "evidence": {
+      "broad_nll": 2.920842170715332,
+      "broad_row_count": 48,
+      "complete_physical_pair_coverage": 5,
+      "complete_units": 10,
+      "complete_units_by_family": {
+        "book_support": 1,
+        "mirror_lr": 2,
+        "picture_support": 0
+      },
+      "cross_prefix_complete_units": 18,
+      "cross_prefix_complete_units_by_family": {
+        "book_support": 2,
+        "mirror_lr": 4,
+        "picture_support": 3
+      },
+      "focus_units": {
+        "cfq_163eb92339ad35a5": {
+          "cross_prefix_margins": [
+            -0.21834421157836914,
+            0.5991287231445312
+          ],
+          "pair_id": "pair_000015",
+          "side_margins": [
+            0.17693853378295898,
+            0.20384597778320312
+          ]
+        },
+        "cfq_5c84a2c27d2be251": {
+          "cross_prefix_margins": [
+            0.19320058822631836,
+            0.11929941177368164
+          ],
+          "pair_id": "pair_000006",
+          "side_margins": [
+            0.0625,
+            0.25
+          ]
+        },
+        "cfq_699675ceeaf65406": {
+          "cross_prefix_margins": [
+            0.5330691337585449,
+            0.34193092584609985
+          ],
+          "pair_id": "pair_000016",
+          "side_margins": [
+            0.5,
+            0.3750000596046448
+          ]
+        }
+      },
+      "original_v46_candidate_relative_prefix_trust_rms": 0.0020444965921342373,
+      "pair_metrics_sha256": "1b984d9d776a8c2c905c455ba48896ecbba204aab6c6933dd5027225cd11b912",
+      "per_unit_nll_row_count": 25,
+      "per_unit_nll_sha256": "452ed2e76b404440cf75f7f6870d7db6c786f2f66f83cdd6d9956ce6a5fc245d",
+      "positive_sides": 35,
+      "priority_deficit_improvement_vs_original_v41_u0": 1.244513750076294,
+      "priority_side_deficit": 29.86921536922455,
+      "unit_count": 25
+    },
+    "passed": false
+  },
+  "optimizer_constructed_or_loaded": false,
+  "optimizer_state_file_opened": false,
+  "optimizer_step_executed": false,
+  "oracle_loaded": false,
+  "passed": false,
+  "runtime_promotion_executed": false,
+  "schema_version": 1,
+  "selector_executed": false,
+  "source_restoration": {
+    "all_parameter_gradients_absent": true,
+    "attempted": true,
+    "authorized_surface_state_sha256": "a23de4988774a966c0d7aac378ede5d15a3fa1d96093c5039f181a62b0bb09b0",
+    "frozen_state_sha256": "31cb215cf0d1623886d4a79203c501912e66537021da53dd711124abdc2e36fa",
+    "full_tensor_state_sha256": "adfc0400d1a3bb49b278cd3012ab571d01465f2380881f986c085a25474276e5",
+    "passed": true
+  },
+  "validation_environment_maps_loaded": false,
+  "validation_qa_loaded": false
+}

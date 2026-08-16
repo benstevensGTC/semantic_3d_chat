@@ -1,0 +1,200 @@
+_base_: gemma4_diverse28_joint_block_cross_v36.yaml
+
+# V37 is a bounded scene-ingress decoder isolation. It starts from the exact
+# stopped V36 update 16 and continues only the already-learned shared K/V LoRA
+# bank on Gemma layers 13--14. The learned V36 block core, learned query bank,
+# complete scene stack, Gemma base, and every other LoRA bank remain frozen.
+language:
+  lora_banks:
+    extension_v23_shared_kv:
+      trainable: true
+      rank: 4
+      alpha: 8.0
+      dropout: 0.0
+      initialization_algorithm: checkpoint_overwrite
+      initialization_seed: null
+      expected_initial_state_sha256: 91a9eea577cab5a37e840cdf4007722a398415846af91280713bcb2cda0f045c
+      target_modules:
+        - model.language_model.layers.13.self_attn.k_proj
+        - model.language_model.layers.13.self_attn.v_proj
+        - model.language_model.layers.14.self_attn.k_proj
+        - model.language_model.layers.14.self_attn.v_proj
+    extension_v30_joint_pair_query:
+      trainable: false
+      rank: 8
+      alpha: 16.0
+      dropout: 0.0
+      initialization_algorithm: checkpoint_overwrite
+      initialization_seed: null
+      expected_initial_state_sha256: 050706c300e6fb0ac8e4cc02e26c565b54a9a89505104302d4ffcedc02124c64
+      target_modules:
+        - model.language_model.layers.18.self_attn.q_proj
+        - model.language_model.layers.19.self_attn.q_proj
+        - model.language_model.layers.20.self_attn.q_proj
+        - model.language_model.layers.21.self_attn.q_proj
+
+training:
+  output_namespace: gemma4_v37_diverse28_scene_ingress_kv
+  lora_learning_rate: 0.00002
+  lora_weight_decay: 0.0
+  v37_scene_ingress_kv:
+    enabled: true
+    optimizer_steps: 64
+    checkpoint_interval_steps: 8
+    broad_nll_weight: 0.25
+    pair_correct_nll_weight: 0.5
+    side_hinge_weight: 4.0
+    side_hinge_margin: 0.5
+    cross_prefix_flip_weight: 8.0
+    cross_prefix_flip_margin: 0.25
+    residual_penalty_weight: 0.001
+    residual_penalty_scale: 0.05
+    learning_rate: 0.00002
+    weight_decay: 0.0
+    gradient_clip_norm: 1.0
+
+v37_scene_ingress_kv:
+  schema_version: 1
+  role: exact_v36_u16_learned_shared_kv_lora_v37
+  engine: fresh_adam_existing_learned_scene_ingress_kv_true_microsteps
+  v36_terminal_gate_report: reports/gemma4/metrics/v36_update16_terminal_gate.json
+  v36_terminal_gate_report_sha256: cb5b1248a4904dc58a685b64e052f980c02771b59eed5578bdbf2865ddbf5877
+  source_checkpoint: data_gemma4/checkpoints/gemma4_v36_diverse28_joint_block_cross/update_016
+  source_optimizer_step: 16
+  source_file_sha256:
+    adapter.safetensors: 6ed86fb51502f7330c75cc48b9be970eb0a933eb19da971a7e04726c419c3be5
+    metadata.json: 7e7c257a1e42d20b7f2270a0257969ae006c3c27859e707c18d21b5537a89342
+    runtime_metadata.json: 63a27773e5d127c063b762cf110c1ed1d4022908bd9e4b843509dc399fe7f6dc
+    optimizer.pt: 51a76712d87f24af793a28848d743034b9229d5e1df63d02c81e13efb5f12569
+  source_v36_tensor_state_sha256: e9b6d1362d58f34aede04817b0c8d81320c616dcd4b64e9c0d3bbe56b5835dd7
+  source_block_core_state_sha256: 92652fd2dbde2406227503f50717b2031baa1bcbc050902a379ddb9ddb52764f
+  source_query_bank_name: extension_v30_joint_pair_query
+  source_query_bank_state_sha256: 050706c300e6fb0ac8e4cc02e26c565b54a9a89505104302d4ffcedc02124c64
+  target_bank_name: extension_v23_shared_kv
+  target_bank_parameter_count: 30720
+  target_bank_source_state_sha256: 91a9eea577cab5a37e840cdf4007722a398415846af91280713bcb2cda0f045c
+  target_bank_rank: 4
+  target_bank_alpha: 8.0
+  target_bank_dropout: 0.0
+  target_modules:
+    - model.language_model.layers.13.self_attn.k_proj
+    - model.language_model.layers.13.self_attn.v_proj
+    - model.language_model.layers.14.self_attn.k_proj
+    - model.language_model.layers.14.self_attn.v_proj
+  target_tensor_count: 8
+  source_v36_frozen_nonauthorized_state_sha256: b394d502f0c32a694c2d1a448cdf3849c47efc4058cb1f1331fe4a97d381b1dc
+  v37_frozen_nonauthorized_state_sha256: c82b8715aebcb775a6e23cb5cd477520922682b5f41929017f4f91917eafe061
+  source_optimizer_state_loaded: false
+  source_optimizer_file_opened: false
+  validation_qa_loaded_during_training: false
+  continuation_gates_use_training_only: true
+  question_dependent_scene_processing: false
+  question_dependent_retrieval: false
+  train_scene_ids:
+    - scene_000011
+    - scene_000012
+    - scene_000013
+    - scene_000014
+    - scene_000015
+    - scene_000016
+    - scene_000017
+    - scene_000018
+    - scene_000031
+    - scene_000032
+    - scene_000033
+    - scene_000034
+    - scene_000035
+    - scene_000036
+    - scene_000037
+    - scene_000038
+  validation_scene_ids:
+    - scene_000019
+    - scene_000020
+    - scene_000021
+    - scene_000022
+    - scene_000023
+    - scene_000024
+  deferred_final_scene_ids:
+    - scene_000025
+    - scene_000026
+    - scene_000027
+    - scene_000028
+    - scene_000029
+    - scene_000030
+  priority_pair_ids:
+    book_support: pair_000015
+    mirror_lr: pair_000016
+    picture_support: pair_000017
+  warmup_question_keys:
+    - cfq_13b1138d14c52a7c
+    - cfq_1c8b8cd72fcde904
+    - cfq_163eb92339ad35a5
+    - cfq_66aab89cee5bef49
+    - cfq_a1c673a1197a0961
+    - cfq_d469c4ac156ac42d
+    - cfq_ac7ac024c40aaddc
+    - cfq_fa3601dfffa80a0e
+  tail_question_keys:
+    - cfq_13b1138d14c52a7c
+    - cfq_1c8b8cd72fcde904
+    - cfq_163eb92339ad35a5
+    - cfq_66aab89cee5bef49
+    - cfq_a1c673a1197a0961
+    - cfq_d469c4ac156ac42d
+  schedule_sha256: 76a123412d4bd3aeee012515b37095c22d9cbf9eb56934b622d715daca45fa2b
+  saved_optimizer_steps: [0, 8, 16, 24, 32, 40, 48, 56, 64]
+  update16_gate:
+    optimizer_step: 16
+    complete_units_minimum: 10
+    complete_physical_pair_coverage_minimum: 5
+    cross_prefix_complete_units_minimum: 16
+    positive_sides_minimum: 35
+    mean_cross_prefix_margin_minimum: 1.4565558433532715
+    book_and_picture_complete_units_minimum: 1
+    book_cross_prefix_complete_units_minimum: 1
+    picture_cross_prefix_complete_units_minimum: 2
+    mirror_complete_units_minimum: 2
+    broad_nll_maximum: 2.973401871621609
+    target_bank_state_must_change: true
+    frozen_nonauthorized_state_must_remain_exact: true
+    residual_diagnostics_must_remain_exact: true
+  update32_gate:
+    optimizer_step: 32
+    require_update16_passed: true
+    complete_units_minimum: 12
+    complete_physical_pair_coverage_minimum: 6
+    cross_prefix_complete_units_minimum: 18
+    positive_sides_minimum: 37
+    mean_cross_prefix_margin_minimum: 1.4565558433532715
+    book_complete_units_minimum: 1
+    picture_complete_units_minimum: 1
+    mirror_complete_units_minimum: 2
+    broad_nll_maximum: 3.002552870362997
+    frozen_nonauthorized_state_must_remain_exact: true
+    residual_diagnostics_must_remain_exact: true
+  update64_gate:
+    optimizer_step: 64
+    require_update32_passed: true
+    complete_units_minimum: 15
+    complete_physical_pair_coverage_minimum: 7
+    cross_prefix_complete_units_minimum: 20
+    positive_sides_minimum: 40
+    book_complete_units_minimum: 1
+    picture_complete_units_minimum: 1
+    mirror_complete_units_minimum: 2
+    greedy_complete_units_minimum: 6
+    require_one_greedy_complete_per_priority_family: true
+    broad_greedy_exact_accuracy_maximum_drop: 0.02
+    broad_nll_maximum: 3.060854867845774
+    frozen_nonauthorized_state_must_remain_exact: true
+    residual_diagnostics_must_remain_exact: true
+  selector_uses_validation_only_after_complete_training: true
+  promotion_greedy_complete_units_minimum: 6
+  promotion_validation_unit_count: 12
+  final_test_deferred: true
+
+experiment:
+  role: exact_v36_u16_learned_shared_kv_lora_v37
+  source_optimizer_step: 16
+  fresh_adam: true
+  final_test_deferred: true

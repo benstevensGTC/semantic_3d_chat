@@ -11,6 +11,7 @@ import argparse
 import asyncio
 import json
 import re
+import sys
 from collections.abc import Mapping
 from pathlib import Path
 from typing import Any, Protocol
@@ -129,6 +130,15 @@ def resolve_visual_assets(
 
 
 def _reference_viewpoint(config: Mapping[str, Any]) -> dict[str, Any]:
+    runtime_viewpoint = config.get("runtime", {}).get("reference_viewpoint")
+    if isinstance(runtime_viewpoint, Mapping):
+        return {
+            "position_m": [float(value) for value in runtime_viewpoint["position_m"]],
+            "yaw_degrees": float(runtime_viewpoint["yaw_degrees"]),
+            "pitch_degrees": float(runtime_viewpoint["pitch_degrees"]),
+            "scan_view_count": int(runtime_viewpoint["scan_view_count"]),
+            "world_axes": {"x": "right", "y": "forward", "z": "up"},
+        }
     render = config.get("render", {})
     position = [float(value) for value in render.get("camera_position_m", (0.0, 0.0, 0.0))]
     yaws = [float(value) for value in render.get("yaw_degrees", (0.0,))]
@@ -148,9 +158,15 @@ def _public_runtime_state(
     runtime: ChatRuntime,
     config: Mapping[str, Any],
     asset_names: Mapping[str, Path],
+    *,
+    startup_summary: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
     runtime.assert_prefix_unchanged()
-    summary = runtime.startup_summary()
+    # Freeze the runtime contract captured before the HTTP server accepts any
+    # questions.  In particular, a question-conditioned research runtime must
+    # never be mislabeled as the strict fixed-prefix primary path merely because
+    # both runtimes preserve the same base scene-prefix hash.
+    summary = dict(runtime.startup_summary() if startup_summary is None else startup_summary)
     permitted_summary_keys = (
         "scene_id",
         "prefix_hash",
@@ -164,13 +180,25 @@ def _public_runtime_state(
         "prefix_build_seconds",
     )
     public_summary = {key: summary[key] for key in permitted_summary_keys if key in summary}
+    strict_fixed = bool(summary.get("strict_fixed_environment_embedding_input", False))
+    question_conditioned = summary.get("question_conditioned_scene_readout_tokens")
+    question_retrieval = summary.get("question_dependent_scene_retrieval")
+    environment_hash = str(
+        summary.get("environment_conditioned_input_sha256", runtime.scene_prefix_hash)
+    )
     return {
         **public_summary,
         "scene_id": runtime.scene_id,
         "prefix_hash": runtime.scene_prefix_hash,
+        "environment_conditioned_input_sha256": environment_hash,
         "questions_answered": runtime.questions_answered,
-        "prefix_built_before_questions": True,
-        "question_dependent_retrieval": False,
+        "prefix_built_before_questions": bool(
+            summary.get("scene_prefix_computed_before_question", False)
+        ),
+        "strict_fixed_environment_embedding_input": strict_fixed,
+        "question_conditioned_scene_readout_tokens": question_conditioned,
+        "question_dependent_retrieval": question_retrieval,
+        "human_visuals_are_model_inputs": False,
         "viewpoint": _reference_viewpoint(config),
         "visuals": {name: f"/assets/{name}" for name in asset_names},
     }
@@ -310,6 +338,13 @@ def create_web_app(
     assets = discovered if visual_assets is None else validate_visual_assets(visual_assets, figure_root)
     runtime.assert_prefix_unchanged()
     initial_prefix_hash = runtime.scene_prefix_hash
+    startup_summary = dict(runtime.startup_summary())
+    runtime_contract = _public_runtime_state(
+        runtime,
+        config,
+        assets,
+        startup_summary=startup_summary,
+    )
     answer_lock = asyncio.Lock()
 
     async def index(_request: Request) -> Response:
@@ -323,7 +358,12 @@ def create_web_app(
         )
 
     async def state(_request: Request) -> Response:
-        payload = _public_runtime_state(runtime, config, assets)
+        payload = _public_runtime_state(
+            runtime,
+            config,
+            assets,
+            startup_summary=startup_summary,
+        )
         payload["prefix_reused"] = runtime.scene_prefix_hash == initial_prefix_hash
         return JSONResponse(payload, headers={"Cache-Control": "no-store"})
 
@@ -359,6 +399,19 @@ def create_web_app(
         response.update(
             {
                 "scene_id": runtime.scene_id,
+                "environment_conditioned_input_sha256": runtime_contract[
+                    "environment_conditioned_input_sha256"
+                ],
+                "strict_fixed_environment_embedding_input": runtime_contract[
+                    "strict_fixed_environment_embedding_input"
+                ],
+                "question_conditioned_scene_readout_tokens": runtime_contract[
+                    "question_conditioned_scene_readout_tokens"
+                ],
+                "question_dependent_retrieval": runtime_contract[
+                    "question_dependent_retrieval"
+                ],
+                "human_visuals_are_model_inputs": False,
                 "prefix_reused": True,
                 "questions_answered": runtime.questions_answered,
             }
@@ -395,9 +448,10 @@ def create_web_app(
 
 def parser() -> argparse.ArgumentParser:
     result = argparse.ArgumentParser(description=__doc__)
-    result.add_argument("--config", default="configs/default.yaml")
+    result.add_argument("--config")
     result.add_argument("--scene", default="scene_000001")
     result.add_argument("--checkpoint")
+    result.add_argument("--primary-pointer")
     result.add_argument("--host", default="127.0.0.1")
     result.add_argument("--port", type=int, default=8765)
     result.add_argument(
@@ -409,7 +463,7 @@ def parser() -> argparse.ArgumentParser:
     return result
 
 
-def main(argv: list[str] | None = None) -> int:
+def _run(argv: list[str] | None = None) -> int:
     args = parser().parse_args(argv)
     if not 1 <= args.port <= 65_535:
         raise SystemExit("--port must be between 1 and 65535")
@@ -417,26 +471,33 @@ def main(argv: list[str] | None = None) -> int:
     if args.host not in loopback_hosts and not args.allow_network:
         raise SystemExit("Refusing a non-loopback bind without --allow-network")
 
-    config_path = _reject_forbidden_path(_rooted(args.config), "web configuration")
     audit_path = _rooted(args.audit_log or "reports/metrics/web_file_access.json")
     default_data_root = PROJECT_ROOT / "data"
-    audit = FileAccessAudit(_forbidden_roots(default_data_root))
+    audit = FileAccessAudit(
+        _forbidden_roots(default_data_root),
+        forbidden_component_names=_FORBIDDEN_RUNTIME_DIRECTORIES,
+        block_forbidden=True,
+    )
     runtime: ChatRuntime | None = None
     try:
         with audit:
             # Delay heavyweight imports until the file-access audit is active.
             import uvicorn
 
+            from semantic_3d_chat.chat.launch import resolve_chat_launch
             from semantic_3d_chat.chat.runtime import StaticChatRuntime
             from semantic_3d_chat.config import (
                 artifact_root,
-                default_checkpoint_path,
-                load_config,
                 reports_root,
             )
 
-            audit.record(config_path)
-            config = load_config(config_path)
+            launch = resolve_chat_launch(
+                config_path=args.config,
+                checkpoint=args.checkpoint,
+                primary_pointer=args.primary_pointer,
+                audit=audit,
+            )
+            config = launch.config
             if args.audit_log is None:
                 audit_path = reports_root(config) / "metrics" / "web_file_access.json"
             configured_forbidden_roots = [
@@ -446,12 +507,18 @@ def main(argv: list[str] | None = None) -> int:
             for root in configured_forbidden_roots:
                 if root not in audit.forbidden_roots:
                     audit.forbidden_roots.append(root)
+            launch.verify_scene_map(args.scene, audit=audit)
             runtime = StaticChatRuntime.load(
                 config,
                 args.scene,
-                checkpoint=args.checkpoint or default_checkpoint_path(config),
+                checkpoint=launch.checkpoint_path,
                 audit=audit,
                 local_files_only=True,
+            )
+            launch.verify_scene_prefix(
+                args.scene,
+                loaded_scene_id=runtime.scene_id,
+                prefix_sha256=runtime.scene_prefix_hash,
             )
             app = create_web_app(runtime, config, audit=audit)
             print(
@@ -462,6 +529,7 @@ def main(argv: list[str] | None = None) -> int:
                         "scene_id": runtime.scene_id,
                         "prefix_hash": runtime.scene_prefix_hash,
                         "prefix_built_before_questions": True,
+                        "behaviorally_promoted": launch.is_production_gemma,
                     },
                     sort_keys=True,
                 ),
@@ -488,6 +556,14 @@ def main(argv: list[str] | None = None) -> int:
             flush=True,
         )
     return 0
+
+
+def main(argv: list[str] | None = None) -> int:
+    try:
+        return _run(argv)
+    except (OSError, RuntimeError, TypeError, ValueError) as exc:
+        print(f"Web chat startup refused: {exc}", file=sys.stderr)
+        return 2
 
 
 if __name__ == "__main__":

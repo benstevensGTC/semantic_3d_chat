@@ -1,0 +1,69 @@
+_base_: gemma_waypoint_policy_operator_dagger_v6.yaml
+
+# V7 is a fresh, unpromoted offline DAgger candidate. YAML list overrides are
+# explicit, so this list repeats V5's sealed source byte-for-byte and appends
+# the exact V6 live failure as source three; V4 remains the inherited singular
+# source. Every correction is training-only and ends with a safe return+STOP.
+gemma_waypoint_traces:
+  profiles:
+    operator:
+      additional_live_failure_dagger_augmentations:
+        # Cumulative source two: preserve the exact V5 live failure contract.
+        - enabled: true
+          report_path: reports/gemma4/metrics/gemma_waypoint_dagger_v5_live_acceptance.json
+          report_sha256: 670fd0eb87f471e084ade548d8f9fa78c961aa926b4d79913bccdcd49ba0adc4
+          scene_id: scene_000001
+          instruction: Do a lap around the room.
+          initial_pose_xy_yaw: [-0.5, -0.25, -90.0]
+          checkpoint_sha256: 3f6785f082442c37ccb23db308e0f1e21b31dda28abe1c5f197d7be511baa199
+          scene_prefix_sha256: 52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95
+          first_rejection_step: 22
+          first_rejection_error_code: E_MODEL_COLLISION
+          failed_target_xy_m: [-0.8826844833092204, 0.41691211338913026]
+          failed_target_tolerance_m: 0.000001
+          route_direction: clockwise
+          resume_waypoint_index: 8
+          maximum_total_decisions: 128
+          minimum_path_length_m: 5.0
+          minimum_abs_winding_area_m2: 0.5
+          maximum_return_error_m: 0.35
+        # Cumulative source three: exact V6 live prefix through its first
+        # rejection at decision 47. The accepted prefix already approximately
+        # reached waypoint 24; waypoint 25 is the first unvisited clockwise
+        # anchor and has a direct padded-map-safe recovery. The expert then
+        # processes waypoints 26..45 back to the exact initial XY before STOP.
+        - enabled: true
+          report_path: reports/gemma4/metrics/gemma_waypoint_dagger_v6_live_acceptance.json
+          report_sha256: a3ccd49891451d8e5863d90ef89718ed3489a6822abea725f3423dd43902ee97
+          scene_id: scene_000001
+          instruction: Do a lap around the room.
+          initial_pose_xy_yaw: [-0.5, -0.25, -90.0]
+          checkpoint_sha256: 7366fced7601b726c7e0d03483446aef4e41bc7bd5bcad224176a3c2543f428a
+          scene_prefix_sha256: 52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95
+          first_rejection_step: 47
+          first_rejection_error_code: E_MODEL_COLLISION
+          failed_target_xy_m: [0.23210880891888863, 0.15496964295076576]
+          failed_target_tolerance_m: 0.000001
+          route_direction: clockwise
+          resume_waypoint_index: 25
+          maximum_total_decisions: 128
+          minimum_path_length_m: 5.0
+          minimum_abs_winding_area_m2: 0.5
+          maximum_return_error_m: 0.35
+          # Separate exact branch before V6's first action-class divergence:
+          # after d44 the correct action is a direct MOVE_TO to the first
+          # unvisited waypoint, not the FACE that V6 emitted at d45.
+          pre_divergence_dagger_augmentation:
+            enabled: true
+            branch_id: pre_d45_move_wp25
+            correction_decision_step: 45
+            observed_model_action: face
+            expected_pose_xy_yaw: [-0.20516896210234745, 0.1940730574124565, 149.9997329711914]
+            expected_input_sha256: 6bdaef05a353bdfa6d1ed935cb4c0dbc6f4720200c525c67bc993ea11dd315ad
+            resume_waypoint_index: 25
+            maximum_total_decisions: 128
+
+gemma_waypoint_policy:
+  trace_dataset: data_gemma4/training/gemma_waypoint_policy_v1_operator_dagger_v7
+  hidden_cache: data_gemma4/training/gemma_waypoint_policy_v1_operator_dagger_v7_runtime_aligned_hidden
+  checkpoint_output: data_gemma4/checkpoints/gemma_waypoint_policy_v1_operator_dagger_v7_runtime_aligned

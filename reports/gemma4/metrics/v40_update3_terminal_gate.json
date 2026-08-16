@@ -1,0 +1,432 @@
+{
+  "arbitrary_training_authorized": false,
+  "artifact": "v40_update3_terminal_gate",
+  "chat_or_runtime_promotion_authorized": false,
+  "conditional_successor_authorization": {
+    "authorization_id": "v41_cpu_f64_halfspace_projected_l14_lora_b",
+    "authorized": true,
+    "chat_or_runtime_promotion_authorized": false,
+    "data_scope": {
+      "all_occupied_blocks_must_be_processed": true,
+      "exact_training_scene_ids": [
+        "scene_000011",
+        "scene_000012",
+        "scene_000013",
+        "scene_000014",
+        "scene_000015",
+        "scene_000016",
+        "scene_000017",
+        "scene_000018",
+        "scene_000031",
+        "scene_000032",
+        "scene_000033",
+        "scene_000034",
+        "scene_000035",
+        "scene_000036",
+        "scene_000037",
+        "scene_000038"
+      ],
+      "final_test_access_authorized": false,
+      "oracle_access_authorized": false,
+      "question_dependent_retrieval": false,
+      "training_qa_and_maps_only": true,
+      "validation_access_authorized": false
+    },
+    "embodied_agent_promotion_authorized": false,
+    "hard_train_only_gates": {
+      "unchanged_from_v38_v40": true,
+      "update16": {
+        "book_or_picture_complete_units_minimum": 1,
+        "broad_nll_maximum_increase": 0.02,
+        "complete_physical_pair_coverage_minimum": 5,
+        "complete_units_minimum": 10,
+        "cross_prefix_complete_units_minimum": 17,
+        "optimizer_step": 16,
+        "positive_sides_minimum": 35,
+        "priority_side_deficit_minimum_improvement": 3.12,
+        "require_update8_passed": true
+      },
+      "update41": {
+        "book_complete_units_minimum": 1,
+        "broad_greedy_accuracy_must_meet_source": true,
+        "broad_nll_maximum_increase": 0.02,
+        "complete_physical_pair_coverage_minimum": 6,
+        "complete_units_minimum": 12,
+        "cross_prefix_complete_units_minimum": 18,
+        "greedy_complete_units_minimum": 6,
+        "mirror_complete_units_minimum": 2,
+        "optimizer_step": 41,
+        "picture_complete_units_minimum": 1,
+        "positive_sides_minimum": 37,
+        "priority_side_deficit_minimum_improvement": 6.24,
+        "require_one_greedy_complete_per_priority_family": true,
+        "require_update16_passed": true
+      },
+      "update8": {
+        "broad_nll_maximum_increase": 0.02,
+        "complete_units_minimum": 9,
+        "cross_prefix_complete_units_minimum": 17,
+        "optimizer_step": 8,
+        "positive_sides_minimum": 34,
+        "priority_side_deficit_minimum_improvement": 0.5
+      }
+    },
+    "only_exact_successor_authorized": "v41_train_only_projected_gradient_continuation",
+    "optimizer": {
+      "adam_or_adamw_authorized": false,
+      "dampening": 0.0,
+      "foreach": false,
+      "fresh": true,
+      "fused": false,
+      "implementation": "torch.optim.SGD",
+      "learning_rate": 0.003,
+      "momentum": 0.0,
+      "nesterov": false,
+      "resume_only_self_hashed_v41_sgd_state": true,
+      "weight_decay": 0.0
+    },
+    "projected_gradient_solver": {
+      "active_constraint_direction_order": "stable_subsequence_of_broad_answer_scene_cross_with_positive_norm",
+      "active_constraint_rule": "finite_l2_norm_strictly_greater_than_zero",
+      "active_set_enumeration": {
+        "active_constraint_count_allowed": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "active_gram_solve": "torch.linalg.solve_cpu_float64",
+        "candidate_objective": "0.5*l2(d-g_raw)^2",
+        "dual_lambda_lower_tolerance": -1e-10,
+        "independent_active_subsets_only": true,
+        "kkt_absolute_tolerance": 1e-10,
+        "kkt_relative_tolerance": 1e-08,
+        "mask_count_allowed": [
+          2,
+          4,
+          8,
+          16
+        ],
+        "mask_count_formula": "2 ** active_constraint_count",
+        "mask_order": "ascending_integer_over_canonical_active_direction_order",
+        "maximum_constraint_count": 4,
+        "no_feasible_candidate_action": "fail_stop_before_mutation",
+        "objective_tie_relative_tolerance": 1e-12,
+        "rank_absolute_tolerance": 1e-12,
+        "rank_relative_tolerance": 1e-10,
+        "require_active_equality_feasibility": true,
+        "require_complementarity": true,
+        "require_dual_feasibility": true,
+        "require_primal_feasibility": true,
+        "require_stationarity": true,
+        "selection": "minimum_objective_then_lowest_mask"
+      },
+      "all_constraint_directions_may_be_zero_and_inactive": true,
+      "authorization_revision": 3,
+      "beta_absolute_floor": 1e-12,
+      "beta_formula": "max(1e-12, 1e-4 * l2(g_raw))",
+      "beta_raw_norm_multiplier": 0.0001,
+      "component_gradient_api": "torch.autograd.grad",
+      "component_order": [
+        "broad",
+        "answer",
+        "side",
+        "cross"
+      ],
+      "constraint_activity_norm_floor_inclusive": 0.0,
+      "constraint_direction_order": [
+        "broad",
+        "answer",
+        "scene",
+        "cross"
+      ],
+      "cpu_solution_safety": {
+        "all_active_constraint_dots_and_cosines_finite_and_strictly_positive": true,
+        "all_active_constraint_dots_at_least_beta": true,
+        "correction_ratio_formula": "l2(d-g_raw)/l2(g_raw)",
+        "correction_ratio_maximum": 0.25,
+        "inactive_exact_zero_directions_recorded_satisfied": true,
+        "projected_to_raw_cosine_minimum": 0.95
+      },
+      "cross_may_be_zero_and_explicitly_inactive": true,
+      "determinism": {
+        "lambdas_must_be_bit_exact": true,
+        "projected_direction_must_be_bit_exact": true,
+        "projected_direction_sha256_must_match": true,
+        "selected_mask_must_match": true,
+        "solve_twice_from_independent_cpu_float64_clones": true
+      },
+      "device_cast_safety": {
+        "all_active_dots_and_cosines_finite_and_strictly_positive": true,
+        "cast_only_after_cpu_solution_passes": true,
+        "failure_action": "fail_stop_before_clip_or_optimizer_step",
+        "inactive_exact_zero_directions_remain_recorded_satisfied": true,
+        "normalized_constraint_margin_minimum": "beta/2",
+        "reattest_on_cpu_float64_after_target_device_dtype_roundtrip": true
+      },
+      "inactive_constraint_direction_order": "stable_subsequence_of_broad_answer_scene_cross_with_exact_zero_norm",
+      "inactive_constraints_must_be_persisted_with_norm_and_reason": true,
+      "minimum_active_constraint_count": 1,
+      "nonfinite_component_action": "fail_stop_before_mutation",
+      "normalize_constraint_directions": true,
+      "normalized_direction_formula": "u_i = component_i / l2(component_i)",
+      "optimization_problem": "minimize 0.5*l2(d-g_raw)^2 subject to u_i dot d >= beta for every active nonzero constraint direction in canonical filtered order",
+      "persist_every_microstep": [
+        "weighted_component_norms_and_hashes",
+        "normalized_constraint_gram_matrix",
+        "raw_total_norm_and_hash",
+        "beta",
+        "all_2**active_constraint_count_candidate_feasibility_records",
+        "selected_mask_and_active_constraints",
+        "selected_lambdas",
+        "primal_dual_equality_stationarity_complementarity_residuals",
+        "projection_objective_and_correction_ratio",
+        "projected_raw_cosine",
+        "double_solve_bit_exact_replay",
+        "cpu_projected_direction_sha256",
+        "post_device_cast_directional_attestation",
+        "post_scalar_clip_directional_attestation",
+        "target_and_frozen_hashes_before_and_after"
+      ],
+      "raw_total_must_be_finite": true,
+      "raw_total_norm_minimum_exclusive": 1e-12,
+      "raw_total_zero_or_nonfinite_action": "fail_stop_before_mutation",
+      "require_all_raw_components_finite": true,
+      "required_before_every_optimizer_step": true,
+      "scalar_clip_safety": {
+        "all_active_component_dots_and_cosines_remain_finite_and_strictly_positive": true,
+        "clip_norm": 1.0,
+        "clip_scalar_must_be_finite_and_strictly_positive": true,
+        "failure_action": "fail_stop_before_optimizer_step",
+        "inactive_exact_zero_directions_remain_recorded_satisfied": true,
+        "projected_to_clipped_cosine_minimum": 0.9999999,
+        "single_global_scalar_over_lora_b": true
+      },
+      "scene_may_be_zero_and_explicitly_inactive": true,
+      "solver_device": "cpu",
+      "solver_dtype": "torch.float64",
+      "standalone_side_is_not_a_constraint": true,
+      "standalone_side_may_be_zero": true,
+      "zero_constraint_first_order_rationale": "a zero gradient cannot be worsened to first order by the update",
+      "zero_constraint_policy": "record_inactive_and_first_order_satisfied_without_normalization"
+    },
+    "schedule": {
+      "diagnostic_steps": [
+        0,
+        8,
+        16,
+        41
+      ],
+      "full_schedule_sha256": "2e7a2a8136c968739a8aaaa1138be87bec322fefa0fb340e6fb9bc6e07278bea",
+      "maximum_optimizer_step": 41,
+      "pair_schedule_sha256": "4e26160c9a36e20ac894ff5e26604e6fad985ff5c84211282fd9807c9e738b3f",
+      "saved_optimizer_steps": [
+        0,
+        8,
+        16,
+        24,
+        32,
+        40,
+        41
+      ],
+      "true_microsteps": true,
+      "unchanged_from_v38_v40": true
+    },
+    "schema_version": 1,
+    "selector_execution_authorized": false,
+    "source": {
+      "adapter_file_sha256": "b0bdceb7699e9d97467915c69186f433d3b0fac2b09144d38c3078afe1f70cb0",
+      "checkpoint": "data_gemma4/checkpoints/gemma4_v40_diverse28_cross_preserving_l14_query/update_000",
+      "frozen_excluding_b_state_sha256": "cec01bc088bb87c6bb44e0659eb03aa766f951ddeee706ca9a70edaa080dea5e",
+      "full_tensor_state_sha256": "7b951c6d7ae4f7b50603159f0bc4dfb4d50b5b40f9325134d78d1de1dae87fc0",
+      "metadata_file_sha256": "ee74b1572061cae09d20bdf2b07e5f94ce9ef5c3ebfb6908131448bf8e5b484d",
+      "optimizer_step": 0,
+      "runtime_metadata_file_sha256": "209858f923ffa0916484209aeefad6f56a2cb4902bbd0dacd29decc222245c49",
+      "source_is_exact_v40_and_v38_update_zero": true,
+      "source_optimizer_access_authorized": false,
+      "target_lora_b_state_sha256": "d0834cc588ee2a9edf08aabedfd01e0a6d2b01c6b6ae7e3a3d764eaddf58cc3e",
+      "v40_transient_pre_update3_state_is_not_a_source_checkpoint": true
+    },
+    "stop_and_isolation": {
+      "authorized_output_root": "data_gemma4/checkpoints/gemma4_v41_diverse28_projected_gradient_l14_query",
+      "new_terminal_seal_required_after_training": true,
+      "no_gate_relaxation_authorized": true,
+      "stop_at_failed_update16_gate": true,
+      "stop_at_failed_update41_gate": true,
+      "stop_at_failed_update8_gate": true,
+      "stop_before_mutation_on_projection_or_attestation_failure": true,
+      "v40_checkpoint_root_write_authorized": false
+    },
+    "target_surface": {
+      "all_other_parameters_and_buffers_frozen": true,
+      "existing_adapter_index": 1,
+      "existing_bank": "extension_v28_stage_b_query",
+      "language_layer": 14,
+      "lora_a_frozen_learned_basis": true,
+      "lora_b_only": true,
+      "module_path": "model.language_model.layers.14.self_attn.q_proj",
+      "new_bank_or_module_authorized": false,
+      "parameter_count": 16384,
+      "parameter_names": [
+        "lora_banks.extension_v28_stage_b_query.adapters.1.lora_b"
+      ],
+      "parameter_shapes": [
+        [
+          4096,
+          4
+        ]
+      ],
+      "tensor_count": 1
+    },
+    "transient_replay_gate": {
+      "exact_target_hash_after_replayed_steps_one_and_two": "8c50aa3a5975f450c3c95fb00dbf077a33285bf22ac3208f5d745cd617bd8d48",
+      "fail_before_step_three_if_hash_differs": true,
+      "proves_exact_replay_of_two_transient_v40_updates": true,
+      "required_before_optimizer_step_three": true,
+      "source_failure_artifact_sha256": "0136edab8669346e4c24163650659608a7bf728fb8244ad81366a8efb5fa1f61"
+    },
+    "weighted_objective_components": {
+      "answer": 0.5,
+      "broad": 1.0,
+      "cross": 56.0,
+      "cross_prefix_margin": 0.1,
+      "raw_total_formula": "broad + answer + side + cross",
+      "scene_formula": "side + cross",
+      "side": 8.0,
+      "side_hinge_margin": 0.5
+    }
+  },
+  "config_replay": {
+    "b_only_surface_exact": true,
+    "config_sha256": "5e7d67a91a10f65e44699a7af1644fffff481dcd21ce34a028cf371048f1c9bc",
+    "normalized_checkpoint_config_hash": "7f8de1306c3b",
+    "objective_exact": true,
+    "train_only_boundaries_exact": true
+  },
+  "execution_conclusion": {
+    "no_optimizer_file_persisted": true,
+    "no_trained_checkpoint_persisted": true,
+    "only_update_zero_checkpoint_persisted": true,
+    "optimizer_step_three_executed": false,
+    "optimizer_step_three_failed_before_clip": true,
+    "optimizer_step_three_target_state_unchanged": true,
+    "optimizer_steps_one_and_two_executed_in_memory": true,
+    "transient_updates_discarded_on_process_exit": true,
+    "v41_must_restart_exact_update_zero": true
+  },
+  "failure_replay": {
+    "broad_cosine_with_raw_total": -0.038372349473092954,
+    "broad_dot_with_raw_total": -0.06791611851052101,
+    "checkpoint_written_for_update_three": false,
+    "clip_applied_for_update_three": false,
+    "failed_before_optimizer_step": 3,
+    "failure_sha256": "0136edab8669346e4c24163650659608a7bf728fb8244ad81366a8efb5fa1f61",
+    "frozen_surface_bit_exact_across_failed_attempt": true,
+    "only_failed_direction": "broad",
+    "optimizer_step_three_executed": false,
+    "oracle_loaded": false,
+    "target_bit_exact_across_failed_attempt": true,
+    "transient_pre_update3_target_sha256": "8c50aa3a5975f450c3c95fb00dbf077a33285bf22ac3208f5d745cd617bd8d48",
+    "validation_loaded": false
+  },
+  "final_test_access_authorized": false,
+  "input_integrity": {
+    "guard_failure": {
+      "path": "data_gemma4/checkpoints/gemma4_v40_diverse28_cross_preserving_l14_query/guard_failure_update_003.json",
+      "sha256": "0136edab8669346e4c24163650659608a7bf728fb8244ad81366a8efb5fa1f61"
+    },
+    "protected_artifact": {
+      "access": "bytes_hashed_only",
+      "path": "reports/gemma4/metrics/training_selection_gemma4_color_mirror_full_vocab_v11_resume36.json",
+      "sha256": "c0086f66edbb8854a7938e09c57535bfd47100adbaf3b3c95eeb4b08014ce2f8",
+      "unchanged": true
+    },
+    "v39_terminal": {
+      "path": "reports/gemma4/metrics/v39_layer14_query_terminal_gate.json",
+      "sha256": "fcf0494c18ed13c3f1fe54eb109a51391183a4eeb14abb9dbd2ad0ad0ca448c3"
+    },
+    "v40_config": {
+      "path": "configs/experiments/gemma4_diverse28_cross_preserving_v40.yaml",
+      "sha256": "5e7d67a91a10f65e44699a7af1644fffff481dcd21ce34a028cf371048f1c9bc"
+    },
+    "v40_selector_tests": {
+      "path": "tests/test_v40_cross_preserving_selector.py",
+      "sha256": "ed6abefded33853a94236000bef6f44fa307e417e0c922f6c4d005c73df19e52"
+    },
+    "v40_trainer": {
+      "path": "src/semantic_3d_chat/training/train_cross_preserving_v40.py",
+      "sha256": "0801d580e4903c82a481f81383a7319e883e431b211fb18761d4af2a72d1fdaa"
+    },
+    "v40_training_tests": {
+      "path": "tests/test_v40_cross_preserving_training.py",
+      "sha256": "bf8e5f5acca9e77546680a3c84243e3ccb3b9fffc93da85f39604fa25a4fa2ac"
+    }
+  },
+  "only_exact_successor_authorized": "v41_train_only_projected_gradient_continuation",
+  "oracle_access_authorized": false,
+  "passed": true,
+  "persisted_update_zero": {
+    "adapter_sha256": "b0bdceb7699e9d97467915c69186f433d3b0fac2b09144d38c3078afe1f70cb0",
+    "final_test_loaded": false,
+    "frozen_excluding_b_state_sha256": "cec01bc088bb87c6bb44e0659eb03aa766f951ddeee706ca9a70edaa080dea5e",
+    "full_tensor_state_sha256": "7b951c6d7ae4f7b50603159f0bc4dfb4d50b5b40f9325134d78d1de1dae87fc0",
+    "metadata_sha256": "ee74b1572061cae09d20bdf2b07e5f94ce9ef5c3ebfb6908131448bf8e5b484d",
+    "only_update_zero_history_persisted": true,
+    "optimizer_step": 0,
+    "oracle_loaded": false,
+    "runtime_metadata_sha256": "209858f923ffa0916484209aeefad6f56a2cb4902bbd0dacd29decc222245c49",
+    "source_optimizer_or_checkpoint_optimizer_present": false,
+    "target_lora_b_state_sha256": "d0834cc588ee2a9edf08aabedfd01e0a6d2b01c6b6ae7e3a3d764eaddf58cc3e",
+    "training_scene_count": 16,
+    "validation_loaded": false
+  },
+  "revision2_change_scope": "finite_exact_zero_constraint_gradients_are_explicitly_inactive",
+  "revision3_change_scope": "dynamic_active_constraint_candidate_inventory_wording_only",
+  "schema_version": 1,
+  "seal_revision": 3,
+  "selector_execution_authorized": false,
+  "stopped_envelope": {
+    "no_trained_optimizer_file_persisted": true,
+    "no_update_one_or_two_checkpoint_written_by_schedule": true,
+    "no_update_three_or_later_checkpoint": true,
+    "only_update_zero_persisted": true,
+    "persisted_update_directories": [
+      "update_000"
+    ],
+    "process_exit_discarded_transient_updates_one_and_two": true,
+    "root_entries": [
+      "guard_failure_update_003.json",
+      "update_000"
+    ],
+    "update_one_and_two_were_transient_process_memory_only": true
+  },
+  "supersedes_revision1_sha256": "9ce66c309adeb9e81636dc45cc1237e20cb7f050ed6ba9fe0cfa762c6c33660e",
+  "supersedes_revision2_sha256": "63b22d16303018d0482710a34c1a848d131a0e65a34dd96735fcfb241deba844",
+  "terminal_process_access_audit": {
+    "adapter_access": "bytes_hashed_only",
+    "final_test_loaded": false,
+    "gemma_loaded": false,
+    "loaded_file_count": 10,
+    "loaded_file_inventory": [
+      "configs/experiments/gemma4_diverse28_cross_preserving_v40.yaml",
+      "data_gemma4/checkpoints/gemma4_v40_diverse28_cross_preserving_l14_query/guard_failure_update_003.json",
+      "data_gemma4/checkpoints/gemma4_v40_diverse28_cross_preserving_l14_query/update_000/adapter.safetensors",
+      "data_gemma4/checkpoints/gemma4_v40_diverse28_cross_preserving_l14_query/update_000/metadata.json",
+      "data_gemma4/checkpoints/gemma4_v40_diverse28_cross_preserving_l14_query/update_000/runtime_metadata.json",
+      "reports/gemma4/metrics/training_selection_gemma4_color_mirror_full_vocab_v11_resume36.json",
+      "reports/gemma4/metrics/v39_layer14_query_terminal_gate.json",
+      "src/semantic_3d_chat/training/train_cross_preserving_v40.py",
+      "tests/test_v40_cross_preserving_selector.py",
+      "tests/test_v40_cross_preserving_training.py"
+    ],
+    "maps_loaded": false,
+    "optimizer_deserialized": false,
+    "oracle_loaded": false,
+    "qa_loaded": false,
+    "validation_loaded": false
+  },
+  "v40_failure_kind": "pre_step_raw_component_direction_conflict",
+  "v40_training_completed": false,
+  "v41_train_only_projected_gradient_continuation_authorized": true,
+  "validation_access_authorized": false
+}

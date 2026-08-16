@@ -1,0 +1,694 @@
+{
+  "collision_count": 0,
+  "elapsed_seconds": 12.723021,
+  "episodes": [
+    {
+      "elapsed_seconds": 2.968279,
+      "result": {
+        "collision_count": 0,
+        "distance_moved": 0.08582216037494385,
+        "final_position_m": [
+          -0.0654824904758955,
+          0.055475099391500304,
+          0.0
+        ],
+        "final_target_distance_m": 0.6,
+        "grounding": {
+          "cosine_similarity": 0.10305903106927872,
+          "eligible_voxels": 40588,
+          "local_support_voxels": 10,
+          "map_sha256": "68c35107b244b0e4da8dfeef10097473da27f62ce2a7c66b4cee385c0607ebb6",
+          "peak_margin_over_q99": 0.03785071521997452,
+          "prompt_variant_index": 0,
+          "query_embedding_sha256": "fa07b505e54649102e40817b64f157c0e7fdcf16548069035aca450ec2ec8717",
+          "scored_voxels": 74699,
+          "seed_xyz_m": [
+            0.17499999701976776,
+            0.675000011920929,
+            0.7250000238418579
+          ],
+          "similarity_q99": 0.0652083158493042,
+          "target_xyz_m": [
+            0.17500001192092896,
+            0.6051733493804932,
+            0.7714365720748901
+          ]
+        },
+        "movement_actions": 1,
+        "plan": {
+          "direct_path": true,
+          "expanded_nodes": 0,
+          "goal_xy_m": [
+            -0.0654824904758955,
+            0.055475099391500304
+          ],
+          "path_length_m": 0.08582216037494385,
+          "target_distance_m": 0.6,
+          "target_xy_m": [
+            0.17500001192092896,
+            0.6051733493804932
+          ],
+          "waypoints_xy_m": [
+            [
+              -0.0654824904758955,
+              0.055475099391500304
+            ]
+          ]
+        },
+        "scan_success": true,
+        "scene_version": 1,
+        "success": true,
+        "turn_actions": 1
+      },
+      "task_id": "task_000"
+    },
+    {
+      "elapsed_seconds": 0.773247,
+      "result": {
+        "collision_count": 0,
+        "distance_moved": 0.5863898409736982,
+        "final_position_m": [
+          -0.5038944830645651,
+          0.299905644385453,
+          0.0
+        ],
+        "final_target_distance_m": 0.6,
+        "grounding": {
+          "cosine_similarity": 0.1739010065793991,
+          "eligible_voxels": 40588,
+          "local_support_voxels": 20,
+          "map_sha256": "68c35107b244b0e4da8dfeef10097473da27f62ce2a7c66b4cee385c0607ebb6",
+          "peak_margin_over_q99": 0.05731407552957535,
+          "prompt_variant_index": 0,
+          "query_embedding_sha256": "0f780477f599a107fe7f1382060cb69ce3242168b39dd149b57eda416b10095f",
+          "scored_voxels": 74699,
+          "seed_xyz_m": [
+            -1.024999976158142,
+            0.625,
+            0.5250000357627869
+          ],
+          "similarity_q99": 0.11658693104982376,
+          "target_xyz_m": [
+            -1.0194844007492065,
+            0.6067721247673035,
+            0.5111563801765442
+          ]
+        },
+        "movement_actions": 2,
+        "plan": {
+          "direct_path": true,
+          "expanded_nodes": 0,
+          "goal_xy_m": [
+            -0.5038944830645651,
+            0.299905644385453
+          ],
+          "path_length_m": 0.5863898409736982,
+          "target_distance_m": 0.6,
+          "target_xy_m": [
+            -1.0194844007492065,
+            0.6067721247673035
+          ],
+          "waypoints_xy_m": [
+            [
+              -0.25194724153228254,
+              0.1499528221927265
+            ],
+            [
+              -0.5038944830645651,
+              0.299905644385453
+            ]
+          ]
+        },
+        "scan_success": true,
+        "scene_version": 1,
+        "success": true,
+        "turn_actions": 2
+      },
+      "task_id": "task_001"
+    },
+    {
+      "elapsed_seconds": 0.773479,
+      "result": {
+        "collision_count": 0,
+        "distance_moved": 1.778192579499838,
+        "final_position_m": [
+          -0.33514304633806896,
+          1.6834685225702208,
+          0.0
+        ],
+        "final_target_distance_m": 0.7999999999999998,
+        "grounding": {
+          "cosine_similarity": 0.14111697673797607,
+          "eligible_voxels": 40588,
+          "local_support_voxels": 24,
+          "map_sha256": "68c35107b244b0e4da8dfeef10097473da27f62ce2a7c66b4cee385c0607ebb6",
+          "peak_margin_over_q99": 0.05618671327829361,
+          "prompt_variant_index": 0,
+          "query_embedding_sha256": "8802e6d083a891d18c221bcee9a86c562749ecaf4d29cef7a34130e401086a82",
+          "scored_voxels": 74699,
+          "seed_xyz_m": [
+            -0.02500000037252903,
+            2.424999952316284,
+            1.524999976158142
+          ],
+          "similarity_q99": 0.08493026345968246,
+          "target_xyz_m": [
+            -0.0417502336204052,
+            2.427726984024048,
+            1.5011460781097412
+          ]
+        },
+        "movement_actions": 5,
+        "plan": {
+          "direct_path": false,
+          "expanded_nodes": 16,
+          "goal_xy_m": [
+            -0.33514304633806896,
+            1.6834685225702208
+          ],
+          "path_length_m": 1.7781925794998386,
+          "target_distance_m": 0.7999999999999998,
+          "target_xy_m": [
+            -0.0417502336204052,
+            2.427726984024048
+          ],
+          "waypoints_xy_m": [
+            [
+              -0.1750000000000007,
+              0.29999999999999916
+            ],
+            [
+              -0.3500000000000014,
+              0.5999999999999983
+            ],
+            [
+              -0.3450476821126906,
+              0.9611561741900725
+            ],
+            [
+              -0.3400953642253798,
+              1.3223123483801467
+            ],
+            [
+              -0.33514304633806896,
+              1.6834685225702208
+            ]
+          ]
+        },
+        "scan_success": true,
+        "scene_version": 1,
+        "success": true,
+        "turn_actions": 1
+      },
+      "task_id": "task_002"
+    },
+    {
+      "elapsed_seconds": 0.776832,
+      "result": {
+        "collision_count": 0,
+        "distance_moved": 1.3315998520388677,
+        "final_position_m": [
+          -1.1667219307380645,
+          -0.6418084623038073,
+          0.0
+        ],
+        "final_target_distance_m": 0.6,
+        "grounding": {
+          "cosine_similarity": 0.10900959372520447,
+          "eligible_voxels": 40588,
+          "local_support_voxels": 11,
+          "map_sha256": "68c35107b244b0e4da8dfeef10097473da27f62ce2a7c66b4cee385c0607ebb6",
+          "peak_margin_over_q99": 0.029704667627811432,
+          "prompt_variant_index": 1,
+          "query_embedding_sha256": "cec56f7bf0da6ececbce79d5c9ef60fe61fe01d88033491123711c0b2c02dbfb",
+          "scored_voxels": 74699,
+          "seed_xyz_m": [
+            -1.725000023841858,
+            -0.824999988079071,
+            0.02500000037252903
+          ],
+          "similarity_q99": 0.07930492609739304,
+          "target_xyz_m": [
+            -1.7375390529632568,
+            -0.8266538381576538,
+            0.02499999850988388
+          ]
+        },
+        "movement_actions": 3,
+        "plan": {
+          "direct_path": true,
+          "expanded_nodes": 0,
+          "goal_xy_m": [
+            -1.1667219307380645,
+            -0.6418084623038073
+          ],
+          "path_length_m": 1.3315998520388677,
+          "target_distance_m": 0.6,
+          "target_xy_m": [
+            -1.7375390529632568,
+            -0.8266538381576538
+          ],
+          "waypoints_xy_m": [
+            [
+              -0.3889073102460215,
+              -0.2139361541012691
+            ],
+            [
+              -0.777814620492043,
+              -0.4278723082025382
+            ],
+            [
+              -1.1667219307380645,
+              -0.6418084623038073
+            ]
+          ]
+        },
+        "scan_success": true,
+        "scene_version": 1,
+        "success": true,
+        "turn_actions": 3
+      },
+      "task_id": "task_003"
+    },
+    {
+      "elapsed_seconds": 0.759101,
+      "result": {
+        "collision_count": 0,
+        "distance_moved": 2.6768859912939713,
+        "final_position_m": [
+          -1.6524739909060921,
+          2.10595544106821,
+          0.0
+        ],
+        "final_target_distance_m": 0.7999999999999999,
+        "grounding": {
+          "cosine_similarity": 0.13592691719532013,
+          "eligible_voxels": 40588,
+          "local_support_voxels": 6,
+          "map_sha256": "68c35107b244b0e4da8dfeef10097473da27f62ce2a7c66b4cee385c0607ebb6",
+          "peak_margin_over_q99": 0.022143855690956116,
+          "prompt_variant_index": 0,
+          "query_embedding_sha256": "7b9f681c472d1a654c549883015e674591869fe619096a38bd2565587960b8ee",
+          "scored_voxels": 74699,
+          "seed_xyz_m": [
+            -2.0250000953674316,
+            1.4250000715255737,
+            1.774999976158142
+          ],
+          "similarity_q99": 0.11378306150436401,
+          "target_xyz_m": [
+            -2.017462968826294,
+            1.3940684795379639,
+            1.774999737739563
+          ]
+        },
+        "movement_actions": 6,
+        "plan": {
+          "direct_path": true,
+          "expanded_nodes": 0,
+          "goal_xy_m": [
+            -1.6524739909060921,
+            2.10595544106821
+          ],
+          "path_length_m": 2.6768859912939713,
+          "target_distance_m": 0.7999999999999999,
+          "target_xy_m": [
+            -2.017462968826294,
+            1.3940684795379639
+          ],
+          "waypoints_xy_m": [
+            [
+              -0.275412331817682,
+              0.35099257351136837
+            ],
+            [
+              -0.550824663635364,
+              0.7019851470227367
+            ],
+            [
+              -0.8262369954530461,
+              1.052977720534105
+            ],
+            [
+              -1.101649327270728,
+              1.4039702940454735
+            ],
+            [
+              -1.3770616590884102,
+              1.7549628675568418
+            ],
+            [
+              -1.6524739909060921,
+              2.10595544106821
+            ]
+          ]
+        },
+        "scan_success": true,
+        "scene_version": 1,
+        "success": true,
+        "turn_actions": 4
+      },
+      "task_id": "task_004"
+    },
+    {
+      "elapsed_seconds": 0.742954,
+      "result": {
+        "collision_count": 0,
+        "distance_moved": 0.045085869082619995,
+        "final_position_m": [
+          -0.03353035611988109,
+          -0.030140517736248373,
+          0.0
+        ],
+        "final_target_distance_m": 0.8,
+        "grounding": {
+          "cosine_similarity": 0.13909099996089935,
+          "eligible_voxels": 40588,
+          "local_support_voxels": 3,
+          "map_sha256": "68c35107b244b0e4da8dfeef10097473da27f62ce2a7c66b4cee385c0607ebb6",
+          "peak_margin_over_q99": 0.030378833413124084,
+          "prompt_variant_index": 0,
+          "query_embedding_sha256": "47d08bea97a533ac98d1612ea12c3aa7a5b095f57bac2b72511a03bd33c3faf0",
+          "scored_voxels": 74699,
+          "seed_xyz_m": [
+            0.574999988079071,
+            0.5250000357627869,
+            1.125
+          ],
+          "similarity_q99": 0.10871216654777527,
+          "target_xyz_m": [
+            0.5614295601844788,
+            0.5046703815460205,
+            1.125
+          ]
+        },
+        "movement_actions": 1,
+        "plan": {
+          "direct_path": true,
+          "expanded_nodes": 0,
+          "goal_xy_m": [
+            -0.03353035611988109,
+            -0.030140517736248373
+          ],
+          "path_length_m": 0.045085869082619995,
+          "target_distance_m": 0.8,
+          "target_xy_m": [
+            0.5614295601844788,
+            0.5046703815460205
+          ],
+          "waypoints_xy_m": [
+            [
+              -0.03353035611988109,
+              -0.030140517736248373
+            ]
+          ]
+        },
+        "scan_success": true,
+        "scene_version": 1,
+        "success": true,
+        "turn_actions": 2
+      },
+      "task_id": "task_005"
+    },
+    {
+      "elapsed_seconds": 0.805259,
+      "result": {
+        "collision_count": 0,
+        "distance_moved": 2.571104582999102,
+        "final_position_m": [
+          1.886589938272952,
+          0.25543242150588036,
+          0.0
+        ],
+        "final_target_distance_m": 0.8,
+        "grounding": {
+          "cosine_similarity": 0.09367554634809494,
+          "eligible_voxels": 40588,
+          "local_support_voxels": 13,
+          "map_sha256": "68c35107b244b0e4da8dfeef10097473da27f62ce2a7c66b4cee385c0607ebb6",
+          "peak_margin_over_q99": 0.02151351422071457,
+          "prompt_variant_index": 0,
+          "query_embedding_sha256": "db02eb28123d87cbf521461940273c7a6e54f97cc6f2cb03e0ba4eb5649e1347",
+          "scored_voxels": 74699,
+          "seed_xyz_m": [
+            1.225000023841858,
+            0.7250000238418579,
+            0.824999988079071
+          ],
+          "similarity_q99": 0.07216203212738037,
+          "target_xyz_m": [
+            1.2472223043441772,
+            0.7362744212150574,
+            0.8266421556472778
+          ]
+        },
+        "movement_actions": 7,
+        "plan": {
+          "direct_path": false,
+          "expanded_nodes": 80,
+          "goal_xy_m": [
+            1.886589938272952,
+            0.25543242150588036
+          ],
+          "path_length_m": 2.571104582999102,
+          "target_distance_m": 0.8,
+          "target_xy_m": [
+            1.2472223043441772,
+            0.7362744212150574
+          ],
+          "waypoints_xy_m": [
+            [
+              0.274999999999999,
+              -0.15000000000000058
+            ],
+            [
+              0.549999999999998,
+              -0.30000000000000115
+            ],
+            [
+              0.9249999999999978,
+              -0.2625000000000012
+            ],
+            [
+              1.2999999999999976,
+              -0.2250000000000012
+            ],
+            [
+              1.6749999999999974,
+              -0.18750000000000122
+            ],
+            [
+              2.049999999999997,
+              -0.15000000000000124
+            ],
+            [
+              1.886589938272952,
+              0.25543242150588036
+            ]
+          ]
+        },
+        "scan_success": true,
+        "scene_version": 1,
+        "success": true,
+        "turn_actions": 2
+      },
+      "task_id": "task_006"
+    },
+    {
+      "elapsed_seconds": 0.816002,
+      "result": {
+        "collision_count": 0,
+        "distance_moved": 0.7613425855176801,
+        "final_position_m": [
+          -0.16506174733438728,
+          0.4012530089642643,
+          0.0
+        ],
+        "final_target_distance_m": 0.8,
+        "grounding": {
+          "cosine_similarity": 0.12637338042259216,
+          "eligible_voxels": 40588,
+          "local_support_voxels": 4,
+          "map_sha256": "68c35107b244b0e4da8dfeef10097473da27f62ce2a7c66b4cee385c0607ebb6",
+          "peak_margin_over_q99": 0.032183967530727386,
+          "prompt_variant_index": 0,
+          "query_embedding_sha256": "ceedb173c53f813d02d122fc34c9dc16d3cd77025bdc3e03abd5bf4224ca1cf9",
+          "scored_voxels": 74699,
+          "seed_xyz_m": [
+            0.42500001192092896,
+            0.9750000238418579,
+            0.824999988079071
+          ],
+          "similarity_q99": 0.09418941289186478,
+          "target_xyz_m": [
+            0.40080153942108154,
+            0.966760516166687,
+            0.8250000476837158
+          ]
+        },
+        "movement_actions": 3,
+        "plan": {
+          "direct_path": false,
+          "expanded_nodes": 8,
+          "goal_xy_m": [
+            -0.16506174733438728,
+            0.4012530089642643
+          ],
+          "path_length_m": 0.7613425855176801,
+          "target_distance_m": 0.8,
+          "target_xy_m": [
+            0.40080153942108154,
+            0.966760516166687
+          ],
+          "waypoints_xy_m": [
+            [
+              -0.1750000000000007,
+              0.2249999999999992
+            ],
+            [
+              -0.3500000000000014,
+              0.4499999999999984
+            ],
+            [
+              -0.16506174733438728,
+              0.4012530089642643
+            ]
+          ]
+        },
+        "scan_success": true,
+        "scene_version": 1,
+        "success": true,
+        "turn_actions": 2
+      },
+      "task_id": "task_007"
+    },
+    {
+      "elapsed_seconds": 1.362213,
+      "result": {
+        "collision_count": 0,
+        "distance_moved": 4.1787336368822805,
+        "final_position_m": [
+          2.366806747203184,
+          2.0164050781691314,
+          0.0
+        ],
+        "final_target_distance_m": 0.5999999999999998,
+        "grounding": {
+          "cosine_similarity": 0.10665221512317657,
+          "eligible_voxels": 40588,
+          "local_support_voxels": 8,
+          "map_sha256": "68c35107b244b0e4da8dfeef10097473da27f62ce2a7c66b4cee385c0607ebb6",
+          "peak_margin_over_q99": 0.04892723262310028,
+          "prompt_variant_index": 0,
+          "query_embedding_sha256": "88fddb495c3139b59d35e55a364d98b0a9b29080938b8efccc687d3d62035b52",
+          "scored_voxels": 74699,
+          "seed_xyz_m": [
+            1.9250000715255737,
+            1.5750000476837158,
+            0.625
+          ],
+          "similarity_q99": 0.057724982500076294,
+          "target_xyz_m": [
+            1.953688383102417,
+            1.5812807083129883,
+            0.634988009929657
+          ]
+        },
+        "movement_actions": 10,
+        "plan": {
+          "direct_path": false,
+          "expanded_nodes": 70,
+          "goal_xy_m": [
+            2.366806747203184,
+            2.0164050781691314
+          ],
+          "path_length_m": 4.17873363688228,
+          "target_distance_m": 0.5999999999999998,
+          "target_xy_m": [
+            1.953688383102417,
+            1.5812807083129883
+          ],
+          "waypoints_xy_m": [
+            [
+              -0.1750000000000007,
+              0.29999999999999916
+            ],
+            [
+              -0.3500000000000014,
+              0.5999999999999983
+            ],
+            [
+              -0.15000000000000155,
+              0.999999999999998
+            ],
+            [
+              0.049999999999998324,
+              1.3999999999999977
+            ],
+            [
+              0.24999999999999822,
+              1.7999999999999976
+            ],
+            [
+              0.699999999999998,
+              1.9499999999999975
+            ],
+            [
+              1.1167016868007944,
+              1.966601269542281
+            ],
+            [
+              1.533403373601591,
+              1.9832025390845645
+            ],
+            [
+              1.9501050604023877,
+              1.999803808626848
+            ],
+            [
+              2.366806747203184,
+              2.0164050781691314
+            ]
+          ]
+        },
+        "scan_success": true,
+        "scene_version": 1,
+        "success": true,
+        "turn_actions": 4
+      },
+      "task_id": "task_008"
+    }
+  ],
+  "map": {
+    "feature_dim": 1536,
+    "navigation_eligible_voxels": 40588,
+    "occupied_voxels": 74699,
+    "path": "data_gemma4/maps/scene_000001/voxel_map.npz",
+    "sha256": "68c35107b244b0e4da8dfeef10097473da27f62ce2a7c66b4cee385c0607ebb6"
+  },
+  "passed": true,
+  "policy": {
+    "arrival_rgbd_scan": true,
+    "arrival_scan_fused_in_this_benchmark": false,
+    "bounded_geometry_planner": true,
+    "environment_input": "continuous_full_voxel_map_and_geometry",
+    "every_map_voxel_scored": true,
+    "oracle_or_labels_available": false,
+    "query_dependent_target_localization": true,
+    "query_input": "user_text_embedded_locally",
+    "target_text_serialized_to_numeric_output": false,
+    "text_encoder_parameter_access": "gemma_tied_input_token_rows_only",
+    "top_k_retrieval_used": false
+  },
+  "runtime_file_audit": {
+    "blocking_enabled": true,
+    "forbidden_accesses": [],
+    "loaded_file_count": 3809,
+    "loaded_file_inventory_sha256": "623154a107e9f1792107e79b6450bfab9aa9b3c96bdb000dd78159197ec97775",
+    "oracle_or_qa_loaded": false
+  },
+  "runtime_success_count": 9,
+  "scene_id": "scene_000001",
+  "schema": "semantic_3d_chat.semantic_navigation_runtime.v1",
+  "task_count": 9
+}

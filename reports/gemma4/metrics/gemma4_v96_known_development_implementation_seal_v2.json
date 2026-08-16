@@ -1,0 +1,818 @@
+{
+  "artifact": "gemma4_v96_known_development_implementation_seal_v2",
+  "candidate_attestation_present_before_seal": false,
+  "candidate_auth_access": {
+    "known_development_labels_opened": false,
+    "known_development_questions_opened": false,
+    "model_loaded": false,
+    "oracle_opened": false,
+    "protected_read_count": 0,
+    "unique_path_count": 33,
+    "unique_path_inventory_sha256": "4a9255fdd4f036357b7c194ee6238a6220d36729167708f1b968723d7cef8b60",
+    "unique_paths": [
+      "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/configs/experiments/gemma4_v95_strict_causal_successor.yaml",
+      "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/configs/experiments/gemma4_v96_atomic_pair_repair.yaml",
+      "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/configs/runtime/gemma4_v85_strict_multiscene.yaml",
+      "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_diverse52/qa/train.jsonl",
+      "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/gemma4/artifacts/v82_strict_dense_reader/development_cache/metadata.json",
+      "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/gemma4/artifacts/v82_strict_dense_reader/development_cache/training_tensors.safetensors",
+      "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/gemma4/artifacts/v82_strict_dense_reader/train_cache/metadata.json",
+      "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/gemma4/artifacts/v82_strict_dense_reader/train_cache/training_tensors.safetensors",
+      "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/gemma4/artifacts/v85_strict_runtime_candidate/adapter.safetensors",
+      "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/gemma4/artifacts/v85_strict_runtime_candidate/runtime_metadata.json",
+      "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/gemma4/artifacts/v94_strict_multiscene_full40_final/bridge.safetensors",
+      "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/gemma4/artifacts/v94_strict_multiscene_full40_final/runtime_metadata.json",
+      "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/gemma4/artifacts/v95_strict_causal_successor_final/bridge.safetensors",
+      "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/gemma4/artifacts/v95_strict_causal_successor_final/runtime_metadata.json",
+      "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/gemma4/artifacts/v96_atomic_pair_repair_final/bridge.safetensors",
+      "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/gemma4/artifacts/v96_atomic_pair_repair_final/runtime_metadata.json",
+      "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/gemma4/metrics/gemma4_v94_strict_multiscene_full40_hardened_evidence.json",
+      "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/gemma4/metrics/gemma4_v94_strict_multiscene_full40_training.json",
+      "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/gemma4/metrics/gemma4_v95_strict_causal_successor_cpu_preflight.json",
+      "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/gemma4/metrics/gemma4_v95_strict_causal_successor_known_development.json",
+      "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/gemma4/metrics/gemma4_v95_strict_causal_successor_known_development_evidence.json",
+      "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/gemma4/metrics/gemma4_v95_strict_causal_successor_known_development_nll.json",
+      "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/gemma4/metrics/gemma4_v95_strict_causal_successor_known_development_nll_access.json",
+      "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/gemma4/metrics/gemma4_v95_strict_causal_successor_known_development_nll_completion.json",
+      "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/gemma4/metrics/gemma4_v95_strict_causal_successor_known_development_structured.json",
+      "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/gemma4/metrics/gemma4_v95_strict_causal_successor_preregistration.json",
+      "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/gemma4/metrics/gemma4_v95_strict_causal_successor_training.json",
+      "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/gemma4/metrics/gemma4_v96_atomic_pair_repair_cpu_preflight.json",
+      "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/gemma4/metrics/gemma4_v96_atomic_pair_repair_preregistration.json",
+      "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/gemma4/metrics/gemma4_v96_atomic_pair_repair_topology_smoke.json",
+      "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/reports/gemma4/metrics/gemma4_v96_atomic_pair_repair_training.json",
+      "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/evaluation/v95_strict_causal_successor_preflight.py",
+      "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/src/semantic_3d_chat/training/train_v95_strict_causal_successor.py"
+    ]
+  },
+  "candidate_pins": {
+    "config_sha256": "435eaf63844175c26ecd541d60fb46bfefea6789a9602d884e8b176d2861645d",
+    "cpu_preflight_sha256": "b4451e6e1557a9d95b8af57cdab0cf4b77a832f7a0517a4ed0925f3df552cfdf",
+    "deferred_final_generated": false,
+    "fingerprint_sha256": "b3dc5bd99da4978c12d05f978cef79f83518d0fcaf43c2a2de9b641938f2bfb2",
+    "fixed_final_optimizer_updates": 285,
+    "frozen_v95_state_sha256": "53404c733586ebd25caa440f822a4d4af6cc3dbb71bf4f6b6f94af23f3a2492a",
+    "known_development_scored": false,
+    "metadata_canonical_sha256": "d46f496cce2813da80fa5373cf91ec0b0bfc43167204743d86faf2e1e1095bdd",
+    "metadata_file_sha256": "952f750f8fec7b795633421a7d367c6ced91abc816a9e51e71cd0decb7ec8c36",
+    "preregistration_sha256": "bb160ee1d7420cacba85fe9e0f63a0262fe899ace2e79ff409bf9709d0f6afa9",
+    "runtime_promotion_authorized": false,
+    "state_sha256": "4dfd0462668286a47559f7a4688e33aa5485f667b1e5a0f10638bfff7ff18011",
+    "tensor_inventory_sha256": "20f617a22e57cdafa30a3433873e1164ac21dedebc6b35aa01ef8fc6f2dbc683",
+    "topology_smoke_sha256": "cf3c381d8658c42aabe6757feb7f0e144fc09d39a31823bef526e5cabb2dcb28",
+    "training_report_sha256": "e137d2c3d28a367480f87c25c78c9c20b6ca234755747bb193408056e1e79cf3",
+    "weights_sha256": "9f488e834643297e10fdca0ba743470fbfcac46be966e9f1e5b47ff7324a134a"
+  },
+  "contract_source_count": 3,
+  "contract_source_inventory_sha256": "8966df7c3f862ade5d01ff0ed3bc5b0399514414cf803872d8b5253e5f33ec84",
+  "contract_sources": {
+    "config": {
+      "path": "configs/experiments/gemma4_v96_atomic_pair_repair.yaml",
+      "sha256": "435eaf63844175c26ecd541d60fb46bfefea6789a9602d884e8b176d2861645d"
+    },
+    "preflight": {
+      "path": "src/semantic_3d_chat/evaluation/v96_atomic_pair_repair_preflight.py",
+      "sha256": "551604bcb21208a2aab091d60efaa0a8475d769fd1ac51dd75c3706917807e01"
+    },
+    "trainer": {
+      "path": "src/semantic_3d_chat/training/train_v96_atomic_pair_repair.py",
+      "sha256": "de7fad4c1a4c7d74bbeef37e1d71374d8fb29bc7dfed8d3c0c046ab341a59b69"
+    }
+  },
+  "frozen_bank_expected_state_inventory_sha256": "ba8cf056a12ccd260da41f81712d51eec6af4702c071f44cfdf5427841e70531",
+  "frozen_bank_expected_states": {
+    "extension_v13": "4eb90fb9b0bea579d14cfcb0f61ebd5b6d566fd600bd3d5e1bfe5177a39e1b34",
+    "extension_v23_shared_kv": "5c9233bd96b381e2f63443f8a739a868a21997b28061d90fb407a46d9de2d4cb",
+    "extension_v24_shared_query": "6db2807476506b947bbaf01837490e97c12e57b1906bab671ef7c82ed36d6399",
+    "extension_v28_stage_b_query": "ac90fc60e944b792d41fc18a21daca3ed87a7ec634a7a5c8594339371b0631e9",
+    "extension_v30_joint_pair_query": "050706c300e6fb0ac8e4cc02e26c565b54a9a89505104302d4ffcedc02124c64",
+    "inherited_v12": "dec768bed654c8c4e16da0318857543ad54d8f5f68f4d24a9a87cd19ec706594",
+    "v85_strict_multiscene_bridge": "f31b8f99f77f1b7b92dafd74220e5e12ccfa35cbc8630a6d7640f2fe1f93c581",
+    "v94_strict_multiscene_full40_bridge": "9f503f0b2c605238a6f32c15740c0600702d46da08a527d867fbc19e6b639452",
+    "v95_strict_causal_successor_bridge": "53404c733586ebd25caa440f822a4d4af6cc3dbb71bf4f6b6f94af23f3a2492a"
+  },
+  "historical_v1_attempt_failed_before_question_io": true,
+  "historical_v1_output_count": 0,
+  "known_development_outputs_present_before_seal": [],
+  "labels_opened": false,
+  "lora_bank_topology": {
+    "banks": [
+      {
+        "alpha": 8.0,
+        "dropout": 0.0,
+        "expected_initial_state_sha256": "dec768bed654c8c4e16da0318857543ad54d8f5f68f4d24a9a87cd19ec706594",
+        "initialization_algorithm": "checkpoint_overwrite",
+        "initialization_seed": null,
+        "name": "inherited_v12",
+        "rank": 4,
+        "target_modules": [
+          "model.language_model.layers.34.self_attn.q_proj",
+          "model.language_model.layers.34.self_attn.o_proj"
+        ],
+        "trainable": false
+      },
+      {
+        "alpha": 16.0,
+        "dropout": 0.0,
+        "expected_initial_state_sha256": "4eb90fb9b0bea579d14cfcb0f61ebd5b6d566fd600bd3d5e1bfe5177a39e1b34",
+        "initialization_algorithm": "checkpoint_overwrite",
+        "initialization_seed": null,
+        "name": "extension_v13",
+        "rank": 8,
+        "target_modules": [
+          "model.language_model.layers.30.self_attn.q_proj",
+          "model.language_model.layers.30.self_attn.o_proj",
+          "model.language_model.layers.31.self_attn.q_proj",
+          "model.language_model.layers.31.self_attn.o_proj",
+          "model.language_model.layers.32.self_attn.q_proj",
+          "model.language_model.layers.32.self_attn.o_proj",
+          "model.language_model.layers.33.self_attn.q_proj",
+          "model.language_model.layers.33.self_attn.o_proj"
+        ],
+        "trainable": false
+      },
+      {
+        "alpha": 8.0,
+        "dropout": 0.0,
+        "expected_initial_state_sha256": "5c9233bd96b381e2f63443f8a739a868a21997b28061d90fb407a46d9de2d4cb",
+        "initialization_algorithm": "checkpoint_overwrite",
+        "initialization_seed": null,
+        "name": "extension_v23_shared_kv",
+        "rank": 4,
+        "target_modules": [
+          "model.language_model.layers.13.self_attn.k_proj",
+          "model.language_model.layers.13.self_attn.v_proj",
+          "model.language_model.layers.14.self_attn.k_proj",
+          "model.language_model.layers.14.self_attn.v_proj"
+        ],
+        "trainable": false
+      },
+      {
+        "alpha": 8.0,
+        "dropout": 0.0,
+        "expected_initial_state_sha256": "6db2807476506b947bbaf01837490e97c12e57b1906bab671ef7c82ed36d6399",
+        "initialization_algorithm": "checkpoint_overwrite",
+        "initialization_seed": null,
+        "name": "extension_v24_shared_query",
+        "rank": 4,
+        "target_modules": [
+          "model.language_model.layers.28.self_attn.q_proj",
+          "model.language_model.layers.29.self_attn.q_proj"
+        ],
+        "trainable": false
+      },
+      {
+        "alpha": 8.0,
+        "dropout": 0.0,
+        "expected_initial_state_sha256": null,
+        "initialization_algorithm": "checkpoint_overwrite",
+        "initialization_seed": null,
+        "name": "extension_v28_stage_b_query",
+        "rank": 4,
+        "target_modules": [
+          "model.language_model.layers.13.self_attn.q_proj",
+          "model.language_model.layers.14.self_attn.q_proj"
+        ],
+        "trainable": false
+      },
+      {
+        "alpha": 16.0,
+        "dropout": 0.0,
+        "expected_initial_state_sha256": "050706c300e6fb0ac8e4cc02e26c565b54a9a89505104302d4ffcedc02124c64",
+        "initialization_algorithm": "checkpoint_overwrite",
+        "initialization_seed": null,
+        "name": "extension_v30_joint_pair_query",
+        "rank": 8,
+        "target_modules": [
+          "model.language_model.layers.18.self_attn.q_proj",
+          "model.language_model.layers.19.self_attn.q_proj",
+          "model.language_model.layers.20.self_attn.q_proj",
+          "model.language_model.layers.21.self_attn.q_proj"
+        ],
+        "trainable": false
+      },
+      {
+        "alpha": 8.0,
+        "dropout": 0.0,
+        "expected_initial_state_sha256": "f31b8f99f77f1b7b92dafd74220e5e12ccfa35cbc8630a6d7640f2fe1f93c581",
+        "initialization_algorithm": "checkpoint_overwrite",
+        "initialization_seed": null,
+        "name": "v85_strict_multiscene_bridge",
+        "rank": 4,
+        "target_modules": [
+          "model.language_model.layers.34.mlp.down_proj"
+        ],
+        "trainable": false
+      },
+      {
+        "alpha": 16.0,
+        "dropout": 0.0,
+        "expected_initial_state_sha256": "9f503f0b2c605238a6f32c15740c0600702d46da08a527d867fbc19e6b639452",
+        "initialization_algorithm": "checkpoint_overwrite",
+        "initialization_seed": null,
+        "name": "v94_strict_multiscene_full40_bridge",
+        "rank": 8,
+        "target_modules": [
+          "model.language_model.layers.34.mlp.gate_proj"
+        ],
+        "trainable": false
+      },
+      {
+        "alpha": 16.0,
+        "dropout": 0.0,
+        "expected_initial_state_sha256": "53404c733586ebd25caa440f822a4d4af6cc3dbb71bf4f6b6f94af23f3a2492a",
+        "initialization_algorithm": "checkpoint_overwrite",
+        "initialization_seed": null,
+        "name": "v95_strict_causal_successor_bridge",
+        "rank": 8,
+        "target_modules": [
+          "model.language_model.layers.9.self_attn.k_proj",
+          "model.language_model.layers.9.self_attn.v_proj",
+          "model.language_model.layers.34.mlp.up_proj"
+        ],
+        "trainable": false
+      },
+      {
+        "alpha": 16.0,
+        "dropout": 0.0,
+        "expected_initial_state_sha256": "a52c4aa9915006c7f04721899723cb684ee65b773a32aed8d03c9083e0075b2b",
+        "initialization_algorithm": "cpu_kaiming_uniform_a_exact_zero_b",
+        "initialization_seed": 960096,
+        "name": "v96_atomic_pair_repair_bridge",
+        "rank": 8,
+        "target_modules": [
+          "model.language_model.layers.9.self_attn.q_proj"
+        ],
+        "trainable": true
+      }
+    ],
+    "enabled": true,
+    "schema_version": 2
+  },
+  "lora_bank_topology_sha256": "bd8e607d6ceff4eb63fb77f86d7953b2094444f05285e9aaa1a6df98be4bc9de",
+  "model_loaded": false,
+  "model_snapshot_binding": {
+    "inventory_sha256": "b342fb3532443172246d22fe4ab12ecfc5424e15994fe4dfe9dcef78f5385bf5",
+    "logical_entries": {
+      ".gitattributes": {
+        "physical_target": "/Users/stevens/.cache/huggingface/hub/models--google--gemma-4-E2B-it/blobs/52373fe24473b1aa44333d318f578ae6bf04b49b",
+        "sha256": "34448b82c17d60fec9b65b1f093c115ddbaadc04beb1b0140b6bfed2e012a930",
+        "size_bytes": 1570
+      },
+      "README.md": {
+        "physical_target": "/Users/stevens/.cache/huggingface/hub/models--google--gemma-4-E2B-it/blobs/61e18105d7cb61ce375aa16ed66442b85116bb8a",
+        "sha256": "3e0608a6be80e3eb040a5aa6c76707809503deb85be6360184a118fb6156526c",
+        "size_bytes": 27955
+      },
+      "chat_template.jinja": {
+        "physical_target": "/Users/stevens/.cache/huggingface/hub/models--google--gemma-4-E2B-it/blobs/fbe3b59b625cd1b8850ea592d4203df6ec04684b",
+        "sha256": "0a2c8073c878ab1da004bee933a998606537bbb62016310352c7285c3f01c5b5",
+        "size_bytes": 18569
+      },
+      "config.json": {
+        "physical_target": "/Users/stevens/.cache/huggingface/hub/models--google--gemma-4-E2B-it/blobs/923b5e9405e7d319572b0c1b1a89291512262aa3",
+        "sha256": "1b28f3d2c3100f6c594754b81107428bd7b822a7f48272ca681dae9d2ec38330",
+        "size_bytes": 4954
+      },
+      "generation_config.json": {
+        "physical_target": "/Users/stevens/.cache/huggingface/hub/models--google--gemma-4-E2B-it/blobs/e605bb4523b1462ea9d9a3810b9e3ecf7ab7b1f6",
+        "sha256": "d4226bbe3117d2d253ba4609720ba82c6c4ce4627a9a6ae05387c78983ac03de",
+        "size_bytes": 208
+      },
+      "model.safetensors": {
+        "physical_target": "/Users/stevens/.cache/huggingface/hub/models--google--gemma-4-E2B-it/blobs/2db5482b20d746879bb3ef79b5203e9075a2e2b98f54ec7c2f281c1477ddc550",
+        "sha256": "2db5482b20d746879bb3ef79b5203e9075a2e2b98f54ec7c2f281c1477ddc550",
+        "size_bytes": 10246621918
+      },
+      "processor_config.json": {
+        "physical_target": "/Users/stevens/.cache/huggingface/hub/models--google--gemma-4-E2B-it/blobs/5465974d23e1eca2c46c2809b26c997946ce0d90",
+        "sha256": "32bdf45d2ad4cc29a0822ddd157a182de76644f0419a6228d151495256e9813c",
+        "size_bytes": 1689
+      },
+      "tokenizer.json": {
+        "physical_target": "/Users/stevens/.cache/huggingface/hub/models--google--gemma-4-E2B-it/blobs/cc8d3a0ce36466ccc1278bf987df5f71db1719b9ca6b4118264f45cb627bfe0f",
+        "sha256": "cc8d3a0ce36466ccc1278bf987df5f71db1719b9ca6b4118264f45cb627bfe0f",
+        "size_bytes": 32169626
+      },
+      "tokenizer_config.json": {
+        "physical_target": "/Users/stevens/.cache/huggingface/hub/models--google--gemma-4-E2B-it/blobs/6068e357379d36f823c377e30efb101fa2c67fe4",
+        "sha256": "9f4fec4b1dc6ecddf8f4a92e9caea5971c0e67d81309f3f9066a2bee8c362633",
+        "size_bytes": 3082
+      }
+    },
+    "logical_entry_count": 9,
+    "model_blob_sha256_identity": "2db5482b20d746879bb3ef79b5203e9075a2e2b98f54ec7c2f281c1477ddc550",
+    "model_cache_root": "/Users/stevens/.cache/huggingface/hub/models--google--gemma-4-E2B-it",
+    "model_id": "google/gemma-4-E2B-it",
+    "revision": "3e22461f65e89153144f8adb70e3b8c2cc9845a7",
+    "snapshot_root": "/Users/stevens/.cache/huggingface/hub/models--google--gemma-4-E2B-it/snapshots/3e22461f65e89153144f8adb70e3b8c2cc9845a7",
+    "weights_hashed_not_model_loaded": true
+  },
+  "questions_opened": false,
+  "runtime_config_binding": {
+    "path": "configs/runtime/gemma4_v85_strict_multiscene.yaml",
+    "sha256": "49d9595e6167fe352dc49f1ca363af396fe3d3be91d50cb430721bc74b130575"
+  },
+  "runtime_promotion_authorized": false,
+  "schema_version": 96,
+  "source_count": 123,
+  "source_inventory_sha256": "1671aa6593bbf6ac8ba33d43ab6d765a4caf78bc868a59aa62324aa9402e132f",
+  "sources": {
+    "source:src/semantic_3d_chat/__init__.py": {
+      "path": "src/semantic_3d_chat/__init__.py",
+      "sha256": "dd5d96051df28b6b062554909bb8abfb34432e2baf804ac8e67970e4f60f12fd"
+    },
+    "source:src/semantic_3d_chat/chat/__init__.py": {
+      "path": "src/semantic_3d_chat/chat/__init__.py",
+      "sha256": "14e799f8e47219875b723514cb242525240542ca0cbb2c64271ed504a0c060f5"
+    },
+    "source:src/semantic_3d_chat/chat/file_audit.py": {
+      "path": "src/semantic_3d_chat/chat/file_audit.py",
+      "sha256": "a6a61b27454c939de011ed87ca27b056f43b92c5d30c203f36844246245b1364"
+    },
+    "source:src/semantic_3d_chat/chat/grounding_sidecar_v78_runtime.py": {
+      "path": "src/semantic_3d_chat/chat/grounding_sidecar_v78_runtime.py",
+      "sha256": "b1756c2ff44183a811c432cfc226f07ae8bfef84c1c504621994c59900e779ac"
+    },
+    "source:src/semantic_3d_chat/chat/question_control_runtime.py": {
+      "path": "src/semantic_3d_chat/chat/question_control_runtime.py",
+      "sha256": "aad4f65209da5c705bc1989bc61c5dd42ca615033c64ff1def1182fc9d59e9f9"
+    },
+    "source:src/semantic_3d_chat/chat/runtime.py": {
+      "path": "src/semantic_3d_chat/chat/runtime.py",
+      "sha256": "2a6f43a74ac94e2b64e7cbc3b19d07ca619095f3153054e2edcfc3f5b432d711"
+    },
+    "source:src/semantic_3d_chat/chat/runtime_config.py": {
+      "path": "src/semantic_3d_chat/chat/runtime_config.py",
+      "sha256": "48a0a3eed9d34724cd6d55e4c06381c92aa6977e6222fdd7979d45550a1b1c24"
+    },
+    "source:src/semantic_3d_chat/chat/v81_scene_memory_runtime.py": {
+      "path": "src/semantic_3d_chat/chat/v81_scene_memory_runtime.py",
+      "sha256": "8fca2328f9fb7f916e3de4aa97a28dcc9426ab228f6cced621812d9dd6d07a29"
+    },
+    "source:src/semantic_3d_chat/chat/v83_direct_scene_memory_runtime.py": {
+      "path": "src/semantic_3d_chat/chat/v83_direct_scene_memory_runtime.py",
+      "sha256": "988d7b1751c0f6b158675a86781178bc6bb3626bab8cf3643f5ff3b22716dd22"
+    },
+    "source:src/semantic_3d_chat/chat/v94_strict_multiscene_runtime.py": {
+      "path": "src/semantic_3d_chat/chat/v94_strict_multiscene_runtime.py",
+      "sha256": "32e73bd5889c77eea5dc541d2a879eb742f70ccf54d6f0bfbaae455c65310f00"
+    },
+    "source:src/semantic_3d_chat/config.py": {
+      "path": "src/semantic_3d_chat/config.py",
+      "sha256": "f31ba226689b59ed8b6930eafc408e8e0c201090f66d4df86f9ce7a124b78b1e"
+    },
+    "source:src/semantic_3d_chat/coordinates.py": {
+      "path": "src/semantic_3d_chat/coordinates.py",
+      "sha256": "490b2e8c0943226ed5d525138744a1e582d62aa1e75bd380bd33c67a79f808ce"
+    },
+    "source:src/semantic_3d_chat/data/__init__.py": {
+      "path": "src/semantic_3d_chat/data/__init__.py",
+      "sha256": "c84c883154751e1d309c094f536288123d04ce7897d18efb9ced4134a6dfe249"
+    },
+    "source:src/semantic_3d_chat/data/dataset.py": {
+      "path": "src/semantic_3d_chat/data/dataset.py",
+      "sha256": "056544fb98ecd5e91e4372e362d592e0ba46b4d2066c455653616bab983ee3c7"
+    },
+    "source:src/semantic_3d_chat/device.py": {
+      "path": "src/semantic_3d_chat/device.py",
+      "sha256": "09d83709aec72cd329eeb8e4fa3d714ce22f10da01cbb20f1541b2c9d6d08699"
+    },
+    "source:src/semantic_3d_chat/evaluation/__init__.py": {
+      "path": "src/semantic_3d_chat/evaluation/__init__.py",
+      "sha256": "3a262f8409702be357c9e21001f40a0001fd998db07d4ab80bb7c181d54b5618"
+    },
+    "source:src/semantic_3d_chat/evaluation/authenticate_v96_known_development_v2.py": {
+      "path": "src/semantic_3d_chat/evaluation/authenticate_v96_known_development_v2.py",
+      "sha256": "d5e66ef50ecd87f2d3f45f5cc581802a9d7a371b09273755ebe8c2d50909bdb7"
+    },
+    "source:src/semantic_3d_chat/evaluation/baseline_io.py": {
+      "path": "src/semantic_3d_chat/evaluation/baseline_io.py",
+      "sha256": "3555027d5c1bc67fc97746d3ba85f0b675f4eaacd73184f7f58802fc4bf8e4e0"
+    },
+    "source:src/semantic_3d_chat/evaluation/candidate_gate_detail.py": {
+      "path": "src/semantic_3d_chat/evaluation/candidate_gate_detail.py",
+      "sha256": "493dca99e261a9d655a3171f7c1fd31285e29a5ede6ea8017f85bfe6475eb11c"
+    },
+    "source:src/semantic_3d_chat/evaluation/evaluate_v94_strict_multiscene_full40.py": {
+      "path": "src/semantic_3d_chat/evaluation/evaluate_v94_strict_multiscene_full40.py",
+      "sha256": "c0193d5ad8768664ca69c07303b1d129e534e7cb249bbd7071302e627a08562b"
+    },
+    "source:src/semantic_3d_chat/evaluation/gemma4_semantic_sanity.py": {
+      "path": "src/semantic_3d_chat/evaluation/gemma4_semantic_sanity.py",
+      "sha256": "b3f4a124c664e7e70dae299d1514bd4f2aac86134fbe222f1ce7d1fdb8119503"
+    },
+    "source:src/semantic_3d_chat/evaluation/metrics.py": {
+      "path": "src/semantic_3d_chat/evaluation/metrics.py",
+      "sha256": "08f27c1f7560f7bf7cfb272bc44bb777bcd40c96311e78c092ba5c98028245e3"
+    },
+    "source:src/semantic_3d_chat/evaluation/nll_v96_known_development_v2.py": {
+      "path": "src/semantic_3d_chat/evaluation/nll_v96_known_development_v2.py",
+      "sha256": "cf7c865a79a9721d5710363d625f727d9188cdae124cbf27837607220c8323f1"
+    },
+    "source:src/semantic_3d_chat/evaluation/predict_v96_known_development_v2.py": {
+      "path": "src/semantic_3d_chat/evaluation/predict_v96_known_development_v2.py",
+      "sha256": "55f396a690af6b0741eb7ba9ae7b3797defc418d2a24fe0b89a12b979e7fcdfd"
+    },
+    "source:src/semantic_3d_chat/evaluation/prediction_artifacts.py": {
+      "path": "src/semantic_3d_chat/evaluation/prediction_artifacts.py",
+      "sha256": "df75b6b6ca8e55b3821279ac52841a8b383f277ffd6bf4a0ada20782af769e26"
+    },
+    "source:src/semantic_3d_chat/evaluation/question_manifest.py": {
+      "path": "src/semantic_3d_chat/evaluation/question_manifest.py",
+      "sha256": "36c906e08b0fe98125c0d67d9709c142a15df061ff84a8716555d37938cb827b"
+    },
+    "source:src/semantic_3d_chat/evaluation/run.py": {
+      "path": "src/semantic_3d_chat/evaluation/run.py",
+      "sha256": "7d0df6064adb536057640aae911bf8040ccf8d2e64e788c7fc5da70517c1ad6c"
+    },
+    "source:src/semantic_3d_chat/evaluation/score_v96_known_development.py": {
+      "path": "src/semantic_3d_chat/evaluation/score_v96_known_development.py",
+      "sha256": "dbf5a7cdec59493bc34de11264f32319737c89644aa5755d28d8fd37c9beed3a"
+    },
+    "source:src/semantic_3d_chat/evaluation/score_v96_known_development_v2.py": {
+      "path": "src/semantic_3d_chat/evaluation/score_v96_known_development_v2.py",
+      "sha256": "22d2e973532a50ccd139bd431bea4b939463e4d1cf6cd99c3310feef57261c4e"
+    },
+    "source:src/semantic_3d_chat/evaluation/seal_v96_known_development_v2.py": {
+      "path": "src/semantic_3d_chat/evaluation/seal_v96_known_development_v2.py",
+      "sha256": "2ca7a7bbeb0e82af23e49f24ae67ec3ba815693e9f03746891c747a821e9210c"
+    },
+    "source:src/semantic_3d_chat/evaluation/semantic_sanity.py": {
+      "path": "src/semantic_3d_chat/evaluation/semantic_sanity.py",
+      "sha256": "6c49ae4ec6062fee4f1795e86d2f9e2fce086a32ac9f7c9826599a43b6fa9e74"
+    },
+    "source:src/semantic_3d_chat/evaluation/v55_development_score.py": {
+      "path": "src/semantic_3d_chat/evaluation/v55_development_score.py",
+      "sha256": "23ea365bbcfc06aa7aaa4d0881bdc3973ff3f0381e8464a765697f897909cfc6"
+    },
+    "source:src/semantic_3d_chat/evaluation/v56_fresh_development_score.py": {
+      "path": "src/semantic_3d_chat/evaluation/v56_fresh_development_score.py",
+      "sha256": "cc6d81de702cd7a456f10c29cf58436768df3d8ecc293513b400eb3b61015172"
+    },
+    "source:src/semantic_3d_chat/evaluation/v75_fixed_atlas_behavior.py": {
+      "path": "src/semantic_3d_chat/evaluation/v75_fixed_atlas_behavior.py",
+      "sha256": "f55747b0cf463e3028bb327397240bb19fba28660662195968320224d66bd49f"
+    },
+    "source:src/semantic_3d_chat/evaluation/v75_official_validation_contract.py": {
+      "path": "src/semantic_3d_chat/evaluation/v75_official_validation_contract.py",
+      "sha256": "a6fc965e7ed6e333c641da5beb5ce184bf4a512474de048ad8dbc034929f4440"
+    },
+    "source:src/semantic_3d_chat/evaluation/v84_strict_bridge_preflight.py": {
+      "path": "src/semantic_3d_chat/evaluation/v84_strict_bridge_preflight.py",
+      "sha256": "85eec3dbcad3ddeabe5191bf6b44ab93918dd19e2819b210fd147becdc14bebe"
+    },
+    "source:src/semantic_3d_chat/evaluation/v85_strict_multiscene_preflight.py": {
+      "path": "src/semantic_3d_chat/evaluation/v85_strict_multiscene_preflight.py",
+      "sha256": "5b9892d80fbb12d79a1758c330f2dc51f575ccdabfe514b7d93553697b23bde8"
+    },
+    "source:src/semantic_3d_chat/evaluation/v94_strict_multiscene_evidence.py": {
+      "path": "src/semantic_3d_chat/evaluation/v94_strict_multiscene_evidence.py",
+      "sha256": "97d3ab760b59847f8f90bd749c301f54368a68cc3963882c9f1ca8c616a689a4"
+    },
+    "source:src/semantic_3d_chat/evaluation/v94_strict_multiscene_preflight.py": {
+      "path": "src/semantic_3d_chat/evaluation/v94_strict_multiscene_preflight.py",
+      "sha256": "86873048da4c5978ce3bbef74cfb4150209996e845d80b1a298d53fa696b85e7"
+    },
+    "source:src/semantic_3d_chat/evaluation/v95_known_development_common.py": {
+      "path": "src/semantic_3d_chat/evaluation/v95_known_development_common.py",
+      "sha256": "fed2b95855f25fb518e9e3408b8818ccfa98dc601780142d9578e78a8074b6b2"
+    },
+    "source:src/semantic_3d_chat/evaluation/v95_strict_causal_successor_preflight.py": {
+      "path": "src/semantic_3d_chat/evaluation/v95_strict_causal_successor_preflight.py",
+      "sha256": "343095ca722a8445dc58349b682640c1bc4ba193e4c02528351a001f80c9964d"
+    },
+    "source:src/semantic_3d_chat/evaluation/v96_atomic_pair_repair_preflight.py": {
+      "path": "src/semantic_3d_chat/evaluation/v96_atomic_pair_repair_preflight.py",
+      "sha256": "551604bcb21208a2aab091d60efaa0a8475d769fd1ac51dd75c3706917807e01"
+    },
+    "source:src/semantic_3d_chat/evaluation/v96_evaluation_io_v2.py": {
+      "path": "src/semantic_3d_chat/evaluation/v96_evaluation_io_v2.py",
+      "sha256": "85518349b95ee57857edc465e12c69e70a0fa670f785e7d9033f97b8fd33f4fb"
+    },
+    "source:src/semantic_3d_chat/evaluation/v96_known_development_candidate_attestation.py": {
+      "path": "src/semantic_3d_chat/evaluation/v96_known_development_candidate_attestation.py",
+      "sha256": "4fba77e0928bdfe0253502223154de0595f378b378382f5af36b8c147061a0de"
+    },
+    "source:src/semantic_3d_chat/evaluation/v96_known_development_common.py": {
+      "path": "src/semantic_3d_chat/evaluation/v96_known_development_common.py",
+      "sha256": "702462ef32fd5c797030f738aa02ae583e9e5b3e1676f500b8af934c8669cd74"
+    },
+    "source:src/semantic_3d_chat/evaluation/v96_known_development_common_v2.py": {
+      "path": "src/semantic_3d_chat/evaluation/v96_known_development_common_v2.py",
+      "sha256": "a7babc4b0ea312dde24367c19a599e4f6d245702db7b9d19cd0e48b4449f6663"
+    },
+    "source:src/semantic_3d_chat/evaluation/v96_known_development_implementation.py": {
+      "path": "src/semantic_3d_chat/evaluation/v96_known_development_implementation.py",
+      "sha256": "fc71d5d77e8e644107f1d8ea0cbb4721fc25b036bdb5f2b300a24d380bfacd5d"
+    },
+    "source:src/semantic_3d_chat/evaluation/v96_known_development_implementation_v2.py": {
+      "path": "src/semantic_3d_chat/evaluation/v96_known_development_implementation_v2.py",
+      "sha256": "0dfad42baf20e838ad7a5c70a5ea1655e01c1dee1610ccff7d44b708c0715011"
+    },
+    "source:src/semantic_3d_chat/language/__init__.py": {
+      "path": "src/semantic_3d_chat/language/__init__.py",
+      "sha256": "912c4ec3d4dcc1d611cfc2c6192f82dd6e46fb15f0cd6409eba4eccbe27d1595"
+    },
+    "source:src/semantic_3d_chat/language/gemma4_answer_tail.py": {
+      "path": "src/semantic_3d_chat/language/gemma4_answer_tail.py",
+      "sha256": "45dda5f3418ebb1755216f9c594c7461d3e49b7308aef737cad2fd7ddb96b524"
+    },
+    "source:src/semantic_3d_chat/language/gemma4_backend.py": {
+      "path": "src/semantic_3d_chat/language/gemma4_backend.py",
+      "sha256": "34edd02ae6c712b9c9cf2ec6586b1819a90631702baae0c2960ecc57bcff60cf"
+    },
+    "source:src/semantic_3d_chat/language/generation.py": {
+      "path": "src/semantic_3d_chat/language/generation.py",
+      "sha256": "1ecb0154316588f4b47e5a21df61af7f10bd0ae01c147ba2e3eb9a86125d3c44"
+    },
+    "source:src/semantic_3d_chat/language/local_lm.py": {
+      "path": "src/semantic_3d_chat/language/local_lm.py",
+      "sha256": "a50f057a855a3baa5988f460f661dfac55fbc5244af96392a2793011b5a11364"
+    },
+    "source:src/semantic_3d_chat/language/lora.py": {
+      "path": "src/semantic_3d_chat/language/lora.py",
+      "sha256": "f7c3ce3a4d46c0fcfef5e4cd360b4e12387799a9f6ccc0e2ffa74cba6ad56899"
+    },
+    "source:src/semantic_3d_chat/language/prefix_injection.py": {
+      "path": "src/semantic_3d_chat/language/prefix_injection.py",
+      "sha256": "17bbff15ed12e506ef79ad9f4cbd4fa8a4e392fe14a0f8eced338f4ebc0028e9"
+    },
+    "source:src/semantic_3d_chat/language/v81_structured_dense_atlas_sidecar.py": {
+      "path": "src/semantic_3d_chat/language/v81_structured_dense_atlas_sidecar.py",
+      "sha256": "71e70447f60ce7d161f61dfd58a1938ef2df9426c636b470e419e9e921c43465"
+    },
+    "source:src/semantic_3d_chat/language/v82_dense_learned_reader.py": {
+      "path": "src/semantic_3d_chat/language/v82_dense_learned_reader.py",
+      "sha256": "d39dea80e059aca79dbaa0f35ffda457f22550abc5d1cac2ee9dc1fced37ef62"
+    },
+    "source:src/semantic_3d_chat/mapping/__init__.py": {
+      "path": "src/semantic_3d_chat/mapping/__init__.py",
+      "sha256": "699c17e9126e5ddec1ea35cf89b746a1e7c7872ccc9cc6aa0dfb5038dfceda7a"
+    },
+    "source:src/semantic_3d_chat/mapping/depth_projection.py": {
+      "path": "src/semantic_3d_chat/mapping/depth_projection.py",
+      "sha256": "d29c080d497528622a07924c35454b5f3fa80201d16f9af013b35625061fdb8b"
+    },
+    "source:src/semantic_3d_chat/mapping/fusion.py": {
+      "path": "src/semantic_3d_chat/mapping/fusion.py",
+      "sha256": "a11253ae0171db36a94cb600b1f529e53b8867813df8a4aa5919781696daa0c4"
+    },
+    "source:src/semantic_3d_chat/mapping/semantic_codec.py": {
+      "path": "src/semantic_3d_chat/mapping/semantic_codec.py",
+      "sha256": "aa7b93d7528c528f1c8496e2ee109fcf49a58952c34819ab27e3744b2a1daf9d"
+    },
+    "source:src/semantic_3d_chat/mapping/voxel_map.py": {
+      "path": "src/semantic_3d_chat/mapping/voxel_map.py",
+      "sha256": "25cf71712b96bbecc8c99cf7845552a2c648e0fd1cdd564c4363f8e4ee0a6f06"
+    },
+    "source:src/semantic_3d_chat/rendering_io.py": {
+      "path": "src/semantic_3d_chat/rendering_io.py",
+      "sha256": "bf4bc4b1382eca886ec2073b83121dbfb44c8b400c2e8581d3d286fab6bebe9c"
+    },
+    "source:src/semantic_3d_chat/scene_encoder/__init__.py": {
+      "path": "src/semantic_3d_chat/scene_encoder/__init__.py",
+      "sha256": "40e0cdabf687addc255f58114ce4f3c77b217a50e1232641e2131b8779123250"
+    },
+    "source:src/semantic_3d_chat/scene_encoder/block_cross_residual.py": {
+      "path": "src/semantic_3d_chat/scene_encoder/block_cross_residual.py",
+      "sha256": "bdc4a6b78003b14c8be6bd95a7fefb104b2e3d64fa484e803a40d5e11b4dd5af"
+    },
+    "source:src/semantic_3d_chat/scene_encoder/dense_alignment.py": {
+      "path": "src/semantic_3d_chat/scene_encoder/dense_alignment.py",
+      "sha256": "df8759757f8cd3d2f37f2b3b09692af9da73a533f8eef7169b0693841b955a54"
+    },
+    "source:src/semantic_3d_chat/scene_encoder/dense_sidecar_adapter.py": {
+      "path": "src/semantic_3d_chat/scene_encoder/dense_sidecar_adapter.py",
+      "sha256": "9e92c2461f8014965055c5d293fdde9ae09769b67b9f7d6596e306b66b1e7bd6"
+    },
+    "source:src/semantic_3d_chat/scene_encoder/fixed_prefix_atlas.py": {
+      "path": "src/semantic_3d_chat/scene_encoder/fixed_prefix_atlas.py",
+      "sha256": "ba8fa693fc85355472b928ef874d6607689d143263f31356fcfe6ddb92eaca8c"
+    },
+    "source:src/semantic_3d_chat/scene_encoder/fixed_prefix_atlas_v2.py": {
+      "path": "src/semantic_3d_chat/scene_encoder/fixed_prefix_atlas_v2.py",
+      "sha256": "5f959b9a75e62c3e37e2251b68396d582fbe59b933398ba7ae3bf9f5f7f79b2b"
+    },
+    "source:src/semantic_3d_chat/scene_encoder/fixed_prefix_atlas_v75.py": {
+      "path": "src/semantic_3d_chat/scene_encoder/fixed_prefix_atlas_v75.py",
+      "sha256": "4dc04e073fadcd21ddb6e4b5519f645713a7c40d5346cc2612f52c3023d1a14d"
+    },
+    "source:src/semantic_3d_chat/scene_encoder/global_residual.py": {
+      "path": "src/semantic_3d_chat/scene_encoder/global_residual.py",
+      "sha256": "10a0e9f5ce69636ea70c0948503f61b8fd966be35634048102a86033841eaa32"
+    },
+    "source:src/semantic_3d_chat/scene_encoder/grounding_sidecar_v78.py": {
+      "path": "src/semantic_3d_chat/scene_encoder/grounding_sidecar_v78.py",
+      "sha256": "87dc2e40dac97a3387474d430add3f46935f5e5d31a175f67b89af9bc3c02ac5"
+    },
+    "source:src/semantic_3d_chat/scene_encoder/map_io.py": {
+      "path": "src/semantic_3d_chat/scene_encoder/map_io.py",
+      "sha256": "10c53adf865caf4d2323c919e807ed05781202e9c6395e9ea54f02fa6c456047"
+    },
+    "source:src/semantic_3d_chat/scene_encoder/perceiver.py": {
+      "path": "src/semantic_3d_chat/scene_encoder/perceiver.py",
+      "sha256": "292734f935a31145c7b8aa004bf88b17dd291477103776f9d1dff0e2683a27c0"
+    },
+    "source:src/semantic_3d_chat/scene_encoder/point_tokens.py": {
+      "path": "src/semantic_3d_chat/scene_encoder/point_tokens.py",
+      "sha256": "6623fe0c44b5ec55f5ef4d02424b65b217626b410ac2b9184e3a507cf411289d"
+    },
+    "source:src/semantic_3d_chat/scene_encoder/projector.py": {
+      "path": "src/semantic_3d_chat/scene_encoder/projector.py",
+      "sha256": "173d9ad4625689e0e76d0705f1f4600338244012401d2d48c0b942533f947825"
+    },
+    "source:src/semantic_3d_chat/scene_encoder/question_control.py": {
+      "path": "src/semantic_3d_chat/scene_encoder/question_control.py",
+      "sha256": "290002b24bed21e50cf9ad380d1f358cd3fcbf0043b8cf3c8b171cdb8f8b2e15"
+    },
+    "source:src/semantic_3d_chat/scene_encoder/question_control_v2.py": {
+      "path": "src/semantic_3d_chat/scene_encoder/question_control_v2.py",
+      "sha256": "62429030574c8379acb8f0bf27e41b9bee6c57facd4d5e7042a4e54008489878"
+    },
+    "source:src/semantic_3d_chat/scene_encoder/question_control_v3.py": {
+      "path": "src/semantic_3d_chat/scene_encoder/question_control_v3.py",
+      "sha256": "3ea445ead987ae555bf94ec72c6527741eaa66ca58465df1006f37d866da2912"
+    },
+    "source:src/semantic_3d_chat/scene_encoder/question_control_v4.py": {
+      "path": "src/semantic_3d_chat/scene_encoder/question_control_v4.py",
+      "sha256": "1db9bb327b76c8a7fc44ba10c4b8071de1d9efddf03cb4e0d6bb347fea95b7ea"
+    },
+    "source:src/semantic_3d_chat/scene_encoder/question_control_v5.py": {
+      "path": "src/semantic_3d_chat/scene_encoder/question_control_v5.py",
+      "sha256": "abfd34aa87bc4eb82dc675a6bd32e31cd799d6d55f983b0d0a4bd730e09266c4"
+    },
+    "source:src/semantic_3d_chat/scene_encoder/question_control_v6.py": {
+      "path": "src/semantic_3d_chat/scene_encoder/question_control_v6.py",
+      "sha256": "5a8e5494c5d09f1d6ffd59f4dab3f5b1c0d57413a4d1c618cc4fab5f5c0bc4df"
+    },
+    "source:src/semantic_3d_chat/scene_encoder/question_control_v7.py": {
+      "path": "src/semantic_3d_chat/scene_encoder/question_control_v7.py",
+      "sha256": "a5acd2e7b332b8c511d0daf053d92e4c8b59abb31ad10ccaca7c9276365cc9c6"
+    },
+    "source:src/semantic_3d_chat/scene_encoder/question_control_v73.py": {
+      "path": "src/semantic_3d_chat/scene_encoder/question_control_v73.py",
+      "sha256": "6f75aac38038003719552db13328c9cd6da7b0f55e4024729d85d419454bd027"
+    },
+    "source:src/semantic_3d_chat/scene_encoder/question_control_v74.py": {
+      "path": "src/semantic_3d_chat/scene_encoder/question_control_v74.py",
+      "sha256": "35ed5cb16e6ff1a90a7aa4bdb44940f01f93bd610168f18dbc81c8cc19696dfd"
+    },
+    "source:src/semantic_3d_chat/scene_encoder/question_control_v75.py": {
+      "path": "src/semantic_3d_chat/scene_encoder/question_control_v75.py",
+      "sha256": "d00576c99bd9e0a1bdc28347008c6c260493c3727df9e8f71715f2b6e8cf5853"
+    },
+    "source:src/semantic_3d_chat/scene_encoder/signed_x_dispatch.py": {
+      "path": "src/semantic_3d_chat/scene_encoder/signed_x_dispatch.py",
+      "sha256": "b521ef27966c462b9c278f0d0df8769fbecc01562ad35e036a82ab6bd197fee1"
+    },
+    "source:src/semantic_3d_chat/scene_encoder/signed_x_local_field.py": {
+      "path": "src/semantic_3d_chat/scene_encoder/signed_x_local_field.py",
+      "sha256": "58644793c49599e6af29b0e836f38fc0ab28aa9b645736e586510d6da846797f"
+    },
+    "source:src/semantic_3d_chat/scene_encoder/signed_x_residual.py": {
+      "path": "src/semantic_3d_chat/scene_encoder/signed_x_residual.py",
+      "sha256": "1249daa01ee8c262727b550e7fd474affec506c4c007b74e1f1cfd21f81cc2a2"
+    },
+    "source:src/semantic_3d_chat/scene_encoder/spatial_blocks.py": {
+      "path": "src/semantic_3d_chat/scene_encoder/spatial_blocks.py",
+      "sha256": "b3137df7bfa941ae8a5f6e01a636d2ef6a45ddb6887bfeb2779b58a5c8b4acd0"
+    },
+    "source:src/semantic_3d_chat/scene_encoder/v81_scene_memory_artifact.py": {
+      "path": "src/semantic_3d_chat/scene_encoder/v81_scene_memory_artifact.py",
+      "sha256": "7756f026bfc5337e99ea6570abfbcc78c70822d5a73d808b73af4c9a65618e2c"
+    },
+    "source:src/semantic_3d_chat/training/__init__.py": {
+      "path": "src/semantic_3d_chat/training/__init__.py",
+      "sha256": "5481f8e8379451b94eb700ee078b5e426f08de5475aca16e5447313153bd77e1"
+    },
+    "source:src/semantic_3d_chat/training/checkpointing.py": {
+      "path": "src/semantic_3d_chat/training/checkpointing.py",
+      "sha256": "cff711f037ac9162478d1eab94ef93e57635133936e13b4ce3628b3e9e51e27d"
+    },
+    "source:src/semantic_3d_chat/training/dense_alignment_calibration.py": {
+      "path": "src/semantic_3d_chat/training/dense_alignment_calibration.py",
+      "sha256": "31b9881d88334c66bb0760ca42fb3b63c46414f1d2ab0f0e86dffd67ce2da6c5"
+    },
+    "source:src/semantic_3d_chat/training/dense_alignment_supervision.py": {
+      "path": "src/semantic_3d_chat/training/dense_alignment_supervision.py",
+      "sha256": "8d82a71c49239314d5f5a1cba7ae5fc03510fa32abefb03d4210ecfe211f0717"
+    },
+    "source:src/semantic_3d_chat/training/grounding_sidecar_v78.py": {
+      "path": "src/semantic_3d_chat/training/grounding_sidecar_v78.py",
+      "sha256": "6861761bfb0bc2658ea244b7e7f7571360d8134b05a4e95946e585dd70f954b6"
+    },
+    "source:src/semantic_3d_chat/training/grounding_sidecar_v78_release.py": {
+      "path": "src/semantic_3d_chat/training/grounding_sidecar_v78_release.py",
+      "sha256": "7813d5dbc2660c3b720826b3bc248cd4666b6bfdb25e884ef6368a90f48c2f5f"
+    },
+    "source:src/semantic_3d_chat/training/losses.py": {
+      "path": "src/semantic_3d_chat/training/losses.py",
+      "sha256": "02e98ea84fdfea12193f349034f7b3265258aae648a7bd6be61284d4f215ab86"
+    },
+    "source:src/semantic_3d_chat/training/pair_curriculum.py": {
+      "path": "src/semantic_3d_chat/training/pair_curriculum.py",
+      "sha256": "9177a8cfd6892b99052c4721ebf688e9238b267c120140705294f5d885eda001"
+    },
+    "source:src/semantic_3d_chat/training/question_control_v4_checkpoint.py": {
+      "path": "src/semantic_3d_chat/training/question_control_v4_checkpoint.py",
+      "sha256": "1deb5966b0b1ec342b56120015b2a2ad046175bd097f07a636e42165b8d953c7"
+    },
+    "source:src/semantic_3d_chat/training/question_control_v5_checkpoint.py": {
+      "path": "src/semantic_3d_chat/training/question_control_v5_checkpoint.py",
+      "sha256": "c2cdfaeb9f720044fea53cb5964099b832eb88618113df03a157905a915f6f74"
+    },
+    "source:src/semantic_3d_chat/training/question_control_v6_checkpoint.py": {
+      "path": "src/semantic_3d_chat/training/question_control_v6_checkpoint.py",
+      "sha256": "83c333079755e4f379755c7d302cf2ea13e9f36b8a3a7deef61adfd376e505e2"
+    },
+    "source:src/semantic_3d_chat/training/question_control_v74_checkpoint.py": {
+      "path": "src/semantic_3d_chat/training/question_control_v74_checkpoint.py",
+      "sha256": "700f82f58d14ebf58588592ac95b1de9cd5eb08640ac29a228a02d9fc76125e0"
+    },
+    "source:src/semantic_3d_chat/training/question_control_v75_checkpoint.py": {
+      "path": "src/semantic_3d_chat/training/question_control_v75_checkpoint.py",
+      "sha256": "181591e644b87c10cdff53121d72c16a4f9fa65c3939ad913ef13e7b5e64a4c5"
+    },
+    "source:src/semantic_3d_chat/training/question_control_v7_checkpoint.py": {
+      "path": "src/semantic_3d_chat/training/question_control_v7_checkpoint.py",
+      "sha256": "a545920c0179452dadd94cfc77c3891c2196d706dab55708c8aaab7e24532e80"
+    },
+    "source:src/semantic_3d_chat/training/source_provenance.py": {
+      "path": "src/semantic_3d_chat/training/source_provenance.py",
+      "sha256": "b8a37483bcf8fc122a6dddccb51ff34cf64d325f3f592e99ec51cbbe38d5da02"
+    },
+    "source:src/semantic_3d_chat/training/train_adapter.py": {
+      "path": "src/semantic_3d_chat/training/train_adapter.py",
+      "sha256": "726ea1a97e0ee0a874cd885fb94b9dbe356bdcf9a751b99046f6d6c11cd56027"
+    },
+    "source:src/semantic_3d_chat/training/train_question_control_v56.py": {
+      "path": "src/semantic_3d_chat/training/train_question_control_v56.py",
+      "sha256": "98263dd8a98ebf5557ed4db32fea3ceca1c95f0c487de25edf6f693b901f080f"
+    },
+    "source:src/semantic_3d_chat/training/train_question_control_v73.py": {
+      "path": "src/semantic_3d_chat/training/train_question_control_v73.py",
+      "sha256": "78544c91ae3cd252b9e612b895c0972d40242d657fa3077c06a9173eaea7b6fb"
+    },
+    "source:src/semantic_3d_chat/training/train_v84_strict_bridge.py": {
+      "path": "src/semantic_3d_chat/training/train_v84_strict_bridge.py",
+      "sha256": "98daf8e3b71f7e58d3722de39dfd649ea245433ee953282ed95a07740850e14e"
+    },
+    "source:src/semantic_3d_chat/training/train_v94_strict_multiscene_full40.py": {
+      "path": "src/semantic_3d_chat/training/train_v94_strict_multiscene_full40.py",
+      "sha256": "b55be84fbaf41580a94b40fe05b8b73d633457f4d3575c7e7ea67a01ac63fbc1"
+    },
+    "source:src/semantic_3d_chat/training/train_v95_strict_causal_successor.py": {
+      "path": "src/semantic_3d_chat/training/train_v95_strict_causal_successor.py",
+      "sha256": "25458f4db96c6b5c6a77c5966e05e23c5f6240412663c90f17b56cc914f3d238"
+    },
+    "source:src/semantic_3d_chat/training/train_v96_atomic_pair_repair.py": {
+      "path": "src/semantic_3d_chat/training/train_v96_atomic_pair_repair.py",
+      "sha256": "de7fad4c1a4c7d74bbeef37e1d71374d8fb29bc7dfed8d3c0c046ab341a59b69"
+    },
+    "source:src/semantic_3d_chat/training/v82_reader_artifacts.py": {
+      "path": "src/semantic_3d_chat/training/v82_reader_artifacts.py",
+      "sha256": "9e2c5d5a41f3ca5d214652a19c618876dce4ba8a8d6d2c53118b8bae9e219116"
+    },
+    "source:src/semantic_3d_chat/vision/__init__.py": {
+      "path": "src/semantic_3d_chat/vision/__init__.py",
+      "sha256": "877b0af5f3c2becc7b87bafcbd7979ab4798f35d965adfa4ded1df1cd2f81ef4"
+    },
+    "source:src/semantic_3d_chat/vision/encoder.py": {
+      "path": "src/semantic_3d_chat/vision/encoder.py",
+      "sha256": "864c148c49e92c451635b1fc773b02a919ae4aab6dee680f665371163b025bd3"
+    },
+    "source:src/semantic_3d_chat/vision/gemma4_encoder.py": {
+      "path": "src/semantic_3d_chat/vision/gemma4_encoder.py",
+      "sha256": "e0f6765ec95b0dc3e6abcc59e32a26ecf2ba1d38f94dd6f3fc332330bd7e3fe1"
+    },
+    "source:src/semantic_3d_chat/vision/gemma4_probe.py": {
+      "path": "src/semantic_3d_chat/vision/gemma4_probe.py",
+      "sha256": "4e20a5d49bb4bee4a840f76df97bc5d9901f6e6517595a106c2032edfba06445"
+    },
+    "source:src/semantic_3d_chat/vision/model_registry.py": {
+      "path": "src/semantic_3d_chat/vision/model_registry.py",
+      "sha256": "23ee04ae3bd2c504a25585ef86d446bdd310da29f1df5e71b690c4aff53ec447"
+    },
+    "source:src/semantic_3d_chat/vision/patch_features.py": {
+      "path": "src/semantic_3d_chat/vision/patch_features.py",
+      "sha256": "8ccc4750cb65ee7fd27c5d0014b0a63c6bec59dff53de45d53d708c0d1f8626d"
+    },
+    "static:runtime_config": {
+      "path": "configs/runtime/gemma4_v85_strict_multiscene.yaml",
+      "sha256": "49d9595e6167fe352dc49f1ca363af396fe3d3be91d50cb430721bc74b130575"
+    },
+    "static:v85_runtime_metadata": {
+      "path": "reports/gemma4/artifacts/v85_strict_runtime_candidate/runtime_metadata.json",
+      "sha256": "093d43c80722dd00cd3f7347d55451eca1cc45e416f6bda220157f18024ce0bd"
+    },
+    "static:v95_config": {
+      "path": "configs/experiments/gemma4_v95_strict_causal_successor.yaml",
+      "sha256": "9115c36b417d03bec935257b42e30597170d5acbf6c4683b5c021a8e4d9bbea2"
+    }
+  },
+  "status": "sealed_before_candidate_attestation_or_question_io",
+  "v1_implementation_seal_sha256": "a22e436d8ea2d106e5a1b33a0ddcbf76e49ae9d5c71825bdf212e28cdb67cef6",
+  "v1_source_inventory_sha256": "5a184073a22ad993d812dd3369ff8d2c19bf9ecdfd762aca5477a1c503838c30",
+  "weights_hashed_not_model_loaded": true
+}

@@ -203,7 +203,15 @@ def deterministic_wrong_scene_sources(scene_ids: Sequence[str]) -> dict[str, str
 def _zero_runtime_scene_memory(runtime: StaticChatRuntime) -> None:
     """Remove all continuous scene signal from language and grounding paths."""
 
-    runtime.scene_prefix = torch.zeros_like(runtime.scene_prefix)
+    if runtime.scene_prefix.ndim != 3 or runtime.scene_prefix.shape[1] < 3:
+        raise ValueError("Scene prefix must contain start, latent, and end tokens")
+    # BOI/EOI (or learned start/end) are protocol delimiters, not environment
+    # content.  Gemma's native prefix backend authenticates their exact frozen
+    # embeddings, so an empty-scene control must preserve those delimiters and
+    # zero only the environment-conditioned latent slots between them.
+    empty_prefix = runtime.scene_prefix.detach().clone()
+    empty_prefix[:, 1:-1].zero_()
+    runtime.scene_prefix = empty_prefix
     runtime.scene_output = replace(
         runtime.scene_output,
         scene_tokens=torch.zeros_like(runtime.scene_output.scene_tokens),
@@ -235,6 +243,14 @@ class SharedControlRuntimeFactory:
         self.checkpoint_metadata = bootstrap.checkpoint_metadata
         self.language = bootstrap.language
         self.scene_model = bootstrap.scene_model
+        # Controls must use the exact trained scene path that produced the
+        # primary prefix.  Omitting any residual/sidecar here silently turns a
+        # control into a different checkpoint rather than a changed input.
+        self.dense_aligner = bootstrap.dense_aligner
+        self.dense_sidecar_adapter = bootstrap.dense_sidecar_adapter
+        self.block_cross_residual = bootstrap.block_cross_residual
+        self.global_scene_residual = bootstrap.global_scene_residual
+        self.signed_x_scene_residual = bootstrap.signed_x_scene_residual
         self.composer = bootstrap.composer
         self.grounding = bootstrap.grounding
         self.warnings = bootstrap.warnings
@@ -268,6 +284,11 @@ class SharedControlRuntimeFactory:
             language=self.language,
             map_data=map_data,
             scene_model=self.scene_model,
+            dense_aligner=self.dense_aligner,
+            dense_sidecar_adapter=self.dense_sidecar_adapter,
+            block_cross_residual=self.block_cross_residual,
+            global_scene_residual=self.global_scene_residual,
+            signed_x_scene_residual=self.signed_x_scene_residual,
             composer=self.composer,
             grounding=self.grounding,
             warnings=self.warnings,
@@ -320,7 +341,7 @@ class SharedControlRuntimeFactory:
                     "processed_voxel_count": map_data.voxel_count,
                     "feature_dim": map_data.feature_dim,
                     "affected_fields": (
-                        ["scene_prefix", "grounding_latents"]
+                        ["scene_prefix_latents", "grounding_latents"]
                         if condition == "empty_scene_prefix"
                         else []
                     ),
@@ -629,6 +650,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             config_path=args.config,
             checkpoint_path=checkpoint,
             references_path=question_manifest.manifest_path,
+            scene_ids=scene_ids,
             split=args.split,
             run_kind="continuous_scene_control",
             condition=json.dumps(

@@ -8,6 +8,7 @@ import torch
 
 from semantic_3d_chat.evaluation.control_predict import (
     BuiltControlRuntime,
+    SharedControlRuntimeFactory,
     _zero_runtime_scene_memory,
     apply_map_control,
     deterministic_wrong_scene_sources,
@@ -97,8 +98,73 @@ def test_wrong_scene_sources_are_a_deterministic_derangement() -> None:
     assert all(target != source for target, source in first.items())
 
 
+def test_shared_control_factory_preserves_complete_trained_scene_stack(
+    monkeypatch,
+) -> None:
+    from semantic_3d_chat.evaluation import control_predict
+
+    dense = object()
+    sidecar_adapter = object()
+    block_cross_residual = object()
+    global_residual = object()
+    signed_residual = object()
+    captured: dict[str, object] = {}
+
+    class FakeStaticRuntime:
+        @classmethod
+        def load(cls, config, scene_id, checkpoint, local_files_only):
+            del config, scene_id, checkpoint, local_files_only
+            runtime = SimpleNamespace(
+                checkpoint_path=Path("/checkpoint"),
+                checkpoint_metadata={"semantic_dim": 5},
+                language=object(),
+                scene_model=object(),
+                dense_aligner=dense,
+                dense_sidecar_adapter=sidecar_adapter,
+                block_cross_residual=block_cross_residual,
+                global_scene_residual=global_residual,
+                signed_x_scene_residual=signed_residual,
+                composer=object(),
+                grounding=object(),
+                warnings=[],
+                map_data=_map_data(),
+                scene_prefix=torch.zeros(1, 4, 3),
+            )
+            runtime.scene_prefix_hash = prefix_sha256(runtime.scene_prefix)
+            runtime.assert_prefix_unchanged = lambda: None
+            return runtime
+
+        def __init__(self, **kwargs):
+            captured.update(kwargs)
+            self.map_data = kwargs["map_data"]
+            self.scene_prefix = torch.zeros(1, 4, 3)
+            self.scene_prefix_hash = prefix_sha256(self.scene_prefix)
+
+        def assert_prefix_unchanged(self) -> None:
+            return None
+
+    monkeypatch.setattr(control_predict, "StaticChatRuntime", FakeStaticRuntime)
+    factory = SharedControlRuntimeFactory(
+        {"scene": {"room_size_m": [6.0, 5.0, 3.0]}, "scene_encoder": {}},
+        "/checkpoint",
+        "scene_000001",
+    )
+    monkeypatch.setattr(factory, "_load_map", lambda _scene_id: _map_data())
+
+    built = factory.build("primary", "scene_000002", "scene_000002")
+
+    assert built.runtime is not None
+    assert captured["dense_aligner"] is dense
+    assert captured["dense_sidecar_adapter"] is sidecar_adapter
+    assert captured["block_cross_residual"] is block_cross_residual
+    assert captured["global_scene_residual"] is global_residual
+    assert captured["signed_x_scene_residual"] is signed_residual
+
+
 def test_zero_prefix_control_removes_language_and_grounding_scene_signal() -> None:
     prefix = torch.randn(1, 6, 8)
+    start = prefix[:, :1].clone()
+    end = prefix[:, -1:].clone()
     runtime = SimpleNamespace(
         scene_prefix=prefix,
         scene_prefix_hash=prefix_sha256(prefix),
@@ -110,7 +176,9 @@ def test_zero_prefix_control_removes_language_and_grounding_scene_signal() -> No
         ),
     )
     _zero_runtime_scene_memory(runtime)
-    assert torch.count_nonzero(runtime.scene_prefix) == 0
+    assert torch.equal(runtime.scene_prefix[:, :1], start)
+    assert torch.equal(runtime.scene_prefix[:, -1:], end)
+    assert torch.count_nonzero(runtime.scene_prefix[:, 1:-1]) == 0
     assert torch.count_nonzero(runtime.scene_output.scene_tokens) == 0
     assert torch.count_nonzero(runtime.scene_output.native_latents) == 0
     assert torch.count_nonzero(runtime.scene_output.block_tokens) == 0
@@ -226,6 +294,13 @@ def test_control_runner_resumes_only_hash_compatible_question_records(tmp_path: 
         checkpoint_files=(),
         references_path="/questions.json",
         references_sha256="5" * 64,
+        scene_map_manifest_sha256="6" * 64,
+        scene_map_manifest={
+            "scene_000001": {
+                "voxel_map_sha256": "7" * 64,
+                "voxel_map_size_bytes": 1,
+            }
+        },
         split="test",
         run_kind="continuous_scene_control",
         condition="primary",

@@ -1,0 +1,14 @@
+v96_candidate_runtime:
+  schema_version: 96
+  artifact: gemma4_v96_explicit_candidate_runtime_hook_v1
+  mode: explicit_candidate_only_not_default
+  authorization_config: configs/experiments/gemma4_v96_atomic_pair_repair.yaml
+  runtime_config: configs/runtime/gemma4_v85_strict_multiscene.yaml
+  default_scene: scene_000039
+  scene_memory_root: reports/gemma4/artifacts/v85_strict_runtime_candidate_memory
+  local_files_only: true
+  require_authenticated_pass_evidence: true
+  require_explicit_candidate_flag: true
+  default_runtime_pointer_modified: false
+  runtime_promotion_authorized: false
+  environmental_text_inputs: []

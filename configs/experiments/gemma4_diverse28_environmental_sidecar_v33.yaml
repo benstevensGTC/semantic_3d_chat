@@ -1,0 +1,119 @@
+_base_: gemma4_diverse28_joint_pair_v31.yaml
+
+# Environmental-only recovery after V32's audited rejection.  V33 starts
+# afresh from selector-approved V29 update_004.  Gemma and every LoRA bank are
+# frozen; only dense-sidecar routes that consume complete, all-voxel scene
+# tensors are optimized.
+training:
+  output_namespace: gemma4_v33_diverse28_environmental_sidecar
+  v33_environmental:
+    enabled: true
+    optimizer_steps: 100
+    checkpoint_interval_steps: 8
+    broad_batch_size: 1
+    pair_units_per_step: 1
+    broad_exclude_expected_change: true
+    broad_nll_weight: 1.0
+    pair_language_nll_weight: 1.0
+    pair_margin_weight: 4.0
+    pair_margin: 0.5
+    output_learning_rate: 0.000025
+    hidden_learning_rate: 0.0001
+    position_learning_rate: 0.0001
+    weight_decay: 0.0
+    output_gradient_clip_norm: 1.0
+    hidden_gradient_clip_norm: 1.0
+    position_gradient_clip_norm: 1.0
+    minimum_answer_types: 4
+
+v33_environmental:
+  schema_version: 1
+  role: approved_v29_diverse28_environmental_sidecar_v33
+  engine: v29_exact_zero_environmental_only_true_microsteps
+  source_selected_update: 4
+  v32_selection_report: reports/gemma4/metrics/v32_microstep_selection.json
+  v32_selection_report_sha256: 2ffeb2655cd6a8627ea9e06c8f261113b0b225a1b39de4eb32126693063c13b7
+  train_scene_ids:
+    - scene_000011
+    - scene_000012
+    - scene_000013
+    - scene_000014
+    - scene_000015
+    - scene_000016
+    - scene_000017
+    - scene_000018
+    - scene_000031
+    - scene_000032
+    - scene_000033
+    - scene_000034
+    - scene_000035
+    - scene_000036
+    - scene_000037
+    - scene_000038
+  validation_scene_ids:
+    - scene_000019
+    - scene_000020
+    - scene_000021
+    - scene_000022
+    - scene_000023
+    - scene_000024
+  deferred_final_scene_ids:
+    - scene_000025
+    - scene_000026
+    - scene_000027
+    - scene_000028
+    - scene_000029
+    - scene_000030
+  train_question_count: 384
+  validation_question_count: 216
+  train_changed_pair_unit_count: 25
+  validation_changed_pair_unit_count: 12
+  optimizer_steps: 100
+  checkpoint_interval_steps: 8
+  saved_optimizer_steps: [0, 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96, 100]
+  exact_pair_unit_recurrence: 4
+  trainable_parameter_names:
+    - output_projection.weight
+    - channel_gain
+    - sidecar_norm.weight
+    - sidecar_norm.bias
+    - sidecar_projection.weight
+    - sidecar_projection.bias
+    - position_projection.weight
+    - position_projection.bias
+  output_parameter_count: 198144
+  hidden_parameter_count: 199808
+  position_parameter_count: 6656
+  exact_trainable_parameter_count: 404608
+  gemma_decoder_frozen: true
+  all_lora_banks_frozen: true
+  base_norm_and_projection_frozen: true
+  exact_zero_source_cache: true
+  allow_only_new_training_scenes_to_derive_prefixes: true
+  inspect_every_saved_arm: true
+  greedy_screen_steps: [32, 64, 100]
+  weak_pair_prefix_rms_minimum_ratio: 1.25
+  unrelated_prefix_rms_maximum_ratio: 1.25
+  update64_nonmirror_teacher_complete_minimum: 1
+  update64_book_picture_advantage_positive: true
+  development_changed_complete_pairs_minimum: 1
+  chat_promotion_changed_complete_pairs_minimum: 6
+  chat_promotion_requires_each_validation_family: true
+  chat_promotion_aggregate_exact_no_regression: true
+  old_color_full_vocab_sides_minimum: 12
+  old_mirror_full_vocab_sides_minimum: 10
+  old_controls_no_new_negatives: true
+  conditional_next_surface:
+    enabled: false
+    parameter_names:
+      - base_norm.weight
+      - base_norm.bias
+      - base_projection.weight
+      - base_projection.bias
+    parameter_count: 199808
+    trigger: no_nonmirror_teacher_complete_by_update_64
+
+experiment:
+  role: approved_v29_diverse28_environmental_sidecar_v33
+  Gemma_decoder_frozen: true
+  final_test_deferred: true

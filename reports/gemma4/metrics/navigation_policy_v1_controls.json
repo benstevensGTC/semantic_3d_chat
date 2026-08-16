@@ -1,0 +1,195 @@
+{
+  "accuracy_deltas_from_primary": {
+    "wrong_scene_prefix": 0.07276123762130737,
+    "zero_robot_tokens": 0.47014927864074707,
+    "zero_scene_prefix": 0.08488810062408447
+  },
+  "checkpoint_weights_sha256": "5cb15947edb80ade2e6c4a99f3a0ba91d66b62d9372949efb06ab393141e1e6a",
+  "conditions": {
+    "primary": {
+      "action_accuracy": 0.878731369972229,
+      "argument_mae": 0.24962164461612701,
+      "by_family": {
+        "approach": {
+          "action_accuracy": 0.7094594836235046,
+          "sample_count": 148
+        },
+        "collision_recovery": {
+          "action_accuracy": 1.0,
+          "sample_count": 32
+        },
+        "face": {
+          "action_accuracy": 0.9196428656578064,
+          "sample_count": 112
+        },
+        "left_right": {
+          "action_accuracy": 0.8928571343421936,
+          "sample_count": 112
+        },
+        "obstacle": {
+          "action_accuracy": 0.9322034120559692,
+          "sample_count": 236
+        },
+        "stop": {
+          "action_accuracy": 1.0,
+          "sample_count": 108
+        },
+        "update_after_scan": {
+          "action_accuracy": 0.845678985118866,
+          "sample_count": 324
+        }
+      },
+      "predicted_action_counts": {
+        "move_backward": 27,
+        "move_forward": 292,
+        "scan": 32,
+        "stop": 251,
+        "turn": 470
+      },
+      "sample_count": 1072,
+      "scene_count": 8,
+      "stop_recall": 0.8780487775802612,
+      "turn_sign_accuracy": 0.8762136101722717
+    },
+    "wrong_scene_prefix": {
+      "action_accuracy": 0.8059701323509216,
+      "argument_mae": 0.31710273027420044,
+      "by_family": {
+        "approach": {
+          "action_accuracy": 0.6959459185600281,
+          "sample_count": 148
+        },
+        "collision_recovery": {
+          "action_accuracy": 1.0,
+          "sample_count": 32
+        },
+        "face": {
+          "action_accuracy": 0.8125,
+          "sample_count": 112
+        },
+        "left_right": {
+          "action_accuracy": 0.8035714030265808,
+          "sample_count": 112
+        },
+        "obstacle": {
+          "action_accuracy": 0.8559321761131287,
+          "sample_count": 236
+        },
+        "stop": {
+          "action_accuracy": 1.0,
+          "sample_count": 108
+        },
+        "update_after_scan": {
+          "action_accuracy": 0.7345678806304932,
+          "sample_count": 324
+        }
+      },
+      "predicted_action_counts": {
+        "move_backward": 27,
+        "move_forward": 264,
+        "scan": 32,
+        "stop": 249,
+        "turn": 500
+      },
+      "sample_count": 1072,
+      "scene_count": 8,
+      "stop_recall": 0.7804877758026123,
+      "turn_sign_accuracy": 0.7718446850776672
+    },
+    "zero_robot_tokens": {
+      "action_accuracy": 0.40858209133148193,
+      "argument_mae": 0.5786529183387756,
+      "by_family": {
+        "approach": {
+          "action_accuracy": 0.5405405163764954,
+          "sample_count": 148
+        },
+        "collision_recovery": {
+          "action_accuracy": 1.0,
+          "sample_count": 32
+        },
+        "face": {
+          "action_accuracy": 0.7142857313156128,
+          "sample_count": 112
+        },
+        "left_right": {
+          "action_accuracy": 0.7142857313156128,
+          "sample_count": 112
+        },
+        "obstacle": {
+          "action_accuracy": 0.33898305892944336,
+          "sample_count": 236
+        },
+        "stop": {
+          "action_accuracy": 0.5,
+          "sample_count": 108
+        },
+        "update_after_scan": {
+          "action_accuracy": 0.09876543283462524,
+          "sample_count": 324
+        }
+      },
+      "predicted_action_counts": {
+        "move_backward": 54,
+        "move_forward": 54,
+        "scan": 324,
+        "stop": 32,
+        "turn": 608
+      },
+      "sample_count": 1072,
+      "scene_count": 8,
+      "stop_recall": 0.13008129596710205,
+      "turn_sign_accuracy": 0.3689320385456085
+    },
+    "zero_scene_prefix": {
+      "action_accuracy": 0.7938432693481445,
+      "argument_mae": 0.35929879546165466,
+      "by_family": {
+        "approach": {
+          "action_accuracy": 0.6891891956329346,
+          "sample_count": 148
+        },
+        "collision_recovery": {
+          "action_accuracy": 1.0,
+          "sample_count": 32
+        },
+        "face": {
+          "action_accuracy": 0.8214285969734192,
+          "sample_count": 112
+        },
+        "left_right": {
+          "action_accuracy": 0.7767857313156128,
+          "sample_count": 112
+        },
+        "obstacle": {
+          "action_accuracy": 0.8262711763381958,
+          "sample_count": 236
+        },
+        "stop": {
+          "action_accuracy": 1.0,
+          "sample_count": 108
+        },
+        "update_after_scan": {
+          "action_accuracy": 0.7253086566925049,
+          "sample_count": 324
+        }
+      },
+      "predicted_action_counts": {
+        "move_backward": 27,
+        "move_forward": 247,
+        "scan": 36,
+        "stop": 267,
+        "turn": 495
+      },
+      "sample_count": 1072,
+      "scene_count": 8,
+      "stop_recall": 0.7967479825019836,
+      "turn_sign_accuracy": 0.6917475461959839
+    }
+  },
+  "dataset_sha256": "3e378b386802095f8cc2ef76f6b9d9f575084e6412d1b39a2c0d547dc189bef6",
+  "environmental_text_inputs_at_runtime": [],
+  "held_out_scenes_only": true,
+  "oracle_inputs_used_by_runtime": false,
+  "schema": "semantic_3d_chat.navigation_policy_causal_controls.v1"
+}

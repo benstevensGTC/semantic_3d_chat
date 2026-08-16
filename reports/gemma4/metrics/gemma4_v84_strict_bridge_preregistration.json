@@ -1,0 +1,131 @@
+{
+  "artifact": "gemma4_v84_strict_bridge_preregistration_v1",
+  "bridge": {
+    "alpha": 8.0,
+    "base_gemma_frozen": true,
+    "dropout": 0.0,
+    "expected_initial_state_sha256": "1ec186d64cab68a3ea2000968a0ca643e591cc32669c6b1b7138deb365cc5cc1",
+    "inherited_v54_lora_banks_frozen": true,
+    "initialization_algorithm": "cpu_kaiming_uniform_a_exact_zero_b",
+    "initialization_seed": 840084,
+    "kind": "unmerged_fp32_lora_inside_frozen_gemma",
+    "merged_weights": false,
+    "rank": 4,
+    "target_in_features": 12288,
+    "target_layer_type": "full_attention",
+    "target_module": "model.language_model.layers.34.mlp.down_proj",
+    "target_out_features": 1536,
+    "trainable_parameter_count": 55296
+  },
+  "config_path": "configs/experiments/gemma4_v84_strict_fixed_memory_bridge.yaml",
+  "config_sha256": "7ac74708f0404e6aae84cc3f90dfb82a88acf8ea15b4e6eff2c4c7cf1b07a2f0",
+  "deferred_final_loaded": false,
+  "development": {
+    "candidate_selection_after_development_scoring": false,
+    "metrics": [
+      "answer_token_nll",
+      "answer_token_top1_accuracy",
+      "correct_scene_nll_minus_paired_wrong_scene_nll",
+      "greedy_normalized_exact_accuracy",
+      "prediction_changing_units"
+    ],
+    "scoring_authorized_only_after_wiring_run": true,
+    "selected_change_family_count": 8,
+    "selected_side_count": 16,
+    "selection_rule": "lexicographically_first_changed_unit_per_change_family"
+  },
+  "forbidden_evaluation_paths_not_opened": [
+    "reports/gemma4/predictions/v83_direct_historical_internal.json",
+    "reports/gemma4/metrics/v83_direct_historical_internal_score.json",
+    "reports/gemma4/predictions/v82_historical_internal.json",
+    "reports/gemma4/metrics/v82_historical_internal_score.json"
+  ],
+  "full_gemma_model_loaded": false,
+  "gates": {
+    "development_required_for_runtime_promotion": true,
+    "runtime_promotion_authorized": false,
+    "wiring_both_rows_nll_improve": true,
+    "wiring_final_mean_nll_below_initial": true,
+    "wiring_memory_hash_invariant": true,
+    "wiring_nonzero_finite_gradient": true
+  },
+  "official_test_loaded": false,
+  "official_validation_loaded": false,
+  "optimizer_constructed": false,
+  "optimizer_updates": 0,
+  "oracle_loaded": false,
+  "runtime_promotion_authorized": false,
+  "schema_version": 84,
+  "sealed_historical_16_loaded": false,
+  "split": {
+    "deferred_final_loaded": false,
+    "development_pair_count": 8,
+    "development_row_count": 384,
+    "development_scene_count": 16,
+    "official_test_loaded": false,
+    "official_validation_loaded": false,
+    "pair_disjoint": true,
+    "scene_disjoint": true,
+    "sealed_historical_16_loaded": false,
+    "source": "exact_v73_historical_pair_split",
+    "train_pair_count": 12,
+    "train_row_count": 576,
+    "train_scene_count": 24
+  },
+  "status": "sealed_before_first_full_model_measurement",
+  "strict_input_contract": {
+    "all_738_memory_slots_retained": true,
+    "compiled_before_question": true,
+    "control_tokens": 0,
+    "environmental_text_inputs": [],
+    "gemma_is_only_question_dependent_consumer": true,
+    "layout": [
+      "boi",
+      "96_groups_each_probe_key_plus_four_scene_values",
+      "all_256_base_latents",
+      "eoi"
+    ],
+    "memory_projector_enabled": false,
+    "question_conditioned_environmental_readout": false,
+    "question_dependent_retrieval": false,
+    "question_dependent_scene_processing": false,
+    "question_derived_environmental_tokens": 0,
+    "reused_byte_identically_across_questions": true,
+    "semantic_or_spatial_top_k_selection": false,
+    "shape_per_scene": [
+      1,
+      738,
+      1536
+    ],
+    "supplied_directly_to_native_gemma_image_prefix": true
+  },
+  "wiring": {
+    "answers_differ_across_sides": true,
+    "checkpoint_selection": "fixed_final_update",
+    "gradient_accumulation_rows": 2,
+    "gradient_clip_norm": 1.0,
+    "intermediate_selection": false,
+    "learning_rate": 0.001,
+    "microbatch_size": 1,
+    "objective": "answer_token_cross_entropy_only",
+    "optimizer": "AdamW",
+    "optimizer_updates": 4,
+    "question_text_identical_across_sides": true,
+    "selected_change_type": "book_support",
+    "selected_pair_id": "pair_000009",
+    "selected_question_key": "cfq_5611adccccae59f1",
+    "selected_rows": [
+      [
+        "scene_000019",
+        "q_000130"
+      ],
+      [
+        "scene_000020",
+        "q_000001"
+      ]
+    ],
+    "selection_rule": "lexicographically_first_changed_unit_by_change_type_pair_id_question_key",
+    "weight_decay": 0.0,
+    "wrong_scene_margin_loss_enabled": false
+  }
+}

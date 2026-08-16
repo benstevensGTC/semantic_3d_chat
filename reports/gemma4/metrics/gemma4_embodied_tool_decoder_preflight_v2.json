@@ -1,0 +1,156 @@
+{
+  "artifact": "gemma4_embodied_tool_decoder_preflight_v2",
+  "execution": {
+    "checkpoint_published": false,
+    "full_model_parameters_loaded": false,
+    "mps_used": false,
+    "multi_update_training_executed": false,
+    "optimizer_steps": 0
+  },
+  "preregistration_sha256": "0e1e41a6af2830f9b36a8711fb0649246e96254a88cdcc76b97dcb06ee3f82f4",
+  "remaining_launch_blocks": {
+    "clearance_cache_materialized_and_hashed": false,
+    "full_model_mps_microbatch_smoke_passed": false,
+    "multi_update_training_authorized": false,
+    "parent_heavy_mps_slot_released": false
+  },
+  "schema_version": 2,
+  "status": "passed_cpu_preflight_blocked_before_heavy_mps",
+  "structural_preflight": {
+    "artifact": "gemma4_embodied_tool_decoder_preflight_v2",
+    "clearance_cache_materialized": false,
+    "experiment_config": {
+      "all_older_banks_frozen": true,
+      "bank_count": 7,
+      "new_bank": "embodied_tool_decoder_v2_final_down",
+      "new_targets": [
+        "model.language_model.layers.34.mlp.down_proj"
+      ],
+      "target_sets_disjoint": true,
+      "training_authorized": false
+    },
+    "full_model_mps_microbatch_smoke_executed": false,
+    "gemma_model_parameters_loaded": false,
+    "initial_states": {
+      "lora_parameter_count": 55296,
+      "lora_parameter_counts": {
+        "model.language_model.layers.34.mlp.down_proj": 55296
+      },
+      "lora_state_sha256": "58b12ef8f2b5c9ffdf1a99d068b32b5414cefe50236013ebbedc831382114a13",
+      "projector_parameter_count": 110592,
+      "projector_state_sha256": "cb83627478b01d69d0d5618c7cd0b04f440fab5bdb070e643f3d9ec03a12b199"
+    },
+    "model": {
+      "file_sha256": {
+        "config.json": "1b28f3d2c3100f6c594754b81107428bd7b822a7f48272ca681dae9d2ec38330",
+        "model.safetensors": "2db5482b20d746879bb3ef79b5203e9075a2e2b98f54ec7c2f281c1477ddc550",
+        "tokenizer_config.json": "9f4fec4b1dc6ecddf8f4a92e9caea5971c0e67d81309f3f9066a2bee8c362633"
+      },
+      "full_checkpoint_loaded": false,
+      "full_weight_hash_recomputed": false,
+      "ignored_layer_34_kv_tensor_shapes": {
+        "model.language_model.layers.34.self_attn.k_proj": [
+          512,
+          1536
+        ],
+        "model.language_model.layers.34.self_attn.v_proj": [
+          512,
+          1536
+        ]
+      },
+      "snapshot": "/Users/stevens/.cache/huggingface/hub/models--google--gemma-4-E2B-it/snapshots/3e22461f65e89153144f8adb70e3b8c2cc9845a7",
+      "target_tensor_shape": [
+        1536,
+        12288
+      ]
+    },
+    "mps_memory_allocated": false,
+    "multi_update_training_authorized": false,
+    "prefixes": {
+      "dtype": "torch.bfloat16",
+      "inventory_sha256": "c477fd12bc4104f147f73c2f6d46904e0b83b3c584206cb227fd70e9371d0d63",
+      "scene_count": 22,
+      "shape": [
+        1,
+        258,
+        1536
+      ]
+    },
+    "preregistration_sha256": "0e1e41a6af2830f9b36a8711fb0649246e96254a88cdcc76b97dcb06ee3f82f4",
+    "project_files": {
+      "configs/experiments/gemma4_embodied_tool_decoder_v2.yaml": "006996bc6900182f03d9daa5e88468f4a9f71d8f8e272887036010bca491a46c",
+      "configs/runtime/embodied_v54.yaml": "ba7c47e377d3b1a352e0c8f6348b7c72d39cf372526afea37da3c4dd711212ca",
+      "data_gemma4/checkpoints/gemma4_v54_semantic_greedy_gate/update_000/adapter.safetensors": "6c627f0a0d9efb7100489c24cbd4acafe10456b79280a64a85399a21cb541daf",
+      "data_gemma4/checkpoints/gemma4_v54_semantic_greedy_gate/update_000/metadata.json": "db1435f8d38ca587e34dcd55dc4d37532efc0504bfb62bc115838dc0ab7a7ece",
+      "data_gemma4/checkpoints/gemma4_v54_semantic_greedy_gate/update_000/runtime_metadata.json": "807515461c71b08c08dfbd08a184a653e791413748530fa69402512eca6f6fdd",
+      "data_gemma4/checkpoints/robot_state_numeric_v1/runtime_metadata.json": "c48b8748dbde04f2c9294321974b1b13be2d77083970f051ba1c11a9b42d1985",
+      "data_gemma4/checkpoints/robot_state_numeric_v1/state.safetensors": "5d6aa13208264e0a99755d84e8f68b7727249b274c460e9d4e26541cd8e46938",
+      "data_gemma4/training/navigation_policy_v3/manifest.json": "005756918c54fbffbb7c6db45e2170174d85f87f278e755e538418d6eb880243",
+      "data_gemma4/training/navigation_policy_v3/traces.jsonl": "72434178ff1cf23c2dfeb98d52cb7b4c443fcc8715c1dd4ee883d87ae127e7ad",
+      "reports/gemma4/metrics/gemma4_embodied_tool_decoder_preregistration_v1.json": "b86a767eccb72ed8a64009ef5878a4024525fdbd4d09266a7e78df08cc7c2b3a",
+      "reports/gemma4/metrics/gemma4_embodied_tool_decoder_v1_design_failure.json": "83939de71e31310b7d523e78c29d3e29add86e2c3dfe916e089b19dfb06decaa",
+      "src/semantic_3d_chat/language/gemma4_tool_decoder_v2.py": "1e9e8d223d9494d8641142ec658fb26261222f3e69d340453fd2951e4367f875"
+    },
+    "schema_version": 2,
+    "status": "passed_structural_preflight_training_not_authorized",
+    "tiny_cpu_backward_smoke_passed": false,
+    "trace_dataset": {
+      "action_counts": {
+        "move_backward": 157,
+        "move_forward": 2333,
+        "scan": 176,
+        "stop": 1370,
+        "turn": 2432
+      },
+      "sample_count": 6468,
+      "split_counts": {
+        "train": 4200,
+        "validation": 2268
+      }
+    },
+    "trainable_parameter_count": 165888,
+    "v1_terminal": {
+      "failure_sha256": "83939de71e31310b7d523e78c29d3e29add86e2c3dfe916e089b19dfb06decaa",
+      "optimizer_steps": 0,
+      "preregistration_sha256": "b86a767eccb72ed8a64009ef5878a4024525fdbd4d09266a7e78df08cc7c2b3a",
+      "terminal_before_training": true
+    }
+  },
+  "tiny_cpu_smoke": {
+    "answer_token_count": 3,
+    "artifact": "gemma4_embodied_tool_decoder_tiny_cpu_backward_smoke_v2",
+    "base_model_trainable_parameter_count": 0,
+    "cloud_inference_used": false,
+    "control_token_count": 4,
+    "device": "cpu",
+    "elapsed_seconds": 0.09701408306136727,
+    "full_checkpoint_loaded": false,
+    "ignored_label_count": 17,
+    "input_sequence_length": 20,
+    "lora_a_gradient_l2_expected_zero": 0.0,
+    "lora_b_gradient_l2": 0.07084495574235916,
+    "loss": 4.240375995635986,
+    "microbatches": 1,
+    "mps_used": false,
+    "nonzero_lora_forward_influence_proved": true,
+    "nonzero_lora_maximum_logit_change": 0.004879012703895569,
+    "optimizer_steps": 0,
+    "projector_gradient_l2": 138.11851501464844,
+    "schema_version": 2,
+    "status": "passed",
+    "tiny_final_down_shape_out_in": [
+      32,
+      128
+    ],
+    "tiny_final_layer_attention": "full_attention",
+    "tiny_first_kv_shared_layer_index": 15,
+    "tiny_hidden_size": 32,
+    "tiny_layer_34_kv_modules_present": false,
+    "tiny_layer_count": 35,
+    "tiny_lora_trainable_parameter_count": 640,
+    "tiny_num_kv_shared_layers": 20,
+    "tiny_projector_trainable_parameter_count": 2304,
+    "training_executed": false,
+    "zero_output_lora_exact_noop": true
+  }
+}

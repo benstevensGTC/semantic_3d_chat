@@ -1,0 +1,149 @@
+{
+  "all_138_rows_used_once_each_epoch": true,
+  "all_19_answer_classes_equal_aggregate_ce_mass": true,
+  "all_738_memory_slots_retained": true,
+  "artifact": "gemma4_v87_scene1_balanced_cpu_preflight_v1",
+  "authenticated_sources": {
+    "configs/experiments/gemma4_v86_scene1_strict_demo.yaml": "ddb7e8f4b02b9912f8adff88dab91868253912b2101d5c1484964740318ea929",
+    "configs/runtime/gemma4_v85_strict_multiscene.yaml": "49d9595e6167fe352dc49f1ca363af396fe3d3be91d50cb430721bc74b130575",
+    "data/qa/train.jsonl": "ffa721d57849ade8fdd0811e3e1e62fe807200f710aec780dc4d3dcecd4fb0e0",
+    "data_gemma4/runtime/scene_memories/v81/scene_000001/memory.safetensors": "3427851432d8f2a3609b6205b18b8c0d9a0fcf68d8f3bf0c98c758ac64209ffb",
+    "data_gemma4/runtime/scene_memories/v81/scene_000001/runtime_metadata.json": "9ca43f9216106668afafe65007b1649621036735b512c07e330358bbeb0bcbcc",
+    "gemma_model_blob_sha256_identity": "2db5482b20d746879bb3ef79b5203e9075a2e2b98f54ec7c2f281c1477ddc550",
+    "reports/gemma4/artifacts/v85_strict_runtime_candidate/adapter.safetensors": "163ceb462bafe4b1d38099c07ca32bcc22944ad93917222b019e75634883fd8d",
+    "reports/gemma4/artifacts/v85_strict_runtime_candidate/runtime_metadata.json": "093d43c80722dd00cd3f7347d55451eca1cc45e416f6bda220157f18024ce0bd",
+    "reports/gemma4/artifacts/v86_scene1_demo_final/bridge.safetensors": "3e4db9a621e915da341ba2163b7c541863c067eafc5abc55e53a50f594476015",
+    "reports/gemma4/artifacts/v86_scene1_demo_final/runtime_metadata.json": "ad9534737bbe1cb443960159461f5ec9c78609cb1f2d311d05b245261f6ac54d",
+    "reports/gemma4/metrics/gemma4_v86_scene1_demo_cpu_preflight.json": "482e0d7c9cfc5f28264d53351af8082220aef3908d699286000a275ff65feffc",
+    "reports/gemma4/metrics/gemma4_v86_scene1_demo_evaluation.json": "47eb4be93df4f376c2ca6acfa57473952b61a287c9e7aab2a836653e871f195f",
+    "reports/gemma4/metrics/gemma4_v86_scene1_demo_preregistration.json": "df22b1dae791904136808687a780e7d7f9802be6fb478d62d3e20251b3c24c55",
+    "reports/gemma4/metrics/gemma4_v86_scene1_demo_training.json": "6bce76de06112fc0f11435c133e71eb245429addfc7772def1c2945eda68af63",
+    "reports/gemma4/predictions/gemma4_v86_scene1_demo_evaluation.json": "c7191eaf4f6e803902265581feaab8956606c833f0a613a9cf5e4c4de7e04dbf",
+    "src/semantic_3d_chat/evaluation/evaluate_v87_scene1_balanced.py": "181ddc6884b3a320b67723b1a41aa17373b4a8496a0472ba5090bdc1384de124",
+    "src/semantic_3d_chat/evaluation/v87_scene1_balanced_preflight.py": "4fe3cd260ea018dfe315fb44265305bd50be43d164f2bdc15e797f039fa95508",
+    "src/semantic_3d_chat/training/train_v87_scene1_balanced.py": "f101246fa4b3c1017a53c3e417b3afd3f15582098cb9c70b70636aea2acbde21"
+  },
+  "config_sha256": "e96be98126b95018d980dc36ede66460555eab728a1b67d8b37d16532ed7ee4a",
+  "deferred_final_loaded": false,
+  "fixed_final_checkpoint_selection": "fixed_final_update_184",
+  "fixed_final_optimizer_updates": 184,
+  "full_gemma_model_loaded": false,
+  "lora_preflight": {
+    "bank_name": "v87_scene1_balanced_bridge",
+    "base_projection_weight_shape": [
+      12288,
+      1536
+    ],
+    "exact_zero_output_at_initialization": true,
+    "full_gemma_model_loaded": false,
+    "initial_state_sha256": "5aff719665064f7d0a3582fc5d67ff330a5044014278bd2ca69bd153ebefbeca",
+    "lora_a_shape": [
+      8,
+      1536
+    ],
+    "lora_b_shape": [
+      12288,
+      8
+    ],
+    "parameter_count": 110592,
+    "target_modules": [
+      "model.language_model.layers.34.mlp.gate_proj"
+    ]
+  },
+  "new_v87_behavior_scored": false,
+  "official_test_loaded": false,
+  "official_validation_loaded": false,
+  "optimizer_constructed": false,
+  "optimizer_updates": 0,
+  "oracle_loaded": false,
+  "parent_v86_evidence": {
+    "parent_v86_bridge_state_sha256": "8b6bd801716132c8aac50c6288b9ba588417dc5e6a7c2c15dd9515892f714260",
+    "parent_v86_canonical_accuracy": 0.6231884057971014,
+    "parent_v86_canonical_correct": 86,
+    "parent_v86_canonical_total": 138,
+    "parent_v86_causal_control_passed": true,
+    "parent_v86_generic_smoke_correct": 3,
+    "parent_v86_generic_smoke_total": 3,
+    "parent_v86_mutated": false,
+    "parent_v86_only_failed_gate": "all_scene1_canonical_accuracy_at_least_0_80",
+    "parent_v86_runtime_promoted": false,
+    "parent_v86_training_gates_all_passed": true,
+    "parent_v86_training_updates": 92
+  },
+  "passed": true,
+  "preregistration_sha256": "e436d9c64b53fe5149a2477a85e20d669fa21daab84218e06f0d043fc58d35f6",
+  "protected_or_sealed_new_behavior_artifacts_opened": [],
+  "protocol_preflight": {
+    "answer_class_inventory_sha256": "639cc0f4f843084a6d5dbe7bbf525480acb43aaacd253568837bec9f2e47aa71",
+    "answer_text_serialized": false,
+    "appearances_each_row": 8,
+    "causal_question_ids": [
+      "q_000080",
+      "q_000108",
+      "q_000014"
+    ],
+    "causal_rows_total": 24,
+    "class_weight_inventory_sha256": "2a890ea9ce8314d3404f2e44101453d29574bb174913b05b8746617d300ad874",
+    "equal_aggregate_ce_mass_per_class": true,
+    "expected_fixed_memory_prefix_sha256": "a428f5147c815839ae7315a0adab952ab210814fb21dcdc5bf13b167f28a6e37",
+    "first_schedule_keys": [
+      [
+        0,
+        "q_000107"
+      ],
+      [
+        0,
+        "q_000007"
+      ],
+      [
+        0,
+        "q_000005"
+      ]
+    ],
+    "fixed_memory_dtype": "torch.bfloat16",
+    "fixed_memory_prefix_sha256": "a428f5147c815839ae7315a0adab952ab210814fb21dcdc5bf13b167f28a6e37",
+    "fixed_memory_shape": [
+      1,
+      738,
+      1536
+    ],
+    "full_gemma_model_loaded": false,
+    "last_schedule_keys": [
+      [
+        7,
+        "q_000114"
+      ],
+      [
+        7,
+        "q_000049"
+      ],
+      [
+        7,
+        "q_000022"
+      ]
+    ],
+    "maximum_class_frequency": 25,
+    "maximum_class_weight": 7.2631578947368425,
+    "mean_class_weight_over_rows": 1.0,
+    "memory_compiled_before_question": true,
+    "minimum_class_frequency": 1,
+    "minimum_class_weight": 0.2905263157894737,
+    "opaque_answer_class_count": 19,
+    "questions_tokenized": false,
+    "row_count": 138,
+    "row_order_sha256": "b1560e3709acf6dff7e7be519a80827ae9a6644c803a8973b5064c0f043180ff",
+    "rows_each_epoch": 138,
+    "schedule_rows": 1104,
+    "zero_payload_nonzero_scalar_count": 0,
+    "zero_payload_prefix_sha256": "c455ed77bf3fe841a4e360e89c036ffb4e8cdb8935c97d767f556d25a9f790d8",
+    "zero_payload_preserves_native_boi": true,
+    "zero_payload_preserves_native_eoi": true,
+    "zero_payload_token_count": 736
+  },
+  "question_conditioned_environmental_readout": false,
+  "question_derived_environmental_tokens": 0,
+  "runtime_promotion_authorized": false,
+  "same_fixed_memory_compiled_before_questions": true,
+  "schema_version": 87,
+  "status": "passed"
+}

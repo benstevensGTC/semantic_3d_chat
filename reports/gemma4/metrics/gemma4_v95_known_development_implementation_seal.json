@@ -1,0 +1,42 @@
+{
+  "artifact": "gemma4_v95_known_development_implementation_seal_v1",
+  "known_development_outputs_present_before_seal": [],
+  "labels_opened": false,
+  "model_loaded": false,
+  "questions_opened": false,
+  "runtime_promotion_authorized": false,
+  "schema_version": 95,
+  "source_count": 7,
+  "source_inventory_sha256": "da0211830f6de7587d22d57c951a7ba5156ff04bd89193e7faab0ec6f8550a90",
+  "sources": {
+    "authenticate": {
+      "path": "src/semantic_3d_chat/evaluation/authenticate_v95_known_development.py",
+      "sha256": "f27c954aba62fd26fe54029f11063abf38e4d6ff46e818deed7b2216ed7f1556"
+    },
+    "common": {
+      "path": "src/semantic_3d_chat/evaluation/v95_known_development_common.py",
+      "sha256": "fed2b95855f25fb518e9e3408b8818ccfa98dc601780142d9578e78a8074b6b2"
+    },
+    "implementation_guard": {
+      "path": "src/semantic_3d_chat/evaluation/v95_known_development_implementation.py",
+      "sha256": "19b979feef291df7631935c400df5753e2529b248ed53e64679eee3b12e19134"
+    },
+    "nll": {
+      "path": "src/semantic_3d_chat/evaluation/nll_v95_known_development.py",
+      "sha256": "5ccf0425f30b6f620895e7b8b9275390faf184cb682ac0bcaecf4416356b7117"
+    },
+    "predict": {
+      "path": "src/semantic_3d_chat/evaluation/predict_v95_known_development.py",
+      "sha256": "69786b9c1828ced22bde43986ebfc81fad1d6e7eb4084dc1f57ceacd4e41e41a"
+    },
+    "score": {
+      "path": "src/semantic_3d_chat/evaluation/score_v95_known_development.py",
+      "sha256": "d6f4a1f487b7b6cbd7ae0e9169f185cf5938d15b5d976d2f935bb6763bb24eba"
+    },
+    "seal": {
+      "path": "src/semantic_3d_chat/evaluation/seal_v95_known_development.py",
+      "sha256": "c1b8fa2aa0812bf9b66c441700a65d31dcf0dcbdca8d982b9549f25052f9cd13"
+    }
+  },
+  "status": "sealed_before_known_development_evaluation"
+}

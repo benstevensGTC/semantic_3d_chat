@@ -1,0 +1,179 @@
+_base_: gemma4_diverse28_scene_ingress_kv_v37.yaml
+
+# V38 is a bounded query-readout recovery experiment. It starts from a
+# deterministic K-only hybrid: V37 update 16 supplies both learned K adapters,
+# while the two V adapters are rolled back bit-exactly to V36 update 16. Only
+# the already-learned V30 query bank is continued. The hybrid V23 bank, learned
+# V36 block core, complete continuous scene stack, Gemma base, and every other
+# LoRA bank remain frozen.
+language:
+  lora_banks:
+    extension_v23_shared_kv:
+      trainable: false
+      rank: 4
+      alpha: 8.0
+      dropout: 0.0
+      initialization_algorithm: checkpoint_overwrite
+      initialization_seed: null
+      expected_initial_state_sha256: 5c9233bd96b381e2f63443f8a739a868a21997b28061d90fb407a46d9de2d4cb
+      target_modules:
+        - model.language_model.layers.13.self_attn.k_proj
+        - model.language_model.layers.13.self_attn.v_proj
+        - model.language_model.layers.14.self_attn.k_proj
+        - model.language_model.layers.14.self_attn.v_proj
+    extension_v30_joint_pair_query:
+      trainable: true
+      rank: 8
+      alpha: 16.0
+      dropout: 0.0
+      initialization_algorithm: checkpoint_overwrite
+      initialization_seed: null
+      expected_initial_state_sha256: 050706c300e6fb0ac8e4cc02e26c565b54a9a89505104302d4ffcedc02124c64
+      target_modules:
+        - model.language_model.layers.18.self_attn.q_proj
+        - model.language_model.layers.19.self_attn.q_proj
+        - model.language_model.layers.20.self_attn.q_proj
+        - model.language_model.layers.21.self_attn.q_proj
+
+training:
+  output_namespace: gemma4_v38_diverse28_query_recovery
+  lora_learning_rate: 0.00002
+  lora_weight_decay: 0.0
+  v38_query_recovery:
+    enabled: true
+    optimizer_steps: 41
+    broad_nll_weight: 0.5
+    pair_correct_nll_weight: 1.0
+    side_hinge_weight: 8.0
+    side_hinge_margin: 0.5
+    cross_prefix_flip_weight: 1.0
+    cross_prefix_flip_margin: 0.10
+    residual_penalty_weight: 0.0
+    residual_penalty_scale: 0.05
+    learning_rate: 0.00002
+    weight_decay: 0.0
+    gradient_clip_norm: 1.0
+
+v38_query_recovery:
+  schema_version: 1
+  role: exact_v37_u16_k_only_hybrid_learned_v30_query_recovery_v38
+  engine: fresh_adam_existing_learned_query_bank_true_microsteps
+  v37_terminal_gate_report: reports/gemma4/metrics/v37_update16_terminal_gate.json
+  v37_terminal_gate_report_sha256: 8f8d9cfaf2c8cf564794b9f6d03eaa23f63d4fce96427816f5bc7b3fca9b70c2
+  v37_source_checkpoint: data_gemma4/checkpoints/gemma4_v37_diverse28_scene_ingress_kv/update_016
+  v37_source_optimizer_step: 16
+  v37_source_file_sha256:
+    adapter.safetensors: 5b897221fb448be75caf330c6ab81a39d424ecaa7d0e0307f264f3c58c7659fa
+    metadata.json: f696eeb75d08471e8676613ef6a440852df62113d90393ad705d6c85b9985ecc
+    runtime_metadata.json: 8b3f70743aa8226549e65d0d5a08882cc311b61bda07eb2ba2d49454267897de
+  v37_source_tensor_state_sha256: 801f80f6fd6a27e7cb815677824fb855c491272d65b81ba464c95200ebd570b9
+  v36_rollback_checkpoint: data_gemma4/checkpoints/gemma4_v36_diverse28_joint_block_cross/update_016
+  v36_rollback_adapter_sha256: 6ed86fb51502f7330c75cc48b9be970eb0a933eb19da971a7e04726c419c3be5
+  v36_rollback_tensor_state_sha256: e9b6d1362d58f34aede04817b0c8d81320c616dcd4b64e9c0d3bbe56b5835dd7
+  hybrid_scope: v23_k_only_hybrid_from_exact_v36_and_v37
+  hybrid_full_tensor_state_sha256: 7b951c6d7ae4f7b50603159f0bc4dfb4d50b5b40f9325134d78d1de1dae87fc0
+  hybrid_v23_state_sha256: 5c9233bd96b381e2f63443f8a739a868a21997b28061d90fb407a46d9de2d4cb
+  hybrid_frozen_excluding_target_sha256: fe39da221505c1968030c67aacb4e99f1a179e05a97d2906d416afe5fef5ed78
+  retained_v37_k_adapter_indices: [0, 2]
+  rolled_back_v36_v_adapter_indices: [1, 3]
+  rolled_back_tensor_names:
+    - lora_banks.extension_v23_shared_kv.adapters.1.lora_a
+    - lora_banks.extension_v23_shared_kv.adapters.1.lora_b
+    - lora_banks.extension_v23_shared_kv.adapters.3.lora_a
+    - lora_banks.extension_v23_shared_kv.adapters.3.lora_b
+  target_bank_name: extension_v30_joint_pair_query
+  target_bank_parameter_count: 131072
+  target_bank_tensor_count: 8
+  target_bank_rank: 8
+  target_bank_alpha: 16.0
+  target_bank_dropout: 0.0
+  target_bank_source_state_sha256: 050706c300e6fb0ac8e4cc02e26c565b54a9a89505104302d4ffcedc02124c64
+  target_modules:
+    - model.language_model.layers.18.self_attn.q_proj
+    - model.language_model.layers.19.self_attn.q_proj
+    - model.language_model.layers.20.self_attn.q_proj
+    - model.language_model.layers.21.self_attn.q_proj
+  source_block_core_state_sha256: 92652fd2dbde2406227503f50717b2031baa1bcbc050902a379ddb9ddb52764f
+  v37_optimizer_state_loaded: false
+  v37_optimizer_file_opened: false
+  v36_optimizer_state_loaded: false
+  v36_optimizer_file_opened: false
+  validation_qa_loaded_during_training: false
+  continuation_gates_use_training_only: true
+  question_dependent_scene_processing: false
+  question_dependent_retrieval: false
+  priority_pair_ids:
+    book_support: pair_000015
+    mirror_lr: pair_000016
+    picture_support: pair_000017
+  priority_question_keys:
+    - cfq_13b1138d14c52a7c
+    - cfq_1c8b8cd72fcde904
+    - cfq_163eb92339ad35a5
+    - cfq_66aab89cee5bef49
+    - cfq_a1c673a1197a0961
+    - cfq_d469c4ac156ac42d
+    - cfq_ac7ac024c40aaddc
+    - cfq_fa3601dfffa80a0e
+  pair_schedule_sha256: 4e26160c9a36e20ac894ff5e26604e6fad985ff5c84211282fd9807c9e738b3f
+  schedule_sha256: 2e7a2a8136c968739a8aaaa1138be87bec322fefa0fb340e6fb9bc6e07278bea
+  saved_optimizer_steps: [0, 8, 16, 24, 32, 40, 41]
+  per_unit_nll_diagnostics_required_at_steps: [0, 8, 16, 41]
+  priority_side_deficit_margin: 0.5
+  update_zero_expected:
+    floating_absolute_tolerance: 0.000001
+    broad_train_nll: 2.9013306349515915
+    broad_greedy_exact_correct: 23
+    broad_greedy_exact_total: 48
+    priority_book_side_deficit: 16.926229
+    priority_picture_side_deficit: 14.1875001
+    priority_combined_side_deficit: 31.1137291
+    complete_units: 9
+    complete_physical_pair_coverage: 4
+    cross_prefix_complete_units: 17
+    positive_sides: 34
+    mean_cross_prefix_margin: 1.4390720129
+    book_complete_units: 0
+    picture_complete_units: 0
+    mirror_complete_units: 2
+    book_cross_prefix_complete_units: 2
+    picture_cross_prefix_complete_units: 2
+  update8_gate:
+    optimizer_step: 8
+    priority_side_deficit_minimum_improvement: 0.5
+    complete_units_minimum: 9
+    positive_sides_minimum: 34
+    cross_prefix_complete_units_minimum: 17
+    broad_nll_maximum_increase: 0.02
+  update16_gate:
+    optimizer_step: 16
+    require_update8_passed: true
+    priority_side_deficit_minimum_improvement: 3.12
+    complete_units_minimum: 10
+    positive_sides_minimum: 35
+    complete_physical_pair_coverage_minimum: 5
+    book_or_picture_complete_units_minimum: 1
+    cross_prefix_complete_units_minimum: 17
+    broad_nll_maximum_increase: 0.02
+  update41_gate:
+    optimizer_step: 41
+    require_update16_passed: true
+    priority_side_deficit_minimum_improvement: 6.24
+    complete_units_minimum: 12
+    positive_sides_minimum: 37
+    complete_physical_pair_coverage_minimum: 6
+    book_complete_units_minimum: 1
+    picture_complete_units_minimum: 1
+    mirror_complete_units_minimum: 2
+    cross_prefix_complete_units_minimum: 18
+    greedy_complete_units_minimum: 6
+    require_one_greedy_complete_per_priority_family: true
+    broad_greedy_accuracy_must_meet_source: true
+    broad_nll_maximum_increase: 0.02
+  final_test_deferred: true
+
+experiment:
+  role: exact_v37_u16_k_only_hybrid_learned_v30_query_recovery_v38
+  source_optimizer_step: 16
+  fresh_adam: true
+  final_test_deferred: true

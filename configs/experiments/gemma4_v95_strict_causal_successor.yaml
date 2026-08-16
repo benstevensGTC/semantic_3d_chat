@@ -1,0 +1,308 @@
+v95:
+  schema_version: 95
+  artifact: gemma4_v95_strict_causal_successor_direct_memory_lora_v1
+  status: sealed_before_v95_full_model_load
+  seed: 950095
+
+  sources:
+    runtime_config: configs/runtime/gemma4_v85_strict_multiscene.yaml
+    runtime_config_sha256: 49d9595e6167fe352dc49f1ca363af396fe3d3be91d50cb430721bc74b130575
+    training_qa: data_diverse52/qa/train.jsonl
+    training_qa_sha256: 01721bf904b1ab0b65ce8acac6e366287040873cda1356da6c70c4981abe7619
+    train_memory_cache: reports/gemma4/artifacts/v82_strict_dense_reader/train_cache
+    train_memory_tensor_sha256: 417492a08ac669210b4bdcaf8dafa0122fa0cf7ed6753489e55fd93bee150a2d
+    train_memory_metadata_sha256: b0e26f2c3e44d868e4f54556f9304d990d0c664d862d1a2a760a714fcdb4a257
+    development_memory_cache: reports/gemma4/artifacts/v82_strict_dense_reader/development_cache
+    development_memory_tensor_sha256: 71222bdc34fc836015ea4449622491545515222a7df99c321c1bf7a22fa2b659
+    development_memory_metadata_sha256: 58b988b03d33c93110083e22a98f050059e44e8356391a78fb761fd74254d1dd
+    frozen_v85_checkpoint: reports/gemma4/artifacts/v85_strict_runtime_candidate
+    frozen_v85_adapter_sha256: 163ceb462bafe4b1d38099c07ca32bcc22944ad93917222b019e75634883fd8d
+    frozen_v85_metadata_sha256: 093d43c80722dd00cd3f7347d55451eca1cc45e416f6bda220157f18024ce0bd
+    frozen_v94_fixed_final: reports/gemma4/artifacts/v94_strict_multiscene_full40_final
+    frozen_v94_bridge_sha256: 574418f9458610a5d0007001c4ba732a0a8a4fd590e3b9bc4fcdd8481a646079
+    frozen_v94_bridge_metadata_sha256: 334f2d927494e200d467fbed339d185b752b5953a4062f07c948f3516c5261cc
+    v94_training_report: reports/gemma4/metrics/gemma4_v94_strict_multiscene_full40_training.json
+    v94_training_report_sha256: 3fab3f4a29d1d5842e4020f896efda7a4e08e11931adb2d09b661845d971eee7
+    v94_hardened_scored_evidence: reports/gemma4/metrics/gemma4_v94_strict_multiscene_full40_hardened_evidence.json
+    v94_hardened_scored_evidence_sha256: 0efb0a2cfb2fd0fc7078c34d97a7fbc1872fbc2e58d6bf6ba79246116e5286de
+    forbidden_v94_release_artifact: data_gemma4/runtime/checkpoints/gemma4_v94_strict_multiscene_release_v1
+    preflight_source: src/semantic_3d_chat/evaluation/v95_strict_causal_successor_preflight.py
+    preflight_source_sha256: 343095ca722a8445dc58349b682640c1bc4ba193e4c02528351a001f80c9964d
+    trainer_source: src/semantic_3d_chat/training/train_v95_strict_causal_successor.py
+    trainer_source_sha256: 25458f4db96c6b5c6a77c5966e05e23c5f6240412663c90f17b56cc914f3d238
+    model_id: google/gemma-4-E2B-it
+    model_revision: 3e22461f65e89153144f8adb70e3b8c2cc9845a7
+    model_blob_sha256_identity: 2db5482b20d746879bb3ef79b5203e9075a2e2b98f54ec7c2f281c1477ddc550
+
+  strict_input_contract:
+    shape_per_scene: [1, 738, 1536]
+    native_boi_retained: true
+    native_eoi_retained: true
+    continuous_environment_payload_tokens: 736
+    compiled_before_question: true
+    reused_byte_identically_across_questions: true
+    supplied_directly_to_native_gemma_image_prefix: true
+    all_memory_slots_retained: true
+    question_derived_environmental_tokens: 0
+    question_conditioned_environmental_readout: false
+    question_dependent_scene_processing: false
+    question_dependent_retrieval: false
+    semantic_or_spatial_top_k_selection: false
+    control_tokens: 0
+    environmental_text_inputs: []
+
+  training_pool:
+    source_role: complete_diverse52_training_pool_only
+    scene_count: 40
+    pair_count: 20
+    row_count: 960
+    changed_unit_count: 66
+    changed_side_count: 132
+    answer_class_count: 29
+    row_inventory_sha256: 064641cdc21b32b39b7e924debc456ae1811ab1acfd0ebb35aac9a2328ffae25
+    scene_inventory_sha256: 441e46b9946507caa87091f37856706c9894ef7e9d3397fcd690d3b3f39eca70
+    pair_inventory_sha256: 5038e50815d52a309c54615efbfe7de5ce1219bff24cdd363ba03dc7ec659cb1
+    answer_class_inventory_sha256: dd43db0afa14dc277265a6db65467cf9726e9e3486098fced20804a82837b874
+    balanced_class_weight_inventory_sha256: 2804b9ddd06f9e8f67040505142acf57d0a9b1b519bda4c134d2e469ee41e841
+    all_rows_used_once_per_epoch: true
+    questions_and_answers_training_only: true
+    runtime_serializes_questions_or_answers: false
+
+  excluded_prior_evaluation:
+    scene_ids:
+      - scene_000057
+      - scene_000058
+      - scene_000059
+      - scene_000060
+      - scene_000061
+      - scene_000062
+    labels_path: data_diverse52/qa/validation.jsonl
+    used_for_v95_optimization: false
+    used_for_v95_checkpoint_selection: false
+    opened_by_v95_preflight: false
+    opened_by_v95_training: false
+
+  deferred_final_lock:
+    scene_ids:
+      - scene_000025
+      - scene_000026
+      - scene_000027
+      - scene_000028
+      - scene_000029
+      - scene_000030
+    physical_artifact_roots:
+      - data/oracle
+      - data/rendered
+      - data_gemma4/features
+      - data_gemma4/maps
+    empty_qa_placeholders:
+      - data_diverse20/qa/test.jsonl
+      - data_diverse28/qa/test.jsonl
+      - data_diverse52/qa/test.jsonl
+    legacy_plan_files_never_opened:
+      - configs/experiments/diverse20.yaml
+      - configs/experiments/diverse28.yaml
+      - configs/experiments/diverse52.yaml
+    physical_artifacts_required_absent_through_fixed_final: true
+    qa_placeholders_required_zero_bytes_through_fixed_final: true
+    generation_before_fixed_final_authorized: false
+    rendering_before_fixed_final_authorized: false
+    feature_extraction_before_fixed_final_authorized: false
+    map_building_before_fixed_final_authorized: false
+    qa_generation_before_fixed_final_authorized: false
+    only_opaque_ids_and_absence_locks_available_to_v95: true
+
+  frozen_stack:
+    exact_parent: fixed_final_nonpromoted_optimization_parent
+    base_gemma_frozen: true
+    frozen_bank_count: 8
+    frozen_adapter_parameter_count: 675840
+    v94_bank_name: v94_strict_multiscene_full40_bridge
+    v94_bank_state_sha256: 9f503f0b2c605238a6f32c15740c0600702d46da08a527d867fbc19e6b639452
+    v94_fixed_final_selected_before_v94_labels_opened: true
+    v94_behavior_gate_passed_required: false
+    v94_runtime_release_required_absent: true
+    merged_weights: false
+
+  bridge:
+    bank_name: v95_strict_causal_successor_bridge
+    target_modules:
+      - model.language_model.layers.9.self_attn.k_proj
+      - model.language_model.layers.9.self_attn.v_proj
+      - model.language_model.layers.34.mlp.up_proj
+    target_layer_roles:
+      - latest_disjoint_full_attention_scene_ingress_key
+      - latest_disjoint_full_attention_scene_ingress_value
+      - final_full_attention_answer_capacity
+    pinned_weight_shapes:
+      model.language_model.layers.9.self_attn.k_proj.weight: [512, 1536]
+      model.language_model.layers.9.self_attn.v_proj.weight: [512, 1536]
+      model.language_model.layers.34.mlp.up_proj.weight: [12288, 1536]
+    pinned_weight_dtype: BF16
+    rank: 8
+    alpha: 16.0
+    dropout: 0.0
+    trainable_parameter_count: 143360
+    initialization_algorithm: cpu_kaiming_uniform_a_exact_zero_b
+    initialization_seed: 950095
+    expected_initial_state_sha256: ba33a6deb0fab6e8e2f8ef1e8b61636b58110d233dd9084a95fe9af1a4a1a39a
+    disjoint_from_all_frozen_bank_targets: true
+    total_bank_count_after_install: 9
+    total_adapter_parameter_count_after_install: 819200
+
+  training:
+    optimizer: AdamW
+    epochs: 4
+    rows_per_epoch: 960
+    total_micro_rows: 3840
+    microbatch_size: 1
+    gradient_accumulation_rows: 8
+    optimizer_updates: 480
+    row_order: sorted_keys_then_epoch_seeded_shuffle
+    row_order_seed: 950095
+    row_order_sha256: ae436b00a12dbd8a0bec88653b27572c02f17fe81c2446a6dfa65fae41b6758f
+    learning_rate: 0.00015
+    weight_decay: 0.0
+    gradient_clip_norm: 1.0
+    balanced_ce_weight: 1.0
+    balanced_ce_formula: normalized_inverse_sqrt_answer_class_frequency
+    balanced_ce_mean_over_rows: 1.0
+    cross_scene_wrong_memory_policy: exact_same_question_text_different_answer_deterministic_cross_scene
+    cross_scene_wrong_memory_margin_weight: 1.25
+    cross_scene_wrong_memory_target_margin_nll: 0.75
+    cross_scene_eligible_row_count: 498
+    cross_scene_exposures_per_eligible_row: 2
+    cross_scene_wrong_memory_rows_per_epoch: 249
+    total_cross_scene_wrong_memory_rows: 996
+    cross_scene_schedule_sha256: 2573448d5c298e3de40cd32ab8ca6a744cfebee0be2bcc301885ab68c4eaadb3
+    causal_control_inventory_policy: seeded_hash_rotation_over_all_cross_scene_eligible_rows
+    causal_control_answer_type_count: 7
+    causal_control_unique_row_count: 498
+    causal_control_repeated_row_count_per_arm: 2
+    zero_payload_margin_weight: 0.75
+    zero_payload_target_margin_nll: 0.5
+    zero_payload_rows_per_epoch: 125
+    total_zero_payload_rows: 500
+    zero_payload_schedule_sha256: dc4f62bb7223f3c734ac04011539ce3d0d8a7d5c6fae6c198f44d79401e86e30
+    permutation_margin_weight: 1.0
+    permutation_target_margin_nll: 0.75
+    permutation_rows_per_epoch: 125
+    total_permutation_rows: 500
+    permutation_control_schedule_sha256: fbd2cbc57dcdfe5da7004fb027727b30422be6fdbeea1b15b4edb9bdb509b0f6
+    payload_permutation_seed: 950095
+    payload_permutation_sha256: be8b9cc947546969db9ee5e9cb771ff8253b0ea8b144cf26d9b702d6ceec3722
+    total_nll_forward_evaluations: 5836
+    auxiliary_nll_forward_evaluations: 1996
+    estimated_wall_time_seconds_from_v94_forward_ratio: 4889
+    wall_time_budget_seconds: 5400
+    checkpoint_every_optimizer_updates: 30
+    deterministic_resume: true
+    checkpoint_selection: fixed_final_update_480_before_known_development_or_deferred_generation
+    intermediate_behavior_selection: false
+
+  known_development_gate:
+    role: post_fixed_final_go_no_go_not_checkpoint_selection
+    scene_ids:
+      - scene_000057
+      - scene_000058
+      - scene_000059
+      - scene_000060
+      - scene_000061
+      - scene_000062
+    labels_path: data_diverse52/qa/validation.jsonl
+    scene_count: 6
+    row_count: 216
+    labels_opened_after_fixed_final_only: true
+    labels_opened_by_separate_label_isolated_evaluator_only: true
+    fixed_final_checkpoint_may_not_change_after_gate: true
+    v94_reference_correct: 143
+    v94_reference_total: 216
+    v94_reference_changed_side_correct: 13
+    v94_reference_complete_changed_units: 2
+    v94_reference_prediction_changed_units: 4
+    v95_correct_minimum: 150
+    v95_accuracy_margin_over_v94_minimum: 0.03
+    changed_side_correct_minimum: 15
+    complete_changed_units_minimum: 4
+    prediction_changed_units_minimum: 7
+    mean_changed_side_wrong_minus_correct_nll_minimum: 0.2
+    correct_accuracy_above_zero_payload_required: true
+    correct_accuracy_above_full_interior_permutation_required: true
+    correct_nll_below_zero_payload_required: true
+    correct_nll_below_full_interior_permutation_required: true
+    pass_required_before_deferred_final_unlock: true
+
+  deferred_evaluation:
+    role: physically_absent_scene_disjoint_final_after_fixed_final
+    scene_ids:
+      - scene_000025
+      - scene_000026
+      - scene_000027
+      - scene_000028
+      - scene_000029
+      - scene_000030
+    scene_count: 6
+    pair_count: 3
+    expected_row_count_after_unlock: 216
+    expected_changed_unit_count_after_unlock: 12
+    expected_changed_side_count_after_unlock: 24
+    generation_requires_explicit_post_fixed_final_unlock: true
+    known_development_gate_must_pass_before_unlock: true
+    fixed_final_selected_before_generation: true
+    fixed_final_selected_before_label_creation: true
+    labels_opened_only_by_separate_final_scorer: true
+    frozen_v94_comparator_scored_on_same_rows: true
+
+  gates:
+    canonical_accuracy_minimum: 0.65
+    canonical_accuracy_margin_over_fixed_v94_same_rows: 0.03
+    attribute_correct_minimum: 24
+    attribute_total: 48
+    count_correct_minimum: 38
+    count_total: 42
+    metric_correct_minimum: 4
+    metric_total: 6
+    orientation_correct_minimum: 4
+    orientation_total: 6
+    presence_correct_minimum: 30
+    presence_total: 42
+    spatial_relation_correct_minimum: 29
+    spatial_relation_total: 48
+    support_correct_minimum: 16
+    support_total: 24
+    changed_side_correct_minimum: 14
+    changed_side_total: 24
+    complete_changed_units_minimum: 6
+    changed_unit_total: 12
+    canonical_prediction_changing_units_minimum: 8
+    mean_changed_side_wrong_minus_correct_nll_minimum: 0.2
+    zero_payload_mean_nll_gap_minimum: 0.5
+    permutation_mean_nll_gap_minimum: 0.35
+    correct_scene_nll_below_zero_payload_required: true
+    correct_scene_nll_below_permuted_payload_required: true
+    exact_prefix_hash_invariance_required: true
+    question_label_isolation_required: true
+    protected_read_count_maximum: 0
+    runtime_packaging_requires_separate_leakage_gate: true
+    automatic_runtime_promotion: false
+
+  outputs:
+    preregistration: reports/gemma4/metrics/gemma4_v95_strict_causal_successor_preregistration.json
+    cpu_preflight: reports/gemma4/metrics/gemma4_v95_strict_causal_successor_cpu_preflight.json
+    work_root: data_gemma4/checkpoints/v95_strict_causal_successor_work
+    fixed_final_candidate: reports/gemma4/artifacts/v95_strict_causal_successor_final
+    training_report: reports/gemma4/metrics/gemma4_v95_strict_causal_successor_training.json
+    known_development_score: reports/gemma4/metrics/gemma4_v95_strict_causal_successor_known_development.json
+
+  scope:
+    local_inference_only: true
+    cloud_inference: false
+    full_gemma_model_loaded_by_preflight: false
+    optimizer_constructed_by_preflight: false
+    prior_evaluation_scenes_57_through_62_loaded: false
+    prior_evaluation_labels_may_be_opened_only_post_fixed_final: true
+    deferred_final_scenes_25_through_30_loaded: false
+    deferred_final_semantic_plans_loaded: false
+    deferred_final_artifacts_generated: false
+    oracle_loaded: false
+    runtime_promotion_authorized: false

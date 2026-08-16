@@ -20,6 +20,48 @@ from semantic_3d_chat.mapping.semantic_codec import (
 
 ColorMode = Literal["rgb", "feature_norm", "uncertainty", "observation_count", "confidence"]
 
+PERSISTED_MAP_CONTENT_HASH_DOMAIN = "semantic_3d_chat.voxel_map.persisted_numeric_arrays.v1"
+MATERIALIZED_MAP_CONTENT_HASH_DOMAIN = "semantic_3d_chat.voxel_map.materialized_numeric_arrays.v1"
+
+
+def _numeric_arrays_content_hash(
+    voxel_size_m: float,
+    arrays: dict[str, np.ndarray],
+) -> str:
+    digest = hashlib.sha256()
+    digest.update(struct.pack("<d", voxel_size_m))
+    for name, values in sorted(arrays.items()):
+        digest.update(name.encode("utf-8"))
+        contiguous = np.ascontiguousarray(values)
+        digest.update(str(contiguous.dtype).encode("ascii"))
+        digest.update(np.asarray(contiguous.shape, dtype=np.int64).tobytes())
+        digest.update(contiguous.tobytes())
+    return digest.hexdigest()
+
+
+def persisted_voxel_map_content_hash(path: str | Path) -> str:
+    """Hash the exact persisted numeric arrays, excluding JSON metadata.
+
+    This domain is stable across loading and is therefore the only hash domain
+    suitable for comparing two independently generated report artifacts.
+    """
+
+    source = Path(path)
+    with np.load(source, allow_pickle=False) as archive:
+        metadata = json.loads(str(archive["metadata_json"].item()))
+        if not isinstance(metadata, dict):
+            raise TypeError("Voxel-map metadata must be a JSON object")
+        voxel_size_m = float(metadata["voxel_size_m"])
+        digest = hashlib.sha256()
+        digest.update(struct.pack("<d", voxel_size_m))
+        for name in sorted(set(archive.files) - {"metadata_json"}):
+            values = np.ascontiguousarray(archive[name])
+            digest.update(name.encode("utf-8"))
+            digest.update(str(values.dtype).encode("ascii"))
+            digest.update(np.asarray(values.shape, dtype=np.int64).tobytes())
+            digest.update(values.tobytes())
+        return digest.hexdigest()
+
 
 @dataclass
 class _VoxelAccumulator:
@@ -378,17 +420,18 @@ class SparseVoxelMap:
         }
 
     def content_hash(self) -> str:
-        """Hash geometry and fused values for cache and invariance checks."""
+        """Hash the numeric arrays materialized from the current map object.
 
-        digest = hashlib.sha256()
-        digest.update(struct.pack("<d", self.voxel_size_m))
-        for name, values in sorted(self.to_arrays(encode_semantics=True).items()):
-            digest.update(name.encode("utf-8"))
-            contiguous = np.ascontiguousarray(values)
-            digest.update(str(contiguous.dtype).encode("ascii"))
-            digest.update(np.asarray(contiguous.shape, dtype=np.int64).tobytes())
-            digest.update(contiguous.tobytes())
-        return digest.hexdigest()
+        A loaded map can normalize stored direction vectors while rebuilding
+        its accumulators, so this materialized-object hash is not necessarily
+        identical to :func:`persisted_voxel_map_content_hash` for the source
+        file. Reports must declare which domain they use.
+        """
+
+        return _numeric_arrays_content_hash(
+            self.voxel_size_m,
+            self.to_arrays(encode_semantics=True),
+        )
 
     def save(self, path: str | Path, *, metadata: dict[str, Any] | None = None) -> Path:
         """Atomically save a non-empty map as an allow-pickle-free NPZ."""

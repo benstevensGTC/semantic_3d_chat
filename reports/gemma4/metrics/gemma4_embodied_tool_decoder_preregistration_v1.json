@@ -1,0 +1,271 @@
+{
+  "artifact": "gemma4_embodied_tool_decoder_preregistration_v1",
+  "continuous_input_layout": {
+    "active_scene_robot_prefix_tokens": 262,
+    "all_active_map_voxels_scored_for_target_grounding": true,
+    "clearance_state_dim": 24,
+    "clearance_tokens": 2,
+    "conceptual_order": [
+      "bos_text_embedding",
+      "native_boi_embedding",
+      "256_complete_question_independent_scene_latents",
+      "4_numeric_robot_state_tokens",
+      "native_eoi_embedding",
+      "environment_free_protocol_and_literal_user_instruction_tokens",
+      "2_numeric_grounded_target_tokens",
+      "2_numeric_anonymous_free_space_tokens",
+      "teacher_forced_json_answer_tokens_training_only"
+    ],
+    "control_tokens": 4,
+    "free_space_source": "sanitized_numeric_voxel_geometry_only",
+    "gemma4_auxiliary_ple_for_continuous_slots": "native_pad_derived",
+    "navigation_target_grounding_may_depend_on_user_instruction": true,
+    "robot_tokens": 4,
+    "scene_prefix_computed_before_instruction": true,
+    "scene_prefix_tokens": 258,
+    "static_scene_prefix_question_independent": true,
+    "target_state_dim": 10,
+    "target_tokens": 2
+  },
+  "data": {
+    "clearance_cache": "data_gemma4/training/gemma4_embodied_tool_decoder_v1/clearance.safetensors",
+    "clearance_cache_must_be_derived_before_launch": true,
+    "clearance_cache_must_be_hashed_before_launch": true,
+    "clearance_cache_source": "sanitized_map_centers_world_and_numeric_pose_only",
+    "episode_count": 1370,
+    "oracle_target_xyz_allowed_training_only": true,
+    "oracle_target_xyz_forbidden_runtime": true,
+    "sample_count": 6468,
+    "scene_prefix_inventory_sha256": "c477fd12bc4104f147f73c2f6d46904e0b83b3c584206cb227fd70e9371d0d63",
+    "scene_prefix_root": "data_gemma4/scene_tokens/v56_question_control_full_prefixes",
+    "scene_splits_disjoint": true,
+    "source": "data_gemma4/training/navigation_policy_v3",
+    "trace_manifest_sha256": "005756918c54fbffbb7c6db45e2170174d85f87f278e755e538418d6eb880243",
+    "trace_rows_sha256": "72434178ff1cf23c2dfeb98d52cb7b4c443fcc8715c1dd4ee883d87ae127e7ad",
+    "train_scene_ids": [
+      "scene_000011",
+      "scene_000012",
+      "scene_000013",
+      "scene_000014",
+      "scene_000015",
+      "scene_000016",
+      "scene_000017",
+      "scene_000018",
+      "scene_000019",
+      "scene_000020",
+      "scene_000021",
+      "scene_000022",
+      "scene_000023",
+      "scene_000024"
+    ],
+    "validation_scene_ids": [
+      "scene_000031",
+      "scene_000032",
+      "scene_000033",
+      "scene_000034",
+      "scene_000035",
+      "scene_000036",
+      "scene_000037",
+      "scene_000039"
+    ]
+  },
+  "execution": {
+    "full_model_generation_executed": false,
+    "runtime_checkpoint_published": false,
+    "training_executed": false
+  },
+  "hard_promotion_gates": {
+    "all_gates_must_pass": true,
+    "collision_execution_count": 0,
+    "empty_scene_prefix_tool_accuracy_drop_minimum": 0.05,
+    "failed_run_publishes_no_runtime_checkpoint": true,
+    "oracle_removed_runtime_smoke_required": true,
+    "validation_argument_mae_normalized_maximum": 0.25,
+    "validation_exact_json_accuracy_minimum": 0.6,
+    "validation_tool_accuracy_minimum": 0.8,
+    "validation_turn_sign_accuracy_minimum": 0.8,
+    "validation_valid_schema_rate_minimum": 0.95,
+    "wrong_target_targeted_tool_accuracy_drop_minimum": 0.1,
+    "zero_clearance_obstacle_tool_accuracy_drop_minimum": 0.05
+  },
+  "launch_authorization": {
+    "clearance_cache_digest_required": true,
+    "multi_update_training_authorized": false,
+    "one_full_model_mps_microbatch_smoke_required": true,
+    "parent_release_of_heavy_mps_slot_required": true,
+    "preflight_digest_required": true,
+    "preregistration_digest_required": true,
+    "tiny_cpu_backward_smoke_required": true
+  },
+  "model": {
+    "actual_checkpoint_file_sha256": {
+      "config.json": "1b28f3d2c3100f6c594754b81107428bd7b822a7f48272ca681dae9d2ec38330",
+      "model.safetensors": "2db5482b20d746879bb3ef79b5203e9075a2e2b98f54ec7c2f281c1477ddc550",
+      "tokenizer_config.json": "9f4fec4b1dc6ecddf8f4a92e9caea5971c0e67d81309f3f9066a2bee8c362633"
+    },
+    "actual_checkpoint_tensor_shapes": {
+      "model.language_model.layers.34.self_attn.k_proj": [
+        512,
+        1536
+      ],
+      "model.language_model.layers.34.self_attn.v_proj": [
+        512,
+        1536
+      ]
+    },
+    "base_dtype": "bfloat16",
+    "cloud_inference": false,
+    "final_layer_attention": "full_attention",
+    "final_layer_index": 34,
+    "hidden_size": 1536,
+    "layer_count": 35,
+    "local_files_only": true,
+    "model_id": "google/gemma-4-E2B-it",
+    "revision": "3e22461f65e89153144f8adb70e3b8c2cc9845a7",
+    "sliding_window": 512
+  },
+  "objective": {
+    "action_balanced_deterministic_sampler": true,
+    "answer_suffix_only_cross_entropy": true,
+    "environmental_caption_loss": false,
+    "intermediate_text_scene_description": false,
+    "labels_before_json_suffix": -100,
+    "token_normalized": true
+  },
+  "optimization": {
+    "bitsandbytes": false,
+    "cpu_fallback": true,
+    "cuda_required": false,
+    "decoder_gradient_checkpointing": true,
+    "early_stopping_patience_validations": 3,
+    "float32_loss_and_finite_checks": true,
+    "gradient_accumulation": 8,
+    "gradient_clip_l2": 1.0,
+    "lora_learning_rate": 0.0001,
+    "maximum_optimizer_updates": 64,
+    "microbatch_size": 1,
+    "optimizer": "adamw",
+    "preferred_device": "mps",
+    "projector_learning_rate": 0.0002,
+    "seed": 2026081217,
+    "validation_every_updates": 8,
+    "weight_decay": 0.0
+  },
+  "output_protocol": {
+    "exact_collision_interlock_before_execution": true,
+    "format": "one_minified_json_object",
+    "key_order": [
+      "arguments",
+      "tool"
+    ],
+    "numeric_precision_decimal_places": 3,
+    "prose_or_markdown_allowed": false,
+    "schema_validation_before_execution": true,
+    "tool_vocabulary": [
+      "stop",
+      "scan",
+      "turn",
+      "move_forward",
+      "move_backward"
+    ]
+  },
+  "required_controls": [
+    "frozen_untrained_continuous_prefix_gemma_seam",
+    "correct_continuous_context",
+    "wrong_scene_prefix_same_instruction",
+    "zero_scene_prefix",
+    "wrong_grounded_target_same_instruction",
+    "zero_grounded_target",
+    "zero_free_space_state",
+    "shuffled_free_space_state",
+    "instruction_only",
+    "oracle_directory_removed"
+  ],
+  "research_question": "Can local Gemma-4 E2B causally decode exact bounded JSON robot actions from a complete continuous 3D scene prefix, numeric robot tokens, a continuously grounded target, and anonymous numeric free-space geometry?",
+  "runtime_and_leakage": {
+    "loaded_file_audit_required": true,
+    "numeric_collision_interlock_authoritative": true,
+    "oracle_directory_removal_test_required": true,
+    "raw_model_output_not_executed_before_schema_validation": true,
+    "runtime_may_load": [
+      "sanitized_continuous_scene_prefix",
+      "numeric_robot_state_encoder",
+      "tool_decoder_lora",
+      "numeric_tool_context_projector",
+      "sanitized_semantic_voxel_map",
+      "frozen_local_gemma4_weights",
+      "literal_user_instruction_tokens"
+    ],
+    "runtime_may_not_load": [
+      "oracle",
+      "training_traces",
+      "training_qa",
+      "scene_labels",
+      "object_inventory",
+      "caption",
+      "serialized_scene_graph"
+    ]
+  },
+  "schema_version": 1,
+  "status": "design_locked_preflight_only_training_not_authorized",
+  "trainable_surface": {
+    "adapter_type": "strict_unmerged_fp32_lora_plus_numeric_linear_projector",
+    "frozen": [
+      "gemma4_base",
+      "all_v54_lora_banks",
+      "scene_encoder_and_prefixes",
+      "robot_state_encoder",
+      "vision_encoder",
+      "semantic_map",
+      "target_grounder"
+    ],
+    "lora": {
+      "alpha": 8.0,
+      "base_weight_merge": false,
+      "dropout": 0.0,
+      "exact_target_modules": [
+        "model.language_model.layers.34.self_attn.k_proj",
+        "model.language_model.layers.34.self_attn.v_proj"
+      ],
+      "initial_state_sha256": "00691e1da8959e8f6cefa56aa553749a63bb9b7ec773b77a2619d7b1989fd50d",
+      "initialization_seed": 2026081217,
+      "module_shapes": [
+        [
+          512,
+          1536
+        ],
+        [
+          512,
+          1536
+        ]
+      ],
+      "parameter_count": 16384,
+      "rank": 4
+    },
+    "numeric_projector": {
+      "bias": true,
+      "clearance_projection": [
+        24,
+        3072
+      ],
+      "initial_output_scale": 0.02,
+      "initial_state_sha256": "bbc1db24367b03eabb061db1b504c6c23cce3d9c4151d46f2772dda4ee48daef",
+      "initialization_seed": 2026081217,
+      "parameter_count": 110592,
+      "target_projection": [
+        10,
+        3072
+      ]
+    },
+    "total_trainable_parameter_count": 126976,
+    "why_kv_reader": "Continuous slots carry their content in main inputs_embeds while all use non-semantic PAD-derived PLE. Final full-attention K/V directly turn those content-bearing hidden states into globally visible memory. V54's already-trained layer-34 Q/O reader remains frozen, and its exact targets are disjoint from this new bank."
+  },
+  "user_text_policy": {
+    "literal_user_navigation_instruction_is_allowed": true,
+    "program_supplied_environmental_text": [],
+    "reason": "The no-leakage prohibition applies to environmental information supplied by the program, not to the user's own question or navigation instruction.",
+    "runtime_object_inventory": false,
+    "runtime_oracle_labels": false,
+    "target_names_inside_user_instruction_are_allowed": true
+  }
+}

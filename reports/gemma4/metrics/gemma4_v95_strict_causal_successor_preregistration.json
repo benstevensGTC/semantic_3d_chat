@@ -1,0 +1,495 @@
+{
+  "artifact": "gemma4_v95_strict_causal_successor_preregistration_v1",
+  "authenticated_sources": {
+    "configs/runtime/gemma4_v85_strict_multiscene.yaml": "49d9595e6167fe352dc49f1ca363af396fe3d3be91d50cb430721bc74b130575",
+    "data_diverse52/qa/train.jsonl": "01721bf904b1ab0b65ce8acac6e366287040873cda1356da6c70c4981abe7619",
+    "reports/gemma4/artifacts/v82_strict_dense_reader/development_cache/metadata.json": "58b988b03d33c93110083e22a98f050059e44e8356391a78fb761fd74254d1dd",
+    "reports/gemma4/artifacts/v82_strict_dense_reader/development_cache/training_tensors.safetensors": "71222bdc34fc836015ea4449622491545515222a7df99c321c1bf7a22fa2b659",
+    "reports/gemma4/artifacts/v82_strict_dense_reader/train_cache/metadata.json": "b0e26f2c3e44d868e4f54556f9304d990d0c664d862d1a2a760a714fcdb4a257",
+    "reports/gemma4/artifacts/v82_strict_dense_reader/train_cache/training_tensors.safetensors": "417492a08ac669210b4bdcaf8dafa0122fa0cf7ed6753489e55fd93bee150a2d",
+    "src/semantic_3d_chat/evaluation/v95_strict_causal_successor_preflight.py": "343095ca722a8445dc58349b682640c1bc4ba193e4c02528351a001f80c9964d",
+    "src/semantic_3d_chat/training/train_v95_strict_causal_successor.py": "25458f4db96c6b5c6a77c5966e05e23c5f6240412663c90f17b56cc914f3d238"
+  },
+  "bridge": {
+    "alpha": 16.0,
+    "bank_name": "v95_strict_causal_successor_bridge",
+    "disjoint_from_all_frozen_bank_targets": true,
+    "dropout": 0.0,
+    "expected_initial_state_sha256": "ba33a6deb0fab6e8e2f8ef1e8b61636b58110d233dd9084a95fe9af1a4a1a39a",
+    "initialization_algorithm": "cpu_kaiming_uniform_a_exact_zero_b",
+    "initialization_seed": 950095,
+    "pinned_weight_dtype": "BF16",
+    "pinned_weight_shapes": {
+      "model.language_model.layers.34.mlp.up_proj.weight": [
+        12288,
+        1536
+      ],
+      "model.language_model.layers.9.self_attn.k_proj.weight": [
+        512,
+        1536
+      ],
+      "model.language_model.layers.9.self_attn.v_proj.weight": [
+        512,
+        1536
+      ]
+    },
+    "rank": 8,
+    "target_layer_roles": [
+      "latest_disjoint_full_attention_scene_ingress_key",
+      "latest_disjoint_full_attention_scene_ingress_value",
+      "final_full_attention_answer_capacity"
+    ],
+    "target_modules": [
+      "model.language_model.layers.9.self_attn.k_proj",
+      "model.language_model.layers.9.self_attn.v_proj",
+      "model.language_model.layers.34.mlp.up_proj"
+    ],
+    "total_adapter_parameter_count_after_install": 819200,
+    "total_bank_count_after_install": 9,
+    "trainable_parameter_count": 143360
+  },
+  "config_path": "configs/experiments/gemma4_v95_strict_causal_successor.yaml",
+  "config_sha256": "9115c36b417d03bec935257b42e30597170d5acbf6c4683b5c021a8e4d9bbea2",
+  "deferred_evaluation_protocol": {
+    "expected_changed_side_count_after_unlock": 24,
+    "expected_changed_unit_count_after_unlock": 12,
+    "expected_row_count_after_unlock": 216,
+    "fixed_final_selected_before_generation": true,
+    "fixed_final_selected_before_label_creation": true,
+    "frozen_v94_comparator_scored_on_same_rows": true,
+    "generation_requires_explicit_post_fixed_final_unlock": true,
+    "known_development_gate_must_pass_before_unlock": true,
+    "labels_opened_only_by_separate_final_scorer": true,
+    "pair_count": 3,
+    "role": "physically_absent_scene_disjoint_final_after_fixed_final",
+    "scene_count": 6,
+    "scene_ids": [
+      "scene_000025",
+      "scene_000026",
+      "scene_000027",
+      "scene_000028",
+      "scene_000029",
+      "scene_000030"
+    ]
+  },
+  "deferred_final_artifacts_generated": false,
+  "deferred_final_labels_opened": false,
+  "deferred_final_lock": {
+    "empty_qa_placeholders": [
+      "data_diverse20/qa/test.jsonl",
+      "data_diverse28/qa/test.jsonl",
+      "data_diverse52/qa/test.jsonl"
+    ],
+    "feature_extraction_before_fixed_final_authorized": false,
+    "generation_before_fixed_final_authorized": false,
+    "legacy_plan_files_never_opened": [
+      "configs/experiments/diverse20.yaml",
+      "configs/experiments/diverse28.yaml",
+      "configs/experiments/diverse52.yaml"
+    ],
+    "map_building_before_fixed_final_authorized": false,
+    "only_opaque_ids_and_absence_locks_available_to_v95": true,
+    "physical_artifact_roots": [
+      "data/oracle",
+      "data/rendered",
+      "data_gemma4/features",
+      "data_gemma4/maps"
+    ],
+    "physical_artifacts_required_absent_through_fixed_final": true,
+    "qa_generation_before_fixed_final_authorized": false,
+    "qa_placeholders_required_zero_bytes_through_fixed_final": true,
+    "rendering_before_fixed_final_authorized": false,
+    "scene_ids": [
+      "scene_000025",
+      "scene_000026",
+      "scene_000027",
+      "scene_000028",
+      "scene_000029",
+      "scene_000030"
+    ]
+  },
+  "derived_contract": {
+    "all_training_memory_hashes": {
+      "scene_000011": "34d2fb645007b6210fdec61fd620fdd837c1ee77444e4d56e64578eee1a03164",
+      "scene_000012": "3025fb0e30c068e4f932eb10919f570509c7bd0ac6beaa5e44900644cb1a453a",
+      "scene_000013": "21ca3957ff9a49db8ea9414abac570b9b09b2c1ab823ebb3e0597053f273c7c5",
+      "scene_000014": "8b507d30a57ddcb95921477cd50d6e961f62737d0e62d0cd7643aea0220cd7bb",
+      "scene_000015": "a7dcab0ed205cc4059c7af76de18dbf49b73204db7e203f228c0b6438363de08",
+      "scene_000016": "9b5e8cda842deceec011326f2b66c03b6a12eb5c3b77200c389e116b878fd911",
+      "scene_000017": "4142f9a18fdf1d7449f5a3181a2e1f60a0df19157dfa03e2877f1ddc6382df31",
+      "scene_000018": "604a61c9833127e452095b4752cec04c642fa48ce4d5caab2fd27a5c6840503f",
+      "scene_000019": "6956932c8d1c4f9e590236089c05935e5628e7bd62ae9ae17e5e8d8a59873fc2",
+      "scene_000020": "97e0077c7d8cd00017d928c1e783f85a556474c179b2b482622ea4faae222c8c",
+      "scene_000021": "6187d29d5d005a107842bf51920f5af2d6a16663a70c59e83a448af4407dbd8d",
+      "scene_000022": "b3d524065adb5d7c96af4ce2ef3b0992a45919ae94828522f058615e028b5d91",
+      "scene_000023": "1b9c96bb5d8b957e0d4fde9244cddad1a0db5416ed89f171591d0398673d566e",
+      "scene_000024": "60ff216d395fa0e6bbe56145789f910e491126114cf7696868f9bc6876bf18b2",
+      "scene_000031": "df17bfcf04ddf184cc38d84f6088fc669a6604ef79179783255e0f146f0977f1",
+      "scene_000032": "293a2f3660d01ae24d42364dce042ad4d26e6bba66373244b61f83c053ca8a81",
+      "scene_000033": "6de77c22e9689037a3249afe18ac2d28e95802b42714e134e3b347767e59ac22",
+      "scene_000034": "69f5eb192f79d5582c651ef309b873dfe3f7a74feb2324faabebab0d226b64d8",
+      "scene_000035": "71873964ba14fd64d99aee9605f107de4d8b3623af6601e12a4add88339947f2",
+      "scene_000036": "563dfb490b57934832c4383dc8c09fa14c5e00ddece195be8b99758a338cced5",
+      "scene_000037": "c1a1d5d19cf01f50d9a6157fe09815be32cdaa8578b46f2c8458f2f31f8f1fa4",
+      "scene_000038": "902a3a440398bf0e9e8cef462341ee6e81be3c4a87ac3f90e8c244e1eb9d3faa",
+      "scene_000039": "f2587d717746678c6d08d14e46ea5e51465f065b586938ce8595cd81a1cfa36a",
+      "scene_000040": "53abb27266c9e7601d6fd8645ec70c631beb36b7fc47470647fc2ecbdabe89bd",
+      "scene_000041": "c02657f6693d60c29d63995775cb3ae38c3bd3cd09dc0b185b4938d49e860ef2",
+      "scene_000042": "db404245e03cc273c879286fe63fc59f57e298ef937fb10bc84a56659f7030c8",
+      "scene_000043": "4499c014c6628aac27381eb7b56067d66808558b8e1c470a83ce57881163e1ab",
+      "scene_000044": "a1288a3ac7cdf5a699d2b6211cb49bf1ad07dd6e5d31a253fd7ae80fcf65f63d",
+      "scene_000045": "ba703f95e14bf36ed5995644be54a13aa208c594a84b857c7182b3803211becd",
+      "scene_000046": "25906630a853199b5b7c459c321ba14c4aa195a15c5f9bb04df551788b9239ad",
+      "scene_000047": "8ebfafd1dae9f24bf732fcfe596bfdf49cfbfbb73d7736d732dfc6a9eb835940",
+      "scene_000048": "c07b2919d317396f6ec0a509a21cb5033a37e7cf528082f73bc0cd0d792f574b",
+      "scene_000049": "61e28667c305e19ad7b10fab0d45df6f6b20dda84fcc37971ac75cd087b329f3",
+      "scene_000050": "c717806631a11545b44a5f301722423331614cc05cfae460302b8e87c4309a8f",
+      "scene_000051": "d211991bcbf1d09c1c554ff76a595e4efbb9bfdfcff8e8f3ca24922bd562c69a",
+      "scene_000052": "55422a9c8d06ac1c0cbc19501c43c5c6321006bdb3b6e32e26481cad74f443b4",
+      "scene_000053": "e18848873e95fbec32fc9bec4f51c1e4ecad2551b736b3d3f2b9b65fb54489c4",
+      "scene_000054": "2e870bed61ae7cc13242fb78a93da90b45777fab6e1ac1f38094d96528c9af61",
+      "scene_000055": "bc66f0856408a6bdeb32a08440cfe206f3310677bc51031b87003bb5f74fc915",
+      "scene_000056": "57e3f954e02ee64d02aabad82d16eb45b6e50d28b9ded00ea0f00a2386d555ca"
+    },
+    "auxiliary_nll_forward_evaluations": 1996,
+    "changed_units": 66,
+    "config_status": "sealed_before_v95_full_model_load",
+    "cross_scene_eligible_rows": 498,
+    "cross_scene_schedule_sha256": "2573448d5c298e3de40cd32ab8ca6a744cfebee0be2bcc301885ab68c4eaadb3",
+    "cross_scene_wrong_inventory_sha256": "92b1f911f8d009e5229ea1580fa6dfd5c72dcb5af85e1d9bafb3b03ac03b605e",
+    "cross_scene_wrong_rows_per_epoch": 249,
+    "cross_scene_wrong_schedule_rows": 996,
+    "dataset_hashes": {
+      "answer_class_inventory_sha256": "dd43db0afa14dc277265a6db65467cf9726e9e3486098fced20804a82837b874",
+      "balanced_class_weight_inventory_sha256": "2804b9ddd06f9e8f67040505142acf57d0a9b1b519bda4c134d2e469ee41e841",
+      "pair_inventory_sha256": "5038e50815d52a309c54615efbfe7de5ce1219bff24cdd363ba03dc7ec659cb1",
+      "row_inventory_sha256": "064641cdc21b32b39b7e924debc456ae1811ab1acfd0ebb35aac9a2328ffae25",
+      "scene_inventory_sha256": "441e46b9946507caa87091f37856706c9894ef7e9d3397fcd690d3b3f39eca70"
+    },
+    "deferred_final_absence": {
+      "empty_qa_placeholders": {
+        "data_diverse20/qa/test.jsonl": 0,
+        "data_diverse28/qa/test.jsonl": 0,
+        "data_diverse52/qa/test.jsonl": 0
+      },
+      "feature_extraction_performed": false,
+      "legacy_plan_file_count_opened": 0,
+      "map_building_performed": false,
+      "physical_artifacts_present": [],
+      "physical_path_count_checked": 24,
+      "qa_generation_performed": false,
+      "rendering_performed": false,
+      "scene_generation_performed": false,
+      "scene_ids": [
+        "scene_000025",
+        "scene_000026",
+        "scene_000027",
+        "scene_000028",
+        "scene_000029",
+        "scene_000030"
+      ]
+    },
+    "deferred_final_artifacts_generated": false,
+    "deferred_final_scene_ids_loaded": [],
+    "deferred_final_semantic_plans_opened": false,
+    "file_audit_forbidden_reads": [],
+    "frozen_parent": {
+      "frozen_adapter_parameter_count": 675840,
+      "frozen_bank_count": 8,
+      "parent": "fixed_final_nonpromoted_optimization_parent",
+      "runtime_promotion_authorized": false,
+      "source_reference_labels_opened": false,
+      "status": "authenticated",
+      "v94_behavior_gate_passed": false,
+      "v94_bridge_state_sha256": "9f503f0b2c605238a6f32c15740c0600702d46da08a527d867fbc19e6b639452",
+      "v94_runtime_release_present": false
+    },
+    "full_gemma_model_loaded": false,
+    "lora_preflight": {
+      "adapter_shapes": [
+        {
+          "lora_a": [
+            8,
+            1536
+          ],
+          "lora_b": [
+            512,
+            8
+          ]
+        },
+        {
+          "lora_a": [
+            8,
+            1536
+          ],
+          "lora_b": [
+            512,
+            8
+          ]
+        },
+        {
+          "lora_a": [
+            8,
+            1536
+          ],
+          "lora_b": [
+            12288,
+            8
+          ]
+        }
+      ],
+      "bank_name": "v95_strict_causal_successor_bridge",
+      "exact_zero_output_at_initialization": true,
+      "full_gemma_model_loaded": false,
+      "initial_state_sha256": "ba33a6deb0fab6e8e2f8ef1e8b61636b58110d233dd9084a95fe9af1a4a1a39a",
+      "parameter_count": 143360,
+      "target_modules": [
+        "model.language_model.layers.9.self_attn.k_proj",
+        "model.language_model.layers.9.self_attn.v_proj",
+        "model.language_model.layers.34.mlp.up_proj"
+      ]
+    },
+    "optimizer_constructed": false,
+    "optimizer_updates": 480,
+    "optimizer_updates_performed": 0,
+    "payload_permutation_sha256": "be8b9cc947546969db9ee5e9cb771ff8253b0ea8b144cf26d9b702d6ceec3722",
+    "permutation_control_schedule_rows": 500,
+    "permutation_control_schedule_sha256": "fbd2cbc57dcdfe5da7004fb027727b30422be6fdbeea1b15b4edb9bdb509b0f6",
+    "permutation_repeated_rows": 2,
+    "permutation_rows_per_epoch": 125,
+    "permutation_unique_rows": 498,
+    "pinned_model_tensors": {
+      "full_gemma_model_loaded": false,
+      "model_blob_sha256_identity": "2db5482b20d746879bb3ef79b5203e9075a2e2b98f54ec7c2f281c1477ddc550",
+      "tensor_materialized": false,
+      "tensors": {
+        "model.language_model.layers.34.mlp.up_proj.weight": {
+          "dtype": "BF16",
+          "shape": [
+            12288,
+            1536
+          ]
+        },
+        "model.language_model.layers.9.self_attn.k_proj.weight": {
+          "dtype": "BF16",
+          "shape": [
+            512,
+            1536
+          ]
+        },
+        "model.language_model.layers.9.self_attn.v_proj.weight": {
+          "dtype": "BF16",
+          "shape": [
+            512,
+            1536
+          ]
+        }
+      }
+    },
+    "prior_evaluation_labels_opened": false,
+    "prior_evaluation_scene_ids_loaded": [],
+    "schedule_micro_rows": 3840,
+    "schema_version": 95,
+    "status": "derived_not_training_authorized",
+    "total_nll_forward_evaluations": 5836,
+    "training_authorized": false,
+    "training_pairs": 20,
+    "training_rows": 960,
+    "training_scenes": 40,
+    "training_schedule_sha256": "ae436b00a12dbd8a0bec88653b27572c02f17fe81c2446a6dfa65fae41b6758f",
+    "zero_payload_repeated_rows": 2,
+    "zero_payload_rows_per_epoch": 125,
+    "zero_payload_schedule_rows": 500,
+    "zero_payload_schedule_sha256": "dc4f62bb7223f3c734ac04011539ce3d0d8a7d5c6fae6c198f44d79401e86e30",
+    "zero_payload_unique_rows": 498
+  },
+  "excluded_prior_evaluation": {
+    "labels_path": "data_diverse52/qa/validation.jsonl",
+    "opened_by_v95_preflight": false,
+    "opened_by_v95_training": false,
+    "scene_ids": [
+      "scene_000057",
+      "scene_000058",
+      "scene_000059",
+      "scene_000060",
+      "scene_000061",
+      "scene_000062"
+    ],
+    "used_for_v95_checkpoint_selection": false,
+    "used_for_v95_optimization": false
+  },
+  "fixed_gates": {
+    "attribute_correct_minimum": 24,
+    "attribute_total": 48,
+    "automatic_runtime_promotion": false,
+    "canonical_accuracy_margin_over_fixed_v94_same_rows": 0.03,
+    "canonical_accuracy_minimum": 0.65,
+    "canonical_prediction_changing_units_minimum": 8,
+    "changed_side_correct_minimum": 14,
+    "changed_side_total": 24,
+    "changed_unit_total": 12,
+    "complete_changed_units_minimum": 6,
+    "correct_scene_nll_below_permuted_payload_required": true,
+    "correct_scene_nll_below_zero_payload_required": true,
+    "count_correct_minimum": 38,
+    "count_total": 42,
+    "exact_prefix_hash_invariance_required": true,
+    "mean_changed_side_wrong_minus_correct_nll_minimum": 0.2,
+    "metric_correct_minimum": 4,
+    "metric_total": 6,
+    "orientation_correct_minimum": 4,
+    "orientation_total": 6,
+    "permutation_mean_nll_gap_minimum": 0.35,
+    "presence_correct_minimum": 30,
+    "presence_total": 42,
+    "protected_read_count_maximum": 0,
+    "question_label_isolation_required": true,
+    "runtime_packaging_requires_separate_leakage_gate": true,
+    "spatial_relation_correct_minimum": 29,
+    "spatial_relation_total": 48,
+    "support_correct_minimum": 16,
+    "support_total": 24,
+    "zero_payload_mean_nll_gap_minimum": 0.5
+  },
+  "frozen_stack": {
+    "base_gemma_frozen": true,
+    "exact_parent": "fixed_final_nonpromoted_optimization_parent",
+    "frozen_adapter_parameter_count": 675840,
+    "frozen_bank_count": 8,
+    "merged_weights": false,
+    "v94_bank_name": "v94_strict_multiscene_full40_bridge",
+    "v94_bank_state_sha256": "9f503f0b2c605238a6f32c15740c0600702d46da08a527d867fbc19e6b639452",
+    "v94_behavior_gate_passed_required": false,
+    "v94_fixed_final_selected_before_v94_labels_opened": true,
+    "v94_runtime_release_required_absent": true
+  },
+  "full_gemma_model_loaded": false,
+  "known_development_protocol": {
+    "changed_side_correct_minimum": 15,
+    "complete_changed_units_minimum": 4,
+    "correct_accuracy_above_full_interior_permutation_required": true,
+    "correct_accuracy_above_zero_payload_required": true,
+    "correct_nll_below_full_interior_permutation_required": true,
+    "correct_nll_below_zero_payload_required": true,
+    "fixed_final_checkpoint_may_not_change_after_gate": true,
+    "labels_opened_after_fixed_final_only": true,
+    "labels_opened_by_separate_label_isolated_evaluator_only": true,
+    "labels_path": "data_diverse52/qa/validation.jsonl",
+    "mean_changed_side_wrong_minus_correct_nll_minimum": 0.2,
+    "pass_required_before_deferred_final_unlock": true,
+    "prediction_changed_units_minimum": 7,
+    "role": "post_fixed_final_go_no_go_not_checkpoint_selection",
+    "row_count": 216,
+    "scene_count": 6,
+    "scene_ids": [
+      "scene_000057",
+      "scene_000058",
+      "scene_000059",
+      "scene_000060",
+      "scene_000061",
+      "scene_000062"
+    ],
+    "v94_reference_changed_side_correct": 13,
+    "v94_reference_complete_changed_units": 2,
+    "v94_reference_correct": 143,
+    "v94_reference_prediction_changed_units": 4,
+    "v94_reference_total": 216,
+    "v95_accuracy_margin_over_v94_minimum": 0.03,
+    "v95_correct_minimum": 150
+  },
+  "optimizer_constructed": false,
+  "optimizer_updates": 0,
+  "parent_authenticated": true,
+  "prior_evaluation_labels_opened": false,
+  "schema_version": 95,
+  "status": "sealed_before_v95_full_model_load_and_deferred_generation",
+  "strict_input_contract": {
+    "all_memory_slots_retained": true,
+    "compiled_before_question": true,
+    "continuous_environment_payload_tokens": 736,
+    "control_tokens": 0,
+    "environmental_text_inputs": [],
+    "native_boi_retained": true,
+    "native_eoi_retained": true,
+    "question_conditioned_environmental_readout": false,
+    "question_dependent_retrieval": false,
+    "question_dependent_scene_processing": false,
+    "question_derived_environmental_tokens": 0,
+    "reused_byte_identically_across_questions": true,
+    "semantic_or_spatial_top_k_selection": false,
+    "shape_per_scene": [
+      1,
+      738,
+      1536
+    ],
+    "supplied_directly_to_native_gemma_image_prefix": true
+  },
+  "training_authorized": true,
+  "training_pool": {
+    "all_rows_used_once_per_epoch": true,
+    "answer_class_count": 29,
+    "answer_class_inventory_sha256": "dd43db0afa14dc277265a6db65467cf9726e9e3486098fced20804a82837b874",
+    "balanced_class_weight_inventory_sha256": "2804b9ddd06f9e8f67040505142acf57d0a9b1b519bda4c134d2e469ee41e841",
+    "changed_side_count": 132,
+    "changed_unit_count": 66,
+    "pair_count": 20,
+    "pair_inventory_sha256": "5038e50815d52a309c54615efbfe7de5ce1219bff24cdd363ba03dc7ec659cb1",
+    "questions_and_answers_training_only": true,
+    "row_count": 960,
+    "row_inventory_sha256": "064641cdc21b32b39b7e924debc456ae1811ab1acfd0ebb35aac9a2328ffae25",
+    "runtime_serializes_questions_or_answers": false,
+    "scene_count": 40,
+    "scene_inventory_sha256": "441e46b9946507caa87091f37856706c9894ef7e9d3397fcd690d3b3f39eca70",
+    "source_role": "complete_diverse52_training_pool_only"
+  },
+  "training_protocol": {
+    "auxiliary_nll_forward_evaluations": 1996,
+    "balanced_ce_formula": "normalized_inverse_sqrt_answer_class_frequency",
+    "balanced_ce_mean_over_rows": 1.0,
+    "balanced_ce_weight": 1.0,
+    "causal_control_answer_type_count": 7,
+    "causal_control_inventory_policy": "seeded_hash_rotation_over_all_cross_scene_eligible_rows",
+    "causal_control_repeated_row_count_per_arm": 2,
+    "causal_control_unique_row_count": 498,
+    "checkpoint_every_optimizer_updates": 30,
+    "checkpoint_selection": "fixed_final_update_480_before_known_development_or_deferred_generation",
+    "cross_scene_eligible_row_count": 498,
+    "cross_scene_exposures_per_eligible_row": 2,
+    "cross_scene_schedule_sha256": "2573448d5c298e3de40cd32ab8ca6a744cfebee0be2bcc301885ab68c4eaadb3",
+    "cross_scene_wrong_memory_margin_weight": 1.25,
+    "cross_scene_wrong_memory_policy": "exact_same_question_text_different_answer_deterministic_cross_scene",
+    "cross_scene_wrong_memory_rows_per_epoch": 249,
+    "cross_scene_wrong_memory_target_margin_nll": 0.75,
+    "deterministic_resume": true,
+    "epochs": 4,
+    "estimated_wall_time_seconds_from_v94_forward_ratio": 4889,
+    "gradient_accumulation_rows": 8,
+    "gradient_clip_norm": 1.0,
+    "intermediate_behavior_selection": false,
+    "learning_rate": 0.00015,
+    "microbatch_size": 1,
+    "optimizer": "AdamW",
+    "optimizer_updates": 480,
+    "payload_permutation_seed": 950095,
+    "payload_permutation_sha256": "be8b9cc947546969db9ee5e9cb771ff8253b0ea8b144cf26d9b702d6ceec3722",
+    "permutation_control_schedule_sha256": "fbd2cbc57dcdfe5da7004fb027727b30422be6fdbeea1b15b4edb9bdb509b0f6",
+    "permutation_margin_weight": 1.0,
+    "permutation_rows_per_epoch": 125,
+    "permutation_target_margin_nll": 0.75,
+    "row_order": "sorted_keys_then_epoch_seeded_shuffle",
+    "row_order_seed": 950095,
+    "row_order_sha256": "ae436b00a12dbd8a0bec88653b27572c02f17fe81c2446a6dfa65fae41b6758f",
+    "rows_per_epoch": 960,
+    "total_cross_scene_wrong_memory_rows": 996,
+    "total_micro_rows": 3840,
+    "total_nll_forward_evaluations": 5836,
+    "total_permutation_rows": 500,
+    "total_zero_payload_rows": 500,
+    "wall_time_budget_seconds": 5400,
+    "weight_decay": 0.0,
+    "zero_payload_margin_weight": 0.75,
+    "zero_payload_rows_per_epoch": 125,
+    "zero_payload_schedule_sha256": "dc4f62bb7223f3c734ac04011539ce3d0d8a7d5c6fae6c198f44d79401e86e30",
+    "zero_payload_target_margin_nll": 0.5
+  }
+}

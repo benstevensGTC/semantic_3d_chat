@@ -1,0 +1,65 @@
+_base_: navigation_policy_v3.yaml
+
+# Single preregistered successor to V3.  The sealed V3 controller is frozen;
+# only the numeric clearance residual and collision-risk head receive gradients.
+navigation_policy_v4:
+  train_scene_ids:
+    - scene_000011
+    - scene_000012
+    - scene_000013
+    - scene_000014
+    - scene_000015
+    - scene_000016
+    - scene_000017
+    - scene_000018
+    - scene_000019
+    - scene_000020
+    - scene_000021
+    - scene_000022
+    - scene_000023
+    - scene_000024
+  validation_scene_ids:
+    - scene_000031
+    - scene_000032
+    - scene_000033
+    - scene_000034
+    - scene_000035
+    - scene_000036
+    - scene_000037
+    - scene_000039
+  source_trace_dataset: data_gemma4/training/navigation_policy_v3
+  map_root: data_gemma4/maps
+  prefix_cache_root: data_gemma4/scene_tokens/v56_question_control_full_prefixes
+  v3_checkpoint: data_gemma4/checkpoints/navigation_policy_v3
+  preregistration: reports/gemma4/metrics/navigation_policy_v4_preregistration.json
+  checkpoint_output: data_gemma4/checkpoints/navigation_policy_v4
+  scene_token_count: 258
+  robot_token_count: 4
+  hidden_size: 1536
+  model_dim: 128
+  clearance_ray_count: 24
+  clearance_max_range_m: 1.0
+  collision_probe_distances_m: [0.125, 0.250, 0.375, 0.500]
+  batch_size: 32
+  epochs: 48
+  learning_rate: 0.0003
+  weight_decay: 0.0001
+  argument_loss_weight: 0.50
+  turn_sign_loss_weight: 0.25
+  collision_risk_loss_weight: 0.25
+  clearance_change_loss_weight: 0.05
+  clearance_change_margin: 0.08
+  gradient_clip_norm: 1.0
+  early_stopping_patience: 10
+  minimum_validation_action_accuracy: 0.90
+  minimum_validation_update_after_scan_accuracy: 0.87
+  minimum_validation_stop_recall: 0.88
+  minimum_validation_turn_sign_accuracy: 0.92
+  maximum_validation_argument_mae: 0.16
+  minimum_unsafe_motion_rejection: 0.95
+  minimum_collision_risk_accuracy: 0.90
+  minimum_shuffled_clearance_family_drop: 0.10
+  minimum_zero_target_targeted_accuracy_drop: 0.80
+  minimum_wrong_target_turn_sign_drop: 0.05
+  seed: 20260813
+  device: cpu

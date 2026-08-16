@@ -1,0 +1,503 @@
+{
+  "action_refit": {
+    "active_constraints": 6,
+    "active_set_iterations": 8,
+    "all_action_constraints_validated_after_float32_materialization": true,
+    "candidate_mutated_only_after_all_gates_passed": true,
+    "covariance_ridge": 1e-09,
+    "enabled": true,
+    "feasibility_tolerance": 1e-07,
+    "linear_action_head_only": true,
+    "materialized_cutting_plane_constraints": 18,
+    "maximum_centered_logit_rmse": 0.25,
+    "minimum_new_margin": 0.0010120868682861328,
+    "minimum_shared_margin": 0.0009899139404296875,
+    "new_action_accuracy": 1.0,
+    "new_label_constraints": 14,
+    "optimizer": "deterministic_active_set_minimum_centered_drift_qp",
+    "positive_margin_required": 0.001,
+    "shared_action_agreement": 1.0,
+    "shared_centered_logit_max_abs": 0.8165034651756287,
+    "shared_centered_logit_rmse": 0.011558830738067627,
+    "shared_cut_iterations": 2,
+    "shared_norm_and_numeric_branches_unchanged": true,
+    "teacher_action_constraints": 14210,
+    "teacher_parameter_materialization_argmax_identical": true,
+    "teacher_parameter_materialization_max_abs": 0.0001087188720703125,
+    "training_rows_only": true
+  },
+  "action_refit_l2_weight": 1e-05,
+  "best_epoch": 0,
+  "checkpoint": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/checkpoints/gemma_waypoint_policy_v2_operator_dagger_v13_runtime_aligned",
+  "checkpoint_selection": "final_training_epoch",
+  "checkpoint_weights_sha256": "2a56e655fcb77f7e261f3b45d271ac5a3c97106c66359c6a9104ed00b74b16f3",
+  "controls": {
+    "accuracy_drop_from_primary": {
+      "wrong_scene_prefix": 0.0,
+      "zero_history": -0.2083333432674408,
+      "zero_scene_prefix": 0.0416666641831398
+    },
+    "conditions": {
+      "primary": {
+        "action_accuracy": 0.125,
+        "action_confusion_target_by_prediction": [
+          [
+            2,
+            5,
+            1
+          ],
+          [
+            7,
+            1,
+            0
+          ],
+          [
+            4,
+            4,
+            0
+          ]
+        ],
+        "action_macro_recall": 0.125,
+        "action_recall": {
+          "face": 0.125,
+          "move_to": 0.25,
+          "stop": 0.0
+        },
+        "actual_gemma_causal_forward_per_sample": true,
+        "complete_scene_prefix_consumed": true,
+        "condition": "primary",
+        "face_sample_count": 8,
+        "heading_error_degrees_mean": 28.25786781311035,
+        "heading_error_degrees_median": 3.814697265625e-06,
+        "move_to_sample_count": 8,
+        "native_scene_boundaries_preserved": false,
+        "sample_count": 24,
+        "scene_content_latents_zeroed": false,
+        "stop_precision": 0.0,
+        "stop_recall": 0.0,
+        "stop_sample_count": 8,
+        "waypoint_error_m_mean": 0.12329495698213577,
+        "waypoint_error_m_median": 0.10090072453022003
+      },
+      "wrong_scene_prefix": {
+        "action_accuracy": 0.125,
+        "action_confusion_target_by_prediction": [
+          [
+            2,
+            5,
+            1
+          ],
+          [
+            7,
+            1,
+            0
+          ],
+          [
+            4,
+            4,
+            0
+          ]
+        ],
+        "action_macro_recall": 0.125,
+        "action_recall": {
+          "face": 0.125,
+          "move_to": 0.25,
+          "stop": 0.0
+        },
+        "actual_gemma_causal_forward_per_sample": true,
+        "complete_scene_prefix_consumed": true,
+        "condition": "wrong_scene_prefix",
+        "face_sample_count": 8,
+        "heading_error_degrees_mean": 29.589580535888672,
+        "heading_error_degrees_median": 3.814697265625e-06,
+        "move_to_sample_count": 8,
+        "native_scene_boundaries_preserved": false,
+        "sample_count": 24,
+        "scene_content_latents_zeroed": false,
+        "stop_precision": 0.0,
+        "stop_recall": 0.0,
+        "stop_sample_count": 8,
+        "waypoint_error_m_mean": 0.12123705446720123,
+        "waypoint_error_m_median": 0.08823734521865845
+      },
+      "zero_history": {
+        "action_accuracy": 0.3333333432674408,
+        "action_confusion_target_by_prediction": [
+          [
+            6,
+            2,
+            0
+          ],
+          [
+            6,
+            2,
+            0
+          ],
+          [
+            8,
+            0,
+            0
+          ]
+        ],
+        "action_macro_recall": 0.3333333333333333,
+        "action_recall": {
+          "face": 0.25,
+          "move_to": 0.75,
+          "stop": 0.0
+        },
+        "actual_gemma_causal_forward_per_sample": true,
+        "complete_scene_prefix_consumed": true,
+        "condition": "zero_history",
+        "face_sample_count": 8,
+        "heading_error_degrees_mean": 17.222681045532227,
+        "heading_error_degrees_median": 0.00028228759765625,
+        "move_to_sample_count": 8,
+        "native_scene_boundaries_preserved": false,
+        "sample_count": 24,
+        "scene_content_latents_zeroed": false,
+        "stop_precision": 0.0,
+        "stop_recall": 0.0,
+        "stop_sample_count": 8,
+        "waypoint_error_m_mean": 0.09717703610658646,
+        "waypoint_error_m_median": 0.08091607689857483
+      },
+      "zero_scene_prefix": {
+        "action_accuracy": 0.0833333358168602,
+        "action_confusion_target_by_prediction": [
+          [
+            1,
+            7,
+            0
+          ],
+          [
+            7,
+            1,
+            0
+          ],
+          [
+            8,
+            0,
+            0
+          ]
+        ],
+        "action_macro_recall": 0.08333333333333333,
+        "action_recall": {
+          "face": 0.125,
+          "move_to": 0.125,
+          "stop": 0.0
+        },
+        "actual_gemma_causal_forward_per_sample": true,
+        "complete_scene_prefix_consumed": true,
+        "condition": "zero_scene_prefix",
+        "face_sample_count": 8,
+        "heading_error_degrees_mean": 36.93012237548828,
+        "heading_error_degrees_median": 27.203266143798828,
+        "move_to_sample_count": 8,
+        "native_scene_boundaries_preserved": true,
+        "sample_count": 24,
+        "scene_content_latents_zeroed": true,
+        "stop_precision": 0.0,
+        "stop_recall": 0.0,
+        "stop_sample_count": 8,
+        "waypoint_error_m_mean": 0.1205882802605629,
+        "waypoint_error_m_median": 0.10515619069337845
+      }
+    },
+    "configured_sample_limit": 24,
+    "environmental_text_inputs_at_inference": [],
+    "oracle_inputs_used_by_inference": false,
+    "output_change_from_primary": {
+      "wrong_scene_prefix": {
+        "action_change_fraction": 0.0,
+        "mean_heading_output_shift_degrees": 0.44560590386390686,
+        "mean_waypoint_output_shift_m": 0.010719873942434788
+      },
+      "zero_history": {
+        "action_change_fraction": 0.4583333432674408,
+        "mean_heading_output_shift_degrees": 38.068660736083984,
+        "mean_waypoint_output_shift_m": 0.06964514404535294
+      },
+      "zero_scene_prefix": {
+        "action_change_fraction": 0.4166666567325592,
+        "mean_heading_output_shift_degrees": 24.42589569091797,
+        "mean_waypoint_output_shift_m": 0.094819575548172
+      }
+    },
+    "schema": "semantic_3d_chat.gemma_waypoint_controls.v1",
+    "wrong_scene_is_deranged_within_evaluation_split": true,
+    "zero_history_is_numeric_all_zeros": true,
+    "zero_scene_preserves_only_native_boi_eoi": true
+  },
+  "dataset_sha256": "20f55e11cd8bc27642fdc0f2601ccb3b0ca54cb0c7aae4b3b502846fe42ee011",
+  "elapsed_seconds": 53.79938741600199,
+  "epochs_completed": 0,
+  "gemma_hidden_cache": {
+    "cache_persisted_to_runtime_checkpoint": false,
+    "hidden_size": 1536,
+    "loaded_authenticated_persistent_cache": true,
+    "one_actual_gemma_forward_per_cached_row": true,
+    "training_rows": 7112,
+    "validation_rows": 96
+  },
+  "heading_refit": {
+    "action_waypoint_and_shared_norm_unchanged": true,
+    "enabled": true,
+    "final_loss": 0.0013966646511107683,
+    "final_retention_loss": 1.291241225054307e-09,
+    "initial_loss": 0.0016468062531203032,
+    "initial_retention_loss": 0.0,
+    "learning_rate": 0.0005,
+    "maximum_heading_error_degrees": 80.0,
+    "mean_heading_error_degrees": 0.09360063076019287,
+    "minimum_turn_margin_degrees": 5.0,
+    "optimizer": "adamw_absolute_sincos",
+    "retention_shared_face_rows": 2617,
+    "retention_weight": 32.0,
+    "sample_weighting_enabled": true,
+    "steps": 1500,
+    "training_rows_only": true
+  },
+  "history": [],
+  "joint_training": {
+    "branch_refits_receive_authenticated_warm_start": true,
+    "epochs_executed": 0,
+    "legacy_configured_epochs": 200,
+    "retention_override_epochs": 0,
+    "skipped_for_authenticated_retention": true
+  },
+  "minimum_training_action_accuracy": 0.995,
+  "minimum_training_turn_margin_degrees": 3.0,
+  "retention": {
+    "all_reference_row_occurrences_consumed_once": true,
+    "all_reference_rows_preserved_exactly": true,
+    "current_dataset_sha256": "20f55e11cd8bc27642fdc0f2601ccb3b0ca54cb0c7aae4b3b502846fe42ee011",
+    "current_duplicate_row_occurrences": 1887,
+    "current_unique_fingerprint_buckets": 5225,
+    "duplicate_exact_rows_authenticated_by_multiplicity": true,
+    "enabled": true,
+    "final": {
+      "new_action_accuracy": 1.0,
+      "new_training_rows": 7,
+      "shared_action_agreement": 1.0,
+      "shared_centered_logit_max_abs": 0.8165087103843689,
+      "shared_centered_logit_rmse": 0.01155882515013218,
+      "shared_face_heading_drift_degrees_max": 0.06644773483276367,
+      "shared_face_heading_drift_degrees_mean": 0.00018581384210847318,
+      "shared_move_waypoint_drift_m_max": 0.005071790423244238,
+      "shared_move_waypoint_drift_m_mean": 0.0004128038417547941,
+      "shared_training_rows": 7105
+    },
+    "freeze_input_norm": true,
+    "gates": {
+      "failure_details": [],
+      "failures": [],
+      "maximum_shared_centered_logit_rmse": 0.25,
+      "maximum_shared_heading_drift_degrees": 1.0,
+      "maximum_shared_waypoint_drift_m": 0.025,
+      "minimum_new_action_accuracy": 1.0,
+      "minimum_shared_action_agreement": 1.0,
+      "passed": true
+    },
+    "heading_weight": 32.0,
+    "identity_fingerprint": "sha256_exact_inputs_targets_metadata_v1",
+    "identity_uses_generated_sample_id": false,
+    "logit_weight": 1.0,
+    "new_sample_weight": 32.0,
+    "new_training_rows": 7,
+    "one_to_one_reference_row_occurrence_matching": true,
+    "reference_checkpoint_weights_sha256": "95bbc0cd68a73f81dc0bc1d5875993cdcb7b6ccf092d4f13811f005e8ca1e9be",
+    "reference_dataset_sha256": "d329cc028942d30a4d480a107e913790fc83fee1a8d426726cd1b772617a1d4c",
+    "reference_duplicate_row_occurrences": 1887,
+    "reference_training_traces_sha256": "e9b3291f3ef176e86147b01343e5429d8aba1f98207d8a1c71c0185935297b49",
+    "reference_unique_fingerprint_buckets": 5218,
+    "runtime_architecture_changed": false,
+    "shared_training_rows": 7105,
+    "training_only": true,
+    "warm_started_from_reference": true,
+    "waypoint_weight": 20.0
+  },
+  "runtime_contract": {
+    "action_names": [
+      "move_to",
+      "face",
+      "stop"
+    ],
+    "action_refit_l2_weight": 1e-05,
+    "actual_gemma_causal_forward": true,
+    "architecture": "gemma_final_hidden_numeric_waypoint_policy",
+    "complete_scene_prefix_required": true,
+    "context_projection_frozen_during_training": true,
+    "context_token_count": 1,
+    "dataset_sha256": "20f55e11cd8bc27642fdc0f2601ccb3b0ca54cb0c7aae4b3b502846fe42ee011",
+    "deterministic_route_planner_allowed_at_runtime": false,
+    "environmental_text_inputs": [],
+    "every_scene_token_processed": true,
+    "frozen_gemma_weights_saved": false,
+    "gemma_output_hidden_states": true,
+    "gemma_runtime_binding": {
+      "base_checkpoint_sha256": "7c3e679702ccd204fa4d7ae4077b065f3d7a7fe36df7dbc45492d67566e97f59",
+      "control_checkpoint_sha256": "5c2a79d47ddae145d7a3e459a0c91d4685f43475035dc3fa6d88364309a4b307",
+      "effective_runtime_config_sha256": "714c60ce9ccb1dff69c72f6618f8afb6f31bc60a830b5ee0fb794fedaa8a321e",
+      "language_backend": "gemma4",
+      "language_dtype": "bfloat16",
+      "lora_bank_state_sha256": {
+        "extension_v13": "4eb90fb9b0bea579d14cfcb0f61ebd5b6d566fd600bd3d5e1bfe5177a39e1b34",
+        "extension_v23_shared_kv": "5c9233bd96b381e2f63443f8a739a868a21997b28061d90fb407a46d9de2d4cb",
+        "extension_v24_shared_query": "6db2807476506b947bbaf01837490e97c12e57b1906bab671ef7c82ed36d6399",
+        "extension_v28_stage_b_query": "ac90fc60e944b792d41fc18a21daca3ed87a7ec634a7a5c8594339371b0631e9",
+        "extension_v30_joint_pair_query": "050706c300e6fb0ac8e4cc02e26c565b54a9a89505104302d4ffcedc02124c64",
+        "inherited_v12": "dec768bed654c8c4e16da0318857543ad54d8f5f68f4d24a9a87cd19ec706594"
+      },
+      "model_id": "google/gemma-4-E2B-it",
+      "model_revision": "3e22461f65e89153144f8adb70e3b8c2cc9845a7",
+      "runtime_kind": "question_controlled_production",
+      "schema": "semantic_3d_chat.gemma_runtime_binding.v1"
+    },
+    "gemma_runtime_binding_sha256": "800110e1545d77c1e374624ab837f6ed82cac54b269bf0359b840030db9e02cf",
+    "head_hidden_dim": 256,
+    "heading_parameterization": "robot_relative_bounded_scalar_tanh",
+    "hidden_size": 1536,
+    "history_dim": 16,
+    "history_parameterization": "selected_action_parameters_goal_progress_v2",
+    "history_projector_initialization_seed": 46421,
+    "max_history_tokens": 16,
+    "max_turn_delta_degrees": 40.0,
+    "max_waypoint_step_m": 0.5,
+    "model_id": "google/gemma-4-E2B-it",
+    "model_revision": "3e22461f65e89153144f8adb70e3b8c2cc9845a7",
+    "model_selects_every_waypoint_and_heading": true,
+    "numeric_heads_initialization_seed": 46422,
+    "numeric_state_and_history_required": true,
+    "oracle_inputs_at_runtime": false,
+    "robot_token_count": 4,
+    "runtime_required_files": [
+      "policy.safetensors",
+      "runtime_metadata.json"
+    ],
+    "saved_controller_tensors_only": true,
+    "scene_splits_disjoint": true,
+    "scene_token_count": 258,
+    "schema": "semantic_3d_chat.gemma_waypoint_checkpoint.v4",
+    "state_dim": 18,
+    "training_sample_count": 7112,
+    "training_scene_count": 1,
+    "training_traces_sha256": "42dab1b0bf03fd56c83912c2bfa332489ed9c25e13e6a43f76d829f826e161ee",
+    "validation_sample_count": 96,
+    "validation_scene_count": 2,
+    "weights_sha256": "2a56e655fcb77f7e261f3b45d271ac5a3c97106c66359c6a9104ed00b74b16f3"
+  },
+  "schema": "semantic_3d_chat.gemma_waypoint_training.v1",
+  "training_metrics": {
+    "action_accuracy": 0.9997187852859497,
+    "action_confusion_target_by_prediction": [
+      [
+        4343,
+        2,
+        0
+      ],
+      [
+        0,
+        2621,
+        0
+      ],
+      [
+        0,
+        0,
+        146
+      ]
+    ],
+    "action_macro_recall": 0.9998465577761332,
+    "action_recall": {
+      "face": 1.0,
+      "move_to": 0.9995396733283997,
+      "stop": 1.0
+    },
+    "face_sample_count": 2621,
+    "heading_error_degrees_mean": 0.09360063821077347,
+    "heading_error_degrees_median": 0.0,
+    "move_to_sample_count": 4345,
+    "sample_count": 7112,
+    "stop_precision": 1.0,
+    "stop_recall": 1.0,
+    "stop_sample_count": 146,
+    "waypoint_error_m_mean": 0.005345798097550869,
+    "waypoint_error_m_median": 0.004379750229418278
+  },
+  "training_traces_sha256": "42dab1b0bf03fd56c83912c2bfa332489ed9c25e13e6a43f76d829f826e161ee",
+  "waypoint_refit": {
+    "deterministic_full_batch": true,
+    "enabled": true,
+    "error_tolerance_m": 0.025,
+    "final_all_move_error_m": {
+      "max": 0.06359012424945831,
+      "mean": 0.005345798097550869,
+      "p99": 0.019044462591409683
+    },
+    "final_new_move_error_m": {
+      "max": 0.000452285457868129,
+      "mean": 0.0004321560263633728,
+      "p99": 0.000451882864581421
+    },
+    "final_objective": 4.888305556960404e-05,
+    "final_retention_loss": 1.7085257297821954e-07,
+    "final_supervised_loss": 4.546600393950939e-05,
+    "gates": {
+      "new_move_within_tolerance_fraction": {
+        "comparison": ">=",
+        "observed": 1.0,
+        "passed": true,
+        "required": 1.0
+      },
+      "passed": true,
+      "shared_waypoint_drift_m_max": {
+        "comparison": "<=",
+        "observed": 0.005071823485195637,
+        "passed": true,
+        "required": 0.025
+      }
+    },
+    "gradient_clip_norm": 1.0,
+    "initial_all_move_error_m": {
+      "max": 0.06866169720888138,
+      "mean": 0.005749979522079229,
+      "p99": 0.020502522587776184
+    },
+    "initial_new_move_error_m": {
+      "max": 0.004310152493417263,
+      "mean": 0.0038788653910160065,
+      "p99": 0.0043015265837311745
+    },
+    "initial_objective": 5.285241059027612e-05,
+    "initial_retention_loss": 3.922970414770195e-15,
+    "initial_supervised_loss": 5.285241059027612e-05,
+    "learning_rate": 0.0003,
+    "move_to_sample_count": 4345,
+    "new_move_to_sample_count": 2,
+    "new_move_within_tolerance_fraction": 1.0,
+    "non_waypoint_controller_tensors_unchanged": true,
+    "optimizer": "adamw_full_batch_waypoint_only",
+    "parameter_requires_grad_flags_restored": true,
+    "retention_enabled": true,
+    "retention_sample_count": 7105,
+    "retention_scope_is_caller_supplied_mask": true,
+    "retention_weight": 20.0,
+    "sample_count": 7112,
+    "sample_weighting_enabled": true,
+    "schema": "semantic_3d_chat.gemma_waypoint_branch_refit.v1",
+    "shared_move_to_sample_count": 4343,
+    "shared_move_waypoint_drift_m": {
+      "max": 0.005071823485195637,
+      "mean": 0.0004128036671318114,
+      "p99": 0.0014327686512842774
+    },
+    "shared_waypoint_drift_m": {
+      "max": 0.005071823485195637,
+      "mean": 0.00026592580252327025,
+      "p99": 0.0013382831821218133
+    },
+    "steps": 1000,
+    "training_rows_only": true,
+    "waypoint_branch_changed": true,
+    "weight_decay": 0.0001
+  }
+}

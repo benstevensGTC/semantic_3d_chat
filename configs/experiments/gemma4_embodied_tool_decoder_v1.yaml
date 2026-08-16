@@ -1,0 +1,61 @@
+_base_: navigation_policy_v3.yaml
+
+# Design-locked first true causal Gemma-4 tool decoder.  This config cannot
+# authorize training by itself: the sealed preregistration, structural
+# preflight, numeric-clearance cache, CPU backward smoke, full-model one-row
+# MPS smoke, and an explicit parent launch release are all required first.
+language:
+  lora_banks:
+    embodied_tool_decoder_v1_kv:
+      trainable: true
+      rank: 4
+      alpha: 8.0
+      dropout: 0.0
+      initialization_algorithm: cpu_kaiming_uniform_a_exact_zero_b
+      initialization_seed: 2026081217
+      expected_initial_state_sha256: 00691e1da8959e8f6cefa56aa553749a63bb9b7ec773b77a2619d7b1989fd50d
+      target_modules:
+        - model.language_model.layers.34.self_attn.k_proj
+        - model.language_model.layers.34.self_attn.v_proj
+
+training:
+  output_namespace: gemma4_embodied_tool_decoder_v1
+  lora_learning_rate: 0.0001
+  lora_weight_decay: 0.0
+  decoder_gradient_checkpointing: true
+
+gemma4_embodied_tool_decoder_v1:
+  schema_version: 1
+  status: design_locked_preflight_only_training_not_authorized
+  training_authorized: false
+  preregistration: reports/gemma4/metrics/gemma4_embodied_tool_decoder_preregistration_v1.json
+  preflight: reports/gemma4/metrics/gemma4_embodied_tool_decoder_preflight_v1.json
+  source_trace_root: data_gemma4/training/navigation_policy_v3
+  scene_prefix_root: data_gemma4/scene_tokens/v56_question_control_full_prefixes
+  clearance_cache: data_gemma4/training/gemma4_embodied_tool_decoder_v1/clearance.safetensors
+  base_checkpoint: data_gemma4/checkpoints/gemma4_v54_semantic_greedy_gate/update_000
+  robot_state_checkpoint: data_gemma4/checkpoints/robot_state_numeric_v1
+  target_state_dim: 10
+  target_token_count: 2
+  clearance_state_dim: 24
+  clearance_token_count: 2
+  numeric_projector_initialization_seed: 2026081217
+  numeric_projector_initial_output_scale: 0.02
+  numeric_projector_parameter_count: 110592
+  lora_parameter_count: 16384
+  total_trainable_parameter_count: 126976
+  answer_suffix_only_cross_entropy: true
+  labels_before_json_suffix: -100
+  numeric_precision_decimal_places: 3
+  action_balanced_deterministic_sampler: true
+  microbatch_size: 1
+  gradient_accumulation: 8
+  maximum_optimizer_updates: 64
+  validation_every_updates: 8
+  early_stopping_patience_validations: 3
+  projector_learning_rate: 0.0002
+  gradient_clip_l2: 1.0
+  parent_release_of_heavy_mps_slot_required: true
+  oracle_inputs_at_runtime: false
+  object_inventory_at_runtime: false
+  user_target_names_in_literal_instruction_allowed: true

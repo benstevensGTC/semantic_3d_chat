@@ -1,0 +1,184 @@
+v85:
+  schema_version: 85
+  artifact: gemma4_v85_strict_multiscene_direct_memory_lora_v1
+  status: preregistered_train_development_only_before_model_training
+  seed: 850085
+
+  sources:
+    parent_v84_config: configs/experiments/gemma4_v84_strict_fixed_memory_bridge.yaml
+    parent_v84_config_sha256: 7ac74708f0404e6aae84cc3f90dfb82a88acf8ea15b4e6eff2c4c7cf1b07a2f0
+    parent_v84_wiring_report: reports/gemma4/metrics/gemma4_v84_strict_bridge_wiring.json
+    parent_v84_wiring_report_sha256: 860d7236aecfa1f0d4aec71e88e7a2b64ff346b3dfbe65dac5858b23fe258ddc
+    parent_v84_pair_margin_report: reports/gemma4/metrics/gemma4_v84_strict_bridge_pair_margin_wiring.json
+    parent_v84_pair_margin_report_sha256: 3405b22a4a1651aef89c5f055e40e1c513998aaef669fab34c4c68d7c5d7b790
+    runtime_config: configs/runtime/gemma4_v54.yaml
+    runtime_config_sha256: 891c58faaaa5fcd2ed76c7e3871f14c5d8c5ae2e05d9fa4ddd5193773d40e56b
+    v73_config: configs/experiments/gemma4_v73_fullscene_controller.yaml
+    v73_config_sha256: d208f28380e3f1810a688be8ea8a263831b6a741f7f90e667795637f39d841f1
+    historical_qa: data_diverse52/qa/train.jsonl
+    historical_qa_sha256: 01721bf904b1ab0b65ce8acac6e366287040873cda1356da6c70c4981abe7619
+    train_memory_cache: reports/gemma4/artifacts/v82_strict_dense_reader/train_cache
+    train_memory_tensor_sha256: 417492a08ac669210b4bdcaf8dafa0122fa0cf7ed6753489e55fd93bee150a2d
+    train_memory_metadata_sha256: b0e26f2c3e44d868e4f54556f9304d990d0c664d862d1a2a760a714fcdb4a257
+    development_memory_cache: reports/gemma4/artifacts/v82_strict_dense_reader/development_cache
+    development_memory_tensor_sha256: 71222bdc34fc836015ea4449622491545515222a7df99c321c1bf7a22fa2b659
+    development_memory_metadata_sha256: 58b988b03d33c93110083e22a98f050059e44e8356391a78fb761fd74254d1dd
+    base_checkpoint: data_gemma4/runtime/checkpoints/gemma4_v54_release_v1
+    base_adapter_sha256: 6c627f0a0d9efb7100489c24cbd4acafe10456b79280a64a85399a21cb541daf
+    base_runtime_metadata_sha256: 807515461c71b08c08dfbd08a184a653e791413748530fa69402512eca6f6fdd
+    v83_runtime_source: src/semantic_3d_chat/chat/v83_direct_scene_memory_runtime.py
+    v83_runtime_source_sha256: 988d7b1751c0f6b158675a86781178bc6bb3626bab8cf3643f5ff3b22716dd22
+    preflight_source: src/semantic_3d_chat/evaluation/v85_strict_multiscene_preflight.py
+    preflight_source_sha256: 5b9892d80fbb12d79a1758c330f2dc51f575ccdabfe514b7d93553697b23bde8
+    training_source: src/semantic_3d_chat/training/train_v85_strict_multiscene.py
+    training_source_sha256: 3090f6ea1a69e9d8fd55c57550421340bd80dc80db281bfc8e60073e1ec2283b
+    evaluation_source: src/semantic_3d_chat/evaluation/evaluate_v85_strict_multiscene.py
+    evaluation_source_sha256: bfc8e9dc212d33524db4ccb9a4edff00266cb7f1cd1796d748d00dc710ca8a38
+    model_id: google/gemma-4-E2B-it
+    model_revision: 3e22461f65e89153144f8adb70e3b8c2cc9845a7
+    model_blob_sha256_identity: 2db5482b20d746879bb3ef79b5203e9075a2e2b98f54ec7c2f281c1477ddc550
+
+  strict_input_contract:
+    layout: [boi, 96_groups_each_probe_key_plus_four_scene_values, all_256_base_latents, eoi]
+    shape_per_scene: [1, 738, 1536]
+    compiled_before_question: true
+    reused_byte_identically_across_questions: true
+    supplied_directly_to_native_gemma_image_prefix: true
+    all_738_memory_slots_retained: true
+    memory_projector_enabled: false
+    question_derived_environmental_tokens: 0
+    question_conditioned_environmental_readout: false
+    question_dependent_scene_processing: false
+    question_dependent_retrieval: false
+    semantic_or_spatial_top_k_selection: false
+    control_tokens: 0
+    environmental_text_inputs: []
+    gemma_is_only_question_dependent_consumer: true
+
+  split:
+    source: exact_v73_historical_pair_split
+    train_pair_count: 12
+    train_scene_count: 24
+    train_row_count: 576
+    train_changed_unit_count: 40
+    train_changed_side_count: 80
+    train_inventory_sha256: 496dc5768de50d2062f709aedf1e39fafe814b2df5d03b81f735b4a56be271a6
+    train_changed_units_sha256: ccd99ff1f1523618fe52d43bf65dbb2b232108838004fed832cdff4a57dd140b
+    development_pair_count: 8
+    development_scene_count: 16
+    development_row_count: 384
+    development_changed_unit_count: 26
+    development_changed_side_count: 52
+    development_inventory_sha256: ac5b7a56c73ab83c48ecafe596d775be1881dec2d2d475da383acff9ba244798
+    development_changed_units_sha256: 1a93a96dd7e9790cba06af36e2324162905ef557ff6ac07195a2856529c956e0
+    pair_disjoint: true
+    scene_disjoint: true
+    development_behavior_opened_during_training: false
+    official_validation_loaded: false
+    official_test_loaded: false
+    deferred_final_loaded: false
+    sealed_historical_16_loaded: false
+
+  bridge:
+    kind: sole_fresh_unmerged_fp32_lora_inside_frozen_gemma
+    bank_name: v85_strict_multiscene_bridge
+    target_module: model.language_model.layers.34.mlp.down_proj
+    target_layer_type: full_attention
+    target_in_features: 12288
+    target_out_features: 1536
+    rank: 4
+    alpha: 8.0
+    dropout: 0.0
+    trainable_parameter_count: 55296
+    initialization_algorithm: cpu_kaiming_uniform_a_exact_zero_b
+    initialization_seed: 840084
+    expected_initial_state_sha256: 1ec186d64cab68a3ea2000968a0ca643e591cc32669c6b1b7138deb365cc5cc1
+    starts_from_v84_candidate: false
+    base_gemma_frozen: true
+    inherited_v54_lora_banks_frozen: true
+    merged_weights: false
+
+  training:
+    optimizer: AdamW
+    epochs: 1
+    all_train_rows_consumed_exactly_once: true
+    row_order: lexicographic_then_python_random_seeded_shuffle
+    row_order_seed: 850085
+    row_order_sha256: f98a22a06988bc2f7656dcbcd8dcb0024a215b11cc45d622be6c820e2107d2ff
+    microbatch_size: 1
+    gradient_accumulation_rows: 8
+    optimizer_updates: 72
+    learning_rate: 0.001
+    weight_decay: 0.0
+    gradient_clip_norm: 1.0
+    correct_scene_answer_ce_weight: 1.0
+    changed_side_wrong_scene_margin_weight: 1.0
+    changed_side_wrong_scene_target_margin_nll: 0.5
+    margin_definition: paired_wrong_scene_same_answer_nll_minus_correct_scene_answer_nll
+    unchanged_rows_receive_margin: false
+    checkpoint_every_optimizer_updates: 12
+    deterministic_resume: true
+    checkpoint_selection: fixed_final_update_72
+    development_driven_checkpoint_selection: false
+    intermediate_selection: false
+
+  development:
+    opens_only_after_fixed_final_checkpoint: true
+    checkpoint_selection_after_scoring: false
+    correct_scene_greedy_all_rows: true
+    paired_wrong_scene_greedy_changed_sides_only: true
+    nll_correct_and_paired_wrong_all_rows: true
+    metrics:
+      - strict_normalized_exact_accuracy
+      - canonical_type_specific_accuracy
+      - canonical_accuracy_by_answer_type
+      - answer_token_nll
+      - correct_scene_nll_vs_paired_wrong_scene_nll
+      - changed_side_correct_scene_accuracy
+      - changed_side_wrong_scene_opposite_target_accuracy
+      - changed_complete_units
+      - canonical_prediction_changing_units
+      - changed_metrics_by_change_family
+      - prefix_hash_invariance
+    research_targets_not_promotion_gates:
+      canonical_accuracy_above_answer_frequency_majority: true
+      mean_wrong_minus_correct_nll_positive: true
+      changed_complete_units_minimum: 1
+      canonical_prediction_changing_units_minimum: 1
+
+  runtime_candidate_gates:
+    purpose: authorize_separate_leakage_runtime_packaging_only
+    canonical_accuracy_minimum: 0.40
+    canonical_accuracy_margin_over_answer_frequency_majority: 0.05
+    canonical_accuracy_threshold_rule: max_fixed_minimum_or_majority_plus_margin
+    spatial_relation_accuracy_minimum: 0.45
+    spatial_relation_minimum_row_count: 20
+    mean_changed_side_wrong_minus_correct_nll_strictly_positive: true
+    complete_changed_units_minimum: 4
+    canonical_prediction_changing_units_minimum: 8
+    exact_prefix_hash_invariance_required: true
+    every_development_memory_hash_retained_required: true
+    protected_read_count_maximum: 0
+    separate_leakage_runtime_packaging_authorized_on_pass: true
+    automatic_runtime_promotion: false
+
+  outputs:
+    preregistration: reports/gemma4/metrics/gemma4_v85_strict_multiscene_preregistration.json
+    cpu_preflight: reports/gemma4/metrics/gemma4_v85_strict_multiscene_cpu_preflight.json
+    work_root: data_gemma4/checkpoints/v85_strict_multiscene_work
+    training_report: reports/gemma4/metrics/gemma4_v85_strict_multiscene_training.json
+    fixed_final_candidate: reports/gemma4/artifacts/v85_strict_multiscene_final
+    development_predictions: reports/gemma4/predictions/gemma4_v85_strict_multiscene_development.json
+    development_score: reports/gemma4/metrics/gemma4_v85_strict_multiscene_development.json
+
+  scope:
+    local_inference_only: true
+    cloud_inference: false
+    training_pool_only_for_optimization: true
+    development_untouched_before_fixed_final_candidate: true
+    official_validation_loaded: false
+    official_test_loaded: false
+    deferred_final_loaded: false
+    sealed_historical_16_loaded: false
+    oracle_loaded: false
+    runtime_promotion_authorized: false

@@ -1,0 +1,25 @@
+_base_: embodied_v54.yaml
+
+# Interactive static-map runtime: the precomputed complete-room memory remains
+# fixed while motion refreshes only continuous numeric robot-state tokens. The
+# hash-sealed V54 experiment config remains byte-identical.
+robot:
+  auto_scan_after_motion: false
+  # Start near the room center. Users provide outcome-level goals; only the
+  # internal learned policy and collision planner emit bounded motor actions.
+  initial_position_xy_m: [-0.5, -0.25]
+  initial_body_yaw_degrees: -90.0
+  # V3 normally follows its trained action/argument heads. For an explicit
+  # face/turn/look-then-stop goal, a near-zero learned turn outside this
+  # deadband is completed from continuous target XYZ plus numeric robot yaw.
+  # Stop is emitted only after the next all-voxel grounding is inside 3 deg.
+  face_alignment_deadband_degrees: 3.0
+  face_alignment_stalled_turn_degrees: 1.0
+  # Explicit move-closer goals cannot terminate until a fresh all-voxel target
+  # is within standoff and the numeric pose proves nonzero translation.
+  approach_heading_deadband_degrees: 15.0
+  approach_target_standoff_m: 0.5
+  approach_minimum_progress_m: 0.15
+  # If less collision-free travel than this remains after meaningful progress,
+  # terminate at the closest safe numeric pose instead of contacting geometry.
+  approach_minimum_safe_step_m: 0.02

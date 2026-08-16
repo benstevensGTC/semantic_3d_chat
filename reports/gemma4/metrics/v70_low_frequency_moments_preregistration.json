@@ -1,0 +1,223 @@
+{
+  "artifact": "v70_low_frequency_moments_preregistration",
+  "behavioral_gates": {
+    "not_executed_by_v70_numeric_screen": true,
+    "thresholds": {
+      "eligible_fold_total": 12,
+      "eligible_folds_with_exact_hit_minimum": 12,
+      "final_complete_unit_minimum": 36,
+      "final_complete_unit_total": 40,
+      "final_exact_minimum": 520,
+      "final_total": 576,
+      "held_changed_side_exact_minimum": 45,
+      "held_changed_side_total": 75,
+      "held_complete_unit_minimum": 15,
+      "held_complete_unit_total": 35,
+      "held_prediction_change_unit_minimum": 20,
+      "held_prediction_change_unit_total": 35,
+      "held_supported_exact_minimum": 300,
+      "held_supported_total": 571,
+      "held_unsupported_total": 5,
+      "paired_opposite_follows_complete_minimum": 25,
+      "paired_opposite_follows_side_minimum": 60,
+      "paired_opposite_original_complete_maximum": 5,
+      "paired_opposite_original_exact_maximum": 20,
+      "paired_opposite_side_total": 80,
+      "paired_opposite_unit_total": 40,
+      "per_type_minimum_exact": [
+        [
+          "attribute",
+          35
+        ],
+        [
+          "count",
+          58
+        ],
+        [
+          "metric",
+          3
+        ],
+        [
+          "orientation",
+          20
+        ],
+        [
+          "presence",
+          60
+        ],
+        [
+          "spatial_relation",
+          65
+        ],
+        [
+          "support",
+          35
+        ]
+      ]
+    },
+    "unchanged_from_v69_v68_v67_and_v66b": true
+  },
+  "common_hyperparameters": {
+    "anchor_scale_floor": 0.0001,
+    "base_batch_size": 48,
+    "base_epochs": 160,
+    "base_learning_rate": 0.0003,
+    "base_weight_decay": 0.0001,
+    "basis_rank": 112,
+    "gradient_clip_norm": 1.0,
+    "initial_control_rms": 0.075,
+    "interaction_dim": 32,
+    "maximum_control_rms": 0.25,
+    "moment_count": 32,
+    "pair_unit_batch_size": 10,
+    "prototype_classification_epochs": 40,
+    "prototype_classification_temperature": 0.07,
+    "prototype_classification_weight": 1.0,
+    "prototype_value_preservation_weight": 1.0,
+    "retention_batch_size": 48,
+    "seed": 680068,
+    "trunk_dim": 192
+  },
+  "controlled_ablation": {
+    "candidate_moment_count": 32,
+    "complete_scene_prefix_unchanged": true,
+    "environment_latent_count": 256,
+    "every_environment_latent_influences_dc_moment": true,
+    "moment_family": "fixed_low_frequency_dct",
+    "only_preregistered_variable_changed": "moment_count",
+    "question_independent_scene_prefix_unchanged": true,
+    "question_mixing_used": false,
+    "source_moment_count": 8,
+    "v68_strong_foundation_exact": true,
+    "v69_augmentation_used": false
+  },
+  "diagnosed_mechanism": {
+    "cached_prefix_pair_delta_energy_fraction_rounded": {
+      "pair_000006": {
+        "first_32": 0.1132,
+        "first_8": 0.0221
+      },
+      "pair_000016": {
+        "first_32": 0.103,
+        "first_8": 0.0168
+      },
+      "pair_000026": {
+        "first_32": 0.214,
+        "first_8": 0.1529
+      }
+    },
+    "current_signature_uses_only_first_8_of_256_fixed_dct_moments": true,
+    "supported_class_learning_has_large_headroom": true,
+    "three_loss_or_augmentation_successors_plateaued": true,
+    "v67_v68_v69_positive_margins": [
+      47,
+      50,
+      50
+    ],
+    "v67_v68_v69_prediction_changes": [
+      14,
+      17,
+      18
+    ]
+  },
+  "failed_predecessor": {
+    "artifact": "v69_pair_augmentation_numeric_grid_v1",
+    "held_changed_side_exact": 53,
+    "held_changed_side_total": 75,
+    "held_complete_unit_total": 35,
+    "held_complete_units": 15,
+    "held_prediction_change_units": 18,
+    "held_supported_exact": 487,
+    "held_supported_total": 571,
+    "path": "reports/gemma4/metrics/v69_pair_augmentation_numeric_grid.json",
+    "positive_own_over_opposite_sides": 50,
+    "predecessor_artifact_bytes_modified": false,
+    "preregistration_path": "reports/gemma4/metrics/v69_pair_augmentation_preregistration.json",
+    "preregistration_sha256": "5cd567a129e083600b8913aa0438c0a8115aba83bd70c24c40ce5475a4bcfb3e",
+    "sha256": "6f6a6af8ab0c254bd8ea1704593770c8445aebaad02bbb55478b94f61103e2a8",
+    "training_identity_sha256": "0d16b6cae0ad5984860f4e94aa0cd0dc029d17b187d582dcc8c2cec8e3094a9e"
+  },
+  "implementation_source_hashes": {
+    "scripts/run_gemma4_v70_low_frequency_moments.sh": "87d9972bb52b61920b1d075917f6108dc5c2385b4b015e52de95914cdd44eda7",
+    "src/semantic_3d_chat/evaluation/v68_regularized_pair_preregistration.py": "2f0ddac791e997534af2f04a5227eb353fe2bdf608201a37ce47614c39f029bc",
+    "src/semantic_3d_chat/evaluation/v70_low_frequency_moments_preregistration.py": "ba2febbc3cabd2020ce516dbdec4d6b051170928f742efc83e9ee1ea3297feb4",
+    "src/semantic_3d_chat/scene_encoder/question_control_v7.py": "a5acd2e7b332b8c511d0daf053d92e4c8b59abb31ad10ccaca7c9276365cc9c6",
+    "src/semantic_3d_chat/training/question_control_v67_objective.py": "4f2183efec5278b7399b56c143f965f13057341410786af081519d9141ea1fb4",
+    "src/semantic_3d_chat/training/question_control_v68_objective.py": "36df4669ab46053ff850734bae715e2ea7799b3a1570239285f1512c26165c01",
+    "src/semantic_3d_chat/training/train_question_control_v63.py": "f3e645c6385e4d2f286ff007e71033a93c25579e043116ee706dd01df7f6d310",
+    "src/semantic_3d_chat/training/train_question_control_v65.py": "e37fa0ac07d14c01f5397502ce26e401db0df182134291afd3668e78fa1e44ea",
+    "src/semantic_3d_chat/training/train_question_control_v66.py": "0c597a143265ab39c3f891a1bf726fa307752fe22f0fc09a7817263874d3b779",
+    "src/semantic_3d_chat/training/train_question_control_v67.py": "2e83be7166e9ff894ca7b9a16aba8a92aaeb331861241b72916555a1298a1e98",
+    "src/semantic_3d_chat/training/train_question_control_v68.py": "23f11bb4e595d0b84a8c3be49a7f83b2c69fc337d134524f17772da48bdfc0a2",
+    "src/semantic_3d_chat/training/train_question_control_v70.py": "5aec4cacf28f14be5cf46046b86852f144528ef18bf89cf80ed54c2baed4a9e1"
+  },
+  "numeric_screen": {
+    "all_12_pairs_held_out_once": true,
+    "fold_codebook_and_basis_built_after_exclusion": true,
+    "held_pair_rows_used_for_optimization": false,
+    "held_pair_teacher_sources_used": false,
+    "protocol": "leave_one_counterfactual_pair_out_numeric_only",
+    "question_and_answer_text_serialized": false,
+    "thresholds": {
+      "fully_supported_pair_sides": 70,
+      "held_changed_class_exact_minimum": 45,
+      "held_changed_total": 75,
+      "held_complete_class_units_minimum": 15,
+      "held_complete_unit_total": 35,
+      "held_prediction_change_units_minimum": 20,
+      "held_supported_class_exact_minimum": 300,
+      "held_supported_total": 571,
+      "held_unsupported_total": 5,
+      "mean_own_over_opposite_margin_minimum": 0.02,
+      "mean_pair_delta_cosine_minimum": 0.35,
+      "positive_own_over_opposite_sides_minimum": 53,
+      "positive_pair_delta_units_minimum": 27
+    },
+    "thresholds_unchanged_from_v69_v68_v67": true,
+    "wall_time_budget_seconds": 1200
+  },
+  "preserved_v68_path_hashes": {
+    "reports/gemma4/metrics/v68_regularized_pair_numeric_grid.json": "0584383d4b3806b6a4205cc516e2957ea05b5c76066134335485d5f638c9e609",
+    "reports/gemma4/metrics/v68_regularized_pair_preregistration.json": "6642b16b38e169df0059b2ccfb6aba0f8b1315052f3aad0e2871b30eeda6811f",
+    "scripts/run_gemma4_v68_regularized_pair.sh": "b5d43262dc7debdd18267add9abb1c6a6e51849234c7ba69966927f25c0f80f3",
+    "src/semantic_3d_chat/training/question_control_v68_objective.py": "36df4669ab46053ff850734bae715e2ea7799b3a1570239285f1512c26165c01",
+    "src/semantic_3d_chat/training/train_question_control_v68.py": "23f11bb4e595d0b84a8c3be49a7f83b2c69fc337d134524f17772da48bdfc0a2"
+  },
+  "publication": {
+    "checkpoint_never_written_by_numeric_screen": true,
+    "failing_screen_publishes_no_checkpoint": true,
+    "gemma_generation_never_used_by_numeric_screen": true,
+    "passing_screen_requires_parent_authorization_before_atlas_or_full_run": true,
+    "screen_report_create_once": true
+  },
+  "research_change": "first_8_to_first_32_fixed_dct_scene_moments_only",
+  "schema_version": 1,
+  "scope": {
+    "deferred_final_loaded": false,
+    "fresh_development_loaded": false,
+    "internal_validation_loaded": false,
+    "numeric_teacher_and_prefix_cache_only": true,
+    "oracle_loaded": false,
+    "scorer_inputs_used": false,
+    "training_only": true,
+    "validation_inputs_used": false
+  },
+  "single_arm": {
+    "anchor_weight": 1.5,
+    "arm_id": "strong_all_value_anchor",
+    "hard_negative_margin": 0.12,
+    "hard_negative_weight": 10.0,
+    "optimizer_scope": "all_value",
+    "pair_classification_weight": 2.0,
+    "pair_delta_weight": 8.0,
+    "pair_learning_rate": 3e-05,
+    "pair_opposite_margin": 0.25,
+    "pair_opposite_weight": 10.0,
+    "pair_refinement_epochs": 70,
+    "pair_refinement_repeats": 4,
+    "pair_value_weight": 1.0,
+    "retention_batches_per_epoch": 4,
+    "retention_weight": 1.5
+  },
+  "status": "locked_before_v70_numeric_screen"
+}

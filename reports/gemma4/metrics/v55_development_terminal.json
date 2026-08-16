@@ -1,0 +1,167 @@
+{
+  "artifact": "v55_one_shot_development_terminal",
+  "authorization": {
+    "authorization_id": "v55_one_shot_development_selector",
+    "bound_sources": {
+      "src/semantic_3d_chat/chat/file_audit.py": "a6a61b27454c939de011ed87ca27b056f43b92c5d30c203f36844246245b1364",
+      "src/semantic_3d_chat/chat/model_snapshot.py": "fa383bde1239e80f5a1a029ea533c5bf8f1d2c517d3be3a75d0af81ea6619e59",
+      "src/semantic_3d_chat/chat/runtime.py": "fede24e6a10e6df0d95ed4b3534bc8248eeab07bd6b9b372b31374d6c929fd3a",
+      "src/semantic_3d_chat/chat/runtime_config.py": "48a0a3eed9d34724cd6d55e4c06381c92aa6977e6222fdd7979d45550a1b1c24",
+      "src/semantic_3d_chat/config.py": "f31ba226689b59ed8b6930eafc408e8e0c201090f66d4df86f9ce7a124b78b1e",
+      "src/semantic_3d_chat/device.py": "09d83709aec72cd329eeb8e4fa3d714ce22f10da01cbb20f1541b2c9d6d08699",
+      "src/semantic_3d_chat/evaluation/baseline_io.py": "3555027d5c1bc67fc97746d3ba85f0b675f4eaacd73184f7f58802fc4bf8e4e0",
+      "src/semantic_3d_chat/evaluation/metrics.py": "08f27c1f7560f7bf7cfb272bc44bb777bcd40c96311e78c092ba5c98028245e3",
+      "src/semantic_3d_chat/evaluation/predict.py": "b45c2a74624847d28cd7c051be93803cd5b106915e8ddfe04dcd4bd5e56a97d8",
+      "src/semantic_3d_chat/evaluation/prediction_artifacts.py": "df75b6b6ca8e55b3821279ac52841a8b383f277ffd6bf4a0ada20782af769e26",
+      "src/semantic_3d_chat/evaluation/prepare_questions.py": "d0e0c061a83bc76497ecaa050f732304c58de0dcb88bdfb2ea2ef12989079148",
+      "src/semantic_3d_chat/evaluation/question_manifest.py": "36c906e08b0fe98125c0d67d9709c142a15df061ff84a8716555d37938cb827b",
+      "src/semantic_3d_chat/evaluation/run.py": "7d0df6064adb536057640aae911bf8040ccf8d2e64e788c7fc5da70517c1ad6c",
+      "src/semantic_3d_chat/evaluation/v55_development_score.py": "23ea365bbcfc06aa7aaa4d0881bdc3973ff3f0381e8464a765697f897909cfc6",
+      "src/semantic_3d_chat/evaluation/v55_development_selector.py": "3d056565a10494dc272f77b3c665aee3eade6fea4782043bd4302be251c11708",
+      "src/semantic_3d_chat/evaluation/v55_development_terminal.py": "dbd888c132c80f43f7f5e4293d460c542563f632b60c6e0dbdff5930f659af1c",
+      "src/semantic_3d_chat/language/generation.py": "1ecb0154316588f4b47e5a21df61af7f10bd0ae01c147ba2e3eb9a86125d3c44",
+      "src/semantic_3d_chat/language/local_lm.py": "0d8c4de10d8aa2c1c426d4aa48c8059fafd7eb85e3b2f4a02794ea9bea9bb372",
+      "src/semantic_3d_chat/language/lora.py": "f7c3ce3a4d46c0fcfef5e4cd360b4e12387799a9f6ccc0e2ffa74cba6ad56899",
+      "src/semantic_3d_chat/language/prefix_injection.py": "17bbff15ed12e506ef79ad9f4cbd4fa8a4e392fe14a0f8eced338f4ebc0028e9",
+      "src/semantic_3d_chat/scene_encoder/block_cross_residual.py": "bdc4a6b78003b14c8be6bd95a7fefb104b2e3d64fa484e803a40d5e11b4dd5af",
+      "src/semantic_3d_chat/scene_encoder/dense_alignment.py": "df8759757f8cd3d2f37f2b3b09692af9da73a533f8eef7169b0693841b955a54",
+      "src/semantic_3d_chat/scene_encoder/dense_sidecar_adapter.py": "9e92c2461f8014965055c5d293fdde9ae09769b67b9f7d6596e306b66b1e7bd6",
+      "src/semantic_3d_chat/scene_encoder/global_residual.py": "10a0e9f5ce69636ea70c0948503f61b8fd966be35634048102a86033841eaa32",
+      "src/semantic_3d_chat/scene_encoder/map_io.py": "edd3f1158dccc2767b986db1b9863ca52b33e6ffb73670b772ce760b9d87543c",
+      "src/semantic_3d_chat/scene_encoder/perceiver.py": "292734f935a31145c7b8aa004bf88b17dd291477103776f9d1dff0e2683a27c0",
+      "src/semantic_3d_chat/scene_encoder/point_tokens.py": "6623fe0c44b5ec55f5ef4d02424b65b217626b410ac2b9184e3a507cf411289d",
+      "src/semantic_3d_chat/scene_encoder/projector.py": "173d9ad4625689e0e76d0705f1f4600338244012401d2d48c0b942533f947825",
+      "src/semantic_3d_chat/scene_encoder/signed_x_dispatch.py": "b521ef27966c462b9c278f0d0df8769fbecc01562ad35e036a82ab6bd197fee1",
+      "src/semantic_3d_chat/scene_encoder/signed_x_local_field.py": "58644793c49599e6af29b0e836f38fc0ab28aa9b645736e586510d6da846797f",
+      "src/semantic_3d_chat/scene_encoder/signed_x_residual.py": "1249daa01ee8c262727b550e7fd474affec506c4c007b74e1f1cfd21f81cc2a2",
+      "src/semantic_3d_chat/scene_encoder/spatial_blocks.py": "b3137df7bfa941ae8a5f6e01a636d2ef6a45ddb6887bfeb2779b58a5c8b4acd0",
+      "src/semantic_3d_chat/training/checkpointing.py": "cff711f037ac9162478d1eab94ef93e57635133936e13b4ce3628b3e9e51e27d",
+      "src/semantic_3d_chat/training/losses.py": "02e98ea84fdfea12193f349034f7b3265258aae648a7bd6be61284d4f215ab86",
+      "tests/test_v55_development_score.py": "6ed728faeb2baf795176f75434fd422ac0cf1885403b9f2bc6676e338cefcea8",
+      "tests/test_v55_development_selector.py": "f16d1f3741459c7ee47e4b6aa40440ec30ba3daa9d7c1182afde248d116d7835"
+    },
+    "candidate": {
+      "checkpoint": "data_gemma4/checkpoints/gemma4_v54_semantic_greedy_gate/update_000",
+      "file_sha256": {
+        "adapter.safetensors": "6c627f0a0d9efb7100489c24cbd4acafe10456b79280a64a85399a21cb541daf",
+        "metadata.json": "db1435f8d38ca587e34dcd55dc4d37532efc0504bfb62bc115838dc0ab7a7ece",
+        "runtime_metadata.json": "807515461c71b08c08dfbd08a184a653e791413748530fa69402512eca6f6fdd"
+      },
+      "selected_optimizer_step": 0,
+      "selected_update": 0,
+      "tensor_state_sha256": {
+        "authorized_surface_state_sha256": "04cb7ac08c062c921a1711cb87acb57af6fa31637f61cb774cfbcd9a28ce8eef",
+        "frozen_state_sha256": "31cb215cf0d1623886d4a79203c501912e66537021da53dd711124abdc2e36fa",
+        "full_tensor_state_sha256": "aae9f67451f9f3f4aeb4d1cbb39fc6c9d3cd935521c9a84704b217ac64f18119",
+        "query_state_sha256": "5144ecc81defa65266e54c3d83a1243d948ebad890cdbed812af1bcc46138249",
+        "scene_readout_state_sha256": "4a0b76ada4ba42b076798b91ff8bcbdd414ede1dca2abff75aaba06bbe949baa"
+      }
+    },
+    "development": {
+      "changed_side_count": 24,
+      "changed_unit_count": 12,
+      "question_count": 216,
+      "question_manifest_sha256": "a5b6d66fef341c59b4d6ebf9f7071780b1d43447bc12d6c4805678862746a9c6",
+      "questions_sha256": "46517d914868ece84106075c50df0ff1afef1f980f30d8c0f3dd8486bb22ede4",
+      "reference_path": "data_diverse28/qa/validation.jsonl",
+      "reference_sha256": "67fb14685b3f4cb43f2409db7eb84220ec89d6390205b7bb86eb148b4d4e68b2",
+      "scene_ids": [
+        "scene_000019",
+        "scene_000020",
+        "scene_000021",
+        "scene_000022",
+        "scene_000023",
+        "scene_000024"
+      ],
+      "split": "validation"
+    },
+    "explicit_terminal_sha256_required": true,
+    "historical_comparator": {
+      "reports/gemma4/metrics/v29_diverse_stage_b_selection.json": "d7acbd7173f079f257619510df36ad3c73f953e7cf0123b7bd383ad01ddfe91a",
+      "reports/gemma4/metrics/v29_diverse_validation.json": "21bf97ce8c5afd68d512fa04e5a526701e3dc5e5bed2c9fa745a0dbb0c775e09",
+      "reports/gemma4/predictions/v29_diverse_validation.jsonl": "25d0cf742c9a0aec409853aa75ddd994e53b1266dd9dddfc4e5b97310f8c8a72",
+      "reports/gemma4/questions/v29_diverse_validation.json": "a5b6d66fef341c59b4d6ebf9f7071780b1d43447bc12d6c4805678862746a9c6"
+    },
+    "immutable_inputs": {
+      "configs/experiments/gemma4_diverse28_book_continuation_v47.yaml": "6b15813237b217d8daad446c799127215bbb1366f2b442b61e975787efa4f6b7",
+      "configs/runtime/gemma4_v54.yaml": "891c58faaaa5fcd2ed76c7e3871f14c5d8c5ae2e05d9fa4ddd5193773d40e56b",
+      "reports/gemma4/metrics/training_selection_gemma4_color_mirror_full_vocab_v11_resume36.json": "c0086f66edbb8854a7938e09c57535bfd47100adbaf3b3c95eeb4b08014ce2f8",
+      "reports/gemma4/metrics/v54_semantic_greedy_gate.json": "ae3d2ca82a81bd0fa0fb00e4b6b4d87b47019aeeb22001a2bcc43effe2ced048"
+    },
+    "only_exact_action": "one_candidate_one_shot_development_selection",
+    "outputs": {
+      "claim": "reports/gemma4/metrics/v55_development_launch_claim.json",
+      "model_snapshot": "reports/gemma4/metrics/v55_development_model_snapshot.json",
+      "prediction_provenance": "reports/gemma4/predictions/v55_development_validation.jsonl.provenance.json",
+      "predictions": "reports/gemma4/predictions/v55_development_validation.jsonl",
+      "questions": "reports/gemma4/questions/v55_development_validation.json",
+      "score": "reports/gemma4/metrics/v55_development_score.json",
+      "selector_report": "reports/gemma4/metrics/v55_development_selector.json"
+    },
+    "runtime": {
+      "config": "configs/runtime/gemma4_v54.yaml",
+      "config_sha256": "891c58faaaa5fcd2ed76c7e3871f14c5d8c5ae2e05d9fa4ddd5193773d40e56b"
+    },
+    "scope": {
+      "backward_authorized": false,
+      "chat_promotion_authorized": false,
+      "checkpoint_write_authorized": false,
+      "development_access_authorized_after_launch_claim": true,
+      "embodied_promotion_authorized": false,
+      "exactly_one_candidate": true,
+      "final_test_access_authorized": false,
+      "optimizer_construction_authorized": false,
+      "optimizer_state_access_authorized": false,
+      "oracle_access_authorized": false,
+      "question_dependent_retrieval_authorized": false,
+      "runtime_promotion_authorized": false,
+      "training_access_authorized": false
+    },
+    "thresholds": {
+      "canonical_aggregate_correct_minimum": 91,
+      "canonical_complete_units_minimum": 2,
+      "canonical_correct_sides_minimum": 12,
+      "canonical_prediction_changed_units_minimum": 2,
+      "count_accuracy_minimum": 0.8,
+      "normalized_exact_accuracy_minimum": 0.375,
+      "physical_change_families_minimum": 2,
+      "presence_f1_minimum": 0.15,
+      "spatial_relation_accuracy_minimum": 0.55
+    }
+  },
+  "passed": true,
+  "predecessor_authentication": {
+    "map_loaded": false,
+    "model_loaded": false,
+    "qa_loaded": false,
+    "v29_checks": {
+      "coverage": true,
+      "historical_prediction_hash_precommitted": true,
+      "historical_question_manifest_hash_precommitted": true,
+      "historical_selected_update": true,
+      "literal_accuracy": true,
+      "reference_hash": true,
+      "selection_passed": true
+    },
+    "v54_checks": {
+      "artifact": true,
+      "candidate_checkpoint": true,
+      "checkpoint_written": true,
+      "file_inventory_exact": true,
+      "files_exact": true,
+      "finite": true,
+      "no_final": true,
+      "no_optimizer": true,
+      "no_oracle": true,
+      "no_promotion": true,
+      "no_selector": true,
+      "no_validation_maps": true,
+      "no_validation_qa": true,
+      "passed": true,
+      "tensor_count": true,
+      "tensors_exact": true
+    }
+  },
+  "schema_version": 1,
+  "terminal_materialization_authorized": true
+}

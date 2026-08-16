@@ -1,0 +1,916 @@
+{
+  "artifact": "v62_pair_disjoint_preregistration",
+  "artifacts": {
+    "filtered_training": {
+      "contains_answers_and_route_labels": true,
+      "row_count": 576,
+      "sha256": "84b99385fadc5d06e44465ada5902f56131192298ca1539373dc3b334608cbf1"
+    },
+    "internal_validation_questions": {
+      "contains_answers_or_route_labels": false,
+      "question_key_inventory_sha256": "f36885e43100a5b7a3682ca38f7a06187c1f9b204095f5dc89b2e597e227ba27",
+      "questions_sha256": "05bd92897b1888b92cfe7be651cc83f9b94cc4a36950c17cb58859ec73325167",
+      "record_fields": [
+        "scene_id",
+        "question_id",
+        "question"
+      ],
+      "row_count": 384,
+      "sha256": "078f65e1402e6e382a7bfdb2ad4b8a65d58e3164705a8a46cd222503aa201052"
+    },
+    "scorer_references": {
+      "contains_question_text": false,
+      "records_sha256": "e140ea3a178d4f9bd8ac93c72148df73219ccac2867e5590ddd01f49e4d5b5a9",
+      "row_count": 384,
+      "runtime_access_permitted": false,
+      "separate_directory_enforced": true,
+      "sha256": "4202e777ee57ab3f7da329f15589e56b8b0464b782fb4d856dd1a3281ff3115c"
+    }
+  },
+  "controls": {
+    "exact_no_control_identity": {
+      "candidate_route": "exact base/no-control path",
+      "population": "all 332 natural retention sides",
+      "required": "all raw output byte hashes equal a preregistered frozen baseline"
+    },
+    "same_question_different_prefix": {
+      "population": "all 26 changed paired units",
+      "question_must_be_byte_identical_within_unit": true,
+      "scene_prefix_hashes_must_differ_between_sides": true,
+      "scene_prefix_must_be_computed_before_question": true
+    },
+    "scene_swap": {
+      "expected_answer_follows_injected_prefix_scene": true,
+      "only_scene_prefix_is_swapped": true,
+      "population": "both directions for all 26 changed paired units",
+      "question_must_remain_unchanged": true
+    }
+  },
+  "data_boundaries": {
+    "baseline_lock_must_bind": [
+      "this exact preregistration SHA-256",
+      "the exact internal-validation question manifest and questions SHA-256",
+      "all 384 opaque question keys",
+      "all raw UTF-8 V54 output SHA-256 values",
+      "one invariant scene-prefix SHA-256 for each of 16 scenes",
+      "the exact V54 checkpoint fingerprint"
+    ],
+    "baseline_lock_required_before_training": true,
+    "deferred_final_loaded": false,
+    "expected_baseline_lock_artifact": "v62_v54_no_control_baseline_lock",
+    "expected_baseline_lock_schema": "semantic_3d_chat.v62.v54_no_control_baseline_lock.v1",
+    "fresh_development_loaded": false,
+    "held_out_qa_or_oracle_loaded": false,
+    "inference_may_load_scorer_references": false,
+    "trainer_data_arguments": [
+      "filtered_train_qa"
+    ],
+    "trainer_may_load_internal_validation_questions": false,
+    "trainer_may_load_scorer_references": false,
+    "trainer_must_not_accept": [
+      "internal_validation_questions",
+      "scorer_references",
+      "scorer_sidecar",
+      "source_train_qa",
+      "validation_questions"
+    ],
+    "trainer_must_validate_baseline_lock_before_any_training_input": true
+  },
+  "natural_population": {
+    "changed_unit_completeness_requires_both_sides_correct": true,
+    "internal_validation": {
+      "answer_type_by_route": {
+        "changed": {
+          "attribute": 8,
+          "count": 4,
+          "metric": 2,
+          "orientation": 2,
+          "presence": 4,
+          "spatial_relation": 28,
+          "support": 4
+        },
+        "retention": {
+          "attribute": 72,
+          "count": 60,
+          "metric": 14,
+          "orientation": 12,
+          "presence": 66,
+          "spatial_relation": 52,
+          "support": 56
+        }
+      },
+      "changed_side_count": 52,
+      "changed_unit_count": 26,
+      "natural_changed_side_fraction": 0.13541666666666666,
+      "pair_count": 8,
+      "pair_inventory": [
+        {
+          "change_type": "chair_orientation",
+          "changed_unit_count": 1,
+          "pair_id": "pair_000019",
+          "paired_unit_count": 24,
+          "retention_unit_count": 23,
+          "scene_ids": [
+            "scene_000039",
+            "scene_000040"
+          ]
+        },
+        {
+          "change_type": "object_relocation",
+          "changed_unit_count": 4,
+          "pair_id": "pair_000020",
+          "paired_unit_count": 24,
+          "retention_unit_count": 20,
+          "scene_ids": [
+            "scene_000041",
+            "scene_000042"
+          ]
+        },
+        {
+          "change_type": "color_swap",
+          "changed_unit_count": 4,
+          "pair_id": "pair_000021",
+          "paired_unit_count": 24,
+          "retention_unit_count": 20,
+          "scene_ids": [
+            "scene_000043",
+            "scene_000044"
+          ]
+        },
+        {
+          "change_type": "object_count",
+          "changed_unit_count": 1,
+          "pair_id": "pair_000022",
+          "paired_unit_count": 24,
+          "retention_unit_count": 23,
+          "scene_ids": [
+            "scene_000045",
+            "scene_000046"
+          ]
+        },
+        {
+          "change_type": "book_support",
+          "changed_unit_count": 4,
+          "pair_id": "pair_000023",
+          "paired_unit_count": 24,
+          "retention_unit_count": 20,
+          "scene_ids": [
+            "scene_000047",
+            "scene_000048"
+          ]
+        },
+        {
+          "change_type": "mirror_lr",
+          "changed_unit_count": 4,
+          "pair_id": "pair_000024",
+          "paired_unit_count": 24,
+          "retention_unit_count": 20,
+          "scene_ids": [
+            "scene_000049",
+            "scene_000050"
+          ]
+        },
+        {
+          "change_type": "picture_support",
+          "changed_unit_count": 4,
+          "pair_id": "pair_000025",
+          "paired_unit_count": 24,
+          "retention_unit_count": 20,
+          "scene_ids": [
+            "scene_000051",
+            "scene_000052"
+          ]
+        },
+        {
+          "change_type": "object_removal",
+          "changed_unit_count": 4,
+          "pair_id": "pair_000027",
+          "paired_unit_count": 24,
+          "retention_unit_count": 20,
+          "scene_ids": [
+            "scene_000055",
+            "scene_000056"
+          ]
+        }
+      ],
+      "paired_unit_count": 192,
+      "question_family_by_route": {
+        "changed": {
+          "attribute_tell": 4,
+          "attribute_what": 4,
+          "count": 4,
+          "metric": 2,
+          "orientation": 2,
+          "presence_find": 2,
+          "presence_is_there": 2,
+          "spatial_horizontal": 18,
+          "spatial_vertical": 10,
+          "support_book_on_under": 2,
+          "support_list": 2
+        },
+        "retention": {
+          "attribute_tell": 26,
+          "attribute_what": 46,
+          "count": 60,
+          "metric": 14,
+          "orientation": 12,
+          "presence_find": 20,
+          "presence_is_there": 46,
+          "spatial_depth": 16,
+          "spatial_horizontal": 18,
+          "spatial_vertical": 18,
+          "support_book_on_under": 14,
+          "support_bowl_floor_table": 16,
+          "support_list": 12,
+          "support_picture_wall_floor": 14
+        }
+      },
+      "retention_side_count": 332,
+      "retention_unit_count": 166,
+      "row_count": 384,
+      "scene_count": 16
+    },
+    "paired_unit_is_two_identically_worded_sides": true,
+    "primary_reporting_uses_all_384_sides_without_rebalancing": true,
+    "training": {
+      "answer_type_by_route": {
+        "changed": {
+          "attribute": 8,
+          "count": 4,
+          "metric": 2,
+          "orientation": 2,
+          "presence": 4,
+          "spatial_relation": 48,
+          "support": 12
+        },
+        "retention": {
+          "attribute": 112,
+          "count": 92,
+          "metric": 22,
+          "orientation": 20,
+          "presence": 96,
+          "spatial_relation": 72,
+          "support": 82
+        }
+      },
+      "changed_side_count": 80,
+      "changed_unit_count": 40,
+      "natural_changed_side_fraction": 0.1388888888888889,
+      "pair_count": 12,
+      "pair_inventory": [
+        {
+          "change_type": "chair_orientation",
+          "changed_unit_count": 1,
+          "pair_id": "pair_000005",
+          "paired_unit_count": 24,
+          "retention_unit_count": 23,
+          "scene_ids": [
+            "scene_000011",
+            "scene_000012"
+          ]
+        },
+        {
+          "change_type": "object_relocation",
+          "changed_unit_count": 4,
+          "pair_id": "pair_000006",
+          "paired_unit_count": 24,
+          "retention_unit_count": 20,
+          "scene_ids": [
+            "scene_000013",
+            "scene_000014"
+          ]
+        },
+        {
+          "change_type": "color_swap",
+          "changed_unit_count": 4,
+          "pair_id": "pair_000007",
+          "paired_unit_count": 24,
+          "retention_unit_count": 20,
+          "scene_ids": [
+            "scene_000015",
+            "scene_000016"
+          ]
+        },
+        {
+          "change_type": "object_count",
+          "changed_unit_count": 1,
+          "pair_id": "pair_000008",
+          "paired_unit_count": 24,
+          "retention_unit_count": 23,
+          "scene_ids": [
+            "scene_000017",
+            "scene_000018"
+          ]
+        },
+        {
+          "change_type": "book_support",
+          "changed_unit_count": 4,
+          "pair_id": "pair_000009",
+          "paired_unit_count": 24,
+          "retention_unit_count": 20,
+          "scene_ids": [
+            "scene_000019",
+            "scene_000020"
+          ]
+        },
+        {
+          "change_type": "mirror_lr",
+          "changed_unit_count": 4,
+          "pair_id": "pair_000010",
+          "paired_unit_count": 24,
+          "retention_unit_count": 20,
+          "scene_ids": [
+            "scene_000021",
+            "scene_000022"
+          ]
+        },
+        {
+          "change_type": "picture_support",
+          "changed_unit_count": 4,
+          "pair_id": "pair_000011",
+          "paired_unit_count": 24,
+          "retention_unit_count": 20,
+          "scene_ids": [
+            "scene_000023",
+            "scene_000024"
+          ]
+        },
+        {
+          "change_type": "book_support",
+          "changed_unit_count": 4,
+          "pair_id": "pair_000015",
+          "paired_unit_count": 24,
+          "retention_unit_count": 20,
+          "scene_ids": [
+            "scene_000031",
+            "scene_000032"
+          ]
+        },
+        {
+          "change_type": "mirror_lr",
+          "changed_unit_count": 4,
+          "pair_id": "pair_000016",
+          "paired_unit_count": 24,
+          "retention_unit_count": 20,
+          "scene_ids": [
+            "scene_000033",
+            "scene_000034"
+          ]
+        },
+        {
+          "change_type": "picture_support",
+          "changed_unit_count": 4,
+          "pair_id": "pair_000017",
+          "paired_unit_count": 24,
+          "retention_unit_count": 20,
+          "scene_ids": [
+            "scene_000035",
+            "scene_000036"
+          ]
+        },
+        {
+          "change_type": "object_removal",
+          "changed_unit_count": 3,
+          "pair_id": "pair_000018",
+          "paired_unit_count": 24,
+          "retention_unit_count": 21,
+          "scene_ids": [
+            "scene_000037",
+            "scene_000038"
+          ]
+        },
+        {
+          "change_type": "cube_support",
+          "changed_unit_count": 3,
+          "pair_id": "pair_000026",
+          "paired_unit_count": 24,
+          "retention_unit_count": 21,
+          "scene_ids": [
+            "scene_000053",
+            "scene_000054"
+          ]
+        }
+      ],
+      "paired_unit_count": 288,
+      "question_family_by_route": {
+        "changed": {
+          "attribute_tell": 4,
+          "attribute_what": 4,
+          "count": 4,
+          "metric": 2,
+          "orientation": 2,
+          "presence_find": 2,
+          "presence_is_there": 2,
+          "spatial_horizontal": 24,
+          "spatial_vertical": 24,
+          "support_book_on_under": 4,
+          "support_list": 6,
+          "support_picture_wall_floor": 2
+        },
+        "retention": {
+          "attribute_tell": 62,
+          "attribute_what": 50,
+          "count": 92,
+          "metric": 22,
+          "orientation": 20,
+          "presence_find": 18,
+          "presence_is_there": 78,
+          "spatial_depth": 34,
+          "spatial_horizontal": 24,
+          "spatial_vertical": 14,
+          "support_book_on_under": 20,
+          "support_bowl_floor_table": 24,
+          "support_list": 18,
+          "support_picture_wall_floor": 20
+        }
+      },
+      "retention_side_count": 496,
+      "retention_unit_count": 248,
+      "row_count": 576,
+      "scene_count": 24
+    }
+  },
+  "preserved_v61_terminal": {
+    "artifact": "v61_scene_conditioned_route_generalization_gate",
+    "may_be_replaced_or_reinterpreted": false,
+    "passed": false,
+    "sha256": "cb7ce887c03dc156693cca489e7638d32adc1ad11cbd0f33464bcfcc4ae5db38"
+  },
+  "required_metric_reporting": {
+    "balanced_or_subsampled_metrics_may_replace_natural_metrics": false,
+    "breakdowns": [
+      "route_label",
+      "answer_type",
+      "question_family",
+      "counterfactual_change_type"
+    ],
+    "paired": [
+      "changed_side_exact",
+      "changed_paired_unit_complete",
+      "changed_paired_unit_correct_direction",
+      "retention_side_exact"
+    ],
+    "primary": "natural_all_side_exact_normalized_accuracy"
+  },
+  "schema": "semantic_3d_chat.v62.pair_disjoint_preregistration.v1",
+  "schema_version": 1,
+  "source": {
+    "full_inventory": {
+      "answer_type_by_route": {
+        "changed": {
+          "attribute": 16,
+          "count": 8,
+          "metric": 4,
+          "orientation": 4,
+          "presence": 8,
+          "spatial_relation": 76,
+          "support": 16
+        },
+        "retention": {
+          "attribute": 184,
+          "count": 152,
+          "metric": 36,
+          "orientation": 32,
+          "presence": 162,
+          "spatial_relation": 124,
+          "support": 138
+        }
+      },
+      "changed_side_count": 132,
+      "changed_unit_count": 66,
+      "natural_changed_side_fraction": 0.1375,
+      "pair_count": 20,
+      "pair_inventory": [
+        {
+          "change_type": "chair_orientation",
+          "changed_unit_count": 1,
+          "pair_id": "pair_000005",
+          "paired_unit_count": 24,
+          "retention_unit_count": 23,
+          "scene_ids": [
+            "scene_000011",
+            "scene_000012"
+          ]
+        },
+        {
+          "change_type": "object_relocation",
+          "changed_unit_count": 4,
+          "pair_id": "pair_000006",
+          "paired_unit_count": 24,
+          "retention_unit_count": 20,
+          "scene_ids": [
+            "scene_000013",
+            "scene_000014"
+          ]
+        },
+        {
+          "change_type": "color_swap",
+          "changed_unit_count": 4,
+          "pair_id": "pair_000007",
+          "paired_unit_count": 24,
+          "retention_unit_count": 20,
+          "scene_ids": [
+            "scene_000015",
+            "scene_000016"
+          ]
+        },
+        {
+          "change_type": "object_count",
+          "changed_unit_count": 1,
+          "pair_id": "pair_000008",
+          "paired_unit_count": 24,
+          "retention_unit_count": 23,
+          "scene_ids": [
+            "scene_000017",
+            "scene_000018"
+          ]
+        },
+        {
+          "change_type": "book_support",
+          "changed_unit_count": 4,
+          "pair_id": "pair_000009",
+          "paired_unit_count": 24,
+          "retention_unit_count": 20,
+          "scene_ids": [
+            "scene_000019",
+            "scene_000020"
+          ]
+        },
+        {
+          "change_type": "mirror_lr",
+          "changed_unit_count": 4,
+          "pair_id": "pair_000010",
+          "paired_unit_count": 24,
+          "retention_unit_count": 20,
+          "scene_ids": [
+            "scene_000021",
+            "scene_000022"
+          ]
+        },
+        {
+          "change_type": "picture_support",
+          "changed_unit_count": 4,
+          "pair_id": "pair_000011",
+          "paired_unit_count": 24,
+          "retention_unit_count": 20,
+          "scene_ids": [
+            "scene_000023",
+            "scene_000024"
+          ]
+        },
+        {
+          "change_type": "book_support",
+          "changed_unit_count": 4,
+          "pair_id": "pair_000015",
+          "paired_unit_count": 24,
+          "retention_unit_count": 20,
+          "scene_ids": [
+            "scene_000031",
+            "scene_000032"
+          ]
+        },
+        {
+          "change_type": "mirror_lr",
+          "changed_unit_count": 4,
+          "pair_id": "pair_000016",
+          "paired_unit_count": 24,
+          "retention_unit_count": 20,
+          "scene_ids": [
+            "scene_000033",
+            "scene_000034"
+          ]
+        },
+        {
+          "change_type": "picture_support",
+          "changed_unit_count": 4,
+          "pair_id": "pair_000017",
+          "paired_unit_count": 24,
+          "retention_unit_count": 20,
+          "scene_ids": [
+            "scene_000035",
+            "scene_000036"
+          ]
+        },
+        {
+          "change_type": "object_removal",
+          "changed_unit_count": 3,
+          "pair_id": "pair_000018",
+          "paired_unit_count": 24,
+          "retention_unit_count": 21,
+          "scene_ids": [
+            "scene_000037",
+            "scene_000038"
+          ]
+        },
+        {
+          "change_type": "chair_orientation",
+          "changed_unit_count": 1,
+          "pair_id": "pair_000019",
+          "paired_unit_count": 24,
+          "retention_unit_count": 23,
+          "scene_ids": [
+            "scene_000039",
+            "scene_000040"
+          ]
+        },
+        {
+          "change_type": "object_relocation",
+          "changed_unit_count": 4,
+          "pair_id": "pair_000020",
+          "paired_unit_count": 24,
+          "retention_unit_count": 20,
+          "scene_ids": [
+            "scene_000041",
+            "scene_000042"
+          ]
+        },
+        {
+          "change_type": "color_swap",
+          "changed_unit_count": 4,
+          "pair_id": "pair_000021",
+          "paired_unit_count": 24,
+          "retention_unit_count": 20,
+          "scene_ids": [
+            "scene_000043",
+            "scene_000044"
+          ]
+        },
+        {
+          "change_type": "object_count",
+          "changed_unit_count": 1,
+          "pair_id": "pair_000022",
+          "paired_unit_count": 24,
+          "retention_unit_count": 23,
+          "scene_ids": [
+            "scene_000045",
+            "scene_000046"
+          ]
+        },
+        {
+          "change_type": "book_support",
+          "changed_unit_count": 4,
+          "pair_id": "pair_000023",
+          "paired_unit_count": 24,
+          "retention_unit_count": 20,
+          "scene_ids": [
+            "scene_000047",
+            "scene_000048"
+          ]
+        },
+        {
+          "change_type": "mirror_lr",
+          "changed_unit_count": 4,
+          "pair_id": "pair_000024",
+          "paired_unit_count": 24,
+          "retention_unit_count": 20,
+          "scene_ids": [
+            "scene_000049",
+            "scene_000050"
+          ]
+        },
+        {
+          "change_type": "picture_support",
+          "changed_unit_count": 4,
+          "pair_id": "pair_000025",
+          "paired_unit_count": 24,
+          "retention_unit_count": 20,
+          "scene_ids": [
+            "scene_000051",
+            "scene_000052"
+          ]
+        },
+        {
+          "change_type": "cube_support",
+          "changed_unit_count": 3,
+          "pair_id": "pair_000026",
+          "paired_unit_count": 24,
+          "retention_unit_count": 21,
+          "scene_ids": [
+            "scene_000053",
+            "scene_000054"
+          ]
+        },
+        {
+          "change_type": "object_removal",
+          "changed_unit_count": 4,
+          "pair_id": "pair_000027",
+          "paired_unit_count": 24,
+          "retention_unit_count": 20,
+          "scene_ids": [
+            "scene_000055",
+            "scene_000056"
+          ]
+        }
+      ],
+      "paired_unit_count": 480,
+      "question_family_by_route": {
+        "changed": {
+          "attribute_tell": 8,
+          "attribute_what": 8,
+          "count": 8,
+          "metric": 4,
+          "orientation": 4,
+          "presence_find": 4,
+          "presence_is_there": 4,
+          "spatial_horizontal": 42,
+          "spatial_vertical": 34,
+          "support_book_on_under": 6,
+          "support_list": 8,
+          "support_picture_wall_floor": 2
+        },
+        "retention": {
+          "attribute_tell": 88,
+          "attribute_what": 96,
+          "count": 152,
+          "metric": 36,
+          "orientation": 32,
+          "presence_find": 38,
+          "presence_is_there": 124,
+          "spatial_depth": 50,
+          "spatial_horizontal": 42,
+          "spatial_vertical": 32,
+          "support_book_on_under": 34,
+          "support_bowl_floor_table": 40,
+          "support_list": 30,
+          "support_picture_wall_floor": 34
+        }
+      },
+      "retention_side_count": 828,
+      "retention_unit_count": 414,
+      "row_count": 960,
+      "scene_count": 40
+    },
+    "read_count_during_prepare": 1,
+    "training_qa_sha256": "01721bf904b1ab0b65ce8acac6e366287040873cda1356da6c70c4981abe7619",
+    "training_qa_size_bytes": 526153
+  },
+  "split": {
+    "exhaustive_over_pinned_training_source": true,
+    "internal_validation_pair_ids": [
+      "pair_000019",
+      "pair_000020",
+      "pair_000021",
+      "pair_000022",
+      "pair_000023",
+      "pair_000024",
+      "pair_000025",
+      "pair_000027"
+    ],
+    "internal_validation_scene_ids": [
+      "scene_000039",
+      "scene_000040",
+      "scene_000041",
+      "scene_000042",
+      "scene_000043",
+      "scene_000044",
+      "scene_000045",
+      "scene_000046",
+      "scene_000047",
+      "scene_000048",
+      "scene_000049",
+      "scene_000050",
+      "scene_000051",
+      "scene_000052",
+      "scene_000055",
+      "scene_000056"
+    ],
+    "pair_disjoint": true,
+    "protected_scene_numbers_never_loaded": [
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62
+    ],
+    "scene_disjoint": true,
+    "seed": 20260808,
+    "training_pair_ids": [
+      "pair_000005",
+      "pair_000006",
+      "pair_000007",
+      "pair_000008",
+      "pair_000009",
+      "pair_000010",
+      "pair_000011",
+      "pair_000015",
+      "pair_000016",
+      "pair_000017",
+      "pair_000018",
+      "pair_000026"
+    ],
+    "training_scene_ids": [
+      "scene_000011",
+      "scene_000012",
+      "scene_000013",
+      "scene_000014",
+      "scene_000015",
+      "scene_000016",
+      "scene_000017",
+      "scene_000018",
+      "scene_000019",
+      "scene_000020",
+      "scene_000021",
+      "scene_000022",
+      "scene_000023",
+      "scene_000024",
+      "scene_000031",
+      "scene_000032",
+      "scene_000033",
+      "scene_000034",
+      "scene_000035",
+      "scene_000036",
+      "scene_000037",
+      "scene_000038",
+      "scene_000053",
+      "scene_000054"
+    ],
+    "unit": "counterfactual_pair_id"
+  },
+  "status": "locked_before_v62_training_or_internal_validation_inference",
+  "thresholds": {
+    "internal_validation": {
+      "changed_paired_unit_complete": {
+        "minimum": 19,
+        "total": 26
+      },
+      "changed_paired_unit_correct_direction": {
+        "minimum": 23,
+        "total": 26
+      },
+      "changed_side_exact": {
+        "minimum": 42,
+        "total": 52
+      },
+      "minimum_complete_changed_units_by_change_type": {
+        "book_support": 2,
+        "chair_orientation": 1,
+        "color_swap": 2,
+        "mirror_lr": 2,
+        "object_count": 1,
+        "object_relocation": 2,
+        "object_removal": 2,
+        "picture_support": 2
+      },
+      "retention_exact_no_control_output_identity": {
+        "comparison": "exact_utf8_output_bytes_sha256",
+        "minimum": 332,
+        "total": 332
+      }
+    },
+    "same_question_different_prefix_control": {
+      "changed_paired_unit_complete": {
+        "minimum": 19,
+        "total": 26
+      },
+      "changed_side_exact": {
+        "minimum": 42,
+        "total": 52
+      },
+      "complete_unit_coverage": {
+        "minimum": 26,
+        "total": 26
+      },
+      "correct_changed_direction": {
+        "minimum": 23,
+        "total": 26
+      },
+      "distinct_scene_prefix_hashes": {
+        "minimum": 26,
+        "total": 26
+      },
+      "question_text_identity": {
+        "minimum": 26,
+        "total": 26
+      }
+    },
+    "scene_swap_control": {
+      "answer_follows_injected_scene": {
+        "minimum": 42,
+        "total": 52
+      },
+      "bidirectional_unit_complete": {
+        "minimum": 19,
+        "total": 26
+      },
+      "opposite_prefix_hash_exact": {
+        "minimum": 52,
+        "total": 52
+      },
+      "question_bytes_unchanged": {
+        "minimum": 52,
+        "total": 52
+      },
+      "swapped_side_coverage": {
+        "minimum": 52,
+        "total": 52
+      }
+    }
+  }
+}

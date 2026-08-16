@@ -1,0 +1,71 @@
+_base_: navigation_policy_v3.yaml
+
+# Mutable, CPU-preflight-only successor to the terminal-negative V2.2 arm.
+# This file is intentionally not an authorization. A later immutable release
+# must bind its exact bytes before any full-model load or optimizer exists.
+language:
+  lora_banks:
+    embodied_tool_decoder_v3_weighted_final_down:
+      trainable: true
+      rank: 4
+      alpha: 8.0
+      dropout: 0.0
+      initialization_algorithm: cpu_kaiming_uniform_a_exact_zero_b
+      initialization_seed: 2026081223
+      target_modules:
+        - model.language_model.layers.34.mlp.down_proj
+
+training:
+  output_namespace: gemma4_embodied_tool_decoder_v3
+  lora_learning_rate: 0.0001
+  lora_weight_decay: 0.0
+  decoder_gradient_checkpointing: true
+
+gemma4_embodied_tool_decoder_v3:
+  schema_version: 3
+  status: unsealed_cpu_design_only_training_unauthorized
+  training_authorized: false
+  full_model_load_authorized: false
+  mps_authorized: false
+  optimizer_construction_authorized: false
+  checkpoint_write_authorized: false
+  v2_terminal_result: reports/gemma4/metrics/gemma4_embodied_tool_decoder_training_v2_2.json
+  v2_terminal_sha256: fc6cb4a829e8a69aa94c03c13d79c270b1829bb8cddde500e6b6b0fe10cbfc01
+  source_trace: data_gemma4/training/navigation_policy_v3/traces.jsonl
+  permitted_training_row_count: 4200
+  permitted_training_prefix_bytes_sha256: 66048cbb5438906c97a1731154834beb559012910bd4e98932e47df16828be84
+  target_state_dim: 10
+  target_token_count: 2
+  clearance_state_dim: 24
+  clearance_token_count: 2
+  numeric_projector_initialization_seed: 2026081223
+  numeric_projector_parameter_count: 110592
+  lora_parameter_count: 55296
+  total_trainable_parameter_count: 165888
+  answer_suffix_only_cross_entropy: true
+  weighted_answer_tail_cross_entropy: true
+  per_answer_weight_normalization: true
+  token_role_weights:
+    structure: 1.0
+    schema_key: 1.0
+    argument_key: 2.0
+    action: 8.0
+    argument_value: 6.0
+    eos: 2.0
+  deterministic_action_argument_sampler: true
+  argument_bin_edges: [-1.0, -0.6, -0.2, 0.2, 0.6, 1.0]
+  sampler_seed: 2026081223
+  microbatch_size: 1
+  gradient_accumulation: 8
+  microbatch_count: 800
+  fixed_optimizer_updates: 100
+  projector_learning_rate: 0.0002
+  gradient_clip_l2: 1.0
+  fixed_final_update_only: true
+  no_posthoc_checkpoint_selection: true
+  unchanged_v2_behavioral_gates: true
+  raw_unconstrained_greedy_is_primary: true
+  parent_release_of_heavy_mps_slot_required: true
+  oracle_inputs_at_runtime: false
+  object_inventory_at_runtime: false
+  question_dependent_scene_retrieval: false

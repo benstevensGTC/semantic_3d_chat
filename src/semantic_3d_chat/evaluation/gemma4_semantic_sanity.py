@@ -30,6 +30,7 @@ from semantic_3d_chat.evaluation.semantic_sanity import (
     _reject_oracle_runtime_input,
     _validate_scene_id,
     compute_multiview_consistency,
+    map_hash_provenance,
     normalize_embedding_matrix,
     oracle_targets,
     queries_from_targets,
@@ -378,7 +379,7 @@ def run_gemma4_semantic_sanity(
         "evaluation_only": True,
         "scene_id": scene_id,
         "map_path": str(selected_map_path),
-        "map_content_hash": voxel_map.content_hash(),
+        **map_hash_provenance(selected_map_path, voxel_map),
         "voxel_count": len(voxel_map),
         "voxel_size_m": voxel_map.voxel_size_m,
         "feature_layout": {

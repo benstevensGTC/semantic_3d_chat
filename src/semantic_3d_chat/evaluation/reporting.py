@@ -19,6 +19,8 @@ from typing import Any
 
 import numpy as np
 
+from semantic_3d_chat.mapping.voxel_map import PERSISTED_MAP_CONTENT_HASH_DOMAIN
+
 
 @dataclass(frozen=True)
 class ReportInputs:
@@ -82,6 +84,39 @@ def _load_jsonl(path: Path, warnings: list[str], limit: int = 20) -> tuple[dict[
     except (OSError, json.JSONDecodeError, TypeError) as error:
         warnings.append(f"Could not read {path}: {type(error).__name__}: {error}")
     return tuple(records)
+
+
+def _persisted_map_hash_pair(
+    map_metrics: Mapping[str, Any],
+    semantic_metrics: Mapping[str, Any],
+) -> tuple[str, str] | None:
+    """Return only hashes known to share the persisted-array domain.
+
+    Legacy mapping reports used ``content_hash`` for persisted numeric arrays
+    without naming the domain, so that field remains comparable. Legacy
+    semantic reports used ``map_content_hash`` after reconstructing the map;
+    an undeclared semantic hash is therefore intentionally not compared.
+    """
+
+    mapping_domain = map_metrics.get("content_hash_domain")
+    if mapping_domain not in (None, PERSISTED_MAP_CONTENT_HASH_DOMAIN):
+        return None
+    mapping_hash = map_metrics.get("content_hash")
+    if not isinstance(mapping_hash, str) or not mapping_hash:
+        return None
+
+    semantic_hash = semantic_metrics.get("map_persisted_content_hash")
+    if semantic_hash is not None:
+        semantic_domain = semantic_metrics.get("map_persisted_content_hash_domain")
+        if semantic_domain not in (None, PERSISTED_MAP_CONTENT_HASH_DOMAIN):
+            return None
+    elif semantic_metrics.get("map_content_hash_domain") == PERSISTED_MAP_CONTENT_HASH_DOMAIN:
+        semantic_hash = semantic_metrics.get("map_content_hash")
+    else:
+        return None
+    if not isinstance(semantic_hash, str) or not semantic_hash:
+        return None
+    return mapping_hash, semantic_hash
 
 
 def _metric_candidates(scene_id: str) -> dict[str, tuple[str, ...]]:
@@ -1657,16 +1692,20 @@ def render_final_report(
         )
     else:
         lines.append("Not measured.")
-    if (
-        map_metrics
-        and semantic
-        and map_metrics.get("content_hash") != semantic.get("map_content_hash")
-    ):
+    persisted_hashes = (
+        _persisted_map_hash_pair(map_metrics, semantic) if map_metrics and semantic else None
+    )
+    if persisted_hashes and persisted_hashes[0] != persisted_hashes[1]:
         lines += [
             "",
             "### Artifact-version warning",
             "",
-            "The mapping summary content hash differs from the semantic-sanity map hash, consistent with the later MaskCLIP map rebuild. Semantic results refer to the map hash recorded in `semantic_sanity_scene_000001.json`; regenerate the mapping summary for a fully synchronized manifest.",
+            (
+                "The persisted numeric-array hash in the mapping summary differs "
+                "from the persisted numeric-array hash authenticated by semantic "
+                "sanity. These results may refer to different map artifacts; "
+                "regenerate the reports from one synchronized map."
+            ),
         ]
     if startup.get("warnings"):
         lines += ["", "### Runtime warnings", ""] + [

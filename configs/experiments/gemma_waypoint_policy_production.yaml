@@ -1,0 +1,17 @@
+_base_: gemma_waypoint_policy_v1.yaml
+
+gemma_waypoint_policy:
+  trace_dataset: data_gemma4/training/gemma_waypoint_policy_v1_production
+  prefix_cache_root: data_gemma4/scene_tokens/gemma_waypoint_policy_v1_production
+  hidden_cache: data_gemma4/training/gemma_waypoint_policy_v1_production_runtime_aligned_hidden
+  checkpoint_output: data_gemma4/checkpoints/gemma_waypoint_policy_v1_production_runtime_aligned
+  runtime_aligned_control_config: configs/runtime/gemma4_v56_question_control.yaml
+  runtime_aligned_base_checkpoint: data_gemma4/runtime/checkpoints/gemma4_v54_release_v1
+  runtime_aligned_scene_id: scene_000001
+  training_sample_limit: 384
+  validation_sample_limit: 96
+  control_sample_limit: 24
+  head_batch_size: 32
+  gradient_accumulation_steps: 1
+  epochs: 100
+  action_class_weight_power: 0.5

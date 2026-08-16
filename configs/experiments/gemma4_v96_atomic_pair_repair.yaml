@@ -1,0 +1,272 @@
+v96:
+  schema_version: 96
+  artifact: gemma4_v96_atomic_pair_repair_direct_memory_lora_v1
+  status: sealed_before_v96_full_model_load
+  seed: 960096
+
+  sources:
+    runtime_config: configs/runtime/gemma4_v85_strict_multiscene.yaml
+    runtime_config_sha256: 49d9595e6167fe352dc49f1ca363af396fe3d3be91d50cb430721bc74b130575
+    training_qa: data_diverse52/qa/train.jsonl
+    training_qa_sha256: 01721bf904b1ab0b65ce8acac6e366287040873cda1356da6c70c4981abe7619
+    train_memory_cache: reports/gemma4/artifacts/v82_strict_dense_reader/train_cache
+    train_memory_tensor_sha256: 417492a08ac669210b4bdcaf8dafa0122fa0cf7ed6753489e55fd93bee150a2d
+    train_memory_metadata_sha256: b0e26f2c3e44d868e4f54556f9304d990d0c664d862d1a2a760a714fcdb4a257
+    development_memory_cache: reports/gemma4/artifacts/v82_strict_dense_reader/development_cache
+    development_memory_tensor_sha256: 71222bdc34fc836015ea4449622491545515222a7df99c321c1bf7a22fa2b659
+    development_memory_metadata_sha256: 58b988b03d33c93110083e22a98f050059e44e8356391a78fb761fd74254d1dd
+    frozen_v95_config: configs/experiments/gemma4_v95_strict_causal_successor.yaml
+    frozen_v95_config_sha256: 9115c36b417d03bec935257b42e30597170d5acbf6c4683b5c021a8e4d9bbea2
+    frozen_v95_fixed_final: reports/gemma4/artifacts/v95_strict_causal_successor_final
+    frozen_v95_bridge_sha256: 964868e2ee6d36471fc31e91f123af0d005aa140be1269ac49cb753e57387026
+    frozen_v95_bridge_metadata_sha256: 0aa2a697fc2896d309a2cac6dde01cc4b5f81d57e27827a8f978584b2b9677bc
+    v95_training_report: reports/gemma4/metrics/gemma4_v95_strict_causal_successor_training.json
+    v95_training_report_sha256: 2c7fc3ed47eaee1112c0fa2aadb412bb7b452087f6651957747dd07bfed59263
+    v95_known_development_structured: reports/gemma4/metrics/gemma4_v95_strict_causal_successor_known_development_structured.json
+    v95_known_development_structured_sha256: 3477ebda24cc78e2722aa27e26e3841c5c1b4e316684e1a4ed68a9ffc4d04f84
+    v95_known_development_final_score: reports/gemma4/metrics/gemma4_v95_strict_causal_successor_known_development.json
+    v95_known_development_final_score_sha256: 9d700e792cd353170ef636733874d1ac5b10d6bb5fdece09f2980298cfd00ef9
+    v95_known_development_evidence: reports/gemma4/metrics/gemma4_v95_strict_causal_successor_known_development_evidence.json
+    v95_known_development_evidence_sha256: e892516d60413ad24f06c56a0ce2d01410982548b32bcd3b8c340a04da44f346
+    preflight_source: src/semantic_3d_chat/evaluation/v96_atomic_pair_repair_preflight.py
+    preflight_source_sha256: 551604bcb21208a2aab091d60efaa0a8475d769fd1ac51dd75c3706917807e01
+    trainer_source: src/semantic_3d_chat/training/train_v96_atomic_pair_repair.py
+    trainer_source_sha256: de7fad4c1a4c7d74bbeef37e1d71374d8fb29bc7dfed8d3c0c046ab341a59b69
+    model_id: google/gemma-4-E2B-it
+    model_revision: 3e22461f65e89153144f8adb70e3b8c2cc9845a7
+    model_blob_sha256_identity: 2db5482b20d746879bb3ef79b5203e9075a2e2b98f54ec7c2f281c1477ddc550
+
+  strict_input_contract:
+    shape_per_scene: [1, 738, 1536]
+    native_boi_retained: true
+    native_eoi_retained: true
+    continuous_environment_payload_tokens: 736
+    compiled_before_question: true
+    reused_byte_identically_across_questions: true
+    supplied_directly_to_native_gemma_image_prefix: true
+    all_memory_slots_retained: true
+    question_derived_environmental_tokens: 0
+    question_conditioned_environmental_readout: false
+    question_dependent_scene_processing: false
+    question_dependent_retrieval: false
+    semantic_or_spatial_top_k_selection: false
+    control_tokens: 0
+    environmental_text_inputs: []
+
+  training_pool:
+    source_role: complete_diverse52_training_pool_only
+    scene_count: 40
+    pair_count: 20
+    row_count: 960
+    changed_unit_count: 66
+    changed_side_count: 132
+    invariant_unit_count: 414
+    invariant_side_count: 828
+    fixed_invariant_subset_unit_count: 96
+    fixed_invariant_subset_side_count: 192
+    answer_class_count: 29
+    canonical_list_answer: "book, cube"
+    canonical_list_answer_row_count: 22
+    exact_answer_strings_preserved_for_teacher_forcing: true
+    normalization_used_only_for_answer_class_ids: true
+    row_inventory_sha256: 1bfbc00f3f93bb320b0f91efd7c31bcda405606efc46706787614e6b0b3824d2
+    raw_answer_inventory_sha256: 99aeb52b4be9f5a78329c0c47dc3e77e0fd3354c6b7aed2d8540b4f64dc35bc7
+    scene_inventory_sha256: 441e46b9946507caa87091f37856706c9894ef7e9d3397fcd690d3b3f39eca70
+    pair_inventory_sha256: 5038e50815d52a309c54615efbfe7de5ce1219bff24cdd363ba03dc7ec659cb1
+    answer_class_inventory_sha256: dd43db0afa14dc277265a6db65467cf9726e9e3486098fced20804a82837b874
+    balanced_class_weight_inventory_sha256: 2804b9ddd06f9e8f67040505142acf57d0a9b1b519bda4c134d2e469ee41e841
+    changed_family_weight_inventory_sha256: 81acbc58897fdf963c4df9a1eda90f97be297bde09b7371ef0d5d073e0fd03a4
+    invariant_family_weight_inventory_sha256: 65e1e769c357213ee73acd3b2b39879bb30edbb33b2ca8b151a8f0e764241d84
+    questions_and_answers_training_only: true
+    runtime_serializes_questions_or_answers: false
+
+  excluded_known_development:
+    scene_ids:
+      - scene_000057
+      - scene_000058
+      - scene_000059
+      - scene_000060
+      - scene_000061
+      - scene_000062
+    labels_path: data_diverse52/qa/validation.jsonl
+    questions_path: reports/gemma4/questions/v56_fresh_development_validation.json
+    aggregate_v95_structured_evidence_only: true
+    labels_opened_by_v96_preflight: false
+    questions_opened_by_v96_preflight: false
+    used_for_v96_optimization: false
+    used_for_v96_checkpoint_selection: false
+    opened_by_v96_training: false
+
+  deferred_final_lock:
+    scene_ids:
+      - scene_000025
+      - scene_000026
+      - scene_000027
+      - scene_000028
+      - scene_000029
+      - scene_000030
+    physical_artifact_roots:
+      - data/oracle
+      - data/rendered
+      - data_gemma4/features
+      - data_gemma4/maps
+    empty_qa_placeholders:
+      - data_diverse20/qa/test.jsonl
+      - data_diverse28/qa/test.jsonl
+      - data_diverse52/qa/test.jsonl
+    legacy_plan_files_never_opened:
+      - configs/experiments/diverse20.yaml
+      - configs/experiments/diverse28.yaml
+      - configs/experiments/diverse52.yaml
+    physical_artifacts_required_absent_through_fixed_final: true
+    qa_placeholders_required_zero_bytes_through_fixed_final: true
+    generation_before_fixed_final_authorized: false
+    rendering_before_fixed_final_authorized: false
+    feature_extraction_before_fixed_final_authorized: false
+    map_building_before_fixed_final_authorized: false
+    qa_generation_before_fixed_final_authorized: false
+    only_opaque_ids_and_absence_locks_available_to_v96: true
+
+  frozen_stack:
+    exact_parent: v95_fixed_final_nonpromoted_optimization_parent
+    base_gemma_frozen: true
+    frozen_bank_count: 9
+    frozen_adapter_parameter_count: 819200
+    v95_bank_name: v95_strict_causal_successor_bridge
+    v95_bank_state_sha256: 53404c733586ebd25caa440f822a4d4af6cc3dbb71bf4f6b6f94af23f3a2492a
+    v95_fixed_final_selected_before_v95_labels_opened: true
+    v95_runtime_release_required_absent: true
+    merged_weights: false
+
+  bridge:
+    bank_name: v96_atomic_pair_repair_bridge
+    target_modules:
+      - model.language_model.layers.9.self_attn.q_proj
+    target_layer_role: question_conditioned_full_attention_scene_routing
+    pinned_weight_shapes:
+      model.language_model.layers.9.self_attn.q_proj.weight: [4096, 1536]
+    pinned_weight_dtype: BF16
+    rank: 8
+    alpha: 16.0
+    dropout: 0.0
+    trainable_parameter_count: 45056
+    initialization_algorithm: cpu_kaiming_uniform_a_exact_zero_b
+    initialization_seed: 960096
+    expected_initial_state_sha256: a52c4aa9915006c7f04721899723cb684ee65b773a32aed8d03c9083e0075b2b
+    disjoint_from_all_frozen_bank_targets: true
+    total_bank_count_after_install: 10
+    total_adapter_parameter_count_after_install: 864256
+
+  training:
+    optimizer: AdamW
+    retention_passes: 2
+    retention_rows_per_pass: 960
+    total_retention_steps: 1920
+    changed_pair_rounds: 4
+    changed_pair_units_per_round: 66
+    total_changed_pair_steps: 264
+    pair_question_identity: byte_exact_left_right_required
+    invariant_subset_rounds: 1
+    invariant_subset_units_per_round: 96
+    total_invariant_pair_steps: 96
+    invariant_subset_question_identity: byte_exact_left_right_required
+    total_micro_steps: 2280
+    microbatch_size: 1
+    gradient_accumulation_steps: 8
+    optimizer_updates: 285
+    schedule_policy: hash_interleaved_two_full_retention_passes_four_exact_changed_pair_rounds_one_balanced_invariant_subset
+    schedule_seed: 960096
+    schedule_sha256: 6dd53b2413b821809c8bbcaaacf935ffc44f9d31ac7ae38ac6134e6ac8620392
+    invariant_subset_policy: answer_independent_answer_type_balanced_hash_selection
+    invariant_subset_sha256: 761ae0f6bd635cf8687ed8a45e153c3ef0778df3e45583422809087b3f75b7ea
+    learning_rate: 0.000075
+    weight_decay: 0.0
+    gradient_clip_norm: 1.0
+    retention_balanced_ce_weight: 1.0
+    balanced_ce_formula: normalized_inverse_sqrt_answer_class_frequency
+    balanced_ce_mean_over_rows: 1.0
+    changed_family_weight_formula: normalized_inverse_sqrt_changed_unit_frequency
+    changed_family_weight_mean_over_units: 1.0
+    pair_correct_ce_weight: 1.0
+    within_memory_answer_margin_weight: 1.5
+    within_memory_answer_target_margin_nll: 0.75
+    across_memory_causal_margin_weight: 0.75
+    across_memory_causal_target_margin_nll: 0.5
+    pair_side_smoothmax_temperature: 0.25
+    invariant_family_weight_formula: normalized_inverse_sqrt_selected_unit_frequency
+    invariant_family_weight_mean_over_units: 1.0
+    invariant_correct_ce_weight: 1.0
+    invariant_nll_consistency_weight: 0.5
+    invariant_nll_consistency_tolerance: 0.1
+    zero_payload_training_rows: 0
+    permutation_training_rows: 0
+    controls_policy: inherited_frozen_v95_behavior_post_fixed_final_gate_only
+    broad_nll_forward_evaluations: 1920
+    changed_pair_nll_forward_evaluations: 1056
+    invariant_pair_nll_forward_evaluations: 192
+    auxiliary_nll_forward_evaluations: 888
+    total_nll_forward_evaluations: 3168
+    v95_measured_seconds_per_nll_forward: 2.2671
+    estimated_wall_time_seconds_from_v95_measured_ratio: 7182
+    wall_time_budget_seconds: 9000
+    checkpoint_every_optimizer_updates: 15
+    deterministic_resume: true
+    checkpoint_selection: fixed_final_update_285_before_known_development_or_deferred_generation
+    intermediate_behavior_selection: false
+
+  known_development_gate:
+    role: post_fixed_final_go_no_go_not_checkpoint_selection
+    scene_ids:
+      - scene_000057
+      - scene_000058
+      - scene_000059
+      - scene_000060
+      - scene_000061
+      - scene_000062
+    labels_path: data_diverse52/qa/validation.jsonl
+    scene_count: 6
+    row_count: 216
+    changed_side_total: 24
+    changed_unit_total: 12
+    invariant_side_total: 192
+    labels_opened_after_fixed_final_only: true
+    labels_opened_by_separate_label_isolated_evaluator_only: true
+    fixed_final_checkpoint_may_not_change_after_gate: true
+    v95_reference_correct: 167
+    v95_reference_total: 216
+    v95_reference_changed_side_correct: 13
+    v95_reference_complete_changed_units: 1
+    v95_reference_prediction_changed_units: 2
+    v95_reference_invariant_false_changes: 20
+    v96_correct_minimum: 160
+    changed_side_correct_minimum: 15
+    complete_changed_units_minimum: 4
+    prediction_changed_units_minimum: 7
+    invariant_false_change_maximum: 20
+    mean_changed_side_wrong_minus_correct_nll_minimum: 0.2
+    correct_accuracy_above_zero_payload_required: true
+    correct_accuracy_above_full_interior_permutation_required: true
+    correct_nll_below_zero_payload_required: true
+    correct_nll_below_full_interior_permutation_required: true
+    pass_required_before_deferred_final_unlock: true
+
+  outputs:
+    preregistration: reports/gemma4/metrics/gemma4_v96_atomic_pair_repair_preregistration.json
+    cpu_preflight: reports/gemma4/metrics/gemma4_v96_atomic_pair_repair_cpu_preflight.json
+    topology_smoke: reports/gemma4/metrics/gemma4_v96_atomic_pair_repair_topology_smoke.json
+    work_root: data_gemma4/checkpoints/v96_atomic_pair_repair_work
+    fixed_final_candidate: reports/gemma4/artifacts/v96_atomic_pair_repair_final
+    training_report: reports/gemma4/metrics/gemma4_v96_atomic_pair_repair_training.json
+
+  scope:
+    local_inference_only: true
+    cloud_inference: false
+    full_gemma_model_loaded_by_preflight: false
+    optimizer_constructed_by_preflight: false
+    known_development_labels_loaded: false
+    known_development_questions_loaded: false
+    deferred_final_scenes_25_through_30_loaded: false
+    deferred_final_semantic_plans_loaded: false
+    deferred_final_artifacts_generated: false
+    oracle_loaded: false
+    runtime_promotion_authorized: false

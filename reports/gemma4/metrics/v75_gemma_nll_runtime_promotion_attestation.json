@@ -1,0 +1,84 @@
+{
+  "attestation_type": "v75_gemma_nll_runtime_promotion_gate_v1",
+  "candidate": {
+    "numeric_state_sha256": "a46fccb96f6b58504711695dddf306ef5f92e7165779d5e7faafd068f2e212a1",
+    "sha256": "d01275538489b3493a8e1ff080109d1db46832be6ca2a26f6d89d161c597188a",
+    "size_bytes": 8357096,
+    "source_candidate_sha256": "182481dd77645cd2a467b3585dd7b060fcea578cc013eebc21486e1915ce9c17"
+  },
+  "data_access": {
+    "official_test_loaded": false,
+    "official_validation_loaded": false,
+    "oracle_loaded": false
+  },
+  "evidence": {
+    "base_release_manifest_sha256": "1af2b07b5d762e8a48e08b9181999cc7b50412cfdc9c983c35750df5e6b0ecc7",
+    "base_runtime_files": {
+      "adapter_safetensors_sha256": "6c627f0a0d9efb7100489c24cbd4acafe10456b79280a64a85399a21cb541daf",
+      "runtime_metadata_json_sha256": "807515461c71b08c08dfbd08a184a653e791413748530fa69402512eca6f6fdd"
+    },
+    "correct_scene_report_sha256": "4b858b90a63c6a866a033604fe3232729de966dbb61ba636449a914b1e4c366b",
+    "source_architecture_report_sha256": "98672720c91b339485b8ab2341acec268c01cc835e38b8e5572804a143976e99",
+    "wrong_scene_report_sha256": "af33a1cb438ef01b0ecd4f959aaad05e298ce22496d79f5c2281119e81e369d4"
+  },
+  "gates": {
+    "base_checkpoint_and_runtime_config_exact": true,
+    "candidate_identity_exact": true,
+    "candidate_numeric_state_finite": true,
+    "changed_side_correct_exact": true,
+    "complete_changed_units_exact": true,
+    "full_correct_scene_exact": true,
+    "full_wrong_scene_exact": true,
+    "no_official_validation_test_or_oracle_access": true,
+    "scene_intervention_reduces_original_accuracy": true,
+    "source_architecture_exact": true,
+    "training_and_minimal_runtime_base_equivalence_attested": true,
+    "wrong_scene_original_target_exact": true,
+    "wrong_scene_paired_target_follow_exact": true
+  },
+  "observed": {
+    "changed_side_correct": {
+      "correct": 31,
+      "total": 52
+    },
+    "complete_changed_units": {
+      "correct": 6,
+      "total": 26
+    },
+    "full_correct_scene": {
+      "correct": 295,
+      "total": 384
+    },
+    "full_wrong_scene": {
+      "correct": 278,
+      "total": 384
+    },
+    "wrong_scene_original_target": {
+      "correct": 14,
+      "total": 52
+    },
+    "wrong_scene_paired_target_follow": {
+      "correct": 31,
+      "total": 52
+    }
+  },
+  "passed": true,
+  "runtime_binding": {
+    "base_runtime_config_sha256": "714c60ce9ccb1dff69c72f6618f8afb6f31bc60a830b5ee0fb794fedaa8a321e",
+    "runtime_base_checkpoint_sha256": "7c3e679702ccd204fa4d7ae4077b065f3d7a7fe36df7dbc45492d67566e97f59",
+    "training_base_checkpoint_sha256": "3e128b40c1b73bb32750285679cda6b1bea364e67465e986a94a81dfc95e81e8"
+  },
+  "runtime_contract": {
+    "answer_class_codebook_runtime_loaded": false,
+    "answer_text_runtime_loaded": false,
+    "architecture": "dense_full_scene_continuous_control_v75",
+    "environmental_text_inputs": [],
+    "exact_two_file_checkpoint": true,
+    "oracle_runtime_loaded": false,
+    "prequestion_scene_key_value_cache": true,
+    "question_dependent_scene_retrieval": false,
+    "teacher_cache_runtime_loaded": false,
+    "training_answers_runtime_loaded": false
+  },
+  "schema_version": 1
+}

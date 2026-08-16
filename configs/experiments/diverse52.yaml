@@ -1,0 +1,385 @@
+_base_: diverse28.yaml
+
+# Successor development split after the one-shot V55 evaluation. The exhausted
+# scenes 19--24 move into training; scenes 57--62 are a new scene-disjoint
+# validation split. The inherited final scenes 25--30 remain deferred and their
+# definitions are not overridden here.
+paths:
+  qa_root: data_diverse52/qa
+
+training:
+  output_namespace: gemma4_diverse52
+
+batch:
+  manifest_name: diverse52
+  expected_scene_count: 52
+  expected_split_counts:
+    train: 40
+    validation: 6
+    test: 6
+  splits:
+    train:
+      - scene_000011
+      - scene_000012
+      - scene_000013
+      - scene_000014
+      - scene_000015
+      - scene_000016
+      - scene_000017
+      - scene_000018
+      - scene_000019
+      - scene_000020
+      - scene_000021
+      - scene_000022
+      - scene_000023
+      - scene_000024
+      - scene_000031
+      - scene_000032
+      - scene_000033
+      - scene_000034
+      - scene_000035
+      - scene_000036
+      - scene_000037
+      - scene_000038
+      - scene_000039
+      - scene_000040
+      - scene_000041
+      - scene_000042
+      - scene_000043
+      - scene_000044
+      - scene_000045
+      - scene_000046
+      - scene_000047
+      - scene_000048
+      - scene_000049
+      - scene_000050
+      - scene_000051
+      - scene_000052
+      - scene_000053
+      - scene_000054
+      - scene_000055
+      - scene_000056
+    validation:
+      - scene_000057
+      - scene_000058
+      - scene_000059
+      - scene_000060
+      - scene_000061
+      - scene_000062
+    test:
+      - scene_000025
+      - scene_000026
+      - scene_000027
+      - scene_000028
+      - scene_000029
+      - scene_000030
+  scenes:
+    # TRAIN SUCCESSOR: nine atomic pairs cover every supported physical-change
+    # family once at new deterministic seeds.
+    scene_000039:
+      plan_version: 2
+      seed_offset: 20180
+      color_variant: swap_red_blue
+      layout_variant: wide
+      chair_orientation: upright
+      picture_placement: floor
+      bowl_placement: floor_right
+      book_placement: under_table
+      pair_id: pair_000019
+      paired_scene_id: scene_000040
+      change_type: chair_orientation
+      pair_role: reference
+    scene_000040:
+      plan_version: 2
+      seed_offset: 20180
+      color_variant: swap_red_blue
+      layout_variant: wide
+      chair_orientation: upside_down
+      picture_placement: floor
+      bowl_placement: floor_right
+      book_placement: under_table
+      pair_id: pair_000019
+      paired_scene_id: scene_000039
+      change_type: chair_orientation
+      pair_role: counterfactual
+
+    scene_000041:
+      plan_version: 2
+      seed_offset: 21189
+      color_variant: rotate_primary
+      layout_variant: mirror_wide
+      picture_placement: wall
+      bowl_placement: floor_left
+      book_placement: table
+      pair_id: pair_000020
+      paired_scene_id: scene_000042
+      change_type: object_relocation
+      pair_role: reference
+    scene_000042:
+      plan_version: 2
+      seed_offset: 21189
+      color_variant: rotate_primary
+      layout_variant: mirror_wide
+      picture_placement: wall
+      bowl_placement: floor_right
+      book_placement: table
+      pair_id: pair_000020
+      paired_scene_id: scene_000041
+      change_type: object_relocation
+      pair_role: counterfactual
+
+    scene_000043:
+      plan_version: 2
+      seed_offset: 22198
+      color_variant: base
+      layout_variant: wide
+      picture_placement: floor
+      bowl_placement: floor_right
+      book_placement: under_table
+      pair_id: pair_000021
+      paired_scene_id: scene_000044
+      change_type: color_swap
+      pair_role: reference
+    scene_000044:
+      plan_version: 2
+      seed_offset: 22198
+      color_variant: swap_blue_yellow
+      layout_variant: wide
+      picture_placement: floor
+      bowl_placement: floor_right
+      book_placement: under_table
+      pair_id: pair_000021
+      paired_scene_id: scene_000043
+      change_type: color_swap
+      pair_role: counterfactual
+
+    scene_000045:
+      plan_version: 2
+      seed_offset: 23207
+      color_variant: swap_green_yellow
+      layout_variant: mirror_wide
+      chair_count: 1
+      picture_placement: wall
+      bowl_placement: floor_left
+      book_placement: table
+      pair_id: pair_000022
+      paired_scene_id: scene_000046
+      change_type: object_count
+      pair_role: reference
+    scene_000046:
+      plan_version: 2
+      seed_offset: 23207
+      color_variant: swap_green_yellow
+      layout_variant: mirror_wide
+      chair_count: 2
+      picture_placement: wall
+      bowl_placement: floor_left
+      book_placement: table
+      pair_id: pair_000022
+      paired_scene_id: scene_000045
+      change_type: object_count
+      pair_role: counterfactual
+
+    scene_000047:
+      plan_version: 2
+      seed_offset: 24216
+      color_variant: swap_blue_yellow
+      layout_variant: wide
+      picture_placement: floor
+      bowl_placement: floor_right
+      book_placement: table
+      pair_id: pair_000023
+      paired_scene_id: scene_000048
+      change_type: book_support
+      pair_role: reference
+    scene_000048:
+      plan_version: 2
+      seed_offset: 24216
+      color_variant: swap_blue_yellow
+      layout_variant: wide
+      picture_placement: floor
+      bowl_placement: floor_right
+      book_placement: under_table
+      pair_id: pair_000023
+      paired_scene_id: scene_000047
+      change_type: book_support
+      pair_role: counterfactual
+
+    scene_000049:
+      plan_version: 2
+      seed_offset: 25225
+      color_variant: rotate_primary
+      layout_variant: wide
+      picture_placement: wall
+      bowl_placement: floor_left
+      book_placement: under_table
+      pair_id: pair_000024
+      paired_scene_id: scene_000050
+      change_type: mirror_lr
+      pair_role: reference
+    scene_000050:
+      plan_version: 2
+      seed_offset: 25225
+      color_variant: rotate_primary
+      layout_variant: mirror_wide
+      picture_placement: wall
+      bowl_placement: floor_left
+      book_placement: under_table
+      pair_id: pair_000024
+      paired_scene_id: scene_000049
+      change_type: mirror_lr
+      pair_role: counterfactual
+
+    scene_000051:
+      plan_version: 2
+      seed_offset: 26234
+      color_variant: base
+      layout_variant: mirror_wide
+      picture_placement: wall
+      bowl_placement: floor_right
+      book_placement: table
+      pair_id: pair_000025
+      paired_scene_id: scene_000052
+      change_type: picture_support
+      pair_role: reference
+    scene_000052:
+      plan_version: 2
+      seed_offset: 26234
+      color_variant: base
+      layout_variant: mirror_wide
+      picture_placement: floor
+      bowl_placement: floor_right
+      book_placement: table
+      pair_id: pair_000025
+      paired_scene_id: scene_000051
+      change_type: picture_support
+      pair_role: counterfactual
+
+    scene_000053:
+      plan_version: 2
+      seed_offset: 27243
+      color_variant: swap_red_blue
+      layout_variant: cube_on
+      picture_placement: floor
+      bowl_placement: floor_left
+      book_placement: table
+      pair_id: pair_000026
+      paired_scene_id: scene_000054
+      change_type: cube_support
+      pair_role: reference
+    scene_000054:
+      plan_version: 2
+      seed_offset: 27243
+      color_variant: swap_red_blue
+      layout_variant: cube_under
+      picture_placement: floor
+      bowl_placement: floor_left
+      book_placement: table
+      pair_id: pair_000026
+      paired_scene_id: scene_000053
+      change_type: cube_support
+      pair_role: counterfactual
+
+    scene_000055:
+      plan_version: 2
+      seed_offset: 28252
+      color_variant: swap_green_yellow
+      layout_variant: wide
+      picture_placement: wall
+      bowl_placement: floor_right
+      book_placement: under_table
+      remove_instance_ids: []
+      pair_id: pair_000027
+      paired_scene_id: scene_000056
+      change_type: object_removal
+      pair_role: reference
+    scene_000056:
+      plan_version: 2
+      seed_offset: 28252
+      color_variant: swap_green_yellow
+      layout_variant: wide
+      picture_placement: wall
+      bowl_placement: floor_right
+      book_placement: under_table
+      remove_instance_ids: [i_000105]
+      pair_id: pair_000027
+      paired_scene_id: scene_000055
+      change_type: object_removal
+      pair_role: counterfactual
+
+    # FRESH VALIDATION: new seeds for the three physical families on which the
+    # immutable V55 development result showed incomplete paired behavior.
+    scene_000057:
+      plan_version: 2
+      seed_offset: 29261
+      color_variant: rotate_primary
+      layout_variant: mirror_wide
+      picture_placement: wall
+      bowl_placement: floor_left
+      book_placement: table
+      pair_id: pair_000028
+      paired_scene_id: scene_000058
+      change_type: book_support
+      pair_role: reference
+    scene_000058:
+      plan_version: 2
+      seed_offset: 29261
+      color_variant: rotate_primary
+      layout_variant: mirror_wide
+      picture_placement: wall
+      bowl_placement: floor_left
+      book_placement: under_table
+      pair_id: pair_000028
+      paired_scene_id: scene_000057
+      change_type: book_support
+      pair_role: counterfactual
+
+    scene_000059:
+      plan_version: 2
+      seed_offset: 30270
+      color_variant: swap_red_blue
+      layout_variant: wide
+      picture_placement: floor
+      bowl_placement: floor_right
+      book_placement: table
+      pair_id: pair_000029
+      paired_scene_id: scene_000060
+      change_type: mirror_lr
+      pair_role: reference
+    scene_000060:
+      plan_version: 2
+      seed_offset: 30270
+      color_variant: swap_red_blue
+      layout_variant: mirror_wide
+      picture_placement: floor
+      bowl_placement: floor_right
+      book_placement: table
+      pair_id: pair_000029
+      paired_scene_id: scene_000059
+      change_type: mirror_lr
+      pair_role: counterfactual
+
+    scene_000061:
+      plan_version: 2
+      seed_offset: 31279
+      color_variant: swap_blue_yellow
+      layout_variant: wide
+      picture_placement: wall
+      bowl_placement: floor_left
+      book_placement: under_table
+      pair_id: pair_000030
+      paired_scene_id: scene_000062
+      change_type: picture_support
+      pair_role: reference
+    scene_000062:
+      plan_version: 2
+      seed_offset: 31279
+      color_variant: swap_blue_yellow
+      layout_variant: wide
+      picture_placement: floor
+      bowl_placement: floor_left
+      book_placement: under_table
+      pair_id: pair_000030
+      paired_scene_id: scene_000061
+      change_type: picture_support
+      pair_role: counterfactual

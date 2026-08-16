@@ -1,0 +1,123 @@
+{
+  "attempt": {
+    "command": "env PYTHONPATH=src /usr/bin/time -p .venv-gemma4/bin/python scripts/train_navigation_policy_v4.py --config configs/experiments/navigation_policy_v4.yaml",
+    "elapsed_seconds": 48.89,
+    "exit_code": 1,
+    "failure_stage": "strict_training_report_json_serialization",
+    "held_out_evaluation_completed": true,
+    "optimizer_constructed": true,
+    "python_pid": 99031,
+    "system_cpu_seconds": 27.28,
+    "time_wrapper_pid": 99029,
+    "training_loop_completed": true,
+    "user_cpu_seconds": 60.12
+  },
+  "authorized_recovery_scope": {
+    "acceptance_gate_change": false,
+    "matches_v3_evaluator_precedent": true,
+    "new_preregistration_required_before_rerun": true,
+    "only_change": "empty_targeted_or_targetless_metric_subgroup_accuracy_is_finite_zero",
+    "protocol_version": "v4.1",
+    "training_data_change": false,
+    "training_hyperparameters_change": false,
+    "training_seed_change": false
+  },
+  "failure": {
+    "diagnosis": "evaluate_prepared_v4 computed an unguarded mean over an empty targeted or targetless subgroup in a causal control condition",
+    "exception_message": "Out of range float values are not JSON compliant: nan",
+    "exception_type": "ValueError",
+    "live_navigation_benchmark_opened": false,
+    "live_navigation_oracle_opened": false,
+    "model_acceptance_result_available": false,
+    "model_acceptance_result_interpreted": false,
+    "terminal_traceback": [
+      "scripts/train_navigation_policy_v4.py:22 main",
+      "src/semantic_3d_chat/training/train_navigation_policy_v4.py:990 train_navigation_policy_v4 -> _atomic_json(report_path, result)",
+      "src/semantic_3d_chat/training/train_navigation_policy_v4.py:95 _atomic_json -> json.dump(..., allow_nan=False)",
+      "json/encoder.py:240 -> ValueError"
+    ]
+  },
+  "original_preregistration": {
+    "acceptance_gates": {
+      "maximum_validation_argument_mae": 0.16,
+      "minimum_collision_risk_accuracy": 0.9,
+      "minimum_shuffled_clearance_family_drop": 0.1,
+      "minimum_unsafe_motion_rejection": 0.95,
+      "minimum_validation_action_accuracy": 0.9,
+      "minimum_validation_stop_recall": 0.88,
+      "minimum_validation_turn_sign_accuracy": 0.92,
+      "minimum_validation_update_after_scan_accuracy": 0.87,
+      "minimum_wrong_target_turn_sign_drop": 0.05,
+      "minimum_zero_target_targeted_accuracy_drop": 0.8
+    },
+    "bytes_modified": false,
+    "hyperparameters": {
+      "argument_loss_weight": 0.5,
+      "batch_size": 32,
+      "clearance_change_loss_weight": 0.05,
+      "clearance_change_margin": 0.08,
+      "clearance_max_range_m": 1.0,
+      "clearance_ray_count": 24,
+      "collision_probe_distances_m": [
+        0.125,
+        0.25,
+        0.375,
+        0.5
+      ],
+      "collision_risk_loss_weight": 0.25,
+      "device": "cpu",
+      "early_stopping_patience": 10,
+      "epochs": 48,
+      "gradient_clip_norm": 1.0,
+      "hidden_size": 1536,
+      "learning_rate": 0.0003,
+      "model_dim": 128,
+      "robot_token_count": 4,
+      "scene_token_count": 258,
+      "seed": 20260813,
+      "turn_sign_loss_weight": 0.25,
+      "weight_decay": 0.0001
+    },
+    "implementation_source_hashes": {
+      "scripts/audit_navigation_policy_v4_runtime.py": "09408ab74fb60926d3e9b4292ce08e97acf312edfa5f4018672740313adc66c8",
+      "scripts/evaluate_navigation_policy_v4.py": "792f53c79463e18e9b6f1d703bf52236ca34981d2f5748a75f3d4e375b22faf7",
+      "scripts/preregister_navigation_policy_v4.py": "beffda4a1dfa8d26bcc09252215b455e086aafffbbd5bb97d0ed596b432dfa87",
+      "scripts/run_llm_navigation_inference.py": "4ea17f443fed4fb822889d2704bc712ee98d431d031a1169f74f0ffd8ba62233",
+      "scripts/train_navigation_policy_v4.py": "c664cac220b91e03dd7a53f52cbedca7443b870840ed7b34eb8f6d4f488b880a",
+      "src/semantic_3d_chat/evaluation/llm_navigation_benchmark.py": "085f86994ed13e244b951e4ad41680bba0b77f88bb3a3d3c7c880aa852535ad2",
+      "src/semantic_3d_chat/evaluation/navigation_policy_v4_preregistration.py": "135b8c84f7ab18be330defc0b7498f1d36d50837ec1db0e2fb93c4c00955ee18",
+      "src/semantic_3d_chat/robot/collision.py": "c88c8fdf4dd9377f829991c122f2639be35a7824db18edf48a4baa23151b6e3d",
+      "src/semantic_3d_chat/robot/conversation_cli.py": "a4deb2a6d3fa2344d3cd003f7274196caeeec98c7ca7a3d50eb5ff39be3fea0f",
+      "src/semantic_3d_chat/robot/llm_tool_policy.py": "c07dfb2a088c1863ec4060da6e4c118f15998fca1e19f9a65073a4408410fef1",
+      "src/semantic_3d_chat/robot/navigation_policy_v4.py": "33e1ff9ff82d0dc25b844676a0f45d71c17502c69e2504edea29f9ece1fd3d08",
+      "src/semantic_3d_chat/scene_encoder/map_io.py": "10c53adf865caf4d2323c919e807ed05781202e9c6395e9ea54f02fa6c456047",
+      "src/semantic_3d_chat/training/train_navigation_policy_v4.py": "45df6b41e0ef56378413d0b302a4f35252e180e11e776af73e7d6728607ce518"
+    },
+    "input_artifact_hashes": {
+      "configs/experiments/navigation_policy_v3.yaml": "9daf6bdbf2d059064a5b447c984b0cd394cb647c2994499110060dd90ebaea3a",
+      "configs/experiments/navigation_policy_v4.yaml": "a6ab85e71b53268e8caa0aa55238a18dc636ec0430a52d0b7ad0f93ec3758962",
+      "configs/runtime/embodied_v54.yaml": "ba7c47e377d3b1a352e0c8f6348b7c72d39cf372526afea37da3c4dd711212ca",
+      "configs/runtime/gemma4_v54.yaml": "891c58faaaa5fcd2ed76c7e3871f14c5d8c5ae2e05d9fa4ddd5193773d40e56b",
+      "data_gemma4/checkpoints/navigation_policy_v3/policy.safetensors": "975c7c6c5e103dd1bb055feb2eceff6cc7fe9ab82a3f7f492a8fbdb5a26cc87c",
+      "data_gemma4/checkpoints/navigation_policy_v3/runtime_metadata.json": "1350fb92e667a793088c7f4e4a3063f3aad0b218f50fff10c418ae850e5cc6d8",
+      "data_gemma4/checkpoints/robot_state_numeric_v1/runtime_metadata.json": "c48b8748dbde04f2c9294321974b1b13be2d77083970f051ba1c11a9b42d1985",
+      "data_gemma4/checkpoints/robot_state_numeric_v1/state.safetensors": "5d6aa13208264e0a99755d84e8f68b7727249b274c460e9d4e26541cd8e46938",
+      "data_gemma4/scene_tokens/v56_question_control_full_prefixes/manifest.json": "5a288a7fef65a957ba7b20132c63380cfadc7edbc37b32c1885037f939b9db61",
+      "data_gemma4/training/navigation_policy_v3/manifest.json": "005756918c54fbffbb7c6db45e2170174d85f87f278e755e538418d6eb880243",
+      "data_gemma4/training/navigation_policy_v3/traces.jsonl": "72434178ff1cf23c2dfeb98d52cb7b4c443fcc8715c1dd4ee883d87ae127e7ad"
+    },
+    "path": "reports/gemma4/metrics/navigation_policy_v4_preregistration.json",
+    "prepared_v4_dataset_sha256": "c1a383b27bbfb114354c083fc90a7f92eaefc445d2bf8f71b818bd66826ea8ec",
+    "seed": 20260813,
+    "sha256": "b855ee22bfbca6b5f709199e5b88937c6643c9ddbea39a102ebebc23f0a28c61"
+  },
+  "publication_state": {
+    "checkpoint_absent": true,
+    "checkpoint_path": "data_gemma4/checkpoints/navigation_policy_v4",
+    "partial_artifact_published": false,
+    "training_report_absent": true,
+    "training_report_path": "reports/gemma4/metrics/navigation_policy_v4_training.json"
+  },
+  "schema": "semantic_3d_chat.navigation_policy_v4_training_incident.v1",
+  "status": "sealed_failed_attempt_no_checkpoint_or_training_report"
+}

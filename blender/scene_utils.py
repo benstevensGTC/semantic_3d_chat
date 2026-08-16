@@ -125,10 +125,24 @@ def load_config(config_argument: str) -> tuple[dict[str, Any], Path]:
         config_path = (PROJECT_ROOT / config_path).resolve()
     if not config_path.is_file():
         raise FileNotFoundError(f"Configuration does not exist: {config_path}")
-    config = _load_simple_yaml(config_path)
-    if base_name := config.get("_base_"):
-        base_path = (config_path.parent / str(base_name)).resolve()
-        config = _deep_merge(_load_simple_yaml(base_path), config)
+
+    def load_recursive(path: Path, stack: tuple[Path, ...]) -> dict[str, Any]:
+        resolved = path.resolve()
+        if resolved in stack:
+            chain = " -> ".join(str(item) for item in (*stack, resolved))
+            raise ValueError(f"Cyclic _base_ config inheritance: {chain}")
+        if not resolved.is_file():
+            raise FileNotFoundError(f"Configuration does not exist: {resolved}")
+        loaded = _load_simple_yaml(resolved)
+        if base_name := loaded.get("_base_"):
+            base = load_recursive(
+                resolved.parent / str(base_name),
+                (*stack, resolved),
+            )
+            return _deep_merge(base, loaded)
+        return loaded
+
+    config = load_recursive(config_path, ())
     return config, config_path
 
 

@@ -58,6 +58,7 @@ from semantic_3d_chat.training.checkpointing import (
     module_collection_state_sha256,
     runtime_checkpoint_metadata,
     save_adapter_checkpoint,
+    validate_runtime_checkpoint_metadata,
 )
 from semantic_3d_chat.training.losses import QuestionGroundingHead
 
@@ -75,6 +76,21 @@ class TinyTokenizer:
 
     def decode(self, _token_ids, **_kwargs):
         return "continuous answer"
+
+
+def test_runtime_input_guard_rejects_leaf_and_parent_symlink_aliases(tmp_path: Path) -> None:
+    target_root = tmp_path / "target"
+    target_root.mkdir()
+    target = target_root / "voxel_map.npz"
+    target.write_bytes(b"numeric")
+    leaf_alias = tmp_path / "map-alias.npz"
+    leaf_alias.symlink_to(target)
+    parent_alias = tmp_path / "map-parent"
+    parent_alias.symlink_to(target_root, target_is_directory=True)
+
+    for candidate in (leaf_alias, parent_alias / target.name):
+        with pytest.raises(ValueError, match="symbolic-link path component"):
+            runtime_module._guard_runtime_input(candidate, "numeric voxel map")
 
 
 class TinyLanguageModel(nn.Module):
@@ -1036,6 +1052,22 @@ def test_runtime_provenance_sanitizes_later_stage_training_history(tmp_path: Pat
             semantic_dim=7,
             language_hidden_dim=8,
         )
+
+
+@pytest.mark.parametrize(
+    "poison",
+    [
+        {"category_hint": "chair"},
+        {"nested": {"scene_graph": ["left_of"]}},
+        {"numeric": float("nan")},
+    ],
+)
+def test_runtime_metadata_recursively_rejects_environment_text_and_nonfinite_data(
+    poison: dict[str, object],
+) -> None:
+    metadata = {"schema_version": 3, "dense_alignment": poison}
+    with pytest.raises(ValueError, match="environmental text|nonfinite"):
+        validate_runtime_checkpoint_metadata(metadata)
 
 
 def test_checkpoint_contract_does_not_allow_null_global_equivalence_without_signed_x(

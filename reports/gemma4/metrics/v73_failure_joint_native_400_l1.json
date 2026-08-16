@@ -1,0 +1,241 @@
+{
+  "artifact": "v73_failure_diagnostic_train_pool_only_v1",
+  "class_probe": {
+    "gated": {
+      "fit": {
+        "elapsed_seconds": 0.6569272500928491,
+        "initial_loss": 3.3651516437530518,
+        "last_loss": 1.67827570438385,
+        "maximum_preclip_gradient_norm": 54.796844482421875,
+        "steps": 14
+      },
+      "held": {
+        "changed_supported_accuracy": 0.38,
+        "complete_class_units": 0,
+        "distinct_predicted_classes": 11,
+        "family_mean_margins": {
+          "book_support": 0.006093800067901611,
+          "chair_orientation": 0.008574485778808594,
+          "color_swap": -0.0014899969100952148,
+          "mirror_lr": -0.025011062622070312,
+          "object_count": 0.10140180587768555,
+          "object_relocation": 0.025370121002197266,
+          "object_removal": -0.1025686264038086,
+          "picture_support": 0.18057268857955933
+        },
+        "mean_correct_over_wrong_scene_margin": 0.043553009033203124,
+        "mean_own_over_opposite_margin": 0.021776504516601562,
+        "positive_own_over_opposite_sides": 25,
+        "prediction_change_units": 0,
+        "supported_accuracy": 0.5248041775456919,
+        "zero_scene_maximum_absolute_logit": 0.0
+      },
+      "train": {
+        "changed_supported_accuracy": 0.375,
+        "complete_class_units": 0,
+        "distinct_predicted_classes": 11,
+        "family_mean_margins": {
+          "book_support": 0.0031590163707733154,
+          "chair_orientation": 0.0017862319946289062,
+          "color_swap": 0.005657553672790527,
+          "cube_support": -0.008302529652913412,
+          "mirror_lr": 0.0068520307540893555,
+          "object_count": 0.011690139770507812,
+          "object_relocation": -0.00016021728515625,
+          "object_removal": -0.03470309575398763,
+          "picture_support": 0.009839773178100586
+        },
+        "mean_correct_over_wrong_scene_margin": 0.0032627701759338377,
+        "mean_own_over_opposite_margin": 0.0016313850879669189,
+        "positive_own_over_opposite_sides": 40,
+        "prediction_change_units": 0,
+        "supported_accuracy": 0.5034722222222222,
+        "zero_scene_maximum_absolute_logit": 0.0
+      }
+    }
+  },
+  "device": "mps",
+  "gated_native_prototype": {
+    "fit": {
+      "elapsed_seconds": 21.718864916823804,
+      "history": [
+        {
+          "loss": 4.05107307434082,
+          "pair_softplus": 0.698101282119751,
+          "row_cross_entropy": 3.3529720306396484,
+          "step": 1
+        },
+        {
+          "loss": 3.8346965312957764,
+          "pair_softplus": 0.7022703289985657,
+          "row_cross_entropy": 3.1324262619018555,
+          "step": 2
+        },
+        {
+          "loss": 1.7432177066802979,
+          "pair_softplus": 0.7284542918205261,
+          "row_cross_entropy": 1.014763355255127,
+          "step": 10
+        },
+        {
+          "loss": 1.2098572254180908,
+          "pair_softplus": 0.6041240692138672,
+          "row_cross_entropy": 0.6057331562042236,
+          "step": 50
+        },
+        {
+          "loss": 0.8276267647743225,
+          "pair_softplus": 0.34809601306915283,
+          "row_cross_entropy": 0.4795307517051697,
+          "step": 100
+        },
+        {
+          "loss": 0.3683767318725586,
+          "pair_softplus": 0.0651245042681694,
+          "row_cross_entropy": 0.3032522201538086,
+          "step": 200
+        },
+        {
+          "loss": 0.2871173620223999,
+          "pair_softplus": 0.0225260891020298,
+          "row_cross_entropy": 0.2645912766456604,
+          "step": 400
+        }
+      ],
+      "learning_rate": 0.003,
+      "maximum_preclip_gradient_norm": 4.585849761962891,
+      "pair_weight": 1.0,
+      "steps": 400
+    },
+    "held": {
+      "changed_supported_accuracy": 0.72,
+      "complete_class_units": 10,
+      "distinct_predicted_classes": 23,
+      "family_mean_margins": {
+        "book_support": 0.6024912185966969,
+        "chair_orientation": 0.05871307849884033,
+        "color_swap": 0.01305580884218216,
+        "mirror_lr": 0.6059116497635841,
+        "object_count": 0.11426019668579102,
+        "object_relocation": 0.001462344080209732,
+        "object_removal": 0.0007393856843312582,
+        "picture_support": 0.43525227531790733
+      },
+      "mean_changed_pair_control_cosine": 0.6000691322237253,
+      "mean_changed_pair_control_delta_rms": 0.16295675278175623,
+      "mean_correct_over_wrong_scene_margin": 0.5446307694911957,
+      "mean_output_rms": 0.2497531771659851,
+      "mean_own_over_opposite_margin": 0.27231538474559785,
+      "positive_own_over_opposite_sides": 35,
+      "prediction_change_units": 10,
+      "supported_accuracy": 0.8668407310704961,
+      "zero_scene_maximum_absolute_control": 0.0
+    },
+    "joint_full_fold_objective": true,
+    "train": {
+      "changed_supported_accuracy": 1.0,
+      "complete_class_units": 40,
+      "distinct_predicted_classes": 28,
+      "family_mean_margins": {
+        "book_support": 0.7551286071538925,
+        "chair_orientation": 0.7519301474094391,
+        "color_swap": 0.8191503137350082,
+        "cube_support": 0.730477492014567,
+        "mirror_lr": 0.8180870413780212,
+        "object_count": 0.6804884076118469,
+        "object_relocation": 0.8147658258676529,
+        "object_removal": 0.8613358537356058,
+        "picture_support": 0.7132373675704002
+      },
+      "mean_changed_pair_control_cosine": -0.24497628752142192,
+      "mean_changed_pair_control_delta_rms": 0.3821305848658085,
+      "mean_correct_over_wrong_scene_margin": 1.5517573639750482,
+      "mean_output_rms": 0.24888449907302856,
+      "mean_own_over_opposite_margin": 0.7758786819875241,
+      "positive_own_over_opposite_sides": 80,
+      "prediction_change_units": 40,
+      "supported_accuracy": 1.0,
+      "zero_scene_maximum_absolute_control": 0.0
+    },
+    "trainable_parameters": 1409024
+  },
+  "preflight": {
+    "absolute_reader_gates": {
+      "changed_supported_accuracy": 0.65,
+      "complete_class_units": 8,
+      "correct_over_wrong_scene_margin": 0.02,
+      "mean_own_over_opposite_margin": 0.2,
+      "positive_own_over_opposite_sides": 34,
+      "prediction_change_units": 13,
+      "supported_accuracy": 0.8,
+      "zero_scene_maximum_absolute_control": 0.0
+    },
+    "artifact": "v73_fullscene_numeric_preflight_v1",
+    "base_checkpoint_sha256": "3e128b40c1b73bb32750285679cda6b1bea364e67465e986a94a81dfc95e81e8",
+    "checkpoint_published": false,
+    "gemma_generation_used": false,
+    "gemma_model_file_sha256": "2db5482b20d746879bb3ef79b5203e9075a2e2b98f54ec7c2f281c1477ddc550",
+    "held_changed_sides": 52,
+    "held_changed_units": 26,
+    "held_pairs": [
+      "pair_000019",
+      "pair_000020",
+      "pair_000021",
+      "pair_000022",
+      "pair_000023",
+      "pair_000024",
+      "pair_000025",
+      "pair_000027"
+    ],
+    "held_rows": 384,
+    "held_scenes": 16,
+    "numeric_gates": {
+      "additional_complete_units": 6,
+      "additional_positive_sides": 8,
+      "causal_margin_gain": 0.03,
+      "causal_margin_gain_bootstrap_lower_bound": 0.0,
+      "correct_over_wrong_scene_margin": 0.02,
+      "improved_families": 6,
+      "maximum_broad_accuracy_drop": 0.02,
+      "minimum_family_margin_gain": -0.02,
+      "prediction_change_units": 13,
+      "zero_scene_maximum_absolute_control": 0.0
+    },
+    "official_test_loaded": false,
+    "official_validation_loaded": false,
+    "oracle_loaded": false,
+    "pair_count": 20,
+    "prefix_manifest_sha256": "5a288a7fef65a957ba7b20132c63380cfadc7edbc37b32c1885037f939b9db61",
+    "row_count": 960,
+    "scene_count": 40,
+    "train_held_pair_disjoint": true,
+    "train_held_scene_disjoint": true,
+    "training_changed_units": 40,
+    "training_pairs": [
+      "pair_000005",
+      "pair_000006",
+      "pair_000007",
+      "pair_000008",
+      "pair_000009",
+      "pair_000010",
+      "pair_000011",
+      "pair_000015",
+      "pair_000016",
+      "pair_000017",
+      "pair_000018",
+      "pair_000026"
+    ],
+    "training_qa_sha256": "01721bf904b1ab0b65ce8acac6e366287040873cda1356da6c70c4981abe7619",
+    "training_rows": 576,
+    "training_scenes": 24
+  },
+  "scope": {
+    "checkpoint_published": false,
+    "deferred_final_loaded": false,
+    "gemma_generation_used": false,
+    "official_test_loaded": false,
+    "official_validation_loaded": false,
+    "oracle_loaded": false,
+    "training_pool_only": true
+  }
+}

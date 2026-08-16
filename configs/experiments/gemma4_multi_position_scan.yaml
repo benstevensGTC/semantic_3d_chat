@@ -1,0 +1,17 @@
+_base_: ../gemma4_e2b.yaml
+
+# Optional deterministic coverage experiment. The inherited center position is
+# always scanned first; these numeric positions are then scanned in this exact
+# order with the same inherited pitch-major, yaw-minor angular sweep.
+paths:
+  data_root: data_multi_position
+  features_root: data_gemma4_multi_position/features
+  maps_root: data_gemma4_multi_position/maps
+  checkpoints_root: data_gemma4_multi_position/checkpoints
+  reports_root: reports/gemma4_multi_position
+
+render:
+  additional_camera_positions_m: [[-1.80, -1.50, 1.40], [1.80, -1.50, 1.40], [1.80, 1.00, 1.40]]
+
+training:
+  output_namespace: gemma4_e2b_multi_position

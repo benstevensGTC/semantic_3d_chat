@@ -19,6 +19,7 @@ ALIGNED_FEATURE_KEY = "clip_aligned"
 MIDDLE_FEATURE_KEY = "native_middle"
 LATE_FEATURE_KEY = "native_late"
 COMPONENT_NAMES = (MIDDLE_FEATURE_KEY, LATE_FEATURE_KEY, ALIGNED_FEATURE_KEY)
+FEATURE_CACHE_FORMAT_VERSION = 2
 
 
 def clip_patch_grid(sequence: torch.Tensor, grid_size: tuple[int, int]) -> torch.Tensor:
@@ -113,7 +114,13 @@ class DensePatchFeatures:
         return 0, middle_end, late_end, aligned_end
 
     def save(self, path: str | Path, metadata: Mapping[str, str] | None = None) -> Path:
-        """Atomically save fusion and named component arrays without lossy coding."""
+        """Atomically save one lossless fusion array plus slice metadata.
+
+        Schema v1 duplicated the same values in five arrays and consumed more
+        than twice the required storage. Schema v2 keeps the full native-width
+        float field exactly once; named streams are lossless views reconstructed
+        from explicit offsets. ``load`` remains compatible with v1 artifacts.
+        """
 
         destination = Path(path)
         if destination.suffix != ".npz":
@@ -122,10 +129,6 @@ class DensePatchFeatures:
         temporary = destination.with_name(f".{destination.stem}.tmp.npz")
         arrays = {
             SPATIAL_FEATURE_KEY: self.spatial_features.detach().cpu().numpy(),
-            NATIVE_FEATURE_KEY: self.native_middle_late.detach().cpu().numpy(),
-            MIDDLE_FEATURE_KEY: self.native_middle.detach().cpu().numpy(),
-            LATE_FEATURE_KEY: self.native_late.detach().cpu().numpy(),
-            ALIGNED_FEATURE_KEY: self.clip_aligned.detach().cpu().numpy(),
             "component_names": np.asarray(COMPONENT_NAMES),
             "component_offsets": np.asarray(self.component_offsets, dtype=np.int32),
             "metadata_json": np.asarray(
@@ -149,37 +152,70 @@ class DensePatchFeatures:
     def load(cls, path: str | Path) -> tuple[DensePatchFeatures, dict[str, str]]:
         source = Path(path)
         with np.load(source, allow_pickle=False) as archive:
-            required = {
+            required_v2 = {
                 SPATIAL_FEATURE_KEY,
-                NATIVE_FEATURE_KEY,
-                MIDDLE_FEATURE_KEY,
-                LATE_FEATURE_KEY,
-                ALIGNED_FEATURE_KEY,
                 "component_names",
                 "component_offsets",
                 "metadata_json",
             }
-            missing = required - set(archive.files)
+            missing = required_v2 - set(archive.files)
             if missing:
                 raise ValueError(f"Missing feature arrays in {source}: {sorted(missing)}")
-            features = cls(
-                native_middle=torch.from_numpy(archive[MIDDLE_FEATURE_KEY].copy()),
-                native_late=torch.from_numpy(archive[LATE_FEATURE_KEY].copy()),
-                clip_aligned=torch.from_numpy(archive[ALIGNED_FEATURE_KEY].copy()),
-            )
             stored_spatial = torch.from_numpy(archive[SPATIAL_FEATURE_KEY].copy())
-            stored_native = torch.from_numpy(archive[NATIVE_FEATURE_KEY].copy())
             names = tuple(str(value) for value in archive["component_names"].tolist())
             offsets = tuple(int(value) for value in archive["component_offsets"].tolist())
             metadata_value = archive["metadata_json"].item()
+            legacy_keys = {
+                NATIVE_FEATURE_KEY,
+                MIDDLE_FEATURE_KEY,
+                LATE_FEATURE_KEY,
+                ALIGNED_FEATURE_KEY,
+            }
+            present_legacy = legacy_keys & set(archive.files)
+            if present_legacy and present_legacy != legacy_keys:
+                missing_legacy = legacy_keys - present_legacy
+                raise ValueError(
+                    f"Partial legacy feature arrays in {source}: {sorted(missing_legacy)}"
+                )
+            legacy_arrays = (
+                {
+                    key: torch.from_numpy(archive[key].copy())
+                    for key in legacy_keys
+                }
+                if present_legacy
+                else None
+            )
         if names != COMPONENT_NAMES:
             raise ValueError(f"Unexpected feature component order in {source}: {names}")
+        if stored_spatial.ndim != 3:
+            raise ValueError(
+                f"Stored spatial feature field must be [grid_h, grid_w, dim] in {source}"
+            )
+        if len(offsets) != 4 or offsets[0] != 0 or offsets[-1] != stored_spatial.shape[-1]:
+            raise ValueError(f"Unexpected feature offsets in {source}: {offsets}")
+        if any(offsets[index] >= offsets[index + 1] for index in range(len(offsets) - 1)):
+            raise ValueError(f"Feature offsets must be strictly increasing in {source}: {offsets}")
+        features = cls(
+            native_middle=stored_spatial[..., offsets[0] : offsets[1]],
+            native_late=stored_spatial[..., offsets[1] : offsets[2]],
+            clip_aligned=stored_spatial[..., offsets[2] : offsets[3]],
+        )
         if offsets != features.component_offsets:
             raise ValueError(f"Unexpected feature offsets in {source}: {offsets}")
-        if not torch.equal(stored_native, features.native_middle_late):
-            raise ValueError(f"Stored native feature field is inconsistent in {source}")
         if not torch.equal(stored_spatial, features.spatial_features):
             raise ValueError(f"Stored spatial feature field is inconsistent in {source}")
+        if legacy_arrays is not None:
+            if not torch.equal(
+                legacy_arrays[NATIVE_FEATURE_KEY], features.native_middle_late
+            ):
+                raise ValueError(f"Stored native feature field is inconsistent in {source}")
+            for key, expected in (
+                (MIDDLE_FEATURE_KEY, features.native_middle),
+                (LATE_FEATURE_KEY, features.native_late),
+                (ALIGNED_FEATURE_KEY, features.clip_aligned),
+            ):
+                if not torch.equal(legacy_arrays[key], expected):
+                    raise ValueError(f"Stored legacy feature component {key} is inconsistent")
         metadata = json.loads(str(metadata_value))
         if not isinstance(metadata, dict) or any(
             not isinstance(key, str) or not isinstance(value, str)

@@ -1,0 +1,81 @@
+{
+  "schema": "semantic_3d_chat.blender_rover_gemma_waypoint_live_acceptance.v1",
+  "passed": true,
+  "verified_at_local": "2026-08-16T07:53:43-04:00",
+  "verification_method": "computer_use_visual_inspection_plus_loopback_api",
+  "scene_id": "scene_000001",
+  "goal": "Move closer to the chair and stop.",
+  "instruction_sha256": "80e8526b2d687162e80834394efc00cf355220a644524af1877dbef2bdd40c59",
+  "blender_version": "5.2.0 LTS",
+  "backend_url": "http://127.0.0.1:8770",
+  "visible_ui_checks": {
+    "real_3d_furnished_room_visible": true,
+    "toy_rover_visible_in_3d_viewport": true,
+    "continuous_point_map_overlay_visible": true,
+    "high_level_goal_field_visible": true,
+    "direct_driving_controls_absent": true,
+    "scrollable_transcript_visible": true,
+    "rover_motion_animated": true,
+    "completed_status_visible": true
+  },
+  "control_contract": {
+    "control_mode": "actual_local_gemma_model_only_waypoint_policy",
+    "navigation_checkpoint_sha256": "149f5e04de1d8305e642909443f03b96894edc3ece67e4500eacec8f5ca81e7c",
+    "gemma_runtime_binding_sha256": "800110e1545d77c1e374624ab837f6ed82cac54b269bf0359b840030db9e02cf",
+    "local_inference": true,
+    "cloud_model_used": false,
+    "high_level_natural_language_only": true,
+    "model_selects_every_waypoint_and_heading": true,
+    "model_selects_stop": true,
+    "deterministic_route_planner_used": false,
+    "fallback_used": false,
+    "substitution_applied": false,
+    "synthetic_stop_applied": false,
+    "camera_control_input": false
+  },
+  "continuous_memory": {
+    "source_voxels": 74699,
+    "processed_voxels": 8422,
+    "semantic_feature_dim": 3072,
+    "scene_tensor_shape": [
+      1,
+      258,
+      1536
+    ],
+    "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95",
+    "all_runtime_voxels_encoded": true,
+    "forbidden_access_count": 0
+  },
+  "result": {
+    "model_decision_count": 17,
+    "move_to_decision_count": 10,
+    "face_decision_count": 6,
+    "stop_decision_count": 1,
+    "accepted_decision_count": 9,
+    "safety_rejected_decision_count": 8,
+    "model_stop_emitted": true,
+    "final_position_xy_m": [
+      -0.4120201677307913,
+      0.30210299283625597
+    ],
+    "final_body_yaw_degrees": -51.863189697265625,
+    "collision": false,
+    "action_count": 9,
+    "last_decision_tensor_sha256": "65c5249059ceea8678bf1c50e3ea202553f46d7414aa43395bc88053c8dc5952",
+    "last_stop_probability": 0.9799046516418457
+  },
+  "evidence": {
+    "before_screenshot": {
+      "path": "reports/gemma4/figures/blender_rover_v14_approach_chair_before.png",
+      "sha256": "d1d23123a0e5dcab5409c78d07a7770b71bc75d51ea0fcb997155313a923386d"
+    },
+    "completed_screenshot": {
+      "path": "reports/gemma4/figures/blender_rover_v14_approach_chair_complete.png",
+      "sha256": "f570380f4075bf952437cb384305e6400534e3e464f17c4f21821139f438e30d"
+    }
+  },
+  "limitations": [
+    "This is same-room live acceptance, not held-out navigation generalization.",
+    "Eight Gemma proposals were rejected by deterministic collision safety; none were replaced."
+  ]
+}

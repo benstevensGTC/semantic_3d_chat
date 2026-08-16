@@ -6,7 +6,6 @@ from torch import nn
 from semantic_3d_chat.config import load_config
 from semantic_3d_chat.language.lora import install_lora_banks, lora_banks_settings
 
-
 V15_CONFIG = "configs/experiments/gemma4_color_mirror_decoder_qkvo_v15.yaml"
 V12_ADAPTER_SHA256 = "a4c85c14a214e4e594992e489a784cb4bacb64d3dfda519ad3da18b1595d9f22"
 V12_METADATA_SHA256 = "f097c6477546460440e77a3d225afb55818cb13abf9cbb4a90500f75a879b0f5"
@@ -75,9 +74,7 @@ class _ExactShapeToyGemma(nn.Module):
         super().__init__()
         self.model = nn.Module()
         self.model.language_model = nn.Module()
-        self.model.language_model.layers = nn.ModuleList(
-            _TargetLayer(layer) for layer in range(35)
-        )
+        self.model.language_model.layers = nn.ModuleList(_TargetLayer(layer) for layer in range(35))
 
 
 def test_v15_qkvo_config_pins_v12_source_fixed_prefix_and_screen_gate() -> None:
@@ -184,18 +181,14 @@ def test_v15_qkvo_exact_shape_installation_is_zero_deterministic_and_isolated() 
     assert inherited.installation.parameter_count == 45_056
     assert extension.installation.parameter_count == 290_816
     assert extension.installation.state_sha256() == V15_EXTENSION_SHA256
-    assert second.bank("extension_v15_qkvo").installation.state_sha256() == (
-        V15_EXTENSION_SHA256
-    )
+    assert second.bank("extension_v15_qkvo").installation.state_sha256() == (V15_EXTENSION_SHA256)
 
     assert all(
         torch.count_nonzero(adapter.lora_b).item() == 0
         for bank in first.banks
         for adapter in bank.installation.adapters
     )
-    assert all(
-        not parameter.requires_grad for parameter in inherited.installation.parameters()
-    )
+    assert all(not parameter.requires_grad for parameter in inherited.installation.parameters())
     assert all(parameter.requires_grad for parameter in extension.installation.parameters())
     assert {id(parameter) for parameter in first.parameters()} == {
         id(parameter) for parameter in extension.installation.parameters()

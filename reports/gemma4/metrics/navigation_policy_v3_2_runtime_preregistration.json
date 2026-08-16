@@ -1,0 +1,127 @@
+{
+  "acceptance_gates": {
+    "calibration_maximum_steps": 10,
+    "calibration_maximum_target_standoff_m": 0.85,
+    "calibration_required_checks": [
+      "all_executed_actions_succeeded",
+      "no_collision",
+      "post_scan_motion",
+      "required_stop",
+      "successful_scan",
+      "target_progress",
+      "target_standoff",
+      "updated_prefix_consumed"
+    ],
+    "calibration_task": "nav_005",
+    "continuous_context_audit_required": true,
+    "maximum_action_failure_count": 0,
+    "maximum_collision_count": 0,
+    "maximum_policy_rejection_count": 0,
+    "minimum_success_count": 6,
+    "oracle_and_qa_runtime_file_count": 0,
+    "previously_passing_tasks_must_remain_passing": [
+      "nav_000",
+      "nav_001",
+      "nav_002",
+      "nav_003",
+      "nav_004"
+    ],
+    "task_count": 6
+  },
+  "authorized_change": {
+    "compound_scan_or_look_action_grammar_only": true,
+    "environmental_text_inputs": [],
+    "kind": "generic_numeric_compound_approach_calibration",
+    "learned_checkpoint_changed": false,
+    "numeric_collision_planner_may_cap_effective_standoff": true,
+    "object_vocabulary_added": false,
+    "oracle_coordinate_added": false,
+    "oracle_inputs_at_runtime": false,
+    "policy_architecture_changed": false,
+    "scoring_spec_changed": false,
+    "semantic_standoff_lowered": true,
+    "task_id_special_case": false,
+    "training_data_changed": false
+  },
+  "benchmark_rerun_completed": false,
+  "calibration": {
+    "compound_semantic_standoff_m": 0.35,
+    "development_calibration": true,
+    "held_out_claim": false,
+    "maximum_waypoint_step_m": 0.5,
+    "numeric_planner_grid_resolution_m": 0.15,
+    "numeric_planner_standoff_tolerance_m": 0.2,
+    "same_diagnostic_benchmark": true,
+    "single_live_run": true
+  },
+  "claim_scope": {
+    "development_calibration": true,
+    "generalization_claim": false,
+    "held_out_claim": false,
+    "same_benchmark_used_for_diagnosis": true
+  },
+  "created_at_utc": "2026-08-13T20:27:45.049344+00:00",
+  "full_gemma_model_loaded_by_preregistration": false,
+  "implementation_source_hashes": {
+    "scripts/audit_navigation_continuous_context.py": "e9bbdc283d30396d01fb14168f4e156d8a889db22437bb0bc267a61a07c9aac8",
+    "scripts/run_learned_navigation_benchmark_v3_2.sh": "21d36d539cc869b0172047b30ad0371df1e077b686275572bf606bb8ec6ec908",
+    "scripts/run_llm_navigation_inference.py": "a9314e60045e13247b6465b25463294868c3f644c48277b01d44d579ca777c64",
+    "scripts/run_llm_navigation_inference_v3_2.py": "43e72229db2400ce2e227efeae73f9469bcc2ebfa53ab9e4f8854de75fbed09e",
+    "scripts/score_llm_navigation.py": "34a57dace3121e4d77f7e848c14c185ae351c8ff85789578608db8230184edd2",
+    "src/semantic_3d_chat/evaluation/llm_navigation_benchmark.py": "abb05f9d427fa57f83ebd3edf3f62329fc40d41e1230fc9a59ded715113fc8c8",
+    "src/semantic_3d_chat/evaluation/navigation_policy_v3_2_preregistration.py": "7f61dac80ef4c3874fdd0ea218c6a249c4c1d4038b7ec95699903a36b458c892",
+    "src/semantic_3d_chat/robot/action_context.py": "47c263e74c3df6dea0deb25eb66da1c6826ce513b0459cf122be1a69511f4979",
+    "src/semantic_3d_chat/robot/collision.py": "c88c8fdf4dd9377f829991c122f2639be35a7824db18edf48a4baa23151b6e3d",
+    "src/semantic_3d_chat/robot/conversation_cli.py": "318f5b85aa4b16b585768fdc70d8516559af68422517427170835a95fff15b62",
+    "src/semantic_3d_chat/robot/llm_tool_policy.py": "62382585b704c7229a593fba42f283af70ee7ca821480e1c6364e15838d13614",
+    "src/semantic_3d_chat/robot/navigation_policy_v3.py": "f79740d4add945d29913b6e0d956fc53454532b2af1f16540babfae848924665",
+    "src/semantic_3d_chat/robot/navigation_policy_v3_2.py": "45a12f92482521424f69548c2f1e582bb6beb7c35ec577656a4e1ddda2c2b6d1",
+    "src/semantic_3d_chat/robot/planner.py": "6f442ad7f0b9cc19dfcc0d323224ee545a1b3a364b5a5e5dc3deb4620df01be2",
+    "src/semantic_3d_chat/robot/runtime_refresh.py": "d0b0be78e8ad948f8e2d2abfcc01ab6a9a496517f7eb2613fb94dff204a2681a",
+    "src/semantic_3d_chat/robot/simulator.py": "596d3ac6fb02aa09e7f3738d85d5c79a2ce75689178b5066f3c57fef91c23a80",
+    "src/semantic_3d_chat/robot/state_encoder.py": "914079ddef0a156756c35ae8be49f82b4b8d45e51da993b2fb39412def8d5c1b",
+    "src/semantic_3d_chat/robot/tools.py": "4057e63ed6d039589f7e7ddd43360985c30ce49c8f41d0070d9c8eec738e210d",
+    "tests/test_navigation_policy_v3_2.py": "e1b215a8e782c8282f43477ea69dfc63384c584f13497346703058ca3a46bcec",
+    "tests/test_numeric_waypoint_planner.py": "63ba5d90544810c0bd641078403d74e298658288d6d6fc8267a2e0b425800190"
+  },
+  "input_file_hashes": {
+    "configs/benchmarks/llm_navigation_v2_scene_000001.json": "29bd12966f28b0b9ecc4ba444af25bde712b98512d7c74e322cbc7019e4f5e07",
+    "configs/benchmarks/oracle/llm_navigation_v2_scene_000001.json": "586e57cdadddd05287816d55090b0a20da615ddfe45b7e90079565ccc25a9196",
+    "configs/runtime/embodied_navigation_v2.yaml": "5ee4610104f4d8058a5fd739678f0e400c2181d6875e0e223727bbbef40ccb13",
+    "configs/runtime/gemma4_v54.yaml": "891c58faaaa5fcd2ed76c7e3871f14c5d8c5ae2e05d9fa4ddd5193773d40e56b",
+    "data/runtime_assets/scene_000001/s_000001.blend": "5ca5c9a05bf81dfd93c4aaa313f15a3ffada8739397fb5f26fbbd1313df36481",
+    "reports/gemma4/metrics/llm_navigation_inference_access_learned_v3_1.json": "cf162157f81b270e3a850faae7acc1fc4e39e8c6e1cb8d637b1346d449471128",
+    "reports/gemma4/metrics/llm_navigation_scene_000001_learned_v3_1.json": "9adfb361586a7e17e235eed7b46ad5f0df3ef4e0766d858f3570d99c4fda3775",
+    "reports/gemma4/metrics/navigation_continuous_context_v3_1.json": "952dc89b5312210e99c26c72da18f2e8c5267e2b0b3a0ef957736044f88c83cb",
+    "reports/gemma4/metrics/navigation_policy_v3_1_runtime_acceptance.json": "3e1cab13b40b1aaa2ecd4a74a2db5c8ad68cf1e57b5cb152fe5bb4b5e4707a5d",
+    "reports/gemma4/metrics/navigation_policy_v3_1_runtime_preregistration.json": "0980784390932b7cde8736b0dde983366909005475a56d7c19ef78e7c5fb60c3",
+    "reports/gemma4/predictions/llm_navigation_scene_000001_learned_v3_1.json": "b83cd1a85cab206d1538a804969e1efae087dda9a572a5b21ef9e40513eaf24b"
+  },
+  "input_tree_hashes": {
+    "data_gemma4/checkpoints/gemma4_v54_semantic_greedy_gate/update_000": "2a08382697f62c2b866f7c5b769fc4d1e7a5a86843e31fd6caf56d7a73440cbb",
+    "data_gemma4/checkpoints/navigation_policy_v3": "1998d7313d023e65a5bef4c52eee00d867b4006344de51c6830e35c32f7ed1e0",
+    "data_gemma4/checkpoints/robot_state_numeric_v1": "e3f673b4db0c6c007634c0b390a80801ab1a5cebdd0b4d995e09cb8163344704"
+  },
+  "parent_diagnosis": {
+    "collision_count": 0,
+    "continuous_context_passed": true,
+    "failed_check": "target_standoff",
+    "failed_task": "nav_005",
+    "final_target_standoff_m": 1.431078162886474,
+    "oracle_runtime_files_opened": 0,
+    "status": "v3_1_rejected_5_of_6",
+    "success_count": 5,
+    "task_count": 6
+  },
+  "runtime_promotion_authorized": false,
+  "runtime_version": "v3.2",
+  "schema": "semantic_3d_chat.navigation_policy_v3_2_preregistration.v1",
+  "status": "sealed_before_single_v3_2_development_run",
+  "successor_outputs": {
+    "continuous_context_audit": "reports/gemma4/metrics/navigation_continuous_context_v3_2.json",
+    "inference_audit": "reports/gemma4/metrics/llm_navigation_inference_access_learned_v3_2.json",
+    "journal": "reports/gemma4/predictions/llm_navigation_scene_000001_learned_v3_2.json",
+    "score": "reports/gemma4/metrics/llm_navigation_scene_000001_learned_v3_2.json"
+  },
+  "successor_outputs_absent_at_preregistration": true
+}

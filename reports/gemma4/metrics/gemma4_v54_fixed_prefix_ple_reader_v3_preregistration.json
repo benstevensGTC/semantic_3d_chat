@@ -1,0 +1,259 @@
+{
+  "artifact": "gemma4_v54_fixed_prefix_ple_reader_v3",
+  "only_change": {
+    "affects_gate_values": false,
+    "affects_gradient": false,
+    "affects_loss": false,
+    "affects_model_forward": false,
+    "affects_optimizer": false,
+    "field": "diagnostic_hash_serialization.for_tuple_keyed_mappings",
+    "v2": "json_object_with_tuple_keys_raises_type_error",
+    "v3": "sorted_records_with_key_list_and_value"
+  },
+  "output_paths": {
+    "checkpoint": "data_gemma4/checkpoints/gemma4_v54_fixed_prefix_ple_reader_v3",
+    "result": "reports/gemma4/metrics/gemma4_v54_fixed_prefix_ple_reader_v3_result.json",
+    "smoke_attestation": "reports/gemma4/metrics/gemma4_v54_fixed_prefix_ple_reader_v3_smoke.json"
+  },
+  "schema_version": 1,
+  "smoke_inheritance": {
+    "new_model_forward_required": false,
+    "reason": "V3 changes only post-forward diagnostic key serialization",
+    "source": "reports/gemma4/metrics/gemma4_v54_fixed_prefix_ple_reader_v2_smoke.json",
+    "source_sha256": "f7daaf2df2f052d0dad45fdf5cacff3c21652c99b953adc12f0361072ba189f0"
+  },
+  "status": "locked_before_single_v3_training_run",
+  "unchanged_v2_contract": {
+    "artifact": "gemma4_v54_fixed_prefix_ple_reader_v2",
+    "only_change": {
+      "field": "gradient_smoke.retention_self_kl_absolute_tolerance",
+      "reason": "observed_finite_mps_repeat_forward_noise_1.7583897715667263e-6",
+      "v1": 1e-06,
+      "v2": 1e-05
+    },
+    "output_paths": {
+      "checkpoint": "data_gemma4/checkpoints/gemma4_v54_fixed_prefix_ple_reader_v2",
+      "result": "reports/gemma4/metrics/gemma4_v54_fixed_prefix_ple_reader_v2_result.json",
+      "smoke": "reports/gemma4/metrics/gemma4_v54_fixed_prefix_ple_reader_v2_smoke.json"
+    },
+    "schema_version": 1,
+    "status": "locked_before_v2_gradient_smoke_and_single_training_run",
+    "unchanged_v1_contract": {
+      "data": {
+        "oracle_runtime_access": false,
+        "prefix_manifest_scene_count": 40,
+        "scene_disjoint": true,
+        "test_split_accessed": false,
+        "training_changed_sides": 80,
+        "training_rows": 576,
+        "training_scenes": [
+          "scene_000011",
+          "scene_000012",
+          "scene_000013",
+          "scene_000014",
+          "scene_000015",
+          "scene_000016",
+          "scene_000017",
+          "scene_000018",
+          "scene_000019",
+          "scene_000020",
+          "scene_000021",
+          "scene_000022",
+          "scene_000023",
+          "scene_000024",
+          "scene_000031",
+          "scene_000032",
+          "scene_000033",
+          "scene_000034",
+          "scene_000035",
+          "scene_000036",
+          "scene_000037",
+          "scene_000038",
+          "scene_000053",
+          "scene_000054"
+        ],
+        "validation_changed_sides": 52,
+        "validation_rows": 384,
+        "validation_scenes": [
+          "scene_000039",
+          "scene_000040",
+          "scene_000041",
+          "scene_000042",
+          "scene_000043",
+          "scene_000044",
+          "scene_000045",
+          "scene_000046",
+          "scene_000047",
+          "scene_000048",
+          "scene_000049",
+          "scene_000050",
+          "scene_000051",
+          "scene_000052",
+          "scene_000055",
+          "scene_000056"
+        ]
+      },
+      "independence": {
+        "all_scene_tokens_fit_inside_sliding_window_with_locked_prompts": true,
+        "base": "accepted_v54_258_token_question_independent_prefix",
+        "base_hidden_dimension": 1536,
+        "base_prefix_tokens": 258,
+        "base_scene_latents": 256,
+        "depends_on_failed_atlas": false,
+        "depends_on_failed_question_controllers": false
+      },
+      "model": {
+        "local_files_only": true,
+        "model_id": "google/gemma-4-E2B-it",
+        "revision": "3e22461f65e89153144f8adb70e3b8c2cc9845a7",
+        "target_module": "model.language_model.per_layer_model_projection",
+        "target_projection_shape": [
+          8960,
+          1536
+        ]
+      },
+      "objective": {
+        "answer_token_normalized_ce_weight": 1.0,
+        "hinge_rows": "changed_counterfactual_sides_only",
+        "labels_before_answer_suffix": -100,
+        "retention_next_token_kl_weight_per_update": 0.2,
+        "same_question_wrong_prefix_hinge_weight": 1.0,
+        "same_question_wrong_prefix_margin_nats_per_token": 0.25,
+        "wrong_prefix": "paired_scene_complete_258_token_prefix"
+      },
+      "optimization": {
+        "adapter_dtype": "float32",
+        "base_dtype": "bfloat16",
+        "decoder_gradient_checkpointing": true,
+        "gradient_accumulation": 4,
+        "gradient_clip_l2": 1.0,
+        "intermediate_selection": false,
+        "learning_rate": 0.0003,
+        "maximum_updates": 40,
+        "one_arm_only": true,
+        "optimizer": "adamw",
+        "seed": 720054,
+        "weight_decay": 0.0
+      },
+      "pinned_input_hashes": {
+        "configs/experiments/gemma4_v54_fixed_prefix_ple_reader_v1_retention.json": "0b2c48236e085960811ac6c9be94440814a141fdc05ed92c1e8f498a2c04f3cb",
+        "configs/runtime/gemma4_v54.yaml": "891c58faaaa5fcd2ed76c7e3871f14c5d8c5ae2e05d9fa4ddd5193773d40e56b",
+        "data_gemma4/checkpoints/gemma4_v54_semantic_greedy_gate/update_000/adapter.safetensors": "6c627f0a0d9efb7100489c24cbd4acafe10456b79280a64a85399a21cb541daf",
+        "data_gemma4/checkpoints/gemma4_v54_semantic_greedy_gate/update_000/metadata.json": "db1435f8d38ca587e34dcd55dc4d37532efc0504bfb62bc115838dc0ab7a7ece",
+        "data_gemma4/checkpoints/gemma4_v54_semantic_greedy_gate/update_000/runtime_metadata.json": "807515461c71b08c08dfbd08a184a653e791413748530fa69402512eca6f6fdd",
+        "data_gemma4/scene_tokens/v56_question_control_full_prefixes/manifest.json": "5a288a7fef65a957ba7b20132c63380cfadc7edbc37b32c1885037f939b9db61",
+        "data_gemma4/training/v62_pair_disjoint/train.jsonl": "84b99385fadc5d06e44465ada5902f56131192298ca1539373dc3b334608cbf1",
+        "reports/gemma4/predictions/v62_v54_no_control_internal_validation.jsonl": "df66de37e918ba068fbcd91308803746122c938ccccadf063d1b1343f1a4c902",
+        "reports/gemma4/questions/v62_internal_validation.json": "078f65e1402e6e382a7bfdb2ad4b8a65d58e3164705a8a46cd222503aa201052",
+        "reports/gemma4/scorer_only/v62_internal_validation_references.json": "4202e777ee57ab3f7da329f15589e56b8b0464b782fb4d856dd1a3281ff3115c"
+      },
+      "publication": {
+        "checkpoint_published_only_if_every_gate_passes": true,
+        "failed_run_publishes_no_checkpoint": true,
+        "no_intermediate_runtime_checkpoints": true,
+        "one_terminal_report_create_once": true
+      },
+      "reader_lora_contract": {
+        "alpha": 8.0,
+        "dropout": 0.0,
+        "enabled": true,
+        "rank": 4,
+        "schema_version": 1,
+        "target_modules": [
+          "model.language_model.per_layer_model_projection"
+        ]
+      },
+      "research_question": "Can a rank-4 adapter on Gemma-4's per-layer model projection improve scene-specific reading of the fixed complete V54 continuous prefix?",
+      "runtime_contract": {
+        "environmental_text_inputs": [],
+        "identical_prefix_for_unchanged_scene": true,
+        "oracle_forbidden": true,
+        "prefix_computed_before_question": true,
+        "question_dependent_retrieval": false,
+        "runtime_files": [
+          "sanitized_continuous_v54_prefix_or_map",
+          "frozen_v54_checkpoint",
+          "ple_reader_adapter",
+          "local_gemma4_snapshot"
+        ]
+      },
+      "selection": {
+        "all_gates_required": true,
+        "candidate_count": 1,
+        "changed_pair_complete_unit_delta_minimum": 3,
+        "changed_wrong_prefix_positive_margin_rate_delta_minimum": 0.1,
+        "changed_wrong_prefix_positive_margin_rate_minimum": 0.65,
+        "greedy_exact_accuracy_delta_minimum": 0.02,
+        "greedy_subset_rows": 96,
+        "greedy_subset_rule": "first_6_question_manifest_rows_per_validation_scene",
+        "retention_mean_ce_increase_nats_maximum": 0.03,
+        "retention_mean_kl_nats_maximum": 0.02,
+        "retention_next_token_top1_agreement_minimum": 0.98,
+        "split": "scene_disjoint_internal_validation",
+        "teacher_forced_rows": 384,
+        "validation_answer_nll_improvement_minimum": 0.03
+      },
+      "trainable_surface": {
+        "alpha": 8.0,
+        "base_model_frozen": true,
+        "dropout": 0.0,
+        "exact_target_modules": [
+          "model.language_model.per_layer_model_projection"
+        ],
+        "no_merge": true,
+        "parameter_count": 41984,
+        "prefix_cache_frozen": true,
+        "rank": 4,
+        "type": "unmerged_fp32_lora",
+        "v54_scene_stack_frozen": true
+      }
+    },
+    "v1_failure": {
+      "elapsed_seconds": 13.114532332867384,
+      "gradient_l2": 0.2632919251918793,
+      "mps_driver_allocated_bytes": 15845965824,
+      "only_failed_condition": "retention_self_kl_above_1e-6",
+      "preregistration_path": "reports/gemma4/metrics/gemma4_v54_fixed_prefix_ple_reader_v1_preregistration.json",
+      "preregistration_sha256": "07c28a95badf87c08692532ed1b8f9064af37763f11bc8c469581dae147bff52",
+      "retention_self_kl": 1.7583897715667263e-06,
+      "smoke_path": "reports/gemma4/metrics/gemma4_v54_fixed_prefix_ple_reader_v1_smoke.json",
+      "smoke_sha256": "c1c8b6efe101fd1ce78d02fea9bafb1a090f3356171122a397bbd42cae7dcfa5"
+    },
+    "v1_source_hashes": {
+      "scripts/run_gemma4_v54_fixed_prefix_ple_reader.sh": "275b235e44e7fa76293731f7aeb062729172c37b855722e3d08c5ee8eb38c664",
+      "src/semantic_3d_chat/evaluation/fixed_prefix_ple_v54_preregistration.py": "29ad92242ba48b8b1caa56bf5888b3d578641843de67b752232a82f75a77d2f2",
+      "src/semantic_3d_chat/training/train_fixed_prefix_ple_v54.py": "244519ba4ee1f7aa6e4904e20a9cba76fd0af8b028ad005c04fbd9ee39c1b99d",
+      "tests/test_fixed_prefix_ple_v54.py": "a271a612a05123a48202c9205b31a1d855376ea9a66afc91b2ea91a2cecd6f92"
+    },
+    "v2_implementation_source_hashes": {
+      "scripts/run_gemma4_v54_fixed_prefix_ple_reader_v2.sh": "ecce536d3a886e2d681066e0c895df0d2922ba843354ef07f684e3fdd5b9e1bc",
+      "src/semantic_3d_chat/evaluation/fixed_prefix_ple_v54_v2_preregistration.py": "9d026b5d41848809ab223d064a1b212ca99744453040d584e42674da3b7aa339",
+      "src/semantic_3d_chat/training/train_fixed_prefix_ple_v54_v2.py": "95728dc82b0577dae2c6262b53f3267312a487c61bc544688b27e6852cef042f",
+      "tests/test_fixed_prefix_ple_v54_v2.py": "fc3cdd24d1e50c0ecc228a52b0abc8e2558c758abed77a2fd87f73890f1c1203"
+    }
+  },
+  "v2_abort": {
+    "abort_path": "reports/gemma4/metrics/gemma4_v54_fixed_prefix_ple_reader_v2_abort.json",
+    "abort_sha256": "97ec2de77484fcf5b014478c8701ed20b5ab8b0e7f394cdd2158a452c2005210",
+    "adapter_update_count": 0,
+    "checkpoint_absent": true,
+    "optimizer_constructed": false,
+    "preregistration_path": "reports/gemma4/metrics/gemma4_v54_fixed_prefix_ple_reader_v2_preregistration.json",
+    "preregistration_sha256": "b82163a0e3fe030f84403e10822944a52a8c3c99ef215d7a67a90dcb88d6d8fd",
+    "smoke_path": "reports/gemma4/metrics/gemma4_v54_fixed_prefix_ple_reader_v2_smoke.json",
+    "smoke_sha256": "f7daaf2df2f052d0dad45fdf5cacff3c21652c99b953adc12f0361072ba189f0",
+    "status": "aborted_before_optimizer_construction_no_checkpoint"
+  },
+  "v2_source_hashes": {
+    "scripts/run_gemma4_v54_fixed_prefix_ple_reader_v2.sh": "ecce536d3a886e2d681066e0c895df0d2922ba843354ef07f684e3fdd5b9e1bc",
+    "src/semantic_3d_chat/evaluation/fixed_prefix_ple_v54_v2_preregistration.py": "9d026b5d41848809ab223d064a1b212ca99744453040d584e42674da3b7aa339",
+    "src/semantic_3d_chat/training/train_fixed_prefix_ple_v54_v2.py": "95728dc82b0577dae2c6262b53f3267312a487c61bc544688b27e6852cef042f",
+    "tests/test_fixed_prefix_ple_v54_v2.py": "fc3cdd24d1e50c0ecc228a52b0abc8e2558c758abed77a2fd87f73890f1c1203"
+  },
+  "v3_implementation_source_hashes": {
+    "scripts/run_gemma4_v54_fixed_prefix_ple_reader_v3.sh": "b0673af6d284b8ccc227c85b4824f1a78920fc30f1f224d19a7cf9b13e47bb69",
+    "src/semantic_3d_chat/evaluation/fixed_prefix_ple_v54_v3_preregistration.py": "682e4ae3cac8d9881c94e8e56d7763ccc350aee8941c25f0fd22bbbd5faec71b",
+    "src/semantic_3d_chat/training/train_fixed_prefix_ple_v54_v3.py": "23fe6025a3a479aad06b6e99957f59e4b2fd72ef80f87422c4a786dfc9a88770",
+    "tests/test_fixed_prefix_ple_v54_v3.py": "37c7d45b8c0a7bfc40497100e18990bcd4ec0585f577efb9f09b26a2de973385"
+  }
+}

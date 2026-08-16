@@ -1,0 +1,45 @@
+{
+  "checkpoint": "data_gemma4/checkpoints/gemma_waypoint_policy_v1_operator_runtime_aligned",
+  "checkpoint_weights_sha256": "f3910b35a7dfee65b8fcb73057b431618357e399bf5b619aa65177a45aa3fa8d",
+  "hidden_cache_binding_sha256": "800110e1545d77c1e374624ab837f6ed82cac54b269bf0359b840030db9e02cf",
+  "instruction": "Do a lap around the room.",
+  "metrics": {
+    "action_accuracy": 1.0,
+    "action_confusion_target_by_prediction": [
+      [
+        47,
+        0,
+        0
+      ],
+      [
+        0,
+        73,
+        0
+      ],
+      [
+        0,
+        0,
+        1
+      ]
+    ],
+    "action_macro_recall": 1.0,
+    "action_recall": {
+      "face": 1.0,
+      "move_to": 1.0,
+      "stop": 1.0
+    },
+    "face_sample_count": 73,
+    "heading_error_degrees_mean": 2.113211154937744,
+    "heading_error_degrees_median": 1.8070582151412964,
+    "move_to_sample_count": 47,
+    "sample_count": 121,
+    "stop_precision": 1.0,
+    "stop_recall": 1.0,
+    "stop_sample_count": 1,
+    "waypoint_error_m_mean": 0.001726227579638362,
+    "waypoint_error_m_median": 0.0014632772654294968
+  },
+  "passed": true,
+  "sample_count": 121,
+  "schema": "semantic_3d_chat.gemma_waypoint_exact_operator_episode.v1"
+}

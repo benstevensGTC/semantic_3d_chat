@@ -1,0 +1,37 @@
+{
+  "artifact": "v72_adaptive_fusion_terminal_development_negative_v1",
+  "checkpoint_published": false,
+  "development_evidence": {
+    "adaptive_complete_class_units": 1,
+    "adaptive_positive_own_over_opposite_sides": 5,
+    "adaptive_prediction_change_units": 1,
+    "branch_32_complete_class_units": 2,
+    "branch_32_positive_own_over_opposite_sides": 6,
+    "branch_32_prediction_change_units": 2,
+    "held_pair_id": "pair_000011",
+    "path": "reports/gemma4/metrics/v72_adaptive_fusion_development_pair_000011.json",
+    "sha256": "7cbfdcbf3953aecad51e40c21bb1d8f14962f890d90337cbf9b796b11af6e72a"
+  },
+  "diagnosis": "question-adaptive fusion varied by question but failed to match the stronger frozen branch on the omitted training pair",
+  "full_numeric_screen_authorized": false,
+  "gemma_generation_used": false,
+  "mechanism_checks": {
+    "both_branches_processed_every_environment_latent": true,
+    "branch_parameters_changed_during_gate_calibration": false,
+    "held_rows_used_for_optimization": false,
+    "held_teacher_sources_used": false,
+    "latent_selection_or_top_k_used": false,
+    "question_dependent_scene_retrieval": false
+  },
+  "promotion_eligible": false,
+  "schema_version": 1,
+  "status": "terminal_development_negative_no_checkpoint",
+  "terminal_reason": "first_pair_disjoint_development_fold_failed_to_improve_over_branch_32",
+  "unexecuted": {
+    "additional_development_folds": true,
+    "deferred_final_evaluation": true,
+    "full_12_fold_numeric_screen": true,
+    "gemma_behavioral_generation": true,
+    "internal_validation": true
+  }
+}

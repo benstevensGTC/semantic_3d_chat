@@ -1,0 +1,137 @@
+_base_: ../default.yaml
+
+# This is the only post-unlock scene recipe for V95's deferred final.  It was
+# written without consulting the legacy diverse20/diverse28/diverse52 plans.
+# The scene controls below use only the public deterministic generator schema.
+seed: 20260808
+
+paths:
+  data_root: data
+  features_root: data_gemma4/features
+  maps_root: data_gemma4/maps
+  checkpoints_root: data_gemma4/checkpoints
+  # Raw answer-bearing rows are an evaluation-side staging artifact.  The
+  # exact-quota selector writes the fixed final reference file only post-unlock.
+  qa_root: reports/gemma4/artifacts/v95_deferred_final/qa_raw
+  reports_root: reports/gemma4
+
+# The semantic scene recipe is derived from default.yaml.  These public,
+# semantics-free dense-model settings reproduce the existing Gemma 4 map
+# format without inheriting any prior dataset or scene-plan configuration.
+vision:
+  backend: gemma4
+  model_id: google/gemma-4-E2B-it
+  revision: 3e22461f65e89153144f8adb70e3b8c2cc9845a7
+  input_size: 224
+  middle_layer: 8
+  late_layer: 16
+  feature_mode: middle_late_projected
+  aligned_method: pooled_native_projector_broadcast
+  dtype: bfloat16
+  storage_dtype: float16
+  batch_size: 1
+
+batch:
+  base_config: configs/default.yaml
+  expected_scene_count: 6
+  expected_split_counts:
+    train: 0
+    validation: 0
+    test: 6
+  seed_stride: 1009
+  manifest_name: v95_deferred_final_v1
+  require_visibility_evidence: true
+  deferred_splits: [test]
+  splits:
+    train: []
+    validation: []
+    test:
+      - scene_000025
+      - scene_000026
+      - scene_000027
+      - scene_000028
+      - scene_000029
+      - scene_000030
+  scenes:
+    scene_000025:
+      seed: 20285024
+      plan_version: 2
+      color_variant: base
+      layout_variant: base
+      pair_id: pair_000013
+      paired_scene_id: scene_000026
+      change_type: color_swap
+      pair_role: reference
+    scene_000026:
+      seed: 20285024
+      plan_version: 2
+      color_variant: swap_red_blue
+      layout_variant: base
+      pair_id: pair_000013
+      paired_scene_id: scene_000025
+      change_type: color_swap
+      pair_role: counterfactual
+    scene_000027:
+      seed: 20287042
+      plan_version: 2
+      color_variant: base
+      layout_variant: cube_on
+      pair_id: pair_000014
+      paired_scene_id: scene_000028
+      change_type: cube_support
+      pair_role: reference
+    scene_000028:
+      seed: 20287042
+      plan_version: 2
+      color_variant: base
+      layout_variant: cube_under
+      pair_id: pair_000014
+      paired_scene_id: scene_000027
+      change_type: cube_support
+      pair_role: counterfactual
+    scene_000029:
+      seed: 20289060
+      plan_version: 2
+      color_variant: base
+      layout_variant: base
+      pair_id: pair_000015
+      paired_scene_id: scene_000030
+      change_type: mirror_lr
+      pair_role: reference
+    scene_000030:
+      seed: 20289060
+      plan_version: 2
+      color_variant: base
+      layout_variant: mirror_lr
+      pair_id: pair_000015
+      paired_scene_id: scene_000029
+      change_type: mirror_lr
+      pair_role: counterfactual
+
+qa:
+  # Generic balanced selection cannot promise exact global answer-type totals.
+  # It therefore emits the full deterministic candidate pool; the separately
+  # gated V95 exact-quota selector performs the create-once final projection.
+  balanced_selection:
+    enabled: false
+  v95_exact_final_selection:
+    schema_version: 1
+    seed: 950095
+    rows_per_scene: 36
+    changed_units_per_pair: 4
+    pair_unit_quotas:
+      attribute: 8
+      count: 7
+      metric: 1
+      orientation: 1
+      presence: 7
+      spatial_relation: 8
+      support: 4
+    answer_type_totals:
+      attribute: 48
+      count: 42
+      metric: 6
+      orientation: 6
+      presence: 42
+      spatial_relation: 48
+      support: 24

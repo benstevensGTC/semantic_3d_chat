@@ -106,6 +106,43 @@ def test_native_aligned_bypass_uses_all_voxels_and_preserves_gradients() -> None
     assert bool(torch.all(aligned_gradient > 0))
 
 
+def test_aligned_sidecar_is_all_voxel_and_zero_scale_preserves_base_path() -> None:
+    torch.manual_seed(12)
+    count, semantic_dim, aligned_dim = 19, 24, 8
+    inputs = _scene_inputs(count, semantic_dim)
+    model = SceneTokenizer(
+        semantic_dim=semantic_dim,
+        model_dim=16,
+        language_hidden_dim=aligned_dim,
+        block_size_m=0.5,
+        tokens_per_block=2,
+        global_latents=8,
+        heads=4,
+        global_layers=1,
+        fourier_bands=2,
+        language_aligned_tail_dim=aligned_dim,
+        native_aligned_coverage_scale=1.0,
+        learned_scene_token_scale=0.0,
+    )
+    sidecar = torch.randn(count, aligned_dim, requires_grad=True)
+
+    baseline = model(**inputs)
+    zero = model(**inputs, aligned_sidecar=sidecar, aligned_sidecar_scale=0.0)
+    adapted = model(**inputs, aligned_sidecar=sidecar, aligned_sidecar_scale=0.25)
+
+    assert torch.equal(zero.scene_tokens, baseline.scene_tokens)
+    assert baseline.aligned_sidecar_tokens is None
+    assert zero.aligned_sidecar_tokens is not None
+    assert adapted.aligned_sidecar_tokens is not None
+    assert torch.equal(zero.aligned_sidecar_tokens, adapted.aligned_sidecar_tokens)
+    assert not torch.equal(adapted.scene_tokens, baseline.scene_tokens)
+    assert adapted.audit["aligned_sidecar_processed_voxels"].item() == count
+    assert adapted.audit["aligned_sidecar_min_voxel_contribution"].item() > 0
+    adapted.scene_tokens.sum().backward()
+    assert sidecar.grad is not None
+    assert bool(torch.all(sidecar.grad != 0))
+
+
 def test_combined_aligned_bypass_keeps_trainable_path_and_controls_rms() -> None:
     torch.manual_seed(13)
     count, semantic_dim, aligned_dim = 23, 24, 8

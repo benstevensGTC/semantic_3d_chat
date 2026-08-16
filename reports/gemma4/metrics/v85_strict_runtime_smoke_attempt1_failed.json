@@ -1,0 +1,17 @@
+{
+  "artifact": "gemma4_v85_strict_runtime_smoke_failed_attempt_v1",
+  "schema_version": 85,
+  "attempt": 1,
+  "status": "failed_closed_before_any_question",
+  "model_loaded": true,
+  "questions_answered": 0,
+  "oracle_physically_unavailable": true,
+  "oracle_restored_after_runtime": true,
+  "forbidden_access_count": 0,
+  "loaded_file_count": 5205,
+  "failure": "frozen_block_cross_source_stack_state_sha256 retained the V54 digest after the intentional V85 frozen bank was added",
+  "checkpoint_digest": "ce059b3be41abe24775500edb3c3113a768d440f3bef9c2660dad640f4f06b24",
+  "runtime_observed_digest": "157b028a073f4e24ed9ee1fef7b1be1e1e2575b6a961869c99938d98594187e8",
+  "repair": "rebind the integrity digest to the exact V54-plus-V85 frozen source-stack tensors while retaining strict validation",
+  "audit": "reports/gemma4/metrics/v85_strict_runtime_smoke_attempt1_failed_access.json"
+}

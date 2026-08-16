@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+import os
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Any
 
 import torch
@@ -18,6 +20,31 @@ from semantic_3d_chat.language.prefix_injection import (
     SCENE_BOUNDARY_MODE_LEARNED,
     validate_scene_boundary_mode,
 )
+
+
+def local_model_snapshot_files(model_id: str, revision: str) -> tuple[Path, ...]:
+    """Enumerate the exact local snapshot surface used by offline loading.
+
+    Transformers 5 may read weight shards through a native ``pread`` loader,
+    which does not necessarily emit CPython ``open`` audit events.  Recording
+    the complete immutable snapshot closes that observability gap.
+    """
+
+    configured_cache = os.environ.get("HF_HUB_CACHE")
+    if configured_cache:
+        hub_root = Path(configured_cache).expanduser().resolve()
+    else:
+        hf_home = Path(os.environ.get("HF_HOME", Path.home() / ".cache/huggingface"))
+        hub_root = (hf_home / "hub").expanduser().resolve()
+    snapshot = hub_root / f"models--{model_id.replace('/', '--')}" / "snapshots" / revision
+    if not snapshot.is_dir():
+        return ()
+    return tuple(
+        sorted(
+            {path.resolve() for path in snapshot.rglob("*") if path.is_file()},
+            key=str,
+        )
+    )
 
 
 @dataclass
@@ -101,52 +128,71 @@ class LocalLanguageModel:
         if not isinstance(scene_prefix_after_bos, bool):
             raise TypeError("scene_prefix_after_bos must be a boolean")
         scene_boundary_mode = validate_scene_boundary_mode(scene_boundary_mode)
-        if self.prefix_backend is not None:
-            prepared = self.prefix_backend.prepare(
-                scene_prefix,
-                prompt_ids,
-                scene_prefix_after_bos=scene_prefix_after_bos,
-                scene_boundary_mode=scene_boundary_mode,
-            )
-            return self.prefix_backend.generate(
-                prepared,
-                max_new_tokens=max_new_tokens,
-                eos_token_ids=eos_token_ids,
-            )
-        if scene_boundary_mode == SCENE_BOUNDARY_MODE_GEMMA4_NATIVE_IMAGE:
-            raise ValueError(
-                "gemma4_native_image boundary mode requires the Gemma4 prefix backend"
-            )
-        prompt_embeddings = self.model.get_input_embeddings()(prompt_ids).to(scene_prefix.dtype)
-        if scene_prefix_after_bos:
-            bos_token_id = self.bos_token_id
-            if bos_token_id is None:
-                raise ValueError("BOS-first scene-prefix layout requires a BOS token ID")
-            if prompt_ids.shape[1] < 1 or not torch.all(prompt_ids[:, 0] == bos_token_id):
-                observed = (
-                    []
-                    if prompt_ids.shape[1] == 0
-                    else sorted({int(value) for value in prompt_ids[:, 0].detach().cpu()})
+        # Training enables checkpoint wrappers on the frozen decoder so scene
+        # gradients can be recomputed cheaply.  Greedy generation needs KV
+        # caching instead; Transformers disables that cache when a
+        # checkpointed decoder is still in train mode.  Temporarily evaluate
+        # only the decoder and restore its exact mode afterward.  This keeps
+        # training behavior unchanged while making selectors and chat use the
+        # intended single-prefill cached autoregressive path.
+        decoder = self.decoder_module
+        bypass_checkpointing = self.decoder_gradient_checkpointing_enabled
+        was_training = decoder.training
+        if bypass_checkpointing:
+            decoder.eval()
+        try:
+            if self.prefix_backend is not None:
+                prepared = self.prefix_backend.prepare(
+                    scene_prefix,
+                    prompt_ids,
+                    scene_prefix_after_bos=scene_prefix_after_bos,
+                    scene_boundary_mode=scene_boundary_mode,
                 )
+                return self.prefix_backend.generate(
+                    prepared,
+                    max_new_tokens=max_new_tokens,
+                    eos_token_ids=eos_token_ids,
+                )
+            if scene_boundary_mode == SCENE_BOUNDARY_MODE_GEMMA4_NATIVE_IMAGE:
                 raise ValueError(
-                    "BOS-first scene-prefix layout requires every prompt to start with "
-                    f"bos_token_id={bos_token_id}; observed={observed}"
+                    "gemma4_native_image boundary mode requires the Gemma4 prefix backend"
                 )
-            inputs_embeds = torch.cat(
-                (prompt_embeddings[:, :1], scene_prefix, prompt_embeddings[:, 1:]), dim=1
+            prompt_embeddings = self.model.get_input_embeddings()(prompt_ids).to(
+                scene_prefix.dtype
             )
-        else:
-            inputs_embeds = torch.cat((scene_prefix, prompt_embeddings), dim=1)
-        attention_mask = torch.ones(
-            inputs_embeds.shape[:2], dtype=torch.long, device=inputs_embeds.device
-        )
-        return fallback(
-            self.model,
-            inputs_embeds,
-            attention_mask,
-            max_new_tokens,
-            eos_token_ids,
-        )
+            if scene_prefix_after_bos:
+                bos_token_id = self.bos_token_id
+                if bos_token_id is None:
+                    raise ValueError("BOS-first scene-prefix layout requires a BOS token ID")
+                if prompt_ids.shape[1] < 1 or not torch.all(prompt_ids[:, 0] == bos_token_id):
+                    observed = (
+                        []
+                        if prompt_ids.shape[1] == 0
+                        else sorted({int(value) for value in prompt_ids[:, 0].detach().cpu()})
+                    )
+                    raise ValueError(
+                        "BOS-first scene-prefix layout requires every prompt to start with "
+                        f"bos_token_id={bos_token_id}; observed={observed}"
+                    )
+                inputs_embeds = torch.cat(
+                    (prompt_embeddings[:, :1], scene_prefix, prompt_embeddings[:, 1:]),
+                    dim=1,
+                )
+            else:
+                inputs_embeds = torch.cat((scene_prefix, prompt_embeddings), dim=1)
+            attention_mask = torch.ones(
+                inputs_embeds.shape[:2], dtype=torch.long, device=inputs_embeds.device
+            )
+            return fallback(
+                self.model,
+                inputs_embeds,
+                attention_mask,
+                max_new_tokens,
+                eos_token_ids,
+            )
+        finally:
+            if bypass_checkpointing:
+                decoder.train(was_training)
 
     def forward_prefix_batch(self, batch: Any, *, use_cache: bool = False) -> Any:
         """Teacher-force a generic or Gemma 4 variable-length prefix batch."""
@@ -229,15 +275,28 @@ def load_local_language_model(
     local_files_only: bool = False,
     backend: str = "auto",
     decoder_gradient_checkpointing: bool = False,
+    file_recorder: Callable[[str | Path], None] | None = None,
 ) -> LocalLanguageModel:
     device = select_device()
     dtype = safe_dtype(device, requested_dtype)
-    tokenizer = AutoTokenizer.from_pretrained(
-        model_id, revision=revision, local_files_only=local_files_only
-    )
     selected_backend = backend.casefold()
     if selected_backend == "auto":
         selected_backend = "gemma4" if "gemma-4" in model_id.casefold() else "causal_lm"
+    if local_files_only and file_recorder is not None:
+        for local_file in local_model_snapshot_files(model_id, revision):
+            file_recorder(local_file)
+    tokenizer_kwargs: dict[str, Any] = {
+        "revision": revision,
+        "local_files_only": local_files_only,
+    }
+    if selected_backend == "gemma4":
+        # The pinned public Gemma 4 snapshot stores ``extra_special_tokens``
+        # using Transformers' legacy list form.  Current tokenizers expect the
+        # model-specific alias mapping introduced later.  The continuous-prefix
+        # path does not use the optional video alias, so override the stale
+        # metadata in memory instead of mutating the immutable model snapshot.
+        tokenizer_kwargs["extra_special_tokens"] = {}
+    tokenizer = AutoTokenizer.from_pretrained(model_id, **tokenizer_kwargs)
     if selected_backend == "gemma4":
         try:
             from transformers import Gemma4ForConditionalGeneration

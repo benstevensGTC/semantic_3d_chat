@@ -1,0 +1,146 @@
+_base_: gemma4_diverse28_environmental_sidecar_v33.yaml
+
+# Bounded high-rank block-token route after V34's exact train-only terminal
+# failure. V35 always restarts from immutable V33 update 64; V34 update 32 is
+# evidence authorizing this architecture, never a weight source.
+training:
+  output_namespace: gemma4_v35_diverse28_block_cross
+  v35_block_cross:
+    enabled: true
+    optimizer_steps: 100
+    checkpoint_interval_steps: 8
+    broad_batch_size: 1
+    pair_units_per_step: 1
+    broad_exclude_expected_change: true
+    broad_nll_weight: 0.25
+    pair_correct_nll_weight: 0.5
+    side_hinge_weight: 4.0
+    side_hinge_margin: 0.5
+    cross_prefix_flip_weight: 8.0
+    cross_prefix_flip_margin: 0.25
+    residual_penalty_weight: 0.001
+    residual_penalty_scale: 0.05
+    qkv_learning_rate: 0.0001
+    output_learning_rate: 0.000025
+    weight_decay: 0.0
+    qkv_gradient_clip_norm: 0.5
+    output_gradient_clip_norm: 1.0
+    minimum_answer_types: 4
+
+scene_encoder:
+  block_cross_residual:
+    enabled: true
+    attention_dim: 256
+    heads: 4
+    spatial_temperature: 0.20
+    residual_scale: 0.25
+    uniform_floor: 0.01
+    initialization_seed: 35035
+    expected_initial_state_sha256: 72ae7f492f5953e58d809b6782d559dc64669637d5d6a79ae98f3a31296a12cd
+
+v35_block_cross:
+  schema_version: 1
+  role: exact_v33_u64_block_token_cross_residual_v35
+  engine: exact_zero_all_block_cross_residual_true_microsteps
+  v34_terminal_gate_report: reports/gemma4/metrics/v34_update32_terminal_gate.json
+  v34_terminal_gate_report_sha256: b0833a72ba5bc507178fa07cacc8cbef798fce4de94a5f85f2e402aafb46679f
+  source_checkpoint: data_gemma4/checkpoints/gemma4_v33_diverse28_environmental_sidecar/update_064
+  source_optimizer_step: 64
+  source_file_sha256:
+    adapter.safetensors: 32c071d7acca0e52f8ae4c3dee8cba83319d67b184bbb3ab9957a6f6c4fcf987
+    metadata.json: ef97dfc3415eb4cfbdf30fe952e85db5ea4c54e4dec896a40725fb41fd787c91
+    runtime_metadata.json: fe8df1c8c052ac50899eb19952f96b74ac691780e20b604ba4e11072db32e168
+    optimizer.pt: 845aa42380b5c8c575162cb003fcadc7761fd615071b9dab71d9da4a85ba3d09
+  source_v33_config_sha256: e920d28da8ab0abc3c0ab2c4ad812a2743d1894b769c6302097ac41c31da3905
+  source_v33_schedule_sha256: 90b7c3b337f573b47a75ed3faefc915eacd98c9ef11b572ff3c45c4166fc9590
+  source_v33_tensor_state_sha256: cb7bb3b48ace60212ee5c7f326839bf2ddd993810417de45c9a9cbc666313fe6
+  train_scene_ids:
+    - scene_000011
+    - scene_000012
+    - scene_000013
+    - scene_000014
+    - scene_000015
+    - scene_000016
+    - scene_000017
+    - scene_000018
+    - scene_000031
+    - scene_000032
+    - scene_000033
+    - scene_000034
+    - scene_000035
+    - scene_000036
+    - scene_000037
+    - scene_000038
+  validation_scene_ids:
+    - scene_000019
+    - scene_000020
+    - scene_000021
+    - scene_000022
+    - scene_000023
+    - scene_000024
+  deferred_final_scene_ids:
+    - scene_000025
+    - scene_000026
+    - scene_000027
+    - scene_000028
+    - scene_000029
+    - scene_000030
+  train_question_count: 384
+  train_changed_pair_unit_count: 25
+  optimizer_steps: 100
+  checkpoint_interval_steps: 8
+  saved_optimizer_steps: [0, 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96, 100]
+  exact_pair_unit_recurrence: 4
+  exact_unique_physical_changed_pair_count: 8
+  exact_nonchanged_train_scene_pair_count: 112
+  train_pair_family_ids:
+    book_support: pair_000015
+    mirror_lr: pair_000016
+    picture_support: pair_000017
+  exact_trainable_parameter_names: [w_q, w_k, w_v, w_o]
+  exact_trainable_parameter_count: 983040
+  step_1_trainable_parameter_names: [w_o]
+  step_2_plus_trainable_parameter_names: [w_q, w_k, w_v, w_o]
+  cache_scene_count: 22
+  cache_source_scene_tokens_dtype: float32_cpu
+  cache_block_tokens_dtype: float16_cpu
+  cache_block_positions_dtype: float16_cpu
+  cache_requires_processed_voxels_equal_voxel_count: true
+  cache_requires_all_block_tokens: true
+  cache_requires_repeated_normalized_block_positions: true
+  cache_uses_question_or_answer_text: false
+  cache_uses_oracle_environment_inputs: false
+  cache_uses_question_dependent_retrieval: false
+  exact_update0_source_tensors: true
+  exact_update0_source_prefixes_all_22_scenes: true
+  exact_update0_zero_residual_identity: true
+  gemma_decoder_frozen: true
+  all_lora_banks_frozen: true
+  complete_v33_stack_frozen: true
+  validation_qa_loaded_during_training: false
+  continuation_gates_use_training_only: true
+  update32_gate:
+    optimizer_step: 32
+    changed_selectivity_geometric_mean_minimum: 1.02
+    changed_pair_coverage_minimum: 6
+    changed_pair_selectivity_minimum: 0.98
+    unrelated_median_ratio_minimum: 0.98
+    unrelated_median_ratio_maximum: 1.02
+    unrelated_p90_abs_log_ratio_maximum: 0.01980262729617973
+    require_mean_margin_strict_improvement: true
+    require_complete_count_strict_improvement: true
+    residual_rms_maximum: 0.10
+  update64_gate:
+    optimizer_step: 64
+    require_update32_passed: true
+    complete_changed_qa_units_minimum: 8
+    require_one_complete_per_family: true
+    require_mean_margin_strict_improvement: true
+    residual_rms_maximum: 0.10
+  selector_uses_validation_only_after_complete_training: true
+  final_test_deferred: true
+
+experiment:
+  role: exact_v33_u64_block_token_cross_residual_v35
+  Gemma_decoder_frozen: true
+  final_test_deferred: true

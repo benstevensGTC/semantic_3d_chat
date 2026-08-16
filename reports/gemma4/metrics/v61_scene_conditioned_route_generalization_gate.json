@@ -1,0 +1,54 @@
+{
+  "artifact": "v61_scene_conditioned_route_generalization_gate",
+  "baseline_sha256": "91ff414b8ddd99faa496884a154a447bc4b1d2373790daaf52d04f27e5457fc1",
+  "checks": {
+    "continuous_global_v4_audits_valid": false,
+    "contradictory_complete_families": false,
+    "negative_exact_v54_output_identity": true,
+    "positive_answer_exact": true,
+    "positive_changed_families": true,
+    "positive_complete_families": true,
+    "route_anchor_positive": false,
+    "route_mirror_positive": true,
+    "route_negative": true,
+    "route_positive": true,
+    "route_removal_positive": true
+  },
+  "deferred_final_loaded": false,
+  "fresh_development_loaded": false,
+  "metrics": {
+    "contradictory_complete_families": 6,
+    "family_total": 11,
+    "negative_exact_v54_output_identity": 42,
+    "negative_total": 44,
+    "positive_answer_exact": 17,
+    "positive_answer_total": 22,
+    "positive_changed_families": 10,
+    "positive_complete_families": 6,
+    "route_negative": 40,
+    "route_negative_total": 44,
+    "route_positive": 18,
+    "route_positive_by_pair": {
+      "anchor": 4,
+      "mirror": 8,
+      "removal": 6
+    },
+    "route_positive_total": 22
+  },
+  "passed": false,
+  "predictions_sha256": "20e7b35d9a26f6d8b2faad760f341fb0d778db37445ba7a3ecad3e86a50d4c89",
+  "preregistration_sha256": "9a80b47475fba61063ac693536c713f55ac11d685b5a07f4bb297a571e07ff5b",
+  "schema_version": 1,
+  "thresholds": {
+    "contradictory_complete_families": 8,
+    "negative_exact_v54_output_identity": 40,
+    "positive_answer_exact": 15,
+    "positive_changed_families": 8,
+    "positive_complete_families": 6,
+    "route_anchor_positive": 6,
+    "route_mirror_positive": 6,
+    "route_negative": 40,
+    "route_positive": 18,
+    "route_removal_positive": 4
+  }
+}

@@ -1,0 +1,400 @@
+v91:
+  schema_version: 91
+  artifact: gemma4_v91_scene1_conversational_repair_direct_memory_v1
+  status: sealed_before_full_model_load
+  seed: 910091
+
+  topology_amendment:
+    amendment_id: v91_layer33_down_proj_shape_correction_v2
+    amendment_version: 2
+    reason: gemma4_swiglu_down_proj_consumes_concatenated_gate_and_up_activations
+    superseded_config_sha256: b5c95ec12fd0040731417700936be94b865abcbfbf16f157be0aedf7d4e76e09
+    superseded_preregistration:
+      path: reports/gemma4/metrics/gemma4_v91_scene1_conversational_repair_preregistration.json
+      sha256: 9dfbaac24f2c0132cd0189e07ff2ace8e3aada2282f10b1ca5cf4aa027774c3e
+    superseded_cpu_preflight:
+      path: reports/gemma4/metrics/gemma4_v91_scene1_conversational_repair_cpu_preflight.json
+      sha256: f341347ea312d1a075647dec3847073ec71f5dc50486ccae02db96e5db6b8711
+    superseded_artifacts_preserved: true
+    pinned_tensor_name: model.language_model.layers.33.mlp.down_proj.weight
+    superseded_synthetic_weight_shape: [1536, 6144]
+    pinned_weight_shape: [1536, 12288]
+    pinned_weight_dtype: BF16
+    corrected_trainable_parameter_count: 221184
+    corrected_initial_state_sha256: 0f255efb26255dcac0815511e44aabad5e21820f78f9a7662dc1bf59f627db2b
+    tensor_header_authenticated_without_full_model_load: true
+    replacement_output_namespace: v2
+
+  sources:
+    runtime_config: configs/runtime/gemma4_v89_strict_scene1.yaml
+    runtime_config_sha256: 184860d1a46b6e54f5b8e28def9dcd03b6cbf90f55537d9810afa9d540416c42
+    scene1_qa: data/qa/train.jsonl
+    scene1_qa_sha256: ffa721d57849ade8fdd0811e3e1e62fe807200f710aec780dc4d3dcecd4fb0e0
+    scene1_memory: data_gemma4/runtime/scene_memories/v89/scene_000001
+    scene1_memory_tensor_sha256: 3427851432d8f2a3609b6205b18b8c0d9a0fcf68d8f3bf0c98c758ac64209ffb
+    scene1_memory_metadata_sha256: ea3a45080b3a0c519292a5e230fa1c4e17a1caafa6f3ff9d23adfd9ef1c2befd
+    parent_v89_checkpoint: data_gemma4/runtime/checkpoints/gemma4_v89_strict_scene1_release_v1
+    parent_v89_adapter_sha256: 78856650751f8c700a651553e02d95ac389be53e12a56c39576a6d2f23d7d386
+    parent_v89_metadata_sha256: c375d729d0a23e515eef979129a7032479fe153ad1b5491d594bf61a9f1f9a72
+    parent_v90_config: configs/experiments/gemma4_v90_scene1_conversational.yaml
+    parent_v90_config_sha256: e9d740b53fbd34a7764d039b4cd8e6d7cea4f61543aa3ea820ce57345a385fc4
+    parent_v90_preregistration: reports/gemma4/metrics/gemma4_v90_scene1_conversational_preregistration.json
+    parent_v90_preregistration_sha256: b9ca3a6c9ef228cacf1a75baba51ae94e7fb8448b0ce451cb1c16e82a9650260
+    parent_v90_cpu_preflight: reports/gemma4/metrics/gemma4_v90_scene1_conversational_cpu_preflight.json
+    parent_v90_cpu_preflight_sha256: 1d00d4f7dce1f0326b6a06d4d341850e6c2cb770c73947b3b832fcadd122d28d
+    parent_v90_training: reports/gemma4/metrics/gemma4_v90_scene1_conversational_training.json
+    parent_v90_training_sha256: 021d87d56fa6d898e255222661f7c381c500478a403b11c6f5bb3ff6228f791c
+    parent_v90_candidate: reports/gemma4/artifacts/v90_scene1_conversational_final
+    parent_v90_bridge_sha256: be8a6fa9b633dc52ca962393170623c2707e339206ced627e6439ce7db0a7f94
+    parent_v90_metadata_sha256: c2dba75094c829c7fadaadf8111a712921f70372ac84e2073714530519349acc
+    parent_v90_predictions: reports/gemma4/predictions/gemma4_v90_scene1_conversational_evaluation.json
+    parent_v90_predictions_sha256: 04dc5b74a1dd5bae9643b7cf0695724adf32c5ed070a6e73cc1623d47fdeef14
+    parent_v90_evaluation: reports/gemma4/metrics/gemma4_v90_scene1_conversational_evaluation.json
+    parent_v90_evaluation_sha256: e2102928af6590db9d206ab5d53c13492b4c73b2736ca740dbfbeb5cc85850e7
+    preflight_source: src/semantic_3d_chat/evaluation/v91_scene1_conversational_preflight.py
+    preflight_source_sha256: 5e98e7efd59133e76ce71553ac2f0d36dad5fc774cf281e3742f2b5d0fb61c5d
+    training_source: src/semantic_3d_chat/training/train_v91_scene1_conversational_repair.py
+    training_source_sha256: 843613f3953e4bcd2d580aa6d7ab4b9197cfd825bfe787b9b6072a3a672ce67b
+    evaluation_source: src/semantic_3d_chat/evaluation/evaluate_v91_scene1_conversational_repair.py
+    evaluation_source_sha256: 6939b9f3e5ed3b6d3088281ce13951515ebb99d40b7efe616df5563ef42bf2a4
+    model_id: google/gemma-4-E2B-it
+    model_revision: 3e22461f65e89153144f8adb70e3b8c2cc9845a7
+    model_blob_sha256_identity: 2db5482b20d746879bb3ef79b5203e9075a2e2b98f54ec7c2f281c1477ddc550
+
+  strict_input_contract:
+    shape: [1, 738, 1536]
+    native_boi_eoi_retained: true
+    continuous_environment_payload_tokens: 736
+    compiled_before_question: true
+    reused_byte_identically_across_questions: true
+    supplied_directly_to_native_gemma_image_prefix: true
+    question_derived_environmental_tokens: 0
+    question_conditioned_environmental_readout: false
+    question_dependent_scene_processing: false
+    question_dependent_retrieval: false
+    semantic_or_spatial_top_k_selection: false
+    control_tokens: 0
+    environmental_text_inputs: []
+
+  parent_v90_result:
+    model_acceptance_gate_passed: false
+    runtime_promotion_authorized: false
+    frozen_parent_state_invariant: true
+    canonical_correct: 124
+    canonical_total: 138
+    canonical_error_count: 14
+    canonical_type_correct:
+      presence: 22
+      count: 9
+      metric: 1
+      attribute: 16
+      spatial_relation: 75
+      support: 1
+    primary_correct: 7
+    primary_total: 13
+    held_wording_correct: 10
+    held_wording_total: 26
+    causal_mean_zero_minus_correct_nll: 0.8939050505152688
+    causal_prediction_changes: 10
+    failed_intents:
+      - inventory
+      - under_table
+      - wall_object
+      - cube_location
+      - sitting
+      - bowl_contents
+    successful_intents:
+      - chair_presence
+      - bowl_color
+      - bowl_left_chair
+      - table_contents
+      - closest
+      - lamp_turn
+      - frame_support
+    candidate_state_sha256: 70e236711d8ac1fe7cf808f6f4e939b29db476016c8ef49db143707df0f3bde7
+    candidate_checkpoint_sha256: 351f42673372008b8312e7b56f7d19a36eb1cfbc9ef184025e9bcdac47cdfcd4
+
+  dataset:
+    scene_id: scene_000001
+    canonical_row_count: 138
+    canonical_row_inventory_sha256: 9919ff1bee4611dce4132d79fa50f6f6b4ace567a6df780a2e0e21bd88237a8e
+    parent_correct_count: 124
+    parent_error_count: 14
+    parent_error_replay_copies: 2
+    parent_correct_anchor_replay_copies: 1
+    conversational_intent_count: 13
+    existing_wordings_per_intent: 6
+    newly_held_wordings_per_intent: 2
+    newly_held_wording_row_count: 26
+    successful_intent_count: 7
+    successful_wording_copies: 2
+    successful_conversational_rows_per_epoch: 84
+    failed_intent_count: 6
+    failed_wording_copies: 6
+    failed_conversational_rows_per_epoch: 216
+    rows_per_epoch: 590
+    epochs: 3
+    total_micro_rows: 1770
+    training_inventory_sha256: 27d478cf90b4e5f9b1c7047b1be79786d28926b984d9ddd8dc559627c307d5fe
+    training_schedule_sha256: f3d66ef1f5ee6922f06b4d976097379eb0104c7bcfc7bbde7509c00b1a23bc11
+    labels_derived_offline_from_oracle: true
+    oracle_loaded_during_training: false
+    questions_or_answers_serialized_at_runtime: false
+
+  conversational_intents:
+    - id: inventory
+      family: inventory
+      answer: table, chair, picture frame, bowl, floor lamp, cube, book, cabinet, plant pot
+      existing_wordings:
+        - What objects are around you?
+        - Which objects can you identify in the room?
+        - List the objects present.
+        - Tell me what objects surround the camera.
+        - What can you see in this room?
+        - Name every object around the viewpoint.
+      new_held_wordings:
+        - Catalog all distinct room objects visible to the camera.
+        - Give the complete inventory of objects in the room.
+    - id: chair_presence
+      family: presence
+      answer: "yes"
+      existing_wordings:
+        - Is there a chair?
+        - Can you see a chair?
+        - Does this room contain a chair?
+        - A chair is present, yes or no?
+        - Do you observe any chair?
+        - Is a chair among the room contents?
+      new_held_wordings:
+        - Can a chair be found here?
+        - Does the embedded room include any chair?
+    - id: bowl_color
+      family: attribute
+      answer: red
+      existing_wordings:
+        - What color is the bowl?
+        - Tell me the bowl's color.
+        - Which color does the bowl have?
+        - Identify the color of the bowl.
+        - How would you describe the bowl's color?
+        - What hue is the bowl?
+      new_held_wordings:
+        - State the hue of the bowl.
+        - Of what color is the bowl?
+    - id: bowl_left_chair
+      family: spatial_relation
+      answer: left
+      existing_wordings:
+        - Is the bowl left or right of the chair?
+        - Relative to the chair, is the bowl on the left or right?
+        - Which side of the chair is the bowl on?
+        - Does the bowl lie to the chair's left or right?
+        - Looking in world coordinates, is the bowl left or right of the chair?
+        - The bowl is on which side of the chair?
+      new_held_wordings:
+        - On which lateral side of the chair does the bowl sit?
+        - Taking the chair as reference, is the bowl left or right?
+    - id: table_contents
+      family: support_list
+      answer: book, cube
+      existing_wordings:
+        - What is on the table?
+        - Which objects are supported by the table?
+        - Name everything resting on the table.
+        - What items sit atop the table?
+        - What does the table have on it?
+        - List the things placed on the tabletop.
+      new_held_wordings:
+        - Enumerate the items the table is holding up.
+        - Which things occupy the top of the table?
+    - id: under_table
+      family: empty_support
+      answer: nothing
+      existing_wordings:
+        - What is underneath the table?
+        - Name what is below the tabletop.
+        - What can be found beneath the table?
+        - Which object, if any, is under the table?
+        - Name anything situated underneath the table.
+        - Which object, if any, is below the table?
+      new_held_wordings:
+        - Report whatever is beneath the table, or say nothing.
+        - Is any item positioned below the table, and if so what?
+    - id: closest
+      family: metric
+      answer: cube
+      existing_wordings:
+        - Which object is closest to you?
+        - Which object is closest to the camera?
+        - What object is nearest the current viewpoint?
+        - Name the closest object to you.
+        - What is the nearest thing to the camera?
+        - Which room object is at the shortest distance?
+      new_held_wordings:
+        - Identify the object with minimum distance from the camera.
+        - What room item is nearest to this viewpoint?
+    - id: wall_object
+      family: wall_object
+      answer: picture frame
+      existing_wordings:
+        - What is hanging on the wall?
+        - Which object is mounted on the wall?
+        - Name the object attached to the wall.
+        - What object is displayed on the wall?
+        - What is hanging from the wall?
+        - Identify the wall-mounted object.
+      new_held_wordings:
+        - Name the item affixed to the wall.
+        - Which room object is suspended on a wall?
+    - id: cube_location
+      family: object_location
+      answer: on the table
+      existing_wordings:
+        - Where is the red cube?
+        - Where can the red cube be found?
+        - Is the red cube on the table or floor?
+        - Describe the red cube's location.
+        - Which surface has the red cube?
+        - Tell me the red cube's location.
+      new_held_wordings:
+        - What surface supports the red cube?
+        - Is the red cube atop the table or somewhere else?
+    - id: lamp_turn
+      family: viewpoint_direction
+      answer: left
+      existing_wordings:
+        - Which direction would you turn to face the lamp?
+        - Would you turn left or right to look at the floor lamp?
+        - From the current viewpoint, which way is the floor lamp?
+        - Which turn direction points the camera toward the lamp?
+        - Should the camera rotate left or right to face the lamp?
+        - On which side is the floor lamp from here?
+      new_held_wordings:
+        - Choose the turn, left or right, that brings the lamp into view.
+        - To point at the lamp from here, which direction should I rotate?
+    - id: frame_support
+      family: frame_support
+      answer: wall
+      existing_wordings:
+        - Is the picture frame on the wall or on the floor?
+        - Is the picture frame supported by the wall or the floor?
+        - Where is the picture frame, wall or floor?
+        - Does the frame rest on the wall or on the floor?
+        - Which surface has the picture frame, the wall or floor?
+        - Is the frame wall-mounted or floor-standing?
+      new_held_wordings:
+        - Does the floor or the wall support the picture frame?
+        - Locate the frame's support, wall versus floor.
+    - id: sitting
+      family: affordance
+      answer: chair
+      existing_wordings:
+        - What object could someone sit on?
+        - Which object is meant for sitting?
+        - What in the room can serve as a seat?
+        - Name the object a person could sit in.
+        - What furniture here is sit-able?
+        - Which item would you use as a seat?
+      new_held_wordings:
+        - Identify the room object designed to support a seated person.
+        - What should a person use for sitting in this room?
+    - id: bowl_contents
+      family: containment
+      answer: "no"
+      existing_wordings:
+        - Is anything inside the bowl?
+        - Does the bowl contain anything?
+        - Is there an object contained by the bowl?
+        - Does the bowl have an object inside?
+        - Are there any items in the bowl?
+        - Does anything occupy the inside of the bowl?
+      new_held_wordings:
+        - Does the bowl currently enclose any object?
+        - Is an item present within the bowl?
+
+  frozen_stack:
+    v89_parent_bank_count: 11
+    v89_parent_adapter_parameter_count: 872448
+    v90_bank_name: v90_scene1_conversational_bridge
+    v90_target_module: model.language_model.layers.28.self_attn.o_proj
+    v90_state_sha256: 70e236711d8ac1fe7cf808f6f4e939b29db476016c8ef49db143707df0f3bde7
+    v90_parameter_count: 28672
+    total_frozen_bank_count: 12
+    total_frozen_adapter_parameter_count: 901120
+    v90_runtime_promotable: false
+    exact_failed_candidate_used_as_offline_parent: true
+    merged_weights: false
+
+  bridge:
+    bank_name: v91_scene1_conversational_repair
+    target_module: model.language_model.layers.33.mlp.down_proj
+    target_layer_type: mlp
+    target_in_features: 12288
+    target_out_features: 1536
+    rank: 16
+    alpha: 32.0
+    dropout: 0.0
+    trainable_parameter_count: 221184
+    initialization_algorithm: cpu_kaiming_uniform_a_exact_zero_b
+    initialization_seed: 910091
+    expected_initial_state_sha256: 0f255efb26255dcac0815511e44aabad5e21820f78f9a7662dc1bf59f627db2b
+    disjoint_from_all_frozen_banks: true
+
+  training:
+    optimizer: AdamW
+    learning_rate: 0.00025
+    weight_decay: 0.0
+    gradient_accumulation_rows: 6
+    optimizer_updates: 295
+    gradient_clip_norm: 1.0
+    answer_ce_weight: 1.0
+    zero_payload_margin_weight: 1.0
+    zero_payload_target_margin_nll: 0.5
+    row_order_seed: 910091
+    checkpoint_selection: fixed_final_update_295
+    intermediate_behavior_selection: false
+
+  gates:
+    canonical_correct_minimum: 122
+    canonical_total: 138
+    canonical_presence_correct_minimum: 21
+    canonical_count_correct_minimum: 9
+    canonical_metric_correct_minimum: 1
+    canonical_attribute_correct_minimum: 15
+    canonical_spatial_correct_minimum: 73
+    canonical_support_correct_minimum: 1
+    primary_conversational_required_correct: 12
+    primary_conversational_total: 13
+    core_actionable_required_correct: 6
+    core_actionable_total: 6
+    new_held_wording_required_correct: 22
+    new_held_wording_total: 26
+    new_held_wording_each_intent_minimum: 1
+    causal_mean_zero_minus_correct_nll_minimum: 0.5
+    causal_prediction_change_minimum: 8
+    exact_prefix_hash_invariance_required: true
+    exact_total_environment_input_invariance_required: true
+    oracle_physically_unavailable_during_runtime_required: true
+    forbidden_runtime_read_count_maximum: 0
+
+  outputs:
+    preregistration: reports/gemma4/metrics/gemma4_v91_scene1_conversational_repair_preregistration_v2.json
+    cpu_preflight: reports/gemma4/metrics/gemma4_v91_scene1_conversational_repair_cpu_preflight_v2.json
+    fixed_final_candidate: reports/gemma4/artifacts/v91_scene1_conversational_repair_final_v2
+    training_report: reports/gemma4/metrics/gemma4_v91_scene1_conversational_repair_training_v2.json
+    evaluation_predictions: reports/gemma4/predictions/gemma4_v91_scene1_conversational_repair_evaluation_v2.json
+    evaluation_report: reports/gemma4/metrics/gemma4_v91_scene1_conversational_repair_evaluation_v2.json
+
+  scope:
+    post_v90_training_set_development: true
+    exact_failed_v90_candidate_frozen: true
+    single_scene_conversational_repair: true
+    development_known_training_wordings: true
+    newly_held_wording_only_evaluation: true
+    local_inference_only: true
+    cloud_inference: false
+    held_out_scene_generalization_claim: false
+    official_validation_loaded: false
+    official_test_loaded: false
+    deferred_final_loaded: false
+    runtime_promotion_authorized: false

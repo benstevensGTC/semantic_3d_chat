@@ -1,0 +1,2197 @@
+{
+  "cloud_model_used": false,
+  "deterministic_route_planner_used": false,
+  "executed_decision_count": 25,
+  "failure_reason": "Gemma selected STOP, but the requested lap geometry failed",
+  "failure_type": "AssertionError",
+  "fallback_used": false,
+  "final_position_xy_m": [
+    -0.5754119704507175,
+    -1.643203649657968
+  ],
+  "initial_position_xy_m": [
+    -0.5,
+    -0.25
+  ],
+  "instruction": "Do a lap around the room.",
+  "local_inference": true,
+  "model_action_counts": {
+    "face": 13,
+    "move_to": 29,
+    "stop": 1
+  },
+  "model_decision_count": 43,
+  "numeric_action_receipt_count": 24,
+  "passed": false,
+  "path_length_m": 4.046756794210254,
+  "rejected_decision_count": 18,
+  "return_error_m": 1.3952431238703678,
+  "runtime_snapshot": {
+    "actions": [
+      {
+        "action_count": 1,
+        "angular_velocity_degrees": 40.0,
+        "body_yaw_degrees": -50.0,
+        "camera_position_m": [
+          -0.5,
+          -0.25,
+          1.2
+        ],
+        "camera_yaw_degrees": -50.0,
+        "collision": false,
+        "distance_moved": 0.0,
+        "error_code": null,
+        "last_movement_delta_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "linear_velocity_xy_m": [
+          0.0,
+          0.0
+        ],
+        "pitch_degrees": 0.0,
+        "position_m": [
+          -0.5,
+          -0.25,
+          0.0
+        ],
+        "scan_count": 0,
+        "scan_coverage": 0.0,
+        "scene_id": "scene_000001",
+        "scene_version": 0,
+        "stopped": false,
+        "success": true,
+        "turn_degrees": 40.0,
+        "valid_depth_pixels": 0,
+        "visible_voxels": 0
+      },
+      {
+        "action_count": 2,
+        "angular_velocity_degrees": 39.9959716796875,
+        "body_yaw_degrees": -10.0040283203125,
+        "camera_position_m": [
+          -0.5,
+          -0.25,
+          1.2
+        ],
+        "camera_yaw_degrees": -10.0040283203125,
+        "collision": false,
+        "distance_moved": 0.0,
+        "error_code": null,
+        "last_movement_delta_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "linear_velocity_xy_m": [
+          0.0,
+          0.0
+        ],
+        "pitch_degrees": 0.0,
+        "position_m": [
+          -0.5,
+          -0.25,
+          0.0
+        ],
+        "scan_count": 0,
+        "scan_coverage": 0.0,
+        "scene_id": "scene_000001",
+        "scene_version": 0,
+        "stopped": false,
+        "success": true,
+        "turn_degrees": 39.9959716796875,
+        "valid_depth_pixels": 0,
+        "visible_voxels": 0
+      },
+      {
+        "action_count": 3,
+        "angular_velocity_degrees": 39.999839782714844,
+        "body_yaw_degrees": 29.995811462402344,
+        "camera_position_m": [
+          -0.5,
+          -0.25,
+          1.2
+        ],
+        "camera_yaw_degrees": 29.995811462402344,
+        "collision": false,
+        "distance_moved": 0.0,
+        "error_code": null,
+        "last_movement_delta_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "linear_velocity_xy_m": [
+          0.0,
+          0.0
+        ],
+        "pitch_degrees": 0.0,
+        "position_m": [
+          -0.5,
+          -0.25,
+          0.0
+        ],
+        "scan_count": 0,
+        "scan_coverage": 0.0,
+        "scene_id": "scene_000001",
+        "scene_version": 0,
+        "stopped": false,
+        "success": true,
+        "turn_degrees": 39.999839782714844,
+        "valid_depth_pixels": 0,
+        "visible_voxels": 0
+      },
+      {
+        "action_count": 4,
+        "angular_velocity_degrees": 0.0,
+        "body_yaw_degrees": 29.995811462402344,
+        "camera_position_m": [
+          -0.6766449844963826,
+          0.09714607346836751,
+          1.2
+        ],
+        "camera_yaw_degrees": 29.995811462402344,
+        "clearance_m": 0.06234385096866696,
+        "collision": false,
+        "distance_moved": 0.38950461726689767,
+        "error_code": null,
+        "last_movement_delta_m": [
+          -0.17664498449638255,
+          0.3471460734683675,
+          0.0
+        ],
+        "linear_velocity_xy_m": [
+          -0.17664498449638255,
+          0.3471460734683675
+        ],
+        "pitch_degrees": 0.0,
+        "position_m": [
+          -0.6766449844963826,
+          0.09714607346836751,
+          0.0
+        ],
+        "scan_count": 0,
+        "scan_coverage": 0.0,
+        "scene_id": "scene_000001",
+        "scene_version": 0,
+        "stopped": false,
+        "success": true,
+        "turn_degrees": 0.0,
+        "valid_depth_pixels": 0,
+        "visible_voxels": 0
+      },
+      {
+        "action_count": 5,
+        "angular_velocity_degrees": 39.972843170166016,
+        "body_yaw_degrees": 69.96865463256836,
+        "camera_position_m": [
+          -0.6766449844963826,
+          0.09714607346836751,
+          1.2
+        ],
+        "camera_yaw_degrees": 69.96865463256836,
+        "collision": false,
+        "distance_moved": 0.0,
+        "error_code": null,
+        "last_movement_delta_m": [
+          -0.17664498449638255,
+          0.3471460734683675,
+          0.0
+        ],
+        "linear_velocity_xy_m": [
+          0.0,
+          0.0
+        ],
+        "pitch_degrees": 0.0,
+        "position_m": [
+          -0.6766449844963826,
+          0.09714607346836751,
+          0.0
+        ],
+        "scan_count": 0,
+        "scan_coverage": 0.0,
+        "scene_id": "scene_000001",
+        "scene_version": 0,
+        "stopped": false,
+        "success": true,
+        "turn_degrees": 39.972843170166016,
+        "valid_depth_pixels": 0,
+        "visible_voxels": 0
+      },
+      {
+        "action_count": 6,
+        "angular_velocity_degrees": 31.947059631347656,
+        "body_yaw_degrees": 101.91571426391602,
+        "camera_position_m": [
+          -0.6766449844963826,
+          0.09714607346836751,
+          1.2
+        ],
+        "camera_yaw_degrees": 101.91571426391602,
+        "collision": false,
+        "distance_moved": 0.0,
+        "error_code": null,
+        "last_movement_delta_m": [
+          -0.17664498449638255,
+          0.3471460734683675,
+          0.0
+        ],
+        "linear_velocity_xy_m": [
+          0.0,
+          0.0
+        ],
+        "pitch_degrees": 0.0,
+        "position_m": [
+          -0.6766449844963826,
+          0.09714607346836751,
+          0.0
+        ],
+        "scan_count": 0,
+        "scan_coverage": 0.0,
+        "scene_id": "scene_000001",
+        "scene_version": 0,
+        "stopped": false,
+        "success": true,
+        "turn_degrees": 31.947059631347656,
+        "valid_depth_pixels": 0,
+        "visible_voxels": 0
+      },
+      {
+        "action_count": 7,
+        "angular_velocity_degrees": 36.592350006103516,
+        "body_yaw_degrees": 138.50806427001953,
+        "camera_position_m": [
+          -0.6766449844963826,
+          0.09714607346836751,
+          1.2
+        ],
+        "camera_yaw_degrees": 138.50806427001953,
+        "collision": false,
+        "distance_moved": 0.0,
+        "error_code": null,
+        "last_movement_delta_m": [
+          -0.17664498449638255,
+          0.3471460734683675,
+          0.0
+        ],
+        "linear_velocity_xy_m": [
+          0.0,
+          0.0
+        ],
+        "pitch_degrees": 0.0,
+        "position_m": [
+          -0.6766449844963826,
+          0.09714607346836751,
+          0.0
+        ],
+        "scan_count": 0,
+        "scan_coverage": 0.0,
+        "scene_id": "scene_000001",
+        "scene_version": 0,
+        "stopped": false,
+        "success": true,
+        "turn_degrees": 36.592350006103516,
+        "valid_depth_pixels": 0,
+        "visible_voxels": 0
+      },
+      {
+        "action_count": 8,
+        "angular_velocity_degrees": -4.265504837036133,
+        "body_yaw_degrees": 134.2425594329834,
+        "camera_position_m": [
+          -0.6766449844963826,
+          0.09714607346836751,
+          1.2
+        ],
+        "camera_yaw_degrees": 134.2425594329834,
+        "collision": false,
+        "distance_moved": 0.0,
+        "error_code": null,
+        "last_movement_delta_m": [
+          -0.17664498449638255,
+          0.3471460734683675,
+          0.0
+        ],
+        "linear_velocity_xy_m": [
+          0.0,
+          0.0
+        ],
+        "pitch_degrees": 0.0,
+        "position_m": [
+          -0.6766449844963826,
+          0.09714607346836751,
+          0.0
+        ],
+        "scan_count": 0,
+        "scan_coverage": 0.0,
+        "scene_id": "scene_000001",
+        "scene_version": 0,
+        "stopped": false,
+        "success": true,
+        "turn_degrees": -4.265504837036133,
+        "valid_depth_pixels": 0,
+        "visible_voxels": 0
+      },
+      {
+        "action_count": 9,
+        "angular_velocity_degrees": 0.0,
+        "body_yaw_degrees": 134.2425594329834,
+        "camera_position_m": [
+          -0.9164564179730638,
+          -0.16805849178694954,
+          1.2
+        ],
+        "camera_yaw_degrees": 134.2425594329834,
+        "clearance_m": 0.055584693145112773,
+        "collision": false,
+        "distance_moved": 0.3575513740127458,
+        "error_code": null,
+        "last_movement_delta_m": [
+          -0.2398114334766812,
+          -0.26520456525531705,
+          0.0
+        ],
+        "linear_velocity_xy_m": [
+          -0.2398114334766812,
+          -0.26520456525531705
+        ],
+        "pitch_degrees": 0.0,
+        "position_m": [
+          -0.9164564179730638,
+          -0.16805849178694954,
+          0.0
+        ],
+        "scan_count": 0,
+        "scan_coverage": 0.0,
+        "scene_id": "scene_000001",
+        "scene_version": 0,
+        "stopped": false,
+        "success": true,
+        "turn_degrees": 0.0,
+        "valid_depth_pixels": 0,
+        "visible_voxels": 0
+      },
+      {
+        "action_count": 10,
+        "angular_velocity_degrees": 38.734962463378906,
+        "body_yaw_degrees": 172.9775218963623,
+        "camera_position_m": [
+          -0.9164564179730638,
+          -0.16805849178694954,
+          1.2
+        ],
+        "camera_yaw_degrees": 172.9775218963623,
+        "collision": false,
+        "distance_moved": 0.0,
+        "error_code": null,
+        "last_movement_delta_m": [
+          -0.2398114334766812,
+          -0.26520456525531705,
+          0.0
+        ],
+        "linear_velocity_xy_m": [
+          0.0,
+          0.0
+        ],
+        "pitch_degrees": 0.0,
+        "position_m": [
+          -0.9164564179730638,
+          -0.16805849178694954,
+          0.0
+        ],
+        "scan_count": 0,
+        "scan_coverage": 0.0,
+        "scene_id": "scene_000001",
+        "scene_version": 0,
+        "stopped": false,
+        "success": true,
+        "turn_degrees": 38.734962463378906,
+        "valid_depth_pixels": 0,
+        "visible_voxels": 0
+      },
+      {
+        "action_count": 11,
+        "angular_velocity_degrees": 0.0,
+        "body_yaw_degrees": 172.9775218963623,
+        "camera_position_m": [
+          -0.9411605030189681,
+          -0.5622410888002084,
+          1.2
+        ],
+        "camera_yaw_degrees": 172.9775218963623,
+        "clearance_m": 0.16190959512446806,
+        "collision": false,
+        "distance_moved": 0.3949559616034078,
+        "error_code": null,
+        "last_movement_delta_m": [
+          -0.024704085045904378,
+          -0.39418259701325886,
+          0.0
+        ],
+        "linear_velocity_xy_m": [
+          -0.024704085045904378,
+          -0.39418259701325886
+        ],
+        "pitch_degrees": 0.0,
+        "position_m": [
+          -0.9411605030189681,
+          -0.5622410888002084,
+          0.0
+        ],
+        "scan_count": 0,
+        "scan_coverage": 0.0,
+        "scene_id": "scene_000001",
+        "scene_version": 0,
+        "stopped": false,
+        "success": true,
+        "turn_degrees": 0.0,
+        "valid_depth_pixels": 0,
+        "visible_voxels": 0
+      },
+      {
+        "action_count": 12,
+        "angular_velocity_degrees": 0.0,
+        "body_yaw_degrees": 172.9775218963623,
+        "camera_position_m": [
+          -0.9577766736032142,
+          -0.9630320127066005,
+          1.2
+        ],
+        "camera_yaw_degrees": 172.9775218963623,
+        "clearance_m": 0.03244898326249046,
+        "collision": false,
+        "distance_moved": 0.40113521636802746,
+        "error_code": null,
+        "last_movement_delta_m": [
+          -0.016616170584246026,
+          -0.40079092390639215,
+          0.0
+        ],
+        "linear_velocity_xy_m": [
+          -0.016616170584246026,
+          -0.40079092390639215
+        ],
+        "pitch_degrees": 0.0,
+        "position_m": [
+          -0.9577766736032142,
+          -0.9630320127066005,
+          0.0
+        ],
+        "scan_count": 0,
+        "scan_coverage": 0.0,
+        "scene_id": "scene_000001",
+        "scene_version": 0,
+        "stopped": false,
+        "success": true,
+        "turn_degrees": 0.0,
+        "valid_depth_pixels": 0,
+        "visible_voxels": 0
+      },
+      {
+        "action_count": 13,
+        "angular_velocity_degrees": 0.0,
+        "body_yaw_degrees": 172.9775218963623,
+        "camera_position_m": [
+          -0.9333574014900662,
+          -1.355343946506053,
+          1.2
+        ],
+        "camera_yaw_degrees": 172.9775218963623,
+        "clearance_m": 0.03244898326249046,
+        "collision": false,
+        "distance_moved": 0.3930711821693394,
+        "error_code": null,
+        "last_movement_delta_m": [
+          0.024419272113147983,
+          -0.3923119337994525,
+          0.0
+        ],
+        "linear_velocity_xy_m": [
+          0.024419272113147983,
+          -0.3923119337994525
+        ],
+        "pitch_degrees": 0.0,
+        "position_m": [
+          -0.9333574014900662,
+          -1.355343946506053,
+          0.0
+        ],
+        "scan_count": 0,
+        "scan_coverage": 0.0,
+        "scene_id": "scene_000001",
+        "scene_version": 0,
+        "stopped": false,
+        "success": true,
+        "turn_degrees": 0.0,
+        "valid_depth_pixels": 0,
+        "visible_voxels": 0
+      },
+      {
+        "action_count": 14,
+        "angular_velocity_degrees": 0.0,
+        "body_yaw_degrees": 172.9775218963623,
+        "camera_position_m": [
+          -0.9372289104818656,
+          -1.7051358672689725,
+          1.2
+        ],
+        "camera_yaw_degrees": 172.9775218963623,
+        "clearance_m": 0.08066266831783836,
+        "collision": false,
+        "distance_moved": 0.3498133451040513,
+        "error_code": null,
+        "last_movement_delta_m": [
+          -0.003871508991799444,
+          -0.34979192076291943,
+          0.0
+        ],
+        "linear_velocity_xy_m": [
+          -0.003871508991799444,
+          -0.34979192076291943
+        ],
+        "pitch_degrees": 0.0,
+        "position_m": [
+          -0.9372289104818656,
+          -1.7051358672689725,
+          0.0
+        ],
+        "scan_count": 0,
+        "scan_coverage": 0.0,
+        "scene_id": "scene_000001",
+        "scene_version": 0,
+        "stopped": false,
+        "success": true,
+        "turn_degrees": 0.0,
+        "valid_depth_pixels": 0,
+        "visible_voxels": 0
+      },
+      {
+        "action_count": 15,
+        "angular_velocity_degrees": -39.99904251098633,
+        "body_yaw_degrees": 132.97847938537598,
+        "camera_position_m": [
+          -0.9372289104818656,
+          -1.7051358672689725,
+          1.2
+        ],
+        "camera_yaw_degrees": 132.97847938537598,
+        "collision": false,
+        "distance_moved": 0.0,
+        "error_code": null,
+        "last_movement_delta_m": [
+          -0.003871508991799444,
+          -0.34979192076291943,
+          0.0
+        ],
+        "linear_velocity_xy_m": [
+          0.0,
+          0.0
+        ],
+        "pitch_degrees": 0.0,
+        "position_m": [
+          -0.9372289104818656,
+          -1.7051358672689725,
+          0.0
+        ],
+        "scan_count": 0,
+        "scan_coverage": 0.0,
+        "scene_id": "scene_000001",
+        "scene_version": 0,
+        "stopped": false,
+        "success": true,
+        "turn_degrees": -39.99904251098633,
+        "valid_depth_pixels": 0,
+        "visible_voxels": 0
+      },
+      {
+        "action_count": 16,
+        "angular_velocity_degrees": 0.0,
+        "body_yaw_degrees": 132.97847938537598,
+        "camera_position_m": [
+          -1.1695380094138597,
+          -1.9589106888394174,
+          1.2
+        ],
+        "camera_yaw_degrees": 132.97847938537598,
+        "clearance_m": 0.23111835742499376,
+        "collision": false,
+        "distance_moved": 0.34404821974500344,
+        "error_code": null,
+        "last_movement_delta_m": [
+          -0.23230909893199403,
+          -0.25377482157044495,
+          0.0
+        ],
+        "linear_velocity_xy_m": [
+          -0.23230909893199403,
+          -0.25377482157044495
+        ],
+        "pitch_degrees": 0.0,
+        "position_m": [
+          -1.1695380094138597,
+          -1.9589106888394174,
+          0.0
+        ],
+        "scan_count": 0,
+        "scan_coverage": 0.0,
+        "scene_id": "scene_000001",
+        "scene_version": 0,
+        "stopped": false,
+        "success": true,
+        "turn_degrees": 0.0,
+        "valid_depth_pixels": 0,
+        "visible_voxels": 0
+      },
+      {
+        "action_count": 17,
+        "angular_velocity_degrees": 0.0,
+        "body_yaw_degrees": 132.97847938537598,
+        "camera_position_m": [
+          -1.4959236428088458,
+          -2.1364277165853958,
+          1.2
+        ],
+        "camera_yaw_degrees": 132.97847938537598,
+        "clearance_m": 0.004329799822623048,
+        "collision": false,
+        "distance_moved": 0.3715371809474965,
+        "error_code": null,
+        "last_movement_delta_m": [
+          -0.32638563339498616,
+          -0.17751702774597833,
+          0.0
+        ],
+        "linear_velocity_xy_m": [
+          -0.32638563339498616,
+          -0.17751702774597833
+        ],
+        "pitch_degrees": 0.0,
+        "position_m": [
+          -1.4959236428088458,
+          -2.1364277165853958,
+          0.0
+        ],
+        "scan_count": 0,
+        "scan_coverage": 0.0,
+        "scene_id": "scene_000001",
+        "scene_version": 0,
+        "stopped": false,
+        "success": true,
+        "turn_degrees": 0.0,
+        "valid_depth_pixels": 0,
+        "visible_voxels": 0
+      },
+      {
+        "action_count": 18,
+        "angular_velocity_degrees": 39.96964645385742,
+        "body_yaw_degrees": 172.9481258392334,
+        "camera_position_m": [
+          -1.4959236428088458,
+          -2.1364277165853958,
+          1.2
+        ],
+        "camera_yaw_degrees": 172.9481258392334,
+        "collision": false,
+        "distance_moved": 0.0,
+        "error_code": null,
+        "last_movement_delta_m": [
+          -0.32638563339498616,
+          -0.17751702774597833,
+          0.0
+        ],
+        "linear_velocity_xy_m": [
+          0.0,
+          0.0
+        ],
+        "pitch_degrees": 0.0,
+        "position_m": [
+          -1.4959236428088458,
+          -2.1364277165853958,
+          0.0
+        ],
+        "scan_count": 0,
+        "scan_coverage": 0.0,
+        "scene_id": "scene_000001",
+        "scene_version": 0,
+        "stopped": false,
+        "success": true,
+        "turn_degrees": 39.96964645385742,
+        "valid_depth_pixels": 0,
+        "visible_voxels": 0
+      },
+      {
+        "action_count": 19,
+        "angular_velocity_degrees": 39.9448127746582,
+        "body_yaw_degrees": -147.1070613861084,
+        "camera_position_m": [
+          -1.4959236428088458,
+          -2.1364277165853958,
+          1.2
+        ],
+        "camera_yaw_degrees": -147.1070613861084,
+        "collision": false,
+        "distance_moved": 0.0,
+        "error_code": null,
+        "last_movement_delta_m": [
+          -0.32638563339498616,
+          -0.17751702774597833,
+          0.0
+        ],
+        "linear_velocity_xy_m": [
+          0.0,
+          0.0
+        ],
+        "pitch_degrees": 0.0,
+        "position_m": [
+          -1.4959236428088458,
+          -2.1364277165853958,
+          0.0
+        ],
+        "scan_count": 0,
+        "scan_coverage": 0.0,
+        "scene_id": "scene_000001",
+        "scene_version": 0,
+        "stopped": false,
+        "success": true,
+        "turn_degrees": 39.9448127746582,
+        "valid_depth_pixels": 0,
+        "visible_voxels": 0
+      },
+      {
+        "action_count": 20,
+        "angular_velocity_degrees": 39.904563903808594,
+        "body_yaw_degrees": -107.2024974822998,
+        "camera_position_m": [
+          -1.4959236428088458,
+          -2.1364277165853958,
+          1.2
+        ],
+        "camera_yaw_degrees": -107.2024974822998,
+        "collision": false,
+        "distance_moved": 0.0,
+        "error_code": null,
+        "last_movement_delta_m": [
+          -0.32638563339498616,
+          -0.17751702774597833,
+          0.0
+        ],
+        "linear_velocity_xy_m": [
+          0.0,
+          0.0
+        ],
+        "pitch_degrees": 0.0,
+        "position_m": [
+          -1.4959236428088458,
+          -2.1364277165853958,
+          0.0
+        ],
+        "scan_count": 0,
+        "scan_coverage": 0.0,
+        "scene_id": "scene_000001",
+        "scene_version": 0,
+        "stopped": false,
+        "success": true,
+        "turn_degrees": 39.904563903808594,
+        "valid_depth_pixels": 0,
+        "visible_voxels": 0
+      },
+      {
+        "action_count": 21,
+        "angular_velocity_degrees": 39.6827278137207,
+        "body_yaw_degrees": -67.5197696685791,
+        "camera_position_m": [
+          -1.4959236428088458,
+          -2.1364277165853958,
+          1.2
+        ],
+        "camera_yaw_degrees": -67.5197696685791,
+        "collision": false,
+        "distance_moved": 0.0,
+        "error_code": null,
+        "last_movement_delta_m": [
+          -0.32638563339498616,
+          -0.17751702774597833,
+          0.0
+        ],
+        "linear_velocity_xy_m": [
+          0.0,
+          0.0
+        ],
+        "pitch_degrees": 0.0,
+        "position_m": [
+          -1.4959236428088458,
+          -2.1364277165853958,
+          0.0
+        ],
+        "scan_count": 0,
+        "scan_coverage": 0.0,
+        "scene_id": "scene_000001",
+        "scene_version": 0,
+        "stopped": false,
+        "success": true,
+        "turn_degrees": 39.6827278137207,
+        "valid_depth_pixels": 0,
+        "visible_voxels": 0
+      },
+      {
+        "action_count": 22,
+        "angular_velocity_degrees": 0.0,
+        "body_yaw_degrees": -67.5197696685791,
+        "camera_position_m": [
+          -1.1766376556461982,
+          -1.9830853705897984,
+          1.2
+        ],
+        "camera_yaw_degrees": -67.5197696685791,
+        "clearance_m": 0.004329799822623048,
+        "collision": false,
+        "distance_moved": 0.3541996847455682,
+        "error_code": null,
+        "last_movement_delta_m": [
+          0.31928598716264767,
+          0.15334234599559737,
+          0.0
+        ],
+        "linear_velocity_xy_m": [
+          0.31928598716264767,
+          0.15334234599559737
+        ],
+        "pitch_degrees": 0.0,
+        "position_m": [
+          -1.1766376556461982,
+          -1.9830853705897984,
+          0.0
+        ],
+        "scan_count": 0,
+        "scan_coverage": 0.0,
+        "scene_id": "scene_000001",
+        "scene_version": 0,
+        "stopped": false,
+        "success": true,
+        "turn_degrees": 0.0,
+        "valid_depth_pixels": 0,
+        "visible_voxels": 0
+      },
+      {
+        "action_count": 23,
+        "angular_velocity_degrees": 0.0,
+        "body_yaw_degrees": -67.5197696685791,
+        "camera_position_m": [
+          -0.8696779674769801,
+          -1.8211322890683306,
+          1.2
+        ],
+        "camera_yaw_degrees": -67.5197696685791,
+        "clearance_m": 0.20691749821230482,
+        "collision": false,
+        "distance_moved": 0.34706346793525067,
+        "error_code": null,
+        "last_movement_delta_m": [
+          0.30695968816921804,
+          0.1619530815214678,
+          0.0
+        ],
+        "linear_velocity_xy_m": [
+          0.30695968816921804,
+          0.1619530815214678
+        ],
+        "pitch_degrees": 0.0,
+        "position_m": [
+          -0.8696779674769801,
+          -1.8211322890683306,
+          0.0
+        ],
+        "scan_count": 0,
+        "scan_coverage": 0.0,
+        "scene_id": "scene_000001",
+        "scene_version": 0,
+        "stopped": false,
+        "success": true,
+        "turn_degrees": 0.0,
+        "valid_depth_pixels": 0,
+        "visible_voxels": 0
+      },
+      {
+        "action_count": 24,
+        "angular_velocity_degrees": 0.0,
+        "body_yaw_degrees": -67.5197696685791,
+        "camera_position_m": [
+          -0.5754119704507175,
+          -1.643203649657968,
+          1.2
+        ],
+        "camera_yaw_degrees": -67.5197696685791,
+        "clearance_m": 0.3688895124577778,
+        "collision": false,
+        "distance_moved": 0.3438765443124658,
+        "error_code": null,
+        "last_movement_delta_m": [
+          0.29426599702626266,
+          0.17792863941036252,
+          0.0
+        ],
+        "linear_velocity_xy_m": [
+          0.29426599702626266,
+          0.17792863941036252
+        ],
+        "pitch_degrees": 0.0,
+        "position_m": [
+          -0.5754119704507175,
+          -1.643203649657968,
+          0.0
+        ],
+        "scan_count": 0,
+        "scan_coverage": 0.0,
+        "scene_id": "scene_000001",
+        "scene_version": 0,
+        "stopped": false,
+        "success": true,
+        "turn_degrees": 0.0,
+        "valid_depth_pixels": 0,
+        "visible_voxels": 0
+      }
+    ],
+    "control": {
+      "camera_control_input": false,
+      "cloud_model_used": false,
+      "control_mode": "actual_local_gemma_model_only_waypoint_policy",
+      "deterministic_route_planner_used": false,
+      "fallback_used": false,
+      "gemma_accepted": true,
+      "gemma_attempted": true,
+      "high_level_natural_language_only": true,
+      "initial_scan_performed": false,
+      "local_inference": true,
+      "model_selects_every_waypoint_and_heading": true,
+      "model_selects_stop": true,
+      "navigation_control_mode": "actual_local_gemma_model_only_waypoint_policy",
+      "scene_memory_refreshed": false,
+      "static_precomputed_scene_memory": true,
+      "substitution_applied": false,
+      "synthetic_stop_applied": false,
+      "task_trained_navigation": true,
+      "untrained_json_backend_enabled": false
+    },
+    "map_version": 0,
+    "model_decisions": [
+      {
+        "accepted": true,
+        "actual_gemma_causal_forward": true,
+        "derived_absolute_facing_heading_degrees": -50.0,
+        "derived_world_waypoint_xy_m": null,
+        "deterministic_route_planner_used": false,
+        "error_code": null,
+        "executed": true,
+        "model_action": "face",
+        "model_desired_heading_degrees": -50.0,
+        "model_selected_every_waypoint_and_heading": true,
+        "model_turn_delta_degrees": 40.0,
+        "model_waypoint_delta_robot_m": [
+          0.06022447720170021,
+          0.24238906800746918
+        ],
+        "primitive_arguments": {
+          "angle_degrees": 40.0
+        },
+        "primitive_tool": "turn",
+        "step": 1,
+        "substitution_applied": false,
+        "synthetic_stop_applied": false
+      },
+      {
+        "accepted": true,
+        "actual_gemma_causal_forward": true,
+        "derived_absolute_facing_heading_degrees": -10.0040283203125,
+        "derived_world_waypoint_xy_m": null,
+        "deterministic_route_planner_used": false,
+        "error_code": null,
+        "executed": true,
+        "model_action": "face",
+        "model_desired_heading_degrees": -10.0040283203125,
+        "model_selected_every_waypoint_and_heading": true,
+        "model_turn_delta_degrees": 39.9959716796875,
+        "model_waypoint_delta_robot_m": [
+          0.05920213460922241,
+          0.29912039637565613
+        ],
+        "primitive_arguments": {
+          "angle_degrees": 39.9959716796875
+        },
+        "primitive_tool": "turn",
+        "step": 2,
+        "substitution_applied": false,
+        "synthetic_stop_applied": false
+      },
+      {
+        "accepted": true,
+        "actual_gemma_causal_forward": true,
+        "derived_absolute_facing_heading_degrees": 29.995811462402344,
+        "derived_world_waypoint_xy_m": null,
+        "deterministic_route_planner_used": false,
+        "error_code": null,
+        "executed": true,
+        "model_action": "face",
+        "model_desired_heading_degrees": 29.995811462402344,
+        "model_selected_every_waypoint_and_heading": true,
+        "model_turn_delta_degrees": 39.999839782714844,
+        "model_waypoint_delta_robot_m": [
+          -0.0473465770483017,
+          0.36119821667671204
+        ],
+        "primitive_arguments": {
+          "angle_degrees": 39.999839782714844
+        },
+        "primitive_tool": "turn",
+        "step": 3,
+        "substitution_applied": false,
+        "synthetic_stop_applied": false
+      },
+      {
+        "accepted": true,
+        "actual_gemma_causal_forward": true,
+        "derived_absolute_facing_heading_degrees": 69.86019134521484,
+        "derived_world_waypoint_xy_m": [
+          -0.6766449844963826,
+          0.09714607346836751
+        ],
+        "deterministic_route_planner_used": false,
+        "error_code": null,
+        "executed": true,
+        "model_action": "move_to",
+        "model_desired_heading_degrees": 69.86019134521484,
+        "model_selected_every_waypoint_and_heading": true,
+        "model_turn_delta_degrees": 39.8643798828125,
+        "model_waypoint_delta_robot_m": [
+          0.020565558224916458,
+          0.3889613151550293
+        ],
+        "primitive_arguments": {
+          "x": -0.6766449844963826,
+          "y": 0.09714607346836751
+        },
+        "primitive_tool": "move_to",
+        "step": 4,
+        "substitution_applied": false,
+        "synthetic_stop_applied": false
+      },
+      {
+        "accepted": true,
+        "actual_gemma_causal_forward": true,
+        "derived_absolute_facing_heading_degrees": 69.96865463256836,
+        "derived_world_waypoint_xy_m": null,
+        "deterministic_route_planner_used": false,
+        "error_code": null,
+        "executed": true,
+        "model_action": "face",
+        "model_desired_heading_degrees": 69.96865463256836,
+        "model_selected_every_waypoint_and_heading": true,
+        "model_turn_delta_degrees": 39.972843170166016,
+        "model_waypoint_delta_robot_m": [
+          0.03750909864902496,
+          0.37310197949409485
+        ],
+        "primitive_arguments": {
+          "angle_degrees": 39.972843170166016
+        },
+        "primitive_tool": "turn",
+        "step": 5,
+        "substitution_applied": false,
+        "synthetic_stop_applied": false
+      },
+      {
+        "accepted": false,
+        "actual_gemma_causal_forward": true,
+        "derived_absolute_facing_heading_degrees": 109.87608337402344,
+        "derived_world_waypoint_xy_m": [
+          -1.0283977665741295,
+          0.2564728071751405
+        ],
+        "deterministic_route_planner_used": false,
+        "error_code": "E_MODEL_COLLISION",
+        "executed": false,
+        "model_action": "move_to",
+        "model_desired_heading_degrees": 109.87608337402344,
+        "model_selected_every_waypoint_and_heading": true,
+        "model_turn_delta_degrees": 39.90742874145508,
+        "model_waypoint_delta_robot_m": [
+          0.029200971126556396,
+          0.3850484788417816
+        ],
+        "primitive_arguments": {
+          "x": -1.0283977665741295,
+          "y": 0.2564728071751405
+        },
+        "primitive_tool": "move_to",
+        "step": 6,
+        "substitution_applied": false,
+        "synthetic_stop_applied": false
+      },
+      {
+        "accepted": false,
+        "actual_gemma_causal_forward": true,
+        "derived_absolute_facing_heading_degrees": 39.43195343017578,
+        "derived_world_waypoint_xy_m": [
+          -1.0480613555654037,
+          0.20293532635810607
+        ],
+        "deterministic_route_planner_used": false,
+        "error_code": "E_MODEL_COLLISION",
+        "executed": false,
+        "model_action": "move_to",
+        "model_desired_heading_degrees": 39.43195343017578,
+        "model_selected_every_waypoint_and_heading": true,
+        "model_turn_delta_degrees": -30.536701202392578,
+        "model_waypoint_delta_robot_m": [
+          -0.027833230793476105,
+          0.385184109210968
+        ],
+        "primitive_arguments": {
+          "x": -1.0480613555654037,
+          "y": 0.20293532635810607
+        },
+        "primitive_tool": "move_to",
+        "step": 7,
+        "substitution_applied": false,
+        "synthetic_stop_applied": false
+      },
+      {
+        "accepted": true,
+        "actual_gemma_causal_forward": true,
+        "derived_absolute_facing_heading_degrees": 101.91571426391602,
+        "derived_world_waypoint_xy_m": null,
+        "deterministic_route_planner_used": false,
+        "error_code": null,
+        "executed": true,
+        "model_action": "face",
+        "model_desired_heading_degrees": 101.91571426391602,
+        "model_selected_every_waypoint_and_heading": true,
+        "model_turn_delta_degrees": 31.947059631347656,
+        "model_waypoint_delta_robot_m": [
+          -0.029692038893699646,
+          0.3911384642124176
+        ],
+        "primitive_arguments": {
+          "angle_degrees": 31.947059631347656
+        },
+        "primitive_tool": "turn",
+        "step": 8,
+        "substitution_applied": false,
+        "synthetic_stop_applied": false
+      },
+      {
+        "accepted": true,
+        "actual_gemma_causal_forward": true,
+        "derived_absolute_facing_heading_degrees": 138.50806427001953,
+        "derived_world_waypoint_xy_m": null,
+        "deterministic_route_planner_used": false,
+        "error_code": null,
+        "executed": true,
+        "model_action": "face",
+        "model_desired_heading_degrees": 138.50806427001953,
+        "model_selected_every_waypoint_and_heading": true,
+        "model_turn_delta_degrees": 36.592350006103516,
+        "model_waypoint_delta_robot_m": [
+          -0.04761812090873718,
+          0.38872718811035156
+        ],
+        "primitive_arguments": {
+          "angle_degrees": 36.592350006103516
+        },
+        "primitive_tool": "turn",
+        "step": 9,
+        "substitution_applied": false,
+        "synthetic_stop_applied": false
+      },
+      {
+        "accepted": true,
+        "actual_gemma_causal_forward": true,
+        "derived_absolute_facing_heading_degrees": 134.2425594329834,
+        "derived_world_waypoint_xy_m": null,
+        "deterministic_route_planner_used": false,
+        "error_code": null,
+        "executed": true,
+        "model_action": "face",
+        "model_desired_heading_degrees": 134.2425594329834,
+        "model_selected_every_waypoint_and_heading": true,
+        "model_turn_delta_degrees": -4.265504837036133,
+        "model_waypoint_delta_robot_m": [
+          -0.027542555704712868,
+          0.3757472336292267
+        ],
+        "primitive_arguments": {
+          "angle_degrees": -4.265504837036133
+        },
+        "primitive_tool": "turn",
+        "step": 10,
+        "substitution_applied": false,
+        "synthetic_stop_applied": false
+      },
+      {
+        "accepted": true,
+        "actual_gemma_causal_forward": true,
+        "derived_absolute_facing_heading_degrees": 166.5157299041748,
+        "derived_world_waypoint_xy_m": [
+          -0.9164564179730638,
+          -0.16805849178694954
+        ],
+        "deterministic_route_planner_used": false,
+        "error_code": null,
+        "executed": true,
+        "model_action": "move_to",
+        "model_desired_heading_degrees": 166.5157299041748,
+        "model_selected_every_waypoint_and_heading": true,
+        "model_turn_delta_degrees": 32.273170471191406,
+        "model_waypoint_delta_robot_m": [
+          -0.02267475426197052,
+          0.3568316698074341
+        ],
+        "primitive_arguments": {
+          "x": -0.9164564179730638,
+          "y": -0.16805849178694954
+        },
+        "primitive_tool": "move_to",
+        "step": 11,
+        "substitution_applied": false,
+        "synthetic_stop_applied": false
+      },
+      {
+        "accepted": true,
+        "actual_gemma_causal_forward": true,
+        "derived_absolute_facing_heading_degrees": 172.9775218963623,
+        "derived_world_waypoint_xy_m": null,
+        "deterministic_route_planner_used": false,
+        "error_code": null,
+        "executed": true,
+        "model_action": "face",
+        "model_desired_heading_degrees": 172.9775218963623,
+        "model_selected_every_waypoint_and_heading": true,
+        "model_turn_delta_degrees": 38.734962463378906,
+        "model_waypoint_delta_robot_m": [
+          -0.014455881901085377,
+          0.3968612551689148
+        ],
+        "primitive_arguments": {
+          "angle_degrees": 38.734962463378906
+        },
+        "primitive_tool": "turn",
+        "step": 12,
+        "substitution_applied": false,
+        "synthetic_stop_applied": false
+      },
+      {
+        "accepted": true,
+        "actual_gemma_causal_forward": true,
+        "derived_absolute_facing_heading_degrees": -163.64892196655273,
+        "derived_world_waypoint_xy_m": [
+          -0.9411605030189681,
+          -0.5622410888002084
+        ],
+        "deterministic_route_planner_used": false,
+        "error_code": null,
+        "executed": true,
+        "model_action": "move_to",
+        "model_desired_heading_degrees": -163.64892196655273,
+        "model_selected_every_waypoint_and_heading": true,
+        "model_turn_delta_degrees": 23.37355613708496,
+        "model_waypoint_delta_robot_m": [
+          -0.02367350086569786,
+          0.39424583315849304
+        ],
+        "primitive_arguments": {
+          "x": -0.9411605030189681,
+          "y": -0.5622410888002084
+        },
+        "primitive_tool": "move_to",
+        "step": 13,
+        "substitution_applied": false,
+        "synthetic_stop_applied": false
+      },
+      {
+        "accepted": false,
+        "actual_gemma_causal_forward": true,
+        "derived_absolute_facing_heading_degrees": -147.30970191955566,
+        "derived_world_waypoint_xy_m": [
+          -1.0108860270488012,
+          -0.9532255548543103
+        ],
+        "deterministic_route_planner_used": false,
+        "error_code": "E_MODEL_COLLISION",
+        "executed": false,
+        "model_action": "move_to",
+        "model_desired_heading_degrees": -147.30970191955566,
+        "model_selected_every_waypoint_and_heading": true,
+        "model_turn_delta_degrees": 39.71277618408203,
+        "model_waypoint_delta_robot_m": [
+          0.02140119858086109,
+          0.3965759575366974
+        ],
+        "primitive_arguments": {
+          "x": -1.0108860270488012,
+          "y": -0.9532255548543103
+        },
+        "primitive_tool": "move_to",
+        "step": 14,
+        "substitution_applied": false,
+        "synthetic_stop_applied": false
+      },
+      {
+        "accepted": true,
+        "actual_gemma_causal_forward": true,
+        "derived_absolute_facing_heading_degrees": -158.11560821533203,
+        "derived_world_waypoint_xy_m": [
+          -0.9577766736032142,
+          -0.9630320127066005
+        ],
+        "deterministic_route_planner_used": false,
+        "error_code": null,
+        "executed": true,
+        "model_action": "move_to",
+        "model_desired_heading_degrees": -158.11560821533203,
+        "model_selected_every_waypoint_and_heading": true,
+        "model_turn_delta_degrees": 28.906869888305664,
+        "model_waypoint_delta_robot_m": [
+          -0.032508667558431625,
+          0.39981576800346375
+        ],
+        "primitive_arguments": {
+          "x": -0.9577766736032142,
+          "y": -0.9630320127066005
+        },
+        "primitive_tool": "move_to",
+        "step": 15,
+        "substitution_applied": false,
+        "synthetic_stop_applied": false
+      },
+      {
+        "accepted": true,
+        "actual_gemma_causal_forward": true,
+        "derived_absolute_facing_heading_degrees": -148.80113410949707,
+        "derived_world_waypoint_xy_m": [
+          -0.9333574014900662,
+          -1.355343946506053
+        ],
+        "deterministic_route_planner_used": false,
+        "error_code": null,
+        "executed": true,
+        "model_action": "move_to",
+        "model_desired_heading_degrees": -148.80113410949707,
+        "model_selected_every_waypoint_and_heading": true,
+        "model_turn_delta_degrees": 38.221343994140625,
+        "model_waypoint_delta_robot_m": [
+          -0.07219964265823364,
+          0.38638344407081604
+        ],
+        "primitive_arguments": {
+          "x": -0.9333574014900662,
+          "y": -1.355343946506053
+        },
+        "primitive_tool": "move_to",
+        "step": 16,
+        "substitution_applied": false,
+        "synthetic_stop_applied": false
+      },
+      {
+        "accepted": true,
+        "actual_gemma_causal_forward": true,
+        "derived_absolute_facing_heading_degrees": -151.1405544281006,
+        "derived_world_waypoint_xy_m": [
+          -0.9372289104818656,
+          -1.7051358672689725
+        ],
+        "deterministic_route_planner_used": false,
+        "error_code": null,
+        "executed": true,
+        "model_action": "move_to",
+        "model_desired_heading_degrees": -151.1405544281006,
+        "model_selected_every_waypoint_and_heading": true,
+        "model_turn_delta_degrees": 35.88192367553711,
+        "model_waypoint_delta_robot_m": [
+          -0.03892264887690544,
+          0.3476411998271942
+        ],
+        "primitive_arguments": {
+          "x": -0.9372289104818656,
+          "y": -1.7051358672689725
+        },
+        "primitive_tool": "move_to",
+        "step": 17,
+        "substitution_applied": false,
+        "synthetic_stop_applied": false
+      },
+      {
+        "accepted": true,
+        "actual_gemma_causal_forward": true,
+        "derived_absolute_facing_heading_degrees": 132.97847938537598,
+        "derived_world_waypoint_xy_m": null,
+        "deterministic_route_planner_used": false,
+        "error_code": null,
+        "executed": true,
+        "model_action": "face",
+        "model_desired_heading_degrees": 132.97847938537598,
+        "model_selected_every_waypoint_and_heading": true,
+        "model_turn_delta_degrees": -39.99904251098633,
+        "model_waypoint_delta_robot_m": [
+          0.019034994766116142,
+          0.359275758266449
+        ],
+        "primitive_arguments": {
+          "angle_degrees": -39.99904251098633
+        },
+        "primitive_tool": "turn",
+        "step": 18,
+        "substitution_applied": false,
+        "synthetic_stop_applied": false
+      },
+      {
+        "accepted": true,
+        "actual_gemma_causal_forward": true,
+        "derived_absolute_facing_heading_degrees": 94.09653663635254,
+        "derived_world_waypoint_xy_m": [
+          -1.1695380094138597,
+          -1.9589106888394174
+        ],
+        "deterministic_route_planner_used": false,
+        "error_code": null,
+        "executed": true,
+        "model_action": "move_to",
+        "model_desired_heading_degrees": 94.09653663635254,
+        "model_selected_every_waypoint_and_heading": true,
+        "model_turn_delta_degrees": -38.88194274902344,
+        "model_waypoint_delta_robot_m": [
+          -0.027293551713228226,
+          0.34296390414237976
+        ],
+        "primitive_arguments": {
+          "x": -1.1695380094138597,
+          "y": -1.9589106888394174
+        },
+        "primitive_tool": "move_to",
+        "step": 19,
+        "substitution_applied": false,
+        "synthetic_stop_applied": false
+      },
+      {
+        "accepted": false,
+        "actual_gemma_causal_forward": true,
+        "derived_absolute_facing_heading_degrees": 92.97925758361816,
+        "derived_world_waypoint_xy_m": [
+          -1.4437037944268134,
+          -2.2038773911741627
+        ],
+        "deterministic_route_planner_used": false,
+        "error_code": "E_MODEL_COLLISION",
+        "executed": false,
+        "model_action": "move_to",
+        "model_desired_heading_degrees": 92.97925758361816,
+        "model_selected_every_waypoint_and_heading": true,
+        "model_turn_delta_degrees": -39.99922180175781,
+        "model_waypoint_delta_robot_m": [
+          0.00768524594604969,
+          0.36758196353912354
+        ],
+        "primitive_arguments": {
+          "x": -1.4437037944268134,
+          "y": -2.2038773911741627
+        },
+        "primitive_tool": "move_to",
+        "step": 20,
+        "substitution_applied": false,
+        "synthetic_stop_applied": false
+      },
+      {
+        "accepted": false,
+        "actual_gemma_causal_forward": true,
+        "derived_absolute_facing_heading_degrees": 97.83718681335449,
+        "derived_world_waypoint_xy_m": [
+          -1.4645465186013111,
+          -2.1908507755127378
+        ],
+        "deterministic_route_planner_used": false,
+        "error_code": "E_MODEL_COLLISION",
+        "executed": false,
+        "model_action": "move_to",
+        "model_desired_heading_degrees": 97.83718681335449,
+        "model_selected_every_waypoint_and_heading": true,
+        "model_turn_delta_degrees": -35.141292572021484,
+        "model_waypoint_delta_robot_m": [
+          0.0314246229827404,
+          0.37395015358924866
+        ],
+        "primitive_arguments": {
+          "x": -1.4645465186013111,
+          "y": -2.1908507755127378
+        },
+        "primitive_tool": "move_to",
+        "step": 21,
+        "substitution_applied": false,
+        "synthetic_stop_applied": false
+      },
+      {
+        "accepted": false,
+        "actual_gemma_causal_forward": true,
+        "derived_absolute_facing_heading_degrees": 165.71449089050293,
+        "derived_world_waypoint_xy_m": [
+          -1.4118553314746791,
+          -2.1825362666814603
+        ],
+        "deterministic_route_planner_used": false,
+        "error_code": "E_MODEL_COLLISION",
+        "executed": false,
+        "model_action": "move_to",
+        "model_desired_heading_degrees": 165.71449089050293,
+        "model_selected_every_waypoint_and_heading": true,
+        "model_turn_delta_degrees": 32.73601150512695,
+        "model_waypoint_delta_robot_m": [
+          0.001586772850714624,
+          0.3297325670719147
+        ],
+        "primitive_arguments": {
+          "x": -1.4118553314746791,
+          "y": -2.1825362666814603
+        },
+        "primitive_tool": "move_to",
+        "step": 22,
+        "substitution_applied": false,
+        "synthetic_stop_applied": false
+      },
+      {
+        "accepted": false,
+        "actual_gemma_causal_forward": true,
+        "derived_absolute_facing_heading_degrees": 98.33302879333496,
+        "derived_world_waypoint_xy_m": [
+          -1.4262132341975093,
+          -2.22755232037448
+        ],
+        "deterministic_route_planner_used": false,
+        "error_code": "E_MODEL_COLLISION",
+        "executed": false,
+        "model_action": "move_to",
+        "model_desired_heading_degrees": 98.33302879333496,
+        "model_selected_every_waypoint_and_heading": true,
+        "model_turn_delta_degrees": -34.645450592041016,
+        "model_waypoint_delta_robot_m": [
+          -0.02155929245054722,
+          0.3709254562854767
+        ],
+        "primitive_arguments": {
+          "x": -1.4262132341975093,
+          "y": -2.22755232037448
+        },
+        "primitive_tool": "move_to",
+        "step": 23,
+        "substitution_applied": false,
+        "synthetic_stop_applied": false
+      },
+      {
+        "accepted": false,
+        "actual_gemma_causal_forward": true,
+        "derived_absolute_facing_heading_degrees": 172.9355297088623,
+        "derived_world_waypoint_xy_m": [
+          -1.462914193434326,
+          -2.1830182666202367
+        ],
+        "deterministic_route_planner_used": false,
+        "error_code": "E_MODEL_COLLISION",
+        "executed": false,
+        "model_action": "move_to",
+        "model_desired_heading_degrees": 172.9355297088623,
+        "model_selected_every_waypoint_and_heading": true,
+        "model_turn_delta_degrees": 39.95705032348633,
+        "model_waypoint_delta_robot_m": [
+          0.036042168736457825,
+          0.3674163222312927
+        ],
+        "primitive_arguments": {
+          "x": -1.462914193434326,
+          "y": -2.1830182666202367
+        },
+        "primitive_tool": "move_to",
+        "step": 24,
+        "substitution_applied": false,
+        "synthetic_stop_applied": false
+      },
+      {
+        "accepted": false,
+        "actual_gemma_causal_forward": true,
+        "derived_absolute_facing_heading_degrees": 172.97847175598145,
+        "derived_world_waypoint_xy_m": [
+          -1.4965317682870745,
+          -2.1887525779003805
+        ],
+        "deterministic_route_planner_used": false,
+        "error_code": "E_MODEL_COLLISION",
+        "executed": false,
+        "model_action": "move_to",
+        "model_desired_heading_degrees": 172.97847175598145,
+        "model_selected_every_waypoint_and_heading": true,
+        "model_turn_delta_degrees": 39.99999237060547,
+        "model_waypoint_delta_robot_m": [
+          0.05476478487253189,
+          0.3959204852581024
+        ],
+        "primitive_arguments": {
+          "x": -1.4965317682870745,
+          "y": -2.1887525779003805
+        },
+        "primitive_tool": "move_to",
+        "step": 25,
+        "substitution_applied": false,
+        "synthetic_stop_applied": false
+      },
+      {
+        "accepted": false,
+        "actual_gemma_causal_forward": true,
+        "derived_absolute_facing_heading_degrees": 172.09525108337402,
+        "derived_world_waypoint_xy_m": [
+          -1.45154605347506,
+          -2.191486722471896
+        ],
+        "deterministic_route_planner_used": false,
+        "error_code": "E_MODEL_COLLISION",
+        "executed": false,
+        "model_action": "move_to",
+        "model_desired_heading_degrees": 172.09525108337402,
+        "model_selected_every_waypoint_and_heading": true,
+        "model_turn_delta_degrees": 39.11677169799805,
+        "model_waypoint_delta_robot_m": [
+          0.022096633911132812,
+          0.36487242579460144
+        ],
+        "primitive_arguments": {
+          "x": -1.45154605347506,
+          "y": -2.191486722471896
+        },
+        "primitive_tool": "move_to",
+        "step": 26,
+        "substitution_applied": false,
+        "synthetic_stop_applied": false
+      },
+      {
+        "accepted": false,
+        "actual_gemma_causal_forward": true,
+        "derived_absolute_facing_heading_degrees": 99.34626197814941,
+        "derived_world_waypoint_xy_m": [
+          -1.4196585317861805,
+          -2.2115409252813496
+        ],
+        "deterministic_route_planner_used": false,
+        "error_code": "E_MODEL_COLLISION",
+        "executed": false,
+        "model_action": "move_to",
+        "model_desired_heading_degrees": 99.34626197814941,
+        "model_selected_every_waypoint_and_heading": true,
+        "model_turn_delta_degrees": -33.63221740722656,
+        "model_waypoint_delta_robot_m": [
+          -0.014313694089651108,
+          0.3552146255970001
+        ],
+        "primitive_arguments": {
+          "x": -1.4196585317861805,
+          "y": -2.2115409252813496
+        },
+        "primitive_tool": "move_to",
+        "step": 27,
+        "substitution_applied": false,
+        "synthetic_stop_applied": false
+      },
+      {
+        "accepted": false,
+        "actual_gemma_causal_forward": true,
+        "derived_absolute_facing_heading_degrees": 92.97847938537598,
+        "derived_world_waypoint_xy_m": [
+          -1.4035062216089356,
+          -2.1999429491315343
+        ],
+        "deterministic_route_planner_used": false,
+        "error_code": "E_MODEL_COLLISION",
+        "executed": false,
+        "model_action": "move_to",
+        "model_desired_heading_degrees": 92.97847938537598,
+        "model_selected_every_waypoint_and_heading": true,
+        "model_turn_delta_degrees": -40.0,
+        "model_waypoint_delta_robot_m": [
+          -0.01683991216123104,
+          0.3354908227920532
+        ],
+        "primitive_arguments": {
+          "x": -1.4035062216089356,
+          "y": -2.1999429491315343
+        },
+        "primitive_tool": "move_to",
+        "step": 28,
+        "substitution_applied": false,
+        "synthetic_stop_applied": false
+      },
+      {
+        "accepted": false,
+        "actual_gemma_causal_forward": true,
+        "derived_absolute_facing_heading_degrees": 92.97854423522949,
+        "derived_world_waypoint_xy_m": [
+          -1.4588845287346672,
+          -2.183430651345988
+        ],
+        "deterministic_route_planner_used": false,
+        "error_code": "E_MODEL_COLLISION",
+        "executed": false,
+        "model_action": "move_to",
+        "model_desired_heading_degrees": 92.97854423522949,
+        "model_selected_every_waypoint_and_heading": true,
+        "model_turn_delta_degrees": -39.999935150146484,
+        "model_waypoint_delta_robot_m": [
+          0.03299334645271301,
+          0.36474931240081787
+        ],
+        "primitive_arguments": {
+          "x": -1.4588845287346672,
+          "y": -2.183430651345988
+        },
+        "primitive_tool": "move_to",
+        "step": 29,
+        "substitution_applied": false,
+        "synthetic_stop_applied": false
+      },
+      {
+        "accepted": false,
+        "actual_gemma_causal_forward": true,
+        "derived_absolute_facing_heading_degrees": 101.24780082702637,
+        "derived_world_waypoint_xy_m": [
+          -1.4539315089932066,
+          -2.209553860431841
+        ],
+        "deterministic_route_planner_used": false,
+        "error_code": "E_MODEL_COLLISION",
+        "executed": false,
+        "model_action": "move_to",
+        "model_desired_heading_degrees": 101.24780082702637,
+        "model_selected_every_waypoint_and_heading": true,
+        "model_turn_delta_degrees": -31.73067855834961,
+        "model_waypoint_delta_robot_m": [
+          0.010504759848117828,
+          0.37893444299697876
+        ],
+        "primitive_arguments": {
+          "x": -1.4539315089932066,
+          "y": -2.209553860431841
+        },
+        "primitive_tool": "move_to",
+        "step": 30,
+        "substitution_applied": false,
+        "synthetic_stop_applied": false
+      },
+      {
+        "accepted": true,
+        "actual_gemma_causal_forward": true,
+        "derived_absolute_facing_heading_degrees": 92.98871421813965,
+        "derived_world_waypoint_xy_m": [
+          -1.4959236428088458,
+          -2.1364277165853958
+        ],
+        "deterministic_route_planner_used": false,
+        "error_code": null,
+        "executed": true,
+        "model_action": "move_to",
+        "model_desired_heading_degrees": 92.98871421813965,
+        "model_selected_every_waypoint_and_heading": true,
+        "model_turn_delta_degrees": -39.98976516723633,
+        "model_waypoint_delta_robot_m": [
+          0.09263159334659576,
+          0.3598044812679291
+        ],
+        "primitive_arguments": {
+          "x": -1.4959236428088458,
+          "y": -2.1364277165853958
+        },
+        "primitive_tool": "move_to",
+        "step": 31,
+        "substitution_applied": false,
+        "synthetic_stop_applied": false
+      },
+      {
+        "accepted": false,
+        "actual_gemma_causal_forward": true,
+        "derived_absolute_facing_heading_degrees": 92.98046684265137,
+        "derived_world_waypoint_xy_m": [
+          -1.8065925495956492,
+          -2.315819249377512
+        ],
+        "deterministic_route_planner_used": false,
+        "error_code": "E_LIMIT",
+        "executed": false,
+        "model_action": "move_to",
+        "model_desired_heading_degrees": 92.98046684265137,
+        "model_selected_every_waypoint_and_heading": true,
+        "model_turn_delta_degrees": -39.99801254272461,
+        "model_waypoint_delta_robot_m": [
+          0.08054572343826294,
+          0.34958386421203613
+        ],
+        "primitive_arguments": {
+          "x": -1.8065925495956492,
+          "y": -2.315819249377512
+        },
+        "primitive_tool": "move_to",
+        "step": 32,
+        "substitution_applied": false,
+        "synthetic_stop_applied": false
+      },
+      {
+        "accepted": false,
+        "actual_gemma_causal_forward": true,
+        "derived_absolute_facing_heading_degrees": 93.2183895111084,
+        "derived_world_waypoint_xy_m": [
+          -1.7749757222878604,
+          -2.349030382604667
+        ],
+        "deterministic_route_planner_used": false,
+        "error_code": "E_LIMIT",
+        "executed": false,
+        "model_action": "move_to",
+        "model_desired_heading_degrees": 93.2183895111084,
+        "model_selected_every_waypoint_and_heading": true,
+        "model_turn_delta_degrees": -39.76008987426758,
+        "model_waypoint_delta_robot_m": [
+          0.03469419479370117,
+          0.349093496799469
+        ],
+        "primitive_arguments": {
+          "x": -1.7749757222878604,
+          "y": -2.349030382604667
+        },
+        "primitive_tool": "move_to",
+        "step": 33,
+        "substitution_applied": false,
+        "synthetic_stop_applied": false
+      },
+      {
+        "accepted": true,
+        "actual_gemma_causal_forward": true,
+        "derived_absolute_facing_heading_degrees": 172.9481258392334,
+        "derived_world_waypoint_xy_m": null,
+        "deterministic_route_planner_used": false,
+        "error_code": null,
+        "executed": true,
+        "model_action": "face",
+        "model_desired_heading_degrees": 172.9481258392334,
+        "model_selected_every_waypoint_and_heading": true,
+        "model_turn_delta_degrees": 39.96964645385742,
+        "model_waypoint_delta_robot_m": [
+          -0.05106232315301895,
+          0.19083894789218903
+        ],
+        "primitive_arguments": {
+          "angle_degrees": 39.96964645385742
+        },
+        "primitive_tool": "turn",
+        "step": 34,
+        "substitution_applied": false,
+        "synthetic_stop_applied": false
+      },
+      {
+        "accepted": true,
+        "actual_gemma_causal_forward": true,
+        "derived_absolute_facing_heading_degrees": -147.1070613861084,
+        "derived_world_waypoint_xy_m": null,
+        "deterministic_route_planner_used": false,
+        "error_code": null,
+        "executed": true,
+        "model_action": "face",
+        "model_desired_heading_degrees": -147.1070613861084,
+        "model_selected_every_waypoint_and_heading": true,
+        "model_turn_delta_degrees": 39.9448127746582,
+        "model_waypoint_delta_robot_m": [
+          -0.08479493111371994,
+          0.20795027911663055
+        ],
+        "primitive_arguments": {
+          "angle_degrees": 39.9448127746582
+        },
+        "primitive_tool": "turn",
+        "step": 35,
+        "substitution_applied": false,
+        "synthetic_stop_applied": false
+      },
+      {
+        "accepted": true,
+        "actual_gemma_causal_forward": true,
+        "derived_absolute_facing_heading_degrees": -107.2024974822998,
+        "derived_world_waypoint_xy_m": null,
+        "deterministic_route_planner_used": false,
+        "error_code": null,
+        "executed": true,
+        "model_action": "face",
+        "model_desired_heading_degrees": -107.2024974822998,
+        "model_selected_every_waypoint_and_heading": true,
+        "model_turn_delta_degrees": 39.904563903808594,
+        "model_waypoint_delta_robot_m": [
+          -0.028663024306297302,
+          0.25523683428764343
+        ],
+        "primitive_arguments": {
+          "angle_degrees": 39.904563903808594
+        },
+        "primitive_tool": "turn",
+        "step": 36,
+        "substitution_applied": false,
+        "synthetic_stop_applied": false
+      },
+      {
+        "accepted": false,
+        "actual_gemma_causal_forward": true,
+        "derived_absolute_facing_heading_degrees": -67.20251274108887,
+        "derived_world_waypoint_xy_m": [
+          -1.2024596277176862,
+          -2.2125820143702795
+        ],
+        "deterministic_route_planner_used": false,
+        "error_code": "E_MODEL_COLLISION",
+        "executed": false,
+        "model_action": "move_to",
+        "model_desired_heading_degrees": -67.20251274108887,
+        "model_selected_every_waypoint_and_heading": true,
+        "model_turn_delta_degrees": 39.99998474121094,
+        "model_waypoint_delta_robot_m": [
+          -0.014044320210814476,
+          0.3028586506843567
+        ],
+        "primitive_arguments": {
+          "x": -1.2024596277176862,
+          "y": -2.2125820143702795
+        },
+        "primitive_tool": "move_to",
+        "step": 37,
+        "substitution_applied": false,
+        "synthetic_stop_applied": false
+      },
+      {
+        "accepted": false,
+        "actual_gemma_causal_forward": true,
+        "derived_absolute_facing_heading_degrees": -67.20350074768066,
+        "derived_world_waypoint_xy_m": [
+          -1.180899115491783,
+          -2.1920898340116897
+        ],
+        "deterministic_route_planner_used": false,
+        "error_code": "E_MODEL_COLLISION",
+        "executed": false,
+        "model_action": "move_to",
+        "model_desired_heading_degrees": -67.20350074768066,
+        "model_selected_every_waypoint_and_heading": true,
+        "model_turn_delta_degrees": 39.99899673461914,
+        "model_waypoint_delta_robot_m": [
+          -0.03999630734324455,
+          0.31739410758018494
+        ],
+        "primitive_arguments": {
+          "x": -1.180899115491783,
+          "y": -2.1920898340116897
+        },
+        "primitive_tool": "move_to",
+        "step": 38,
+        "substitution_applied": false,
+        "synthetic_stop_applied": false
+      },
+      {
+        "accepted": true,
+        "actual_gemma_causal_forward": true,
+        "derived_absolute_facing_heading_degrees": -67.5197696685791,
+        "derived_world_waypoint_xy_m": null,
+        "deterministic_route_planner_used": false,
+        "error_code": null,
+        "executed": true,
+        "model_action": "face",
+        "model_desired_heading_degrees": -67.5197696685791,
+        "model_selected_every_waypoint_and_heading": true,
+        "model_turn_delta_degrees": 39.6827278137207,
+        "model_waypoint_delta_robot_m": [
+          -0.025646710768342018,
+          0.36077719926834106
+        ],
+        "primitive_arguments": {
+          "angle_degrees": 39.6827278137207
+        },
+        "primitive_tool": "turn",
+        "step": 39,
+        "substitution_applied": false,
+        "synthetic_stop_applied": false
+      },
+      {
+        "accepted": true,
+        "actual_gemma_causal_forward": true,
+        "derived_absolute_facing_heading_degrees": -27.520769119262695,
+        "derived_world_waypoint_xy_m": [
+          -1.1766376556461982,
+          -1.9830853705897984
+        ],
+        "deterministic_route_planner_used": false,
+        "error_code": null,
+        "executed": true,
+        "model_action": "move_to",
+        "model_desired_heading_degrees": -27.520769119262695,
+        "model_selected_every_waypoint_and_heading": true,
+        "model_turn_delta_degrees": 39.999000549316406,
+        "model_waypoint_delta_robot_m": [
+          -0.01960642635822296,
+          0.3536566197872162
+        ],
+        "primitive_arguments": {
+          "x": -1.1766376556461982,
+          "y": -1.9830853705897984
+        },
+        "primitive_tool": "move_to",
+        "step": 40,
+        "substitution_applied": false,
+        "synthetic_stop_applied": false
+      },
+      {
+        "accepted": true,
+        "actual_gemma_causal_forward": true,
+        "derived_absolute_facing_heading_degrees": -27.52897834777832,
+        "derived_world_waypoint_xy_m": [
+          -0.8696779674769801,
+          -1.8211322890683306
+        ],
+        "deterministic_route_planner_used": false,
+        "error_code": null,
+        "executed": true,
+        "model_action": "move_to",
+        "model_desired_heading_degrees": -27.52897834777832,
+        "model_selected_every_waypoint_and_heading": true,
+        "model_turn_delta_degrees": 39.99079132080078,
+        "model_waypoint_delta_robot_m": [
+          -0.032275985926389694,
+          0.34555941820144653
+        ],
+        "primitive_arguments": {
+          "x": -0.8696779674769801,
+          "y": -1.8211322890683306
+        },
+        "primitive_tool": "move_to",
+        "step": 41,
+        "substitution_applied": false,
+        "synthetic_stop_applied": false
+      },
+      {
+        "accepted": true,
+        "actual_gemma_causal_forward": true,
+        "derived_absolute_facing_heading_degrees": -27.558847427368164,
+        "derived_world_waypoint_xy_m": [
+          -0.5754119704507175,
+          -1.643203649657968
+        ],
+        "deterministic_route_planner_used": false,
+        "error_code": null,
+        "executed": true,
+        "model_action": "move_to",
+        "model_desired_heading_degrees": -27.558847427368164,
+        "model_selected_every_waypoint_and_heading": true,
+        "model_turn_delta_degrees": 39.96092224121094,
+        "model_waypoint_delta_robot_m": [
+          -0.051891203969717026,
+          0.33993878960609436
+        ],
+        "primitive_arguments": {
+          "x": -0.5754119704507175,
+          "y": -1.643203649657968
+        },
+        "primitive_tool": "move_to",
+        "step": 42,
+        "substitution_applied": false,
+        "synthetic_stop_applied": false
+      },
+      {
+        "accepted": true,
+        "actual_gemma_causal_forward": true,
+        "derived_absolute_facing_heading_degrees": -27.522268295288086,
+        "derived_world_waypoint_xy_m": null,
+        "deterministic_route_planner_used": false,
+        "error_code": null,
+        "executed": true,
+        "model_action": "stop",
+        "model_desired_heading_degrees": -27.522268295288086,
+        "model_selected_every_waypoint_and_heading": true,
+        "model_turn_delta_degrees": 39.997501373291016,
+        "model_waypoint_delta_robot_m": [
+          -0.1073918491601944,
+          0.26753371953964233
+        ],
+        "primitive_arguments": {},
+        "primitive_tool": "stop",
+        "step": 43,
+        "substitution_applied": false,
+        "synthetic_stop_applied": false
+      }
+    ],
+    "reply": "Gemma chose and executed 43 decisions from the continuous 3D memory, including its own STOP decision.",
+    "scene_memory": {
+      "active_l2_norm": 284.29364013671875,
+      "active_sha256": "fcd15a6141e16d5bc813e7965dbbb332c5253c8f4d441b4a7aedb4f830b1ca5e",
+      "active_tensor_shape": [
+        1,
+        262,
+        1536
+      ],
+      "all_runtime_voxels_encoded": true,
+      "base_adapter_weights_loaded": true,
+      "control_training_gate_passed": true,
+      "control_weights_loaded": true,
+      "environmental_text_inputs": [],
+      "l2_norm": 284.2933044433594,
+      "loaded_file_audit": {
+        "enabled": true,
+        "forbidden_access_count": 0,
+        "loaded_file_count": 149,
+        "loaded_file_inventory_sha256": "b166b1ced4edb701f30856558b9b2ee7aa9d5496ecab11529a1dd8e608dc194d",
+        "passed": true
+      },
+      "map_version": 0,
+      "model_dim": 1536,
+      "processed_voxels": 8422,
+      "question_dependent_scene_retrieval": false,
+      "rms": 0.4516076445579529,
+      "robot_state_token_count": 4,
+      "schema": "semantic_3d_chat.scene_memory_diagnostics.v1",
+      "semantic_feature_dim": 3072,
+      "sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95",
+      "source_voxels": 74699,
+      "tensor_shape": [
+        1,
+        258,
+        1536
+      ],
+      "token_count": 258
+    },
+    "scene_prefix_hash": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95",
+    "state": {
+      "action_count": 24,
+      "body_yaw_degrees": -67.5197696685791,
+      "camera_yaw_degrees": -67.5197696685791,
+      "collision": false,
+      "map_version": 0,
+      "pitch_degrees": 0.0,
+      "position_xy_m": [
+        -0.5754119704507175,
+        -1.643203649657968
+      ],
+      "room_size_m": [
+        6.0,
+        5.0,
+        3.0
+      ],
+      "scan_count": 0,
+      "scan_coverage": 0.0,
+      "scene_id": "scene_000001",
+      "scene_prefix_hash": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95",
+      "scene_version": 0,
+      "stopped": false
+    },
+    "visuals": {
+      "map": "/assets/map",
+      "overview": "/assets/overview"
+    }
+  },
+  "schema": "semantic_3d_chat.gemma_waypoint_live_acceptance.v1",
+  "snapshot_failure": null,
+  "substitution_applied": false,
+  "synthetic_stop_applied": false
+}

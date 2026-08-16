@@ -1,0 +1,129 @@
+{
+  "all_input_factor_gradients_exact_zero_at_zero_output_init": true,
+  "all_output_factor_gradients_nonzero": true,
+  "artifact": "gemma4_v54_fixed_prefix_attention_reader_v6_3_gradient_screen",
+  "audit": {
+    "forbidden_accesses": [],
+    "loaded_file_count": 123,
+    "loaded_files_sha256": "47506310e47ce585a1687f94b6ec634c6f00c5b38d8c0477fff65ef44cff7a69",
+    "oracle_accessed": false,
+    "passed": true,
+    "validation_deferred_or_final_accessed": false
+  },
+  "elapsed_seconds": 18.057863290887326,
+  "exact_zero_initialization": {
+    "answer_logits_bit_exact": true,
+    "answer_nll_bit_exact": true,
+    "baseline_nll": 4.119704723358154,
+    "state_sha256_after_backward": "2e6133d83688e5632fa8c810efdd87fad0b251bb8dce747148ba38a4c8dc5355",
+    "state_sha256_before_backward": "2e6133d83688e5632fa8c810efdd87fad0b251bb8dce747148ba38a4c8dc5355",
+    "state_unchanged": true,
+    "wrapped_nll": 4.119704723358154
+  },
+  "full_huggingface_forward": true,
+  "gradients": {
+    "by_module": {
+      "model.language_model.layers.13.self_attn.k_proj": {
+        "residual_a": 0.0,
+        "residual_b": 0.2646664083003998,
+        "total_l2": 0.2646664083003998
+      },
+      "model.language_model.layers.13.self_attn.v_proj": {
+        "residual_a": 0.0,
+        "residual_b": 0.44898751378059387,
+        "total_l2": 0.44898751378059387
+      },
+      "model.language_model.layers.14.self_attn.k_proj": {
+        "residual_a": 0.0,
+        "residual_b": 0.3415009677410126,
+        "total_l2": 0.3415009677410126
+      },
+      "model.language_model.layers.14.self_attn.v_proj": {
+        "residual_a": 0.0,
+        "residual_b": 0.3849926292896271,
+        "total_l2": 0.3849926292896271
+      }
+    },
+    "total_l2": 0.7324481761796539
+  },
+  "objective": {
+    "correct_ce_weight": 0.1,
+    "kind": "symmetric_two_scene_by_two_answer_softplus_margin",
+    "margin_target": 0.5,
+    "pair_units": [
+      {
+        "pair_id": "pair_000007",
+        "pair_question_key": "cfq_736067b51ce93c49",
+        "sides": [
+          {
+            "answer": "green",
+            "correct_nll": 4.090857028961182,
+            "margin": -0.45060253143310547,
+            "unscaled_side_objective": 1.6864765882492065,
+            "wrong_nll": 3.640254497528076
+          },
+          {
+            "answer": "yellow",
+            "correct_nll": 4.187053680419922,
+            "margin": 0.10338163375854492,
+            "unscaled_side_objective": 1.3296973705291748,
+            "wrong_nll": 4.290435314178467
+          }
+        ]
+      },
+      {
+        "pair_id": "pair_000006",
+        "pair_question_key": "cfq_0a79d507273195ef",
+        "sides": [
+          {
+            "answer": "right",
+            "correct_nll": 1.55338716506958,
+            "margin": 0.01012110710144043,
+            "unscaled_side_objective": 1.123127818107605,
+            "wrong_nll": 1.5635082721710205
+          },
+          {
+            "answer": "left",
+            "correct_nll": 1.4503084421157837,
+            "margin": 0.0034433603286743164,
+            "unscaled_side_objective": 1.116965889930725,
+            "wrong_nll": 1.453751802444458
+          }
+        ]
+      }
+    ],
+    "pair_units_balanced_equally": true
+  },
+  "optimizer_constructed": false,
+  "optimizer_steps": 0,
+  "passed": true,
+  "runtime_checkpoint_published": false,
+  "schema_version": 1,
+  "status": "passed",
+  "target_modules": [
+    "model.language_model.layers.13.self_attn.k_proj",
+    "model.language_model.layers.13.self_attn.v_proj",
+    "model.language_model.layers.14.self_attn.k_proj",
+    "model.language_model.layers.14.self_attn.v_proj"
+  ],
+  "target_shapes_out_in": {
+    "model.language_model.layers.13.self_attn.k_proj": [
+      256,
+      1536
+    ],
+    "model.language_model.layers.13.self_attn.v_proj": [
+      256,
+      1536
+    ],
+    "model.language_model.layers.14.self_attn.k_proj": [
+      512,
+      1536
+    ],
+    "model.language_model.layers.14.self_attn.v_proj": [
+      512,
+      1536
+    ]
+  },
+  "trainable_parameter_count": 30720,
+  "v6_2_down_projection_installed": false
+}

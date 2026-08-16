@@ -1,0 +1,88 @@
+{
+  "checks": {
+    "answer_is_yes": true,
+    "answer_uses_v2_active_prefix": true,
+    "no_environmental_text": true,
+    "scan_changed_map_scene_and_control_cache": true,
+    "scan_success_v1": true,
+    "startup_v0": true,
+    "turn_auto_scan_changed_all_hashes_again": true,
+    "turn_positive_15_degrees_success_v2": true,
+    "versions_monotonic": true
+  },
+  "environmental_text_audit": {
+    "all_environmental_text_inputs_empty": true,
+    "answer_codebook_not_loaded_attestation_count": 1,
+    "answer_text_not_loaded_attestation_count": 1,
+    "environmental_text_attestation_count": 7,
+    "forbidden_environment_fields_found": 0,
+    "oracle_false_attestation_count": 2,
+    "passed": true,
+    "visited_json_fields": 446
+  },
+  "facts": {
+    "answer": {
+      "active_prefix_sha256": "70d0d4a80b70ced7a514f704ab25c5b6b9b5a1ffe76e966ef8366c73d71c7b78",
+      "binding_unchanged_since_turn": true,
+      "map_version": 2,
+      "normalized_answer": "yes",
+      "uses_version_two_active_prefix": true
+    },
+    "map_versions": [
+      0,
+      1,
+      2,
+      2
+    ],
+    "scan": {
+      "active_prefix_sha256": "f8b0032fa202f2bc9ec3f6ec6a9b3f87ef0e2e567630aaa13f726884b058a92c",
+      "changed_map_scene_control_and_active_prefix": true,
+      "map_sha256": "0ce47997a1409fe4e47e742289a8b35d1950692f37e3cecb231bb52466b27f45",
+      "map_version": 1,
+      "observation_id": "o_000001",
+      "scan_count": 1,
+      "scene_control_signature_sha256": "7c0413e3063f8ff5cab5cda7ebd35e12e013453379d51ca81ca508c4c09d73f8",
+      "scene_prefix_sha256": "8035572ddfd7a790589922f380b6d3ab78ef041edfbcc460adc6f46cc9a35eb7",
+      "scene_version": 1,
+      "success": true,
+      "valid_depth_pixels": 50176
+    },
+    "scene_id": "scene_000001",
+    "startup": {
+      "active_prefix_sha256": "6c2273acf948c3218e3ba334e46909b50e775a83d301577cf14c72ac3bcdb969",
+      "map_sha256": "68c35107b244b0e4da8dfeef10097473da27f62ce2a7c66b4cee385c0607ebb6",
+      "map_version": 0,
+      "prequestion_scene_key_value_cache": true,
+      "questions_answered": 0,
+      "scene_control_signature_sha256": "992742d1fbc9458d1e25bdf4067c7935f73af8b21b50f091ae6052b25f91304a",
+      "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95"
+    },
+    "turn": {
+      "active_prefix_sha256": "70d0d4a80b70ced7a514f704ab25c5b6b9b5a1ffe76e966ef8366c73d71c7b78",
+      "auto_scan": true,
+      "changed_map_scene_control_and_active_prefix_again": true,
+      "map_sha256": "a3c0ece9bf0116ee6db57847af57e7f96136ade043bcc50a218c4bff760e023d",
+      "map_version": 2,
+      "observation_id": "o_000002",
+      "scan_count": 2,
+      "scene_control_signature_sha256": "78e096961a869fdca20a9c278f2c162c07bf81582e6ad7ea6ac63fb9de4e4875",
+      "scene_prefix_sha256": "864109d4a119c1fd148c7b17d3d00b9f1840e684e359031971d4676adde4afea",
+      "scene_version": 2,
+      "success": true,
+      "turn_degrees": 15.0,
+      "valid_depth_pixels": 50176
+    },
+    "versions_monotonic": true
+  },
+  "passed": true,
+  "schema": "semantic_3d_chat.embodied_conversation_seal.v1",
+  "source_transcript": {
+    "duplicate_json_keys_rejected": true,
+    "nonfinite_json_rejected": true,
+    "path": "reports/gemma4/examples/v75_embodied_live_conversation_scene_000001_v1.jsonl",
+    "record_count": 4,
+    "sha256": "0331f8f2b3e3a6856e514cf0395f7e6ec43a97ab33737e5acc9301f24861b0da",
+    "size_bytes": 20593,
+    "strict_utf8_jsonl": true
+  }
+}

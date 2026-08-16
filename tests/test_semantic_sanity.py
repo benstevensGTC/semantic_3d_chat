@@ -13,8 +13,15 @@ from semantic_3d_chat.evaluation.semantic_sanity import (
     _reject_oracle_runtime_input,
     compute_multiview_consistency,
     extract_aligned_features,
+    map_hash_provenance,
     score_semantic_queries,
     write_query_heatmaps,
+)
+from semantic_3d_chat.mapping.voxel_map import (
+    MATERIALIZED_MAP_CONTENT_HASH_DOMAIN,
+    PERSISTED_MAP_CONTENT_HASH_DOMAIN,
+    SparseVoxelMap,
+    persisted_voxel_map_content_hash,
 )
 
 
@@ -76,6 +83,30 @@ def test_wrong_feature_layout_and_oracle_map_path_are_rejected(tmp_path: Path) -
     oracle_map = tmp_path / "oracle" / "scene_000001" / "map.npz"
     with pytest.raises(ValueError, match="opaque runtime artifact"):
         _reject_oracle_runtime_input(oracle_map, "Fused map")
+
+
+def test_map_hash_provenance_names_persisted_and_reloaded_domains(tmp_path: Path) -> None:
+    voxel_map = SparseVoxelMap(0.1)
+    voxel_map.add_observations(
+        np.array([[0.01, 0.01, 0.01]], dtype=np.float32),
+        np.array([[0.25, 0.75]], dtype=np.float32),
+        view_directions_world=np.array([[0.2, 0.9, 0.1]], dtype=np.float32),
+        frame_id="f_000000",
+    )
+    map_path = voxel_map.save(
+        tmp_path / "map.npz",
+        metadata={"scene_id": "scene_000001"},
+    )
+    reloaded = SparseVoxelMap.load(map_path)
+
+    provenance = map_hash_provenance(map_path, reloaded)
+
+    assert provenance["map_content_hash"] == reloaded.content_hash()
+    assert provenance["map_reloaded_content_hash"] == reloaded.content_hash()
+    assert provenance["map_content_hash_domain"] == MATERIALIZED_MAP_CONTENT_HASH_DOMAIN
+    assert provenance["map_reloaded_content_hash_domain"] == MATERIALIZED_MAP_CONTENT_HASH_DOMAIN
+    assert provenance["map_persisted_content_hash"] == persisted_voxel_map_content_hash(map_path)
+    assert provenance["map_persisted_content_hash_domain"] == PERSISTED_MAP_CONTENT_HASH_DOMAIN
 
 
 def test_heatmaps_use_opaque_query_filenames(tmp_path: Path) -> None:

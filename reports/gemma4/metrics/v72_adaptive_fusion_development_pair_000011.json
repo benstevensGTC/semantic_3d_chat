@@ -1,0 +1,318 @@
+{
+  "architecture": {
+    "both_branches_process_every_environment_latent": true,
+    "branch_moment_counts": [
+      8,
+      32
+    ],
+    "complete_scene_prefix": true,
+    "environment_latent_count": 256,
+    "environmental_text_inputs": [],
+    "fusion": "question_conditioned_per_token_per_basis_continuous_gate",
+    "fusion_bounds": [
+      0.05,
+      0.95
+    ],
+    "latent_selection_or_top_k_used": false,
+    "question_dependent_scene_retrieval": false
+  },
+  "artifact": "v72_adaptive_fusion_train_only_development_v1",
+  "calibration_hyperparameters": {
+    "classification_weight": 0.5,
+    "epochs": 100,
+    "gate_hidden_size": 64,
+    "hard_negative_weight": 0.5,
+    "learning_rate": 0.002,
+    "pair_weight": 2.0,
+    "retention_weight": 0.5,
+    "selection_weight": 1.0,
+    "weight_decay": 0.001
+  },
+  "checkpoint_published": false,
+  "folds": [
+    {
+      "adaptive_metrics": {
+        "changed_class_exact": 5,
+        "changed_total": 8,
+        "complete_class_units": 1,
+        "complete_unit_total": 4,
+        "fully_supported_pair_sides": 8,
+        "gemma_generation_used": false,
+        "inventory_total": 48,
+        "own_over_opposite_margin_sum": 1.625744640827179,
+        "pair_delta_cosine_sum": 3.4249133467674255,
+        "positive_own_over_opposite_sides": 5,
+        "positive_pair_delta_units": 4,
+        "prediction_change_units": 1,
+        "question_or_answer_text_stored": false,
+        "supported_class_exact": 45,
+        "supported_total": 48,
+        "unsupported_total": 0
+      },
+      "adaptive_pair_evidence": [
+        {
+          "both_class_exact": true,
+          "kind": "pair",
+          "left_scene_id": "scene_000023",
+          "own_over_opposite_margins": [
+            0.37106895446777344,
+            0.516558051109314
+          ],
+          "pair_delta_cosine": 0.9697406888008118,
+          "pair_id": "pair_000011",
+          "prediction_changed": true,
+          "question_key": "cfq_34bc318f4e30a8bf",
+          "right_scene_id": "scene_000024"
+        },
+        {
+          "both_class_exact": false,
+          "kind": "pair",
+          "left_scene_id": "scene_000023",
+          "own_over_opposite_margins": [
+            -0.06632071733474731,
+            0.31682127714157104
+          ],
+          "pair_delta_cosine": 0.8249648213386536,
+          "pair_id": "pair_000011",
+          "prediction_changed": false,
+          "question_key": "cfq_77d49144288e75e5",
+          "right_scene_id": "scene_000024"
+        },
+        {
+          "both_class_exact": false,
+          "kind": "pair",
+          "left_scene_id": "scene_000023",
+          "own_over_opposite_margins": [
+            -0.08900636434555054,
+            0.3172485828399658
+          ],
+          "pair_delta_cosine": 0.8007768988609314,
+          "pair_id": "pair_000011",
+          "prediction_changed": false,
+          "question_key": "cfq_92cfe24420e64641",
+          "right_scene_id": "scene_000024"
+        },
+        {
+          "both_class_exact": false,
+          "kind": "pair",
+          "left_scene_id": "scene_000023",
+          "own_over_opposite_margins": [
+            -0.0018126964569091797,
+            0.2611875534057617
+          ],
+          "pair_delta_cosine": 0.8294309377670288,
+          "pair_id": "pair_000011",
+          "prediction_changed": false,
+          "question_key": "cfq_e1e142773f6d422e",
+          "right_scene_id": "scene_000024"
+        }
+      ],
+      "branch_diagnostics": {
+        "branch_32": {
+          "metrics": {
+            "changed_class_exact": 6,
+            "changed_total": 8,
+            "complete_class_units": 2,
+            "complete_unit_total": 4,
+            "fully_supported_pair_sides": 8,
+            "gemma_generation_used": false,
+            "inventory_total": 48,
+            "own_over_opposite_margin_sum": 1.7706130743026733,
+            "pair_delta_cosine_sum": 3.1833575963974,
+            "positive_own_over_opposite_sides": 6,
+            "positive_pair_delta_units": 4,
+            "prediction_change_units": 2,
+            "question_or_answer_text_stored": false,
+            "supported_class_exact": 42,
+            "supported_total": 48,
+            "unsupported_total": 0
+          },
+          "pair_evidence": [
+            {
+              "both_class_exact": true,
+              "kind": "pair",
+              "left_scene_id": "scene_000023",
+              "own_over_opposite_margins": [
+                0.4244036078453064,
+                0.5106731057167053
+              ],
+              "pair_delta_cosine": 0.9245814085006714,
+              "pair_id": "pair_000011",
+              "prediction_changed": true,
+              "question_key": "cfq_34bc318f4e30a8bf",
+              "right_scene_id": "scene_000024"
+            },
+            {
+              "both_class_exact": false,
+              "kind": "pair",
+              "left_scene_id": "scene_000023",
+              "own_over_opposite_margins": [
+                -0.0445481538772583,
+                0.32447099685668945
+              ],
+              "pair_delta_cosine": 0.755929172039032,
+              "pair_id": "pair_000011",
+              "prediction_changed": false,
+              "question_key": "cfq_77d49144288e75e5",
+              "right_scene_id": "scene_000024"
+            },
+            {
+              "both_class_exact": false,
+              "kind": "pair",
+              "left_scene_id": "scene_000023",
+              "own_over_opposite_margins": [
+                -0.06131339073181152,
+                0.3179624080657959
+              ],
+              "pair_delta_cosine": 0.7449829578399658,
+              "pair_id": "pair_000011",
+              "prediction_changed": false,
+              "question_key": "cfq_92cfe24420e64641",
+              "right_scene_id": "scene_000024"
+            },
+            {
+              "both_class_exact": true,
+              "kind": "pair",
+              "left_scene_id": "scene_000023",
+              "own_over_opposite_margins": [
+                0.026297032833099365,
+                0.27266746759414673
+              ],
+              "pair_delta_cosine": 0.7578640580177307,
+              "pair_id": "pair_000011",
+              "prediction_changed": true,
+              "question_key": "cfq_e1e142773f6d422e",
+              "right_scene_id": "scene_000024"
+            }
+          ]
+        },
+        "branch_8": {
+          "metrics": {
+            "changed_class_exact": 5,
+            "changed_total": 8,
+            "complete_class_units": 1,
+            "complete_unit_total": 4,
+            "fully_supported_pair_sides": 8,
+            "gemma_generation_used": false,
+            "inventory_total": 48,
+            "own_over_opposite_margin_sum": 1.0824521481990814,
+            "pair_delta_cosine_sum": 2.7930814027786255,
+            "positive_own_over_opposite_sides": 5,
+            "positive_pair_delta_units": 4,
+            "prediction_change_units": 1,
+            "question_or_answer_text_stored": false,
+            "supported_class_exact": 45,
+            "supported_total": 48,
+            "unsupported_total": 0
+          },
+          "pair_evidence": [
+            {
+              "both_class_exact": true,
+              "kind": "pair",
+              "left_scene_id": "scene_000023",
+              "own_over_opposite_margins": [
+                0.26415568590164185,
+                0.4770527184009552
+              ],
+              "pair_delta_cosine": 0.9546573758125305,
+              "pair_id": "pair_000011",
+              "prediction_changed": true,
+              "question_key": "cfq_34bc318f4e30a8bf",
+              "right_scene_id": "scene_000024"
+            },
+            {
+              "both_class_exact": false,
+              "kind": "pair",
+              "left_scene_id": "scene_000023",
+              "own_over_opposite_margins": [
+                -0.07914113998413086,
+                0.19623392820358276
+              ],
+              "pair_delta_cosine": 0.6280262470245361,
+              "pair_id": "pair_000011",
+              "prediction_changed": false,
+              "question_key": "cfq_77d49144288e75e5",
+              "right_scene_id": "scene_000024"
+            },
+            {
+              "both_class_exact": false,
+              "kind": "pair",
+              "left_scene_id": "scene_000023",
+              "own_over_opposite_margins": [
+                -0.11070871353149414,
+                0.21631723642349243
+              ],
+              "pair_delta_cosine": 0.5504679083824158,
+              "pair_id": "pair_000011",
+              "prediction_changed": false,
+              "question_key": "cfq_92cfe24420e64641",
+              "right_scene_id": "scene_000024"
+            },
+            {
+              "both_class_exact": false,
+              "kind": "pair",
+              "left_scene_id": "scene_000023",
+              "own_over_opposite_margins": [
+                -0.036038994789123535,
+                0.15458142757415771
+              ],
+              "pair_delta_cosine": 0.6599298715591431,
+              "pair_id": "pair_000011",
+              "prediction_changed": false,
+              "question_key": "cfq_e1e142773f6d422e",
+              "right_scene_id": "scene_000024"
+            }
+          ]
+        }
+      },
+      "calibration": {
+        "branch_parameter_count": 789986,
+        "branch_parameters_changed": false,
+        "distinct_question_weight_vectors": 92,
+        "elapsed_seconds": 1.4117430420592427,
+        "final_fusion_weight_mean": 0.510425329208374,
+        "final_fusion_weight_standard_deviation": 0.05912131071090698,
+        "final_selection_accuracy": 0.5764381885528564,
+        "held_rows_used_for_optimization": false,
+        "initial_fusion_weight_mean": 0.499999076128006,
+        "initial_selection_accuracy": 0.49954766035079956,
+        "latent_selection_or_top_k_used": false,
+        "maximum_preclip_gradient_norm": 0.060399267822504044,
+        "optimizer_steps": 100,
+        "question_count": 528,
+        "question_dependent_scene_retrieval": false,
+        "trainable_parameter_count": 127424
+      },
+      "held_fusion": {
+        "distinct_row_vectors": 24,
+        "maximum": 0.8345614671707153,
+        "mean": 0.5100812315940857,
+        "minimum": 0.2668687701225281,
+        "row_count": 48,
+        "standard_deviation": 0.059020496904850006
+      },
+      "held_pair_id": "pair_000011",
+      "held_rows_used_for_optimization": false,
+      "held_teacher_sources_used": false
+    }
+  ],
+  "gemma_generation_used": false,
+  "held_pairs": [
+    "pair_000011"
+  ],
+  "schema_version": 1,
+  "scope": {
+    "deferred_final_loaded": false,
+    "fresh_development_loaded": false,
+    "internal_validation_loaded": false,
+    "oracle_loaded": false,
+    "pair_disjoint_held_measurement": true,
+    "question_or_answer_text_stored_in_report": false,
+    "scorer_inputs_used": false,
+    "training_only": true,
+    "validation_inputs_used": false
+  },
+  "status": "development_measurement_only",
+  "teacher_audit_loaded": true,
+  "total_wall_time_seconds": 74.84803270804696
+}

@@ -1,0 +1,117 @@
+{
+  "artifact": "gemma4_v91_scene1_conversational_repair_cpu_preflight_v1",
+  "config_sha256": "b5c95ec12fd0040731417700936be94b865abcbfbf16f157be0aedf7d4e76e09",
+  "memory": {
+    "canonical_prefix_sha256": "a428f5147c815839ae7315a0adab952ab210814fb21dcdc5bf13b167f28a6e37",
+    "compiled_before_question": true,
+    "device": "cpu",
+    "dtype": "torch.bfloat16",
+    "model_loaded": false,
+    "native_boi_preserved": true,
+    "native_eoi_preserved": true,
+    "oracle_loaded": false,
+    "question_inputs_used": false,
+    "questions_or_answers_serialized": false,
+    "scene_id": "scene_000001",
+    "shape": [
+      1,
+      738,
+      1536
+    ],
+    "zero_payload_prefix_sha256": "c455ed77bf3fe841a4e360e89c036ffb4e8cdb8935c97d767f556d25a9f790d8",
+    "zeroed_interior_tokens": 736
+  },
+  "model_loaded": false,
+  "mps_used": false,
+  "optimizer_constructed": false,
+  "oracle_loaded": false,
+  "parent": {
+    "canonical_correct": 124,
+    "canonical_errors": 14,
+    "new_repair_is_post_failure_development": true,
+    "primary_correct": 7,
+    "total_frozen_bank_count": 12,
+    "total_frozen_parameter_count": 901120,
+    "v89_frozen_bank_count": 11,
+    "v89_frozen_parameter_count": 872448,
+    "v90_bank_name": "v90_scene1_conversational_bridge",
+    "v90_model_acceptance_gate_passed": false,
+    "v90_parameter_count": 28672,
+    "v90_runtime_promotion_authorized": false,
+    "v90_state_sha256": "70e236711d8ac1fe7cf808f6f4e939b29db476016c8ef49db143707df0f3bde7"
+  },
+  "preregistration_sha256": "9dfbaac24f2c0132cd0189e07ff2ace8e3aada2282f10b1ca5cf4aa027774c3e",
+  "protocol": {
+    "canonical_rows_per_epoch": 138,
+    "checks": {
+      "accumulation_6_exact": true,
+      "canonical_138_exact": true,
+      "failed_intents_216_exact": true,
+      "failed_v90_parent_not_misrepresented_as_release": true,
+      "fresh_target_disjoint": true,
+      "inventory_hash_exact": true,
+      "micro_rows_1770_exact": true,
+      "new_held_26_excluded": true,
+      "optimizer_updates_295_exact": true,
+      "oracle_not_loaded_by_trainer": true,
+      "primary_causal_13_per_epoch_exact": true,
+      "primary_causal_39_total_exact": true,
+      "rows_per_epoch_590_exact": true,
+      "runtime_serializes_no_supervision": true,
+      "schedule_hash_exact": true,
+      "success_intents_84_exact": true,
+      "three_epochs_exact": true,
+      "v90_anchors_124_exact": true,
+      "v90_errors_28_exact": true
+    },
+    "epochs": 3,
+    "failed_conversational_rows_per_epoch": 216,
+    "gradient_accumulation_rows": 6,
+    "lora": {
+      "bank_name": "v91_scene1_conversational_repair",
+      "base_projection_type": "torch.nn.Linear",
+      "base_projection_weight_shape": [
+        1536,
+        6144
+      ],
+      "device": "cpu",
+      "exact_zero_output_at_initialization": true,
+      "full_gemma_model_loaded": false,
+      "initial_state_sha256": "2759aff3a205b7bad3e01e4212986f89e1f378aed4f34cb4b1b234de708a9eda",
+      "lora_a_shape": [
+        16,
+        6144
+      ],
+      "lora_b_nonzero_count": 0,
+      "lora_b_shape": [
+        1536,
+        16
+      ],
+      "parameter_count": 122880,
+      "target_modules": [
+        "model.language_model.layers.33.mlp.down_proj"
+      ]
+    },
+    "new_held_wording_rows": 26,
+    "optimizer_updates": 295,
+    "parent_correct_anchor_rows_per_epoch": 124,
+    "parent_error_replay_rows_per_epoch": 28,
+    "primary_causal_rows_per_epoch": 13,
+    "rows_per_epoch": 590,
+    "successful_conversational_rows_per_epoch": 84,
+    "total_micro_rows": 1770,
+    "total_primary_causal_rows": 39,
+    "training_inventory_sha256": "27d478cf90b4e5f9b1c7047b1be79786d28926b984d9ddd8dc559627c307d5fe",
+    "training_schedule_sha256": "f3d66ef1f5ee6922f06b4d976097379eb0104c7bcfc7bbde7509c00b1a23bc11",
+    "wording_lineage": {
+      "all_existing_wordings_exact_v90_rows": true,
+      "existing_wording_count": 78,
+      "new_held_wording_count": 26,
+      "new_held_wordings_disjoint": true,
+      "source_v90_intent_count": 13
+    }
+  },
+  "schema_version": 91,
+  "status": "cpu_preflight_pass_training_authorized",
+  "training_authorized": true
+}

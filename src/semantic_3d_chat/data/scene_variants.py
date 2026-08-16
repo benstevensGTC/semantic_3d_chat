@@ -17,10 +17,36 @@ SCENE_ID_PATTERN = re.compile(r"scene_[0-9]{6}")
 PAIR_ID_PATTERN = re.compile(r"pair_[0-9]{6}")
 INSTANCE_ID_PATTERN = re.compile(r"i_[0-9]{6}")
 
-COLOR_VARIANTS = frozenset({"base", "swap_red_blue"})
-LAYOUT_VARIANTS = frozenset({"base", "cube_on", "cube_under", "mirror_lr"})
+COLOR_VARIANTS = frozenset(
+    {
+        "base",
+        "swap_red_blue",
+        "swap_green_yellow",
+        "swap_blue_yellow",
+        "rotate_primary",
+    }
+)
+LAYOUT_VARIANTS = frozenset(
+    {"base", "cube_on", "cube_under", "mirror_lr", "wide", "mirror_wide"}
+)
+CHAIR_ORIENTATIONS = frozenset({"upright", "upside_down"})
+PICTURE_PLACEMENTS = frozenset({"wall", "floor"})
+BOWL_PLACEMENTS = frozenset({"floor_left", "floor_right", "table"})
+BOOK_PLACEMENTS = frozenset({"table", "under_table"})
 PAIR_ROLES = frozenset({"reference", "counterfactual"})
-CHANGE_TYPES = frozenset({"color_swap", "cube_support", "mirror_lr", "object_removal"})
+CHANGE_TYPES = frozenset(
+    {
+        "color_swap",
+        "cube_support",
+        "mirror_lr",
+        "object_removal",
+        "chair_orientation",
+        "object_relocation",
+        "object_count",
+        "book_support",
+        "picture_support",
+    }
+)
 REMOVABLE_INSTANCE_IDS = frozenset(
     {
         "i_000101",  # chair
@@ -73,6 +99,12 @@ class ScenePlan:
     color_variant: str = "base"
     layout_variant: str = "base"
     remove_instance_ids: tuple[str, ...] = ()
+    plan_version: int = 1
+    chair_count: int = 1
+    chair_orientation: str = "upright"
+    picture_placement: str = "wall"
+    bowl_placement: str = "floor_left"
+    book_placement: str = "table"
     pair_id: str | None = None
     paired_scene_id: str | None = None
     change_type: str | None = None
@@ -86,6 +118,18 @@ class ScenePlan:
             raise ValueError(f"Unknown color variant: {self.color_variant}")
         if self.layout_variant not in LAYOUT_VARIANTS:
             raise ValueError(f"Unknown layout variant: {self.layout_variant}")
+        if self.plan_version not in {1, 2}:
+            raise ValueError("plan_version must be 1 or 2")
+        if self.chair_count not in {0, 1, 2}:
+            raise ValueError("chair_count must be 0, 1, or 2")
+        if self.chair_orientation not in CHAIR_ORIENTATIONS:
+            raise ValueError(f"Unknown chair orientation: {self.chair_orientation}")
+        if self.picture_placement not in PICTURE_PLACEMENTS:
+            raise ValueError(f"Unknown picture placement: {self.picture_placement}")
+        if self.bowl_placement not in BOWL_PLACEMENTS:
+            raise ValueError(f"Unknown bowl placement: {self.bowl_placement}")
+        if self.book_placement not in BOOK_PLACEMENTS:
+            raise ValueError(f"Unknown book placement: {self.book_placement}")
         removals = tuple(sorted(set(self.remove_instance_ids)))
         if any(not INSTANCE_ID_PATTERN.fullmatch(value) for value in removals):
             raise ValueError("removed instances must use opaque i_XXXXXX IDs")
@@ -117,21 +161,50 @@ class ScenePlan:
             and self.color_variant == "base"
             and self.layout_variant == "base"
             and not self.remove_instance_ids
+            and self.plan_version == 1
+            and self.chair_count == 1
+            and self.chair_orientation == "upright"
+            and self.picture_placement == "wall"
+            and self.bowl_placement == "floor_left"
+            and self.book_placement == "table"
             and self.pair_id is None
         )
 
     @property
     def mirrored(self) -> bool:
-        return self.layout_variant == "mirror_lr"
+        return self.layout_variant in {"mirror_lr", "mirror_wide"}
 
     @property
-    def control_signature(self) -> tuple[str, str, tuple[str, ...]]:
-        return self.color_variant, self.layout_variant, self.remove_instance_ids
+    def wide_layout(self) -> bool:
+        return self.layout_variant in {"wide", "mirror_wide"}
+
+    @property
+    def control_signature(self) -> tuple[Any, ...]:
+        return (
+            self.color_variant,
+            self.layout_variant,
+            self.remove_instance_ids,
+            self.chair_count,
+            self.chair_orientation,
+            self.picture_placement,
+            self.bowl_placement,
+            self.book_placement,
+        )
 
     def resolved_color(self, color_name: str) -> str:
-        if self.color_variant != "swap_red_blue":
-            return color_name
-        return {"red": "blue", "blue": "red"}.get(color_name, color_name)
+        mappings = {
+            "base": {},
+            "swap_red_blue": {"red": "blue", "blue": "red"},
+            "swap_green_yellow": {"green": "yellow", "yellow": "green"},
+            "swap_blue_yellow": {"blue": "yellow", "yellow": "blue"},
+            "rotate_primary": {
+                "red": "green",
+                "green": "blue",
+                "blue": "yellow",
+                "yellow": "red",
+            },
+        }
+        return mappings[self.color_variant].get(color_name, color_name)
 
     def mirror_x(self, x: float) -> float:
         return -float(x) if self.mirrored else float(x)
@@ -149,6 +222,17 @@ class ScenePlan:
             "layout_variant": self.layout_variant,
             "removed_instance_ids": list(self.remove_instance_ids),
         }
+        if self.plan_version >= 2:
+            result.update(
+                {
+                    "plan_version": self.plan_version,
+                    "chair_count": self.chair_count,
+                    "chair_orientation": self.chair_orientation,
+                    "picture_placement": self.picture_placement,
+                    "bowl_placement": self.bowl_placement,
+                    "book_placement": self.book_placement,
+                }
+            )
         if self.pair_id is not None:
             result["counterfactual_pair"] = {
                 "pair_id": self.pair_id,
@@ -192,6 +276,12 @@ def scene_plan_from_mapping(
         color_variant=str(values.get("color_variant", "base")),
         layout_variant=str(values.get("layout_variant", "base")),
         remove_instance_ids=tuple(str(value) for value in raw_removals),
+        plan_version=int(values.get("plan_version", 1)),
+        chair_count=int(values.get("chair_count", 1)),
+        chair_orientation=str(values.get("chair_orientation", "upright")),
+        picture_placement=str(values.get("picture_placement", "wall")),
+        bowl_placement=str(values.get("bowl_placement", "floor_left")),
+        book_placement=str(values.get("book_placement", "table")),
         pair_id=None if values.get("pair_id") is None else str(values["pair_id"]),
         paired_scene_id=(
             None if values.get("paired_scene_id") is None else str(values["paired_scene_id"])
@@ -231,6 +321,70 @@ def batch_scene_plans(config: dict[str, Any]) -> tuple[ScenePlan, ...]:
     return plans
 
 
+def batch_scene_splits(
+    config: dict[str, Any],
+    plans: tuple[ScenePlan, ...] | None = None,
+) -> dict[str, list[str]] | None:
+    """Validate an optional explicit, pair-atomic batch split manifest.
+
+    The mapping is oracle/dataset configuration. It is never copied into a
+    sanitized rendering manifest or imported by chat inference.
+    """
+
+    batch = config.get("batch")
+    if not isinstance(batch, dict):
+        raise TypeError("Batch configuration requires a batch mapping")
+    raw_splits = batch.get("splits")
+    if raw_splits is None:
+        return None
+    if not isinstance(raw_splits, dict) or set(raw_splits) != {
+        "train",
+        "validation",
+        "test",
+    }:
+        raise ValueError("batch.splits must contain exactly train, validation, and test")
+    resolved_plans = plans if plans is not None else batch_scene_plans(config)
+    known = {plan.scene_id for plan in resolved_plans}
+    result: dict[str, list[str]] = {}
+    seen: set[str] = set()
+    for split_name in ("train", "validation", "test"):
+        raw_scene_ids = raw_splits[split_name]
+        if isinstance(raw_scene_ids, str) or not isinstance(raw_scene_ids, (list, tuple)):
+            raise TypeError(f"batch.splits.{split_name} must be a list")
+        scene_ids = [validate_scene_id(str(value)) for value in raw_scene_ids]
+        if len(scene_ids) != len(set(scene_ids)):
+            raise ValueError(f"batch.splits.{split_name} contains duplicate scene IDs")
+        overlap = seen & set(scene_ids)
+        if overlap:
+            raise ValueError(f"batch.splits contains scene leakage: {sorted(overlap)}")
+        seen.update(scene_ids)
+        result[split_name] = scene_ids
+    if seen != known:
+        raise ValueError(
+            "batch.splits must cover every configured scene exactly once: "
+            f"missing={sorted(known - seen)} unknown={sorted(seen - known)}"
+        )
+    scene_to_split = {
+        scene_id: split_name
+        for split_name, scene_ids in result.items()
+        for scene_id in scene_ids
+    }
+    for plan in resolved_plans:
+        if plan.paired_scene_id is None:
+            continue
+        if scene_to_split[plan.scene_id] != scene_to_split[plan.paired_scene_id]:
+            raise ValueError(f"{plan.pair_id} crosses explicit batch splits")
+    expected_counts = batch.get("expected_split_counts")
+    if expected_counts is not None:
+        observed_counts = {name: len(scene_ids) for name, scene_ids in result.items()}
+        if expected_counts != observed_counts:
+            raise ValueError(
+                "batch expected split counts disagree: "
+                f"expected={expected_counts} observed={observed_counts}"
+            )
+    return result
+
+
 def _validate_counterfactual_pairs(plans: tuple[ScenePlan, ...]) -> None:
     groups: dict[str, list[ScenePlan]] = {}
     for plan in plans:
@@ -241,6 +395,11 @@ def _validate_counterfactual_pairs(plans: tuple[ScenePlan, ...]) -> None:
         "cube_support": "layout_variant",
         "mirror_lr": "layout_variant",
         "object_removal": "remove_instance_ids",
+        "chair_orientation": "chair_orientation",
+        "object_relocation": "bowl_placement",
+        "object_count": "chair_count",
+        "book_support": "book_placement",
+        "picture_support": "picture_placement",
     }
     for pair_id, members in groups.items():
         if len(members) != 2:
@@ -254,7 +413,16 @@ def _validate_counterfactual_pairs(plans: tuple[ScenePlan, ...]) -> None:
             raise ValueError(f"{pair_id} needs one reference and one counterfactual")
         if first.paired_scene_id != second.scene_id or second.paired_scene_id != first.scene_id:
             raise ValueError(f"{pair_id} paired scene references must be reciprocal")
-        controls = ("color_variant", "layout_variant", "remove_instance_ids")
+        controls = (
+            "color_variant",
+            "layout_variant",
+            "remove_instance_ids",
+            "chair_count",
+            "chair_orientation",
+            "picture_placement",
+            "bowl_placement",
+            "book_placement",
+        )
         changed = {
             name for name in controls if getattr(first, name) != getattr(second, name)
         }
@@ -486,16 +654,85 @@ def validate_oracle_geometry(
     }
 
 
+def validate_visibility_evidence(evidence: dict[str, Any]) -> dict[str, int]:
+    """Validate opaque object visibility measured by exact depth ray casts.
+
+    The artifact belongs in the oracle tree. It intentionally records only
+    opaque numeric instance IDs and hit counts, so the renderer can prove that
+    every generated object contributed actual scan pixels without consulting
+    category labels or segmentation metadata.
+    """
+
+    if not isinstance(evidence, dict):
+        raise TypeError("visibility evidence must be a mapping")
+    allowed = {
+        "schema_version",
+        "scene_id",
+        "method",
+        "minimum_visible_pixels",
+        "expected_instance_ids",
+        "visible_pixel_counts",
+        "all_required_visible",
+    }
+    unexpected = set(evidence) - allowed
+    if unexpected:
+        raise ValueError(f"Unexpected visibility evidence keys: {sorted(unexpected)}")
+    if evidence.get("schema_version") != 1:
+        raise ValueError("visibility evidence schema_version must be 1")
+    validate_scene_id(str(evidence.get("scene_id", "")))
+    if evidence.get("method") != "exact_depth_raycast":
+        raise ValueError("visibility evidence must come from exact_depth_raycast")
+    minimum = evidence.get("minimum_visible_pixels")
+    if not isinstance(minimum, int) or isinstance(minimum, bool) or minimum < 1:
+        raise ValueError("minimum_visible_pixels must be a positive integer")
+    expected = evidence.get("expected_instance_ids")
+    counts = evidence.get("visible_pixel_counts")
+    if not isinstance(expected, list) or not expected:
+        raise ValueError("expected_instance_ids must be a non-empty list")
+    if not isinstance(counts, dict):
+        raise TypeError("visible_pixel_counts must be a mapping")
+    expected_ids = [str(value) for value in expected]
+    if len(expected_ids) != len(set(expected_ids)):
+        raise ValueError("expected_instance_ids contains duplicates")
+    if any(
+        not INSTANCE_ID_PATTERN.fullmatch(instance_id)
+        or int(instance_id.removeprefix("i_")) < 100
+        for instance_id in expected_ids
+    ):
+        raise ValueError("visibility evidence may contain only opaque object IDs")
+    if set(counts) != set(expected_ids):
+        raise ValueError("visible_pixel_counts must cover every expected object exactly")
+    normalized: dict[str, int] = {}
+    for instance_id in expected_ids:
+        count = counts[instance_id]
+        if not isinstance(count, int) or isinstance(count, bool) or count < 0:
+            raise ValueError(f"Invalid visibility count for {instance_id}")
+        normalized[instance_id] = count
+    observed_all_visible = all(value >= minimum for value in normalized.values())
+    if evidence.get("all_required_visible") is not observed_all_visible:
+        raise ValueError("all_required_visible disagrees with measured counts")
+    if not observed_all_visible:
+        hidden = [key for key, value in normalized.items() if value < minimum]
+        raise ValueError(f"Objects lack actual scan visibility: {hidden}")
+    return normalized
+
+
 __all__ = [
+    "BOOK_PLACEMENTS",
+    "BOWL_PLACEMENTS",
+    "CHAIR_ORIENTATIONS",
     "CHANGE_TYPES",
     "COLOR_VARIANTS",
     "LAYOUT_VARIANTS",
+    "PICTURE_PLACEMENTS",
     "REMOVABLE_INSTANCE_IDS",
     "ScenePlan",
     "batch_scene_plans",
+    "batch_scene_splits",
     "derive_scene_seed",
     "oracle_control_facts",
     "project_oracle_counterfactual",
     "scene_plan_from_mapping",
     "validate_oracle_geometry",
+    "validate_visibility_evidence",
 ]

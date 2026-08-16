@@ -1,0 +1,186 @@
+{
+  "artifact": "v75_fixed_atlas_historical_internal_score_v1",
+  "behavioral_accuracy_measured": true,
+  "change_family_counts": {
+    "book_support": 2,
+    "chair_orientation": 2,
+    "color_swap": 2,
+    "mirror_lr": 2,
+    "object_count": 2,
+    "object_relocation": 2,
+    "object_removal": 2,
+    "picture_support": 2
+  },
+  "direct_exact_v75": {
+    "accuracy": 0.5625,
+    "by_change_type": {
+      "book_support": {
+        "accuracy": 1.0,
+        "correct": 2,
+        "total": 2
+      },
+      "chair_orientation": {
+        "accuracy": 0.5,
+        "correct": 1,
+        "total": 2
+      },
+      "color_swap": {
+        "accuracy": 0.5,
+        "correct": 1,
+        "total": 2
+      },
+      "mirror_lr": {
+        "accuracy": 0.5,
+        "correct": 1,
+        "total": 2
+      },
+      "object_count": {
+        "accuracy": 0.5,
+        "correct": 1,
+        "total": 2
+      },
+      "object_relocation": {
+        "accuracy": 0.5,
+        "correct": 1,
+        "total": 2
+      },
+      "object_removal": {
+        "accuracy": 0.5,
+        "correct": 1,
+        "total": 2
+      },
+      "picture_support": {
+        "accuracy": 0.5,
+        "correct": 1,
+        "total": 2
+      }
+    },
+    "correct": 9,
+    "total": 16
+  },
+  "execution_valid": true,
+  "fixed_atlas_accuracy_gain_over_v54": 0.0,
+  "fixed_atlas_accuracy_gap_to_direct_v75": -0.1875,
+  "fixed_v75_atlas": {
+    "accuracy": 0.375,
+    "by_change_type": {
+      "book_support": {
+        "accuracy": 0.5,
+        "correct": 1,
+        "total": 2
+      },
+      "chair_orientation": {
+        "accuracy": 0.5,
+        "correct": 1,
+        "total": 2
+      },
+      "color_swap": {
+        "accuracy": 0.0,
+        "correct": 0,
+        "total": 2
+      },
+      "mirror_lr": {
+        "accuracy": 0.5,
+        "correct": 1,
+        "total": 2
+      },
+      "object_count": {
+        "accuracy": 0.5,
+        "correct": 1,
+        "total": 2
+      },
+      "object_relocation": {
+        "accuracy": 0.5,
+        "correct": 1,
+        "total": 2
+      },
+      "object_removal": {
+        "accuracy": 0.0,
+        "correct": 0,
+        "total": 2
+      },
+      "picture_support": {
+        "accuracy": 0.5,
+        "correct": 1,
+        "total": 2
+      }
+    },
+    "correct": 6,
+    "total": 16
+  },
+  "frozen_v54": {
+    "accuracy": 0.375,
+    "by_change_type": {
+      "book_support": {
+        "accuracy": 0.5,
+        "correct": 1,
+        "total": 2
+      },
+      "chair_orientation": {
+        "accuracy": 0.5,
+        "correct": 1,
+        "total": 2
+      },
+      "color_swap": {
+        "accuracy": 0.0,
+        "correct": 0,
+        "total": 2
+      },
+      "mirror_lr": {
+        "accuracy": 0.5,
+        "correct": 1,
+        "total": 2
+      },
+      "object_count": {
+        "accuracy": 0.5,
+        "correct": 1,
+        "total": 2
+      },
+      "object_relocation": {
+        "accuracy": 0.5,
+        "correct": 1,
+        "total": 2
+      },
+      "object_removal": {
+        "accuracy": 0.0,
+        "correct": 0,
+        "total": 2
+      },
+      "picture_support": {
+        "accuracy": 0.5,
+        "correct": 1,
+        "total": 2
+      }
+    },
+    "correct": 6,
+    "total": 16
+  },
+  "prediction_artifact_sha256": "b7c70f2ad49b4c212c3fb63391e960879a097a82267e0cd092e4910d751df46f",
+  "prediction_change_units": {
+    "direct_exact_v75": 2,
+    "fixed_v75_atlas": 1,
+    "frozen_v54": 1,
+    "total": 8
+  },
+  "predictor_reference_isolation_passed": true,
+  "prefix_invariance_passed": true,
+  "protected_evaluation_authorized": false,
+  "reference_artifact_sha256": "d262633aea021c76061dcbe41db21467c41a0860c7d3e24c89d7787939a4d8b6",
+  "runtime_promotion_authorized": false,
+  "scope": {
+    "deferred_final_loaded": false,
+    "held_pair_count": 8,
+    "held_row_count": 16,
+    "held_scene_count": 16,
+    "historical_training_pool_only": true,
+    "official_test_loaded": false,
+    "official_validation_loaded": false,
+    "optimization_pair_count": 12,
+    "oracle_loaded": false,
+    "pair_disjoint": true,
+    "question_disjoint": false,
+    "scene_disjoint": true
+  },
+  "status": "behavior_measured_not_promoted",
+  "structural_compiler_implies_behavioral_success": false
+}

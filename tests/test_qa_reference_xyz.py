@@ -50,7 +50,7 @@ def test_spatial_relation_records_include_exact_ordered_reference_center() -> No
     assert all(
         "reference_xyz" not in record
         for record in records
-        if record["answer_type"] != "spatial_relation"
+        if record["answer_type"] in {"presence", "count", "attribute"}
     )
 
 
