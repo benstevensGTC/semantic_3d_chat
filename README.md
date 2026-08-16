@@ -680,7 +680,11 @@ mean heading error there. Its cache contains 96 validation rows from two disjoin
 scenes, but the reported configured 24-row disjoint control is only 12.5%
 action-accurate, with 0.122765 m mean waypoint error, 29.5241° mean heading
 error, and zero STOP recall. The passing live tests below therefore demonstrate
-a runnable one-room controller, not broad unseen-room transfer.
+a runnable one-room controller, not broad unseen-room transfer. The
+[V15 section](#v15-what-27-training-rooms-actually-bought) scales this to 27
+training rooms and measures 14 unseen ones; it raises disjoint per-step accuracy
+to 51–62% with real STOP recall, but shows that unseen-room *navigation* remains
+unsolved for a reason data scale cannot fix.
 
 The fresh model-only closed-loop V14 lap **passed** live acceptance. Gemma made
 76 decisions (46 `MOVE_TO`, 29 `FACE`, and its own final `STOP`), traveled
@@ -712,6 +716,207 @@ Closing Blender also stops a backend created by this command. A compatible
 backend that was already running is reused and left running. If port 8770 belongs
 to another service, the launcher refuses to kill it and explains how to select
 another port.
+
+### V15: what 27 training rooms actually bought
+
+Everything above was measured in `scene_000001`, the one room the V4–V14
+operator policy was fitted to. V15 tests the obvious hypothesis — that the 12.5%
+disjoint control was a data-scale problem — by changing only the breadth of
+supervision. The deployed contract is untouched: 258 continuous scene tokens,
+four numeric robot tokens, the raw goal, the same 16D receipt history, one real
+frozen-Gemma causal forward per decision, and the same collision-safe executor.
+
+41 rooms have both an oracle scene and a built prefix, partitioned three ways:
+**27 train** (`scene_000001`, 11–24, 38, 40, 41–50), **8 development** (31–37, 39;
+these drive checkpoint selection), and **6 sealed** (51–56), scored once after
+the checkpoint was frozen. Supervision is 67,331 rows over 3,592 episodes, each
+ending in a model-labeled STOP, and 6,800 authenticated Gemma decision states are
+cached — 17.7× the 384 the previous multi-room run used, with the training slice
+exactly balanced at 1,800 rows per action across all 27 rooms.
+
+**Offline decisions improved a great deal.** On 336 rows from the eight unseen
+development rooms V15 reaches 62.20% action accuracy with 0.7590 STOP recall;
+on 270 rows from the six sealed rooms, 51.11% and 0.5889. Against V14's 12.5%
+and zero STOP recall on 24 rows, goal completion is now learned rather than
+absent, and the measurement is 11–14× larger.
+
+**Closed-loop goal success did not follow.** Running the *same deployed
+controller* over 30 goals in the six sealed rooms, Gemma emitted its own STOP in
+29 of 30 — but only 1 of 30 goals passed its geometric threshold
+([score](reports/gemma4/metrics/gemma_waypoint_v15_heldout_score.json)). Median
+`FACE` yaw error is 93° against a 20° threshold; seven of twelve `approach`
+goals ended with *exactly* zero translation; all six laps enclosed zero area.
+
+The causal battery explains the gap, and this is the substantive finding:
+
+| control (sealed rooms, n=270) | action accuracy | Δ vs primary |
+| --- | --- | --- |
+| primary | 51.11% | — |
+| wrong-scene prefix | 52.22% | **+1.11** |
+| shuffled scene latents | 51.11% | **0.00** |
+| zero history | 45.19% | −5.93 |
+| zero scene prefix | 38.15% | −12.96 |
+
+Zeroing the scene destroys accuracy, so the prefix is genuinely load-bearing —
+but giving the controller *another room's* prefix, or permuting the 256 content
+latents while keeping the exact multiset, changes nothing. What the policy reads
+is a global "a room is present" signal and its coarse statistics, not where this
+particular room's geometry is. The numeric branches are more scene-sensitive
+than the classifier (shuffling shifts headings 10.5°, zeroing 32.1°), but that
+sensitivity does not translate into being right about the actual room.
+
+A second control isolates the cause further. Running the same 30-goal harness on
+`scene_000001` — a room that *is* in V15's training set, and the room V14 passes
+live acceptance in — V15 still scores 0 of 5, with 44.0° and 99.7° `FACE` errors,
+zero translation on both approaches, and a lap enclosing no area. The failure is
+therefore not specific to unseen rooms.
+
+The obvious reading of those controls is that the scene bridge never encoded
+room-specific geometry. **That reading is wrong**, and a probe that needs no
+Gemma forward at all settles it
+([`probe`](reports/gemma4/metrics/gemma_waypoint_v15_scene_token_probe.json)).
+Each of the 256 content latents has a fixed Halton anchor in normalized room
+XYZ and is built from a distance-weighted average of the blocks near it, so if
+geometry survived the bridge a linear map should recover a token's own anchor
+from the token vector. Over 10,496 tokens from 41 rooms, fitted on 33 rooms and
+tested on 8 it never saw, it recovers the anchor at **R² = 0.983 / 0.990 /
+0.995** for x/y/z, and a single token identifies its room **86.1% of the time
+against 2.4% chance**.
+
+So the 3D information is present in the tokens, positionally indexed and
+room-specific. It is the *readout* that discards it. Two bottlenecks are
+implicated, and neither is decoder size:
+
+1. **The control head reads the wrong position.** It consumes only the final
+   decision hidden state. For room geometry to reach that position, a frozen,
+   text-trained Gemma would have to learn to attend from the decision token into
+   the right scene tokens conditioned on the goal — which nothing in this
+   pipeline ever trained it to do. The head then falls back on numeric history
+   and state, which is exactly the pattern the controls show.
+2. **Breadth is not a substitute for on-policy correction.** V14's live-room
+   competence came from 7,115 rows dominated by DAgger corrections recorded from
+   its *own* rollout failures. V15 has 27 rooms of expert demonstrations and no
+   on-policy correction anywhere, so its per-step predictions are good while its
+   closed-loop trajectories compound error — the standard behaviour-cloning
+   result, reproduced here with a large, balanced, multi-room dataset.
+
+That makes the next experiment cheap rather than architectural: read from the
+scene-token hidden states directly (the `v80_atlas_attention_reader` /
+`v82_dense_learned_reader` pattern already in this repo) instead of from the
+decision position alone. Those states are causally upstream of the prompt, so
+they cache **per room** — 41 forwards, not 6,800 — and the probe above proves
+the signal is there to be read. Decoder LoRA and multi-room DAgger follow. A
+larger Gemma is not indicated by any measurement taken here.
+
+**V15 is deliberately not promoted.** V14 remains the live-room default because
+it is the only checkpoint with passing closed-loop acceptance; V15 is better on
+disjoint per-step decisions and worse in the loop, so promoting it would trade a
+working demonstration for a better offline number. V15 is selected explicitly:
+
+```bash
+make v15-check            # tests + ruff for the whole V15 surface
+make v15-traces           # 27-room general set + 6-room sealed set
+make v15-cache            # authenticated Gemma decision states
+make v15-train            # fit heads, select on development rooms only
+make v15-sealed-score     # sealed-room decisions + causal controls
+make v15-heldout-plan     # oracle-derived goals, and a separate scoring key
+make v15-heldout-rollout  # closed loop in sealed rooms, oracle access blocked
+make v15-heldout-score    # join rollouts with the scoring key
+make v15-summary          # hash every artifact into one release summary
+```
+
+The rollout stage runs under a `FileAccessAudit` that *blocks* `data/oracle`,
+`data/qa`, and `data_gemma4/training`, so a rollout that consulted oracle
+geometry would raise rather than score well. Goal text and scoring geometry live
+in two separate files, and only the geometry-free one is tracked in git. No
+Blender asset or rendering is required: model-only control keeps the map static,
+so the runtime is built with `observation_scanner=None`, which is what lets the
+deployed controller run in any of the 41 rooms.
+
+Two scaling changes are recorded rather than silent. The legacy V3 source rows
+are dropped, because the deployed heading head emits `40*tanh(raw)` and a 45° V3
+label is therefore unreachable — earlier runs trained against impossible targets.
+And in some procedurally generated rooms furniture blocks the wall-following ring
+from one sampled start; the generator may now drop that single start under
+`skip_unroutable_lap_starts`, listing every dropped start in the dataset manifest
+(six of them), while the per-room coverage gate still fails loudly if a room
+would lose its lap supervision entirely.
+
+## Spatial Lens: author a room, have Gemma perceive it, ask it, drive in it
+
+V15 established that the *soft-prefix* control path is limited by its readout,
+not by the representation. Spatial Lens is the complementary system: it reaches
+working spatial reasoning and navigation **with no on-device training at all**,
+by giving Gemma its perception in a form it can already read.
+
+```bash
+make lens-build LENS_ROOM=studio     # your JSON room -> a .blend
+make lens-scan  LENS_ROOM=studio     # 30 RGB + metric-depth views, no labels
+make lens-perceive LENS_ROOM=studio  # Gemma vision -> semantic point cloud
+make lens-understand LENS_ROOM=studio# discover objects, ask Gemma what they are
+make lens-ask   LENS_ROOM=studio     # spatial questions about the room
+make lens-drive LENS_ROOM=studio LENS_GOAL="Drive to the bookshelf and stop beside it."
+make lens-check                      # 27 tests + ruff, no model needed
+```
+
+**You author the room.** `rooms/studio.json` is a few lines per object — a name,
+a shape (`box`, `cylinder`, `sphere`, or furniture like `table`, `chair`,
+`shelf`, `lamp`, `bed`, `screen`, `rug`), a colour, a position and a size.
+Composites expand into primitives, and the builder rejects furniture that
+overlaps or leaves the room.
+
+**Your words never reach the model.** The spec compiles into two files: a
+geometry-only `build.json` that Blender consumes (instance ids, RGBA and boxes —
+grep it for "table" and you get nothing) and a `key.json` written under
+`reports/gemma4/scorer_only/`, which the runtime file audit blocks. So "the
+author called it a bookshelf" and "the system decided it is a bookshelf" stay
+independent, and agreement is a measurement.
+
+**Perception is Gemma's own.** Each of the 30 views goes through Gemma's vision
+tower once; every depth pixel is back-projected through its exact camera pose,
+the 48×48 patch grid is sampled at that pixel, and the result is fused into a
+voxel map — 58,693 voxels carrying the 1536-D language-aligned stream from
+Gemma's own vision projector. Objects are then found *geometrically*: the room
+shell is removed using the scan's own dimensions, the rest is grouped by
+26-connectivity, and fragments contained within a larger footprint are absorbed.
+On the demo room that recovers **exactly 7 blobs for 7 authored objects**, with
+no vocabulary, no detector and no oracle.
+
+**Naming is VQA, not embedding similarity.** Matching voxel features to text
+embeddings was measured on this repo's own semantic-sanity runs at 61.5% top-1
+with a *negative* correct-vs-distractor margin — too weak to use. Instead each
+blob is projected back into the three frames that see it best, outlined in red
+inside a generous crop that keeps the surrounding room visible (a tight crop
+reliably yields "Shape"), and Gemma is asked what it is. Three views vote. On the
+demo room it gets **5 of 7 right** — bookshelf, table, television, lamp, ball —
+and calls the bed a "table" and the chair a "monitor". Repeated names are made
+addressable with the object's own perceived colour, so two tables become "tan
+table" and "teal table".
+
+**Reasoning happens in metres.** The scene graph — perceived names, measured
+extents, and a free-space grid inflated by the rover radius — is rendered as a
+compact metric description. Gemma answers questions over it:
+
+> *Is the floor lamp to the left or the right of the television?*
+> "The lamp is to the right of the television. The television is centered at
+> (+0.60, −2.18). The lamp is centered at (+2.38, −1.84). Since the X-coordinate
+> of the lamp (2.38) is greater than the X-coordinate of the television (0.60)…"
+
+**Driving works when the route is not blocked.** Gemma emits one JSON action per
+step; the executor only checks legality and moves exactly as told — it never
+reroutes, never clamps and never invents a stop. Asked to reach the bookshelf it
+faced +53°, drove seven steps to the free spot beside it, stopped on its own at
+0.57 m, and had **zero rejected moves**. Asked for the floor lamp it arrived
+(0.56 m) but wandered on the way and ran out of steps before stopping. Asked for
+the ball — whose straight line is blocked by the table — it repeatedly retried
+the blocked move and never got there.
+
+That is the honest boundary: **Gemma-4-E2B can hold the room, answer geometric
+questions about it, and drive to things it can see a clear line to; it cannot
+plan a detour around a large obstacle.** The failure is sequential planning, not
+perception — the map is correct, and the same map drives the successful runs. A
+larger local decoder is the natural thing to try here, and unlike the V15 result
+this is a case where model size genuinely is the suspect.
 
 ### Browser compatibility surface
 

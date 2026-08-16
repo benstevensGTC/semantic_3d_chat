@@ -1,0 +1,467 @@
+{
+  "accepted": 10,
+  "deterministic_planner_used": false,
+  "final_pose": {
+    "x_m": -0.2201,
+    "y_m": 0.5597,
+    "yaw_degrees": 0.0
+  },
+  "goal": "Drive to the ball and stop next to it.",
+  "model_selected_every_action": true,
+  "objects": [
+    {
+      "center_m": [
+        -1.8096,
+        -1.1747
+      ],
+      "name": "teal table"
+    },
+    {
+      "center_m": [
+        -2.3358,
+        1.7534
+      ],
+      "name": "bookshelf"
+    },
+    {
+      "center_m": [
+        0.803,
+        1.0168
+      ],
+      "name": "tan table"
+    },
+    {
+      "center_m": [
+        0.8936,
+        -0.0568
+      ],
+      "name": "monitor"
+    },
+    {
+      "center_m": [
+        0.6022,
+        -2.1767
+      ],
+      "name": "television"
+    },
+    {
+      "center_m": [
+        2.375,
+        -1.8364
+      ],
+      "name": "lamp"
+    },
+    {
+      "center_m": [
+        2.2713,
+        1.1548
+      ],
+      "name": "ball"
+    }
+  ],
+  "path": [
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.3536,
+      0.3536
+    ],
+    [
+      -0.1464,
+      0.35
+    ],
+    [
+      0.21,
+      0.0
+    ],
+    [
+      -0.29,
+      0.0
+    ],
+    [
+      0.1857,
+      0.154
+    ],
+    [
+      -0.31,
+      0.15
+    ],
+    [
+      0.149,
+      0.3483
+    ],
+    [
+      -0.35,
+      0.35
+    ],
+    [
+      -0.7,
+      0.7
+    ],
+    [
+      -0.2201,
+      0.5597
+    ]
+  ],
+  "path_length_m": 4.9892,
+  "rejected": 6,
+  "room": "studio",
+  "schema": "semantic_3d_chat.spatial_lens.drive.v1",
+  "steps": [
+    {
+      "accepted": false,
+      "action": "MOVE_TOWARD",
+      "distance_m": 0.0,
+      "error_code": "E_PATH_BLOCKED",
+      "pose_after": {
+        "x_m": 0.0,
+        "y_m": 0.0,
+        "yaw_degrees": 0.0
+      },
+      "pose_before": {
+        "x_m": 0.0,
+        "y_m": 0.0,
+        "yaw_degrees": 0.0
+      },
+      "reasoning": "The ball is in the direction of yaw -63, and moving towards that direction seems like a good first step.",
+      "requested": {
+        "x": 0.5,
+        "y": 0.0
+      },
+      "step": 1
+    },
+    {
+      "accepted": false,
+      "action": "MOVE_TOWARD",
+      "distance_m": 0.0,
+      "error_code": "E_PATH_BLOCKED",
+      "pose_after": {
+        "x_m": 0.0,
+        "y_m": 0.0,
+        "yaw_degrees": 0.0
+      },
+      "pose_before": {
+        "x_m": 0.0,
+        "y_m": 0.0,
+        "yaw_degrees": 0.0
+      },
+      "reasoning": "The ball is in the direction of yaw -63, and moving towards yaw -45 is a clear path that reduces the distance to the ball.",
+      "requested": {
+        "x": 0.5,
+        "y": 0.35
+      },
+      "step": 2
+    },
+    {
+      "accepted": true,
+      "action": "MOVE_TOWARD",
+      "distance_m": 0.5,
+      "error_code": null,
+      "pose_after": {
+        "x_m": 0.3536,
+        "y_m": 0.3536,
+        "yaw_degrees": 0.0
+      },
+      "pose_before": {
+        "x_m": 0.0,
+        "y_m": 0.0,
+        "yaw_degrees": 0.0
+      },
+      "reasoning": "The ball is in the direction of yaw -63, and moving towards yaw -45 is a clear path that reduces the distance to the ball.",
+      "requested": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "step": 3
+    },
+    {
+      "accepted": true,
+      "action": "MOVE_TOWARD",
+      "distance_m": 0.5,
+      "error_code": null,
+      "pose_after": {
+        "x_m": -0.1464,
+        "y_m": 0.35,
+        "yaw_degrees": 0.0
+      },
+      "pose_before": {
+        "x_m": 0.3536,
+        "y_m": 0.3536,
+        "yaw_degrees": 0.0
+      },
+      "reasoning": "The goal is to reach the ball, and facing +90 degrees leads towards a clear path.",
+      "requested": {
+        "x": -0.15,
+        "y": 0.35
+      },
+      "step": 4
+    },
+    {
+      "accepted": false,
+      "action": "MOVE_TOWARD",
+      "distance_m": 0.0,
+      "error_code": "E_PATH_BLOCKED",
+      "pose_after": {
+        "x_m": -0.1464,
+        "y_m": 0.35,
+        "yaw_degrees": 0.0
+      },
+      "pose_before": {
+        "x_m": -0.1464,
+        "y_m": 0.35,
+        "yaw_degrees": 0.0
+      },
+      "reasoning": "The ball is at (+2.12, +0.78), and moving towards it from the current position is the best next step.",
+      "requested": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "step": 5
+    },
+    {
+      "accepted": true,
+      "action": "MOVE_TOWARD",
+      "distance_m": 0.4996,
+      "error_code": null,
+      "pose_after": {
+        "x_m": 0.21,
+        "y_m": 0.0,
+        "yaw_degrees": 0.0
+      },
+      "pose_before": {
+        "x_m": -0.1464,
+        "y_m": 0.35,
+        "yaw_degrees": 0.0
+      },
+      "reasoning": "The goal is to reach the ball, and moving towards the ball's stand-at point seems like a good next step.",
+      "requested": {
+        "x": 0.21,
+        "y": -0.0
+      },
+      "step": 6
+    },
+    {
+      "accepted": true,
+      "action": "MOVE_TOWARD",
+      "distance_m": 0.5,
+      "error_code": null,
+      "pose_after": {
+        "x_m": -0.29,
+        "y_m": 0.0,
+        "yaw_degrees": 0.0
+      },
+      "pose_before": {
+        "x_m": 0.21,
+        "y_m": 0.0,
+        "yaw_degrees": 0.0
+      },
+      "reasoning": "The robot needs to move towards the ball, and facing +90 degrees leads to a clear path towards the ball's general area.",
+      "requested": {
+        "x": -0.29,
+        "y": 0.0
+      },
+      "step": 7
+    },
+    {
+      "accepted": false,
+      "action": "MOVE_TOWARD",
+      "distance_m": 0.0,
+      "error_code": "E_ALREADY_THERE",
+      "pose_after": {
+        "x_m": -0.29,
+        "y_m": 0.0,
+        "yaw_degrees": 0.0
+      },
+      "pose_before": {
+        "x_m": -0.29,
+        "y_m": 0.0,
+        "yaw_degrees": 0.0
+      },
+      "reasoning": "The robot is currently at (-0.29, +0.00) and needs to move towards the ball at (+2.12, +0.78). Moving towards yaw +45 seems like a good direction to start heading towards the ball's general area.",
+      "requested": {
+        "x": -0.29,
+        "y": 0.0
+      },
+      "step": 8
+    },
+    {
+      "accepted": true,
+      "action": "MOVE_TOWARD",
+      "distance_m": 0.5,
+      "error_code": null,
+      "pose_after": {
+        "x_m": 0.1857,
+        "y_m": 0.154,
+        "yaw_degrees": 0.0
+      },
+      "pose_before": {
+        "x_m": -0.29,
+        "y_m": 0.0,
+        "yaw_degrees": 0.0
+      },
+      "reasoning": "The ball is at (+2.12, +0.78), and the robot is currently at (-0.29, +0.00), so it should move towards the ball.",
+      "requested": {
+        "x": 2.12,
+        "y": 0.78
+      },
+      "step": 9
+    },
+    {
+      "accepted": true,
+      "action": "MOVE_TOWARD",
+      "distance_m": 0.4957,
+      "error_code": null,
+      "pose_after": {
+        "x_m": -0.31,
+        "y_m": 0.15,
+        "yaw_degrees": 0.0
+      },
+      "pose_before": {
+        "x_m": 0.1857,
+        "y_m": 0.154,
+        "yaw_degrees": 0.0
+      },
+      "reasoning": "The robot needs to move towards the ball, and facing +90 degrees offers a clear path towards the general area of the ball.",
+      "requested": {
+        "x": -0.31,
+        "y": 0.15
+      },
+      "step": 10
+    },
+    {
+      "accepted": true,
+      "action": "MOVE_TOWARD",
+      "distance_m": 0.5,
+      "error_code": null,
+      "pose_after": {
+        "x_m": 0.149,
+        "y_m": 0.3483,
+        "yaw_degrees": 0.0
+      },
+      "pose_before": {
+        "x_m": -0.31,
+        "y_m": 0.15,
+        "yaw_degrees": 0.0
+      },
+      "reasoning": "The robot is currently at its starting position and needs to move towards the ball, which is at (+2.12, +0.78).",
+      "requested": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "step": 11
+    },
+    {
+      "accepted": false,
+      "action": "MOVE_TOWARD",
+      "distance_m": 0.0,
+      "error_code": "E_PATH_BLOCKED",
+      "pose_after": {
+        "x_m": 0.149,
+        "y_m": 0.3483,
+        "yaw_degrees": 0.0
+      },
+      "pose_before": {
+        "x_m": 0.149,
+        "y_m": 0.3483,
+        "yaw_degrees": 0.0
+      },
+      "reasoning": "The ball is at (+2.27, +1.15), and the robot is currently at (+0.15, +0.35) facing yaw +0.0. Moving towards the ball seems like a good next step.",
+      "requested": {
+        "x": 1.02,
+        "y": 0.8
+      },
+      "step": 12
+    },
+    {
+      "accepted": true,
+      "action": "MOVE_TOWARD",
+      "distance_m": 0.499,
+      "error_code": null,
+      "pose_after": {
+        "x_m": -0.35,
+        "y_m": 0.35,
+        "yaw_degrees": 0.0
+      },
+      "pose_before": {
+        "x_m": 0.149,
+        "y_m": 0.3483,
+        "yaw_degrees": 0.0
+      },
+      "reasoning": "The robot needs to move towards the ball, and facing +90 degrees offers a clear path towards the general area of the ball.",
+      "requested": {
+        "x": -0.35,
+        "y": 0.35
+      },
+      "step": 13
+    },
+    {
+      "accepted": false,
+      "action": "MOVE_TOWARD",
+      "distance_m": 0.0,
+      "error_code": "E_ALREADY_THERE",
+      "pose_after": {
+        "x_m": -0.35,
+        "y_m": 0.35,
+        "yaw_degrees": 0.0
+      },
+      "pose_before": {
+        "x_m": -0.35,
+        "y_m": 0.35,
+        "yaw_degrees": 0.0
+      },
+      "reasoning": "The robot needs to move towards the ball, and facing +0 degrees leads towards a potential path.",
+      "requested": {
+        "x": -0.35,
+        "y": 0.35
+      },
+      "step": 14
+    },
+    {
+      "accepted": true,
+      "action": "MOVE_TOWARD",
+      "distance_m": 0.495,
+      "error_code": null,
+      "pose_after": {
+        "x_m": -0.7,
+        "y_m": 0.7,
+        "yaw_degrees": 0.0
+      },
+      "pose_before": {
+        "x_m": -0.35,
+        "y_m": 0.35,
+        "yaw_degrees": 0.0
+      },
+      "reasoning": "The robot needs to move towards the ball, which is at (+2.12, +0.78), and the current clear direction that reduces distance is yaw +45.",
+      "requested": {
+        "x": -0.7,
+        "y": 0.7
+      },
+      "step": 15
+    },
+    {
+      "accepted": true,
+      "action": "MOVE_TOWARD",
+      "distance_m": 0.5,
+      "error_code": null,
+      "pose_after": {
+        "x_m": -0.2201,
+        "y_m": 0.5597,
+        "yaw_degrees": 0.0
+      },
+      "pose_before": {
+        "x_m": -0.7,
+        "y_m": 0.7,
+        "yaw_degrees": 0.0
+      },
+      "reasoning": "The robot is currently at (-0.70, +0.70) and needs to move towards the ball, which is at (+2.12, +0.78).",
+      "requested": {
+        "x": 1.42,
+        "y": 0.08
+      },
+      "step": 16
+    }
+  ],
+  "termination": "max_steps"
+}

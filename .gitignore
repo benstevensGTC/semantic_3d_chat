@@ -28,6 +28,13 @@ data/qa/*
 data/checkpoints/*
 data/runtime_assets/*
 data/robot/
+
+# Spatial Lens generated artifacts. The authored room specs under rooms/ are the
+# tracked inputs; everything a scan or a fuse produces is large and derived.
+data/spatial_lens/*/scans/
+data/spatial_lens/*/naming_views/
+data/spatial_lens/*/point_cloud.npz
+data/spatial_lens/*/*.freegrid.npy
 !data/**/.gitkeep
 
 # Isolated Gemma 4 feature/map/checkpoint artifacts remain local. Small

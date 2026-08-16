@@ -302,6 +302,8 @@ BLENDER_ROVER_BACKEND_TIMEOUT ?= 900
 .PHONY: strict-atlas-check strict-atlas-build strict-atlas-chat strict-atlas-evaluate strict-atlas-v2-auth ple-reader-prereg-auth
 .PHONY: strict-web-check strict-web mcp-stdio-smoke
 .PHONY: rover-demo-check rover-demo rover-demo-mcp rover-gemma-mcp-check rover-gemma-mcp blender-rover-demo-check blender-rover-demo rover-3d-check rover-3d rover-live-verify
+.PHONY: lens-check lens-build lens-scan lens-perceive lens-understand lens-ask lens-drive lens-all
+.PHONY: v15-check v15-traces v15-cache v15-train v15-sealed-score v15-heldout-plan v15-heldout-rollout v15-heldout-score v15-probe v15-summary
 .PHONY: v81-reader-check v81-scene-memory-compile v81-scene-memory-check v81-scene-memory-demo v81-scene-memory-chat v81-scene-memory-leakage v81-historical-predict v81-historical-score conversation-mcp-smoke
 .PHONY: v82-reader-preflight v82-reader-prepare-train v82-reader-fit v82-reader-prepare-development v82-reader-evaluate v82-chat v82-historical-predict v82-historical-score
 .PHONY: v83-check v83-chat v83-historical-predict v83-historical-score
@@ -2444,6 +2446,154 @@ blender-rover-demo:
 rover-3d-check: blender-rover-demo-check
 
 rover-3d: blender-rover-demo
+
+# ---------------------------------------------------------------------------
+# Spatial Lens: author a room, perceive it, ask about it, drive in it.
+#
+# Zero on-device training. Perception is Gemma's vision encoder plus its VQA;
+# reasoning is Gemma reading the metric map it built. The author's words for the
+# furniture are written to a scorer-only path and never reach the model.
+# ---------------------------------------------------------------------------
+LENS_ROOM ?= studio
+LENS_SPEC ?= rooms/$(LENS_ROOM).json
+LENS_GOAL ?= Drive to the bookshelf and stop beside it.
+LENS_METRICS ?= reports/gemma4/metrics
+
+lens-check:
+	$(PYTHON) -m pytest -q tests/test_spatial_lens.py
+	$(PYTHON) -m ruff check \
+		src/semantic_3d_chat/spatial_lens/ \
+		scripts/lens_build_room.py \
+		scripts/lens_scan_room.py \
+		scripts/lens_perceive.py \
+		scripts/lens_understand.py \
+		scripts/lens_ask.py \
+		scripts/lens_drive.py \
+		blender/build_authored_room.py \
+		blender/scan_authored_room.py \
+		tests/test_spatial_lens.py
+
+lens-build:
+	PYTHONPATH=src $(PYTHON) scripts/lens_build_room.py --spec $(LENS_SPEC) --force
+
+lens-scan:
+	PYTHONPATH=src $(PYTHON) scripts/lens_scan_room.py --room $(LENS_ROOM) --force
+
+lens-perceive:
+	PYTHONPATH=src $(GEMMA4_PYTHON) scripts/lens_perceive.py --room $(LENS_ROOM) --force
+
+lens-understand:
+	PYTHONPATH=src $(GEMMA4_PYTHON) scripts/lens_understand.py --room $(LENS_ROOM) --force
+
+lens-ask:
+	PYTHONPATH=src $(GEMMA4_PYTHON) scripts/lens_ask.py --room $(LENS_ROOM) --show-map
+
+lens-drive:
+	PYTHONPATH=src $(GEMMA4_PYTHON) scripts/lens_drive.py --room $(LENS_ROOM) \
+		--goal "$(LENS_GOAL)" \
+		--output $(LENS_METRICS)/spatial_lens_$(LENS_ROOM)_drive.json
+
+# Everything from an authored JSON room to a perceived, queryable scene graph.
+lens-all: lens-build lens-scan lens-perceive lens-understand
+
+
+# ---------------------------------------------------------------------------
+# V15 room generalization
+#
+# Every V4-V14 waypoint result was measured in the single room the policy was
+# fitted to. V15 trains across 27 rooms and measures 8 scene-disjoint
+# development rooms plus 6 rooms that are sealed until the checkpoint is
+# frozen. These targets rebuild that pipeline from scratch; each stage refuses
+# to overwrite an existing artifact, so remove the previous one deliberately.
+# ---------------------------------------------------------------------------
+GEMMA4_V15_CONFIG ?= configs/experiments/gemma_waypoint_policy_v15_general.yaml
+GEMMA4_V15_CHECKPOINT ?= data_gemma4/checkpoints/gemma_waypoint_policy_v15_general
+GEMMA4_V15_SEALED_DATASET ?= data_gemma4/training/gemma_waypoint_policy_v15_sealed
+GEMMA4_V15_METRICS ?= reports/gemma4/metrics
+
+v15-check:
+	$(PYTHON) -m pytest -q \
+		tests/test_v15_general_trace_dataset.py \
+		tests/test_v15_shuffled_scene_control.py \
+		tests/test_v15_heldout_closed_loop.py \
+		tests/test_v15_summary_builder.py \
+		tests/test_v15_recorded_result.py \
+		tests/test_gemma_waypoint_training.py \
+		tests/test_gemma_waypoint_runtime.py
+	$(PYTHON) -m ruff check \
+		src/semantic_3d_chat/evaluation/v15_heldout_closed_loop.py \
+		src/semantic_3d_chat/evaluation/v15_scene_token_probe.py \
+		src/semantic_3d_chat/training/gemma_waypoint_policy.py \
+		src/semantic_3d_chat/training/gemma_waypoint_trace_generator.py \
+		scripts/evaluate_v15_heldout_closed_loop.py \
+		scripts/evaluate_gemma_waypoint_policy.py \
+		scripts/generate_gemma_waypoint_traces.py \
+		tests/test_v15_general_trace_dataset.py \
+		tests/test_v15_shuffled_scene_control.py \
+		tests/test_v15_heldout_closed_loop.py \
+		tests/test_v15_summary_builder.py \
+		tests/test_v15_recorded_result.py \
+		scripts/build_gemma_waypoint_v15_summary.py
+
+v15-traces:
+	PYTHONPATH=src $(GEMMA4_PYTHON) scripts/generate_gemma_waypoint_traces.py \
+		--config $(GEMMA4_V15_CONFIG) --profile general
+	PYTHONPATH=src $(GEMMA4_PYTHON) scripts/generate_gemma_waypoint_traces.py \
+		--config $(GEMMA4_V15_CONFIG) --profile general_sealed \
+		--destination $(GEMMA4_V15_SEALED_DATASET)
+
+v15-cache:
+	PYTHONPATH=src $(GEMMA4_PYTHON) scripts/cache_gemma_waypoint_hidden.py \
+		--config $(GEMMA4_V15_CONFIG) --gemma-batch-size 4 --forward-chunk-size 128
+
+v15-train:
+	PYTHONPATH=src $(GEMMA4_PYTHON) scripts/train_gemma_waypoint_policy.py \
+		--config $(GEMMA4_V15_CONFIG) \
+		--metrics $(GEMMA4_V15_METRICS)/gemma_waypoint_policy_v15_general_training.json
+
+# Sealed unseen-room offline decisions, including the shuffled-scene control.
+v15-sealed-score:
+	PYTHONPATH=src $(GEMMA4_PYTHON) scripts/evaluate_gemma_waypoint_policy.py \
+		--config $(GEMMA4_V15_CONFIG) \
+		--dataset $(GEMMA4_V15_SEALED_DATASET) \
+		--checkpoint $(GEMMA4_V15_CHECKPOINT) \
+		--split validation \
+		--sample-limit 270 \
+		--condition wrong_scene_prefix --condition zero_scene_prefix \
+		--condition shuffled_scene_prefix --condition zero_history \
+		--output $(GEMMA4_V15_METRICS)/gemma_waypoint_v15_sealed_controls.json
+
+# Closed-loop goals in the sealed rooms. `plan` reads oracle geometry, `rollout`
+# is audited to prove it cannot, and `score` joins the two.
+v15-heldout-plan:
+	PYTHONPATH=src $(GEMMA4_PYTHON) scripts/evaluate_v15_heldout_closed_loop.py plan \
+		--tasks $(GEMMA4_V15_METRICS)/gemma_waypoint_v15_heldout_tasks.json \
+		--targets reports/gemma4/scorer_only/gemma_waypoint_v15_heldout_targets.json
+
+v15-heldout-rollout:
+	PYTHONPATH=src $(GEMMA4_PYTHON) scripts/evaluate_v15_heldout_closed_loop.py rollout \
+		--tasks $(GEMMA4_V15_METRICS)/gemma_waypoint_v15_heldout_tasks.json \
+		--navigation-checkpoint $(GEMMA4_V15_CHECKPOINT) \
+		--output $(GEMMA4_V15_METRICS)/gemma_waypoint_v15_heldout_runtime.json
+
+v15-heldout-score:
+	PYTHONPATH=src $(GEMMA4_PYTHON) scripts/evaluate_v15_heldout_closed_loop.py score \
+		--rollouts $(GEMMA4_V15_METRICS)/gemma_waypoint_v15_heldout_runtime.json \
+		--targets reports/gemma4/scorer_only/gemma_waypoint_v15_heldout_targets.json \
+		--output $(GEMMA4_V15_METRICS)/gemma_waypoint_v15_heldout_score.json
+
+# Every field is read back out of the artifacts above and each one is hashed,
+# so the summary cannot drift from the evidence. Absent stages are reported.
+v15-probe:
+	PYTHONPATH=src $(GEMMA4_PYTHON) -m semantic_3d_chat.evaluation.v15_scene_token_probe \
+		--prefix-cache data_gemma4/scene_tokens/gemma_waypoint_policy_v15_rooms \
+		--output $(GEMMA4_V15_METRICS)/gemma_waypoint_v15_scene_token_probe.json
+
+v15-summary:
+	$(PYTHON) scripts/build_gemma_waypoint_v15_summary.py \
+		--checkpoint $(GEMMA4_V15_CHECKPOINT) \
+		--sealed-dataset $(GEMMA4_V15_SEALED_DATASET) \
+		--output $(GEMMA4_V15_METRICS)/gemma_waypoint_v15_summary.json
 
 # Run against a separately started, fresh rover backend (action_count must be 0).
 # This verifier reads no oracle data. It requires an actual Gemma forward for

@@ -1,0 +1,261 @@
+{
+  "accuracy_drop_from_primary": {
+    "shuffled_scene_prefix": 0.0,
+    "wrong_scene_prefix": -0.011111080646514893,
+    "zero_history": 0.05925929546356201,
+    "zero_scene_prefix": 0.12962967157363892
+  },
+  "conditions": {
+    "primary": {
+      "action_accuracy": 0.5111111402511597,
+      "action_confusion_target_by_prediction": [
+        [
+          61,
+          16,
+          13
+        ],
+        [
+          54,
+          24,
+          12
+        ],
+        [
+          25,
+          12,
+          53
+        ]
+      ],
+      "action_macro_recall": 0.5111111104488373,
+      "action_recall": {
+        "face": 0.2666666805744171,
+        "move_to": 0.6777777671813965,
+        "stop": 0.5888888835906982
+      },
+      "actual_gemma_causal_forward_per_sample": true,
+      "complete_scene_prefix_consumed": true,
+      "condition": "primary",
+      "face_sample_count": 90,
+      "heading_error_degrees_mean": 26.773847579956055,
+      "heading_error_degrees_median": 14.976930618286133,
+      "move_to_sample_count": 90,
+      "native_scene_boundaries_preserved": false,
+      "sample_count": 270,
+      "scene_content_latents_shuffled": false,
+      "scene_content_latents_zeroed": false,
+      "stop_precision": 0.6794871794871795,
+      "stop_recall": 0.5888888888888889,
+      "stop_sample_count": 90,
+      "waypoint_error_m_mean": 0.1257823407649994,
+      "waypoint_error_m_median": 0.10024350136518478
+    },
+    "shuffled_scene_prefix": {
+      "action_accuracy": 0.5111111402511597,
+      "action_confusion_target_by_prediction": [
+        [
+          64,
+          14,
+          12
+        ],
+        [
+          52,
+          25,
+          13
+        ],
+        [
+          32,
+          9,
+          49
+        ]
+      ],
+      "action_macro_recall": 0.5111111203829447,
+      "action_recall": {
+        "face": 0.2777777910232544,
+        "move_to": 0.7111111283302307,
+        "stop": 0.5444444417953491
+      },
+      "actual_gemma_causal_forward_per_sample": true,
+      "complete_scene_prefix_consumed": true,
+      "condition": "shuffled_scene_prefix",
+      "face_sample_count": 90,
+      "heading_error_degrees_mean": 27.440765380859375,
+      "heading_error_degrees_median": 17.026397705078125,
+      "move_to_sample_count": 90,
+      "native_scene_boundaries_preserved": true,
+      "sample_count": 270,
+      "scene_content_latents_shuffled": true,
+      "scene_content_latents_zeroed": false,
+      "stop_precision": 0.6621621621621622,
+      "stop_recall": 0.5444444444444444,
+      "stop_sample_count": 90,
+      "waypoint_error_m_mean": 0.12390202283859253,
+      "waypoint_error_m_median": 0.0928468257188797
+    },
+    "wrong_scene_prefix": {
+      "action_accuracy": 0.5222222208976746,
+      "action_confusion_target_by_prediction": [
+        [
+          61,
+          18,
+          11
+        ],
+        [
+          47,
+          26,
+          17
+        ],
+        [
+          25,
+          11,
+          54
+        ]
+      ],
+      "action_macro_recall": 0.522222230831782,
+      "action_recall": {
+        "face": 0.2888889014720917,
+        "move_to": 0.6777777671813965,
+        "stop": 0.6000000238418579
+      },
+      "actual_gemma_causal_forward_per_sample": true,
+      "complete_scene_prefix_consumed": true,
+      "condition": "wrong_scene_prefix",
+      "face_sample_count": 90,
+      "heading_error_degrees_mean": 25.814132690429688,
+      "heading_error_degrees_median": 13.003103256225586,
+      "move_to_sample_count": 90,
+      "native_scene_boundaries_preserved": false,
+      "sample_count": 270,
+      "scene_content_latents_shuffled": false,
+      "scene_content_latents_zeroed": false,
+      "stop_precision": 0.6585365853658537,
+      "stop_recall": 0.6,
+      "stop_sample_count": 90,
+      "waypoint_error_m_mean": 0.12659840285778046,
+      "waypoint_error_m_median": 0.10691589117050171
+    },
+    "zero_history": {
+      "action_accuracy": 0.45185184478759766,
+      "action_confusion_target_by_prediction": [
+        [
+          66,
+          3,
+          21
+        ],
+        [
+          67,
+          14,
+          9
+        ],
+        [
+          44,
+          4,
+          42
+        ]
+      ],
+      "action_macro_recall": 0.45185185968875885,
+      "action_recall": {
+        "face": 0.15555556118488312,
+        "move_to": 0.7333333492279053,
+        "stop": 0.46666666865348816
+      },
+      "actual_gemma_causal_forward_per_sample": true,
+      "complete_scene_prefix_consumed": true,
+      "condition": "zero_history",
+      "face_sample_count": 90,
+      "heading_error_degrees_mean": 25.123828887939453,
+      "heading_error_degrees_median": 15.224275588989258,
+      "move_to_sample_count": 90,
+      "native_scene_boundaries_preserved": false,
+      "sample_count": 270,
+      "scene_content_latents_shuffled": false,
+      "scene_content_latents_zeroed": false,
+      "stop_precision": 0.5833333333333334,
+      "stop_recall": 0.4666666666666667,
+      "stop_sample_count": 90,
+      "waypoint_error_m_mean": 0.15557081997394562,
+      "waypoint_error_m_median": 0.13278840482234955
+    },
+    "zero_scene_prefix": {
+      "action_accuracy": 0.38148146867752075,
+      "action_confusion_target_by_prediction": [
+        [
+          26,
+          39,
+          25
+        ],
+        [
+          18,
+          40,
+          32
+        ],
+        [
+          6,
+          47,
+          37
+        ]
+      ],
+      "action_macro_recall": 0.38148148854573566,
+      "action_recall": {
+        "face": 0.4444444477558136,
+        "move_to": 0.2888889014720917,
+        "stop": 0.41111111640930176
+      },
+      "actual_gemma_causal_forward_per_sample": true,
+      "complete_scene_prefix_consumed": true,
+      "condition": "zero_scene_prefix",
+      "face_sample_count": 90,
+      "heading_error_degrees_mean": 44.25321578979492,
+      "heading_error_degrees_median": 45.70211410522461,
+      "move_to_sample_count": 90,
+      "native_scene_boundaries_preserved": true,
+      "sample_count": 270,
+      "scene_content_latents_shuffled": false,
+      "scene_content_latents_zeroed": true,
+      "stop_precision": 0.39361702127659576,
+      "stop_recall": 0.4111111111111111,
+      "stop_sample_count": 90,
+      "waypoint_error_m_mean": 0.13888266682624817,
+      "waypoint_error_m_median": 0.10973711311817169
+    }
+  },
+  "configured_sample_limit": 270,
+  "environmental_text_inputs_at_inference": [],
+  "evaluated_checkpoint": "data_gemma4/checkpoints/gemma_waypoint_policy_v15_general",
+  "evaluated_conditions": [
+    "primary",
+    "wrong_scene_prefix",
+    "zero_scene_prefix",
+    "shuffled_scene_prefix",
+    "zero_history"
+  ],
+  "evaluated_dataset": "data_gemma4/training/gemma_waypoint_policy_v15_sealed",
+  "evaluated_split": "validation",
+  "oracle_inputs_used_by_inference": false,
+  "output_change_from_primary": {
+    "shuffled_scene_prefix": {
+      "action_change_fraction": 0.192592591047287,
+      "mean_heading_output_shift_degrees": 10.473878860473633,
+      "mean_waypoint_output_shift_m": 0.03669733926653862
+    },
+    "wrong_scene_prefix": {
+      "action_change_fraction": 0.10740740597248077,
+      "mean_heading_output_shift_degrees": 5.749229431152344,
+      "mean_waypoint_output_shift_m": 0.021476028487086296
+    },
+    "zero_history": {
+      "action_change_fraction": 0.3444444537162781,
+      "mean_heading_output_shift_degrees": 25.721084594726562,
+      "mean_waypoint_output_shift_m": 0.07329705357551575
+    },
+    "zero_scene_prefix": {
+      "action_change_fraction": 0.6185185313224792,
+      "mean_heading_output_shift_degrees": 32.059844970703125,
+      "mean_waypoint_output_shift_m": 0.09883265197277069
+    }
+  },
+  "robot_state_checkpoint_sha256": "62cfdd2a9edcd0a450da19907009fdf3f5ed96cac4cedafae75f775bb96077c8",
+  "schema": "semantic_3d_chat.gemma_waypoint_controls.v1",
+  "shuffled_scene_permutes_content_latents_only": true,
+  "wrong_scene_is_deranged_within_evaluation_split": true,
+  "zero_history_is_numeric_all_zeros": true,
+  "zero_scene_preserves_only_native_boi_eoi": true
+}

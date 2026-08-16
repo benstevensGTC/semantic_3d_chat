@@ -1,0 +1,285 @@
+{
+  "checkpoint_present": true,
+  "complete": true,
+  "development_controls": {
+    "accuracy_drop_from_primary": {
+      "wrong_scene_prefix": 0.00892859697341919,
+      "zero_history": 0.11904764175415039,
+      "zero_scene_prefix": 0.255952388048172
+    },
+    "evaluated_conditions": [
+      "primary",
+      "wrong_scene_prefix",
+      "zero_scene_prefix",
+      "zero_history"
+    ],
+    "output_change_from_primary": {
+      "wrong_scene_prefix": {
+        "action_change_fraction": 0.1339285671710968,
+        "mean_heading_output_shift_degrees": 5.7259840965271,
+        "mean_waypoint_output_shift_m": 0.023936240002512932
+      },
+      "zero_history": {
+        "action_change_fraction": 0.4523809552192688,
+        "mean_heading_output_shift_degrees": 23.592082977294922,
+        "mean_waypoint_output_shift_m": 0.08704812824726105
+      },
+      "zero_scene_prefix": {
+        "action_change_fraction": 0.6398809552192688,
+        "mean_heading_output_shift_degrees": 31.395700454711914,
+        "mean_waypoint_output_shift_m": 0.10180282592773438
+      }
+    },
+    "per_condition_action_accuracy": {
+      "primary": 0.6220238208770752,
+      "wrong_scene_prefix": 0.613095223903656,
+      "zero_history": 0.5029761791229248,
+      "zero_scene_prefix": 0.3660714328289032
+    },
+    "primary": {
+      "action_accuracy": 0.6220238208770752,
+      "action_macro_recall": 0.6220238109429678,
+      "action_recall": {
+        "face": 0.3839285671710968,
+        "move_to": 0.7232142686843872,
+        "stop": 0.7589285969734192
+      },
+      "heading_error_degrees_mean": 19.2543888092041,
+      "stop_precision": 0.7870370370370371,
+      "stop_recall": 0.7589285714285714,
+      "waypoint_error_m_mean": 0.09010779112577438
+    },
+    "sample_count": 336
+  },
+  "evidence": {
+    "checkpoint_metadata": {
+      "path": "data_gemma4/checkpoints/gemma_waypoint_policy_v15_general/runtime_metadata.json",
+      "present": true,
+      "sha256": "c535d57433224703857e020e526883869ec1e15cdb6e83e13e2563972d8ea327"
+    },
+    "checkpoint_weights": {
+      "path": "data_gemma4/checkpoints/gemma_waypoint_policy_v15_general/policy.safetensors",
+      "present": true,
+      "sha256": "161db4539dfaaaa3891153acf535955034b23fce3cd266b5606a159aaae589cf"
+    },
+    "general_trace_manifest": {
+      "path": "data_gemma4/training/gemma_waypoint_policy_v15_general/manifest.json",
+      "present": true,
+      "sha256": "19a4c0315366cfe9e7be1b48b3fca24da058b540f88da2fa8e52ccac5ac102e7"
+    },
+    "heldout_closed_loop_score": {
+      "path": "reports/gemma4/metrics/gemma_waypoint_v15_heldout_score.json",
+      "present": true,
+      "sha256": "a34571f854aa763947f7e5e512c6aa3f1547be5067fbc3f0fded284c58899046"
+    },
+    "sealed_controls": {
+      "path": "reports/gemma4/metrics/gemma_waypoint_v15_sealed_controls.json",
+      "present": true,
+      "sha256": "d0075dbf3fdc5bfb36cae5c8016e0065c4f1789c6e6c090d87acd3c82a3a3a74"
+    },
+    "sealed_trace_manifest": {
+      "path": "data_gemma4/training/gemma_waypoint_policy_v15_sealed/manifest.json",
+      "present": true,
+      "sha256": "21f7742c711450a7a74d1d75ef83a46cf519a14ebf8585557c421c8407904552"
+    },
+    "training_report": {
+      "path": "reports/gemma4/metrics/gemma_waypoint_policy_v15_general_training.json",
+      "present": true,
+      "sha256": "f3c5139e3b9013ac3a4ca6ac04b5eba2b1a303672da8e2883f666324f2f2e4da"
+    }
+  },
+  "experiment": "gemma_waypoint_v15_room_generalization",
+  "gemma_runtime_binding_sha256": "800110e1545d77c1e374624ab837f6ed82cac54b269bf0359b840030db9e02cf",
+  "model_id": "google/gemma-4-E2B-it",
+  "model_revision": "3e22461f65e89153144f8adb70e3b8c2cc9845a7",
+  "navigation_checkpoint": "data_gemma4/checkpoints/gemma_waypoint_policy_v15_general",
+  "navigation_checkpoint_sha256": "161db4539dfaaaa3891153acf535955034b23fce3cd266b5606a159aaae589cf",
+  "rooms": {
+    "action_sample_counts": {
+      "FACE": 31271,
+      "MOVE_TO": 32468,
+      "STOP": 3592
+    },
+    "development_room_count": 8,
+    "development_scene_ids": [
+      "scene_000031",
+      "scene_000032",
+      "scene_000033",
+      "scene_000034",
+      "scene_000035",
+      "scene_000036",
+      "scene_000037",
+      "scene_000039"
+    ],
+    "generated_episodes": 3592,
+    "generated_rows": 67331,
+    "sealed_room_count": 6,
+    "sealed_scene_ids": [
+      "scene_000051",
+      "scene_000052",
+      "scene_000053",
+      "scene_000054",
+      "scene_000055",
+      "scene_000056"
+    ],
+    "train_room_count": 27,
+    "train_scene_ids": [
+      "scene_000001",
+      "scene_000011",
+      "scene_000012",
+      "scene_000013",
+      "scene_000014",
+      "scene_000015",
+      "scene_000016",
+      "scene_000017",
+      "scene_000018",
+      "scene_000019",
+      "scene_000020",
+      "scene_000021",
+      "scene_000022",
+      "scene_000023",
+      "scene_000024",
+      "scene_000038",
+      "scene_000040",
+      "scene_000041",
+      "scene_000042",
+      "scene_000043",
+      "scene_000044",
+      "scene_000045",
+      "scene_000046",
+      "scene_000047",
+      "scene_000048",
+      "scene_000049",
+      "scene_000050"
+    ],
+    "unroutable_lap_start_count": 6
+  },
+  "runtime_contract": {
+    "actual_gemma_causal_forward": true,
+    "checkpoint_schema": "semantic_3d_chat.gemma_waypoint_checkpoint.v4",
+    "complete_scene_prefix_required": true,
+    "deterministic_route_planner_allowed_at_runtime": false,
+    "environmental_text_inputs": [],
+    "every_scene_token_processed": true,
+    "history_dim": 16,
+    "history_parameterization": "selected_action_parameters_goal_progress_v2",
+    "model_selects_every_waypoint_and_heading": true,
+    "oracle_inputs_at_runtime": false,
+    "robot_token_count": 4,
+    "scene_token_count": 258,
+    "training_sample_count": 5400,
+    "training_scene_count": 27,
+    "validation_sample_count": 1400,
+    "validation_scene_count": 8
+  },
+  "schema": "semantic_3d_chat.gemma_waypoint_release_summary.v2",
+  "sealed_closed_loop": {
+    "goal_count": 30,
+    "model_selected_terminal_stop_rate": 0.9666666666666667,
+    "pass_rate": 0.03333333333333333,
+    "passed_count": 1,
+    "per_metric": {
+      "approach_standoff": {
+        "pass_rate": 0.08333333333333333,
+        "passed": 1,
+        "total": 12
+      },
+      "face_yaw": {
+        "pass_rate": 0.0,
+        "passed": 0,
+        "total": 12
+      },
+      "lap_circuit": {
+        "pass_rate": 0.0,
+        "passed": 0,
+        "total": 6
+      }
+    },
+    "rollout_process_read_oracle": false,
+    "scene_ids": [
+      "scene_000051",
+      "scene_000052",
+      "scene_000053",
+      "scene_000054",
+      "scene_000055",
+      "scene_000056"
+    ]
+  },
+  "sealed_controls": {
+    "accuracy_drop_from_primary": {
+      "shuffled_scene_prefix": 0.0,
+      "wrong_scene_prefix": -0.011111080646514893,
+      "zero_history": 0.05925929546356201,
+      "zero_scene_prefix": 0.12962967157363892
+    },
+    "evaluated_conditions": [
+      "primary",
+      "wrong_scene_prefix",
+      "zero_scene_prefix",
+      "shuffled_scene_prefix",
+      "zero_history"
+    ],
+    "output_change_from_primary": {
+      "shuffled_scene_prefix": {
+        "action_change_fraction": 0.192592591047287,
+        "mean_heading_output_shift_degrees": 10.473878860473633,
+        "mean_waypoint_output_shift_m": 0.03669733926653862
+      },
+      "wrong_scene_prefix": {
+        "action_change_fraction": 0.10740740597248077,
+        "mean_heading_output_shift_degrees": 5.749229431152344,
+        "mean_waypoint_output_shift_m": 0.021476028487086296
+      },
+      "zero_history": {
+        "action_change_fraction": 0.3444444537162781,
+        "mean_heading_output_shift_degrees": 25.721084594726562,
+        "mean_waypoint_output_shift_m": 0.07329705357551575
+      },
+      "zero_scene_prefix": {
+        "action_change_fraction": 0.6185185313224792,
+        "mean_heading_output_shift_degrees": 32.059844970703125,
+        "mean_waypoint_output_shift_m": 0.09883265197277069
+      }
+    },
+    "per_condition_action_accuracy": {
+      "primary": 0.5111111402511597,
+      "shuffled_scene_prefix": 0.5111111402511597,
+      "wrong_scene_prefix": 0.5222222208976746,
+      "zero_history": 0.45185184478759766,
+      "zero_scene_prefix": 0.38148146867752075
+    },
+    "primary": {
+      "action_accuracy": 0.5111111402511597,
+      "action_macro_recall": 0.5111111104488373,
+      "action_recall": {
+        "face": 0.2666666805744171,
+        "move_to": 0.6777777671813965,
+        "stop": 0.5888888835906982
+      },
+      "heading_error_degrees_mean": 26.773847579956055,
+      "stop_precision": 0.6794871794871795,
+      "stop_recall": 0.5888888888888889,
+      "waypoint_error_m_mean": 0.1257823407649994
+    },
+    "sample_count": 270
+  },
+  "stages_present": {
+    "checkpoint_metadata": true,
+    "checkpoint_weights": true,
+    "general_trace_manifest": true,
+    "heldout_closed_loop_score": true,
+    "sealed_controls": true,
+    "sealed_trace_manifest": true,
+    "training_report": true
+  },
+  "training": {
+    "best_epoch": 119,
+    "dataset_sha256": "3101b97c72d62f23060532657cffabeb8c727d63598e5e7b72dbf13249ac8b86",
+    "elapsed_seconds": 782.0976815000031,
+    "epochs_completed": 160,
+    "training_action_accuracy": 0.7983333468437195,
+    "training_rows": 5400,
+    "training_stop_recall": 0.925,
+    "validation_rows": 1400
+  }
+}

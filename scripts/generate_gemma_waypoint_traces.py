@@ -20,13 +20,25 @@ def main() -> None:
     )
     parser.add_argument(
         "--profile",
-        choices=("smoke", "live", "demo", "full", "production", "operator"),
+        choices=(
+            "smoke",
+            "live",
+            "demo",
+            "full",
+            "production",
+            "operator",
+            "general_smoke",
+            "general",
+            "general_sealed",
+        ),
         default="smoke",
         help=(
             "smoke is the fast conversion proof; live is the compact scene_000001 "
             "fit; demo is a larger scene_000001 fit; full uses every V3 scene; "
             "production combines the live room with disjoint training rooms; "
-            "operator retains every exact-start live-room step"
+            "operator retains every exact-start live-room step; general is the "
+            "27-train/14-held-out room generalization set and general_smoke is "
+            "its fast two-room wiring proof"
         ),
     )
     parser.add_argument(

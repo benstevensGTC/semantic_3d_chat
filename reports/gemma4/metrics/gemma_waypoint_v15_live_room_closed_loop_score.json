@@ -1,0 +1,163 @@
+{
+  "goal_count": 5,
+  "goals": [
+    {
+      "accepted_decision_count": 2,
+      "checks": {
+        "maximum_oracle_yaw_error": false,
+        "model_selected_terminal_stop": true
+      },
+      "decision_count": 2,
+      "final_body_yaw_degrees": -102.78200054168701,
+      "final_target_center_distance_m": 1.6177381986670238,
+      "goal_id": "scene_000001_face_table",
+      "initial_target_center_distance_m": 1.6177381986670238,
+      "instruction": "Face the table, then stop.",
+      "metric": "face_yaw",
+      "oracle_target_heading_degrees": -58.796791528816364,
+      "oracle_yaw_error_degrees": 43.985209012870655,
+      "passed": false,
+      "path_length_m": 0.0,
+      "rejected_decision_count": 0,
+      "scene_id": "scene_000001",
+      "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95",
+      "target_category": "table",
+      "target_center_progress_m": 0.0,
+      "target_instance_id": "i_000100",
+      "termination": "model_stop"
+    },
+    {
+      "accepted_decision_count": 5,
+      "checks": {
+        "maximum_oracle_bbox_standoff": false,
+        "minimum_oracle_center_progress": false,
+        "model_selected_terminal_stop": true
+      },
+      "decision_count": 5,
+      "final_oracle_bbox_standoff_m": 0.7982236110474838,
+      "final_target_center_distance_m": 1.6177381986670238,
+      "goal_id": "scene_000001_approach_table",
+      "initial_target_center_distance_m": 1.6177381986670238,
+      "instruction": "Move close to the table, then stop.",
+      "metric": "approach_standoff",
+      "passed": false,
+      "path_length_m": 0.0,
+      "rejected_decision_count": 0,
+      "scene_id": "scene_000001",
+      "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95",
+      "target_category": "table",
+      "target_center_progress_m": 0.0,
+      "target_instance_id": "i_000100",
+      "termination": "model_stop"
+    },
+    {
+      "accepted_decision_count": 3,
+      "checks": {
+        "maximum_oracle_yaw_error": false,
+        "model_selected_terminal_stop": true
+      },
+      "decision_count": 3,
+      "final_body_yaw_degrees": 142.61798572540283,
+      "final_target_center_distance_m": 2.394022068802745,
+      "goal_id": "scene_000001_face_floor_lamp",
+      "initial_target_center_distance_m": 2.394022068802745,
+      "instruction": "Face the floor lamp, then stop.",
+      "metric": "face_yaw",
+      "oracle_target_heading_degrees": 42.96230746261051,
+      "oracle_yaw_error_degrees": 99.65567826279232,
+      "passed": false,
+      "path_length_m": 0.0,
+      "rejected_decision_count": 0,
+      "scene_id": "scene_000001",
+      "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95",
+      "target_category": "floor lamp",
+      "target_center_progress_m": 0.0,
+      "target_instance_id": "i_000104",
+      "termination": "model_stop"
+    },
+    {
+      "accepted_decision_count": 6,
+      "checks": {
+        "maximum_oracle_bbox_standoff": false,
+        "minimum_oracle_center_progress": false,
+        "model_selected_terminal_stop": true
+      },
+      "decision_count": 6,
+      "final_oracle_bbox_standoff_m": 1.8711864669830935,
+      "final_target_center_distance_m": 2.394022068802745,
+      "goal_id": "scene_000001_approach_floor_lamp",
+      "initial_target_center_distance_m": 2.394022068802745,
+      "instruction": "Move close to the floor lamp, then stop.",
+      "metric": "approach_standoff",
+      "passed": false,
+      "path_length_m": 0.0,
+      "rejected_decision_count": 0,
+      "scene_id": "scene_000001",
+      "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95",
+      "target_category": "floor lamp",
+      "target_center_progress_m": 0.0,
+      "target_instance_id": "i_000104",
+      "termination": "model_stop"
+    },
+    {
+      "absolute_swept_area_m2": 0.0,
+      "accepted_decision_count": 13,
+      "checks": {
+        "maximum_return_error": false,
+        "minimum_absolute_swept_area": false,
+        "minimum_path_length": false,
+        "model_selected_terminal_stop": true
+      },
+      "decision_count": 16,
+      "goal_id": "scene_000001_lap",
+      "instruction": "Do a lap around the room.",
+      "metric": "lap_circuit",
+      "passed": false,
+      "path_length_m": 2.786222673667091,
+      "rejected_decision_count": 3,
+      "return_distance_m": 2.786222673667091,
+      "scene_id": "scene_000001",
+      "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95",
+      "termination": "model_stop"
+    }
+  ],
+  "model_selected_terminal_stop_rate": 1.0,
+  "navigation_checkpoint": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/checkpoints/gemma_waypoint_policy_v15_general",
+  "oracle_file_sha256": {
+    "scene_000001": "d3b7f56a810ac606964e8218b3150ad0f652edd4c0f139d1d7b8e3cf1882d78c"
+  },
+  "pass_rate": 0.0,
+  "passed_count": 0,
+  "per_metric": {
+    "approach_standoff": {
+      "pass_rate": 0.0,
+      "passed": 0,
+      "total": 2
+    },
+    "face_yaw": {
+      "pass_rate": 0.0,
+      "passed": 0,
+      "total": 2
+    },
+    "lap_circuit": {
+      "pass_rate": 0.0,
+      "passed": 0,
+      "total": 1
+    }
+  },
+  "rollout_process_read_oracle": false,
+  "scene_ids": [
+    "scene_000001"
+  ],
+  "schema": "semantic_3d_chat.v15_heldout_closed_loop_score.v1",
+  "scorer_reads_oracle": true,
+  "status": "evaluation_only_oracle_score",
+  "thresholds": {
+    "maximum_bbox_standoff_m": 0.6,
+    "maximum_face_yaw_error_degrees": 20.0,
+    "maximum_lap_return_error_m": 0.75,
+    "minimum_center_progress_m": 0.25,
+    "minimum_lap_absolute_area_m2": 0.5,
+    "minimum_lap_path_length_m": 5.0
+  }
+}

@@ -3882,6 +3882,9 @@ def generate_gemma_waypoint_trace_dataset(
     start_count = int(settings["start_pose_count"])
     between_count = int(settings["between_pairs_per_scene"])
     object_target_count = int(settings.get("object_targets_per_scene", 1))
+    skip_unroutable_lap_starts = settings.get("skip_unroutable_lap_starts", False)
+    if not isinstance(skip_unroutable_lap_starts, bool):
+        raise TypeError("skip_unroutable_lap_starts must be a boolean")
     selected_splits = {
         **{scene: "train" for scene in train_scenes},
         **{scene: "validation" for scene in validation_scenes},
@@ -3916,6 +3919,7 @@ def generate_gemma_waypoint_trace_dataset(
     family_episodes: Counter[str] = Counter()
     variant_episodes: Counter[str] = Counter()
     synthetic_episode_counter = 0
+    unroutable_lap_starts: list[dict[str, Any]] = []
     lap_recovery_sample_count = 0
     lap_recovery_episode_count = 0
     lap_execution_drift_sample_count = 0
@@ -4022,10 +4026,28 @@ def generate_gemma_waypoint_trace_dataset(
             try:
                 routes = _lap_routes(start, patrol)
             except RuntimeError as error:
-                raise RuntimeError(
-                    f"No complete lap teacher route for {scene_id} start {start_index}"
-                ) from error
-            for yaw_index, yaw in enumerate(lap_yaws):
+                if not skip_unroutable_lap_starts:
+                    raise RuntimeError(
+                        f"No complete lap teacher route for {scene_id} start {start_index}"
+                    ) from error
+                # Some rooms have furniture that blocks the wall-following ring
+                # from a particular collision-free start.  Across dozens of
+                # procedurally varied rooms this is ordinary, not a defect, so
+                # the profile may drop that one start.  Every dropped start is
+                # recorded in the manifest -- this is never a silent cap -- and
+                # the per-scene family-coverage gate below still fails loudly if
+                # a scene ends up with no lap supervision at all.
+                unroutable_lap_starts.append(
+                    {
+                        "scene_id": scene_id,
+                        "split": split,
+                        "start_index": start_index,
+                        "start_xy_m": [float(start[0]), float(start[1])],
+                        "reason": str(error),
+                    }
+                )
+                routes = None
+            for yaw_index, yaw in enumerate(lap_yaws if routes is not None else ()):
                 for direction in ("clockwise", "counterclockwise"):
                     generic_lap = settings.get("generic_clockwise_lap_instructions")
                     if generic_lap is not None and (
@@ -4583,6 +4605,9 @@ def generate_gemma_waypoint_trace_dataset(
             "source_converted_episode_count": source_episode_count,
             "source_rows_included": include_source_rows,
             "synthetic_expert_episode_count": synthetic_episode_counter,
+            "skip_unroutable_lap_starts": skip_unroutable_lap_starts,
+            "unroutable_lap_start_count": len(unroutable_lap_starts),
+            "unroutable_lap_starts": unroutable_lap_starts,
             "train_scene_ids": train_scenes,
             "validation_scene_ids": validation_scenes,
             "train_scene_count": len(train_scenes),

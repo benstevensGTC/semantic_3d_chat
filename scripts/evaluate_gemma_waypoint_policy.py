@@ -9,6 +9,8 @@ from pathlib import Path
 
 from semantic_3d_chat.config import PROJECT_ROOT, load_config
 from semantic_3d_chat.training.gemma_waypoint_policy import (
+    CONTROL_CONDITIONS,
+    DEFAULT_CONTROL_CONDITIONS,
     ActualGemmaWaypointForward,
     evaluate_waypoint_controls,
     load_actual_waypoint_stack,
@@ -26,10 +28,31 @@ def main() -> None:
     parser.add_argument("--checkpoint")
     parser.add_argument("--split", choices=("train", "validation", "test"), default="validation")
     parser.add_argument(
+        "--condition",
+        action="append",
+        choices=CONTROL_CONDITIONS,
+        default=None,
+        help=(
+            "control conditions to evaluate; repeatable. Defaults to the "
+            "historical four. 'primary' is always included first."
+        ),
+    )
+    parser.add_argument(
+        "--sample-limit",
+        type=int,
+        default=None,
+        help="override gemma_waypoint_policy.control_sample_limit for this run",
+    )
+    parser.add_argument(
         "--output",
         default="reports/gemma4/metrics/gemma_waypoint_policy_controls.json",
     )
     args = parser.parse_args()
+    if args.condition is None:
+        conditions = DEFAULT_CONTROL_CONDITIONS
+    else:
+        requested = [name for name in args.condition if name != "primary"]
+        conditions = ("primary", *dict.fromkeys(requested))
     config = load_config(args.config)
     settings = validate_waypoint_settings(config)
     dataset, cache = load_waypoint_data_from_config(config, dataset_path=args.dataset)
@@ -51,9 +74,17 @@ def main() -> None:
         runner,
         cache,
         dataset.split(args.split),
-        sample_limit=settings.get("control_sample_limit"),
+        sample_limit=(
+            args.sample_limit
+            if args.sample_limit is not None
+            else settings.get("control_sample_limit")
+        ),
+        conditions=conditions,
     )
     result["robot_state_checkpoint_sha256"] = state_hash
+    result["evaluated_split"] = args.split
+    result["evaluated_dataset"] = args.dataset or str(settings["trace_dataset"])
+    result["evaluated_checkpoint"] = checkpoint
     output = Path(args.output)
     if not output.is_absolute():
         output = PROJECT_ROOT / output

@@ -1,0 +1,192 @@
+{
+  "deterministic_route_planner_used": false,
+  "elapsed_seconds": 29.144953875002102,
+  "model_selected_every_action": true,
+  "navigation_checkpoint": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/checkpoints/gemma_waypoint_policy_v15_general",
+  "oracle_reads_blocked_by_audit": true,
+  "renderer_used": false,
+  "rollout_count": 5,
+  "rollout_process_read_oracle": false,
+  "rollouts": [
+    {
+      "absolute_swept_area_m2": 0.0,
+      "accepted_decision_count": 2,
+      "action_counts": {
+        "face": 1,
+        "stop": 1
+      },
+      "checkpoint_sha256": "161db4539dfaaaa3891153acf535955034b23fce3cd266b5606a159aaae589cf",
+      "controller_success": true,
+      "decision_count": 2,
+      "elapsed_seconds": 1.6947727499937173,
+      "error_code": null,
+      "final_pose_xy_yaw": [
+        -0.5,
+        -0.25,
+        -102.78200054168701
+      ],
+      "goal_id": "scene_000001_face_table",
+      "instruction": "Face the table, then stop.",
+      "max_steps": 32,
+      "model_stop_emitted": true,
+      "path_length_m": 0.0,
+      "rejected_decision_count": 0,
+      "return_distance_m": 0.0,
+      "scene_id": "scene_000001",
+      "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95",
+      "signed_swept_area_m2": 0.0,
+      "start_pose_xy_yaw": [
+        -0.5,
+        -0.25,
+        -90.0
+      ],
+      "termination": "model_stop"
+    },
+    {
+      "absolute_swept_area_m2": 0.0,
+      "accepted_decision_count": 5,
+      "action_counts": {
+        "face": 4,
+        "stop": 1
+      },
+      "checkpoint_sha256": "161db4539dfaaaa3891153acf535955034b23fce3cd266b5606a159aaae589cf",
+      "controller_success": true,
+      "decision_count": 5,
+      "elapsed_seconds": 2.4848277919954853,
+      "error_code": null,
+      "final_pose_xy_yaw": [
+        -0.5,
+        -0.25,
+        -153.85220623016357
+      ],
+      "goal_id": "scene_000001_approach_table",
+      "instruction": "Move close to the table, then stop.",
+      "max_steps": 32,
+      "model_stop_emitted": true,
+      "path_length_m": 0.0,
+      "rejected_decision_count": 0,
+      "return_distance_m": 0.0,
+      "scene_id": "scene_000001",
+      "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95",
+      "signed_swept_area_m2": 0.0,
+      "start_pose_xy_yaw": [
+        -0.5,
+        -0.25,
+        -102.78200054168701
+      ],
+      "termination": "model_stop"
+    },
+    {
+      "absolute_swept_area_m2": 0.0,
+      "accepted_decision_count": 3,
+      "action_counts": {
+        "face": 2,
+        "stop": 1
+      },
+      "checkpoint_sha256": "161db4539dfaaaa3891153acf535955034b23fce3cd266b5606a159aaae589cf",
+      "controller_success": true,
+      "decision_count": 3,
+      "elapsed_seconds": 1.517801750000217,
+      "error_code": null,
+      "final_pose_xy_yaw": [
+        -0.5,
+        -0.25,
+        142.61798572540283
+      ],
+      "goal_id": "scene_000001_face_floor_lamp",
+      "instruction": "Face the floor lamp, then stop.",
+      "max_steps": 32,
+      "model_stop_emitted": true,
+      "path_length_m": 0.0,
+      "rejected_decision_count": 0,
+      "return_distance_m": 0.0,
+      "scene_id": "scene_000001",
+      "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95",
+      "signed_swept_area_m2": 0.0,
+      "start_pose_xy_yaw": [
+        -0.5,
+        -0.25,
+        -153.85220623016357
+      ],
+      "termination": "model_stop"
+    },
+    {
+      "absolute_swept_area_m2": 0.0,
+      "accepted_decision_count": 6,
+      "action_counts": {
+        "face": 5,
+        "stop": 1
+      },
+      "checkpoint_sha256": "161db4539dfaaaa3891153acf535955034b23fce3cd266b5606a159aaae589cf",
+      "controller_success": true,
+      "decision_count": 6,
+      "elapsed_seconds": 3.19714458398812,
+      "error_code": null,
+      "final_pose_xy_yaw": [
+        -0.5,
+        -0.25,
+        -173.16417789459229
+      ],
+      "goal_id": "scene_000001_approach_floor_lamp",
+      "instruction": "Move close to the floor lamp, then stop.",
+      "max_steps": 32,
+      "model_stop_emitted": true,
+      "path_length_m": 0.0,
+      "rejected_decision_count": 0,
+      "return_distance_m": 0.0,
+      "scene_id": "scene_000001",
+      "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95",
+      "signed_swept_area_m2": 0.0,
+      "start_pose_xy_yaw": [
+        -0.5,
+        -0.25,
+        142.61798572540283
+      ],
+      "termination": "model_stop"
+    },
+    {
+      "absolute_swept_area_m2": 0.0,
+      "accepted_decision_count": 13,
+      "action_counts": {
+        "face": 3,
+        "move_to": 12,
+        "stop": 1
+      },
+      "checkpoint_sha256": "161db4539dfaaaa3891153acf535955034b23fce3cd266b5606a159aaae589cf",
+      "controller_success": true,
+      "decision_count": 16,
+      "elapsed_seconds": 8.335690958003397,
+      "error_code": null,
+      "final_pose_xy_yaw": [
+        -2.570304600002579,
+        -2.114638209000544,
+        116.2174186706543
+      ],
+      "goal_id": "scene_000001_lap",
+      "instruction": "Do a lap around the room.",
+      "max_steps": 128,
+      "model_stop_emitted": true,
+      "path_length_m": 2.786222673667091,
+      "rejected_decision_count": 3,
+      "return_distance_m": 2.786222673667091,
+      "scene_id": "scene_000001",
+      "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95",
+      "signed_swept_area_m2": 0.0,
+      "start_pose_xy_yaw": [
+        -0.5,
+        -0.25,
+        -173.16417789459229
+      ],
+      "termination": "model_stop"
+    }
+  ],
+  "scene_identities": {
+    "scene_000001": {
+      "checkpoint": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/checkpoints/gemma_waypoint_policy_v15_general",
+      "checkpoint_sha256": "161db4539dfaaaa3891153acf535955034b23fce3cd266b5606a159aaae589cf",
+      "scene_id": "scene_000001",
+      "scene_prefix_sha256": "52c33298140845d341fa2b4568f2c6e960279495890e08455caafa7d5bbc9c95"
+    }
+  },
+  "schema": "semantic_3d_chat.v15_heldout_closed_loop_rollout.v1"
+}

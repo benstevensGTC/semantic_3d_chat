@@ -1,0 +1,40 @@
+{
+  "contains_target_geometry": false,
+  "scene_ids": [
+    "scene_000001"
+  ],
+  "schema": "semantic_3d_chat.v15_heldout_closed_loop_plan.v1",
+  "task_count": 5,
+  "tasks": [
+    {
+      "goal_id": "scene_000001_face_table",
+      "instruction": "Face the table, then stop.",
+      "max_steps": 32,
+      "scene_id": "scene_000001"
+    },
+    {
+      "goal_id": "scene_000001_approach_table",
+      "instruction": "Move close to the table, then stop.",
+      "max_steps": 32,
+      "scene_id": "scene_000001"
+    },
+    {
+      "goal_id": "scene_000001_face_floor_lamp",
+      "instruction": "Face the floor lamp, then stop.",
+      "max_steps": 32,
+      "scene_id": "scene_000001"
+    },
+    {
+      "goal_id": "scene_000001_approach_floor_lamp",
+      "instruction": "Move close to the floor lamp, then stop.",
+      "max_steps": 32,
+      "scene_id": "scene_000001"
+    },
+    {
+      "goal_id": "scene_000001_lap",
+      "instruction": "Do a lap around the room.",
+      "max_steps": 128,
+      "scene_id": "scene_000001"
+    }
+  ]
+}

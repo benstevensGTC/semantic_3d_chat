@@ -1,0 +1,190 @@
+_base_: gemma_waypoint_policy_v1.yaml
+
+# V15 is the first waypoint controller trained for *room generalization* rather
+# than for one live demonstration room.  It keeps the deployed runtime contract
+# unchanged (258 continuous scene tokens, four numeric robot tokens, raw user
+# goal, 16D receipt-derived numeric history, and a real frozen-Gemma causal
+# forward per decision) and changes only the breadth of supervision:
+#
+#   * 27 training rooms instead of the single scene_000001 operator room.
+#   * 14 scene-disjoint held-out rooms, none of which contribute any training
+#     row, prefix selection, hyper-parameter choice, or checkpoint selection.
+#   * Thousands of authenticated cached Gemma decision states instead of 384.
+#
+# Every deployed waypoint, heading, and STOP is still emitted by Gemma. The
+# offline geometry experts that label these rows are training-only and are not
+# importable from the runtime controller.
+gemma_waypoint_traces:
+  # Default --destination for this config's profiles.
+  output_root: data_gemma4/training/gemma_waypoint_policy_v15
+  # Runtime-aligned numeric history. This is the same contract the promoted
+  # V14 rover already executes, so a V15 checkpoint is a drop-in replacement.
+  history_parameterization: selected_action_parameters_goal_progress_v2
+  history_feature_dim: 16
+  # Keep every teacher turn strictly inside the simulator's 45-degree action
+  # cap; exact boundary labels are unsafe under bfloat16/MPS drift.
+  #
+  # This also makes the legacy V3 source rows unusable, deliberately:
+  #   * Re-converting a V3 turn under a 40-degree cap changes its completion
+  #     pose, which the generator correctly rejects as a discontinuous episode.
+  #   * More importantly, the deployed heading head emits 40*tanh(raw), so a
+  #     45-degree V3 label is not reachable by the model at all.  Earlier runs
+  #     that kept those rows were training against impossible targets.
+  # Every profile below therefore sets include_source_rows: false and takes all
+  # of its supervision from the offline lap/approach/between/face experts.
+  expert_turn_margin_degrees: 5.0
+
+  profiles:
+    # Fast wiring proof for the general profile: two training rooms (one of
+    # which has no legacy V3 rows) and two held-out rooms.
+    general_smoke:
+      train_scene_ids:
+        - scene_000011
+        - scene_000041
+      validation_scene_ids:
+        - scene_000031
+        - scene_000051
+      start_pose_count: 1
+      initial_yaw_degrees: [0.0]
+      between_pairs_per_scene: 1
+      object_targets_per_scene: 1
+      include_source_rows: false
+      skip_unroutable_lap_starts: true
+
+    # Full generalization set.
+    #
+    # Room budget: 41 rooms have both an oracle scene and a built 258-token
+    # scene prefix.  They are partitioned three ways, and the partition is the
+    # point of the whole experiment:
+    #
+    #   * 27 TRAIN rooms  - scene_000001, 11-24, 38, 40, 41-50.
+    #   * 8 DEVELOPMENT rooms - 31-37 and 39.  Scene-disjoint from training.
+    #     These are the `validation` split: they drive checkpoint selection and
+    #     the in-training causal-control battery, so they are *not* a clean
+    #     estimate of unseen-room performance.
+    #   * 6 SEALED rooms - 51-56.  Held in the separate `general_sealed`
+    #     profile below, scored exactly once by the standalone evaluator after
+    #     the checkpoint is frozen.  Nothing about training, hyper-parameters,
+    #     sampling, or epoch selection ever observes them.
+    #
+    # scene_000001 stays a training room so the existing Blender live
+    # demonstration keeps working with the generalizing checkpoint.
+    general:
+      train_scene_ids:
+        - scene_000001
+        - scene_000011
+        - scene_000012
+        - scene_000013
+        - scene_000014
+        - scene_000015
+        - scene_000016
+        - scene_000017
+        - scene_000018
+        - scene_000019
+        - scene_000020
+        - scene_000021
+        - scene_000022
+        - scene_000023
+        - scene_000024
+        - scene_000038
+        - scene_000040
+        - scene_000041
+        - scene_000042
+        - scene_000043
+        - scene_000044
+        - scene_000045
+        - scene_000046
+        - scene_000047
+        - scene_000048
+        - scene_000049
+        - scene_000050
+      validation_scene_ids:
+        - scene_000031
+        - scene_000032
+        - scene_000033
+        - scene_000034
+        - scene_000035
+        - scene_000036
+        - scene_000037
+        - scene_000039
+      start_pose_count: 2
+      initial_yaw_degrees: [0.0, -90.0, 90.0, 180.0]
+      between_pairs_per_scene: 3
+      object_targets_per_scene: 4
+      include_source_rows: false
+      skip_unroutable_lap_starts: true
+      required_start_pose_xy_by_scene:
+        scene_000001: [-0.5, -0.25]
+      generic_clockwise_lap_instructions:
+        - Do a lap around the room.
+        - Take one lap around the room and stop.
+
+    # Sealed unseen-room test set.  Its `validation` split is rooms 51-56,
+    # which appear in no other profile.  The `train` split exists only because
+    # the generator requires two nonempty disjoint splits; it is never loaded
+    # by the trainer and never cached through Gemma.  This dataset is passed to
+    # scripts/evaluate_gemma_waypoint_policy.py once, against an already-frozen
+    # checkpoint.
+    general_sealed:
+      train_scene_ids:
+        - scene_000011
+      validation_scene_ids:
+        - scene_000051
+        - scene_000052
+        - scene_000053
+        - scene_000054
+        - scene_000055
+        - scene_000056
+      start_pose_count: 2
+      initial_yaw_degrees: [0.0, -90.0, 90.0, 180.0]
+      between_pairs_per_scene: 3
+      object_targets_per_scene: 4
+      include_source_rows: false
+      skip_unroutable_lap_starts: true
+      generic_clockwise_lap_instructions:
+        - Do a lap around the room.
+        - Take one lap around the room and stop.
+
+gemma_waypoint_policy:
+  trace_dataset: data_gemma4/training/gemma_waypoint_policy_v15_general
+  prefix_cache_root: data_gemma4/scene_tokens/gemma_waypoint_policy_v15_rooms
+  hidden_cache: data_gemma4/training/gemma_waypoint_policy_v15_general_hidden
+  checkpoint_output: data_gemma4/checkpoints/gemma_waypoint_policy_v15_general
+
+  # Runtime-aligned numeric history contract (checkpoint schema v4).
+  history_dim: 16
+  history_parameterization: selected_action_parameters_goal_progress_v2
+
+  # Cache and train against the exact LoRA-installed decoder the deployed
+  # rover runs.  Without this the cached decision states come from a raw HF
+  # Gemma and the resulting checkpoint fails the runtime binding gate in
+  # practical_rover_preflight(), so it could never be promoted.
+  runtime_aligned_control_config: configs/runtime/gemma4_v56_question_control.yaml
+  runtime_aligned_base_checkpoint: data_gemma4/runtime/checkpoints/gemma4_v54_release_v1
+  runtime_aligned_control_checkpoint: data_gemma4/runtime/checkpoints/gemma4_v75_nll_control_release_v1
+  runtime_aligned_scene_id: scene_000001
+
+  # The single most important change from every previous waypoint experiment:
+  # the earlier runs cached only 192 training rows, so the heads could not see
+  # enough rooms to separate "what this room affords" from "where I am in the
+  # numeric history".  ~2.4 real Gemma forwards/second on this machine makes a
+  # few thousand authenticated rows a routine overnight-free cost.
+  training_sample_limit: 5400
+  validation_sample_limit: 1400
+  # The control battery re-runs live Gemma once per row *per condition*, so it
+  # is priced separately from the cached training rows. 336 rows over the eight
+  # development rooms is 14 per (room, action) bucket -- fourteen times the
+  # 24-row slice every earlier waypoint result was reported on.
+  control_sample_limit: 336
+
+  head_batch_size: 64
+  epochs: 160
+  learning_rate: 0.0003
+  weight_decay: 0.0001
+  # Rebalance the rare STOP class harder than the one-room operator run did.
+  action_class_weight_power: 1.0
+  checkpoint_selection: heldout_validation
+  waypoint_loss_weight: 1.0
+  heading_loss_weight: 0.5
+  gradient_clip_norm: 1.0
+  seed: 20260816

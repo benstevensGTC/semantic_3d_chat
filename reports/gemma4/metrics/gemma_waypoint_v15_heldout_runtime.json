@@ -1,0 +1,1082 @@
+{
+  "deterministic_route_planner_used": false,
+  "elapsed_seconds": 264.14696795798955,
+  "model_selected_every_action": true,
+  "navigation_checkpoint": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/checkpoints/gemma_waypoint_policy_v15_general",
+  "oracle_reads_blocked_by_audit": true,
+  "renderer_used": false,
+  "rollout_count": 30,
+  "rollout_process_read_oracle": false,
+  "rollouts": [
+    {
+      "absolute_swept_area_m2": 0.0,
+      "accepted_decision_count": 2,
+      "action_counts": {
+        "face": 1,
+        "stop": 1
+      },
+      "checkpoint_sha256": "161db4539dfaaaa3891153acf535955034b23fce3cd266b5606a159aaae589cf",
+      "controller_success": true,
+      "decision_count": 2,
+      "elapsed_seconds": 1.7295164579991251,
+      "error_code": null,
+      "final_pose_xy_yaw": [
+        -0.5,
+        -0.25,
+        -107.24790954589844
+      ],
+      "goal_id": "scene_000051_face_table",
+      "instruction": "Face the table, then stop.",
+      "max_steps": 32,
+      "model_stop_emitted": true,
+      "path_length_m": 0.0,
+      "rejected_decision_count": 0,
+      "return_distance_m": 0.0,
+      "scene_id": "scene_000051",
+      "scene_prefix_sha256": "7da0805d3523912ef694785b3b2cf202e201196552b02bcfcc640d77891342be",
+      "signed_swept_area_m2": 0.0,
+      "start_pose_xy_yaw": [
+        -0.5,
+        -0.25,
+        -90.0
+      ],
+      "termination": "model_stop"
+    },
+    {
+      "absolute_swept_area_m2": 0.0,
+      "accepted_decision_count": 5,
+      "action_counts": {
+        "face": 4,
+        "stop": 1
+      },
+      "checkpoint_sha256": "161db4539dfaaaa3891153acf535955034b23fce3cd266b5606a159aaae589cf",
+      "controller_success": true,
+      "decision_count": 5,
+      "elapsed_seconds": 2.597008750002715,
+      "error_code": null,
+      "final_pose_xy_yaw": [
+        -0.5,
+        -0.25,
+        -178.7528531551361
+      ],
+      "goal_id": "scene_000051_approach_table",
+      "instruction": "Move close to the table, then stop.",
+      "max_steps": 32,
+      "model_stop_emitted": true,
+      "path_length_m": 0.0,
+      "rejected_decision_count": 0,
+      "return_distance_m": 0.0,
+      "scene_id": "scene_000051",
+      "scene_prefix_sha256": "7da0805d3523912ef694785b3b2cf202e201196552b02bcfcc640d77891342be",
+      "signed_swept_area_m2": 0.0,
+      "start_pose_xy_yaw": [
+        -0.5,
+        -0.25,
+        -107.24790954589844
+      ],
+      "termination": "model_stop"
+    },
+    {
+      "absolute_swept_area_m2": 0.0,
+      "accepted_decision_count": 6,
+      "action_counts": {
+        "face": 5,
+        "stop": 1
+      },
+      "checkpoint_sha256": "161db4539dfaaaa3891153acf535955034b23fce3cd266b5606a159aaae589cf",
+      "controller_success": true,
+      "decision_count": 6,
+      "elapsed_seconds": 2.9341619159968104,
+      "error_code": null,
+      "final_pose_xy_yaw": [
+        -0.5,
+        -0.25,
+        37.248403787612915
+      ],
+      "goal_id": "scene_000051_face_floor_lamp",
+      "instruction": "Face the floor lamp, then stop.",
+      "max_steps": 32,
+      "model_stop_emitted": true,
+      "path_length_m": 0.0,
+      "rejected_decision_count": 0,
+      "return_distance_m": 0.0,
+      "scene_id": "scene_000051",
+      "scene_prefix_sha256": "7da0805d3523912ef694785b3b2cf202e201196552b02bcfcc640d77891342be",
+      "signed_swept_area_m2": 0.0,
+      "start_pose_xy_yaw": [
+        -0.5,
+        -0.25,
+        -178.7528531551361
+      ],
+      "termination": "model_stop"
+    },
+    {
+      "absolute_swept_area_m2": 0.0,
+      "accepted_decision_count": 5,
+      "action_counts": {
+        "face": 3,
+        "move_to": 1,
+        "stop": 1
+      },
+      "checkpoint_sha256": "161db4539dfaaaa3891153acf535955034b23fce3cd266b5606a159aaae589cf",
+      "controller_success": true,
+      "decision_count": 5,
+      "elapsed_seconds": 2.63645095800166,
+      "error_code": null,
+      "final_pose_xy_yaw": [
+        -0.6803225192840785,
+        0.18127137763111395,
+        -21.36089015007019
+      ],
+      "goal_id": "scene_000051_approach_floor_lamp",
+      "instruction": "Move close to the floor lamp, then stop.",
+      "max_steps": 32,
+      "model_stop_emitted": true,
+      "path_length_m": 0.46745182866772034,
+      "rejected_decision_count": 0,
+      "return_distance_m": 0.46745182866772034,
+      "scene_id": "scene_000051",
+      "scene_prefix_sha256": "7da0805d3523912ef694785b3b2cf202e201196552b02bcfcc640d77891342be",
+      "signed_swept_area_m2": 0.0,
+      "start_pose_xy_yaw": [
+        -0.5,
+        -0.25,
+        37.248403787612915
+      ],
+      "termination": "model_stop"
+    },
+    {
+      "absolute_swept_area_m2": 0.0,
+      "accepted_decision_count": 35,
+      "action_counts": {
+        "face": 21,
+        "move_to": 43,
+        "stop": 1
+      },
+      "checkpoint_sha256": "161db4539dfaaaa3891153acf535955034b23fce3cd266b5606a159aaae589cf",
+      "controller_success": true,
+      "decision_count": 65,
+      "elapsed_seconds": 33.09399750000739,
+      "error_code": null,
+      "final_pose_xy_yaw": [
+        1.2393091743991302,
+        2.1140604744011955,
+        53.0125253200531
+      ],
+      "goal_id": "scene_000051_lap",
+      "instruction": "Do a lap around the room.",
+      "max_steps": 128,
+      "model_stop_emitted": true,
+      "path_length_m": 2.724088752589822,
+      "rejected_decision_count": 30,
+      "return_distance_m": 2.724088752589822,
+      "scene_id": "scene_000051",
+      "scene_prefix_sha256": "7da0805d3523912ef694785b3b2cf202e201196552b02bcfcc640d77891342be",
+      "signed_swept_area_m2": 0.0,
+      "start_pose_xy_yaw": [
+        -0.6803225192840785,
+        0.18127137763111395,
+        -21.36089015007019
+      ],
+      "termination": "model_stop"
+    },
+    {
+      "absolute_swept_area_m2": 0.0,
+      "accepted_decision_count": 2,
+      "action_counts": {
+        "face": 1,
+        "stop": 1
+      },
+      "checkpoint_sha256": "161db4539dfaaaa3891153acf535955034b23fce3cd266b5606a159aaae589cf",
+      "controller_success": true,
+      "decision_count": 2,
+      "elapsed_seconds": 1.7194467920053285,
+      "error_code": null,
+      "final_pose_xy_yaw": [
+        -0.5,
+        -0.25,
+        -105.4012508392334
+      ],
+      "goal_id": "scene_000052_face_table",
+      "instruction": "Face the table, then stop.",
+      "max_steps": 32,
+      "model_stop_emitted": true,
+      "path_length_m": 0.0,
+      "rejected_decision_count": 0,
+      "return_distance_m": 0.0,
+      "scene_id": "scene_000052",
+      "scene_prefix_sha256": "26631ce8d09502f67f7c1a7b76a385a10c6c437b082f00b4667f1574ecd76493",
+      "signed_swept_area_m2": 0.0,
+      "start_pose_xy_yaw": [
+        -0.5,
+        -0.25,
+        -90.0
+      ],
+      "termination": "model_stop"
+    },
+    {
+      "absolute_swept_area_m2": 0.0,
+      "accepted_decision_count": 5,
+      "action_counts": {
+        "face": 4,
+        "stop": 1
+      },
+      "checkpoint_sha256": "161db4539dfaaaa3891153acf535955034b23fce3cd266b5606a159aaae589cf",
+      "controller_success": true,
+      "decision_count": 5,
+      "elapsed_seconds": 2.5327545830077725,
+      "error_code": null,
+      "final_pose_xy_yaw": [
+        -0.5,
+        -0.25,
+        173.214768409729
+      ],
+      "goal_id": "scene_000052_approach_table",
+      "instruction": "Move close to the table, then stop.",
+      "max_steps": 32,
+      "model_stop_emitted": true,
+      "path_length_m": 0.0,
+      "rejected_decision_count": 0,
+      "return_distance_m": 0.0,
+      "scene_id": "scene_000052",
+      "scene_prefix_sha256": "26631ce8d09502f67f7c1a7b76a385a10c6c437b082f00b4667f1574ecd76493",
+      "signed_swept_area_m2": 0.0,
+      "start_pose_xy_yaw": [
+        -0.5,
+        -0.25,
+        -105.4012508392334
+      ],
+      "termination": "model_stop"
+    },
+    {
+      "absolute_swept_area_m2": 0.0,
+      "accepted_decision_count": 6,
+      "action_counts": {
+        "face": 3,
+        "move_to": 2,
+        "stop": 1
+      },
+      "checkpoint_sha256": "161db4539dfaaaa3891153acf535955034b23fce3cd266b5606a159aaae589cf",
+      "controller_success": true,
+      "decision_count": 6,
+      "elapsed_seconds": 2.914132834004704,
+      "error_code": null,
+      "final_pose_xy_yaw": [
+        -1.265113359820731,
+        0.04369624010030687,
+        68.3276720046997
+      ],
+      "goal_id": "scene_000052_face_picture_frame",
+      "instruction": "Face the picture frame, then stop.",
+      "max_steps": 32,
+      "model_stop_emitted": true,
+      "path_length_m": 0.8195461761397124,
+      "rejected_decision_count": 0,
+      "return_distance_m": 0.8195461761397124,
+      "scene_id": "scene_000052",
+      "scene_prefix_sha256": "26631ce8d09502f67f7c1a7b76a385a10c6c437b082f00b4667f1574ecd76493",
+      "signed_swept_area_m2": 0.0,
+      "start_pose_xy_yaw": [
+        -0.5,
+        -0.25,
+        173.214768409729
+      ],
+      "termination": "model_stop"
+    },
+    {
+      "absolute_swept_area_m2": 0.0,
+      "accepted_decision_count": 6,
+      "action_counts": {
+        "face": 3,
+        "move_to": 2,
+        "stop": 1
+      },
+      "checkpoint_sha256": "161db4539dfaaaa3891153acf535955034b23fce3cd266b5606a159aaae589cf",
+      "controller_success": true,
+      "decision_count": 6,
+      "elapsed_seconds": 3.0274062499956926,
+      "error_code": null,
+      "final_pose_xy_yaw": [
+        -1.924613881853966,
+        -0.5416604801179871,
+        131.15437841415405
+      ],
+      "goal_id": "scene_000052_approach_picture_frame",
+      "instruction": "Move close to the picture frame, then stop.",
+      "max_steps": 32,
+      "model_stop_emitted": true,
+      "path_length_m": 0.8818069111017601,
+      "rejected_decision_count": 0,
+      "return_distance_m": 0.8818069111017601,
+      "scene_id": "scene_000052",
+      "scene_prefix_sha256": "26631ce8d09502f67f7c1a7b76a385a10c6c437b082f00b4667f1574ecd76493",
+      "signed_swept_area_m2": 0.0,
+      "start_pose_xy_yaw": [
+        -1.265113359820731,
+        0.04369624010030687,
+        68.3276720046997
+      ],
+      "termination": "model_stop"
+    },
+    {
+      "absolute_swept_area_m2": 0.0,
+      "accepted_decision_count": 6,
+      "action_counts": {
+        "face": 4,
+        "move_to": 1,
+        "stop": 1
+      },
+      "checkpoint_sha256": "161db4539dfaaaa3891153acf535955034b23fce3cd266b5606a159aaae589cf",
+      "controller_success": true,
+      "decision_count": 6,
+      "elapsed_seconds": 2.8719540409947513,
+      "error_code": null,
+      "final_pose_xy_yaw": [
+        -2.223667532675542,
+        -0.5916436012575008,
+        -161.22477006912231
+      ],
+      "goal_id": "scene_000052_lap",
+      "instruction": "Do a lap around the room.",
+      "max_steps": 128,
+      "model_stop_emitted": true,
+      "path_length_m": 0.3032019103972805,
+      "rejected_decision_count": 0,
+      "return_distance_m": 0.3032019103972805,
+      "scene_id": "scene_000052",
+      "scene_prefix_sha256": "26631ce8d09502f67f7c1a7b76a385a10c6c437b082f00b4667f1574ecd76493",
+      "signed_swept_area_m2": 0.0,
+      "start_pose_xy_yaw": [
+        -1.924613881853966,
+        -0.5416604801179871,
+        131.15437841415405
+      ],
+      "termination": "model_stop"
+    },
+    {
+      "absolute_swept_area_m2": 0.0,
+      "accepted_decision_count": 2,
+      "action_counts": {
+        "face": 1,
+        "stop": 1
+      },
+      "checkpoint_sha256": "161db4539dfaaaa3891153acf535955034b23fce3cd266b5606a159aaae589cf",
+      "controller_success": true,
+      "decision_count": 2,
+      "elapsed_seconds": 1.6634774160047527,
+      "error_code": null,
+      "final_pose_xy_yaw": [
+        -0.5,
+        -0.25,
+        -111.32513809204102
+      ],
+      "goal_id": "scene_000053_face_table",
+      "instruction": "Face the table, then stop.",
+      "max_steps": 32,
+      "model_stop_emitted": true,
+      "path_length_m": 0.0,
+      "rejected_decision_count": 0,
+      "return_distance_m": 0.0,
+      "scene_id": "scene_000053",
+      "scene_prefix_sha256": "a9ad99a2fb0e3084d2e37f71fc7ee2d50fb6779c1f823ad3d0864f8d8c6c53e5",
+      "signed_swept_area_m2": 0.0,
+      "start_pose_xy_yaw": [
+        -0.5,
+        -0.25,
+        -90.0
+      ],
+      "termination": "model_stop"
+    },
+    {
+      "absolute_swept_area_m2": 0.0,
+      "accepted_decision_count": 6,
+      "action_counts": {
+        "face": 5,
+        "stop": 1
+      },
+      "checkpoint_sha256": "161db4539dfaaaa3891153acf535955034b23fce3cd266b5606a159aaae589cf",
+      "controller_success": true,
+      "decision_count": 6,
+      "elapsed_seconds": 3.1602482089947443,
+      "error_code": null,
+      "final_pose_xy_yaw": [
+        -0.5,
+        -0.25,
+        152.61012816429138
+      ],
+      "goal_id": "scene_000053_approach_table",
+      "instruction": "Move close to the table, then stop.",
+      "max_steps": 32,
+      "model_stop_emitted": true,
+      "path_length_m": 0.0,
+      "rejected_decision_count": 0,
+      "return_distance_m": 0.0,
+      "scene_id": "scene_000053",
+      "scene_prefix_sha256": "a9ad99a2fb0e3084d2e37f71fc7ee2d50fb6779c1f823ad3d0864f8d8c6c53e5",
+      "signed_swept_area_m2": 0.0,
+      "start_pose_xy_yaw": [
+        -0.5,
+        -0.25,
+        -111.32513809204102
+      ],
+      "termination": "model_stop"
+    },
+    {
+      "absolute_swept_area_m2": 0.0,
+      "accepted_decision_count": 6,
+      "action_counts": {
+        "face": 5,
+        "stop": 1
+      },
+      "checkpoint_sha256": "161db4539dfaaaa3891153acf535955034b23fce3cd266b5606a159aaae589cf",
+      "controller_success": true,
+      "decision_count": 6,
+      "elapsed_seconds": 2.8707680000079563,
+      "error_code": null,
+      "final_pose_xy_yaw": [
+        -0.5,
+        -0.25,
+        93.03422522544861
+      ],
+      "goal_id": "scene_000053_face_picture_frame",
+      "instruction": "Face the picture frame, then stop.",
+      "max_steps": 32,
+      "model_stop_emitted": true,
+      "path_length_m": 0.0,
+      "rejected_decision_count": 0,
+      "return_distance_m": 0.0,
+      "scene_id": "scene_000053",
+      "scene_prefix_sha256": "a9ad99a2fb0e3084d2e37f71fc7ee2d50fb6779c1f823ad3d0864f8d8c6c53e5",
+      "signed_swept_area_m2": 0.0,
+      "start_pose_xy_yaw": [
+        -0.5,
+        -0.25,
+        152.61012816429138
+      ],
+      "termination": "model_stop"
+    },
+    {
+      "absolute_swept_area_m2": 0.0,
+      "accepted_decision_count": 6,
+      "action_counts": {
+        "face": 5,
+        "stop": 1
+      },
+      "checkpoint_sha256": "161db4539dfaaaa3891153acf535955034b23fce3cd266b5606a159aaae589cf",
+      "controller_success": true,
+      "decision_count": 6,
+      "elapsed_seconds": 3.123239291991922,
+      "error_code": null,
+      "final_pose_xy_yaw": [
+        -0.5,
+        -0.25,
+        135.95993876457214
+      ],
+      "goal_id": "scene_000053_approach_picture_frame",
+      "instruction": "Move close to the picture frame, then stop.",
+      "max_steps": 32,
+      "model_stop_emitted": true,
+      "path_length_m": 0.0,
+      "rejected_decision_count": 0,
+      "return_distance_m": 0.0,
+      "scene_id": "scene_000053",
+      "scene_prefix_sha256": "a9ad99a2fb0e3084d2e37f71fc7ee2d50fb6779c1f823ad3d0864f8d8c6c53e5",
+      "signed_swept_area_m2": 0.0,
+      "start_pose_xy_yaw": [
+        -0.5,
+        -0.25,
+        93.03422522544861
+      ],
+      "termination": "model_stop"
+    },
+    {
+      "absolute_swept_area_m2": 0.0,
+      "accepted_decision_count": 13,
+      "action_counts": {
+        "face": 7,
+        "move_to": 18,
+        "stop": 1
+      },
+      "checkpoint_sha256": "161db4539dfaaaa3891153acf535955034b23fce3cd266b5606a159aaae589cf",
+      "controller_success": true,
+      "decision_count": 26,
+      "elapsed_seconds": 13.365227292000782,
+      "error_code": null,
+      "final_pose_xy_yaw": [
+        1.4721556408850758,
+        -0.6696556103999493,
+        -141.89131903648376
+      ],
+      "goal_id": "scene_000053_lap",
+      "instruction": "Do a lap around the room.",
+      "max_steps": 128,
+      "model_stop_emitted": true,
+      "path_length_m": 2.0163106663445935,
+      "rejected_decision_count": 13,
+      "return_distance_m": 2.0163106663445935,
+      "scene_id": "scene_000053",
+      "scene_prefix_sha256": "a9ad99a2fb0e3084d2e37f71fc7ee2d50fb6779c1f823ad3d0864f8d8c6c53e5",
+      "signed_swept_area_m2": 0.0,
+      "start_pose_xy_yaw": [
+        -0.5,
+        -0.25,
+        135.95993876457214
+      ],
+      "termination": "model_stop"
+    },
+    {
+      "absolute_swept_area_m2": 0.0,
+      "accepted_decision_count": 2,
+      "action_counts": {
+        "face": 1,
+        "stop": 1
+      },
+      "checkpoint_sha256": "161db4539dfaaaa3891153acf535955034b23fce3cd266b5606a159aaae589cf",
+      "controller_success": true,
+      "decision_count": 2,
+      "elapsed_seconds": 1.7433827499917243,
+      "error_code": null,
+      "final_pose_xy_yaw": [
+        -0.5,
+        -0.25,
+        -106.9881420135498
+      ],
+      "goal_id": "scene_000054_face_table",
+      "instruction": "Face the table, then stop.",
+      "max_steps": 32,
+      "model_stop_emitted": true,
+      "path_length_m": 0.0,
+      "rejected_decision_count": 0,
+      "return_distance_m": 0.0,
+      "scene_id": "scene_000054",
+      "scene_prefix_sha256": "213523a26deba3ec64fa9858a84e2699843594efef0f201b782d098140d1e438",
+      "signed_swept_area_m2": 0.0,
+      "start_pose_xy_yaw": [
+        -0.5,
+        -0.25,
+        -90.0
+      ],
+      "termination": "model_stop"
+    },
+    {
+      "absolute_swept_area_m2": 0.0,
+      "accepted_decision_count": 5,
+      "action_counts": {
+        "face": 4,
+        "stop": 1
+      },
+      "checkpoint_sha256": "161db4539dfaaaa3891153acf535955034b23fce3cd266b5606a159aaae589cf",
+      "controller_success": true,
+      "decision_count": 5,
+      "elapsed_seconds": 2.396934499993222,
+      "error_code": null,
+      "final_pose_xy_yaw": [
+        -0.5,
+        -0.25,
+        -178.9558162689209
+      ],
+      "goal_id": "scene_000054_approach_table",
+      "instruction": "Move close to the table, then stop.",
+      "max_steps": 32,
+      "model_stop_emitted": true,
+      "path_length_m": 0.0,
+      "rejected_decision_count": 0,
+      "return_distance_m": 0.0,
+      "scene_id": "scene_000054",
+      "scene_prefix_sha256": "213523a26deba3ec64fa9858a84e2699843594efef0f201b782d098140d1e438",
+      "signed_swept_area_m2": 0.0,
+      "start_pose_xy_yaw": [
+        -0.5,
+        -0.25,
+        -106.9881420135498
+      ],
+      "termination": "model_stop"
+    },
+    {
+      "absolute_swept_area_m2": 0.0,
+      "accepted_decision_count": 5,
+      "action_counts": {
+        "face": 3,
+        "move_to": 2,
+        "stop": 1
+      },
+      "checkpoint_sha256": "161db4539dfaaaa3891153acf535955034b23fce3cd266b5606a159aaae589cf",
+      "controller_success": true,
+      "decision_count": 6,
+      "elapsed_seconds": 2.999395541002741,
+      "error_code": null,
+      "final_pose_xy_yaw": [
+        -0.8379525112989562,
+        -0.1299013715862359,
+        68.10920524597168
+      ],
+      "goal_id": "scene_000054_face_picture_frame",
+      "instruction": "Face the picture frame, then stop.",
+      "max_steps": 32,
+      "model_stop_emitted": true,
+      "path_length_m": 0.35865802715140577,
+      "rejected_decision_count": 1,
+      "return_distance_m": 0.35865802715140577,
+      "scene_id": "scene_000054",
+      "scene_prefix_sha256": "213523a26deba3ec64fa9858a84e2699843594efef0f201b782d098140d1e438",
+      "signed_swept_area_m2": 0.0,
+      "start_pose_xy_yaw": [
+        -0.5,
+        -0.25,
+        -178.9558162689209
+      ],
+      "termination": "model_stop"
+    },
+    {
+      "absolute_swept_area_m2": 0.0,
+      "accepted_decision_count": 6,
+      "action_counts": {
+        "face": 5,
+        "stop": 1
+      },
+      "checkpoint_sha256": "161db4539dfaaaa3891153acf535955034b23fce3cd266b5606a159aaae589cf",
+      "controller_success": true,
+      "decision_count": 6,
+      "elapsed_seconds": 2.8942561250005383,
+      "error_code": null,
+      "final_pose_xy_yaw": [
+        -0.8379525112989562,
+        -0.1299013715862359,
+        101.64046034961939
+      ],
+      "goal_id": "scene_000054_approach_picture_frame",
+      "instruction": "Move close to the picture frame, then stop.",
+      "max_steps": 32,
+      "model_stop_emitted": true,
+      "path_length_m": 0.0,
+      "rejected_decision_count": 0,
+      "return_distance_m": 0.0,
+      "scene_id": "scene_000054",
+      "scene_prefix_sha256": "213523a26deba3ec64fa9858a84e2699843594efef0f201b782d098140d1e438",
+      "signed_swept_area_m2": 0.0,
+      "start_pose_xy_yaw": [
+        -0.8379525112989562,
+        -0.1299013715862359,
+        68.10920524597168
+      ],
+      "termination": "model_stop"
+    },
+    {
+      "absolute_swept_area_m2": 0.0,
+      "accepted_decision_count": 16,
+      "action_counts": {
+        "face": 7,
+        "move_to": 11,
+        "stop": 1
+      },
+      "checkpoint_sha256": "161db4539dfaaaa3891153acf535955034b23fce3cd266b5606a159aaae589cf",
+      "controller_success": true,
+      "decision_count": 19,
+      "elapsed_seconds": 9.584912333011744,
+      "error_code": null,
+      "final_pose_xy_yaw": [
+        -2.647086440135379,
+        -0.004579311667381847,
+        30.468228317797184
+      ],
+      "goal_id": "scene_000054_lap",
+      "instruction": "Do a lap around the room.",
+      "max_steps": 128,
+      "model_stop_emitted": true,
+      "path_length_m": 1.8134693797165191,
+      "rejected_decision_count": 3,
+      "return_distance_m": 1.8134693797165191,
+      "scene_id": "scene_000054",
+      "scene_prefix_sha256": "213523a26deba3ec64fa9858a84e2699843594efef0f201b782d098140d1e438",
+      "signed_swept_area_m2": 0.0,
+      "start_pose_xy_yaw": [
+        -0.8379525112989562,
+        -0.1299013715862359,
+        101.64046034961939
+      ],
+      "termination": "model_stop"
+    },
+    {
+      "absolute_swept_area_m2": 0.0,
+      "accepted_decision_count": 2,
+      "action_counts": {
+        "face": 1,
+        "stop": 1
+      },
+      "checkpoint_sha256": "161db4539dfaaaa3891153acf535955034b23fce3cd266b5606a159aaae589cf",
+      "controller_success": true,
+      "decision_count": 2,
+      "elapsed_seconds": 1.7400898750056513,
+      "error_code": null,
+      "final_pose_xy_yaw": [
+        -0.5,
+        -0.25,
+        -66.07596206665039
+      ],
+      "goal_id": "scene_000055_face_table",
+      "instruction": "Face the table, then stop.",
+      "max_steps": 32,
+      "model_stop_emitted": true,
+      "path_length_m": 0.0,
+      "rejected_decision_count": 0,
+      "return_distance_m": 0.0,
+      "scene_id": "scene_000055",
+      "scene_prefix_sha256": "c43a598f9bd7ab36ebac21bb9026c9777e6000aee07e87c728765f7e1a584417",
+      "signed_swept_area_m2": 0.0,
+      "start_pose_xy_yaw": [
+        -0.5,
+        -0.25,
+        -90.0
+      ],
+      "termination": "model_stop"
+    },
+    {
+      "absolute_swept_area_m2": 0.0,
+      "accepted_decision_count": 12,
+      "action_counts": {
+        "face": 7,
+        "move_to": 5,
+        "stop": 1
+      },
+      "checkpoint_sha256": "161db4539dfaaaa3891153acf535955034b23fce3cd266b5606a159aaae589cf",
+      "controller_success": true,
+      "decision_count": 13,
+      "elapsed_seconds": 6.60951620900596,
+      "error_code": null,
+      "final_pose_xy_yaw": [
+        1.1848028156530839,
+        0.23425194928927498,
+        -81.41430541872978
+      ],
+      "goal_id": "scene_000055_approach_table",
+      "instruction": "Move close to the table, then stop.",
+      "max_steps": 32,
+      "model_stop_emitted": true,
+      "path_length_m": 1.7530146827745117,
+      "rejected_decision_count": 1,
+      "return_distance_m": 1.7530146827745117,
+      "scene_id": "scene_000055",
+      "scene_prefix_sha256": "c43a598f9bd7ab36ebac21bb9026c9777e6000aee07e87c728765f7e1a584417",
+      "signed_swept_area_m2": 0.0,
+      "start_pose_xy_yaw": [
+        -0.5,
+        -0.25,
+        -66.07596206665039
+      ],
+      "termination": "model_stop"
+    },
+    {
+      "absolute_swept_area_m2": 0.0,
+      "accepted_decision_count": 2,
+      "action_counts": {
+        "face": 1,
+        "stop": 1
+      },
+      "checkpoint_sha256": "161db4539dfaaaa3891153acf535955034b23fce3cd266b5606a159aaae589cf",
+      "controller_success": true,
+      "decision_count": 2,
+      "elapsed_seconds": 1.03479145799065,
+      "error_code": null,
+      "final_pose_xy_yaw": [
+        1.1848028156530839,
+        0.23425194928927498,
+        -74.36741229891777
+      ],
+      "goal_id": "scene_000055_face_floor_lamp",
+      "instruction": "Face the floor lamp, then stop.",
+      "max_steps": 32,
+      "model_stop_emitted": true,
+      "path_length_m": 0.0,
+      "rejected_decision_count": 0,
+      "return_distance_m": 0.0,
+      "scene_id": "scene_000055",
+      "scene_prefix_sha256": "c43a598f9bd7ab36ebac21bb9026c9777e6000aee07e87c728765f7e1a584417",
+      "signed_swept_area_m2": 0.0,
+      "start_pose_xy_yaw": [
+        1.1848028156530839,
+        0.23425194928927498,
+        -81.41430541872978
+      ],
+      "termination": "model_stop"
+    },
+    {
+      "absolute_swept_area_m2": 0.0,
+      "accepted_decision_count": 7,
+      "action_counts": {
+        "face": 5,
+        "move_to": 1,
+        "stop": 1
+      },
+      "checkpoint_sha256": "161db4539dfaaaa3891153acf535955034b23fce3cd266b5606a159aaae589cf",
+      "controller_success": true,
+      "decision_count": 7,
+      "elapsed_seconds": 3.417926249996526,
+      "error_code": null,
+      "final_pose_xy_yaw": [
+        1.5303296520673344,
+        -0.06868861609578669,
+        -132.59608313441277
+      ],
+      "goal_id": "scene_000055_approach_floor_lamp",
+      "instruction": "Move close to the floor lamp, then stop.",
+      "max_steps": 32,
+      "model_stop_emitted": true,
+      "path_length_m": 0.4595234279536366,
+      "rejected_decision_count": 0,
+      "return_distance_m": 0.4595234279536366,
+      "scene_id": "scene_000055",
+      "scene_prefix_sha256": "c43a598f9bd7ab36ebac21bb9026c9777e6000aee07e87c728765f7e1a584417",
+      "signed_swept_area_m2": 0.0,
+      "start_pose_xy_yaw": [
+        1.1848028156530839,
+        0.23425194928927498,
+        -74.36741229891777
+      ],
+      "termination": "model_stop"
+    },
+    {
+      "absolute_swept_area_m2": 0.0,
+      "accepted_decision_count": 14,
+      "action_counts": {
+        "face": 10,
+        "move_to": 118
+      },
+      "checkpoint_sha256": "161db4539dfaaaa3891153acf535955034b23fce3cd266b5606a159aaae589cf",
+      "controller_success": false,
+      "decision_count": 128,
+      "elapsed_seconds": 65.2629682909901,
+      "error_code": "E_MAX_STEPS",
+      "final_pose_xy_yaw": [
+        2.2311845458912902,
+        -0.8937471266337229,
+        -167.41134878993034
+      ],
+      "goal_id": "scene_000055_lap",
+      "instruction": "Do a lap around the room.",
+      "max_steps": 128,
+      "model_stop_emitted": false,
+      "path_length_m": 1.0825521363925463,
+      "rejected_decision_count": 114,
+      "return_distance_m": 1.0825521363925463,
+      "scene_id": "scene_000055",
+      "scene_prefix_sha256": "c43a598f9bd7ab36ebac21bb9026c9777e6000aee07e87c728765f7e1a584417",
+      "signed_swept_area_m2": 0.0,
+      "start_pose_xy_yaw": [
+        1.5303296520673344,
+        -0.06868861609578669,
+        -132.59608313441277
+      ],
+      "termination": "max_steps"
+    },
+    {
+      "absolute_swept_area_m2": 0.0,
+      "accepted_decision_count": 2,
+      "action_counts": {
+        "face": 1,
+        "stop": 1
+      },
+      "checkpoint_sha256": "161db4539dfaaaa3891153acf535955034b23fce3cd266b5606a159aaae589cf",
+      "controller_success": true,
+      "decision_count": 2,
+      "elapsed_seconds": 1.6878875419934047,
+      "error_code": null,
+      "final_pose_xy_yaw": [
+        -0.5,
+        -0.25,
+        -70.7196216583252
+      ],
+      "goal_id": "scene_000056_face_table",
+      "instruction": "Face the table, then stop.",
+      "max_steps": 32,
+      "model_stop_emitted": true,
+      "path_length_m": 0.0,
+      "rejected_decision_count": 0,
+      "return_distance_m": 0.0,
+      "scene_id": "scene_000056",
+      "scene_prefix_sha256": "6aadf22888ae612f9d0136294ae6c12e8844e3cc18c310b428db78383190529e",
+      "signed_swept_area_m2": 0.0,
+      "start_pose_xy_yaw": [
+        -0.5,
+        -0.25,
+        -90.0
+      ],
+      "termination": "model_stop"
+    },
+    {
+      "absolute_swept_area_m2": 0.0,
+      "accepted_decision_count": 5,
+      "action_counts": {
+        "face": 4,
+        "stop": 1
+      },
+      "checkpoint_sha256": "161db4539dfaaaa3891153acf535955034b23fce3cd266b5606a159aaae589cf",
+      "controller_success": true,
+      "decision_count": 5,
+      "elapsed_seconds": 2.6237249999976484,
+      "error_code": null,
+      "final_pose_xy_yaw": [
+        -0.5,
+        -0.25,
+        -73.99362277984619
+      ],
+      "goal_id": "scene_000056_approach_table",
+      "instruction": "Move close to the table, then stop.",
+      "max_steps": 32,
+      "model_stop_emitted": true,
+      "path_length_m": 0.0,
+      "rejected_decision_count": 0,
+      "return_distance_m": 0.0,
+      "scene_id": "scene_000056",
+      "scene_prefix_sha256": "6aadf22888ae612f9d0136294ae6c12e8844e3cc18c310b428db78383190529e",
+      "signed_swept_area_m2": 0.0,
+      "start_pose_xy_yaw": [
+        -0.5,
+        -0.25,
+        -70.7196216583252
+      ],
+      "termination": "model_stop"
+    },
+    {
+      "absolute_swept_area_m2": 0.0,
+      "accepted_decision_count": 2,
+      "action_counts": {
+        "face": 1,
+        "stop": 1
+      },
+      "checkpoint_sha256": "161db4539dfaaaa3891153acf535955034b23fce3cd266b5606a159aaae589cf",
+      "controller_success": true,
+      "decision_count": 2,
+      "elapsed_seconds": 0.9807403330050875,
+      "error_code": null,
+      "final_pose_xy_yaw": [
+        -0.5,
+        -0.25,
+        -65.48062038421631
+      ],
+      "goal_id": "scene_000056_face_floor_lamp",
+      "instruction": "Face the floor lamp, then stop.",
+      "max_steps": 32,
+      "model_stop_emitted": true,
+      "path_length_m": 0.0,
+      "rejected_decision_count": 0,
+      "return_distance_m": 0.0,
+      "scene_id": "scene_000056",
+      "scene_prefix_sha256": "6aadf22888ae612f9d0136294ae6c12e8844e3cc18c310b428db78383190529e",
+      "signed_swept_area_m2": 0.0,
+      "start_pose_xy_yaw": [
+        -0.5,
+        -0.25,
+        -73.99362277984619
+      ],
+      "termination": "model_stop"
+    },
+    {
+      "absolute_swept_area_m2": 0.0,
+      "accepted_decision_count": 14,
+      "action_counts": {
+        "face": 6,
+        "move_to": 7,
+        "stop": 1
+      },
+      "checkpoint_sha256": "161db4539dfaaaa3891153acf535955034b23fce3cd266b5606a159aaae589cf",
+      "controller_success": true,
+      "decision_count": 14,
+      "elapsed_seconds": 7.258349958006875,
+      "error_code": null,
+      "final_pose_xy_yaw": [
+        2.4814059095442103,
+        -0.08853607601612183,
+        -93.62929236888885
+      ],
+      "goal_id": "scene_000056_approach_floor_lamp",
+      "instruction": "Move close to the floor lamp, then stop.",
+      "max_steps": 32,
+      "model_stop_emitted": true,
+      "path_length_m": 2.9857749071578406,
+      "rejected_decision_count": 0,
+      "return_distance_m": 2.9857749071578406,
+      "scene_id": "scene_000056",
+      "scene_prefix_sha256": "6aadf22888ae612f9d0136294ae6c12e8844e3cc18c310b428db78383190529e",
+      "signed_swept_area_m2": 0.0,
+      "start_pose_xy_yaw": [
+        -0.5,
+        -0.25,
+        -65.48062038421631
+      ],
+      "termination": "model_stop"
+    },
+    {
+      "absolute_swept_area_m2": 0.0,
+      "accepted_decision_count": 2,
+      "action_counts": {
+        "face": 1,
+        "stop": 1
+      },
+      "checkpoint_sha256": "161db4539dfaaaa3891153acf535955034b23fce3cd266b5606a159aaae589cf",
+      "controller_success": true,
+      "decision_count": 2,
+      "elapsed_seconds": 0.9996932920039399,
+      "error_code": null,
+      "final_pose_xy_yaw": [
+        2.4814059095442103,
+        -0.08853607601612183,
+        -133.3365753889084
+      ],
+      "goal_id": "scene_000056_lap",
+      "instruction": "Do a lap around the room.",
+      "max_steps": 128,
+      "model_stop_emitted": true,
+      "path_length_m": 0.0,
+      "rejected_decision_count": 0,
+      "return_distance_m": 0.0,
+      "scene_id": "scene_000056",
+      "scene_prefix_sha256": "6aadf22888ae612f9d0136294ae6c12e8844e3cc18c310b428db78383190529e",
+      "signed_swept_area_m2": 0.0,
+      "start_pose_xy_yaw": [
+        2.4814059095442103,
+        -0.08853607601612183,
+        -93.62929236888885
+      ],
+      "termination": "model_stop"
+    }
+  ],
+  "scene_identities": {
+    "scene_000051": {
+      "checkpoint": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/checkpoints/gemma_waypoint_policy_v15_general",
+      "checkpoint_sha256": "161db4539dfaaaa3891153acf535955034b23fce3cd266b5606a159aaae589cf",
+      "scene_id": "scene_000051",
+      "scene_prefix_sha256": "7da0805d3523912ef694785b3b2cf202e201196552b02bcfcc640d77891342be"
+    },
+    "scene_000052": {
+      "checkpoint": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/checkpoints/gemma_waypoint_policy_v15_general",
+      "checkpoint_sha256": "161db4539dfaaaa3891153acf535955034b23fce3cd266b5606a159aaae589cf",
+      "scene_id": "scene_000052",
+      "scene_prefix_sha256": "26631ce8d09502f67f7c1a7b76a385a10c6c437b082f00b4667f1574ecd76493"
+    },
+    "scene_000053": {
+      "checkpoint": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/checkpoints/gemma_waypoint_policy_v15_general",
+      "checkpoint_sha256": "161db4539dfaaaa3891153acf535955034b23fce3cd266b5606a159aaae589cf",
+      "scene_id": "scene_000053",
+      "scene_prefix_sha256": "a9ad99a2fb0e3084d2e37f71fc7ee2d50fb6779c1f823ad3d0864f8d8c6c53e5"
+    },
+    "scene_000054": {
+      "checkpoint": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/checkpoints/gemma_waypoint_policy_v15_general",
+      "checkpoint_sha256": "161db4539dfaaaa3891153acf535955034b23fce3cd266b5606a159aaae589cf",
+      "scene_id": "scene_000054",
+      "scene_prefix_sha256": "213523a26deba3ec64fa9858a84e2699843594efef0f201b782d098140d1e438"
+    },
+    "scene_000055": {
+      "checkpoint": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/checkpoints/gemma_waypoint_policy_v15_general",
+      "checkpoint_sha256": "161db4539dfaaaa3891153acf535955034b23fce3cd266b5606a159aaae589cf",
+      "scene_id": "scene_000055",
+      "scene_prefix_sha256": "c43a598f9bd7ab36ebac21bb9026c9777e6000aee07e87c728765f7e1a584417"
+    },
+    "scene_000056": {
+      "checkpoint": "/Users/stevens/Desktop/GTC/GTCAgenticOps/semantic_3d_chat/data_gemma4/checkpoints/gemma_waypoint_policy_v15_general",
+      "checkpoint_sha256": "161db4539dfaaaa3891153acf535955034b23fce3cd266b5606a159aaae589cf",
+      "scene_id": "scene_000056",
+      "scene_prefix_sha256": "6aadf22888ae612f9d0136294ae6c12e8844e3cc18c310b428db78383190529e"
+    }
+  },
+  "schema": "semantic_3d_chat.v15_heldout_closed_loop_rollout.v1"
+}

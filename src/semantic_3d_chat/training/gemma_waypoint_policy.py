@@ -73,6 +73,21 @@ SYSTEM_PROMPT: Final[str] = (
     "not text generation, emits MOVE_TO, FACE, or STOP and its numeric target."
 )
 _SCENE_ID_PREFIX: Final[str] = "scene_"
+# Historical control battery. Existing evidence was produced with exactly these
+# four conditions, so they remain the default and their order is stable.
+DEFAULT_CONTROL_CONDITIONS: Final[tuple[str, ...]] = (
+    "primary",
+    "wrong_scene_prefix",
+    "zero_scene_prefix",
+    "zero_history",
+)
+# ``shuffled_scene_prefix`` is opt-in: it is a strictly stronger scene-grounding
+# probe than zeroing, and adding it by default would silently change the shape
+# of every previously recorded control report.
+CONTROL_CONDITIONS: Final[tuple[str, ...]] = (
+    *DEFAULT_CONTROL_CONDITIONS,
+    "shuffled_scene_prefix",
+)
 _CHECKPOINT_FILES: Final[frozenset[str]] = frozenset(
     {"policy.safetensors", "runtime_metadata.json"}
 )
@@ -2212,14 +2227,30 @@ def _concatenate_outputs(values: Sequence[WaypointPolicyTensors]) -> WaypointPol
     )
 
 
+_SHUFFLED_SCENE_PREFIX_SEED: Final[int] = 20260816
+
+
 def _controlled_prefix(prefix: torch.Tensor, condition: str) -> torch.Tensor:
-    if condition != "zero_scene_prefix":
-        return prefix
-    # Native BOI/EOI identities are part of the Gemma protocol, not scene
-    # content. Preserve them while zeroing all 256 learned scene latents.
-    controlled = prefix.clone()
-    controlled[:, 1:-1] = 0
-    return controlled
+    if condition == "zero_scene_prefix":
+        # Native BOI/EOI identities are part of the Gemma protocol, not scene
+        # content. Preserve them while zeroing all 256 learned scene latents.
+        controlled = prefix.clone()
+        controlled[:, 1:-1] = 0
+        return controlled
+    if condition == "shuffled_scene_prefix":
+        # Keep the exact multiset of scene latents and destroy only their
+        # order.  Zeroing the prefix tests "does the model use the scene at
+        # all"; this tests the strictly harder question "does it use *where*
+        # things are, or merely which features are present in the room".
+        controlled = prefix.clone()
+        content = controlled[:, 1:-1]
+        generator = torch.Generator(device="cpu").manual_seed(
+            _SHUFFLED_SCENE_PREFIX_SEED
+        )
+        order = torch.randperm(content.shape[1], generator=generator)
+        controlled[:, 1:-1] = content[:, order.to(content.device)]
+        return controlled
+    return prefix
 
 
 @torch.inference_mode()
@@ -2230,8 +2261,7 @@ def evaluate_waypoint_condition(
     *,
     condition: str = "primary",
 ) -> tuple[dict[str, Any], WaypointPolicyTensors]:
-    valid = {"primary", "wrong_scene_prefix", "zero_scene_prefix", "zero_history"}
-    if condition not in valid:
+    if condition not in CONTROL_CONDITIONS:
         raise ValueError(f"Unknown waypoint evaluation condition: {condition}")
     scenes = sorted({sample.scene_id for sample in samples})
     wrong_scene: dict[str, str] = {}
@@ -2265,7 +2295,9 @@ def evaluate_waypoint_condition(
         "actual_gemma_causal_forward_per_sample": True,
         "complete_scene_prefix_consumed": True,
         "scene_content_latents_zeroed": condition == "zero_scene_prefix",
-        "native_scene_boundaries_preserved": condition == "zero_scene_prefix",
+        "scene_content_latents_shuffled": condition == "shuffled_scene_prefix",
+        "native_scene_boundaries_preserved": condition
+        in {"zero_scene_prefix", "shuffled_scene_prefix"},
     }, outputs
 
 
@@ -2300,6 +2332,7 @@ def evaluate_waypoint_controls(
     samples: Sequence[WaypointTraceSample],
     *,
     sample_limit: int | None = None,
+    conditions: Sequence[str] = DEFAULT_CONTROL_CONDITIONS,
 ) -> dict[str, Any]:
     if sample_limit is not None:
         if isinstance(sample_limit, bool) or not isinstance(sample_limit, int) or sample_limit < 2:
@@ -2315,20 +2348,23 @@ def evaluate_waypoint_controls(
                     if buckets[key] and len(selected) < sample_limit:
                         selected.append(buckets[key].pop(0))
             samples = tuple(selected)
-    conditions: dict[str, Any] = {}
+    requested = tuple(conditions)
+    if requested[:1] != ("primary",) or len(set(requested)) != len(requested):
+        raise ValueError("Waypoint controls must start with a unique primary condition")
+    unknown = sorted(set(requested) - set(CONTROL_CONDITIONS))
+    if unknown:
+        raise ValueError(f"Unknown waypoint control conditions: {unknown}")
+    results: dict[str, Any] = {}
     outputs: dict[str, WaypointPolicyTensors] = {}
-    for condition in (
-        "primary",
-        "wrong_scene_prefix",
-        "zero_scene_prefix",
-        "zero_history",
-    ):
-        conditions[condition], outputs[condition] = evaluate_waypoint_condition(
+    for condition in requested:
+        results[condition], outputs[condition] = evaluate_waypoint_condition(
             runner, cache, samples, condition=condition
         )
+    conditions = results
     primary = conditions["primary"]
     return {
         "schema": "semantic_3d_chat.gemma_waypoint_controls.v1",
+        "evaluated_conditions": list(requested),
         "conditions": conditions,
         "accuracy_drop_from_primary": {
             name: primary["action_accuracy"] - value["action_accuracy"]
@@ -2343,6 +2379,9 @@ def evaluate_waypoint_controls(
         "wrong_scene_is_deranged_within_evaluation_split": True,
         "zero_scene_preserves_only_native_boi_eoi": True,
         "zero_history_is_numeric_all_zeros": True,
+        "shuffled_scene_permutes_content_latents_only": (
+            "shuffled_scene_prefix" in requested
+        ),
         "oracle_inputs_used_by_inference": False,
         "environmental_text_inputs_at_inference": [],
         "configured_sample_limit": sample_limit,
