@@ -508,3 +508,26 @@ def test_3d_question_answering_evidence_is_recorded_without_a_scene_graph() -> N
         for phrase in ("cannot", "no specific", "unable", "impossible", "without")
     )
     assert by_condition["scene"] != by_condition["zeroed"]
+
+
+def test_3d_localization_is_recorded_as_at_chance() -> None:
+    """Describing the field works; locating within it does not. Pin both.
+
+    If this ever rises above the controls, the README and GOAL.md conclusions
+    are out of date and navigation should be reconsidered for the 3D pathway.
+    """
+
+    path = (
+        Path(__file__).resolve().parents[1]
+        / "reports/gemma4/metrics/spatial_lens_studio_locate3d.json"
+    )
+    if not path.is_file():
+        pytest.skip("3D localization evidence has not been produced here")
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    assert payload["scene_graph_used_in_prompt"] is False
+    scene = payload["summary"]["scene"]["accuracy"]
+    # At or near the random baseline, and not meaningfully above the controls.
+    assert scene <= 0.35
+    for control in ("shuffled", "zeroed"):
+        if control in payload["summary"]:
+            assert scene - payload["summary"][control]["accuracy"] < 0.30

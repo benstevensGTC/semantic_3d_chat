@@ -53,8 +53,29 @@ obstacle-detour case with a larger local model plus visit memory.
 does not produce grounded behaviour: the geometry is present in the tokens
 (R² = 0.99 for position, 86% room identity) but the readout discards it.
 
+**Measured limit of the 3D pathway.** Reading a *position* out of the same
+tokens does not work. Asked which grid cell each object occupies, Gemma scores
+14% within 1 m — identical to the scrambled and zeroed controls, and at the
+10.5% random baseline
+([evidence](reports/gemma4/metrics/spatial_lens_studio_locate3d.json)). So the
+field supports "what is in this room" but not "where exactly", and navigation
+was deliberately *not* moved onto it, because that would have been a regression.
+
+This converges with the V15 result from the other direction. There, a probe
+showed position is present in the scene tokens (R² = 0.99) while the control
+head could not use it. Here, a frozen decoder can pool the same tokens into an
+accurate description but cannot index them spatially. Both say the same thing:
+**the geometry is in the representation; what is missing is a readout trained to
+address it.**
+
 ## Next
 
-Move rover navigation onto the same 3D-token pathway that already works for
-question answering, so the whole system reasons over the semantic 3D map rather
-than over notes derived from it.
+Two candidates, in order of expected value:
+
+1. Train a small readout that addresses scene tokens by position -- a
+   cross-attention head over the token grid, supervised on "which cell holds
+   this object". The per-room tokens cache, so this is minutes of training, not
+   hours, and it is the one thing both experiments point at.
+2. Failing that, keep navigation on the metric scene graph, which is itself
+   derived from the 3D map, and be explicit that the LLM reads notes for
+   metric work and the field for semantic work.

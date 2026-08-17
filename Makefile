@@ -302,7 +302,7 @@ BLENDER_ROVER_BACKEND_TIMEOUT ?= 900
 .PHONY: strict-atlas-check strict-atlas-build strict-atlas-chat strict-atlas-evaluate strict-atlas-v2-auth ple-reader-prereg-auth
 .PHONY: strict-web-check strict-web mcp-stdio-smoke
 .PHONY: rover-demo-check rover-demo rover-demo-mcp rover-gemma-mcp-check rover-gemma-mcp blender-rover-demo-check blender-rover-demo rover-3d-check rover-3d rover-live-verify
-.PHONY: lens-check lens-build lens-scan lens-perceive lens-understand lens-ask lens-ask-3d lens-drive lens-all
+.PHONY: lens-check lens-build lens-scan lens-perceive lens-understand lens-ask lens-ask-3d lens-locate-3d lens-drive lens-all
 .PHONY: v15-check v15-traces v15-cache v15-train v15-sealed-score v15-heldout-plan v15-heldout-rollout v15-heldout-score v15-probe v15-summary
 .PHONY: v81-reader-check v81-scene-memory-compile v81-scene-memory-check v81-scene-memory-demo v81-scene-memory-chat v81-scene-memory-leakage v81-historical-predict v81-historical-score conversation-mcp-smoke
 .PHONY: v82-reader-preflight v82-reader-prepare-train v82-reader-fit v82-reader-prepare-development v82-reader-evaluate v82-chat v82-historical-predict v82-historical-score
@@ -2464,6 +2464,7 @@ lens-check:
 	$(PYTHON) -m ruff check \
 		src/semantic_3d_chat/spatial_lens/ \
 		scripts/lens_ask_3d.py \
+		scripts/lens_locate_3d.py \
 		scripts/lens_build_room.py \
 		scripts/lens_scan_room.py \
 		scripts/lens_perceive.py \
@@ -2489,6 +2490,10 @@ lens-understand:
 lens-ask-3d:
 	PYTHONPATH=src $(GEMMA4_PYTHON) scripts/lens_ask_3d.py --room $(LENS_ROOM) --controls \
 		--output $(LENS_METRICS)/spatial_lens_$(LENS_ROOM)_qa3d.json
+
+lens-locate-3d:
+	PYTHONPATH=src $(GEMMA4_PYTHON) scripts/lens_locate_3d.py --room $(LENS_ROOM) --controls \
+		--output $(LENS_METRICS)/spatial_lens_$(LENS_ROOM)_locate3d.json
 
 lens-ask:
 	PYTHONPATH=src $(GEMMA4_PYTHON) scripts/lens_ask.py --room $(LENS_ROOM) --show-map

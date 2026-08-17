@@ -932,7 +932,20 @@ against a scrambled-layout copy and a zeroed copy of the same tokens
 
 Zeroing destroys the answer, so the tokens are necessary. Scrambling costs the
 colours, shapes and positions while leaving generic furniture words, which is
-what a preserved feature multiset with a destroyed layout should do. Some
+what a preserved feature multiset with a destroyed layout should do. **But it cannot say *where*.** Asked which grid cell each object occupies, the
+same pathway scores 14% within a metre — identical to the scrambled and zeroed
+controls, and identical to the 10.5% random baseline
+([evidence](reports/gemma4/metrics/spatial_lens_studio_locate3d.json)). So
+navigation was deliberately **not** moved onto the 3D pathway: it would have
+been a regression, and it still reads the metric scene graph.
+
+That converges with V15 from the opposite direction. There a probe showed
+position is present in the scene tokens (R² = 0.99) while the control head could
+not use it. Here a frozen decoder pools the same tokens into an accurate
+description but cannot index them spatially. Both say the geometry is in the
+representation and the missing piece is a readout trained to address it.
+
+Some
 questions do not discriminate — "is there furniture on the left?" is answerable
 from prior alone and the scrambled condition also gets it right — so it is
 reported and not counted.

@@ -23,9 +23,10 @@ from semantic_3d_chat.spatial_lens.scene_tokens_3d import SceneTokens3D
 
 SYSTEM = (
     "You are looking at a three-dimensional scan of a room, supplied as visual "
-    "tokens laid out as a bird's-eye grid: the first tokens are the far side of "
-    "the room and the last are the near side, left to right. Answer the question "
-    "about what is in the room and where. Be concise."
+    "tokens laid out as a bird's-eye grid of the floor, read row by row: the "
+    "first tokens are one edge of the room and the last are the opposite edge, "
+    "each row running left to right. Answer the question about what is in the "
+    "room and where. Be concise."
 )
 
 
@@ -61,6 +62,7 @@ def ask_3d(
     question: str,
     *,
     max_new_tokens: int = 96,
+    system: str | None = None,
 ) -> str:
     """Answer one question with the 3D scene as the only evidence."""
 
@@ -72,7 +74,9 @@ def ask_3d(
     backend = language.prefix_backend
     device = language.device
     prefix = _prefix_embeddings(backend, tokens, device)
-    prompt_ids = prompt_token_ids(language.tokenizer, SYSTEM, question, device)
+    prompt_ids = prompt_token_ids(
+        language.tokenizer, system or SYSTEM, question, device
+    )
     reference = backend.native_boundary_embeddings()[0]
     prepared = backend.prepare(
         prefix.to(dtype=reference.dtype),
@@ -93,4 +97,74 @@ def ask_3d(
     ).strip()
 
 
-__all__ = ["SYSTEM", "Answer3D", "ask_3d"]
+__all__ = ["LOCATE_SYSTEM", "SYSTEM", "Answer3D", "ask_3d", "locate_3d"]
+
+
+# The grid is emitted with row 0 at y = -depth/2 and column 0 at x = -width/2,
+# so the convention stated here must match cell_center_m exactly. An earlier
+# version described row 0 as the far side, which is the opposite of the code.
+LOCATE_SYSTEM = (
+    "You are looking at a three-dimensional scan of a room, supplied as visual "
+    "tokens arranged as a bird's-eye grid of {grid} rows by {grid} columns "
+    "covering the whole floor.\n"
+    "Row 0 is the y = {y_min:+.1f} m edge and row {last} is the y = {y_max:+.1f} m "
+    "edge. Column 0 is the x = {x_min:+.1f} m edge and column {last} is the "
+    "x = {x_max:+.1f} m edge.\n"
+    "The user names one object. Report which grid cell it occupies.\n"
+    'Reply with ONE json object and nothing else: {{"row": <0-{last}>, '
+    '"col": <0-{last}>, "found": true|false}}. Set found=false if that object '
+    "is not in the scan."
+)
+
+
+def locate_3d(
+    language: Any,
+    tokens: SceneTokens3D,
+    name: str,
+    *,
+    max_new_tokens: int = 48,
+) -> tuple[float, float] | None:
+    """Ask where an object is, using only the 3D field, and return metres.
+
+    This is what keeps navigation grounded in the scene rather than in a list of
+    coordinates: the target's position is read out of the same tokens the model
+    would use to describe the room.
+    """
+
+    import json as _json
+    import re as _re
+
+    grid = tokens.grid
+    width, depth, _ = tokens.room_size_m
+    system = LOCATE_SYSTEM.format(
+        grid=grid,
+        last=grid - 1,
+        x_min=-width / 2.0,
+        x_max=width / 2.0,
+        y_min=-depth / 2.0,
+        y_max=depth / 2.0,
+    )
+    reply = ask_3d(
+        language,
+        tokens,
+        f"Where is the {name}?",
+        max_new_tokens=max_new_tokens,
+        system=system,
+    )
+    match = _re.search(r"\{.*\}", reply, _re.DOTALL)
+    if match is None:
+        return None
+    try:
+        payload = _json.loads(match.group(0))
+    except ValueError:
+        return None
+    if payload.get("found") is False:
+        return None
+    try:
+        row = int(payload["row"])
+        column = int(payload["col"])
+    except (KeyError, TypeError, ValueError):
+        return None
+    if not (0 <= row < grid and 0 <= column < grid):
+        return None
+    return tokens.cell_center_m(row * grid + column)
