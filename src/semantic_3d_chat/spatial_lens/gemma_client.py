@@ -107,4 +107,70 @@ class GemmaChat:
         return self._generate(conversation, max_new_tokens)
 
 
-__all__ = ["MODEL_ID", "MODEL_REVISION", "GemmaChat"]
+@dataclass
+class OllamaChat:
+    """A larger local model, reached through a loopback Ollama server.
+
+    Perception stays Gemma's: its vision encoder builds the point cloud and its
+    VQA names the objects.  This backend only replaces the *reasoning* layer,
+    for the step-by-step geometry that a 2B decoder gets wrong.  Inference is
+    still entirely on this machine -- Ollama is a local process, not a service.
+    """
+
+    model: str = "qwen3.8:27b"
+    host: str = "http://127.0.0.1:11434"
+    timeout_seconds: float = 300.0
+
+    @classmethod
+    def load(cls, *, model: str = "qwen3.8:27b", host: str = "http://127.0.0.1:11434") -> OllamaChat:
+        import json as _json
+        import urllib.request
+
+        if not host.startswith(("http://127.0.0.1", "http://localhost")):
+            raise ValueError("Ollama host must be loopback; this stack stays local")
+        try:
+            with urllib.request.urlopen(f"{host}/api/tags", timeout=10) as response:
+                available = {
+                    entry["name"] for entry in _json.load(response).get("models", [])
+                }
+        except OSError as error:  # pragma: no cover - depends on a running server
+            raise RuntimeError(
+                f"No Ollama server at {host}. Start it with `ollama serve`."
+            ) from error
+        if model not in available:
+            raise RuntimeError(
+                f"Ollama has no model {model!r}; available: {sorted(available)}"
+            )
+        return cls(model=model, host=host)
+
+    def ask_text(
+        self, prompt: str, *, system: str | None = None, max_new_tokens: int = 256
+    ) -> str:
+        import json as _json
+        import urllib.request
+
+        payload = {
+            "model": self.model,
+            "prompt": prompt,
+            "stream": False,
+            # Reasoning traces would blow the latency budget for a control loop.
+            "think": False,
+            "options": {"temperature": 0.0, "num_predict": int(max_new_tokens)},
+        }
+        if system:
+            payload["system"] = system
+        request = urllib.request.Request(
+            f"{self.host}/api/generate",
+            data=_json.dumps(payload).encode("utf-8"),
+            headers={"Content-Type": "application/json"},
+        )
+        with urllib.request.urlopen(request, timeout=self.timeout_seconds) as response:
+            return str(_json.load(response).get("response", "")).strip()
+
+    def ask_image(self, image: object, question: str, *, max_new_tokens: int = 24) -> str:
+        raise NotImplementedError(
+            "Object naming deliberately stays on Gemma's own vision encoder"
+        )
+
+
+__all__ = ["MODEL_ID", "MODEL_REVISION", "GemmaChat", "OllamaChat"]

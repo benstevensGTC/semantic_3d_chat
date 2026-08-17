@@ -35,8 +35,12 @@ NAV_SYSTEM = (
     "pose, and a goal. You decide where the robot goes.\n"
     "\n"
     "Reply with ONE json object and nothing else:\n"
-    '{"reasoning": "<one short sentence>", "action": "<ACTION>", '
-    '"x": <metres>, "y": <metres>, "yaw_degrees": <degrees>}\n'
+    '{"reasoning": "<one short sentence>", "target": "<object name>", '
+    '"action": "<ACTION>", "x": <metres>, "y": <metres>, '
+    '"yaw_degrees": <degrees>}\n'
+    "\n"
+    'Always set "target" to the object you are currently heading for; it is '
+    "carried forward so distances to it are measured for you.\n"
     "\n"
     "Actions:\n"
     '  MOVE_TOWARD  with "x","y": head for that point. The robot automatically '
@@ -52,11 +56,43 @@ NAV_SYSTEM = (
     "blocked, pick a different intermediate point that goes around the "
     "obstruction. Emit STOP only when the goal is actually achieved.\n"
     "\n"
-    "The prompt lists every direction that is clear from the robot's current "
-    "spot, with the exact position each one would reach. When the straight line "
-    "to your target is blocked, do NOT keep retrying it. Instead read that list, "
-    "work out which listed position ends up closest to your target, and reply "
-    "with MOVE_TO and that exact position. Repeat until you arrive."
+    "Once a target is set, every clear direction is listed with the distance "
+    "it would leave you from that target. Do not compute distances yourself and "
+    "do not retry a move that was just rejected: read the list, take the clear "
+    "direction with the SMALLEST resulting distance, and reply with MOVE_TO and "
+    "that exact position. Repeat until the target is under about 0.7 m, then "
+    "STOP.\n"
+    "\n"
+    "Directions marked [ALREADY VISITED] lead somewhere the robot has been "
+    "before. NEVER choose one: going back is how a robot gets stuck oscillating "
+    "between two spots. If every distance-reducing direction is already "
+    "visited, the direct route is blocked, so deliberately take the nearest "
+    "UNVISITED clear direction even though it increases the distance for now -- "
+    "that is how you get around an obstacle."
+)
+
+ASSISTED_NAV_SYSTEM = (
+    "You are the navigation system of a small indoor robot. You are given a "
+    "metric map of the room that the robot built by looking at it, the robot's "
+    "pose, and a goal. You decide WHICH object the robot goes to and WHEN it "
+    "has arrived. The robot's motor layer handles steering round furniture, so "
+    "you never need to plan a route or do arithmetic.\n"
+    "\n"
+    "Reply with ONE json object and nothing else:\n"
+    '{"reasoning": "<one short sentence>", "target": "<object name>", '
+    '"action": "<ACTION>", "x": <metres>, "y": <metres>, '
+    '"yaw_degrees": <degrees>}\n'
+    "\n"
+    "Actions:\n"
+    '  MOVE_TOWARD  with "x","y" set to your target\'s stand-at point: the '
+    "robot advances one step along a clear route, going around obstacles by "
+    "itself. This is almost always the right action.\n"
+    '  FACE         with "yaw_degrees": turn on the spot to look at something.\n'
+    "  STOP         no arguments: the goal is achieved.\n"
+    "\n"
+    'Always set "target" to the object you are heading for. The prompt tells you '
+    "how far away it currently is. Keep issuing MOVE_TOWARD until that distance "
+    "is about 0.7 m or less, then STOP."
 )
 
 _JSON = re.compile(r"\{.*\}", re.DOTALL)
@@ -95,6 +131,7 @@ class NavDecision:
     yaw_degrees: float | None
     reasoning: str
     raw: str
+    target: str | None = None
 
     def as_dict(self) -> dict[str, Any]:
         return {
@@ -102,6 +139,7 @@ class NavDecision:
             "x_m": self.x_m,
             "y_m": self.y_m,
             "yaw_degrees": self.yaw_degrees,
+            "target": self.target,
             "reasoning": self.reasoning,
         }
 
@@ -147,6 +185,11 @@ def parse_decision(text: str) -> NavDecision:
         yaw_degrees=number("yaw_degrees"),
         reasoning=str(payload.get("reasoning", "")).strip()[:300],
         raw=text,
+        target=(
+            str(payload["target"]).strip()[:60]
+            if isinstance(payload.get("target"), str) and payload["target"].strip()
+            else None
+        ),
     )
 
 
@@ -159,6 +202,9 @@ def navigation_prompt(
     max_step_m: float,
     approach_points: dict[str, tuple[float, float]] | None = None,
     open_directions: list[tuple[float, tuple[float, float], bool]] | None = None,
+    target: tuple[float, float] | None = None,
+    target_name: str | None = None,
+    visited: list[tuple[float, float]] | None = None,
 ) -> str:
     """Describe the room *relative to where the robot is standing right now*.
 
@@ -187,13 +233,13 @@ def navigation_prompt(
         graph.objects,
         key=lambda o: math.dist((pose.x_m, pose.y_m), o.center_m[:2]),
     ):
-        target = (item.center_m[0], item.center_m[1])
-        distance = math.dist((pose.x_m, pose.y_m), target)
-        bearing = heading_to((pose.x_m, pose.y_m), target)
+        centre = (item.center_m[0], item.center_m[1])
+        distance = math.dist((pose.x_m, pose.y_m), centre)
+        bearing = heading_to((pose.x_m, pose.y_m), centre)
         turn = normalize_degrees(bearing - pose.yaw_degrees)
         entry = (
             f"  {item.name}: {distance:.2f} m away, bearing yaw {bearing:+.0f} "
-            f"(turn {turn:+.0f}), centre ({target[0]:+.2f}, {target[1]:+.2f}), "
+            f"(turn {turn:+.0f}), centre ({centre[0]:+.2f}, {centre[1]:+.2f}), "
             f"occupies X [{item.bbox_min_m[0]:+.2f}, {item.bbox_max_m[0]:+.2f}] "
             f"Y [{item.bbox_min_m[1]:+.2f}, {item.bbox_max_m[1]:+.2f}]"
         )
@@ -202,20 +248,43 @@ def navigation_prompt(
             entry += f", stand at ({stand[0]:+.2f}, {stand[1]:+.2f})"
         lines.append(entry)
     if open_directions:
+        header = "WHERE THE ROBOT CAN GO FROM HERE (one move, straight line)"
+        if target is not None:
+            header += f", and how far that leaves it from {target_name or 'the target'}"
+        lines.extend(["", header])
+        for label, point, clear in open_directions:
+            if not clear:
+                lines.append(f"  yaw {label:+4.0f}: blocked")
+                continue
+            entry = (
+                f"  yaw {label:+4.0f}: clear, reaches "
+                f"({point[0]:+.2f}, {point[1]:+.2f})"
+            )
+            if target is not None:
+                # Computing eight distances per step is exactly the arithmetic a
+                # 2B model gets wrong. Measuring them here turns the decision
+                # into "read the list and pick", while which target to chase --
+                # and whether to detour or stop -- stays the model's call.
+                entry += f" -> {math.dist(point, target):.2f} m away"
+            if visited and any(math.dist(point, seen) < 0.12 for seen in visited):
+                # Pure distance-greedy search ping-pongs between two cells when
+                # the direct route is blocked. Naming the already-visited cells
+                # gives the model what it needs to break out; choosing to accept
+                # a temporarily worse step is still its decision.
+                entry += "  [ALREADY VISITED]"
+            lines.append(entry)
+    if target is not None:
+        current = math.dist((pose.x_m, pose.y_m), target)
         lines.extend(
             [
                 "",
-                "WHERE THE ROBOT CAN GO FROM HERE (one move, straight line)",
+                (
+                    f"CURRENT TARGET: {target_name or 'point'} at "
+                    f"({target[0]:+.2f}, {target[1]:+.2f}), now "
+                    f"{current:.2f} m away"
+                ),
             ]
         )
-        for label, point, clear in open_directions:
-            if clear:
-                lines.append(
-                    f"  yaw {label:+4.0f}: clear, would reach "
-                    f"({point[0]:+.2f}, {point[1]:+.2f})"
-                )
-            else:
-                lines.append(f"  yaw {label:+4.0f}: blocked")
     lines.extend(["", f"GOAL\n  {goal.strip()}"])
     if history:
         lines.extend(["", "WHAT HAS HAPPENED SO FAR"])
@@ -227,6 +296,7 @@ def navigation_prompt(
 
 
 __all__ = [
+    "ASSISTED_NAV_SYSTEM",
     "NAV_SYSTEM",
     "QA_SYSTEM",
     "NavDecision",

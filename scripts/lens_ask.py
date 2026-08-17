@@ -11,7 +11,7 @@ import argparse
 import json
 
 from semantic_3d_chat.config import PROJECT_ROOT
-from semantic_3d_chat.spatial_lens.gemma_client import GemmaChat
+from semantic_3d_chat.spatial_lens.gemma_client import GemmaChat, OllamaChat
 from semantic_3d_chat.spatial_lens.reasoning import answer_question
 from semantic_3d_chat.spatial_lens.scene_graph import SceneGraph
 
@@ -22,6 +22,17 @@ def main() -> int:
     parser.add_argument("--question", action="append", default=None)
     parser.add_argument("--max-new-tokens", type=int, default=220)
     parser.add_argument("--show-map", action="store_true")
+    parser.add_argument(
+        "--reasoner",
+        choices=("gemma", "ollama"),
+        default="gemma",
+        help=(
+            "which local model does the reasoning. Perception always stays on "
+            "Gemma; 'ollama' swaps only the reasoning layer for a larger local "
+            "model, which is what makes unaided step-by-step navigation work."
+        ),
+    )
+    parser.add_argument("--ollama-model", default="qwen3.8:27b")
     parser.add_argument("--output")
     args = parser.parse_args()
 
@@ -31,7 +42,11 @@ def main() -> int:
         print(graph.describe())
         print()
 
-    chat = GemmaChat.load()
+    chat = (
+        OllamaChat.load(model=args.ollama_model)
+        if args.reasoner == "ollama"
+        else GemmaChat.load()
+    )
     transcript = []
 
     def run(question: str) -> None:

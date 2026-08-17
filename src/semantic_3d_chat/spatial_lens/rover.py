@@ -158,7 +158,13 @@ def choose_start_pose(graph: SceneGraph) -> RoverPose:
     return RoverPose(x_m=start[0], y_m=start[1], yaw_degrees=0.0)
 
 
-__all__ = ["Rover", "StepReceipt", "choose_start_pose", "probe_directions"]
+__all__ = [
+    "Rover",
+    "StepReceipt",
+    "choose_start_pose",
+    "follow_toward",
+    "probe_directions",
+]
 
 
 def probe_directions(
@@ -183,3 +189,97 @@ def probe_directions(
         clear = rover.graph.is_free(*target) and rover._segment_clear(target)
         results.append((yaw, target, clear))
     return results
+
+
+def _grid_path(
+    graph: SceneGraph,
+    start: tuple[float, float],
+    goal: tuple[float, float],
+) -> list[tuple[float, float]] | None:
+    """Shortest free-space path between two points, as cell centres.
+
+    Breadth-first over the perceived free grid. This is the robot's local
+    planner: it answers "how do I physically get to the place I was told to go",
+    never "where should I go" or "am I done".
+    """
+
+    from collections import deque
+
+    rows, columns = graph.free_grid.shape
+    start_cell = graph._cell(*start)
+    goal_cell = graph._cell(*goal)
+
+    def valid(cell: tuple[int, int]) -> bool:
+        column, row = cell
+        return (
+            0 <= row < rows and 0 <= column < columns and bool(graph.free_grid[row, column])
+        )
+
+    if not valid(goal_cell):
+        nearest = graph.nearest_free(*goal)
+        if nearest is None:
+            return None
+        goal_cell = graph._cell(*nearest)
+    if not valid(start_cell) or not valid(goal_cell):
+        return None
+
+    came: dict[tuple[int, int], tuple[int, int] | None] = {start_cell: None}
+    queue = deque([start_cell])
+    while queue:
+        cell = queue.popleft()
+        if cell == goal_cell:
+            break
+        column, row = cell
+        for dc, dr in (
+            (1, 0), (-1, 0), (0, 1), (0, -1),
+            (1, 1), (1, -1), (-1, 1), (-1, -1),
+        ):
+            nxt = (column + dc, row + dr)
+            if nxt in came or not valid(nxt):
+                continue
+            came[nxt] = cell
+            queue.append(nxt)
+    if goal_cell not in came:
+        return None
+    path: list[tuple[float, float]] = []
+    cursor: tuple[int, int] | None = goal_cell
+    while cursor is not None:
+        path.append(graph.cell_center(*cursor))
+        cursor = came[cursor]
+    path.reverse()
+    return path
+
+
+def follow_toward(
+    rover: Rover, x: float, y: float
+) -> tuple[bool, str | None, float]:
+    """Advance one bounded step along a collision-free route to a point.
+
+    This is the assisted motor layer. The destination is still whatever the
+    model asked for; only the metric business of getting round furniture is
+    handled here, exactly as a real robot's local planner would.
+    """
+
+    if not all(math.isfinite(value) for value in (x, y)):
+        return False, "E_NOT_FINITE", 0.0
+    path = _grid_path(rover.graph, (rover.pose.x_m, rover.pose.y_m), (x, y))
+    if path is None or len(path) < 2:
+        return False, "E_NO_ROUTE", 0.0
+    start = (rover.pose.x_m, rover.pose.y_m)
+    # Walk the route until the step budget is spent, keeping the last pose that
+    # is still reachable in a straight line from the previous one.
+    chosen = path[1]
+    for point in path[1:]:
+        if math.dist(start, point) > rover.max_step_m:
+            break
+        chosen = point
+    if not rover.graph.is_free(*chosen):
+        return False, "E_PATH_BLOCKED", 0.0
+    travelled = math.dist(start, chosen)
+    if travelled < 1e-6:
+        return False, "E_ALREADY_THERE", 0.0
+    rover.pose = RoverPose(
+        x_m=chosen[0], y_m=chosen[1], yaw_degrees=rover.pose.yaw_degrees
+    )
+    rover.path.append(chosen)
+    return True, None, travelled

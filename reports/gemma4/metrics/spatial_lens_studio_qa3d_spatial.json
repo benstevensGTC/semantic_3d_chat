@@ -1,0 +1,41 @@
+{
+  "exchanges": [
+    {
+      "answer": "Yes, there is a piece of furniture (a table) on the left side of the room.",
+      "condition": "scene",
+      "question": "Is there any furniture on the left side of the room?"
+    },
+    {
+      "answer": "Yes, there is a table on the left side of the room.",
+      "condition": "shuffled",
+      "question": "Is there any furniture on the left side of the room?"
+    },
+    {
+      "answer": "Based on the visual tokens provided, it is difficult to definitively state what is on the left side of the room without a clearer view or more context.",
+      "condition": "zeroed",
+      "question": "Is there any furniture on the left side of the room?"
+    },
+    {
+      "answer": "The largest visible object appears to be the light blue rectangular structure on the left.",
+      "condition": "scene",
+      "question": "What is the largest object in the room?"
+    },
+    {
+      "answer": "The largest visible objects are the tables/surfaces in the foreground and middle ground.",
+      "condition": "shuffled",
+      "question": "What is the largest object in the room?"
+    },
+    {
+      "answer": "Based on the provided image, it is impossible to determine the largest object in the room as the image is a bird's-eye grid scan without any discernible objects or context.",
+      "condition": "zeroed",
+      "question": "What is the largest object in the room?"
+    }
+  ],
+  "grid": 16,
+  "object_list_in_prompt": false,
+  "occupied_columns": 123,
+  "room": "studio",
+  "scene_graph_used": false,
+  "schema": "semantic_3d_chat.spatial_lens.qa_3d.v1",
+  "token_count": 256
+}

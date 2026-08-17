@@ -14,8 +14,9 @@ import json
 import math
 
 from semantic_3d_chat.config import PROJECT_ROOT
-from semantic_3d_chat.spatial_lens.gemma_client import GemmaChat
+from semantic_3d_chat.spatial_lens.gemma_client import GemmaChat, OllamaChat
 from semantic_3d_chat.spatial_lens.reasoning import (
+    ASSISTED_NAV_SYSTEM,
     NAV_SYSTEM,
     navigation_prompt,
     parse_decision,
@@ -24,6 +25,7 @@ from semantic_3d_chat.spatial_lens.rover import (
     Rover,
     StepReceipt,
     choose_start_pose,
+    follow_toward,
     probe_directions,
 )
 from semantic_3d_chat.spatial_lens.scene_graph import SceneGraph
@@ -37,6 +39,28 @@ def main() -> int:
     parser.add_argument("--max-step-m", type=float, default=0.5)
     parser.add_argument("--start-x", type=float, default=None)
     parser.add_argument("--start-y", type=float, default=None)
+    parser.add_argument(
+        "--step-selection",
+        choices=("assisted", "model"),
+        default="assisted",
+        help=(
+            "assisted: Gemma picks the target and decides when to stop, and a "
+            "local planner handles getting round furniture (this is what a real "
+            "robot does, and it works). model: Gemma also chooses every metric "
+            "step, which is the purer measurement and fails on detours."
+        ),
+    )
+    parser.add_argument(
+        "--reasoner",
+        choices=("gemma", "ollama"),
+        default="gemma",
+        help=(
+            "which local model does the reasoning. Perception always stays on "
+            "Gemma; 'ollama' swaps only the reasoning layer for a larger local "
+            "model, which is what makes unaided step-by-step navigation work."
+        ),
+    )
+    parser.add_argument("--ollama-model", default="qwen3.8:27b")
     parser.add_argument("--output")
     args = parser.parse_args()
 
@@ -51,8 +75,16 @@ def main() -> int:
         rover.pose = type(rover.pose)(placed[0], placed[1], 0.0)
         rover.path = [placed]
 
-    chat = GemmaChat.load()
+    chat = (
+        OllamaChat.load(model=args.ollama_model)
+        if args.reasoner == "ollama"
+        else GemmaChat.load()
+    )
+    nav_system = (
+        ASSISTED_NAV_SYSTEM if args.step_selection == "assisted" else NAV_SYSTEM
+    )
     print(f"goal: {args.goal}")
+    print(f"step selection: {args.step_selection}  reasoner: {args.reasoner}")
     print(f"start: ({rover.pose.x_m:+.2f}, {rover.pose.y_m:+.2f}) yaw {rover.pose.yaw_degrees:+.1f}\n")
 
     approach_points = {
@@ -63,6 +95,10 @@ def main() -> int:
     history: list[str] = []
     receipts: list[StepReceipt] = []
     termination = "max_steps"
+    # The model names its target once; the harness carries it forward so that
+    # per-direction progress can be measured for it on every later step.
+    target_name: str | None = None
+    target_point: tuple[float, float] | None = None
     for step in range(1, args.max_steps + 1):
         prompt = navigation_prompt(
             graph,
@@ -72,8 +108,11 @@ def main() -> int:
             max_step_m=args.max_step_m,
             approach_points=approach_points,
             open_directions=probe_directions(rover),
+            target=target_point,
+            target_name=target_name,
+            visited=rover.path,
         )
-        reply = chat.ask_text(prompt, system=NAV_SYSTEM, max_new_tokens=160)
+        reply = chat.ask_text(prompt, system=nav_system, max_new_tokens=160)
         before = rover.pose.as_dict()
         try:
             decision = parse_decision(reply)
@@ -82,9 +121,21 @@ def main() -> int:
             print(f"  {step}: unparsable reply", flush=True)
             continue
 
+        if decision.target:
+            resolved = graph.find(decision.target)
+            if resolved is not None:
+                target_name = resolved.name
+                target_point = approach_points.get(
+                    resolved.name, (resolved.center_m[0], resolved.center_m[1])
+                )
+
         if decision.action in {"MOVE_TO", "MOVE_TOWARD"}:
             if decision.x_m is None or decision.y_m is None:
                 accepted, code, distance = False, "E_MISSING_TARGET", 0.0
+            elif args.step_selection == "assisted":
+                accepted, code, distance = follow_toward(
+                    rover, decision.x_m, decision.y_m
+                )
             elif decision.action == "MOVE_TOWARD":
                 accepted, code, distance = rover.move_toward(decision.x_m, decision.y_m)
             else:
@@ -133,14 +184,18 @@ def main() -> int:
         "room": args.room,
         "goal": args.goal,
         "termination": termination,
-        "model_selected_every_action": True,
-        "deterministic_planner_used": False,
+        "step_selection": args.step_selection,
+        "reasoner": args.reasoner,
+        "model_selected_target_and_termination": True,
+        "model_selected_every_metric_step": args.step_selection == "model",
+        "deterministic_local_planner_used": args.step_selection == "assisted",
         "final_pose": final.as_dict(),
         "path_length_m": round(rover.path_length_m, 4),
         "path": [[round(x, 4), round(y, 4)] for x, y in rover.path],
         "accepted": sum(1 for r in receipts if r.accepted),
         "rejected": sum(1 for r in receipts if not r.accepted),
         "steps": [r.as_dict() for r in receipts],
+        "final_target": target_name,
         "objects": [
             {"name": item.name, "center_m": list(item.center_m[:2])}
             for item in graph.objects

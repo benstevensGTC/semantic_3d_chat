@@ -893,6 +893,50 @@ and calls the bed a "table" and the chair a "monitor". Repeated names are made
 addressable with the object's own perceived colour, so two tables become "tan
 table" and "teal table".
 
+### Reasoning over the 3D field itself, with nothing trained
+
+The scene-graph route below reasons over *notes* derived from the 3D map. This
+one does not, and it is the part that matters.
+
+The 1536-D payload fused into every voxel is the output of Gemma's **own vision
+projector** — it already lives in the space the decoder consumes image tokens
+from. So the room can be handed to the language model through the pathway it
+already understands. `scripts/lens_ask_3d.py` pools the semantic point cloud
+into a bird's-eye grid of 256 tokens (one per floor column, weighted by height
+and observation count), wraps them in Gemma's native begin/end-of-image
+embeddings, and appends the question as ordinary text.
+
+There is no scene graph, no object list, no caption and no photograph in that
+prompt. Nothing is trained. Asked to list what it can see:
+
+> *"a light blue/cyan rectangular object (possibly a bench or low platform), a
+> dark rectangular object (possibly a television or monitor), a wooden surface
+> (table or desk), a cylindrical object with a white top (a lamp), and a wooden
+> shelving unit"*
+
+That is the teal bed, the television, the tan table, the floor lamp (a cylinder
+with a pale shade) and the bookshelf — with colours and shapes, from the 3D
+field alone. Asked which object is largest, it answers *"the light blue
+rectangular structure on the left"*: the bed genuinely is the largest object and
+genuinely is on the left.
+
+The claim is only worth as much as its controls, so every question is repeated
+against a scrambled-layout copy and a zeroed copy of the same tokens
+([evidence](reports/gemma4/metrics/spatial_lens_studio_qa3d.json)):
+
+| condition | "list the objects" | "largest object" |
+| --- | --- | --- |
+| 3D scene | five objects, with colours and shapes | the bed, correctly placed left |
+| layout scrambled | "a table, a chair, a lamp, a television" | wrong object, invented position |
+| tokens zeroed | "I cannot discern any specific objects" | "impossible to determine" |
+
+Zeroing destroys the answer, so the tokens are necessary. Scrambling costs the
+colours, shapes and positions while leaving generic furniture words, which is
+what a preserved feature multiset with a destroyed layout should do. Some
+questions do not discriminate — "is there furniture on the left?" is answerable
+from prior alone and the scrambled condition also gets it right — so it is
+reported and not counted.
+
 **Reasoning happens in metres.** The scene graph — perceived names, measured
 extents, and a free-space grid inflated by the rover radius — is rendered as a
 compact metric description. Gemma answers questions over it:
@@ -902,21 +946,44 @@ compact metric description. Gemma answers questions over it:
 > (+0.60, −2.18). The lamp is centered at (+2.38, −1.84). Since the X-coordinate
 > of the lamp (2.38) is greater than the X-coordinate of the television (0.60)…"
 
-**Driving works when the route is not blocked.** Gemma emits one JSON action per
-step; the executor only checks legality and moves exactly as told — it never
-reroutes, never clamps and never invents a stop. Asked to reach the bookshelf it
-faced +53°, drove seven steps to the free spot beside it, stopped on its own at
-0.57 m, and had **zero rejected moves**. Asked for the floor lamp it arrived
-(0.56 m) but wandered on the way and ran out of steps before stopping. Asked for
-the ball — whose straight line is blocked by the table — it repeatedly retried
-the blocked move and never got there.
+**Driving.** The model emits one JSON action per step; the executor only checks
+legality and moves exactly as told — it never reroutes, never clamps and never
+invents a stop. Two configurations, both recorded in the run report:
 
-That is the honest boundary: **Gemma-4-E2B can hold the room, answer geometric
-questions about it, and drive to things it can see a clear line to; it cannot
-plan a detour around a large obstacle.** The failure is sequential planning, not
-perception — the map is correct, and the same map drives the successful runs. A
-larger local decoder is the natural thing to try here, and unlike the V15 result
-this is a case where model size genuinely is the suspect.
+`--step-selection model` — the model chooses every metric step itself.
+`--step-selection assisted` — the model chooses the target and decides when it
+has arrived; a local planner over the perceived free grid handles getting round
+furniture, exactly as a real robot's motor layer does.
+
+The reasoning layer is swappable with `--reasoner {gemma,ollama}`. Perception
+always stays Gemma's: its vision encoder builds the point cloud and its VQA
+names the objects. Only the *reasoning* changes, and Ollama is a loopback
+process, so everything remains on-device.
+
+Three measurements, in the order they were taken, because the progression is the
+result:
+
+1. **Gemma-4-E2B, model-selected steps.** Reached the bookshelf perfectly (7
+   steps, own STOP, 0.57 m, zero rejections) but could not reach the ball, whose
+   straight line is blocked by the table. It could not reliably compare the
+   eight candidate distances it was given.
+2. **Gemma-4-E2B, assisted steps.** 5 of 7 objects reached, model stopping
+   itself on 86% of goals. Good enough to demonstrate, and it is the default.
+3. **qwen3.8:27b, model-selected steps.** The larger local model does the
+   arithmetic correctly and even narrates the problem — *"the robot is
+   oscillating between two points"* — but still ping-ponged, because a greedy
+   one-step lookahead is structurally trappable no matter how good the reasoner
+   is. Telling it which cells it had already visited fixed that: it then drove
+   *away* from the ball to clear the table (*"the direct path to the ball is
+   blocked, so I must take the nearest unvisited clear direction"*), came round
+   the south side, and stopped itself 0.64 m away in 9 steps with zero
+   rejections.
+
+So the obstacle failure was never mainly about model size. E2B lacked the
+arithmetic; a 27B model had the arithmetic and still failed, because the
+*decision surface* was a one-step greedy choice with no memory. Adding the
+robot's own visit history — information about itself, not a route — is what
+made unaided detour planning work.
 
 ### Browser compatibility surface
 

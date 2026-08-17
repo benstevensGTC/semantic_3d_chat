@@ -130,10 +130,21 @@ def _synthetic_cloud() -> SemanticCloud:
         [[(i + 0.5) * voxel, (j + 0.5) * voxel, (k + 0.5) * voxel] for i, j, k in sorted(cells)],
         dtype=np.float64,
     )
+    # Distinct features per region, so anything that claims to use the semantic
+    # payload is actually exercised rather than silently comparing zeros.
+    signature = np.stack(
+        [
+            np.sin(array[:, 0]),
+            np.cos(array[:, 1]),
+            np.sin(array[:, 2] * 2.0),
+            np.full(len(array), 0.5),
+        ],
+        axis=1,
+    ).astype(np.float16)
     return SemanticCloud(
         centers_m=array,
         rgb=np.full((len(array), 3), 0.5, dtype=np.float32),
-        features=np.zeros((len(array), 4), dtype=np.float16),
+        features=signature,
         counts=np.ones(len(array), dtype=np.int32),
         voxel_size_m=voxel,
         room_size_m=(6.0, 5.0, 2.8),
@@ -401,7 +412,8 @@ def test_readme_documents_the_capability_boundary() -> None:
     collapsed = " ".join(readme.split())
     assert "Spatial Lens: author a room" in collapsed
     assert "with no on-device training at all" in collapsed
-    assert "it cannot plan a detour around a large obstacle" in collapsed
+    assert "a greedy one-step lookahead is structurally trappable" in collapsed
+    assert "the obstacle failure was never mainly about model size" in collapsed.lower()
     assert "Your words never reach the model" in collapsed
     for overclaim in (
         "navigates reliably",
@@ -409,3 +421,90 @@ def test_readme_documents_the_capability_boundary() -> None:
         "always reaches",
     ):
         assert overclaim not in collapsed
+
+
+def test_visited_cells_are_flagged_so_the_model_can_escape_a_loop() -> None:
+    """The fix that made unaided detour planning work must stay in the prompt."""
+
+    graph = _graph()
+    pose = RoverPose(-2.0, 0.0, 0.0)
+    prompt = navigation_prompt(
+        graph,
+        pose,
+        "reach the table",
+        [],
+        max_step_m=0.5,
+        target=(0.0, 0.0),
+        target_name="tan table",
+        open_directions=probe_directions(Rover(graph=graph, pose=pose)),
+        # exactly where a yaw -90 step from the start pose lands
+        visited=[(-1.50, 0.0)],
+    )
+    assert "[ALREADY VISITED]" in prompt
+    assert "CURRENT TARGET: tan table" in prompt
+    # Without a visit history nothing should be marked.
+    clean = navigation_prompt(
+        graph,
+        pose,
+        "reach the table",
+        [],
+        max_step_m=0.5,
+        target=(0.0, 0.0),
+        target_name="tan table",
+        open_directions=probe_directions(Rover(graph=graph, pose=pose)),
+    )
+    assert "[ALREADY VISITED]" not in clean
+
+
+# ------------------------------------------------------- 3D scene tokens
+def test_scene_tokens_3d_are_a_spatial_grid_of_fused_semantics() -> None:
+    """The tokens Gemma reads must be pooled 3D, not a picture or a summary."""
+
+    from semantic_3d_chat.spatial_lens.scene_tokens_3d import (
+        build_scene_tokens_3d,
+        shuffled,
+        zeroed,
+    )
+
+    cloud = _synthetic_cloud()
+    tokens = build_scene_tokens_3d(cloud, grid=8)
+    assert tokens.token_count == 64
+    assert tokens.occupancy.shape == (8, 8)
+    # The two synthetic blocks stand somewhere, and most of the floor does not.
+    assert 0 < int(tokens.occupancy.sum()) < 64
+    # Occupied columns carry signal; the payload dimensionality is preserved.
+    assert tokens.tokens.shape[1] == cloud.features.shape[1]
+
+    # A column's centre must map back to the room, so the grid is spatial.
+    x, y = tokens.cell_center_m(0)
+    assert -cloud.room_size_m[0] / 2 <= x <= cloud.room_size_m[0] / 2
+    assert -cloud.room_size_m[1] / 2 <= y <= cloud.room_size_m[1] / 2
+
+    # Controls: shuffling preserves the multiset, zeroing destroys everything.
+    mixed = shuffled(tokens)
+    assert mixed.tokens.shape == tokens.tokens.shape
+    assert np.allclose(np.sort(mixed.tokens.sum(1)), np.sort(tokens.tokens.sum(1)))
+    assert not np.array_equal(mixed.tokens, tokens.tokens)
+    assert not zeroed(tokens).tokens.any()
+
+
+def test_3d_question_answering_evidence_is_recorded_without_a_scene_graph() -> None:
+    path = (
+        Path(__file__).resolve().parents[1]
+        / "reports/gemma4/metrics/spatial_lens_studio_qa3d.json"
+    )
+    if not path.is_file():
+        pytest.skip("3D question-answering evidence has not been produced here")
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    assert payload["scene_graph_used"] is False
+    assert payload["object_list_in_prompt"] is False
+    assert payload["token_count"] == 256
+    by_condition = {row["condition"]: row["answer"] for row in payload["exchanges"]}
+    # The tokens must be necessary: with them zeroed the model must not invent
+    # a room. If this ever starts describing furniture, the result is void.
+    zeroed_answer = by_condition["zeroed"].lower()
+    assert any(
+        phrase in zeroed_answer
+        for phrase in ("cannot", "no specific", "unable", "impossible", "without")
+    )
+    assert by_condition["scene"] != by_condition["zeroed"]

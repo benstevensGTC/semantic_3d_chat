@@ -100,10 +100,22 @@ def discover_objects(
     connect_radius_voxels: int = 1,
     min_voxels: int = 40,
     min_height_m: float = 0.08,
+    feature_similarity_threshold: float | None = None,
 ) -> list[ObjectProposal]:
-    """Group the non-shell point cloud into anonymous object proposals."""
+    """Group the non-shell point cloud into anonymous object proposals.
+
+    With ``feature_similarity_threshold`` set, two touching voxels are only
+    joined when Gemma's semantic features also agree.  Pure geometry cannot
+    separate objects that are in contact -- a bowl on a table is one connected
+    blob -- so this is where the semantic payload of the point cloud does work
+    that neither geometry nor a single photograph can do.
+    """
 
     centers = np.asarray(cloud.centers_m, dtype=np.float64)
+    unit_features: np.ndarray | None = None
+    if feature_similarity_threshold is not None:
+        raw = np.asarray(cloud.features, dtype=np.float32)
+        unit_features = raw / (np.linalg.norm(raw, axis=1, keepdims=True) + 1e-8)
     keep = ~_shell_mask(
         centers,
         cloud.room_size_m,
@@ -128,8 +140,16 @@ def discover_objects(
     for key, position in lookup.items():
         for dx, dy, dz in offsets:
             neighbour = lookup.get((key[0] + dx, key[1] + dy, key[2] + dz))
-            if neighbour is not None:
-                union.union(position, neighbour)
+            if neighbour is None:
+                continue
+            if unit_features is not None:
+                similarity = float(
+                    unit_features[indices[position]]
+                    @ unit_features[indices[neighbour]]
+                )
+                if similarity < feature_similarity_threshold:
+                    continue
+            union.union(position, neighbour)
 
     groups: dict[int, list[int]] = {}
     for position in range(len(indices)):

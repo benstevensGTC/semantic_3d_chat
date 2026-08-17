@@ -1,0 +1,26 @@
+{
+  "exchanges": [
+    {
+      "answer": "I can see a light blue/cyan rectangular object (possibly a bench or low platform), a dark rectangular object (possibly a television or monitor), a wooden surface (table or desk), a cylindrical object with a white top (a lamp), and a wooden shelving unit.",
+      "condition": "scene",
+      "question": "List the objects you can see in this room."
+    },
+    {
+      "answer": "The room contains a table, a chair, a lamp, and a television.",
+      "condition": "shuffled",
+      "question": "List the objects you can see in this room."
+    },
+    {
+      "answer": "Based on the provided image, I cannot discern any specific objects in the room. The image appears to be a general scan or a grid representation without discernible furniture or objects.",
+      "condition": "zeroed",
+      "question": "List the objects you can see in this room."
+    }
+  ],
+  "grid": 16,
+  "object_list_in_prompt": false,
+  "occupied_columns": 123,
+  "room": "studio",
+  "scene_graph_used": false,
+  "schema": "semantic_3d_chat.spatial_lens.qa_3d.v1",
+  "token_count": 256
+}

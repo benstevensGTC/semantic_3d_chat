@@ -1,0 +1,228 @@
+{
+  "accepted": 6,
+  "deterministic_local_planner_used": false,
+  "final_pose": {
+    "x_m": -2.2,
+    "y_m": 0.03,
+    "yaw_degrees": 0.0
+  },
+  "final_target": "teal table",
+  "goal": "Drive to the teal table and stop next to it.",
+  "model_selected_every_metric_step": true,
+  "model_selected_target_and_termination": true,
+  "objects": [
+    {
+      "center_m": [
+        -1.8096,
+        -1.1747
+      ],
+      "name": "teal table"
+    },
+    {
+      "center_m": [
+        -2.3358,
+        1.7534
+      ],
+      "name": "bookshelf"
+    },
+    {
+      "center_m": [
+        0.803,
+        1.0168
+      ],
+      "name": "tan table"
+    },
+    {
+      "center_m": [
+        0.8936,
+        -0.0568
+      ],
+      "name": "monitor"
+    },
+    {
+      "center_m": [
+        0.6022,
+        -2.1767
+      ],
+      "name": "television"
+    },
+    {
+      "center_m": [
+        2.375,
+        -1.8364
+      ],
+      "name": "lamp"
+    },
+    {
+      "center_m": [
+        2.2713,
+        1.1548
+      ],
+      "name": "ball"
+    }
+  ],
+  "path": [
+    [
+      0.0,
+      0.0
+    ],
+    [
+      -0.35,
+      -0.35
+    ],
+    [
+      -0.8493,
+      -0.3231
+    ],
+    [
+      -1.2,
+      0.03
+    ],
+    [
+      -1.7,
+      0.03
+    ],
+    [
+      -2.2,
+      0.03
+    ]
+  ],
+  "path_length_m": 2.4927,
+  "reasoner": "ollama",
+  "rejected": 0,
+  "room": "studio",
+  "schema": "semantic_3d_chat.spatial_lens.drive.v1",
+  "step_selection": "model",
+  "steps": [
+    {
+      "accepted": true,
+      "action": "MOVE_TO",
+      "distance_m": 0.495,
+      "error_code": null,
+      "pose_after": {
+        "x_m": -0.35,
+        "y_m": -0.35,
+        "yaw_degrees": 0.0
+      },
+      "pose_before": {
+        "x_m": 0.0,
+        "y_m": 0.0,
+        "yaw_degrees": 0.0
+      },
+      "reasoning": "Goal is the teal table at stand-at (-2.58, -0.23); the clear direction yaw +135 reaches (-0.35, -0.35) which is the closest clear step toward it.",
+      "requested": {
+        "x": -0.35,
+        "y": -0.35
+      },
+      "step": 1
+    },
+    {
+      "accepted": true,
+      "action": "MOVE_TOWARD",
+      "distance_m": 0.5,
+      "error_code": null,
+      "pose_after": {
+        "x_m": -0.8493,
+        "y_m": -0.3231,
+        "yaw_degrees": 0.0
+      },
+      "pose_before": {
+        "x_m": -0.35,
+        "y_m": -0.35,
+        "yaw_degrees": 0.0
+      },
+      "reasoning": "Head toward the teal table's stand-at point; the direct path is clear.",
+      "requested": {
+        "x": -2.58,
+        "y": -0.23
+      },
+      "step": 2
+    },
+    {
+      "accepted": true,
+      "action": "MOVE_TO",
+      "distance_m": 0.4977,
+      "error_code": null,
+      "pose_after": {
+        "x_m": -1.2,
+        "y_m": 0.03,
+        "yaw_degrees": 0.0
+      },
+      "pose_before": {
+        "x_m": -0.8493,
+        "y_m": -0.3231,
+        "yaw_degrees": 0.0
+      },
+      "reasoning": "The direct path to the teal table is blocked, so I must take the nearest unvisited clear direction (yaw +45) to go around the obstruction.",
+      "requested": {
+        "x": -1.2,
+        "y": 0.03
+      },
+      "step": 3
+    },
+    {
+      "accepted": true,
+      "action": "MOVE_TO",
+      "distance_m": 0.5,
+      "error_code": null,
+      "pose_after": {
+        "x_m": -1.7,
+        "y_m": 0.03,
+        "yaw_degrees": 0.0
+      },
+      "pose_before": {
+        "x_m": -1.2,
+        "y_m": 0.03,
+        "yaw_degrees": 0.0
+      },
+      "reasoning": "The target is the teal table; the clear direction yaw +90 reduces the distance to 0.91 m, so move there.",
+      "requested": {
+        "x": -1.7,
+        "y": 0.03
+      },
+      "step": 4
+    },
+    {
+      "accepted": true,
+      "action": "MOVE_TO",
+      "distance_m": 0.5,
+      "error_code": null,
+      "pose_after": {
+        "x_m": -2.2,
+        "y_m": 0.03,
+        "yaw_degrees": 0.0
+      },
+      "pose_before": {
+        "x_m": -1.7,
+        "y_m": 0.03,
+        "yaw_degrees": 0.0
+      },
+      "reasoning": "The target is the teal table; the clear direction yaw +90 reduces the distance to 0.45 m, which is the smallest unvisited option.",
+      "requested": {
+        "x": -2.2,
+        "y": 0.03
+      },
+      "step": 5
+    },
+    {
+      "accepted": true,
+      "action": "STOP",
+      "distance_m": 0.0,
+      "error_code": null,
+      "pose_after": {
+        "x_m": -2.2,
+        "y_m": 0.03,
+        "yaw_degrees": 0.0
+      },
+      "pose_before": {
+        "x_m": -2.2,
+        "y_m": 0.03,
+        "yaw_degrees": 0.0
+      },
+      "reasoning": "The target teal table is 0.45 m away, which is within the 0.7 m stopping threshold, so the goal is achieved.",
+      "requested": {},
+      "step": 6
+    }
+  ],
+  "termination": "model_stop"
+}
