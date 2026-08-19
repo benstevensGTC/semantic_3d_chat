@@ -142,3 +142,43 @@ def test_relational_examples_carry_their_candidate_set() -> None:
         assert example.candidates.sum() >= (example.target > 0).sum()
         return
     pytest.skip("no scanned rooms produced a relational example")
+
+
+def test_colour_control_is_finite_and_discriminative() -> None:
+    """A doubling frequency ladder reaches 2**255 and turns the control to NaN."""
+
+    import importlib.util
+    import sys
+
+    from semantic_3d_chat.spatial_lens.point_grounding import PointExample
+
+    spec = importlib.util.spec_from_file_location(
+        "_lens_train_points",
+        __import__("semantic_3d_chat.config", fromlist=["PROJECT_ROOT"]).PROJECT_ROOT
+        / "scripts" / "lens_train_points.py",
+    )
+    module = importlib.util.module_from_spec(spec)
+    sys.modules["_lens_train_points"] = module
+    spec.loader.exec_module(module)
+
+    colours = np.array(
+        [[0.82, 0.71, 0.55], [0.55, 0.42, 0.28], [0.0, 0.55, 0.55]], dtype=np.float32
+    )
+    example = PointExample(
+        room="r", phrase="p",
+        points=np.zeros((3, 3), dtype=np.float32),
+        features=np.zeros((3, 1536), dtype=np.float32),
+        target=np.array([1.0, 0.0, 0.0], dtype=np.float32),
+        room_size_m=(4.0, 4.0, 2.4),
+        rgb=colours,
+    )
+    encoded = module.point_features(example, "rgb")
+    assert np.isfinite(encoded).all()
+    # Tan and brown differ mostly in brightness, which is the first thing a
+    # LayerNorm over a mostly-zero vector would have thrown away.
+    normalised = (encoded - encoded.mean(1, keepdims=True)) / encoded.std(1, keepdims=True)
+    similarity = float(
+        normalised[0] @ normalised[1]
+        / np.linalg.norm(normalised[0]) / np.linalg.norm(normalised[1])
+    )
+    assert similarity < 0.9

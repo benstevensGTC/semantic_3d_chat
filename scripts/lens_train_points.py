@@ -78,7 +78,11 @@ def point_features(example, mode: str) -> np.ndarray:
         colour = np.asarray(example.rgb, dtype=np.float32)
         width = example.features.shape[1]
         bands = max(width // 6, 1)
-        frequencies = (2.0 ** np.arange(bands, dtype=np.float32)) * np.pi
+        # Geometric from pi to 512*pi. Doubling per band instead would reach
+        # 2**255 by the last one, which overflows float32 to infinity and turns
+        # the whole control into NaN.
+        exponent = np.arange(bands, dtype=np.float32) / bands
+        frequencies = np.pi * (512.0 ** exponent)
         angles = colour[:, :, None] * frequencies[None, None, :]
         expanded = np.concatenate(
             [np.sin(angles).reshape(len(colour), -1),
