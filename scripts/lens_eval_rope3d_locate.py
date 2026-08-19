@@ -52,7 +52,11 @@ def scrambled_positions(tokens, seed: int = 20260818):
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--holdout", type=int, default=8)
+    # Nothing on this path is trained, so there is nothing to hold out from --
+    # and at 53 queries the intervals were wide enough to swallow every effect
+    # being argued about. All 27 rooms roughly triples the sample.
+    parser.add_argument("--rooms", type=int, default=0,
+                        help="cap on rooms measured; 0 uses every scanned room")
     parser.add_argument("--grid", type=int, default=16)
     parser.add_argument("--span-units", type=float, default=256.0)
     parser.add_argument("--tolerance-m", type=float, default=1.0)
@@ -62,8 +66,8 @@ def main() -> int:
 
     shuffled = list(available_rooms())
     random.Random(20260818).shuffle(shuffled)
-    rooms = sorted(shuffled[: args.holdout])
-    print(f"held-out rooms: {rooms}")
+    rooms = sorted(shuffled[: args.rooms] if args.rooms else shuffled)
+    print(f"measuring {len(rooms)} rooms")
 
     from semantic_3d_chat.language.local_lm import load_local_language_model
 
@@ -74,13 +78,18 @@ def main() -> int:
         local_files_only=True,
     )
 
-    results = {name: {"errors": [], "hits": [], "refused": 0} for name in CONDITIONS}
+    results = {
+        name: {"errors": [], "hits": [], "answered": [], "refused": 0}
+        for name in CONDITIONS
+    }
     chance = []
+    occupancy = []
     trials = []
     for room in rooms:
         root = PROJECT_ROOT / "data" / "spatial_lens" / room
         cloud = SemanticCloud.load(root / "point_cloud.npz")
         tokens = build_scene_tokens_3d(cloud, grid=args.grid)
+        occupancy.append(tokens.occupied_fraction)
         named = {
             item["object_id"]: item["name"]
             for item in json.loads((root / "scene_graph.json").read_text())["objects"]
@@ -113,40 +122,83 @@ def main() -> int:
             ).min(axis=1)
             chance.append(float((near <= args.tolerance_m).mean()))
 
+            outcome: dict[str, str] = {}
             for condition, (field, use_rope, axes) in variants.items():
-                answer = locate_3d(language, field, name, rope3d=use_rope, axes=axes)
+                answer = locate_3d(
+                    language, field, name,
+                    rope3d=use_rope, axes=axes, span_units=args.span_units,
+                )
+                # A refusal is scored wrong so the arms share a denominator, and
+                # recorded separately so a condition that merely declines more
+                # often is not mistaken for one that reasons worse.
                 if answer is None:
                     results[condition]["refused"] += 1
                     results[condition]["errors"].append(float("inf"))
                     results[condition]["hits"].append(0.0)
+                    results[condition]["answered"].append(0.0)
+                    outcome[condition] = "-"
+                    trials.append(
+                        {"room": room, "object": name, "condition": condition,
+                         "answer_m": None, "gap_m": None, "refused": True}
+                    )
                     continue
                 gap = float(
                     np.linalg.norm(np.asarray(answer)[None, :] - footprint, axis=1).min()
                 )
                 results[condition]["errors"].append(gap)
                 results[condition]["hits"].append(float(gap <= args.tolerance_m))
+                results[condition]["answered"].append(1.0)
+                outcome[condition] = f"{float(gap <= args.tolerance_m):.0f}"
                 trials.append(
                     {"room": room, "object": name, "condition": condition,
-                     "answer_m": [round(v, 3) for v in answer], "gap_m": round(gap, 3)}
+                     "answer_m": [round(v, 3) for v in answer],
+                     "gap_m": round(gap, 3), "refused": False}
                 )
             print(f"  {room:8s} {name:22s} " + "  ".join(
-                f"{c}={results[c]['hits'][-1]:.0f}" for c in CONDITIONS))
+                f"{c}={outcome[c]}" for c in CONDITIONS))
+
+    from semantic_3d_chat.evaluation.proportions import mcnemar_exact, wilson_interval
+
+    def condition_summary(data: dict) -> dict[str, object]:
+        total = len(data["hits"])
+        hits = int(sum(data["hits"]))
+        answered_count = int(sum(data["answered"]))
+        finite = [e for e in data["errors"] if np.isfinite(e)]
+        return {
+            "queries": total,
+            "within_tolerance": round(hits / total, 3) if total else None,
+            "interval_95": wilson_interval(hits, total),
+            "refused": data["refused"],
+            # Conditioned on the model answering at all, so it is NOT comparable
+            # across conditions with different refusal rates -- it is here to
+            # show whether a low score is bad aim or bad compliance.
+            "within_tolerance_when_answered": (
+                round(
+                    sum(
+                        h for h, a in zip(data["hits"], data["answered"], strict=True) if a
+                    ) / answered_count, 3
+                ) if answered_count else None
+            ),
+            "median_gap_m_answered": (
+                round(float(np.median(finite)), 3) if finite else None
+            ),
+        }
 
     summary = {
-        "held_out_rooms": rooms,
+        "rooms": rooms,
         "tolerance_m": args.tolerance_m,
         "span_units": args.span_units,
         "queries_per_condition": len(results["raster"]["hits"]),
         "random_baseline": round(float(np.mean(chance)), 4),
+        # Empty columns are zero vectors, so this much of a "real" scene differs
+        # from the zeroed control at all. Read that control accordingly.
+        "occupied_fraction": round(float(np.mean(occupancy)), 3),
         "conditions": {
-            name: {
-                "within_tolerance": round(float(np.mean(data["hits"])), 4),
-                "median_gap_m": round(
-                    float(np.median([e for e in data["errors"] if np.isfinite(e)]) )
-                    if any(np.isfinite(e) for e in data["errors"]) else float("nan"), 3),
-                "refused": data["refused"],
-            }
-            for name, data in results.items()
+            name: condition_summary(data) for name, data in results.items()
+        },
+        "mcnemar_vs_raster": {
+            name: mcnemar_exact(results[name]["hits"], results["raster"]["hits"])
+            for name in CONDITIONS if name != "raster"
         },
         "trials": trials,
     }

@@ -57,9 +57,14 @@ def index_units(
 
     extent = positions.reshape(-1, 3)
     low = extent.min(dim=0).values
-    size = (extent.max(dim=0).values - low).clamp(min=1e-3)
-    scaled = (positions - low) * (span_units / size.max())
-    return scaled - span_units / 2.0 if centred else scaled
+    high = extent.max(dim=0).values
+    size = (high - low).clamp(min=1e-3)
+    # Centre on each axis's own midpoint. Subtracting one global half-span
+    # instead centres only the longest axis and leaves the others sitting
+    # entirely to one side of zero -- for a room-shaped scan that put the whole
+    # height band about ninety index units from where it belonged.
+    origin = (low + high) / 2.0 if centred else low
+    return (positions - origin) * (span_units / size.max())
 
 
 class Rope3DRotary(nn.Module):

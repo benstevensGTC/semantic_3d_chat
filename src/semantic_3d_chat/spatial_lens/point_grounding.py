@@ -43,6 +43,13 @@ class PointExample:
     # Colour per sampled point, so "is this Gemma's semantics or just the paint
     # on my synthetic furniture?" can be asked and answered.
     rgb: np.ndarray | None = None  # [N, 3] in [0, 1]
+    # Which points belong to any object the phrase could have picked out, and
+    # how many such objects there were. "The object nearest the shelf" is always
+    # answered by one of the room's objects, so a guesser that knows only that
+    # much already beats a uniformly random point by more than an order of
+    # magnitude -- and that, not the uniform point, is the null worth quoting.
+    candidates: np.ndarray | None = None  # [N] bool
+    candidate_count: int | None = None
     # Every voxel of the object at full resolution, not just the sampled ones.
     # Scoring against the sample would charge the model for gaps the downsample
     # opened up, and would not be comparable to the grid head's footprint gap.

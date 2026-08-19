@@ -27,8 +27,13 @@ def main() -> int:
         return {
             "rooms": run["train_room_count"],
             "hits_object": held["hits_object"],
-            "chance": held["chance_hits_object"],
-            "lift": held["lift_over_chance"],
+            # The informed null: a guesser that knows the answer is one of the
+            # room's objects but nothing about where anything is. Against the
+            # uniform-point null everything looks like a triumph, because
+            # "objects are not floor" is most of the score.
+            "chance": held.get("chance_random_object"),
+            "chance_uniform_point": held.get("chance_uniform_point"),
+            "lift": held.get("lift_over_random_object"),
             "median_gap_m": held["median_gap_m"],
             "gap_under_0p5m": held["gap_under_0p5m"],
             "parameters": run["parameters"],
@@ -67,7 +72,8 @@ def main() -> int:
     destination.write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
 
     print(f"held-out rooms: {', '.join(summary['held_out_rooms'])}\n")
-    print("position ablation, 19 training rooms")
+    print("position ablation, object phrases, 19 training rooms")
+    print("  chance = a guesser that knows the answer is one of the room's objects")
     print(f"  {'scheme':<24} {'on object':>10} {'chance':>8} {'lift':>7} {'median gap':>11}")
     for name, data in summary["position_ablation"].items():
         print(f"  {name:<24} {data['hits_object']:>9.1%} {data['chance']:>7.1%} "

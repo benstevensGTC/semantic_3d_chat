@@ -75,7 +75,7 @@ def room_examples(
         named = {item["object_id"]: item["name"] for item in payload["objects"]}
 
     membership = np.full(len(cloud), -1, dtype=np.int64)
-    examples: list[PointExample] = []
+    eligible: list[tuple[int, str, np.ndarray, np.ndarray, np.ndarray]] = []
     for index, proposal in enumerate(discover_objects(cloud)):
         membership[proposal.voxel_indices] = index
         phrase_root = named.get(proposal.proposal_id)
@@ -84,10 +84,26 @@ def room_examples(
         inside = membership[chosen] == index
         if int(inside.sum()) < min_points:
             continue
+        eligible.append((
+            index,
+            phrase_root,
+            proposal.mean_rgb,
+            inside,
+            np.asarray(cloud.centers_m, dtype=np.float32)[proposal.voxel_indices],
+        ))
+
+    # Which points lie on any object at all. A guesser that knows only "the
+    # answer is an object, not floor or wall" already does far better than a
+    # uniformly random point, and that is the null worth reporting.
+    union = np.zeros(chosen.shape[0], dtype=bool)
+    for _, _, _, inside, _ in eligible:
+        union |= inside
+
+    examples: list[PointExample] = []
+    for _, phrase_root, mean_rgb, inside, footprint in eligible:
         target = inside.astype(np.float32)
         target /= target.sum()
-        footprint = np.asarray(cloud.centers_m, dtype=np.float32)[proposal.voxel_indices]
-        for phrase in _phrases(phrase_root, proposal.mean_rgb):
+        for phrase in _phrases(phrase_root, mean_rgb):
             examples.append(
                 PointExample(
                     room=room,
@@ -97,6 +113,8 @@ def room_examples(
                     target=target,
                     room_size_m=cloud.room_size_m,
                     rgb=colours,
+                    candidates=union,
+                    candidate_count=len(eligible),
                     footprint=footprint,
                 )
             )
@@ -109,7 +127,7 @@ def relational_examples(
     token_budget: int = 1024,
     cell_m: float = 0.14,
     min_points: int = 3,
-    min_margin_m: float = 0.8,
+    min_margin_m: float = 0.5,
     seed: int = 0,
 ) -> list[PointExample]:
     """Phrases that identify an object purely by where it is.
@@ -125,8 +143,13 @@ def relational_examples(
     cannot be reached from semantics at all. The anchor is still named, because
     something has to be found by meaning before anything can be measured from it.
 
-    A pair is only used when the two candidates differ clearly in distance, so a
-    near-tie is never scored as though it had a right answer.
+    A label is only emitted when the runner-up is at least ``min_margin_m``
+    further away than the answer, and when no object in the cloud at all --
+    including the ones too small or too anonymous to be a target -- contradicts
+    the phrase. Checking the spread between nearest and furthest instead, as an
+    earlier version did, measures how big the room is and lets an exact tie be
+    scored as though it had a unique right answer; two thirds of the labels it
+    produced had a runner-up inside the margin it claimed to enforce.
     """
 
     root = PROJECT_ROOT / "data" / "spatial_lens" / room
@@ -143,8 +166,13 @@ def relational_examples(
         named = {item["object_id"]: item["name"] for item in payload["objects"]}
 
     centers = np.asarray(cloud.centers_m, dtype=np.float64)
+    # Every proposal, including the ones that cannot be a target. They are still
+    # physically in the cloud the model is scored on, so "the object nearest the
+    # shelf" is a false statement if one of them is nearer than the answer.
+    every: list[np.ndarray] = []
     found = []
     for index, proposal in enumerate(discover_objects(cloud)):
+        every.append(centers[proposal.voxel_indices].mean(axis=0))
         name = named.get(proposal.proposal_id)
         if not name or name == "unidentified object":
             continue
@@ -167,19 +195,42 @@ def relational_examples(
         if len(others) < 2:
             continue
         gaps = sorted(
-            (float(np.linalg.norm(mid[:2] - anchor_mid[:2])), name, picked, voxels)
-            for _, name, mid, picked, voxels in others
+            (float(np.linalg.norm(mid[:2] - anchor_mid[:2])), index, picked, voxels)
+            for index, _, mid, picked, voxels in others
         )
-        near_gap, _, near_mask, near_voxels = gaps[0]
-        far_gap, _, far_mask, far_voxels = gaps[-1]
-        if far_gap - near_gap < min_margin_m:
-            continue
-        wording = [
-            (f"the object nearest the {anchor_name}", near_mask, near_voxels),
-            (f"the object closest to the {anchor_name}", near_mask, near_voxels),
-            (f"the object furthest from the {anchor_name}", far_mask, far_voxels),
-            (f"the object farthest from the {anchor_name}", far_mask, far_voxels),
-        ]
+        # Distance from the anchor to every proposal in the room, eligible to be
+        # a target or not, so the phrase can be checked against the whole cloud.
+        world = sorted(
+            float(np.linalg.norm(mid[:2] - anchor_mid[:2]))
+            for index, mid in enumerate(every)
+            if index != anchor_index
+        )
+        union = np.zeros(chosen.shape[0], dtype=bool)
+        for _, _, picked, _ in gaps:
+            union |= picked
+
+        wording: list[tuple[str, np.ndarray, np.ndarray]] = []
+        # The margin that decides "nearest" is the one to the runner-up. The
+        # spread between nearest and furthest only says how big the room is,
+        # and would let an exact tie be scored as a unique right answer.
+        if (
+            gaps[1][0] - gaps[0][0] >= min_margin_m
+            and gaps[0][0] <= world[0] + 1e-6
+        ):
+            _, _, near_mask, near_voxels = gaps[0]
+            wording += [
+                (f"the object nearest the {anchor_name}", near_mask, near_voxels),
+                (f"the object closest to the {anchor_name}", near_mask, near_voxels),
+            ]
+        if (
+            gaps[-1][0] - gaps[-2][0] >= min_margin_m
+            and gaps[-1][0] >= world[-1] - 1e-6
+        ):
+            _, _, far_mask, far_voxels = gaps[-1]
+            wording += [
+                (f"the object furthest from the {anchor_name}", far_mask, far_voxels),
+                (f"the object farthest from the {anchor_name}", far_mask, far_voxels),
+            ]
         for phrase, mask, voxels in wording:
             target = mask.astype(np.float32)
             target /= target.sum()
@@ -192,6 +243,8 @@ def relational_examples(
                     target=target,
                     room_size_m=cloud.room_size_m,
                     rgb=colours,
+                    candidates=union,
+                    candidate_count=len(others),
                     footprint=voxels,
                 )
             )

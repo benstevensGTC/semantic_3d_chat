@@ -73,12 +73,19 @@ def parse(reply: str, options: tuple[str, str]) -> str | None:
             said = str(json.loads(match.group(0)).get("answer", "")).casefold()
         except ValueError:
             said = ""
-        for option in options:
-            if option.casefold() in said:
-                return option
-    # Fall back to whichever name is mentioned, but only if exactly one is.
+        # Longest match, not first: "shelf" is inside "bookshelf", so taking
+        # whichever option happens to be presented first hands the point to the
+        # shorter name every time the two are nested.
+        hits = [o for o in options if o.casefold() in said]
+        if hits:
+            return max(hits, key=len)
     lowered = reply.casefold()
     mentioned = [o for o in options if o.casefold() in lowered]
+    if len(mentioned) == 2:
+        longer, shorter = sorted(mentioned, key=len, reverse=True)
+        nested = shorter.casefold() in longer.casefold()
+        if nested and lowered.count(shorter.casefold()) == lowered.count(longer.casefold()):
+            return longer
     return mentioned[0] if len(mentioned) == 1 else None
 
 
@@ -130,7 +137,8 @@ def build_questions(cloud: SemanticCloud, named: dict[str, str], rng: random.Ran
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--holdout", type=int, default=8)
+    parser.add_argument("--rooms", type=int, default=0,
+                        help="cap on rooms measured; 0 uses every scanned room")
     parser.add_argument("--per-room", type=int, default=6,
                         help="questions sampled per room per kind")
     parser.add_argument("--seed", type=int, default=20260818)
@@ -141,8 +149,8 @@ def main() -> int:
     rng = random.Random(args.seed)
     shuffled = list(available_rooms())
     random.Random(20260818).shuffle(shuffled)
-    rooms = sorted(shuffled[: args.holdout])
-    print(f"held-out rooms: {rooms}")
+    rooms = sorted(shuffled[: args.rooms] if args.rooms else shuffled)
+    print(f"measuring {len(rooms)} rooms")
 
     from semantic_3d_chat.language.local_lm import load_local_language_model
 
@@ -153,13 +161,16 @@ def main() -> int:
         local_files_only=True,
     )
 
+    occupancy: list[float] = []
     tally: dict[tuple[str, str], list[float]] = {}
+    answered: dict[tuple[str, str], list[float]] = {}
     unparsed = dict.fromkeys(CONDITIONS, 0)
     trials = []
     for room in rooms:
         root = PROJECT_ROOT / "data" / "spatial_lens" / room
         cloud = SemanticCloud.load(root / "point_cloud.npz")
         tokens = build_scene_tokens_3d(cloud)
+        occupancy.append(tokens.occupied_fraction)
         named = {
             item["object_id"]: item["name"]
             for item in json.loads((root / "scene_graph.json").read_text())["objects"]
@@ -186,30 +197,71 @@ def main() -> int:
                     said = parse(reply, question["options"])
                     if said is None:
                         unparsed[condition] += 1
-                    # An unreadable answer is a wrong answer, not a skipped one.
+                    # An unreadable answer is a wrong answer, not a skipped one
+                    # -- but the two are tracked apart, because a condition that
+                    # simply refuses more often would otherwise look worse at
+                    # spatial reasoning than one that guesses.
                     correct = float(said == question["answer"])
                     tally.setdefault((kind, condition), []).append(correct)
+                    answered.setdefault((kind, condition), []).append(
+                        float(said is not None)
+                    )
                     marks[condition] = correct
                 trials.append({"room": room, **{
                     k: v for k, v in question.items() if k != "options"}, "marks": marks})
                 print(f"  {room:8s} {kind:7s} " + "  ".join(
                     f"{c}={marks[c]:.0f}" for c in CONDITIONS))
 
+    from semantic_3d_chat.evaluation.proportions import mcnemar_exact, wilson_interval
+
+    def cell(kind: str, condition: str) -> dict[str, object]:
+        marks_list = tally[(kind, condition)]
+        replies = answered[(kind, condition)]
+        total = len(marks_list)
+        hits = int(sum(marks_list))
+        answered_count = int(sum(replies))
+        answered_hits = sum(
+            m for m, a in zip(marks_list, replies, strict=True) if a
+        )
+        return {
+            "questions": total,
+            "correct": hits,
+            "accuracy": round(hits / total, 3) if total else None,
+            "interval_95": wilson_interval(hits, total),
+            "answered": answered_count,
+            # A coin-flipper that refuses as often as this arm did would score
+            # this, which is the floor the raw accuracy should be read against.
+            "chance_given_this_refusal_rate": round(
+                0.5 * answered_count / total, 3
+            ) if total else None,
+            "accuracy_when_answered": (
+                round(answered_hits / answered_count, 3) if answered_count else None
+            ),
+        }
+
+    results = {
+        kind: {c: cell(kind, c) for c in CONDITIONS if (kind, c) in tally}
+        for kind in ("higher", "nearer")
+    }
+    # Every condition answers the same questions, so the comparison against the
+    # raster layout is paired and does not need to treat the arms as independent.
+    against_raster = {
+        kind: {
+            c: mcnemar_exact(tally[(kind, c)], tally[(kind, "raster")])
+            for c in CONDITIONS
+            if c != "raster" and (kind, c) in tally and (kind, "raster") in tally
+        }
+        for kind in ("higher", "nearer")
+    }
     summary = {
-        "held_out_rooms": rooms,
-        "chance": 0.5,
+        "rooms": rooms,
+        "chance_when_answered": 0.5,
+        # Empty columns are zero vectors, so this much of a "real" scene differs
+        # from the zeroed control at all. Read that control accordingly.
+        "occupied_fraction": round(float(np.mean(occupancy)), 3),
         "unparsed_replies": unparsed,
-        "results": {
-            kind: {
-                condition: {
-                    "questions": len(tally[(kind, condition)]),
-                    "correct": round(float(np.mean(tally[(kind, condition)])), 4),
-                }
-                for condition in CONDITIONS
-                if (kind, condition) in tally
-            }
-            for kind in ("higher", "nearer")
-        },
+        "results": results,
+        "mcnemar_vs_raster": against_raster,
         "trials": trials,
     }
     destination = PROJECT_ROOT / args.report

@@ -166,6 +166,7 @@ def locate_3d(
     max_new_tokens: int = 48,
     rope3d: bool = False,
     axes: str = "xyz",
+    span_units: float = 256.0,
 ) -> tuple[float, float] | None:
     """Ask where an object is, using only the 3D field, and return metres.
 
@@ -195,6 +196,7 @@ def locate_3d(
         system=system,
         rope3d=rope3d,
         axes=axes,
+        span_units=span_units,
     )
     match = _re.search(r"\{.*\}", reply, _re.DOTALL)
     if match is None:

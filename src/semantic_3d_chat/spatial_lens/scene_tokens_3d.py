@@ -47,6 +47,12 @@ class SceneTokens3D:
     def token_count(self) -> int:
         return int(self.tokens.shape[0])
 
+    @property
+    def occupied_fraction(self) -> float:
+        """How much of the grid carries any observation at all."""
+
+        return float(self.occupancy.mean())
+
     def cell_center_m(self, index: int) -> tuple[float, float]:
         row, column = divmod(index, self.grid)
         width, depth, _ = self.room_size_m
@@ -105,11 +111,14 @@ def build_scene_tokens_3d(
     tokens = np.zeros_like(totals, dtype=np.float32)
     tokens[occupied] = (totals[occupied] / mass[occupied, None]).astype(np.float32)
 
-    # Empty floor is a real observation, not missing data: give it the mean of
-    # what the room's empty columns look like rather than a zero vector, which
-    # would read as an out-of-distribution token.
-    if occupied.any() and not occupied.all():
-        tokens[~occupied] = tokens[occupied].mean(axis=0) * 0.0
+    # Empty columns stay zero. An earlier comment here claimed they were given
+    # the mean of the occupied ones, but the expression multiplied that mean by
+    # zero, so they never were. Zero is the defensible choice -- a column with
+    # nothing standing in it has nothing to report -- but it has a consequence
+    # worth stating rather than hiding: a typical room fills well under half its
+    # columns, so most of a real scene is already identical to the zeroed
+    # control, and the gap between them is correspondingly smaller than the word
+    # "zeroed" suggests. Callers report occupied_fraction so that is visible.
 
     # An empty column still has a place: its cell centre on the floor.
     centroids = np.zeros((grid * grid, 3), dtype=np.float32)

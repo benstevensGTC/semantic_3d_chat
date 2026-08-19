@@ -68,12 +68,25 @@ def point_features(example, mode: str) -> np.ndarray:
     if mode == "gemma":
         return example.features
     if mode == "rgb":
-        # Colour alone, padded to the same width so capacity is unchanged. These
-        # rooms are built from coloured primitives, so this asks whether the
-        # reader is using Gemma's semantics or just the paint.
-        padded = np.zeros_like(example.features)
-        padded[:, :3] = example.rgb
-        return padded
+        # Colour alone, in a form that survives the LayerNorm the projection
+        # starts with. Writing RGB into three slots of 1536 and zeroing the rest
+        # does not: LayerNorm removes the mean, which for a mostly-zero vector is
+        # dominated by the padding, and brightness -- the part that separates a
+        # tan cabinet from a brown one -- is the first thing lost. A Fourier
+        # expansion spreads each channel across the full width instead, so the
+        # control genuinely carries the colour it claims to.
+        colour = np.asarray(example.rgb, dtype=np.float32)
+        width = example.features.shape[1]
+        bands = max(width // 6, 1)
+        frequencies = (2.0 ** np.arange(bands, dtype=np.float32)) * np.pi
+        angles = colour[:, :, None] * frequencies[None, None, :]
+        expanded = np.concatenate(
+            [np.sin(angles).reshape(len(colour), -1),
+             np.cos(angles).reshape(len(colour), -1)], axis=1
+        )
+        out = np.zeros_like(example.features)
+        out[:, : expanded.shape[1]] = expanded[:, :width]
+        return out
     raise ValueError(f"unknown feature mode: {mode}")
 
 
@@ -99,7 +112,7 @@ def evaluate(model, examples, vectors, device, batch=8, feature_mode="gemma"):
     if not examples:
         return {"examples": 0}
     model.eval()
-    hits, gaps, chance = [], [], []
+    hits, gaps, chance, object_chance = [], [], [], []
     for start in range(0, len(examples), batch):
         chunk = examples[start : start + batch]
         points, features, query, target = stack(
@@ -110,9 +123,18 @@ def evaluate(model, examples, vectors, device, batch=8, feature_mode="gemma"):
         best = logits.argmax(dim=-1)
         for index, example in enumerate(chunk):
             hits.append(float(target[index, best[index]] > 0))
-            # A random point's chance of landing on this object, which is the
-            # only fair baseline when objects occupy a few points in a thousand.
+            # Two nulls, because they answer different questions. The first is a
+            # uniformly random point; the second is a guesser that already knows
+            # the answer is an object rather than floor or wall, and picks among
+            # them at random. For the relational task especially, the second is
+            # the one a claim should be measured against -- against the first,
+            # simply learning "objects are not floor" looks like spatial skill.
             chance.append(float((example.target > 0).mean()))
+            if example.candidate_count:
+                # The answer is one of this room's objects, so a guesser that
+                # knows only that much is right one time in however many there
+                # are -- regardless of how few points each one occupies.
+                object_chance.append(1.0 / float(example.candidate_count))
             # Against the object's full-resolution voxels, so the number is
             # comparable to the grid head's footprint gap.
             occupied = (
@@ -124,11 +146,19 @@ def evaluate(model, examples, vectors, device, batch=8, feature_mode="gemma"):
                 occupied - predicted[index].cpu().numpy()[None, :], axis=1
             ).min()
             gaps.append(float(gap))
+    informed = float(np.mean(object_chance)) if object_chance else float("nan")
     return {
         "examples": len(examples),
         "hits_object": round(float(np.mean(hits)), 4),
-        "chance_hits_object": round(float(np.mean(chance)), 4),
-        "lift_over_chance": round(float(np.mean(hits) / max(np.mean(chance), 1e-9)), 2),
+        "chance_uniform_point": round(float(np.mean(chance)), 4),
+        "chance_random_object": round(informed, 4),
+        "lift_over_uniform_point": round(
+            float(np.mean(hits) / max(np.mean(chance), 1e-9)), 2
+        ),
+        "lift_over_random_object": (
+            round(float(np.mean(hits) / max(informed, 1e-9)), 2)
+            if object_chance else None
+        ),
         "median_gap_m": round(float(np.median(gaps)), 3),
         "mean_gap_m": round(float(np.mean(gaps)), 3),
         "gap_under_0p5m": round(float(np.mean([g <= 0.5 for g in gaps])), 4),
