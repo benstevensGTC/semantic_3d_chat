@@ -302,7 +302,7 @@ BLENDER_ROVER_BACKEND_TIMEOUT ?= 900
 .PHONY: strict-atlas-check strict-atlas-build strict-atlas-chat strict-atlas-evaluate strict-atlas-v2-auth ple-reader-prereg-auth
 .PHONY: strict-web-check strict-web mcp-stdio-smoke
 .PHONY: rover-demo-check rover-demo rover-demo-mcp rover-gemma-mcp-check rover-gemma-mcp blender-rover-demo-check blender-rover-demo rover-3d-check rover-3d rover-live-verify
-.PHONY: lens-check lens-build lens-scan lens-perceive lens-understand lens-ask lens-ask-3d lens-locate-3d lens-drive lens-all lens-rooms lens-batch lens-train-grounding lens-ground lens-topdown lens-compare lens-phrases lens-train-points lens-point-sweep lens-point-summary lens-rope3d-locate lens-rope3d-relations
+.PHONY: lens-check lens-build lens-scan lens-perceive lens-understand lens-ask lens-ask-3d lens-locate-3d lens-drive lens-all lens-rooms lens-batch lens-train-grounding lens-ground lens-topdown lens-compare lens-phrases lens-train-points lens-point-sweep lens-point-summary lens-rope3d-locate lens-rope3d-relations lens-rope3d-evals
 .PHONY: v15-check v15-traces v15-cache v15-train v15-sealed-score v15-heldout-plan v15-heldout-rollout v15-heldout-score v15-probe v15-summary
 .PHONY: v81-reader-check v81-scene-memory-compile v81-scene-memory-check v81-scene-memory-demo v81-scene-memory-chat v81-scene-memory-leakage v81-historical-predict v81-historical-score conversation-mcp-smoke
 .PHONY: v82-reader-preflight v82-reader-prepare-train v82-reader-fit v82-reader-prepare-development v82-reader-evaluate v82-chat v82-historical-predict v82-historical-score
@@ -2536,6 +2536,9 @@ lens-point-sweep:
 
 lens-point-summary:
 	PYTHONPATH=src $(PYTHON) scripts/build_point_grounding_summary.py
+
+lens-rope3d-evals:
+	./scripts/lens_gemma_rope3d_evals.sh
 
 lens-rope3d-locate:
 	PYTHONPATH=src $(GEMMA4_PYTHON) scripts/lens_eval_rope3d_locate.py

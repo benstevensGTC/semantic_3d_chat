@@ -15,7 +15,15 @@ in as continuous embeddings. Specifically **not**:
 - a caption or description of the room,
 - a single rendered picture standing in for the space,
 - an object detector feeding labels into a planner,
-- deterministic code choosing where the robot goes.
+- deterministic code choosing where the robot goes,
+- **a coordinate written out as text for the model to read**.
+
+That last one covers position specifically, and it rules out more than it looks
+like. A token whose place is implied by its index in a list is still a coordinate
+the reader has to decode against a convention. The form position is supposed to
+take is the one a transformer already uses: a rotation of the token's embedding,
+so that an attention score is a function of the displacement between two tokens.
+Extending that to a 3D displacement is what `spatial_lens/rope3d.py` does.
 
 The test is causal, not rhetorical: swap the scene for another room's, scramble
 its spatial layout, or zero it, and the answers must change accordingly. An
@@ -93,11 +101,31 @@ grounding` takes the target's position from the 3D semantic map via the head,
 not from the scene graph, and reaches objects in rooms the head never trained
 on.
 
+**Position is now a rotation, not an index.** The grid and its learned per-cell
+codes were the opposite of how a transformer handles position. `Rope3D` splits
+an attention head into three bands and drives each by one axis, so two points
+half a metre apart attend alike wherever they are in the room -- verified, with
+the converse also checked, so the invariance has not collapsed into ignoring
+position. `PointGroundingModel` scores the cloud itself rather than a pooled
+grid, which makes answers continuous rather than quantised to a 0.35 m cell.
+
+**Measured negative: a frozen decoder does not pick this up for free.**
+Substituting the same rotation into Gemma's own rotary channel leaves it
+answering coherently but no better at saying where anything is -- 15.1% within a
+metre against a 17.7% random baseline, against 26.4% for the raster layout it
+was meant to beat
+([evidence](reports/gemma4/metrics/rope3d_locate.json)). Two causes were found
+and fixed after that measurement -- the rotation discarded the scene's place in
+the sequence, and it discarded the 2D raster prior the decoder does have -- and
+the re-measurement is what the `z_only` mode exists to test.
+
 ## Next
 
-- Train on more rooms; 19 is still few, and the head fits them perfectly while
-  reaching 78.8% on unseen ones, so the gap is data.
-- Give the head sub-cell precision, so answers are metric rather than quantised
-  to a third of a metre.
+- Train on more rooms; 19 is still few, and the reader fits them perfectly while
+  reaching far less on unseen ones, so the gap is data. The scaling sweep is
+  what turns that assertion into a curve.
 - Re-test the untrained route with a working multimodal 27B; qwen3.8's vision
   path returned empty on this Ollama build.
+- The frozen-decoder path may simply need adaptation rather than a better
+  encoding: nothing in pretraining gives Gemma a reason to read metres in its
+  rotary channel as space.

@@ -110,14 +110,18 @@ def relational_examples(
     min_margin_m: float = 0.8,
     seed: int = 0,
 ) -> list[PointExample]:
-    """Phrases that name an object by where it is relative to another one.
+    """Phrases that identify an object purely by where it is.
 
-    "The chair" can be answered by semantics alone: find the points that look
-    like a chair. "The chair nearest the bookshelf" cannot -- it needs the
-    distance between two objects, which exists only if the model can relate two
-    positions. These are the queries that separate a semantic point cloud from a
-    spatial one, and like every other label here they are read off perception's
-    own output rather than from an oracle.
+    "The chair" is answerable by semantics alone: find the points that look like
+    a chair. So is "the chair nearest the bookshelf", as long as the room holds
+    only one chair -- and none of these rooms repeats a name, so naming the
+    target would have handed the answer over and measured nothing.
+
+    The target is therefore left unnamed. "The object nearest the bookshelf"
+    can only be resolved by finding the bookshelf, measuring to everything else,
+    and comparing -- which needs the displacement between two positions and
+    cannot be reached from semantics at all. The anchor is still named, because
+    something has to be found by meaning before anything can be measured from it.
 
     A pair is only used when the two candidates differ clearly in distance, so a
     near-tie is never scored as though it had a right answer.
@@ -163,14 +167,17 @@ def relational_examples(
             (float(np.linalg.norm(mid[:2] - anchor_mid[:2])), name, picked, voxels)
             for _, name, mid, picked, voxels in others
         )
-        near_gap, near_name, near_mask, near_voxels = gaps[0]
-        far_gap, far_name, far_mask, far_voxels = gaps[-1]
+        near_gap, _, near_mask, near_voxels = gaps[0]
+        far_gap, _, far_mask, far_voxels = gaps[-1]
         if far_gap - near_gap < min_margin_m:
             continue
-        for phrase, mask, voxels in (
-            (f"the {near_name} nearest the {anchor_name}", near_mask, near_voxels),
-            (f"the {far_name} furthest from the {anchor_name}", far_mask, far_voxels),
-        ):
+        wording = [
+            (f"the object nearest the {anchor_name}", near_mask, near_voxels),
+            (f"the object closest to the {anchor_name}", near_mask, near_voxels),
+            (f"the object furthest from the {anchor_name}", far_mask, far_voxels),
+            (f"the object farthest from the {anchor_name}", far_mask, far_voxels),
+        ]
+        for phrase, mask, voxels in wording:
             target = mask.astype(np.float32)
             target /= target.sum()
             examples.append(
