@@ -932,7 +932,62 @@ against a scrambled-layout copy and a zeroed copy of the same tokens
 
 Zeroing destroys the answer, so the tokens are necessary. Scrambling costs the
 colours, shapes and positions while leaving generic furniture words, which is
-what a preserved feature multiset with a destroyed layout should do. **But it cannot say *where*.** Asked which grid cell each object occupies, the
+what a preserved feature multiset with a destroyed layout should do. ### Giving language an address into the field: the grounding head
+
+Description worked with nothing trained. Location did not, and the reason is
+worth stating precisely, because it decides how much training is actually
+needed.
+
+Everything semantic is already there. A single voxel's embedding identifies its
+object 96.8% of the time against 14.3% chance, and a frozen decoder handed the
+pooled field names the furniture with its colours and shapes. What is *not*
+there is a convention: "token 137 is the floor column at (+1.2, −0.8) in a
+top-down metric grid" is a layout invented for this repo. No amount of
+pretraining can contain it, and no re-architecting removes the need to learn it
+— 3D-native language models train far more than this does.
+
+So the missing piece is an *addressing* layer, and it is small. A 2.64M-parameter
+head reads the room's per-cell embeddings and a phrase, and scores every cell:
+
+```bash
+make lens-rooms          # author a spread of varied rooms
+make lens-batch          # build, scan, perceive and name them all
+make lens-train-grounding   # train the head, held out by room
+make lens-ground         # locate objects in a room by phrase
+make lens-compare        # both methods, same rooms, same metric
+```
+
+Its supervision costs nothing to collect. Discovery already knows which voxels
+form each object and naming already asked Gemma what they are, so every scanned
+room yields (phrase, footprint) pairs by itself — no oracle, no annotation. 27
+rooms produced 602 examples this way, and rooms are augmented through all eight
+rotations and reflections, since a room turned ninety degrees is still a room.
+
+**It generalizes.** Trained on 19 rooms and measured on 8 it never saw, scoring
+by distance from the answer to the object's footprint — zero on a hit, which is
+what "could the rover drive there" means
+([evidence](reports/gemma4/metrics/spatial_lens_grounding.json)):
+
+| method | lands on object | median gap | within 0.5 m | trained |
+| --- | --- | --- | --- | --- |
+| top-down render, read as an image | 14.9% | 1.25 m | 21.3% | 0 params |
+| **grounding head** | **78.8%** | **0.00 m** | **82.3%** | 2.64M params |
+| random baseline | 3.8% | — | — | — |
+
+The first row is the honest attempt to avoid training altogether: render the
+same point cloud as a picture, a layout the model already reads, and ask. It
+beats chance but lands on the right object one time in seven. Addressing the
+field directly is **5.3× better**, and it is what the rover now uses —
+`lens_drive.py --target-source grounding` takes the target's position from the
+3D field rather than from the scene graph, and reaches objects in rooms the head
+was never trained on.
+
+A caveat worth recording: `qwen3.8:27b` is multimodal and would have been the
+stronger test of the untrained route, but its vision path returns empty through
+both Ollama endpoints on this build, so the zero-training row is Gemma-4-E2B
+only.
+
+**But it cannot say *where*.** Asked which grid cell each object occupies, the
 same pathway scores 14% within a metre — identical to the scrambled and zeroed
 controls, and identical to the 10.5% random baseline
 ([evidence](reports/gemma4/metrics/spatial_lens_studio_locate3d.json)). So

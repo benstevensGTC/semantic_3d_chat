@@ -167,10 +167,38 @@ class OllamaChat:
         with urllib.request.urlopen(request, timeout=self.timeout_seconds) as response:
             return str(_json.load(response).get("response", "")).strip()
 
-    def ask_image(self, image: object, question: str, *, max_new_tokens: int = 24) -> str:
-        raise NotImplementedError(
-            "Object naming deliberately stays on Gemma's own vision encoder"
+    def ask_image(self, image: Any, question: str, *, max_new_tokens: int = 64) -> str:
+        """Answer about an image with the larger local model.
+
+        Object *naming* deliberately stays on Gemma's own vision encoder, so
+        that perception is Gemma's throughout. This path exists for the
+        zero-training top-down control, where the question is whether a bigger
+        model can read a rendered map well enough to make the trained grounding
+        head unnecessary.
+        """
+
+        import base64
+        import io
+        import json as _json
+        import urllib.request
+
+        buffer = io.BytesIO()
+        image.save(buffer, format="PNG")
+        payload = {
+            "model": self.model,
+            "prompt": question,
+            "images": [base64.b64encode(buffer.getvalue()).decode("ascii")],
+            "stream": False,
+            "think": False,
+            "options": {"temperature": 0.0, "num_predict": int(max_new_tokens)},
+        }
+        request = urllib.request.Request(
+            f"{self.host}/api/generate",
+            data=_json.dumps(payload).encode("utf-8"),
+            headers={"Content-Type": "application/json"},
         )
+        with urllib.request.urlopen(request, timeout=self.timeout_seconds) as response:
+            return str(_json.load(response).get("response", "")).strip()
 
 
 __all__ = ["MODEL_ID", "MODEL_REVISION", "GemmaChat", "OllamaChat"]

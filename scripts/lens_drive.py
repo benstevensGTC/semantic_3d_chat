@@ -31,6 +31,53 @@ from semantic_3d_chat.spatial_lens.rover import (
 from semantic_3d_chat.spatial_lens.scene_graph import SceneGraph
 
 
+def _grounding_locator(room: str, head_path: str) -> dict:
+    """Load the grounding head and return a phrase -> metres callable."""
+
+    import numpy as np
+    import torch
+
+    from semantic_3d_chat.spatial_lens.grounding import load_head
+    from semantic_3d_chat.spatial_lens.grounding_data import embed_phrases
+    from semantic_3d_chat.spatial_lens.perceive import SemanticCloud
+    from semantic_3d_chat.spatial_lens.scene_tokens_3d import build_scene_tokens_3d
+
+    head, metadata = load_head(PROJECT_ROOT / head_path)
+    cloud = SemanticCloud.load(
+        PROJECT_ROOT / "data" / "spatial_lens" / room / "point_cloud.npz"
+    )
+    tokens = build_scene_tokens_3d(cloud, grid=int(metadata["grid"]))
+    status = (
+        "room was HELD OUT of head training"
+        if room in metadata.get("heldout_rooms", [])
+        else "room was in head training"
+        if room in metadata.get("train_rooms", [])
+        else "room is new to the head"
+    )
+
+    from semantic_3d_chat.language.local_lm import load_local_language_model
+
+    language = load_local_language_model(
+        "google/gemma-4-E2B-it",
+        revision="3e22461f65e89153144f8adb70e3b8c2cc9845a7",
+        requested_dtype="bfloat16", local_files_only=True,
+    )
+    cache: dict[str, tuple[float, float]] = {}
+
+    def locate(phrase: str) -> tuple[float, float]:
+        if phrase not in cache:
+            vector = embed_phrases(language, [phrase])
+            with torch.no_grad():
+                logits = head(
+                    torch.from_numpy(tokens.tokens).unsqueeze(0).float(),
+                    torch.from_numpy(vector).float(),
+                )[0]
+            cache[phrase] = tokens.cell_center_m(int(np.asarray(logits).argmax()))
+        return cache[phrase]
+
+    return {"locate": locate, "status": status}
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--room", required=True)
@@ -61,6 +108,21 @@ def main() -> int:
         ),
     )
     parser.add_argument("--ollama-model", default="qwen3.8:27b")
+    parser.add_argument(
+        "--target-source",
+        choices=("graph", "grounding"),
+        default="graph",
+        help=(
+            "graph: the target's position comes from the metric scene graph. "
+            "grounding: it is read out of the 3D semantic field by the trained "
+            "grounding head, so the rover is driving to a place the model "
+            "located in the point cloud rather than looked up in a list."
+        ),
+    )
+    parser.add_argument(
+        "--grounding-head",
+        default="data_gemma4/checkpoints/spatial_grounding_v1",
+    )
     parser.add_argument("--output")
     args = parser.parse_args()
 
@@ -92,6 +154,11 @@ def main() -> int:
         for item in graph.objects
         if (point := graph.approach_point(item)) is not None
     }
+
+    locator = None
+    if args.target_source == "grounding":
+        locator = _grounding_locator(args.room, args.grounding_head)
+        print(f"targets located by the grounding head ({locator['status']})\n")
     history: list[str] = []
     receipts: list[StepReceipt] = []
     termination = "max_steps"
@@ -125,9 +192,16 @@ def main() -> int:
             resolved = graph.find(decision.target)
             if resolved is not None:
                 target_name = resolved.name
-                target_point = approach_points.get(
-                    resolved.name, (resolved.center_m[0], resolved.center_m[1])
-                )
+                if locator is not None:
+                    # Read the target's position out of the 3D field, then take
+                    # the nearest standable cell to it. The scene graph supplies
+                    # only the vocabulary, never the coordinates.
+                    located = locator["locate"](f"the {resolved.name}")
+                    target_point = graph.nearest_free(*located) or located
+                else:
+                    target_point = approach_points.get(
+                        resolved.name, (resolved.center_m[0], resolved.center_m[1])
+                    )
 
         if decision.action in {"MOVE_TO", "MOVE_TOWARD"}:
             if decision.x_m is None or decision.y_m is None:
@@ -189,6 +263,8 @@ def main() -> int:
         "model_selected_target_and_termination": True,
         "model_selected_every_metric_step": args.step_selection == "model",
         "deterministic_local_planner_used": args.step_selection == "assisted",
+        "target_source": args.target_source,
+        "target_located_in_3d_field": args.target_source == "grounding",
         "final_pose": final.as_dict(),
         "path_length_m": round(rover.path_length_m, 4),
         "path": [[round(x, 4), round(y, 4)] for x, y in rover.path],

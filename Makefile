@@ -302,7 +302,7 @@ BLENDER_ROVER_BACKEND_TIMEOUT ?= 900
 .PHONY: strict-atlas-check strict-atlas-build strict-atlas-chat strict-atlas-evaluate strict-atlas-v2-auth ple-reader-prereg-auth
 .PHONY: strict-web-check strict-web mcp-stdio-smoke
 .PHONY: rover-demo-check rover-demo rover-demo-mcp rover-gemma-mcp-check rover-gemma-mcp blender-rover-demo-check blender-rover-demo rover-3d-check rover-3d rover-live-verify
-.PHONY: lens-check lens-build lens-scan lens-perceive lens-understand lens-ask lens-ask-3d lens-locate-3d lens-drive lens-all
+.PHONY: lens-check lens-build lens-scan lens-perceive lens-understand lens-ask lens-ask-3d lens-locate-3d lens-drive lens-all lens-rooms lens-batch lens-train-grounding lens-ground lens-topdown lens-compare
 .PHONY: v15-check v15-traces v15-cache v15-train v15-sealed-score v15-heldout-plan v15-heldout-rollout v15-heldout-score v15-probe v15-summary
 .PHONY: v81-reader-check v81-scene-memory-compile v81-scene-memory-check v81-scene-memory-demo v81-scene-memory-chat v81-scene-memory-leakage v81-historical-predict v81-historical-score conversation-mcp-smoke
 .PHONY: v82-reader-preflight v82-reader-prepare-train v82-reader-fit v82-reader-prepare-development v82-reader-evaluate v82-chat v82-historical-predict v82-historical-score
@@ -2458,11 +2458,21 @@ LENS_ROOM ?= studio
 LENS_SPEC ?= rooms/$(LENS_ROOM).json
 LENS_GOAL ?= Drive to the bookshelf and stop beside it.
 LENS_METRICS ?= reports/gemma4/metrics
+LENS_ROOM_COUNT ?= 12
+LENS_ROOM_PREFIX ?= room
+LENS_HOLDOUT ?= 8
+LENS_ROOMS ?= studio
 
 lens-check:
-	$(PYTHON) -m pytest -q tests/test_spatial_lens.py
+	$(PYTHON) -m pytest -q tests/test_spatial_lens.py tests/test_spatial_grounding.py
 	$(PYTHON) -m ruff check \
 		src/semantic_3d_chat/spatial_lens/ \
+		scripts/lens_make_rooms.py \
+		scripts/lens_batch.py \
+		scripts/lens_train_grounding.py \
+		scripts/lens_ground.py \
+		scripts/lens_topdown_baseline.py \
+		scripts/lens_compare_methods.py \
 		scripts/lens_ask_3d.py \
 		scripts/lens_locate_3d.py \
 		scripts/lens_build_room.py \
@@ -2473,7 +2483,8 @@ lens-check:
 		scripts/lens_drive.py \
 		blender/build_authored_room.py \
 		blender/scan_authored_room.py \
-		tests/test_spatial_lens.py
+		tests/test_spatial_lens.py \
+		tests/test_spatial_grounding.py
 
 lens-build:
 	PYTHONPATH=src $(PYTHON) scripts/lens_build_room.py --spec $(LENS_SPEC) --force
@@ -2486,6 +2497,26 @@ lens-perceive:
 
 lens-understand:
 	PYTHONPATH=src $(GEMMA4_PYTHON) scripts/lens_understand.py --room $(LENS_ROOM) --force
+
+lens-rooms:
+	$(PYTHON) scripts/lens_make_rooms.py --count $(LENS_ROOM_COUNT) --prefix $(LENS_ROOM_PREFIX)
+
+lens-batch:
+	PYTHONPATH=src $(PYTHON) scripts/lens_batch.py --rooms $(LENS_ROOMS)
+
+lens-train-grounding:
+	PYTHONPATH=src $(GEMMA4_PYTHON) scripts/lens_train_grounding.py --holdout $(LENS_HOLDOUT)
+
+lens-ground:
+	PYTHONPATH=src $(GEMMA4_PYTHON) scripts/lens_ground.py --room $(LENS_ROOM) --controls \
+		--output $(LENS_METRICS)/spatial_lens_$(LENS_ROOM)_ground.json
+
+lens-topdown:
+	PYTHONPATH=src $(GEMMA4_PYTHON) scripts/lens_topdown_baseline.py --rooms $(LENS_ROOMS) \
+		--output $(LENS_METRICS)/spatial_lens_topdown_gemma.json
+
+lens-compare:
+	PYTHONPATH=src $(PYTHON) scripts/lens_compare_methods.py
 
 lens-ask-3d:
 	PYTHONPATH=src $(GEMMA4_PYTHON) scripts/lens_ask_3d.py --room $(LENS_ROOM) --controls \

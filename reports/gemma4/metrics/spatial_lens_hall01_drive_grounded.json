@@ -1,0 +1,140 @@
+{
+  "accepted": 3,
+  "deterministic_local_planner_used": true,
+  "final_pose": {
+    "x_m": 0.625,
+    "y_m": 0.175,
+    "yaw_degrees": -49.0
+  },
+  "final_target": "table",
+  "goal": "Drive to the table and stop next to it.",
+  "model_selected_every_metric_step": false,
+  "model_selected_target_and_termination": true,
+  "objects": [
+    {
+      "center_m": [
+        -1.6131,
+        -1.0627
+      ],
+      "name": "shelf"
+    },
+    {
+      "center_m": [
+        -0.1766,
+        -0.0202
+      ],
+      "name": "chair"
+    },
+    {
+      "center_m": [
+        1.1472,
+        0.6777
+      ],
+      "name": "table"
+    },
+    {
+      "center_m": [
+        1.4033,
+        -1.637
+      ],
+      "name": "unidentified object"
+    },
+    {
+      "center_m": [
+        -0.9283,
+        1.1894
+      ],
+      "name": "lamp"
+    },
+    {
+      "center_m": [
+        1.1014,
+        1.8306
+      ],
+      "name": "wall"
+    }
+  ],
+  "path": [
+    [
+      0.325,
+      -0.025
+    ],
+    [
+      0.625,
+      0.175
+    ]
+  ],
+  "path_length_m": 0.3606,
+  "reasoner": "gemma",
+  "rejected": 0,
+  "room": "hall01",
+  "schema": "semantic_3d_chat.spatial_lens.drive.v1",
+  "step_selection": "assisted",
+  "steps": [
+    {
+      "accepted": true,
+      "action": "FACE",
+      "distance_m": 0.0,
+      "error_code": null,
+      "pose_after": {
+        "x_m": 0.325,
+        "y_m": -0.025,
+        "yaw_degrees": -49.0
+      },
+      "pose_before": {
+        "x_m": 0.325,
+        "y_m": -0.025,
+        "yaw_degrees": 0.0
+      },
+      "reasoning": "The table is in the direction of yaw -49, so I need to turn towards it first.",
+      "requested": {
+        "yaw_degrees": -49.0
+      },
+      "step": 1
+    },
+    {
+      "accepted": true,
+      "action": "MOVE_TOWARD",
+      "distance_m": 0.3606,
+      "error_code": null,
+      "pose_after": {
+        "x_m": 0.625,
+        "y_m": 0.175,
+        "yaw_degrees": -49.0
+      },
+      "pose_before": {
+        "x_m": 0.325,
+        "y_m": -0.025,
+        "yaw_degrees": -49.0
+      },
+      "reasoning": "Move towards the table as it is the current goal.",
+      "requested": {
+        "x": 0.62,
+        "y": 0.18
+      },
+      "step": 2
+    },
+    {
+      "accepted": true,
+      "action": "STOP",
+      "distance_m": 0.0,
+      "error_code": null,
+      "pose_after": {
+        "x_m": 0.625,
+        "y_m": 0.175,
+        "yaw_degrees": -49.0
+      },
+      "pose_before": {
+        "x_m": 0.625,
+        "y_m": 0.175,
+        "yaw_degrees": -49.0
+      },
+      "reasoning": "The robot is very close to the table, so it should stop.",
+      "requested": {},
+      "step": 3
+    }
+  ],
+  "target_located_in_3d_field": true,
+  "target_source": "grounding",
+  "termination": "model_stop"
+}
