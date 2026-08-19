@@ -63,8 +63,17 @@ def ask_3d(
     *,
     max_new_tokens: int = 96,
     system: str | None = None,
+    rope3d: bool = False,
+    span_units: float = 256.0,
 ) -> str:
-    """Answer one question with the 3D scene as the only evidence."""
+    """Answer one question with the 3D scene as the only evidence.
+
+    With ``rope3d`` the decoder's own rotary position encoding is driven by each
+    token's position in the room rather than by its index in the sequence, so
+    attention between two scene tokens depends on the displacement between the
+    two places. The raster convention in the system prompt then becomes
+    unnecessary, and no coordinate is written out as text either way.
+    """
 
     from semantic_3d_chat.language.local_lm import prompt_token_ids
     from semantic_3d_chat.language.prefix_injection import (
@@ -87,11 +96,35 @@ def ask_3d(
     # The backend's own generate() carries Gemma 4's auxiliary per-layer input
     # stream through prefill and every cached step; the plain embeddings path
     # would make the decoder re-derive it and blow up.
-    produced = backend.generate(
-        prepared,
-        max_new_tokens=max_new_tokens,
-        eos_token_ids=getattr(language.tokenizer, "eos_token_id", None),
-    )
+    def _generate() -> Any:
+        return backend.generate(
+            prepared,
+            max_new_tokens=max_new_tokens,
+            eos_token_ids=getattr(language.tokenizer, "eos_token_id", None),
+        )
+
+    if rope3d:
+        from semantic_3d_chat.language.rope3d_patch import (
+            ScenePositions,
+            attach_rope3d,
+            scene_span_from_mask,
+        )
+
+        if tokens.centroids_m is None:
+            raise ValueError("rope3d needs token centroids; rebuild the scene tokens")
+        marks = getattr(prepared, "mm_token_type_ids", None)
+        if marks is None:
+            raise ValueError("rope3d needs the prepared batch's multimodal mask")
+        start, stop = scene_span_from_mask(marks)
+        places = torch.from_numpy(tokens.centroids_m).to(device=device, dtype=torch.float32)
+        if stop - start != places.shape[0]:
+            raise ValueError(
+                f"scene span is {stop - start} tokens but {places.shape[0]} centroids"
+            )
+        with attach_rope3d(language.model, ScenePositions(start, places), span_units=span_units):
+            produced = _generate()
+    else:
+        produced = _generate()
     return language.tokenizer.decode(
         produced[0].detach().cpu(), skip_special_tokens=True
     ).strip()
@@ -123,6 +156,7 @@ def locate_3d(
     name: str,
     *,
     max_new_tokens: int = 48,
+    rope3d: bool = False,
 ) -> tuple[float, float] | None:
     """Ask where an object is, using only the 3D field, and return metres.
 
@@ -150,6 +184,7 @@ def locate_3d(
         f"Where is the {name}?",
         max_new_tokens=max_new_tokens,
         system=system,
+        rope3d=rope3d,
     )
     match = _re.search(r"\{.*\}", reply, _re.DOTALL)
     if match is None:

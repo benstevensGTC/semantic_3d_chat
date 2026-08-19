@@ -37,6 +37,11 @@ class SceneTokens3D:
     occupancy: np.ndarray  # [grid, grid] bool: did any voxel land here
     grid: int
     room_size_m: tuple[float, float, float]
+    # Where each token actually is, in metres. Raster order already implies a
+    # position, but only as an index the reader has to decode. Carrying the
+    # centroid lets the decoder receive position as a rotation instead -- see
+    # semantic_3d_chat.language.rope3d_patch.
+    centroids_m: np.ndarray | None = None
 
     @property
     def token_count(self) -> int:
@@ -93,6 +98,8 @@ def build_scene_tokens_3d(
     mass = np.zeros(grid * grid, dtype=np.float64)
     np.add.at(totals, cell, features * weights[:, None])
     np.add.at(mass, cell, weights)
+    places = np.zeros((grid * grid, 3), dtype=np.float64)
+    np.add.at(places, cell, centers * weights[:, None])
 
     occupied = mass > 0
     tokens = np.zeros_like(totals, dtype=np.float32)
@@ -104,11 +111,21 @@ def build_scene_tokens_3d(
     if occupied.any() and not occupied.all():
         tokens[~occupied] = tokens[occupied].mean(axis=0) * 0.0
 
+    # An empty column still has a place: its cell centre on the floor.
+    centroids = np.zeros((grid * grid, 3), dtype=np.float32)
+    centroids[occupied] = (places[occupied] / mass[occupied, None]).astype(np.float32)
+    empty = np.flatnonzero(~occupied)
+    if empty.size:
+        rows_e, columns_e = np.divmod(empty, grid)
+        centroids[empty, 0] = (columns_e + 0.5) * width / grid - width / 2.0
+        centroids[empty, 1] = (rows_e + 0.5) * depth / grid - depth / 2.0
+
     return SceneTokens3D(
         tokens=tokens,
         occupancy=occupied.reshape(grid, grid),
         grid=grid,
         room_size_m=(float(width), float(depth), float(height)),
+        centroids_m=centroids,
     )
 
 
@@ -122,6 +139,7 @@ def shuffled(tokens: SceneTokens3D, *, seed: int = 20260816) -> SceneTokens3D:
         occupancy=tokens.occupancy,
         grid=tokens.grid,
         room_size_m=tokens.room_size_m,
+        centroids_m=tokens.centroids_m,
     )
 
 
@@ -133,6 +151,7 @@ def zeroed(tokens: SceneTokens3D) -> SceneTokens3D:
         occupancy=tokens.occupancy,
         grid=tokens.grid,
         room_size_m=tokens.room_size_m,
+        centroids_m=tokens.centroids_m,
     )
 
 
