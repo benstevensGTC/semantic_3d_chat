@@ -78,6 +78,58 @@ def _grounding_locator(room: str, head_path: str) -> dict:
     return {"locate": locate, "status": status}
 
 
+def _point_locator(room: str, model_path: str) -> dict:
+    """Read the target's position out of the point cloud itself.
+
+    The grid locator above answers with a cell centre, so its precision stops
+    at a third of a metre no matter how sure it is. This one answers with a
+    weighted position over real points, which is a place in the room rather
+    than a box the place falls inside.
+    """
+
+    import torch
+
+    from semantic_3d_chat.spatial_lens.grounding_data import embed_phrases
+    from semantic_3d_chat.spatial_lens.perceive import SemanticCloud
+    from semantic_3d_chat.spatial_lens.point_grounding import load_model
+    from semantic_3d_chat.spatial_lens.point_grounding_data import downsample
+
+    model, metadata = load_model(PROJECT_ROOT / model_path)
+    cloud = SemanticCloud.load(
+        PROJECT_ROOT / "data" / "spatial_lens" / room / "point_cloud.npz"
+    )
+    budget = int(metadata.get("token_budget", 1024))
+    chosen = downsample(cloud, token_budget=budget, cell_m=0.14, seed=0)
+    points = torch.from_numpy(cloud.centers_m[chosen]).unsqueeze(0).float()
+    features = torch.from_numpy(
+        cloud.features[chosen].astype("float32")
+    ).unsqueeze(0).float()
+    status = (
+        "room was HELD OUT of training"
+        if room in metadata.get("held_out_rooms", [])
+        else "room was in training"
+    )
+
+    from semantic_3d_chat.language.local_lm import load_local_language_model
+
+    language = load_local_language_model(
+        "google/gemma-4-E2B-it",
+        revision="3e22461f65e89153144f8adb70e3b8c2cc9845a7",
+        requested_dtype="bfloat16", local_files_only=True,
+    )
+    cache: dict[str, tuple[float, float]] = {}
+
+    def locate(phrase: str) -> tuple[float, float]:
+        if phrase not in cache:
+            vector = torch.from_numpy(embed_phrases(language, [phrase])).float()
+            with torch.no_grad():
+                where = model.predict_position(features, points, vector)[0]
+            cache[phrase] = (float(where[0]), float(where[1]))
+        return cache[phrase]
+
+    return {"locate": locate, "status": status}
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--room", required=True)
@@ -110,10 +162,12 @@ def main() -> int:
     parser.add_argument("--ollama-model", default="qwen3.8:27b")
     parser.add_argument(
         "--target-source",
-        choices=("graph", "grounding"),
+        choices=("graph", "grounding", "points"),
         default="graph",
         help=(
             "graph: the target's position comes from the metric scene graph. "
+            "points: the same, read straight off the point cloud by the "
+            "3D-rotary model, which answers with a position rather than a cell. "
             "grounding: it is read out of the 3D semantic field by the trained "
             "grounding head, so the rover is driving to a place the model "
             "located in the point cloud rather than looked up in a list."
@@ -122,6 +176,10 @@ def main() -> int:
     parser.add_argument(
         "--grounding-head",
         default="data_gemma4/checkpoints/spatial_grounding_v1",
+    )
+    parser.add_argument(
+        "--point-model",
+        default="data_gemma4/checkpoints/point_grounding_rope3d",
     )
     parser.add_argument("--output")
     args = parser.parse_args()
@@ -159,6 +217,9 @@ def main() -> int:
     if args.target_source == "grounding":
         locator = _grounding_locator(args.room, args.grounding_head)
         print(f"targets located by the grounding head ({locator['status']})\n")
+    elif args.target_source == "points":
+        locator = _point_locator(args.room, args.point_model)
+        print(f"targets located in the point cloud ({locator['status']})\n")
     history: list[str] = []
     receipts: list[StepReceipt] = []
     termination = "max_steps"
@@ -264,7 +325,7 @@ def main() -> int:
         "model_selected_every_metric_step": args.step_selection == "model",
         "deterministic_local_planner_used": args.step_selection == "assisted",
         "target_source": args.target_source,
-        "target_located_in_3d_field": args.target_source == "grounding",
+        "target_located_in_3d_field": args.target_source in {"grounding", "points"},
         "final_pose": final.as_dict(),
         "path_length_m": round(rover.path_length_m, 4),
         "path": [[round(x, 4), round(y, 4)] for x, y in rover.path],

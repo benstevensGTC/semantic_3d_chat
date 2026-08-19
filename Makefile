@@ -2529,7 +2529,9 @@ lens-phrases:
 	PYTHONPATH=src $(GEMMA4_PYTHON) scripts/lens_cache_phrases.py
 
 lens-train-points:
-	PYTHONPATH=src $(PYTHON) scripts/lens_train_points.py --holdout $(LENS_HOLDOUT)
+	PYTHONPATH=src $(PYTHON) scripts/lens_train_points.py --holdout $(LENS_HOLDOUT) \
+		--out data_gemma4/checkpoints/point_grounding_rope3d \
+		--report reports/gemma4/metrics/point_grounding/rope3d_rooms19.json
 
 lens-point-sweep:
 	./scripts/lens_point_sweep.sh
