@@ -60,4 +60,15 @@ for n in 4 8 12 16 19; do
   run "relational_learned_absolute_rooms$n" --target-steps "$STEPS" --task relational \
       --position-mode learned_absolute --train-rooms "$n"
 done
+# The first runs of a sweep can predate a change to what gets recorded. Redo
+# any run whose report is missing the per-item outcomes the paired comparison
+# needs, rather than leaving one arm silently uncomparable.
+for path in "$OUT"/*.json; do
+  [ -e "$path" ] || continue
+  case "$(basename "$path")" in summary.json) continue;; esac
+  if ! grep -q '"per_item"' "$path"; then
+    echo "re-running $(basename "$path" .json): recorded before per-item outcomes"
+    rm -f "$path"
+  fi
+done
 echo "sweep complete"
