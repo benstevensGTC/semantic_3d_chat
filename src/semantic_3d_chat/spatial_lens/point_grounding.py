@@ -40,6 +40,9 @@ class PointExample:
     features: np.ndarray      # [N, F] Gemma embeddings
     target: np.ndarray        # [N] float32 over those tokens, sums to 1
     room_size_m: tuple[float, float, float]
+    # Colour per sampled point, so "is this Gemma's semantics or just the paint
+    # on my synthetic furniture?" can be asked and answered.
+    rgb: np.ndarray | None = None  # [N, 3] in [0, 1]
     # Every voxel of the object at full resolution, not just the sampled ones.
     # Scoring against the sample would charge the model for gaps the downsample
     # opened up, and would not be comparable to the grid head's footprint gap.

@@ -40,4 +40,7 @@ done
 for n in 4 8 12 16; do
   run "relational_rope3d_rooms$n" --task relational --position-mode rope3d --train-rooms "$n"
 done
+# Is the reader using Gemma's semantics, or the paint on synthetic furniture?
+run rgb_only_rooms19            --position-mode rope3d --feature-mode rgb
+run relational_rgb_only_rooms19 --task relational --position-mode rope3d --feature-mode rgb
 echo "sweep complete"

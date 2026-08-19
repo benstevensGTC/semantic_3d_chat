@@ -39,10 +39,12 @@ def main() -> int:
         for mode in ("rope3d", "learned_absolute", "none")
     }
     ablation["rope3d_no_augmentation"] = row("rope3d_rooms19_noaug")
+    ablation["rgb_instead_of_gemma"] = row("rgb_only_rooms19")
     relational = {
         mode: row(f"relational_{mode}_rooms19")
         for mode in ("rope3d", "learned_absolute", "none")
     }
+    relational["rgb_instead_of_gemma"] = row("relational_rgb_only_rooms19")
     scaling = {
         mode: {
             str(n): row(f"{mode}_rooms{n}")

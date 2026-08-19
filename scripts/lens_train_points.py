@@ -62,11 +62,26 @@ def rigid(points: np.ndarray, rng: random.Random) -> np.ndarray:
     return moved.astype(np.float32)
 
 
-def stack(examples, vectors, device, rng=None):
+def point_features(example, mode: str) -> np.ndarray:
+    """What each point is allowed to say about itself."""
+
+    if mode == "gemma":
+        return example.features
+    if mode == "rgb":
+        # Colour alone, padded to the same width so capacity is unchanged. These
+        # rooms are built from coloured primitives, so this asks whether the
+        # reader is using Gemma's semantics or just the paint.
+        padded = np.zeros_like(example.features)
+        padded[:, :3] = example.rgb
+        return padded
+    raise ValueError(f"unknown feature mode: {mode}")
+
+
+def stack(examples, vectors, device, rng=None, feature_mode="gemma"):
     points = np.stack(
         [rigid(e.points, rng) if rng is not None else e.points for e in examples]
     )
-    features = np.stack([e.features for e in examples])
+    features = np.stack([point_features(e, feature_mode) for e in examples])
     query = np.stack([vectors[e.phrase] for e in examples])
     target = np.stack([e.target for e in examples])
     def to(array):
@@ -80,14 +95,16 @@ def soft_cross_entropy(logits: torch.Tensor, target: torch.Tensor) -> torch.Tens
 
 
 @torch.no_grad()
-def evaluate(model, examples, vectors, device, batch=8):
+def evaluate(model, examples, vectors, device, batch=8, feature_mode="gemma"):
     if not examples:
         return {"examples": 0}
     model.eval()
     hits, gaps, chance = [], [], []
     for start in range(0, len(examples), batch):
         chunk = examples[start : start + batch]
-        points, features, query, target = stack(chunk, vectors, device)
+        points, features, query, target = stack(
+            chunk, vectors, device, feature_mode=feature_mode
+        )
         logits = model(features, points, query)
         predicted = model.predict_position(features, points, query)
         best = logits.argmax(dim=-1)
@@ -125,6 +142,9 @@ def main() -> int:
                         choices=["object", "relational", "both"],
                         help="'relational' phrases name an object by where it is "
                              "relative to another, which semantics alone cannot resolve")
+    parser.add_argument("--feature-mode", default="gemma", choices=["gemma", "rgb"],
+                        help="'rgb' replaces Gemma's embedding with the point's "
+                             "colour, to separate semantics from paint")
     parser.add_argument("--position-mode", default="rope3d",
                         choices=["rope3d", "learned_absolute", "none"])
     parser.add_argument("--holdout", type=int, default=8)
@@ -212,7 +232,8 @@ def main() -> int:
         for start in range(0, len(order), args.batch_size):
             chunk = [train[i] for i in order[start : start + args.batch_size]]
             points, features, query, target = stack(
-                chunk, vectors, device, None if args.no_augment else rng
+                chunk, vectors, device, None if args.no_augment else rng,
+                feature_mode=args.feature_mode,
             )
             loss = soft_cross_entropy(model(features, points, query), target)
             if not torch.isfinite(loss):
@@ -234,6 +255,7 @@ def main() -> int:
 
     report = {
         "task": args.task,
+        "feature_mode": args.feature_mode,
         "position_mode": args.position_mode,
         "train_rooms": train_rooms,
         "held_out_rooms": held_out,
@@ -246,8 +268,10 @@ def main() -> int:
         "seed": args.seed,
         "skipped_nonfinite_steps": skipped,
         "train_minutes": round((time.time() - started) / 60.0, 2),
-        "train_fit": evaluate(model, train, vectors, device),
-        "held_out": evaluate(model, test, vectors, device),
+        "train_fit": evaluate(model, train, vectors, device,
+                              feature_mode=args.feature_mode),
+        "held_out": evaluate(model, test, vectors, device,
+                             feature_mode=args.feature_mode),
     }
     print(json.dumps(report["held_out"], indent=2))
 

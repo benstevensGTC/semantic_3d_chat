@@ -66,6 +66,7 @@ def room_examples(
     chosen = downsample(cloud, token_budget=token_budget, cell_m=cell_m, seed=seed)
     points = np.asarray(cloud.centers_m, dtype=np.float32)[chosen]
     features = np.asarray(cloud.features, dtype=np.float32)[chosen]
+    colours = np.asarray(cloud.rgb, dtype=np.float32)[chosen]
 
     graph_path = root / "scene_graph.json"
     named: dict[str, str] = {}
@@ -95,6 +96,7 @@ def room_examples(
                     features=features,
                     target=target,
                     room_size_m=cloud.room_size_m,
+                    rgb=colours,
                     footprint=footprint,
                 )
             )
@@ -132,6 +134,7 @@ def relational_examples(
     chosen = downsample(cloud, token_budget=token_budget, cell_m=cell_m, seed=seed)
     points = np.asarray(cloud.centers_m, dtype=np.float32)[chosen]
     features = np.asarray(cloud.features, dtype=np.float32)[chosen]
+    colours = np.asarray(cloud.rgb, dtype=np.float32)[chosen]
 
     graph_path = root / "scene_graph.json"
     named: dict[str, str] = {}
@@ -188,6 +191,7 @@ def relational_examples(
                     features=features,
                     target=target,
                     room_size_m=cloud.room_size_m,
+                    rgb=colours,
                     footprint=voxels,
                 )
             )
