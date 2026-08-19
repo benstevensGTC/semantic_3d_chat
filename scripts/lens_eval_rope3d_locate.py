@@ -32,7 +32,13 @@ from semantic_3d_chat.spatial_lens.perceive import SemanticCloud
 from semantic_3d_chat.spatial_lens.reason_3d import locate_3d
 from semantic_3d_chat.spatial_lens.scene_tokens_3d import build_scene_tokens_3d, zeroed
 
-CONDITIONS = ("raster", "rope3d", "rope3d_scrambled", "zeroed")
+CONDITIONS = (
+    "raster",
+    "rope3d_xyz",
+    "rope3d_z_only",
+    "rope3d_scrambled",
+    "zeroed",
+)
 
 
 def scrambled_positions(tokens, seed: int = 20260818):
@@ -82,10 +88,11 @@ def main() -> int:
         width, depth, _ = cloud.room_size_m
         centers = np.asarray(cloud.centers_m, dtype=np.float64)
         variants = {
-            "raster": (tokens, False),
-            "rope3d": (tokens, True),
-            "rope3d_scrambled": (scrambled_positions(tokens), True),
-            "zeroed": (zeroed(tokens), True),
+            "raster": (tokens, False, "xyz"),
+            "rope3d_xyz": (tokens, True, "xyz"),
+            "rope3d_z_only": (tokens, True, "z_only"),
+            "rope3d_scrambled": (scrambled_positions(tokens), True, "xyz"),
+            "zeroed": (zeroed(tokens), False, "xyz"),
         }
         for proposal in discover_objects(cloud):
             name = named.get(proposal.proposal_id)
@@ -106,10 +113,8 @@ def main() -> int:
             ).min(axis=1)
             chance.append(float((near <= args.tolerance_m).mean()))
 
-            for condition, (field, use_rope) in variants.items():
-                answer = locate_3d(
-                    language, field, name, rope3d=use_rope
-                ) if condition != "raster" else locate_3d(language, field, name)
+            for condition, (field, use_rope, axes) in variants.items():
+                answer = locate_3d(language, field, name, rope3d=use_rope, axes=axes)
                 if answer is None:
                     results[condition]["refused"] += 1
                     results[condition]["errors"].append(float("inf"))

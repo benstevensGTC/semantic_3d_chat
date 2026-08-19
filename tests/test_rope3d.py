@@ -151,6 +151,45 @@ def test_index_units_keeps_axes_to_one_scale() -> None:
     assert float(extent[0] / extent[1]) == pytest.approx(2.0, abs=1e-3)
 
 
+def test_centred_index_units_straddle_zero() -> None:
+    """The anchored mode needs an offset around a point, not a range from it."""
+
+    positions = torch.tensor([[0.0, 0.0, 0.0], [6.0, 3.0, 2.0]])
+    scaled = index_units(positions, span_units=256.0, centred=True)
+    assert float(scaled.min()) == pytest.approx(-128.0, abs=1e-3)
+    assert float(scaled.max()) == pytest.approx(128.0, abs=1e-3)
+
+
+def test_anchored_rotation_keeps_the_scene_where_the_sequence_put_it() -> None:
+    """Otherwise the question loses track of how far away the scene is."""
+
+    from semantic_3d_chat.language.rope3d_patch import Rope3DRotary
+
+    class Inner(torch.nn.Module):
+        def __init__(self) -> None:
+            super().__init__()
+            self.register_buffer("full_attention_inv_freq", torch.ones(4) * 0.01)
+            self.full_attention_attention_scaling = 1.0
+
+        def forward(self, x, position_ids, layer_type=None):
+            angle = position_ids[..., None].float() * self.full_attention_inv_freq
+            block = torch.cat((angle, angle), dim=-1)
+            return block.cos(), block.sin()
+
+    places = torch.tensor([[0.0, 0.0, 0.0], [2.0, 1.0, 0.5], [4.0, 2.0, 1.0]])
+    ids = torch.arange(10).unsqueeze(0)
+    anchored = Rope3DRotary(Inner(), ScenePositions(4, places), anchored=True)
+    drifting = Rope3DRotary(Inner(), ScenePositions(4, places), anchored=False)
+
+    def mean_angle(patch: Rope3DRotary) -> float:
+        cos, _ = patch(torch.zeros(1, 10, 8), ids, "full_attention")
+        return float(torch.acos(cos[0, 4:7, 0].clamp(-1, 1)).mean() / 0.01)
+
+    # The scene tokens sit at sequence positions 4, 5, 6, so their mean stays
+    # near 5 when anchored and drifts far away when it is not.
+    assert abs(mean_angle(anchored) - 5.0) < abs(mean_angle(drifting) - 5.0)
+
+
 def test_scene_span_is_found_from_the_multimodal_mask() -> None:
     mask = torch.tensor([[0, 0, 1, 1, 1, 1, 0, 0]])
     assert scene_span_from_mask(mask) == (2, 6)

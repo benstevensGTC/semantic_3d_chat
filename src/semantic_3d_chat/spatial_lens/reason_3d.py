@@ -65,6 +65,8 @@ def ask_3d(
     system: str | None = None,
     rope3d: bool = False,
     span_units: float = 256.0,
+    anchored: bool = True,
+    axes: str = "xyz",
 ) -> str:
     """Answer one question with the 3D scene as the only evidence.
 
@@ -121,7 +123,13 @@ def ask_3d(
             raise ValueError(
                 f"scene span is {stop - start} tokens but {places.shape[0]} centroids"
             )
-        with attach_rope3d(language.model, ScenePositions(start, places), span_units=span_units):
+        with attach_rope3d(
+            language.model,
+            ScenePositions(start, places),
+            span_units=span_units,
+            anchored=anchored,
+            axes=axes,
+        ):
             produced = _generate()
     else:
         produced = _generate()
@@ -157,6 +165,7 @@ def locate_3d(
     *,
     max_new_tokens: int = 48,
     rope3d: bool = False,
+    axes: str = "xyz",
 ) -> tuple[float, float] | None:
     """Ask where an object is, using only the 3D field, and return metres.
 
@@ -185,6 +194,7 @@ def locate_3d(
         max_new_tokens=max_new_tokens,
         system=system,
         rope3d=rope3d,
+        axes=axes,
     )
     match = _re.search(r"\{.*\}", reply, _re.DOTALL)
     if match is None:

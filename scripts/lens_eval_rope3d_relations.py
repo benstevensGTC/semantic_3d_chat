@@ -36,7 +36,18 @@ from semantic_3d_chat.spatial_lens.perceive import SemanticCloud
 from semantic_3d_chat.spatial_lens.reason_3d import ask_3d
 from semantic_3d_chat.spatial_lens.scene_tokens_3d import build_scene_tokens_3d, zeroed
 
-CONDITIONS = ("raster", "rope3d", "rope3d_scrambled", "zeroed")
+# raster           position implied by the order the tokens arrive in
+# rope3d_xyz        all three axes drive the decoder's rotary channel
+# rope3d_z_only     raster order kept, height added on a third of the slots
+# rope3d_scrambled  same as xyz, with the positions permuted among the tokens
+# zeroed            no scene at all
+CONDITIONS = (
+    "raster",
+    "rope3d_xyz",
+    "rope3d_z_only",
+    "rope3d_scrambled",
+    "zeroed",
+)
 
 SYSTEM = (
     "You are looking at a three-dimensional scan of a room, supplied as visual "
@@ -154,10 +165,11 @@ def main() -> int:
             for item in json.loads((root / "scene_graph.json").read_text())["objects"]
         }
         variants = {
-            "raster": (tokens, False),
-            "rope3d": (tokens, True),
-            "rope3d_scrambled": (scrambled_positions(tokens), True),
-            "zeroed": (zeroed(tokens), True),
+            "raster": (tokens, False, "xyz"),
+            "rope3d_xyz": (tokens, True, "xyz"),
+            "rope3d_z_only": (tokens, True, "z_only"),
+            "rope3d_scrambled": (scrambled_positions(tokens), True, "xyz"),
+            "zeroed": (zeroed(tokens), False, "xyz"),
         }
         questions = build_questions(cloud, named, rng)
         for kind in ("higher", "nearer"):
@@ -165,10 +177,11 @@ def main() -> int:
             rng.shuffle(pool)
             for question in pool[: args.per_room]:
                 marks = {}
-                for condition, (field, use_rope) in variants.items():
+                for condition, (field, use_rope, axes) in variants.items():
                     reply = ask_3d(
                         language, field, question["text"],
-                        system=SYSTEM, max_new_tokens=40, rope3d=use_rope,
+                        system=SYSTEM, max_new_tokens=40,
+                        rope3d=use_rope, axes=axes,
                     )
                     said = parse(reply, question["options"])
                     if said is None:
