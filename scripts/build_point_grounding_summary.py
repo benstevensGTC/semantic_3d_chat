@@ -63,7 +63,12 @@ def main() -> int:
             for n in (2, 4, 8, 12, 16, 19)
             if row(f"{mode}_rooms{n}")
         }
-        for mode in ("rope3d", "learned_absolute", "relational_rope3d")
+        for mode in (
+            "rope3d",
+            "learned_absolute",
+            "relational_rope3d",
+            "relational_learned_absolute",
+        )
     }
 
     any_run = next(iter(runs.values()))
@@ -100,9 +105,13 @@ def main() -> int:
             for n in header
         )
         print(f"  {mode:<24} {cells}")
-    print(f"  {'(train fit, rope3d)':<24} " + " ".join(
-        f"{scaling['rope3d'][n]['train_fit']:>6.1%}"
-        if n in scaling.get("rope3d", {}) else f"{'-':>7}" for n in header))
+    for mode in ("rope3d", "relational_rope3d"):
+        points = scaling.get(mode, {})
+        if not points:
+            continue
+        print(f"  {'(train fit, ' + mode + ')':<24} " + " ".join(
+            f"{points[n]['train_fit']:>6.1%}" if n in points else f"{'-':>7}"
+            for n in header))
     print("\n  Held-out intervals are 95% Wilson; points whose intervals overlap")
     print("  are not distinguishable at this sample size.")
     print(f"\nwrote {destination.relative_to(PROJECT_ROOT)}")
