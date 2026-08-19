@@ -210,12 +210,16 @@ def relational_examples(
             union |= picked
 
         wording: list[tuple[str, np.ndarray, np.ndarray]] = []
-        # The margin that decides "nearest" is the one to the runner-up. The
-        # spread between nearest and furthest only says how big the room is,
-        # and would let an exact tie be scored as a unique right answer.
+        # The margin that decides "nearest" is the one to the runner-up, and
+        # the runner-up is whatever is actually second closest in the cloud --
+        # not the second closest thing that happened to be nameable. Measuring
+        # it against the eligible candidates alone lets an unnamed object sit
+        # between the answer and the runner-up and go uncounted, which leaves a
+        # label that is ambiguous in the room even though the filter passed.
         if (
-            gaps[1][0] - gaps[0][0] >= min_margin_m
-            and gaps[0][0] <= world[0] + 1e-6
+            gaps[0][0] <= world[0] + 1e-6
+            and len(world) > 1
+            and world[1] - world[0] >= min_margin_m
         ):
             _, _, near_mask, near_voxels = gaps[0]
             wording += [
@@ -223,8 +227,9 @@ def relational_examples(
                 (f"the object closest to the {anchor_name}", near_mask, near_voxels),
             ]
         if (
-            gaps[-1][0] - gaps[-2][0] >= min_margin_m
-            and gaps[-1][0] >= world[-1] - 1e-6
+            gaps[-1][0] >= world[-1] - 1e-6
+            and len(world) > 1
+            and world[-1] - world[-2] >= min_margin_m
         ):
             _, _, far_mask, far_voxels = gaps[-1]
             wording += [

@@ -212,7 +212,11 @@ def main() -> int:
                 print(f"  {room:8s} {kind:7s} " + "  ".join(
                     f"{c}={marks[c]:.0f}" for c in CONDITIONS))
 
-    from semantic_3d_chat.evaluation.proportions import mcnemar_exact, wilson_interval
+    from semantic_3d_chat.evaluation.proportions import (
+        holm_adjust,
+        mcnemar_exact,
+        wilson_interval,
+    )
 
     def cell(kind: str, condition: str) -> dict[str, object]:
         marks_list = tally[(kind, condition)]
@@ -262,6 +266,10 @@ def main() -> int:
         "unparsed_replies": unparsed,
         "results": results,
         "mcnemar_vs_raster": against_raster,
+        "holm_adjusted_p": {
+            kind: holm_adjust({k: v["p_value"] for k, v in arms.items()})
+            for kind, arms in against_raster.items()
+        },
         "trials": trials,
     }
     destination = PROJECT_ROOT / args.report

@@ -78,11 +78,14 @@ def point_features(example, mode: str) -> np.ndarray:
         colour = np.asarray(example.rgb, dtype=np.float32)
         width = example.features.shape[1]
         bands = max(width // 6, 1)
-        # Geometric from pi to 512*pi. Doubling per band instead would reach
-        # 2**255 by the last one, which overflows float32 to infinity and turns
-        # the whole control into NaN.
+        # Geometric from pi to 8*pi. Doubling per band reaches 2**255 and
+        # overflows float32 to NaN; going to 512*pi instead makes two similar
+        # colours orthogonal, which turns the control into a per-point hash and
+        # quietly biases the comparison towards Gemma. Keeping the top frequency
+        # low leaves nearby colours nearby, which is what a colour control has
+        # to preserve to be a control at all.
         exponent = np.arange(bands, dtype=np.float32) / bands
-        frequencies = np.pi * (512.0 ** exponent)
+        frequencies = np.pi * (8.0 ** exponent)
         angles = colour[:, :, None] * frequencies[None, None, :]
         expanded = np.concatenate(
             [np.sin(angles).reshape(len(colour), -1),
@@ -150,18 +153,23 @@ def evaluate(model, examples, vectors, device, batch=8, feature_mode="gemma"):
                 occupied - predicted[index].cpu().numpy()[None, :], axis=1
             ).min()
             gaps.append(float(gap))
-    informed = float(np.mean(object_chance)) if object_chance else float("nan")
+    from semantic_3d_chat.evaluation.proportions import wilson_interval
+
+    informed = float(np.mean(object_chance)) if object_chance else None
     return {
         "examples": len(examples),
         "hits_object": round(float(np.mean(hits)), 4),
+        # So a reader can see which points on the scaling curve are actually
+        # distinguishable from each other and which are the same number twice.
+        "interval_95": wilson_interval(int(sum(hits)), len(hits)),
         "chance_uniform_point": round(float(np.mean(chance)), 4),
-        "chance_random_object": round(informed, 4),
+        "chance_random_object": round(informed, 4) if informed is not None else None,
         "lift_over_uniform_point": round(
             float(np.mean(hits) / max(np.mean(chance), 1e-9)), 2
         ),
         "lift_over_random_object": (
             round(float(np.mean(hits) / max(informed, 1e-9)), 2)
-            if object_chance else None
+            if informed else None
         ),
         "median_gap_m": round(float(np.median(gaps)), 3),
         "mean_gap_m": round(float(np.mean(gaps)), 3),
@@ -186,6 +194,9 @@ def main() -> int:
                         help="cap on training rooms; 0 uses every remaining room")
     parser.add_argument("--token-budget", type=int, default=1024)
     parser.add_argument("--epochs", type=int, default=160)
+    parser.add_argument("--target-steps", type=int, default=0,
+                        help="hold total optimiser steps fixed instead of epochs, so "
+                             "a scaling curve compares data rather than compute")
     parser.add_argument("--batch-size", type=int, default=8)
     parser.add_argument("--learning-rate", type=float, default=3e-4)
     parser.add_argument("--model-dim", type=int, default=256)
@@ -248,7 +259,14 @@ def main() -> int:
 
     optimiser = torch.optim.AdamW(model.parameters(), lr=args.learning_rate,
                                   weight_decay=0.01)
-    steps = args.epochs * max(1, math.ceil(len(train) / args.batch_size))
+    per_epoch = max(1, math.ceil(len(train) / args.batch_size))
+    epochs = args.epochs
+    if args.target_steps:
+        # Two rooms at a fixed epoch count gets thirteen times fewer gradient
+        # steps than nineteen do, so a rising curve would partly be measuring
+        # training length. Fixing the step budget removes that reading.
+        epochs = max(1, round(args.target_steps / per_epoch))
+    steps = epochs * per_epoch
     warmup = max(1, steps // 20)
     schedule = torch.optim.lr_scheduler.LambdaLR(
         optimiser,
@@ -258,7 +276,7 @@ def main() -> int:
 
     started = time.time()
     skipped = 0
-    for epoch in range(args.epochs):
+    for epoch in range(epochs):
         model.train()
         order = list(range(len(train)))
         rng.shuffle(order)
@@ -284,7 +302,7 @@ def main() -> int:
             optimiser.step()
             schedule.step()
             total += float(loss.detach())
-        if (epoch + 1) % 20 == 0 or epoch == 0:
+        if (epoch + 1) % 20 == 0 or epoch == 0 or epoch + 1 == epochs:
             print(f"  epoch {epoch+1:4d}  loss {total/max(1,len(order)/args.batch_size):.4f}")
 
     report = {
@@ -298,7 +316,10 @@ def main() -> int:
         "token_budget": args.token_budget,
         "parameters": parameters,
         "augmented": not args.no_augment,
-        "epochs": args.epochs,
+        "epochs": epochs,
+        "requested_epochs": args.epochs,
+        "target_steps": args.target_steps,
+        "optimiser_steps": steps,
         "seed": args.seed,
         "skipped_nonfinite_steps": skipped,
         "train_minutes": round((time.time() - started) / 60.0, 2),

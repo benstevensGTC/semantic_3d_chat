@@ -36,6 +36,13 @@ def main() -> int:
             "lift": held.get("lift_over_random_object"),
             "median_gap_m": held["median_gap_m"],
             "gap_under_0p5m": held["gap_under_0p5m"],
+            # Without this a reader cannot tell a model that is short of data
+            # from one that is short of capacity, which is the whole question a
+            # scaling curve is asked to answer.
+            "train_fit": run["train_fit"]["hits_object"],
+            "train_examples": run["train_examples"],
+            "held_out_examples": held["examples"],
+            "interval_95": held.get("interval_95"),
             "parameters": run["parameters"],
         }
 
@@ -93,6 +100,11 @@ def main() -> int:
             for n in header
         )
         print(f"  {mode:<24} {cells}")
+    print(f"  {'(train fit, rope3d)':<24} " + " ".join(
+        f"{scaling['rope3d'][n]['train_fit']:>6.1%}"
+        if n in scaling.get("rope3d", {}) else f"{'-':>7}" for n in header))
+    print("\n  Held-out intervals are 95% Wilson; points whose intervals overlap")
+    print("  are not distinguishable at this sample size.")
     print(f"\nwrote {destination.relative_to(PROJECT_ROOT)}")
     return 0
 

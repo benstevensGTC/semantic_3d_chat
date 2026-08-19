@@ -2,6 +2,9 @@
 
 from __future__ import annotations
 
+import json
+import re
+
 import numpy as np
 import pytest
 
@@ -81,49 +84,65 @@ def test_relational_labels_have_a_clear_runner_up() -> None:
     """The margin that decides the label is the one that has to be checked.
 
     An earlier version compared the nearest candidate against the FURTHEST one,
-    which measures how big the room is. Two thirds of the labels it accepted had
-    a runner-up inside the margin it claimed to enforce, including an exact tie
-    broken alphabetically by a tuple sort.
+    which measures how big the room is; two thirds of the labels it accepted had
+    a runner-up inside the margin it claimed to enforce. An earlier version of
+    *this test* then asserted that same wrong criterion against an anchor it
+    never actually looked up, so it passed regardless. This one recomputes the
+    geometry from the cloud and checks the answer really is the extreme one.
     """
 
+    from semantic_3d_chat.config import PROJECT_ROOT
     from semantic_3d_chat.spatial_lens.discover import discover_objects
     from semantic_3d_chat.spatial_lens.grounding_data import available_rooms
     from semantic_3d_chat.spatial_lens.point_grounding_data import relational_examples
 
-    rooms = available_rooms()
-    if not rooms:
-        pytest.skip("no scanned rooms available")
-    room = rooms[0]
     margin = 0.5
-    examples = relational_examples(room, min_margin_m=margin)
-    if not examples:
-        pytest.skip("this room supports no unambiguous relational label")
-
-    cloud = SemanticCloud.load(
-        __import__("semantic_3d_chat.config", fromlist=["PROJECT_ROOT"]).PROJECT_ROOT
-        / "data" / "spatial_lens" / room / "point_cloud.npz"
-    )
-    centres = np.asarray(cloud.centers_m, dtype=np.float64)
-    places = {
-        proposal.proposal_id: centres[proposal.voxel_indices].mean(axis=0)
-        for proposal in discover_objects(cloud)
-    }
-    for example in examples:
-        anchor_words = example.phrase.split(" the ")[-1]
-        answer = example.points[example.target > 0].mean(axis=0)
-        anchor = next(
-            (mid for pid, mid in places.items() if pid and anchor_words in example.phrase),
-            None,
-        )
-        if anchor is None:
+    checked = 0
+    for room in available_rooms():
+        examples = relational_examples(room, min_margin_m=margin)
+        if not examples:
             continue
-        distances = sorted(
-            float(np.linalg.norm(mid[:2] - anchor[:2])) for mid in places.values()
+        graph = json.loads(
+            (PROJECT_ROOT / "data" / "spatial_lens" / room / "scene_graph.json")
+            .read_text(encoding="utf-8")
         )
-        # Whatever the label is, some pair in the room must be separated by the
-        # margin, or the phrase had no unique answer to begin with.
-        assert distances[-1] - distances[0] >= margin
-        assert np.isfinite(answer).all()
+        names = {item["object_id"]: item["name"] for item in graph["objects"]}
+        cloud = SemanticCloud.load(
+            PROJECT_ROOT / "data" / "spatial_lens" / room / "point_cloud.npz"
+        )
+        centres = np.asarray(cloud.centers_m, dtype=np.float64)
+        places = [
+            (names.get(p.proposal_id), centres[p.voxel_indices].mean(axis=0))
+            for p in discover_objects(cloud)
+        ]
+        for example in examples:
+            match = re.search(r"(?:nearest|closest to|furthest from|farthest from) the (.+)$",
+                              example.phrase)
+            assert match is not None, example.phrase
+            anchor_name = match.group(1)
+            anchor = next((mid for n, mid in places if n == anchor_name), None)
+            assert anchor is not None, f"anchor {anchor_name!r} not found in {room}"
+
+            answer = example.footprint.mean(axis=0)
+            distances = sorted(
+                (float(np.linalg.norm(mid[:2] - anchor[:2])), n)
+                for n, mid in places
+                if mid is not anchor
+            )
+            to_answer = float(np.linalg.norm(answer[:2] - anchor[:2]))
+            wants_near = "nearest" in example.phrase or "closest" in example.phrase
+            if wants_near:
+                # The labelled object is the closest thing in the room, and the
+                # runner-up is clearly further -- not merely somewhere nearer
+                # than the far wall.
+                assert to_answer <= distances[0][0] + 0.35
+                assert distances[1][0] - distances[0][0] >= margin - 1e-6
+            else:
+                assert to_answer >= distances[-1][0] - 0.35
+                assert distances[-1][0] - distances[-2][0] >= margin - 1e-6
+            checked += 1
+    if checked == 0:
+        pytest.skip("no scanned rooms produced a relational example")
 
 
 def test_relational_examples_carry_their_candidate_set() -> None:

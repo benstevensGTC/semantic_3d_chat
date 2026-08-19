@@ -113,11 +113,14 @@ grid, which makes answers continuous rather than quantised to a 0.35 m cell.
 Substituting the same rotation into Gemma's own rotary channel leaves it
 answering coherently but no better at saying where anything is -- 15.1% within a
 metre against a 17.7% random baseline, against 26.4% for the raster layout it
-was meant to beat
-([evidence](reports/gemma4/metrics/rope3d_locate.json)). Two causes were found
-and fixed after that measurement -- the rotation discarded the scene's place in
-the sequence, and it discarded the 2D raster prior the decoder does have -- and
-the re-measurement is what the `z_only` mode exists to test.
+was meant to beat. That reading did not survive scrutiny either: at 53 queries
+the interval on 26.4% runs from 0.164 to 0.396, which swallows every effect
+being argued about, so the honest verdict was **underpowered, not negative**.
+Three causes were found and fixed -- the rotation discarded the scene's place in
+the sequence, it discarded the 2D raster prior the decoder does have, and
+nothing on this path is trained so there was never a reason to hold rooms out.
+The re-measurement covers all 27 rooms, adds Wilson intervals and a paired
+McNemar test, and is what the `z_only` mode exists to settle.
 
 ## Next
 

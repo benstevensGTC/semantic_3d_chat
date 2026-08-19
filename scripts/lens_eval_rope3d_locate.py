@@ -157,7 +157,11 @@ def main() -> int:
             print(f"  {room:8s} {name:22s} " + "  ".join(
                 f"{c}={outcome[c]}" for c in CONDITIONS))
 
-    from semantic_3d_chat.evaluation.proportions import mcnemar_exact, wilson_interval
+    from semantic_3d_chat.evaluation.proportions import (
+        holm_adjust,
+        mcnemar_exact,
+        wilson_interval,
+    )
 
     def condition_summary(data: dict) -> dict[str, object]:
         total = len(data["hits"])
@@ -184,6 +188,10 @@ def main() -> int:
             ),
         }
 
+    paired = {
+        name: mcnemar_exact(results[name]["hits"], results["raster"]["hits"])
+        for name in CONDITIONS if name != "raster"
+    }
     summary = {
         "rooms": rooms,
         "tolerance_m": args.tolerance_m,
@@ -196,10 +204,8 @@ def main() -> int:
         "conditions": {
             name: condition_summary(data) for name, data in results.items()
         },
-        "mcnemar_vs_raster": {
-            name: mcnemar_exact(results[name]["hits"], results["raster"]["hits"])
-            for name in CONDITIONS if name != "raster"
-        },
+        "mcnemar_vs_raster": paired,
+        "holm_adjusted_p": holm_adjust({k: v["p_value"] for k, v in paired.items()}),
         "trials": trials,
     }
     destination = PROJECT_ROOT / args.report

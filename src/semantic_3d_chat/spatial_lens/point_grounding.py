@@ -89,8 +89,15 @@ class PointGroundingModel(nn.Module):
         # raw coordinates instead of a cell index; 'none' removes position
         # entirely, leaving a bag of semantic points.
         if position_mode == "learned_absolute":
-            self.absolute = nn.Sequential(
-                nn.Linear(3, model_dim), nn.GELU(), nn.Linear(model_dim, model_dim)
+            # One code per layer, because rope3d rotates inside every attention
+            # block. Injecting the absolute code once at the input would have
+            # made the comparison about where position enters as much as about
+            # what it encodes, and only one of those is the question.
+            self.absolute = nn.ModuleList(
+                nn.Sequential(
+                    nn.Linear(3, model_dim), nn.GELU(), nn.Linear(model_dim, model_dim)
+                )
+                for _ in range(layers)
             )
         self.blocks = nn.ModuleList(
             Rope3DBlock(
@@ -116,10 +123,14 @@ class PointGroundingModel(nn.Module):
 
         tokens = self.point_projection(features)
         tokens = tokens + self.query_projection(query).unsqueeze(1)
-        if self.position_mode == "learned_absolute":
-            tokens = tokens + self.absolute(positions)
-        geometry = positions if self.position_mode == "rope3d" else torch.zeros_like(positions)
-        for block in self.blocks:
+        # Zero positions make the rotary an identity, which is what makes the
+        # other two modes genuine controls rather than differently-wired models.
+        geometry = (
+            positions if self.position_mode == "rope3d" else torch.zeros_like(positions)
+        )
+        for index, block in enumerate(self.blocks):
+            if self.position_mode == "learned_absolute":
+                tokens = tokens + self.absolute[index](positions)
             tokens = block(tokens, geometry)
         logits = self.score(tokens).squeeze(-1)
         if mask is not None:
