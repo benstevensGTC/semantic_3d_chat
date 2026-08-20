@@ -6,6 +6,11 @@
 # silently mismatching.
 set -u
 cd "$(dirname "$0")/.."
+
+# A killed chain must take its children with it. Killing the parent by name
+# once left an orphaned sweep running for twenty minutes, writing results into
+# the same directory as its replacement.
+trap 'kill 0' INT TERM EXIT
 export PYTHONPATH=src
 MAIN=.venv/bin/python
 GEMMA=.venv-gemma4/bin/python
@@ -19,7 +24,10 @@ step "primitive corpus: matched-compute scaling endpoints"
 STEPS=2880 ./scripts/lens_scale_endpoints.sh
 
 step "asset corpus: the full study"
-STEPS=3600 HOLDOUT=15 ./scripts/lens_asset_sweep.sh
+# Thirty, not fifteen: the sweep's own default was raised for the doubled
+# corpus and an explicit value here silently overrode it, so the first runs of
+# the final study were measured on the split the change was meant to replace.
+STEPS=3600 HOLDOUT=30 ./scripts/lens_asset_sweep.sh
 
 step "Gemma reading the field directly, per corpus"
 ./scripts/lens_gemma_rope3d_evals.sh
