@@ -31,6 +31,9 @@ def main() -> int:
     parser.add_argument("--resolution", type=int, default=448)
     parser.add_argument("--ring-count", type=int, default=8)
     parser.add_argument("--yaws-per-station", type=int, default=3)
+    # With a coverage plan the ring arguments are ignored: the views were
+    # chosen for this room's geometry rather than drawn on a circle.
+    parser.add_argument("--plan", default=None)
     parser.add_argument("--force", action="store_true")
     args = parser.parse_args()
 
@@ -62,6 +65,8 @@ def main() -> int:
         "--yaws-per-station",
         str(args.yaws_per_station),
     ]
+    if args.plan:
+        command += ["--plan", str(args.plan)]
     completed = subprocess.run(command, capture_output=True, text=True, check=False)
     if completed.returncode != 0 or not (scans / "manifest.json").is_file():
         sys.stderr.write(completed.stdout[-4000:] + "\n" + completed.stderr[-4000:])
