@@ -1053,6 +1053,93 @@ arithmetic; a 27B model had the arithmetic and still failed, because the
 robot's own visit history — information about itself, not a route — is what
 made unaided detour planning work.
 
+### Position as a rotation: a RoPE for three dimensions
+
+Everything above carries geometry the wrong way, and it is worth being exact
+about how. The scene tokens are emitted in raster order, so a token's position
+is an *index* the reader must decode against a stated convention, and the
+grounding head learns one absolute code per grid cell, so position becomes a
+lookup. Neither is what a transformer normally does with position.
+
+RoPE does something else. It rotates a token's embedding by an angle
+proportional to its coordinate, and because a dot product between two rotated
+vectors depends only on the difference of the angles, an attention score comes
+out a function of the **displacement** between two tokens. Position is never a
+value the model reads; it is a geometry the model computes in.
+
+Nothing in that construction requires the coordinate to be a place in a
+sequence. `spatial_lens/rope3d.py` splits each attention head into three bands
+and drives each band with one axis, giving a point cloud the same property in
+metres. Two points half a metre apart attend to each other identically wherever
+in the room they are, and different displacements still score differently, so
+the invariance has not collapsed into ignoring position — both checked directly
+([tests](tests/test_rope3d.py)). This is Qwen2-VL's M-RoPE with metres in place
+of time, height and width.
+
+**The cloud stays a cloud.** `PointGroundingModel` drops the grid: each sampled
+voxel is a token carrying its Gemma embedding, its place enters only through the
+rotation, and the answer is a softmax-weighted position over real points. So
+predictions are continuous rather than quantised to a 0.35 m cell, and nothing
+is tied to one room shape, because only relative geometry is ever encoded.
+
+**Inside the decoder too.** `language/rope3d_patch.py` substitutes the same
+construction into Gemma's own rotary channel for the span of scene tokens.
+Nothing is trained, and no coordinate appears as text on either path.
+
+### The rooms had to be rebuilt before any of this could be measured
+
+The first twenty-seven rooms were hand-built from flat-shaded coloured
+primitives, and two results came out of them that were facts about the rooms
+rather than about the method: a colour-only control reached two thirds of what
+Gemma's embeddings did, which is roughly what coloured boxes produce on their
+own; and no room held two objects of the same kind, so every relational question
+was answerable by naming the target.
+
+The corpus is now **120 rooms built from 200 downloaded CC0 assets** across 32
+categories, with repeated categories guaranteed, varied extent and fill, and
+small objects standing on larger ones so no single viewpoint sees everything.
+Placement is rejection-sampled against the walls, the ceiling and everything
+already placed. Asset sizes are **measured by importing each mesh** rather than
+read from published metadata, which disagreed with the geometry for eleven of
+two hundred — including a clean factor of ten and several transposed axes.
+
+**View counts are derived, not chosen.** Thirty views on one ring at one height
+was a number somebody picked, and whether a room is covered depends on how
+cluttered it is and what stands in front of what. `plan_scan_coverage.py`
+samples surface points over the furniture, generates ~900 candidate viewpoints
+across positions, three heights and three pitches, resolves visibility by
+ray-cast so a chair behind a table is not credited to a view that cannot see it,
+and takes views greedily until the curve flattens. Rooms need 12–43 views
+(median 24) for 99% of *reachable* surface — which is 60% of the furniture's
+total area, the rest being undersides, backs against walls and interiors no
+camera in the room can reach. Depth is exact; nothing models sensor noise.
+
+![How many views a room needs](reports/figures/scan_coverage.png)
+
+### What five rounds of review found
+
+Every round found something, and every one of them flattered the result. They
+are recorded because the corrections are more informative than the numbers.
+
+| what was wrong | why it mattered |
+| --- | --- |
+| Relational labels named their target | The room held one of each, so the relation was decoration |
+| Near-tie filter compared the extremes | Two thirds of labels had a runner-up inside the stated margin; one exact tie was broken alphabetically |
+| Margin ignored objects that could not be targets | "Nearest" could be labelled on something demonstrably not nearest |
+| Baseline was a uniformly random point | Learning "objects are not floor" was most of the score; lift was inflated ~16× |
+| The two position schemes differed in injection depth | The ablation was partly about *where* position enters, not what it encodes |
+| Colour control was a hash | Two near-identical tans scored as dissimilar as tan and teal, so the control could not lose fairly |
+| Scaling curve compared training length | Two rooms got 13× fewer gradient steps than nineteen |
+| A regression test could not fail | It asserted the very criterion the fix had removed |
+| Asset sizes came from metadata | One shelf was built at 34% of its recorded height in eight rooms |
+| Nothing checked the vertical axis | Four objects passed through the ceiling, one clean out of the building |
+| Planner and camera used opposite yaw signs | Every planned view was mirrored; coverage was reported for a scan never taken |
+| Cameras could stand inside furniture | Those views scored well for seeing upholstery |
+| Intervals treated shared-target wordings as independent | Narrower than earned |
+| Coverage divided by a self-referential denominator | Could not fall far below the stopping threshold by construction |
+| Asset rooms joined the pool mid-sweep | Early and late runs would have been measured on different data |
+| Disambiguation test set held two distinct targets | A score of zero that measured nothing |
+
 ### Browser compatibility surface
 
 The browser route remains available for local API/debug compatibility, but the
