@@ -62,6 +62,10 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--ring-count", type=int, default=8)
     parser.add_argument("--yaws-per-station", type=int, default=3)
     parser.add_argument("--pitch-degrees", type=float, default=-14.0)
+    # A plan from plan_scan_coverage.py replaces the fixed ring entirely: its
+    # views were chosen because of what they see in THIS room, at heights and
+    # pitches a single standing orbit never reaches.
+    parser.add_argument("--plan", default=None)
     return parser
 
 
@@ -106,53 +110,64 @@ def main() -> None:
     (output / "depth").mkdir(parents=True, exist_ok=True)
 
     frames: list[dict[str, Any]] = []
-    stations = _stations(room_w, room_d, room_h, int(args.ring_count))
-    frame_index = 0
-    for station in stations:
-        # Face the room centre from the ring, and sweep all round from inside.
-        if station == (0.0, 0.0):
-            base_yaws = [i * 360.0 / (args.yaws_per_station * 2) for i in range(args.yaws_per_station * 2)]
-        else:
-            inward = math.degrees(math.atan2(-station[0], -station[1]))
-            spread = 42.0
-            base_yaws = [
-                inward + spread * (i - (args.yaws_per_station - 1) / 2.0)
-                for i in range(args.yaws_per_station)
-            ]
-        for yaw in base_yaws:
-            position = (station[0], station[1], float(args.camera_height))
-            set_camera_yaw_pitch(camera, position, yaw, float(args.pitch_degrees))
-            camera_to_world = camera_to_world_cv(camera)
-            frame_id = f"o_{frame_index + 1:06d}"
-            rgb_relative = f"rgb/{frame_id}.png"
-            depth_relative = f"depth/{frame_id}.npy"
-            render_png(scene, output / rgb_relative)
-            depth = axial_depth_from_bvh(
-                bvh,
-                camera_to_world,
-                rays,
-                width=width_px,
-                height=height_px,
-                max_distance_m=max_distance,
+
+    if args.plan:
+        plan = json.loads(Path(args.plan).read_text(encoding="utf-8"))
+        poses = [
+            (
+                tuple(float(v) for v in view["position_m"]),
+                float(view["yaw_degrees"]),
+                float(view["pitch_degrees"]),
             )
-            if not np.isfinite(depth).all() or np.any(depth < 0):
-                raise RuntimeError(f"Invalid depth in {frame_id}")
-            np.save(output / depth_relative, depth.astype(np.float32, copy=False))
-            frames.append(
-                {
-                    "frame_id": frame_id,
-                    "rgb_path": rgb_relative,
-                    "depth_path": depth_relative,
-                    "width": width_px,
-                    "height": height_px,
-                    "intrinsics": intrinsics.tolist(),
-                    "camera_to_world": camera_to_world.tolist(),
-                    "camera_position_m": list(position),
-                    "camera_yaw_degrees": float(yaw),
-                    "camera_pitch_degrees": float(args.pitch_degrees),
-                }
+            for view in plan["views"]
+        ]
+    else:
+        poses = [
+            ((station[0], station[1], float(args.camera_height)), yaw, float(args.pitch_degrees))
+            for station in _stations(room_w, room_d, room_h, int(args.ring_count))
+            for yaw in (
+                [i * 360.0 / (args.yaws_per_station * 2) for i in range(args.yaws_per_station * 2)]
+                if station == (0.0, 0.0)
+                else [
+                    math.degrees(math.atan2(-station[0], -station[1]))
+                    + 42.0 * (i - (args.yaws_per_station - 1) / 2.0)
+                    for i in range(args.yaws_per_station)
+                ]
             )
-            frame_index += 1
+        ]
+
+    for frame_index, (position, yaw, pitch) in enumerate(poses):
+        set_camera_yaw_pitch(camera, position, yaw, pitch)
+        camera_to_world = camera_to_world_cv(camera)
+        frame_id = f"o_{frame_index + 1:06d}"
+        rgb_relative = f"rgb/{frame_id}.png"
+        depth_relative = f"depth/{frame_id}.npy"
+        render_png(scene, output / rgb_relative)
+        depth = axial_depth_from_bvh(
+            bvh,
+            camera_to_world,
+            rays,
+            width=width_px,
+            height=height_px,
+            max_distance_m=max_distance,
+        )
+        if not np.isfinite(depth).all() or np.any(depth < 0):
+            raise RuntimeError(f"Invalid depth in {frame_id}")
+        np.save(output / depth_relative, depth.astype(np.float32, copy=False))
+        frames.append(
+            {
+                "frame_id": frame_id,
+                "rgb_path": rgb_relative,
+                "depth_path": depth_relative,
+                "width": width_px,
+                "height": height_px,
+                "intrinsics": intrinsics.tolist(),
+                "camera_to_world": camera_to_world.tolist(),
+                "camera_position_m": list(position),
+                "camera_yaw_degrees": float(yaw),
+                "camera_pitch_degrees": float(pitch),
+            }
+        )
 
     atomic_json(
         output / "manifest.json",

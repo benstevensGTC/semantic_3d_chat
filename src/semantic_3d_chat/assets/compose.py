@@ -42,6 +42,52 @@ WALL_CATEGORIES = frozenset({"painting", "mirror"})
 # Things wide and flat enough to put something else on.
 SUPPORT_CATEGORIES = frozenset({"table", "desk", "cabinet", "bookshelf"})
 
+# What each word actually implies about size, as (min, max) largest extent in
+# metres. The tag-based classifier is generous -- a 17 cm decorative ledge and a
+# two-metre bookcase both answer to "shelf" -- and an object labelled one thing
+# while looking like another poisons the scoring without ever reaching the
+# model. Anything outside its category's range is dropped rather than renamed.
+CATEGORY_SIZE_M: dict[str, tuple[float, float]] = {
+    "bed": (1.4, 2.6),
+    "sofa": (1.2, 2.6),
+    "armchair": (0.6, 1.4),
+    "chair": (0.4, 1.4),
+    "desk": (0.7, 2.2),
+    "table": (0.4, 2.4),
+    "cabinet": (0.5, 2.6),
+    "bookshelf": (0.7, 2.6),
+    "television": (0.3, 1.8),
+    "chandelier": (0.3, 1.4),
+    "lamp": (0.15, 1.9),
+    "speaker": (0.15, 1.4),
+    "barrel": (0.4, 1.2),
+    "crate": (0.2, 1.4),
+    "basket": (0.2, 1.0),
+    "vase": (0.15, 1.0),
+    "pot": (0.12, 0.8),
+    "bottle": (0.1, 0.6),
+    "books": (0.15, 0.7),
+    "plant": (0.2, 2.0),
+    "clock": (0.1, 0.6),
+    "bucket": (0.15, 0.7),
+    "toolbox": (0.2, 0.9),
+    "suitcase": (0.3, 1.1),
+    "rug": (0.8, 3.0),
+    "mirror": (0.3, 2.2),
+    "painting": (0.3, 2.2),
+    "ball": (0.15, 0.5),
+    "guitar": (0.5, 1.3),
+    "camera": (0.1, 0.5),
+    "fan": (0.2, 1.6),
+    "heater": (0.3, 1.6),
+    "sign": (0.3, 1.4),
+}
+
+# Below this an object is a few voxels across and neither the vision encoder nor
+# the point cloud can say anything reliable about it, so it may sit on a surface
+# as clutter but never stands alone on the floor as a target.
+MIN_FLOOR_EXTENT_M = 0.35
+
 BUILD_SCHEMA = "semantic_3d_chat.assets.room_build.v1"
 KEY_SCHEMA = "semantic_3d_chat.assets.room_key.v1"
 
@@ -170,11 +216,24 @@ def compose_room(
 
     by_category: dict[str, list[dict[str, Any]]] = {}
     for entry in manifest:
-        by_category.setdefault(entry["category"], []).append(entry)
+        category = entry["category"]
+        extent = max(float(v) for v in entry["size_m"])
+        low, high = CATEGORY_SIZE_M.get(category, (0.1, 3.0))
+        if not (low <= extent <= high):
+            continue
+        by_category.setdefault(category, []).append(entry)
 
     floor_pool = [c for c in by_category if c not in CEILING_CATEGORIES | WALL_CATEGORIES]
     surface_pool = [c for c in floor_pool if c in SURFACE_CATEGORIES]
-    standing_pool = [c for c in floor_pool if c not in SURFACE_CATEGORIES]
+    standing_pool = [
+        c
+        for c in floor_pool
+        if c not in SURFACE_CATEGORIES
+        and any(
+            max(float(v) for v in e["size_m"]) >= MIN_FLOOR_EXTENT_M
+            for e in by_category[c]
+        )
+    ]
     if not standing_pool:
         raise ValueError("asset manifest has nothing that can stand on a floor")
 
@@ -211,6 +270,12 @@ def compose_room(
 
     for category in plan:
         options = [e for e in by_category[category] if e["asset_id"] not in used_assets]
+        if not options:
+            continue
+        options = [
+            e for e in options
+            if max(float(v) for v in e["size_m"]) >= MIN_FLOOR_EXTENT_M
+        ]
         if not options:
             continue
         entry = rng.choice(options)
@@ -338,8 +403,10 @@ def compose_room(
 
 __all__ = [
     "BUILD_SCHEMA",
+    "CATEGORY_SIZE_M",
     "CEILING_CATEGORIES",
     "KEY_SCHEMA",
+    "MIN_FLOOR_EXTENT_M",
     "SUPPORT_CATEGORIES",
     "SURFACE_CATEGORIES",
     "ComposedRoom",
