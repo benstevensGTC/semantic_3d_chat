@@ -42,8 +42,6 @@ def main() -> int:
 
         # Geometry for Blender: instance ids, transforms and mesh paths only.
         build = room.build_payload()
-        for entry, placement in zip(build["objects"], room.placements, strict=True):
-            entry["size_m"] = [round(v, 5) for v in placement.size_m]
         (room_dir / "build.json").write_text(
             json.dumps(build, indent=2, sort_keys=True) + "\n", encoding="utf-8"
         )

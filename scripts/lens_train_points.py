@@ -151,6 +151,11 @@ def evaluate(model, examples, vectors, device, batch=8, feature_mode="gemma", wo
     # overlapping Wilson intervals instead throws away the pairing, and with it
     # most of the power the design already has.
     items: list[str] = []
+    # Several wordings can point at the same object in the same room, and two of
+    # them may carry byte-identical targets. Treating those as independent
+    # trials narrows the interval by a factor it has not earned, so the interval
+    # is computed over distinct (room, target) groups instead.
+    groups: list[str] = []
     for start in range(0, len(examples), batch):
         chunk = examples[start : start + batch]
         points, features, query, target, phrase_words, phrase_mask = stack(
@@ -168,6 +173,9 @@ def evaluate(model, examples, vectors, device, batch=8, feature_mode="gemma", wo
         for index, example in enumerate(chunk):
             hits.append(float(target[index, best[index]] > 0))
             items.append(f"{example.room}|{example.phrase}")
+            groups.append(
+                f"{example.room}|{np.flatnonzero(example.target > 0).tobytes().hex()[:32]}"
+            )
             # Two nulls, because they answer different questions. The first is a
             # uniformly random point; the second is a guesser that already knows
             # the answer is an object rather than floor or wall, and picks among
@@ -199,7 +207,11 @@ def evaluate(model, examples, vectors, device, batch=8, feature_mode="gemma", wo
         "hits_object": round(float(np.mean(hits)), 4),
         # So a reader can see which points on the scaling curve are actually
         # distinguishable from each other and which are the same number twice.
-        "interval_95": wilson_interval(int(sum(hits)), len(hits)),
+        # Over independent groups, not over wordings.
+        "interval_95": wilson_interval(
+            round(float(np.mean(hits)) * len(set(groups))), len(set(groups))
+        ),
+        "effective_n": len(set(groups)),
         "per_item": dict(zip(items, (int(h) for h in hits), strict=True)),
         "chance_uniform_point": round(float(np.mean(chance)), 4),
         "chance_random_object": round(informed, 4) if informed is not None else None,

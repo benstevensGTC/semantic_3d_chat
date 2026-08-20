@@ -260,16 +260,25 @@ def main() -> None:
     atomic_json(
         Path(args.output),
         {
-            "schema": "semantic_3d_chat.spatial_lens.scan_plan.v1",
+            "schema": "semantic_3d_chat.spatial_lens.scan_plan.v2",
             "room_size_m": [width, depth, height],
             "surface_samples": len(points),
-            # Coverage is quoted against what any camera in the room can reach:
-            # the inside of a drawer is not a failure of the view plan.
+            # Two denominators, because one of them flatters the plan. Coverage
+            # "of reachable" divides by what this candidate pool can see, so it
+            # is partly a statement about the pool and cannot fall much below
+            # the stopping threshold by construction. Coverage "of surface" is
+            # the fraction of the furniture's whole area that was seen, which is
+            # the number a reader actually wants and is always lower.
             "reachable_samples": len(reachable),
             "reachable_fraction_of_sampled": round(len(reachable) / len(points), 4),
             "views": [candidates[index] for index in chosen],
             "coverage_curve": curve,
+            "final_coverage_of_reachable": curve[-1] if curve else 0.0,
+            "final_coverage_of_surface": round(len(covered) / len(points), 5),
             "final_coverage": curve[-1] if curve else 0.0,
+            # The scanner must render with the same field of view this was
+            # computed for, or the plan describes a different camera.
+            "fov_degrees": float(args.fov_degrees),
             "candidates_considered": len(candidates),
             "free_space_clearance_m": 0.35,
         },
@@ -278,7 +287,8 @@ def main() -> None:
         json.dumps(
             {
                 "views": len(chosen),
-                "coverage": curve[-1] if curve else 0.0,
+                "coverage_of_reachable": curve[-1] if curve else 0.0,
+                "coverage_of_surface": round(len(covered) / len(points), 4),
                 "reachable_fraction": round(len(reachable) / len(points), 4),
             },
             indent=2,

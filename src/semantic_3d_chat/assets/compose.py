@@ -140,6 +140,10 @@ class ComposedRoom:
                     "position_m": [round(v, 4) for v in p.position_m],
                     "yaw_degrees": round(p.yaw_degrees, 2),
                     "scale": round(p.scale, 4),
+                    # The builder fits the mesh to this, so it has to travel
+                    # with the geometry rather than being reattached by the
+                    # caller. It is a size, not a name.
+                    "size_m": [round(v, 5) for v in p.size_m],
                 }
                 for p in self.placements
             ],
@@ -200,10 +204,11 @@ def compose_room(
     max_extent_m: float = 9.0,
     wall_clearance_m: float = 0.25,
     object_clearance_m: float = 0.22,
+    ceiling_clearance_m: float = 0.06,
     duplicate_categories: tuple[int, int] = (1, 3),
     min_objects: int = 5,
     attempts: int = 400,
-    tries: int = 12,
+    tries: int = 24,
 ) -> ComposedRoom:
     """Draw one room: its size, its contents, and where everything stands."""
 
@@ -281,7 +286,14 @@ def compose_room(
         entry = rng.choice(options)
         scale = rng.uniform(0.85, 1.18)
         size = tuple(float(v) * scale for v in entry["size_m"])
-        if size[0] > width - 2 * wall_clearance_m or size[1] > depth - 2 * wall_clearance_m:
+        # Height was drawn and then never used: nothing stopped a 2.9 m cabinet
+        # standing in a 2.77 m room, or a lamp on a cabinet passing clean
+        # through the ceiling slab and out of the building.
+        if (
+            size[0] > width - 2 * wall_clearance_m
+            or size[1] > depth - 2 * wall_clearance_m
+            or size[2] > height - ceiling_clearance_m
+        ):
             continue
         yaw = rng.uniform(0.0, 360.0)
         counter += 1
@@ -339,6 +351,9 @@ def compose_room(
         support_extent = support.footprint_m()
         if size[0] > support_extent[0] * 0.7 or size[1] > support_extent[1] * 0.7:
             continue
+        base_z = support.position_m[2] + support.size_m[2]
+        if base_z + size[2] > height - ceiling_clearance_m:
+            continue
         counter += 1
         jitter_x = (support_extent[0] - size[0]) / 2.0 * 0.6
         jitter_y = (support_extent[1] - size[1]) / 2.0 * 0.6
@@ -351,7 +366,7 @@ def compose_room(
                 position_m=(
                     round(support.position_m[0] + rng.uniform(-jitter_x, jitter_x), 4),
                     round(support.position_m[1] + rng.uniform(-jitter_y, jitter_y), 4),
-                    round(support.size_m[2], 4),
+                    round(base_z, 4),
                 ),
                 yaw_degrees=rng.uniform(0.0, 360.0),
                 scale=scale,
@@ -375,6 +390,7 @@ def compose_room(
             wall_clearance_m=wall_clearance_m,
             object_clearance_m=object_clearance_m,
             duplicate_categories=duplicate_categories,
+            ceiling_clearance_m=ceiling_clearance_m,
             min_objects=min_objects,
             attempts=attempts,
             tries=tries - 1,

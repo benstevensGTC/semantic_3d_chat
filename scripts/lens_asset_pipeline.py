@@ -59,8 +59,6 @@ def main() -> int:
             room = compose_room(name, manifest, seed=args.seed + index)
             root.mkdir(parents=True, exist_ok=True)
             build = room.build_payload()
-            for entry, placement in zip(build["objects"], room.placements, strict=True):
-                entry["size_m"] = [round(v, 5) for v in placement.size_m]
             (root / "build.json").write_text(
                 json.dumps(build, indent=2, sort_keys=True) + "\n", encoding="utf-8"
             )

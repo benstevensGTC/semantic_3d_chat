@@ -99,11 +99,27 @@ def _fetch_json(url: str, timeout: float = 60.0) -> Any:
 
 
 def classify(asset_id: str, tags: list[str], categories: list[str]) -> str | None:
-    """Which everyday word describes this object, if any."""
+    """Which everyday word describes this object, if any.
 
-    haystack = " ".join([re.sub(r"[_\d]+", " ", asset_id), *tags, *categories]).lower()
+    English compounds put the head noun last: a desk lamp is a lamp, a mantel
+    clock is a clock. Taking the first rule that matches anywhere gets both of
+    those wrong, because "desk" and "shelf" appear earlier in the list and
+    earlier in the name. So the asset's own name is scored first, and the rule
+    matching furthest into it wins; tags only decide when the name says nothing.
+    """
+
+    words = re.sub(r"[_\d]+", " ", asset_id).lower()
+    haystack = " ".join([words, *tags, *categories]).lower()
     if EXCLUDE.search(haystack):
         return None
+
+    best_name, best_position = None, -1
+    for name, pattern in CATEGORY_RULES:
+        found = list(re.finditer(pattern, words))
+        if found and found[-1].start() > best_position:
+            best_name, best_position = name, found[-1].start()
+    if best_name is not None:
+        return best_name
     for name, pattern in CATEGORY_RULES:
         if re.search(pattern, haystack):
             return name

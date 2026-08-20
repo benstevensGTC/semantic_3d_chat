@@ -113,6 +113,15 @@ def main() -> None:
 
     if args.plan:
         plan = json.loads(Path(args.plan).read_text(encoding="utf-8"))
+        # The plan's visibility test used a cone of this width. Rendering with a
+        # different one would mean the views were chosen for a camera that is
+        # not the one taking the pictures.
+        planned_fov = plan.get("fov_degrees")
+        if planned_fov is not None and abs(float(planned_fov) - float(args.fov_degrees)) > 1e-6:
+            raise SystemExit(
+                f"plan was computed for {planned_fov} degrees but this scan "
+                f"renders {args.fov_degrees}"
+            )
         poses = [
             (
                 tuple(float(v) for v in view["position_m"]),

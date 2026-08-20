@@ -297,10 +297,16 @@ def disambiguation_examples(
 
     centers = np.asarray(cloud.centers_m, dtype=np.float64)
     found: list[tuple[str, str, np.ndarray, np.ndarray, np.ndarray]] = []
+    # Every member of every category, including ones too thinly sampled to be a
+    # target. They are still in the room, so "the cabinet nearest the sofa" is a
+    # false statement if one of them is nearer and merely got filtered out here.
+    all_members: dict[str, list[np.ndarray]] = {}
     for proposal in discover_objects(cloud):
         name = named.get(proposal.proposal_id)
         if not name or name == "unidentified object":
             continue
+        middle = centers[proposal.voxel_indices].mean(axis=0)
+        all_members.setdefault(re.sub(r"\s+\d+$", "", name), []).append(middle)
         inside = np.zeros(len(cloud), dtype=bool)
         inside[proposal.voxel_indices] = True
         picked = inside[chosen]
@@ -345,16 +351,38 @@ def disambiguation_examples(
             # cabinets it accepts a pair of them sitting on top of each other so
             # long as the third is across the room. Twelve of the nineteen
             # three-or-more cases here were exactly that.
+            # Distances to every member in the room, filtered or not, so a
+            # thinly-sampled cabinet cannot make the label a lie.
+            world = sorted(
+                float(np.linalg.norm(mid[:2] - anchor_mid[:2]))
+                for mid in all_members.get(category, [])
+            )
+            if len(world) < 2:
+                continue
+
             wording: list[tuple[str, int]] = []
-            if ranked[1][0] - ranked[0][0] >= min_margin_m:
+            # Two wordings each way. Emitting two "near" against one "far" makes
+            # the nearest member the answer two times in three, so a model that
+            # always guesses "nearest" beats the 1/k line without using geometry
+            # at all -- and 1/k stops being the achievable null.
+            if (
+                ranked[1][0] - ranked[0][0] >= min_margin_m
+                and ranked[0][0] <= world[0] + 1e-6
+                and world[1] - world[0] >= min_margin_m
+            ):
                 wording += [
                     (f"the {category} nearest the {anchor_name}", ranked[0][1]),
                     (f"the {category} closest to the {anchor_name}", ranked[0][1]),
                 ]
-            if ranked[-1][0] - ranked[-2][0] >= min_margin_m:
-                wording.append(
-                    (f"the {category} furthest from the {anchor_name}", ranked[-1][1])
-                )
+            if (
+                ranked[-1][0] - ranked[-2][0] >= min_margin_m
+                and ranked[-1][0] >= world[-1] - 1e-6
+                and world[-1] - world[-2] >= min_margin_m
+            ):
+                wording += [
+                    (f"the {category} furthest from the {anchor_name}", ranked[-1][1]),
+                    (f"the {category} farthest from the {anchor_name}", ranked[-1][1]),
+                ]
             for phrase, index in wording:
                 _c, _n, _mid, picked, voxels = members[index]
                 target = picked.astype(np.float32)
