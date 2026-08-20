@@ -122,13 +122,62 @@ nothing on this path is trained so there was never a reason to hold rooms out.
 The re-measurement covers all 27 rooms, adds Wilson intervals and a paired
 McNemar test, and is what the `z_only` mode exists to settle.
 
+## The rooms, and why they were rebuilt twice
+
+The first twenty-seven rooms were hand-built from flat-shaded coloured
+primitives. Two results came out of them that turned out to be facts about the
+rooms rather than about the method:
+
+- a colour-only control reached two thirds of what Gemma's embeddings did,
+  which is roughly what coloured boxes would produce on their own;
+- no room held two objects of the same kind, so every relational question was
+  answerable by naming the target, and the task had to be rewritten around
+  targets that are never named.
+
+The corpus is now **120 rooms built from 200 downloaded CC0 assets** across 32
+categories, with repeated categories guaranteed, varied extent and fill, and
+small objects standing on larger ones. Placement is rejection-sampled against
+the walls, the ceiling and everything already placed. Asset sizes are measured
+by importing each mesh rather than read from published metadata, which
+disagreed with the geometry for eleven of two hundred -- including a clean
+factor of ten and several transposed axes.
+
+View counts are derived rather than chosen: surface points are sampled over the
+furniture, ~900 candidate viewpoints are generated across positions, three
+heights and three pitches, visibility is resolved by ray-cast so a chair behind
+a table is not credited to a view that cannot see it, and views are taken
+greedily until the curve flattens. Rooms need 12-43 views (median 24) to reach
+99% of *reachable* surface, which is 60% of the furniture's total area; the rest
+is undersides, backs against walls and interiors no camera in the room can see.
+
+Depth is exact. Nothing models sensor noise, because the question is what the
+representation supports rather than what a particular sensor costs.
+
+## What did not survive contact with the better corpus
+
+- **3D rotary's advantage at naming objects did not replicate.** On primitives
+  it beat learned-absolute position 24 items to 9 (paired, p = 0.014). On real
+  furniture it loses 17 to 28, p = 0.135, which is no difference at all.
+- **Colour is a stronger baseline than expected, not weaker.** It reaches 75% of
+  Gemma's accuracy on real assets against 61% on primitives.
+
+What does hold in both corpora is precision rather than identification: any
+positional encoding lands about four times closer than none, and Gemma's
+embeddings land about six times closer than colour alone. Naming an object is
+mostly a semantic task with a positional readout, which is why a no-position
+control still reaches half.
+
 ## Next
 
-- Train on more rooms; 19 is still few, and the reader fits them perfectly while
-  reaching far less on unseen ones, so the gap is data. The scaling sweep is
-  what turns that assertion into a curve.
+- Relational grounding is still unproven. It sat at chance on the primitive
+  corpus at every scale, and the disambiguation test that should settle it is
+  only now large enough to answer a moderate effect: a room yields about two
+  distinct targets however many phrasings it produces, and only 28% of rooms can
+  pose the question at all, because Gemma has to independently give two objects
+  the same name.
+- A mean-pooled phrase cannot express *nearest(shelf)*; the word-level query
+  path exists and is measured, and is the likeliest single fix.
+- The frozen decoder may simply need adaptation: nothing in pretraining gives
+  Gemma a reason to read metres in its rotary channel as space.
 - Re-test the untrained route with a working multimodal 27B; qwen3.8's vision
   path returned empty on this Ollama build.
-- The frozen-decoder path may simply need adaptation rather than a better
-  encoding: nothing in pretraining gives Gemma a reason to read metres in its
-  rotary channel as space.
