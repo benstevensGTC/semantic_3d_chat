@@ -252,6 +252,9 @@ def main() -> int:
     parser.add_argument("--exclude-prefix", default=None,
                         help="ignore rooms whose name starts with this")
     parser.add_argument("--holdout", type=int, default=8)
+    parser.add_argument("--capable-oversample", type=float, default=1.6,
+                        help="how much to over-represent disambiguation-capable "
+                             "rooms in the held-out set, relative to proportional")
     parser.add_argument("--train-rooms", type=int, default=0,
                         help="cap on training rooms; 0 uses every remaining room")
     parser.add_argument("--token-budget", type=int, default=1024)
@@ -300,8 +303,18 @@ def main() -> int:
     if capable and len(capable) < len(shuffled):
         rich = [r for r in shuffled if r in capable]
         plain = [r for r in shuffled if r not in capable]
-        share = round(args.holdout * len(rich) / len(shuffled))
-        share = max(1, min(share, len(rich), args.holdout))
+        # Deliberately over-represented rather than merely proportional. A
+        # room contributes about two distinct disambiguation targets however
+        # many phrasings it yields, and intervals are computed over targets, so
+        # a proportional split left sixteen of them and could only have
+        # resolved a very large effect. Taking a larger share of the capable
+        # rooms trades training data for a test that can actually answer the
+        # question it is asked. Every task uses the same split, so the object
+        # and relational test sets are drawn from slightly duplicate-richer
+        # rooms than their training sets -- stated here because it is a real
+        # distribution shift, if a mild one.
+        share = round(args.holdout * len(rich) / len(shuffled) * float(args.capable_oversample))
+        share = max(1, min(share, len(rich) - 4, args.holdout))
         held_out = sorted(rich[:share] + plain[: args.holdout - share])
         train_rooms = [r for r in shuffled if r not in set(held_out)]
     else:
@@ -413,6 +426,7 @@ def main() -> int:
         "rooms_used": sorted(rooms),
         "room_pool": len(rooms),
         "holdout_stratified_by_disambiguation": True,
+        "capable_oversample": args.capable_oversample,
         "feature_mode": args.feature_mode,
         "query_mode": args.query_mode,
         "position_mode": args.position_mode,
