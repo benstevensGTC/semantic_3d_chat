@@ -57,11 +57,24 @@ def main() -> int:
         for mode in ("rope3d", "learned_absolute", "none")
     }
     relational["rgb_instead_of_gemma"] = row("relational_rgb_only_rooms19")
+    # The 19-room endpoint comes from its own matched-compute run: the sweep's
+    # ablation run of the same name was trained for twice as many steps, and
+    # putting it on this curve would make training length look like data.
+    def scaling_point(mode: str, n: int) -> dict[str, object] | None:
+        if n == 19:
+            endpoint = (
+                f"scale19_relational_{mode.split('relational_', 1)[1]}"
+                if mode.startswith("relational_")
+                else f"scale19_{mode}"
+            )
+            return row(endpoint)
+        return row(f"{mode}_rooms{n}")
+
     scaling = {
         mode: {
-            str(n): row(f"{mode}_rooms{n}")
+            str(n): scaling_point(mode, n)
             for n in (2, 4, 8, 12, 16, 19)
-            if row(f"{mode}_rooms{n}")
+            if scaling_point(mode, n)
         }
         for mode in (
             "rope3d",
