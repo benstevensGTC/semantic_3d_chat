@@ -16,7 +16,7 @@ cd "$(dirname "$0")/.."
 export PYTHONPATH=src
 PY=.venv/bin/python
 STEPS=${STEPS:-3600}
-HOLDOUT=${HOLDOUT:-15}
+HOLDOUT=${HOLDOUT:-30}
 OUT=reports/gemma4/metrics/point_grounding_assets
 mkdir -p "$OUT"
 
@@ -58,7 +58,7 @@ done
 run relational_rope3d_tokens --task relational --position-mode rope3d --query-mode tokens
 
 # Scaling. The axis is rooms; the step budget is fixed, so it is not compute.
-for n in 4 12 24 45; do
+for n in 6 12 24 48 90; do
   for mode in rope3d learned_absolute; do
     run "scale_object_${mode}_${n}" --position-mode "$mode" --train-rooms "$n"
   done
