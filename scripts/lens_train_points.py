@@ -227,6 +227,11 @@ def main() -> int:
                              "is not averaged into the thing it relates to")
     parser.add_argument("--position-mode", default="rope3d",
                         choices=["rope3d", "learned_absolute", "none"])
+    # Primitive rooms and asset rooms live in the same directory, and
+    # available_rooms() returns both. Mixing them would silently average two
+    # different experiments and make the comparison between them impossible.
+    parser.add_argument("--room-prefix", default=None,
+                        help="only use rooms whose name starts with this")
     parser.add_argument("--holdout", type=int, default=8)
     parser.add_argument("--train-rooms", type=int, default=0,
                         help="cap on training rooms; 0 uses every remaining room")
@@ -252,6 +257,13 @@ def main() -> int:
     rng = random.Random(args.seed)
 
     rooms = available_rooms()
+    if args.room_prefix:
+        rooms = [r for r in rooms if r.startswith(args.room_prefix)]
+        if len(rooms) <= args.holdout:
+            raise SystemExit(
+                f"only {len(rooms)} rooms match {args.room_prefix!r}, "
+                f"which leaves nothing to train on after holding out {args.holdout}"
+            )
     shuffled = list(rooms)
     # The split is fixed across every run so the scaling curve and the ablation
     # are measured on exactly the same held-out rooms.
@@ -353,6 +365,8 @@ def main() -> int:
 
     report = {
         "task": args.task,
+        "room_prefix": args.room_prefix,
+        "room_pool": len(rooms),
         "feature_mode": args.feature_mode,
         "query_mode": args.query_mode,
         "position_mode": args.position_mode,
