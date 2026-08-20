@@ -57,6 +57,8 @@ def main() -> int:
     # being argued about. All 27 rooms roughly triples the sample.
     parser.add_argument("--rooms", type=int, default=0,
                         help="cap on rooms measured; 0 uses every scanned room")
+    parser.add_argument("--room-prefix", default=None,
+                        help="only measure rooms whose name starts with this")
     parser.add_argument("--grid", type=int, default=16)
     parser.add_argument("--span-units", type=float, default=256.0)
     parser.add_argument("--tolerance-m", type=float, default=1.0)
@@ -65,6 +67,8 @@ def main() -> int:
     args = parser.parse_args()
 
     shuffled = list(available_rooms())
+    if args.room_prefix:
+        shuffled = [r for r in shuffled if r.startswith(args.room_prefix)]
     random.Random(20260818).shuffle(shuffled)
     rooms = sorted(shuffled[: args.rooms] if args.rooms else shuffled)
     print(f"measuring {len(rooms)} rooms")
@@ -194,6 +198,7 @@ def main() -> int:
     }
     summary = {
         "rooms": rooms,
+        "room_prefix": args.room_prefix,
         "tolerance_m": args.tolerance_m,
         "span_units": args.span_units,
         "queries_per_condition": len(results["raster"]["hits"]),

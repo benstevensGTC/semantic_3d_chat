@@ -139,6 +139,8 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--rooms", type=int, default=0,
                         help="cap on rooms measured; 0 uses every scanned room")
+    parser.add_argument("--room-prefix", default=None,
+                        help="only measure rooms whose name starts with this")
     parser.add_argument("--per-room", type=int, default=6,
                         help="questions sampled per room per kind")
     parser.add_argument("--seed", type=int, default=20260818)
@@ -148,6 +150,8 @@ def main() -> int:
 
     rng = random.Random(args.seed)
     shuffled = list(available_rooms())
+    if args.room_prefix:
+        shuffled = [r for r in shuffled if r.startswith(args.room_prefix)]
     random.Random(20260818).shuffle(shuffled)
     rooms = sorted(shuffled[: args.rooms] if args.rooms else shuffled)
     print(f"measuring {len(rooms)} rooms")
@@ -259,6 +263,7 @@ def main() -> int:
     }
     summary = {
         "rooms": rooms,
+        "room_prefix": args.room_prefix,
         "chance_when_answered": 0.5,
         # Empty columns are zero vectors, so this much of a "real" scene differs
         # from the zeroed control at all. Read that control accordingly.
