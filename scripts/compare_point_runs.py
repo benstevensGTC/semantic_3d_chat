@@ -12,17 +12,22 @@ from __future__ import annotations
 
 import argparse
 import json
+from pathlib import Path
 
 from semantic_3d_chat.config import PROJECT_ROOT
 from semantic_3d_chat.evaluation.proportions import mcnemar_exact, wilson_interval
 
-ROOT = PROJECT_ROOT / "reports" / "gemma4" / "metrics" / "point_grounding"
+METRICS = PROJECT_ROOT / "reports" / "gemma4" / "metrics"
+CORPORA = {
+    "primitive": METRICS / "point_grounding",
+    "asset": METRICS / "point_grounding_assets",
+}
 
 
-def load(tag: str) -> dict:
-    path = ROOT / f"{tag}.json"
+def load(tag: str, root: Path) -> dict:
+    path = root / f"{tag}.json"
     if not path.is_file():
-        raise SystemExit(f"no run named {tag}")
+        raise SystemExit(f"no run named {tag} under {root.name}")
     return json.loads(path.read_text(encoding="utf-8"))
 
 
@@ -30,9 +35,11 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("first")
     parser.add_argument("second")
+    parser.add_argument("--corpus", default="primitive", choices=sorted(CORPORA))
     args = parser.parse_args()
 
-    a, b = load(args.first), load(args.second)
+    root = CORPORA[args.corpus]
+    a, b = load(args.first, root), load(args.second, root)
     first = a["held_out"].get("per_item")
     second = b["held_out"].get("per_item")
     if not first or not second:
