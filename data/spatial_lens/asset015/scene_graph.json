@@ -1,12 +1,12 @@
 {
-  "free_fraction": 0.7308926553672317,
+  "free_fraction": 0.6974011299435028,
   "grid_resolution_m": 0.05,
   "objects": [
     {
       "bbox_max_m": [
         3.5,
         2.05,
-        2.4
+        2.2
       ],
       "bbox_min_m": [
         1.45,
@@ -14,34 +14,33 @@
         0.1
       ],
       "center_m": [
-        2.359,
-        1.4376,
-        1.0789
+        2.3437,
+        1.4166,
+        1.072
       ],
       "footprint_m": [
         2.05,
         1.25
       ],
-      "height_m": 2.3,
+      "height_m": 2.1,
       "mean_rgb": [
-        0.0578,
-        0.0405,
-        0.0343
+        0.0707,
+        0.0476,
+        0.0409
       ],
-      "name": "cabinet 1",
-      "name_confidence": 0.5,
+      "name": "cabinet",
+      "name_confidence": 1.0,
       "name_votes": {
-        "cabinet": 1,
-        "coffin": 1
+        "cabinet": 2
       },
       "object_id": "p_001",
-      "voxel_count": 3553
+      "voxel_count": 3390
     },
     {
       "bbox_max_m": [
         0.55,
         -1.25,
-        2.05
+        1.95
       ],
       "bbox_min_m": [
         -0.55,
@@ -49,28 +48,95 @@
         0.1
       ],
       "center_m": [
-        0.0052,
-        -1.7103,
-        1.0546
+        -0.0265,
+        -1.6984,
+        0.9528
       ],
       "footprint_m": [
         1.1,
         0.95
       ],
-      "height_m": 1.95,
+      "height_m": 1.85,
       "mean_rgb": [
-        0.2884,
-        0.2139,
-        0.1392
+        0.2891,
+        0.2082,
+        0.13
       ],
-      "name": "cabinet 2",
-      "name_confidence": 0.5,
+      "name": "shelf",
+      "name_confidence": 1.0,
       "name_votes": {
-        "cabinet": 1,
-        "shelf": 1
+        "shelf": 2
       },
       "object_id": "p_002",
-      "voxel_count": 1725
+      "voxel_count": 1354
+    },
+    {
+      "bbox_max_m": [
+        -1.45,
+        0.5,
+        1.9
+      ],
+      "bbox_min_m": [
+        -2.1,
+        -0.1,
+        0.1
+      ],
+      "center_m": [
+        -1.7878,
+        0.1999,
+        1.0317
+      ],
+      "footprint_m": [
+        0.65,
+        0.6
+      ],
+      "height_m": 1.8,
+      "mean_rgb": [
+        0.3575,
+        0.2865,
+        0.2201
+      ],
+      "name": "ladder",
+      "name_confidence": 1.0,
+      "name_votes": {
+        "ladder": 2
+      },
+      "object_id": "p_003",
+      "voxel_count": 956
+    },
+    {
+      "bbox_max_m": [
+        3.7,
+        -1.2,
+        1.25
+      ],
+      "bbox_min_m": [
+        2.9,
+        -2.0,
+        0.1
+      ],
+      "center_m": [
+        3.272,
+        -1.4938,
+        0.645
+      ],
+      "footprint_m": [
+        0.8,
+        0.8
+      ],
+      "height_m": 1.15,
+      "mean_rgb": [
+        0.0499,
+        0.0466,
+        0.037
+      ],
+      "name": "chair",
+      "name_confidence": 1.0,
+      "name_votes": {
+        "chair": 2
+      },
+      "object_id": "p_004",
+      "voxel_count": 626
     },
     {
       "bbox_max_m": [
@@ -84,9 +150,9 @@
         0.1
       ],
       "center_m": [
-        -3.1057,
-        1.3492,
-        0.2736
+        -3.1084,
+        1.3444,
+        0.2754
       ],
       "footprint_m": [
         0.75,
@@ -94,122 +160,53 @@
       ],
       "height_m": 0.35,
       "mean_rgb": [
-        0.1508,
-        0.0791,
-        0.0331
+        0.151,
+        0.0794,
+        0.0335
       ],
-      "name": "cabinet 3",
+      "name": "bucket",
       "name_confidence": 0.5,
       "name_votes": {
         "barrel": 1,
-        "cabinet": 1
-      },
-      "object_id": "p_003",
-      "voxel_count": 366
-    },
-    {
-      "bbox_max_m": [
-        -1.55,
-        1.5,
-        0.45
-      ],
-      "bbox_min_m": [
-        -2.25,
-        0.95,
-        0.1
-      ],
-      "center_m": [
-        -1.9148,
-        1.2458,
-        0.298
-      ],
-      "footprint_m": [
-        0.7,
-        0.55
-      ],
-      "height_m": 0.35,
-      "mean_rgb": [
-        0.1463,
-        0.1353,
-        0.1257
-      ],
-      "name": "television",
-      "name_confidence": 1.0,
-      "name_votes": {
-        "television": 2
-      },
-      "object_id": "p_004",
-      "voxel_count": 313
-    },
-    {
-      "bbox_max_m": [
-        -0.2,
-        0.65,
-        0.5
-      ],
-      "bbox_min_m": [
-        -0.45,
-        0.25,
-        0.1
-      ],
-      "center_m": [
-        -0.3194,
-        0.4648,
-        0.3023
-      ],
-      "footprint_m": [
-        0.25,
-        0.4
-      ],
-      "height_m": 0.4,
-      "mean_rgb": [
-        0.4843,
-        0.3502,
-        0.2338
-      ],
-      "name": "bookshelf",
-      "name_confidence": 0.5,
-      "name_votes": {
-        "bookshelf": 1,
-        "shelf": 1
+        "bucket": 1
       },
       "object_id": "p_005",
-      "voxel_count": 152
+      "voxel_count": 371
     },
     {
       "bbox_max_m": [
-        2.65,
-        -1.7,
-        0.4
+        2.1,
+        -0.35,
+        0.55
       ],
       "bbox_min_m": [
-        2.05,
-        -2.3,
+        1.6,
+        -0.85,
         0.1
       ],
       "center_m": [
-        2.3605,
-        -1.9742,
-        0.3184
+        1.8565,
+        -0.6036,
+        0.3507
       ],
       "footprint_m": [
-        0.6,
-        0.6
+        0.5,
+        0.5
       ],
-      "height_m": 0.3,
+      "height_m": 0.45,
       "mean_rgb": [
-        0.257,
-        0.2043,
-        0.1638
+        0.2933,
+        0.2737,
+        0.2487
       ],
-      "name": "cabinet 4",
+      "name": "table",
       "name_confidence": 0.5,
       "name_votes": {
-        "cabinet": 1,
+        "frame": 1,
         "table": 1
       },
       "object_id": "p_006",
-      "voxel_count": 121
+      "voxel_count": 224
     },
     {
       "bbox_max_m": [
@@ -223,9 +220,9 @@
         0.1
       ],
       "center_m": [
-        2.9709,
-        -0.5286,
-        0.2286
+        2.9746,
+        -0.5242,
+        0.2279
       ],
       "footprint_m": [
         0.35,
@@ -233,18 +230,86 @@
       ],
       "height_m": 0.4,
       "mean_rgb": [
-        0.0958,
-        0.0606,
-        0.0378
+        0.0847,
+        0.0528,
+        0.0329
       ],
-      "name": "cabinet 5",
+      "name": "lamp",
       "name_confidence": 0.5,
       "name_votes": {
-        "bucket": 1,
-        "cabinet": 1
+        "lamp": 1
       },
       "object_id": "p_007",
-      "voxel_count": 111
+      "voxel_count": 120
+    },
+    {
+      "bbox_max_m": [
+        0.45,
+        0.8,
+        0.9
+      ],
+      "bbox_min_m": [
+        0.1,
+        0.2,
+        0.1
+      ],
+      "center_m": [
+        0.2406,
+        0.4939,
+        0.6004
+      ],
+      "footprint_m": [
+        0.35,
+        0.6
+      ],
+      "height_m": 0.8,
+      "mean_rgb": [
+        0.578,
+        0.345,
+        0.2458
+      ],
+      "name": "crane",
+      "name_confidence": 0.5,
+      "name_votes": {
+        "crane": 1,
+        "lamp": 1
+      },
+      "object_id": "p_008",
+      "voxel_count": 61
+    },
+    {
+      "bbox_max_m": [
+        -2.3,
+        -2.2,
+        0.4
+      ],
+      "bbox_min_m": [
+        -2.65,
+        -2.55,
+        0.1
+      ],
+      "center_m": [
+        -2.4917,
+        -2.3117,
+        0.255
+      ],
+      "footprint_m": [
+        0.35,
+        0.35
+      ],
+      "height_m": 0.3,
+      "mean_rgb": [
+        0.2376,
+        0.2336,
+        0.2272
+      ],
+      "name": "window",
+      "name_confidence": 0.5,
+      "name_votes": {
+        "window": 1
+      },
+      "object_id": "p_009",
+      "voxel_count": 45
     }
   ],
   "room": "asset015",
