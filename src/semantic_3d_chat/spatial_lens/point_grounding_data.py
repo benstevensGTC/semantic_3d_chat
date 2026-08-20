@@ -13,6 +13,7 @@ subset of sampled points that fall inside the object.
 from __future__ import annotations
 
 import json
+import re
 
 import numpy as np
 
@@ -256,6 +257,116 @@ def relational_examples(
     return examples
 
 
+def disambiguation_examples(
+    room: str,
+    *,
+    token_budget: int = 1024,
+    cell_m: float = 0.14,
+    min_points: int = 3,
+    min_margin_m: float = 0.5,
+    seed: int = 0,
+) -> list[PointExample]:
+    """"The cabinet nearest the sofa", in rooms holding more than one cabinet.
+
+    This is the form the referring-expression literature uses, and the primitive
+    corpus could not pose it: no room there held two of anything, so the category
+    alone always identified the target and the relation was decoration.
+
+    It is a sharper test than the unnamed version. Semantics narrows the field to
+    the cabinets and can go no further; only the distance from the sofa decides
+    which one is meant. A model that ignores position scores one in k however
+    good its features are, and k is usually two, so the baseline is 50% rather
+    than something a bag of semantics can drift above.
+
+    Both the category and the anchor come from what Gemma called things. Nothing
+    here reads the composer's own labels.
+    """
+
+    root = PROJECT_ROOT / "data" / "spatial_lens" / room
+    cloud = SemanticCloud.load(root / "point_cloud.npz")
+    chosen = downsample(cloud, token_budget=token_budget, cell_m=cell_m, seed=seed)
+    points = np.asarray(cloud.centers_m, dtype=np.float32)[chosen]
+    features = np.asarray(cloud.features, dtype=np.float32)[chosen]
+    colours = np.asarray(cloud.rgb, dtype=np.float32)[chosen]
+
+    graph_path = root / "scene_graph.json"
+    if not graph_path.is_file():
+        return []
+    payload = json.loads(graph_path.read_text(encoding="utf-8"))
+    named = {item["object_id"]: item["name"] for item in payload["objects"]}
+
+    centers = np.asarray(cloud.centers_m, dtype=np.float64)
+    found: list[tuple[str, str, np.ndarray, np.ndarray, np.ndarray]] = []
+    for proposal in discover_objects(cloud):
+        name = named.get(proposal.proposal_id)
+        if not name or name == "unidentified object":
+            continue
+        inside = np.zeros(len(cloud), dtype=bool)
+        inside[proposal.voxel_indices] = True
+        picked = inside[chosen]
+        if int(picked.sum()) < min_points:
+            continue
+        # "cabinet 2" is the naming stage disambiguating; the category is
+        # "cabinet", and that is what a person would say.
+        category = re.sub(r"\s+\d+$", "", name)
+        found.append((
+            category,
+            name,
+            centers[proposal.voxel_indices].mean(axis=0),
+            picked,
+            np.asarray(cloud.centers_m, dtype=np.float32)[proposal.voxel_indices],
+        ))
+
+    counts: dict[str, int] = {}
+    for category, *_ in found:
+        counts[category] = counts.get(category, 0) + 1
+    repeated = {c for c, n in counts.items() if n >= 2}
+    singles = [item for item in found if counts[item[0]] == 1]
+    if not repeated or not singles:
+        return []
+
+    examples: list[PointExample] = []
+    for category in sorted(repeated):
+        members = [item for item in found if item[0] == category]
+        union = np.zeros(chosen.shape[0], dtype=bool)
+        for _c, _n, _mid, picked, _v in members:
+            union |= picked
+        for _ac, anchor_name, anchor_mid, _ap, _av in singles:
+            if anchor_name == category:
+                continue
+            ranked = sorted(
+                (float(np.linalg.norm(mid[:2] - anchor_mid[:2])), index)
+                for index, (_c, _n, mid, _p, _v) in enumerate(members)
+            )
+            near_gap, near_index = ranked[0]
+            far_gap, far_index = ranked[-1]
+            if far_gap - near_gap < min_margin_m:
+                continue
+            for phrase, index in (
+                (f"the {category} nearest the {anchor_name}", near_index),
+                (f"the {category} closest to the {anchor_name}", near_index),
+                (f"the {category} furthest from the {anchor_name}", far_index),
+            ):
+                _c, _n, _mid, picked, voxels = members[index]
+                target = picked.astype(np.float32)
+                target /= target.sum()
+                examples.append(
+                    PointExample(
+                        room=room,
+                        phrase=phrase,
+                        points=points,
+                        features=features,
+                        target=target,
+                        room_size_m=cloud.room_size_m,
+                        rgb=colours,
+                        candidates=union,
+                        candidate_count=len(members),
+                        footprint=voxels,
+                    )
+                )
+    return examples
+
+
 def collect(rooms: list[str], **kwargs: object) -> list[PointExample]:
     gathered: list[PointExample] = []
     for room in rooms:
@@ -274,9 +385,20 @@ def collect_relational(rooms: list[str], **kwargs: object) -> list[PointExample]
     return gathered
 
 
+def collect_disambiguation(rooms: list[str], **kwargs: object) -> list[PointExample]:
+    gathered: list[PointExample] = []
+    for room in rooms:
+        if not (PROJECT_ROOT / "data" / "spatial_lens" / room / "point_cloud.npz").is_file():
+            continue
+        gathered.extend(disambiguation_examples(room, **kwargs))  # type: ignore[arg-type]
+    return gathered
+
+
 __all__ = [
     "collect",
+    "collect_disambiguation",
     "collect_relational",
+    "disambiguation_examples",
     "downsample",
     "relational_examples",
     "room_examples",

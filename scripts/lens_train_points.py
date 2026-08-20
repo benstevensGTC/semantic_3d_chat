@@ -32,7 +32,11 @@ import torch
 from semantic_3d_chat.config import PROJECT_ROOT
 from semantic_3d_chat.spatial_lens.grounding_data import available_rooms
 from semantic_3d_chat.spatial_lens.point_grounding import PointGroundingModel, save_model
-from semantic_3d_chat.spatial_lens.point_grounding_data import collect, collect_relational
+from semantic_3d_chat.spatial_lens.point_grounding_data import (
+    collect,
+    collect_disambiguation,
+    collect_relational,
+)
 
 CACHE = PROJECT_ROOT / "data" / "spatial_lens" / "phrase_embeddings.npz"
 
@@ -216,9 +220,10 @@ def evaluate(model, examples, vectors, device, batch=8, feature_mode="gemma", wo
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--task", default="object",
-                        choices=["object", "relational", "both"],
-                        help="'relational' phrases name an object by where it is "
-                             "relative to another, which semantics alone cannot resolve")
+                        choices=["object", "relational", "disambiguation", "both"],
+                        help="'relational' names no target at all; 'disambiguation' "
+                             "names a category the room holds more than one of, so "
+                             "semantics narrows the field and only geometry chooses")
     parser.add_argument("--feature-mode", default="gemma", choices=["gemma", "rgb"],
                         help="'rgb' replaces Gemma's embedding with the point's "
                              "colour, to separate semantics from paint")
@@ -281,6 +286,9 @@ def main() -> int:
     gather = {
         "object": lambda rooms: collect(rooms, token_budget=args.token_budget),
         "relational": lambda rooms: collect_relational(
+            rooms, token_budget=args.token_budget
+        ),
+        "disambiguation": lambda rooms: collect_disambiguation(
             rooms, token_budget=args.token_budget
         ),
         "both": lambda rooms: collect(rooms, token_budget=args.token_budget)

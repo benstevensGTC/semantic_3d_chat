@@ -19,6 +19,7 @@ from semantic_3d_chat.spatial_lens.grounding_data import (
     embed_phrases,
 )
 from semantic_3d_chat.spatial_lens.point_grounding_data import (
+    disambiguation_examples,
     relational_examples,
     room_examples,
 )
@@ -35,6 +36,8 @@ def main() -> int:
         for example in room_examples(room):
             phrases.add(example.phrase)
         for example in relational_examples(room):
+            phrases.add(example.phrase)
+        for example in disambiguation_examples(room):
             phrases.add(example.phrase)
     ordered = sorted(phrases)
     print(f"{len(ordered)} distinct phrases across {len(available_rooms())} rooms")
