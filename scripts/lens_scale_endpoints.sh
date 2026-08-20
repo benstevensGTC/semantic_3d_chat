@@ -18,8 +18,9 @@ run () {
   local tag="$1"; shift
   if [ -f "$OUT/$tag.json" ]; then echo "skip $tag"; return; fi
   echo "=== $tag ==="
-  if ! $PY scripts/lens_train_points.py --holdout 8 --target-steps "$STEPS" \
-       --report "$OUT/$tag.json" "$@" 2>&1 | grep -v '^  epoch' | tail -14; then
+  if ! $PY scripts/lens_train_points.py --holdout 8 --exclude-prefix asset \
+       --target-steps "$STEPS" --report "$OUT/$tag.json" "$@" \
+       2>&1 | grep -v '^  epoch' | tail -14; then
     echo "FAILED $tag"
   fi
 }

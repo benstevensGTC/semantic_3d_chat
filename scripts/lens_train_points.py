@@ -232,6 +232,8 @@ def main() -> int:
     # different experiments and make the comparison between them impossible.
     parser.add_argument("--room-prefix", default=None,
                         help="only use rooms whose name starts with this")
+    parser.add_argument("--exclude-prefix", default=None,
+                        help="ignore rooms whose name starts with this")
     parser.add_argument("--holdout", type=int, default=8)
     parser.add_argument("--train-rooms", type=int, default=0,
                         help="cap on training rooms; 0 uses every remaining room")
@@ -257,6 +259,8 @@ def main() -> int:
     rng = random.Random(args.seed)
 
     rooms = available_rooms()
+    if args.exclude_prefix:
+        rooms = [r for r in rooms if not r.startswith(args.exclude_prefix)]
     if args.room_prefix:
         rooms = [r for r in rooms if r.startswith(args.room_prefix)]
         if len(rooms) <= args.holdout:
@@ -366,6 +370,11 @@ def main() -> int:
     report = {
         "task": args.task,
         "room_prefix": args.room_prefix,
+        "exclude_prefix": args.exclude_prefix,
+        # Recorded so a later reader can tell whether two runs were measured on
+        # the same corpus. Without it, a room pool that grew mid-sweep is
+        # invisible in the results.
+        "rooms_used": sorted(rooms),
         "room_pool": len(rooms),
         "feature_mode": args.feature_mode,
         "query_mode": args.query_mode,

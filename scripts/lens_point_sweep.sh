@@ -19,7 +19,11 @@ run () {  # run <tag> <extra args...>
   local tag="$1"; shift
   if [ -f "$OUT/$tag.json" ]; then echo "skip $tag"; return; fi
   echo "=== $tag ==="
-  if ! $PY scripts/lens_train_points.py --holdout 8 --report "$OUT/$tag.json" "$@" \
+  # Pinned to the primitive corpus: asset rooms appear in the same directory
+  # and would otherwise join the pool part-way through a sweep, so early and
+  # late runs would be measured on different data.
+  if ! $PY scripts/lens_train_points.py --holdout 8 --exclude-prefix asset \
+       --report "$OUT/$tag.json" "$@" \
        2>&1 | grep -v '^  epoch' | tail -16; then
     # A crashed run and an unrun one look identical from the output directory,
     # so say which happened.
