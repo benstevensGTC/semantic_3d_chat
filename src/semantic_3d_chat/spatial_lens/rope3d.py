@@ -146,4 +146,45 @@ class Rope3DBlock(nn.Module):
         return tokens + self.dropout(self.feed(self.feed_norm(tokens)))
 
 
-__all__ = ["Rope3D", "Rope3DAttention", "Rope3DBlock"]
+class QueryCrossAttention(nn.Module):
+    """Let each point look at the words of the query separately.
+
+    A relational phrase carries structure -- a relation and the thing it relates
+    to -- and a point needs different parts of it at different moments: which
+    words name the anchor, which word says what to do about it. Collapsing the
+    phrase to one vector before the model sees it forecloses that.
+    """
+
+    def __init__(self, model_dim: int, heads: int) -> None:
+        super().__init__()
+        if model_dim % heads != 0:
+            raise ValueError("model_dim must divide evenly into heads")
+        self.heads = int(heads)
+        self.head_dim = model_dim // heads
+        self.to_q = nn.Linear(model_dim, model_dim, bias=False)
+        self.to_kv = nn.Linear(model_dim, model_dim * 2, bias=False)
+        self.project = nn.Linear(model_dim, model_dim, bias=False)
+
+    def forward(
+        self, tokens: torch.Tensor, words: torch.Tensor, mask: torch.Tensor | None
+    ) -> torch.Tensor:
+        batch, count, model_dim = tokens.shape
+        length = words.shape[1]
+        query = self.to_q(tokens).reshape(batch, count, self.heads, self.head_dim)
+        key, value = (
+            self.to_kv(words)
+            .reshape(batch, length, 2, self.heads, self.head_dim)
+            .permute(2, 0, 3, 1, 4)
+        )
+        attention_mask = None
+        if mask is not None:
+            attention_mask = mask[:, None, None, :]
+        attended = torch.nn.functional.scaled_dot_product_attention(
+            query.transpose(1, 2), key, value, attn_mask=attention_mask
+        )
+        return self.project(
+            attended.transpose(1, 2).reshape(batch, count, model_dim)
+        )
+
+
+__all__ = ["QueryCrossAttention", "Rope3D", "Rope3DAttention", "Rope3DBlock"]

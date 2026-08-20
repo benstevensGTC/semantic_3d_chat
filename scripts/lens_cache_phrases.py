@@ -13,7 +13,11 @@ import argparse
 import numpy as np
 
 from semantic_3d_chat.config import PROJECT_ROOT
-from semantic_3d_chat.spatial_lens.grounding_data import available_rooms, embed_phrases
+from semantic_3d_chat.spatial_lens.grounding_data import (
+    available_rooms,
+    embed_phrase_tokens,
+    embed_phrases,
+)
 from semantic_3d_chat.spatial_lens.point_grounding_data import (
     relational_examples,
     room_examples,
@@ -44,11 +48,18 @@ def main() -> int:
         local_files_only=True,
     )
     vectors = embed_phrases(language, ordered)
+    # Also keep the phrase one token at a time: a mean-pooled vector can name a
+    # thing but cannot name a relation to a thing.
+    words, mask = embed_phrase_tokens(language, ordered)
     CACHE.parent.mkdir(parents=True, exist_ok=True)
     np.savez_compressed(
-        CACHE, phrases=np.asarray(ordered), vectors=vectors.astype(np.float32)
+        CACHE,
+        phrases=np.asarray(ordered),
+        vectors=vectors.astype(np.float32),
+        words=words.astype(np.float16),
+        word_mask=mask,
     )
-    print(f"wrote {CACHE.relative_to(PROJECT_ROOT)}  {vectors.shape}")
+    print(f"wrote {CACHE.relative_to(PROJECT_ROOT)}  pooled={vectors.shape} tokens={words.shape}")
     return 0
 
 

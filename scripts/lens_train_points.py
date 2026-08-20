@@ -44,6 +44,21 @@ def load_phrase_vectors() -> dict[str, np.ndarray]:
         return dict(zip(data["phrases"].tolist(), data["vectors"], strict=True))
 
 
+def load_phrase_words() -> dict[str, tuple[np.ndarray, np.ndarray]]:
+    """Per-token phrase embeddings, for the compositional query mode."""
+
+    with np.load(CACHE, allow_pickle=False) as data:
+        if "words" not in data:
+            raise SystemExit(
+                "the phrase cache predates token embeddings; "
+                "re-run scripts/lens_cache_phrases.py"
+            )
+        names = data["phrases"].tolist()
+        words = data["words"].astype(np.float32)
+        mask = data["word_mask"]
+    return {name: (words[i], mask[i]) for i, name in enumerate(names)}
+
+
 def rigid(points: np.ndarray, rng: random.Random) -> np.ndarray:
     """A random rigid motion of the room, in metres."""
 
@@ -97,7 +112,7 @@ def point_features(example, mode: str) -> np.ndarray:
     raise ValueError(f"unknown feature mode: {mode}")
 
 
-def stack(examples, vectors, device, rng=None, feature_mode="gemma"):
+def stack(examples, vectors, device, rng=None, feature_mode="gemma", words=None):
     points = np.stack(
         [rigid(e.points, rng) if rng is not None else e.points for e in examples]
     )
@@ -107,7 +122,14 @@ def stack(examples, vectors, device, rng=None, feature_mode="gemma"):
     def to(array):
         return torch.from_numpy(array).to(device).float()
 
-    return to(points), to(features), to(query), to(target)
+    if words is None:
+        return to(points), to(features), to(query), to(target), None, None
+    phrase_words = np.stack([words[e.phrase][0] for e in examples])
+    phrase_mask = np.stack([words[e.phrase][1] for e in examples])
+    return (
+        to(points), to(features), to(query), to(target),
+        to(phrase_words), torch.from_numpy(phrase_mask).to(device),
+    )
 
 
 def soft_cross_entropy(logits: torch.Tensor, target: torch.Tensor) -> torch.Tensor:
@@ -115,7 +137,7 @@ def soft_cross_entropy(logits: torch.Tensor, target: torch.Tensor) -> torch.Tens
 
 
 @torch.no_grad()
-def evaluate(model, examples, vectors, device, batch=8, feature_mode="gemma"):
+def evaluate(model, examples, vectors, device, batch=8, feature_mode="gemma", words=None):
     if not examples:
         return {"examples": 0}
     model.eval()
@@ -127,11 +149,17 @@ def evaluate(model, examples, vectors, device, batch=8, feature_mode="gemma"):
     items: list[str] = []
     for start in range(0, len(examples), batch):
         chunk = examples[start : start + batch]
-        points, features, query, target = stack(
-            chunk, vectors, device, feature_mode=feature_mode
+        points, features, query, target, phrase_words, phrase_mask = stack(
+            chunk, vectors, device, feature_mode=feature_mode, words=words
         )
-        logits = model(features, points, query)
-        predicted = model.predict_position(features, points, query)
+        logits = model(
+            features, points, query,
+            query_words=phrase_words, query_mask=phrase_mask,
+        )
+        predicted = model.predict_position(
+            features, points, query,
+            query_words=phrase_words, query_mask=phrase_mask,
+        )
         best = logits.argmax(dim=-1)
         for index, example in enumerate(chunk):
             hits.append(float(target[index, best[index]] > 0))
@@ -194,6 +222,9 @@ def main() -> int:
     parser.add_argument("--feature-mode", default="gemma", choices=["gemma", "rgb"],
                         help="'rgb' replaces Gemma's embedding with the point's "
                              "colour, to separate semantics from paint")
+    parser.add_argument("--query-mode", default="pooled", choices=["pooled", "tokens"],
+                        help="'tokens' keeps the phrase word by word so a relation "
+                             "is not averaged into the thing it relates to")
     parser.add_argument("--position-mode", default="rope3d",
                         choices=["rope3d", "learned_absolute", "none"])
     parser.add_argument("--holdout", type=int, default=8)
@@ -247,6 +278,7 @@ def main() -> int:
     print(f"examples: {len(train)} train, {len(test)} held out")
 
     vectors = load_phrase_vectors()
+    words = load_phrase_words() if args.query_mode == "tokens" else None
     missing = {e.phrase for e in train + test} - set(vectors)
     if missing:
         raise SystemExit(f"phrase cache is stale, missing {len(missing)}")
@@ -260,6 +292,7 @@ def main() -> int:
         metres_per_cycle=args.metres_per_cycle,
         dropout=args.dropout,
         position_mode=args.position_mode,
+        query_mode=args.query_mode,
     ).to(device)
     parameters = sum(p.numel() for p in model.parameters())
     print(f"{args.position_mode}: {parameters/1e6:.2f}M parameters")
@@ -290,11 +323,17 @@ def main() -> int:
         total = 0.0
         for start in range(0, len(order), args.batch_size):
             chunk = [train[i] for i in order[start : start + args.batch_size]]
-            points, features, query, target = stack(
+            points, features, query, target, phrase_words, phrase_mask = stack(
                 chunk, vectors, device, None if args.no_augment else rng,
-                feature_mode=args.feature_mode,
+                feature_mode=args.feature_mode, words=words,
             )
-            loss = soft_cross_entropy(model(features, points, query), target)
+            loss = soft_cross_entropy(
+                model(
+                    features, points, query,
+                    query_words=phrase_words, query_mask=phrase_mask,
+                ),
+                target,
+            )
             if not torch.isfinite(loss):
                 skipped += 1
                 optimiser.zero_grad(set_to_none=True)
@@ -315,6 +354,7 @@ def main() -> int:
     report = {
         "task": args.task,
         "feature_mode": args.feature_mode,
+        "query_mode": args.query_mode,
         "position_mode": args.position_mode,
         "train_rooms": train_rooms,
         "held_out_rooms": held_out,
@@ -331,9 +371,9 @@ def main() -> int:
         "skipped_nonfinite_steps": skipped,
         "train_minutes": round((time.time() - started) / 60.0, 2),
         "train_fit": evaluate(model, train, vectors, device,
-                              feature_mode=args.feature_mode),
+                              feature_mode=args.feature_mode, words=words),
         "held_out": evaluate(model, test, vectors, device,
-                             feature_mode=args.feature_mode),
+                             feature_mode=args.feature_mode, words=words),
     }
     print(json.dumps(report["held_out"], indent=2))
 
@@ -345,6 +385,7 @@ def main() -> int:
             "layers": args.layers,
             "metres_per_cycle": args.metres_per_cycle,
             "position_mode": args.position_mode,
+            "query_mode": args.query_mode,
             "token_budget": args.token_budget,
             "held_out_rooms": held_out,
             "held_out": report["held_out"],

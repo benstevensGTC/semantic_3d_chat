@@ -25,7 +25,7 @@ import numpy as np
 import torch
 from torch import nn
 
-from semantic_3d_chat.spatial_lens.rope3d import Rope3DBlock
+from semantic_3d_chat.spatial_lens.rope3d import QueryCrossAttention, Rope3DBlock
 
 POINT_SCHEMA = "semantic_3d_chat.spatial_lens.point_grounding.v1"
 
@@ -68,11 +68,18 @@ class PointGroundingModel(nn.Module):
         metres_per_cycle: float = 8.0,
         dropout: float = 0.0,
         position_mode: str = "rope3d",
+        query_mode: str = "pooled",
     ) -> None:
         super().__init__()
         if position_mode not in {"rope3d", "learned_absolute", "none"}:
             raise ValueError(f"unknown position_mode: {position_mode}")
+        if query_mode not in {"pooled", "tokens"}:
+            raise ValueError(f"unknown query_mode: {query_mode}")
         self.position_mode = position_mode
+        # "pooled" averages the phrase into one vector, which is enough to name
+        # a thing and not enough to name a relation to a thing. "tokens" keeps
+        # the words and lets each point attend to them.
+        self.query_mode = query_mode
         self.point_projection = nn.Sequential(
             nn.LayerNorm(feature_dim),
             nn.Linear(feature_dim, model_dim),
@@ -105,6 +112,11 @@ class PointGroundingModel(nn.Module):
             )
             for _ in range(layers)
         )
+        if query_mode == "tokens":
+            self.word_norm = nn.LayerNorm(model_dim)
+            self.cross = nn.ModuleList(
+                QueryCrossAttention(model_dim, heads) for _ in range(layers)
+            )
         self.score = nn.Sequential(
             nn.LayerNorm(model_dim),
             nn.Linear(model_dim, model_dim),
@@ -118,11 +130,22 @@ class PointGroundingModel(nn.Module):
         positions: torch.Tensor,
         query: torch.Tensor,
         mask: torch.Tensor | None = None,
+        query_words: torch.Tensor | None = None,
+        query_mask: torch.Tensor | None = None,
     ) -> torch.Tensor:
-        """features [B,N,F], positions [B,N,3], query [B,F] -> logits [B,N]."""
+        """features [B,N,F], positions [B,N,3], query [B,F] -> logits [B,N].
+
+        ``query_words`` [B,L,F] and ``query_mask`` [B,L] carry the phrase one
+        token at a time and are required by the "tokens" query mode.
+        """
 
         tokens = self.point_projection(features)
         tokens = tokens + self.query_projection(query).unsqueeze(1)
+        words = None
+        if self.query_mode == "tokens":
+            if query_words is None:
+                raise ValueError("query_mode 'tokens' needs query_words")
+            words = self.word_norm(self.query_projection(query_words))
         # Zero positions make the rotary an identity, which is what makes the
         # other two modes genuine controls rather than differently-wired models.
         geometry = (
@@ -131,6 +154,8 @@ class PointGroundingModel(nn.Module):
         for index, block in enumerate(self.blocks):
             if self.position_mode == "learned_absolute":
                 tokens = tokens + self.absolute[index](positions)
+            if words is not None:
+                tokens = tokens + self.cross[index](tokens, words, query_mask)
             tokens = block(tokens, geometry)
         logits = self.score(tokens).squeeze(-1)
         if mask is not None:
@@ -145,10 +170,15 @@ class PointGroundingModel(nn.Module):
         mask: torch.Tensor | None = None,
         *,
         temperature: float = 0.25,
+        query_words: torch.Tensor | None = None,
+        query_mask: torch.Tensor | None = None,
     ) -> torch.Tensor:
         """A continuous answer: the attention-weighted centroid of the match."""
 
-        logits = self.forward(features, positions, query, mask)
+        logits = self.forward(
+            features, positions, query, mask,
+            query_words=query_words, query_mask=query_mask,
+        )
         weights = torch.softmax(logits / temperature, dim=-1)
         return torch.einsum("bn,bnd->bd", weights, positions)
 
@@ -176,6 +206,7 @@ def load_model(path: str | Path) -> tuple[PointGroundingModel, dict[str, Any]]:
         layers=int(metadata["layers"]),
         metres_per_cycle=float(metadata["metres_per_cycle"]),
         position_mode=str(metadata["position_mode"]),
+        query_mode=str(metadata.get("query_mode", "pooled")),
     )
     model.load_state_dict(torch.load(source / "point_grounding.pt", map_location="cpu"))
     model.eval()

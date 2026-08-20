@@ -120,4 +120,42 @@ def embed_phrases(language: object, phrases: list[str]) -> np.ndarray:
     return out
 
 
-__all__ = ["available_rooms", "collect", "embed_phrases", "room_examples"]
+def embed_phrase_tokens(
+    language: object, phrases: list[str], max_tokens: int = 12
+) -> tuple[np.ndarray, np.ndarray]:
+    """Per-token Gemma embeddings, padded, with a mask.
+
+    Mean-pooling is fine for "the blue cabinet", where every word narrows the
+    same thing down. It is not fine for "the object nearest the blue cabinet":
+    averaging blends the relation into the thing it relates to, and what comes
+    out cannot express *nearest(cabinet)* at all. A model asked to ground a
+    compositional phrase from that vector is being asked to recover structure
+    that was destroyed before it was called.
+    """
+
+    import torch
+
+    tokenizer = language.tokenizer  # type: ignore[attr-defined]
+    embeddings = language.model.get_input_embeddings()  # type: ignore[attr-defined]
+    device = next(embeddings.parameters()).device
+    width = embeddings.weight.shape[1]
+    out = np.zeros((len(phrases), max_tokens, width), dtype=np.float32)
+    mask = np.zeros((len(phrases), max_tokens), dtype=bool)
+    with torch.no_grad():
+        for index, phrase in enumerate(phrases):
+            ids = tokenizer.encode(phrase, add_special_tokens=False)[:max_tokens]
+            if not ids:
+                continue
+            tensor = torch.tensor([ids], dtype=torch.long, device=device)
+            out[index, : len(ids)] = embeddings(tensor)[0].float().cpu().numpy()
+            mask[index, : len(ids)] = True
+    return out, mask
+
+
+__all__ = [
+    "available_rooms",
+    "collect",
+    "embed_phrase_tokens",
+    "embed_phrases",
+    "room_examples",
+]
