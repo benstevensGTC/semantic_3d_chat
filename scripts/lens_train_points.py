@@ -289,8 +289,24 @@ def main() -> int:
     # The split is fixed across every run so the scaling curve and the ablation
     # are measured on exactly the same held-out rooms.
     random.Random(20260818).shuffle(shuffled)
-    held_out = sorted(shuffled[: args.holdout])
-    train_rooms = shuffled[args.holdout :]
+
+    # Only some rooms hold two of anything, and those are the only ones that can
+    # pose "which cabinet". A plain random holdout caught one of them out of
+    # fifteen, leaving eight test examples over two distinct targets and a score
+    # of zero that measured nothing. Stratifying keeps the same proportion of
+    # capable rooms on both sides, and the split stays identical for every task
+    # so the tasks remain comparable on the same rooms.
+    capable = {r for r in shuffled if collect_disambiguation([r])}
+    if capable and len(capable) < len(shuffled):
+        rich = [r for r in shuffled if r in capable]
+        plain = [r for r in shuffled if r not in capable]
+        share = round(args.holdout * len(rich) / len(shuffled))
+        share = max(1, min(share, len(rich), args.holdout))
+        held_out = sorted(rich[:share] + plain[: args.holdout - share])
+        train_rooms = [r for r in shuffled if r not in set(held_out)]
+    else:
+        held_out = sorted(shuffled[: args.holdout])
+        train_rooms = shuffled[args.holdout :]
     if args.train_rooms:
         train_rooms = train_rooms[: args.train_rooms]
     train_rooms = sorted(train_rooms)
@@ -396,6 +412,7 @@ def main() -> int:
         # invisible in the results.
         "rooms_used": sorted(rooms),
         "room_pool": len(rooms),
+        "holdout_stratified_by_disambiguation": True,
         "feature_mode": args.feature_mode,
         "query_mode": args.query_mode,
         "position_mode": args.position_mode,

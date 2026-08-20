@@ -250,21 +250,27 @@ def compose_room(
     repeatable = [c for c in standing_pool if len(by_category[c]) >= 2]
     if not repeatable:
         raise ValueError("no category has two assets; cannot guarantee a duplicate")
-    guaranteed = rng.choice(repeatable)
+    # Two repeated categories rather than one. Only a fraction of rooms end up
+    # posing "which cabinet" -- the composer can repeat a category, but Gemma
+    # then has to independently give both objects the same name, and often it
+    # does not. Repeating twice roughly doubles the chance that at least one
+    # pair survives naming, which is what the task needs.
+    guaranteed = rng.sample(repeatable, k=min(2, len(repeatable)))
     wanted = rng.sample(standing_pool, k=min(len(standing_pool), rng.randint(4, 7)))
-    if guaranteed not in wanted:
-        wanted.append(guaranteed)
+    for category in guaranteed:
+        if category not in wanted:
+            wanted.append(category)
     plan: list[str] = []
     for category in wanted:
         available = len(by_category[category])
-        if category == guaranteed:
+        if category in guaranteed:
             count = rng.randint(2, min(max(high, 2), available))
         else:
             count = rng.randint(low, min(high, available))
         plan += [category] * count
-    # The guaranteed duplicate goes first so the clutter budget cannot squeeze
-    # it out in favour of whatever happened to be drawn earlier.
-    plan.sort(key=lambda c: c != guaranteed)
+    # The guaranteed duplicates go first so the clutter budget cannot squeeze
+    # them out in favour of whatever happened to be drawn earlier.
+    plan.sort(key=lambda c: c not in guaranteed)
 
     budget = width * depth * clutter
     placed_boxes: list[tuple[tuple[float, float], tuple[float, float]]] = []
