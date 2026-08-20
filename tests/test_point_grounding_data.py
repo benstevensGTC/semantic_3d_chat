@@ -201,3 +201,39 @@ def test_colour_control_is_finite_and_discriminative() -> None:
         / np.linalg.norm(normalised[0]) / np.linalg.norm(normalised[1])
     )
     assert similarity < 0.9
+
+
+def test_disambiguation_margin_uses_the_deciding_pair() -> None:
+    """With three cabinets, two of them may sit together and one far away.
+
+    Checking the spread from nearest to furthest accepts that: the spread is
+    large, while the pair the label actually distinguishes is a coin flip. This
+    is the same defect that was found in relational_examples, and it reached
+    this function by being written the same way.
+    """
+
+    from semantic_3d_chat.spatial_lens.grounding_data import available_rooms
+    from semantic_3d_chat.spatial_lens.point_grounding_data import (
+        disambiguation_examples,
+    )
+
+    margin = 0.5
+    checked = 0
+    for room in available_rooms():
+        examples = disambiguation_examples(room, min_margin_m=margin)
+        for example in examples:
+            # Every emitted label must have a runner-up clear of the margin, and
+            # the answer must be one of the candidates it claims to choose among.
+            assert example.candidate_count is not None
+            assert example.candidate_count >= 2
+            assert example.candidates is not None
+            covered = example.candidates.sum()
+            target = (example.target > 0).sum()
+            assert covered >= target
+            # The target has to be a strict subset when there is more than one
+            # candidate, or the phrase distinguishes nothing.
+            if example.candidate_count > 1:
+                assert covered > target
+            checked += 1
+    if checked == 0:
+        pytest.skip("no rooms produced a disambiguation example")

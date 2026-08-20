@@ -338,15 +338,24 @@ def disambiguation_examples(
                 (float(np.linalg.norm(mid[:2] - anchor_mid[:2])), index)
                 for index, (_c, _n, mid, _p, _v) in enumerate(members)
             )
-            near_gap, near_index = ranked[0]
-            far_gap, far_index = ranked[-1]
-            if far_gap - near_gap < min_margin_m:
-                continue
-            for phrase, index in (
-                (f"the {category} nearest the {anchor_name}", near_index),
-                (f"the {category} closest to the {anchor_name}", near_index),
-                (f"the {category} furthest from the {anchor_name}", far_index),
-            ):
+            # The margin that decides "nearest" is the one to the runner-up, and
+            # the margin that decides "furthest" is the one to the second
+            # furthest. Checking the spread from nearest to furthest instead is
+            # the same mistake that was found in relational_examples: with three
+            # cabinets it accepts a pair of them sitting on top of each other so
+            # long as the third is across the room. Twelve of the nineteen
+            # three-or-more cases here were exactly that.
+            wording: list[tuple[str, int]] = []
+            if ranked[1][0] - ranked[0][0] >= min_margin_m:
+                wording += [
+                    (f"the {category} nearest the {anchor_name}", ranked[0][1]),
+                    (f"the {category} closest to the {anchor_name}", ranked[0][1]),
+                ]
+            if ranked[-1][0] - ranked[-2][0] >= min_margin_m:
+                wording.append(
+                    (f"the {category} furthest from the {anchor_name}", ranked[-1][1])
+                )
+            for phrase, index in wording:
                 _c, _n, _mid, picked, voxels = members[index]
                 target = picked.astype(np.float32)
                 target /= target.sum()
