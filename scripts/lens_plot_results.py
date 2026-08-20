@@ -274,6 +274,59 @@ def plot_asset_ablation(task: str, name: str, title: str, note: str) -> Path | N
     return _save(figure, name)
 
 
+def plot_asset_scaling(name: str) -> Path | None:
+    """Does more data help on the real-furniture corpus, and for which task?"""
+
+    sizes = [4, 12, 24, 45]
+    series = [
+        ("scale_object_rope3d", "naming an object, 3D rotary", SERIES["rope3d"], "-"),
+        ("scale_object_learned_absolute", "naming an object, absolute",
+         SERIES["learned_absolute"], "-"),
+        ("scale_disambig_rope3d", "\"which cabinet\", 3D rotary", SERIES["rgb"], "-"),
+    ]
+    figure, ax = plt.subplots(figsize=(7.6, 4.4))
+    drawn = False
+    for prefix, label, colour, style in series:
+        xs, ys, los, his = [], [], [], []
+        for size in sizes:
+            run = _load(f"{prefix}_{size}", ASSETS)
+            if not run:
+                continue
+            held = run["held_out"]
+            xs.append(size)
+            ys.append(held["hits_object"])
+            low, high = held.get("interval_95") or (held["hits_object"],) * 2
+            los.append(max(held["hits_object"] - low, 0.0))
+            his.append(max(high - held["hits_object"], 0.0))
+        if not xs:
+            continue
+        drawn = True
+        ax.errorbar(xs, ys, yerr=[los, his], color=colour, marker="o", linestyle=style,
+                    linewidth=2.0, capsize=5, label=label, markersize=6)
+    if not drawn:
+        plt.close(figure)
+        return None
+    # Two tasks with different chance lines share this axis, so both are drawn.
+    for prefix, dash in (("scale_object_rope3d", (0, (4, 3))),
+                         ("scale_disambig_rope3d", (0, (1, 2)))):
+        run = _load(f"{prefix}_{sizes[-1]}", ASSETS) or _load(f"{prefix}_{sizes[0]}", ASSETS)
+        chance = run["held_out"].get("chance_random_object") if run else None
+        if chance:
+            ax.axhline(chance, color=SERIES["chance"], linestyle=dash, linewidth=1.3)
+            ax.text(sizes[-1], chance + 0.012, f"chance {chance:.0%}",
+                    color=SERIES["chance"], fontsize=8, ha="right")
+    _style(ax, "Real-furniture corpus: accuracy against training rooms",
+           "training rooms", "lands on the object")
+    ax.set_xticks(sizes)
+    ax.legend(frameon=False, fontsize=9)
+    ax.yaxis.set_major_formatter(lambda v, _p: f"{v:.0%}")
+    figure.text(0.012, 0.015,
+                "Fixed optimiser-step budget at every point, so the axis is data and not "
+                "compute. 15 held-out rooms. One seed per point.",
+                fontsize=8, color="#5b5b66")
+    return _save(figure, name)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.parse_args()
@@ -294,6 +347,7 @@ def main() -> int:
             "Finding an unnamed object by its relation to a named one",
             "The strictest form: the phrase never says what the target is.",
         ),
+        plot_asset_scaling("asset_scaling.png"),
         plot_ablation("object", "ablation_object.png",
                       "Naming an object in a room the model has never seen"),
         plot_ablation("relational", "ablation_relational.png",
