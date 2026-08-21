@@ -30,6 +30,7 @@ import random
 import numpy as np
 
 from semantic_3d_chat.config import PROJECT_ROOT
+from semantic_3d_chat.language.model_choice import add_model_arguments, revision_for
 from semantic_3d_chat.spatial_lens.discover import discover_objects
 from semantic_3d_chat.spatial_lens.grounding_data import available_rooms
 from semantic_3d_chat.spatial_lens.perceive import SemanticCloud
@@ -141,6 +142,7 @@ def main() -> int:
                         help="cap on rooms measured; 0 uses every scanned room")
     parser.add_argument("--room-prefix", default=None,
                         help="only measure rooms whose name starts with this")
+    add_model_arguments(parser)
     parser.add_argument("--per-room", type=int, default=6,
                         help="questions sampled per room per kind")
     parser.add_argument("--seed", type=int, default=20260818)
@@ -159,8 +161,8 @@ def main() -> int:
     from semantic_3d_chat.language.local_lm import load_local_language_model
 
     language = load_local_language_model(
-        "google/gemma-4-E2B-it",
-        revision="3e22461f65e89153144f8adb70e3b8c2cc9845a7",
+        args.model,
+        revision=args.revision or revision_for(args.model),
         requested_dtype="bfloat16",
         local_files_only=True,
     )
@@ -264,6 +266,7 @@ def main() -> int:
     summary = {
         "rooms": rooms,
         "room_prefix": args.room_prefix,
+        "model": args.model,
         "chance_when_answered": 0.5,
         # Empty columns are zero vectors, so this much of a "real" scene differs
         # from the zeroed control at all. Read that control accordingly.
