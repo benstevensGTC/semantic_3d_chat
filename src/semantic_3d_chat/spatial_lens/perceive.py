@@ -85,8 +85,16 @@ def build_semantic_cloud(
     max_depth_m: float = 12.0,
     device: str | None = None,
     progress: Any | None = None,
+    model_id: str | None = None,
+    revision: str | None = None,
 ) -> SemanticCloud:
-    """Fuse every scanned frame into one semantic point cloud."""
+    """Fuse every scanned frame into one semantic point cloud.
+
+    The cloud is not portable between models. Every point carries the output of
+    one decoder's vision projector, so its width is that decoder's hidden size
+    -- 1536 for E2B, 2560 for E4B -- and a map built with one cannot be read by
+    the other. Changing ``model_id`` means rebuilding the map, not reusing it.
+    """
 
     import torch
     from PIL import Image
@@ -102,9 +110,12 @@ def build_semantic_cloud(
     if not frames:
         raise ValueError("Scan has no frames")
 
+    from semantic_3d_chat.language.model_choice import DEFAULT_MODEL, revision_for
+
+    chosen = model_id or DEFAULT_MODEL
     encoder = DenseGemma4Encoder.from_pretrained(
-        "google/gemma-4-E2B-it",
-        revision="3e22461f65e89153144f8adb70e3b8c2cc9845a7",
+        chosen,
+        revision=revision or revision_for(chosen),
         device=None if device is None else torch.device(device),
         requested_dtype="bfloat16",
         storage_dtype=torch.float16,

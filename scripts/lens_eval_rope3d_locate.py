@@ -61,6 +61,9 @@ def main() -> int:
     parser.add_argument("--room-prefix", default=None,
                         help="only measure rooms whose name starts with this")
     add_model_arguments(parser)
+    # A cloud belongs to the model that built it, so the map has to be selected
+    # alongside the model that reads it.
+    parser.add_argument("--cloud-name", default="point_cloud.npz")
     parser.add_argument("--grid", type=int, default=16)
     parser.add_argument("--span-units", type=float, default=256.0)
     parser.add_argument("--tolerance-m", type=float, default=1.0)
@@ -72,7 +75,11 @@ def main() -> int:
     if args.room_prefix:
         shuffled = [r for r in shuffled if r.startswith(args.room_prefix)]
     random.Random(20260818).shuffle(shuffled)
-    rooms = sorted(shuffled[: args.rooms] if args.rooms else shuffled)
+    have = [
+        r for r in shuffled
+        if (PROJECT_ROOT / "data" / "spatial_lens" / r / args.cloud_name).is_file()
+    ]
+    rooms = sorted(have[: args.rooms] if args.rooms else have)
     print(f"measuring {len(rooms)} rooms")
 
     from semantic_3d_chat.language.local_lm import load_local_language_model
@@ -93,7 +100,7 @@ def main() -> int:
     trials = []
     for room in rooms:
         root = PROJECT_ROOT / "data" / "spatial_lens" / room
-        cloud = SemanticCloud.load(root / "point_cloud.npz")
+        cloud = SemanticCloud.load(root / args.cloud_name)
         tokens = build_scene_tokens_3d(cloud, grid=args.grid)
         occupancy.append(tokens.occupied_fraction)
         named = {
@@ -202,6 +209,7 @@ def main() -> int:
         "rooms": rooms,
         "room_prefix": args.room_prefix,
         "model": args.model,
+        "cloud": args.cloud_name,
         "tolerance_m": args.tolerance_m,
         "span_units": args.span_units,
         "queries_per_condition": len(results["raster"]["hits"]),

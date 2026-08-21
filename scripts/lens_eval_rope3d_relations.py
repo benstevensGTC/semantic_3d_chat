@@ -143,6 +143,9 @@ def main() -> int:
     parser.add_argument("--room-prefix", default=None,
                         help="only measure rooms whose name starts with this")
     add_model_arguments(parser)
+    # A cloud belongs to the model that built it, so the map has to be selected
+    # alongside the model that reads it.
+    parser.add_argument("--cloud-name", default="point_cloud.npz")
     parser.add_argument("--per-room", type=int, default=6,
                         help="questions sampled per room per kind")
     parser.add_argument("--seed", type=int, default=20260818)
@@ -155,7 +158,11 @@ def main() -> int:
     if args.room_prefix:
         shuffled = [r for r in shuffled if r.startswith(args.room_prefix)]
     random.Random(20260818).shuffle(shuffled)
-    rooms = sorted(shuffled[: args.rooms] if args.rooms else shuffled)
+    have = [
+        r for r in shuffled
+        if (PROJECT_ROOT / "data" / "spatial_lens" / r / args.cloud_name).is_file()
+    ]
+    rooms = sorted(have[: args.rooms] if args.rooms else have)
     print(f"measuring {len(rooms)} rooms")
 
     from semantic_3d_chat.language.local_lm import load_local_language_model
@@ -174,7 +181,7 @@ def main() -> int:
     trials = []
     for room in rooms:
         root = PROJECT_ROOT / "data" / "spatial_lens" / room
-        cloud = SemanticCloud.load(root / "point_cloud.npz")
+        cloud = SemanticCloud.load(root / args.cloud_name)
         tokens = build_scene_tokens_3d(cloud)
         occupancy.append(tokens.occupied_fraction)
         named = {
@@ -267,6 +274,7 @@ def main() -> int:
         "rooms": rooms,
         "room_prefix": args.room_prefix,
         "model": args.model,
+        "cloud": args.cloud_name,
         "chance_when_answered": 0.5,
         # Empty columns are zero vectors, so this much of a "real" scene differs
         # from the zeroed control at all. Read that control accordingly.

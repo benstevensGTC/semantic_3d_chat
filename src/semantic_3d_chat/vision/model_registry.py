@@ -8,7 +8,7 @@ heuristics spread through the extractor.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 
 @dataclass(frozen=True)
@@ -118,9 +118,22 @@ GEMMA4_E2B = DenseVisionModelSpec(
 )
 
 
+# E4B carries the same vision tower as E2B -- 768-wide, patch 16, sixteen
+# layers -- and a wider decoder. Since a point's feature is the projector's
+# output, and the projector lands in the decoder's space, the only thing that
+# changes is how wide each point ends up: 2560 instead of 1536. That also means
+# a map built with one model cannot be read by the other.
+GEMMA4_E4B = replace(
+    GEMMA4_E2B,
+    model_id="google/gemma-4-E4B-it",
+    aligned_dim=2560,
+)
+
+
 _MODEL_REGISTRY = {
     CLIP_VIT_BASE_PATCH16_224.model_id: CLIP_VIT_BASE_PATCH16_224,
     GEMMA4_E2B.model_id: GEMMA4_E2B,
+    GEMMA4_E4B.model_id: GEMMA4_E4B,
 }
 
 
