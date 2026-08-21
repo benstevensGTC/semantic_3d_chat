@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import textwrap
 from pathlib import Path
 
 import matplotlib
@@ -23,7 +24,11 @@ from semantic_3d_chat.config import PROJECT_ROOT
 
 POINTS = PROJECT_ROOT / "reports" / "gemma4" / "metrics" / "point_grounding"
 ASSETS = PROJECT_ROOT / "reports" / "gemma4" / "metrics" / "point_grounding_assets"
-FIGURES = PROJECT_ROOT / "reports" / "figures"
+CAPACITY = PROJECT_ROOT / "reports" / "gemma4" / "metrics" / "point_grounding_capacity"
+# Its own folder: reports/figures already holds a decade of earlier experiments,
+# and a reader cannot tell which pictures belong to which study once they are
+# mixed together.
+FIGURES = PROJECT_ROOT / "reports" / "figures" / "rope3d_study"
 
 INK = "#1b1b1f"
 GRID = "#d8d8de"
@@ -49,10 +54,19 @@ def _style(ax, title: str, xlabel: str, ylabel: str) -> None:
     ax.tick_params(colors=INK, labelsize=9)
 
 
-def _save(figure, name: str) -> Path:
+def _save(figure, name: str, footnote: str = "") -> Path:
+    """Write the figure, wrapping the footnote so it cannot run off the edge."""
+
     FIGURES.mkdir(parents=True, exist_ok=True)
     path = FIGURES / name
-    figure.tight_layout()
+    if footnote:
+        width = int(figure.get_size_inches()[0] * 15)
+        lines = textwrap.wrap(" ".join(footnote.split()), width=width)
+        figure.tight_layout(rect=(0, 0.03 + 0.035 * len(lines), 1, 1))
+        figure.text(0.012, 0.012, "\n".join(lines), fontsize=8, color="#5b5b66",
+                    va="bottom")
+    else:
+        figure.tight_layout()
     figure.savefig(path, dpi=170, facecolor="white")
     plt.close(figure)
     return path
@@ -98,11 +112,7 @@ def plot_ablation(task: str, name: str, title: str) -> Path | None:
     _style(ax, title, "", "lands on the object")
     ax.set_ylim(0, max(max(values) * 1.35, (chance or 0) * 1.6))
     ax.yaxis.set_major_formatter(lambda v, _p: f"{v:.0%}")
-    figure.text(0.012, 0.015,
-                f"{held_rooms} held-out rooms, n={n}; bars are 95% Wilson intervals. "
-                "Chance = a guesser that knows the answer is one of the room's objects.",
-                fontsize=8, color="#5b5b66")
-    return _save(figure, name)
+    return _save(figure, name, f"{held_rooms} held-out rooms, n={n}; bars are 95% Wilson intervals. " "Chance = a guesser that knows the answer is one of the room's objects.")
 
 
 def plot_scaling(metric: str, name: str, title: str, ylabel: str) -> Path | None:
@@ -146,11 +156,7 @@ def plot_scaling(metric: str, name: str, title: str, ylabel: str) -> Path | None
     _style(ax, title, "training rooms", ylabel)
     ax.set_xticks(sizes)
     ax.legend(frameon=False, fontsize=9)
-    figure.text(0.012, 0.015,
-                "Every point trained to the same number of optimiser steps, so the axis is "
-                "data rather than compute. One seed per point.",
-                fontsize=8, color="#5b5b66")
-    return _save(figure, name)
+    return _save(figure, name, "Every point trained to the same number of optimiser steps, so the axis is " "data rather than compute. One seed per point.")
 
 
 def plot_coverage(name: str) -> Path | None:
@@ -175,12 +181,7 @@ def plot_coverage(name: str) -> Path | None:
     ax.yaxis.set_major_formatter(lambda v, _p: f"{v:.0%}")
     tail = (f" Of the furniture's whole area, {np.mean(surface):.0%} is seen."
             if surface else "")
-    figure.text(0.012, 0.015,
-                f"{len(finals)} rooms; median {int(np.median(finals))} views. Reachable = "
-                f"visible from some camera in the room, so a drawer interior is not a "
-                f"miss -- but that denominator flatters the plan.{tail}",
-                fontsize=8, color="#5b5b66")
-    return _save(figure, name)
+    return _save(figure, name, f"{len(finals)} rooms; median {int(np.median(finals))} views. Reachable = " f"visible from some camera in the room, so a drawer interior is not a " f"miss -- but that denominator flatters the plan.{tail}")
 
 
 def plot_corpus_comparison(name: str) -> Path | None:
@@ -226,12 +227,7 @@ def plot_corpus_comparison(name: str) -> Path | None:
            "lands on the object")
     ax.legend(frameon=False, fontsize=9)
     ax.yaxis.set_major_formatter(lambda v, _p: f"{v:.0%}")
-    figure.text(0.012, 0.015,
-                "Identical method, identical metric. Primitive rooms held one of each "
-                "object and were flat-shaded, which is why colour did so well and why a "
-                "relation was never needed to identify anything.",
-                fontsize=8, color="#5b5b66")
-    return _save(figure, name)
+    return _save(figure, name, "Identical method, identical metric. Primitive rooms held one of each " "object and were flat-shaded, which is why colour did so well and why a " "relation was never needed to identify anything.")
 
 
 def plot_asset_ablation(task: str, name: str, title: str, note: str) -> Path | None:
@@ -267,11 +263,7 @@ def plot_asset_ablation(task: str, name: str, title: str, note: str) -> Path | N
     ax.yaxis.set_major_formatter(lambda v, _p: f"{v:.0%}")
     held_rooms = len(rows[0][2]["held_out_rooms"])
     effective = rows[0][2]["held_out"].get("effective_n")
-    figure.text(0.012, 0.015,
-                f"{held_rooms} held-out asset rooms; intervals over "
-                f"{effective} independent targets. {note}",
-                fontsize=8, color="#5b5b66")
-    return _save(figure, name)
+    return _save(figure, name, f"{held_rooms} held-out asset rooms; intervals over " f"{effective} independent targets. {note}")
 
 
 def plot_asset_scaling(name: str) -> Path | None:
@@ -320,11 +312,82 @@ def plot_asset_scaling(name: str) -> Path | None:
     ax.set_xticks(sizes)
     ax.legend(frameon=False, fontsize=9)
     ax.yaxis.set_major_formatter(lambda v, _p: f"{v:.0%}")
-    figure.text(0.012, 0.015,
-                "Fixed optimiser-step budget at every point, so the axis is data and not "
-                "compute. 15 held-out rooms. One seed per point.",
-                fontsize=8, color="#5b5b66")
-    return _save(figure, name)
+    return _save(figure, name, "Fixed optimiser-step budget at every point, so the axis is data and not " "compute. 15 held-out rooms. One seed per point.")
+
+
+def plot_capacity(name: str) -> Path | None:
+    """Does a bigger reader solve the task a small one cannot?"""
+
+    specs = [("disambig_dim256_layers4", "256x4"), ("disambig_dim512_layers6", "512x6"),
+             ("disambig_dim768_layers8", "768x8")]
+    rows = [(lab, _load(tag, CAPACITY)) for tag, lab in specs]
+    rows = [(lab, r) for lab, r in rows if r]
+    if len(rows) < 2:
+        return None
+    figure, ax = plt.subplots(figsize=(7.2, 4.3))
+    xs = [r["parameters"] / 1e6 for _l, r in rows]
+    ys = [r["held_out"]["hits_object"] for _l, r in rows]
+    los = [max(y - (r["held_out"].get("interval_95") or [y, y])[0], 0) for y, (_l, r) in zip(ys, rows)]
+    his = [max((r["held_out"].get("interval_95") or [y, y])[1] - y, 0) for y, (_l, r) in zip(ys, rows)]
+    ax.errorbar(xs, ys, yerr=[los, his], color=SERIES["rope3d"], marker="o",
+                linewidth=2.0, capsize=6, markersize=8)
+    chance = rows[0][1]["held_out"].get("chance_random_object")
+    if chance:
+        ax.axhline(chance, color=SERIES["chance"], linestyle="--", linewidth=1.5)
+        ax.text(xs[-1], chance + 0.015, f"chance {chance:.0%}", color=SERIES["chance"],
+                fontsize=9, ha="right")
+    for x, y, (lab, _r) in zip(xs, ys, rows):
+        ax.annotate(lab, (x, y), textcoords="offset points", xytext=(14, 4),
+                    fontsize=8, color="#5b5b66", ha="left")
+    _style(ax, "Fifteen times the reader does not buy the task",
+           "reader parameters (millions)", "lands on the right cabinet")
+    ax.set_xscale("log")
+    # Plain parameter counts; nobody reads a model size as 6 x 10^1.
+    ax.set_xticks(xs)
+    ax.set_xticklabels([f"{x:.0f}M" for x in xs])
+    ax.minorticks_off()
+    ax.set_xlim(min(xs) * 0.7, max(xs) * 1.45)
+    ax.set_ylim(0, max(chance or 0.5, max(ys)) * 1.5)
+    ax.yaxis.set_major_formatter(lambda v, _p: f"{v:.0%}")
+    return _save(figure, name, "Same data, same steps, same split. If depth or width were the missing " "ingredient for comparing two distances, it would appear here.")
+
+
+def plot_wavelength(name: str) -> Path | None:
+    """The one rotary hyperparameter nobody tuned, on both tasks."""
+
+    bands = [2.0, 4.0, 8.0, 16.0, 32.0]
+    figure, ax = plt.subplots(figsize=(7.4, 4.3))
+    drawn = False
+    for prefix, label, colour in (("object", "naming an object", SERIES["rope3d"]),
+                                  ("disambig", "which cabbinet", SERIES["rgb"])):
+        xs, ys = [], []
+        for band in bands:
+            run = _load(f"{prefix}_cycle{band}", CAPACITY)
+            if run:
+                xs.append(band)
+                ys.append(run["held_out"]["hits_object"])
+        if not xs:
+            continue
+        drawn = True
+        pretty = label.replace("cabbinet", "cabinet")
+        ax.plot(xs, ys, color=colour, marker="o", linewidth=2.0, markersize=7, label=pretty)
+        run = _load(f"{prefix}_cycle8.0", CAPACITY)
+        chance = run["held_out"].get("chance_random_object") if run else None
+        if chance:
+            ax.axhline(chance, color=colour, linestyle=":", linewidth=1.2, alpha=0.8)
+            ax.text(bands[-1], chance + 0.012, f"chance {chance:.0%}", color=colour,
+                    fontsize=8, ha="right")
+    if not drawn:
+        plt.close(figure)
+        return None
+    _style(ax, "The rotary band matters for one task and not the other",
+           "metres per cycle (log)", "lands on the object")
+    ax.set_xscale("log", base=2)
+    ax.set_xticks(bands)
+    ax.set_xticklabels([f"{b:g}" for b in bands])
+    ax.legend(frameon=False, fontsize=9)
+    ax.yaxis.set_major_formatter(lambda v, _p: f"{v:.0%}")
+    return _save(figure, name, "Naming peaks near room scale and falls off either side, so the knob is " "live. Disambiguation is flat and far below its own chance line at every " "band, so the knob has no purchase on it.")
 
 
 def main() -> int:
@@ -348,6 +411,8 @@ def main() -> int:
             "The strictest form: the phrase never says what the target is.",
         ),
         plot_asset_scaling("asset_scaling.png"),
+        plot_capacity("capacity.png"),
+        plot_wavelength("wavelength.png"),
         plot_ablation("object", "ablation_object.png",
                       "Naming an object in a room the model has never seen"),
         plot_ablation("relational", "ablation_relational.png",
