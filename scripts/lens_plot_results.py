@@ -390,6 +390,58 @@ def plot_wavelength(name: str) -> Path | None:
     return _save(figure, name, "Naming peaks near room scale and falls off either side, so the knob is " "live. Disambiguation is flat and far below its own chance line at every " "band, so the knob has no purchase on it.")
 
 
+def plot_model_comparison(name: str) -> Path | None:
+    """Two model sizes, same rooms, same questions, same controls."""
+
+    arms = []
+    for tag, label in (("e2b_25", "Gemma E2B"), ("e4b_25", "Gemma E4B")):
+        path = PROJECT_ROOT / "reports" / "gemma4" / "metrics" / f"rope3d_locate_{tag}.json"
+        if path.is_file():
+            arms.append((label, json.loads(path.read_text(encoding="utf-8"))))
+    if len(arms) < 2:
+        return None
+
+    order = [
+        ("raster", "raster order"),
+        ("rope3d_xyz", "3D rotary"),
+        ("rope3d_scrambled", "3D rotary,\nscrambled"),
+        ("zeroed", "no scene"),
+    ]
+    figure, ax = plt.subplots(figsize=(8.0, 4.4))
+    spots = np.arange(len(order))
+    width = 0.36
+    for offset, (label, run), colour in (
+        (-width / 2, arms[0], "#6e7781"), (width / 2, arms[1], "#1f6feb")
+    ):
+        values, lows, highs = [], [], []
+        for key, _pretty in order:
+            cell = run["conditions"][key]
+            value = cell["within_tolerance"]
+            low, high = cell["interval_95"]
+            values.append(value)
+            lows.append(max(value - low, 0.0))
+            highs.append(max(high - value, 0.0))
+        ax.bar(spots + offset, values, width=width, color=colour, label=label,
+               yerr=[lows, highs], capsize=5, ecolor=INK, error_kw={"linewidth": 1.1})
+    baseline = arms[0][1]["random_baseline"]
+    ax.axhline(baseline, color=SERIES["chance"], linestyle="--", linewidth=1.4)
+    ax.text(len(order) - 0.4, baseline + 0.008, f"chance {baseline:.0%}",
+            color=SERIES["chance"], fontsize=9, ha="right")
+    ax.set_xticks(spots)
+    ax.set_xticklabels([pretty for _k, pretty in order])
+    _style(ax, "Does a bigger Gemma read the 3D field better?", "", "within 1 m")
+    ax.legend(frameon=False, fontsize=9)
+    ax.yaxis.set_major_formatter(lambda v, _p: f"{v:.0%}")
+    return _save(
+        figure, name,
+        f"Same {len(arms[0][1]['rooms'])} rooms and {arms[0][1]['queries_per_condition']} "
+        "questions for both. Scale lifts every real condition by about seven points, "
+        "but real positions still do not separate from scrambled ones (p = 0.35 for "
+        "E2B, 0.18 for E4B), so neither model is using the rotary channel. E4B refuses "
+        "every question when the scene is zeroed; E2B answers 76 of them.",
+    )
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.parse_args()
@@ -412,6 +464,7 @@ def main() -> int:
         ),
         plot_asset_scaling("asset_scaling.png"),
         plot_capacity("capacity.png"),
+        plot_model_comparison("model_comparison.png"),
         plot_wavelength("wavelength.png"),
         plot_ablation("object", "ablation_object.png",
                       "Naming an object in a room the model has never seen"),

@@ -1,0 +1,8525 @@
+{
+  "rooms": [
+    "asset005",
+    "asset006",
+    "asset008",
+    "asset009",
+    "asset010",
+    "asset011",
+    "asset017",
+    "asset018",
+    "asset019",
+    "asset036",
+    "asset037",
+    "asset041",
+    "asset043",
+    "asset050",
+    "asset051",
+    "asset058",
+    "asset061",
+    "asset062",
+    "asset069",
+    "asset075",
+    "asset090",
+    "asset103",
+    "asset104",
+    "asset110",
+    "asset116"
+  ],
+  "room_prefix": "asset",
+  "model": "google/gemma-4-E4B-it",
+  "cloud": "point_cloud_e4b.npz",
+  "tolerance_m": 1.0,
+  "span_units": 256.0,
+  "queries_per_condition": 163,
+  "random_baseline": 0.1439,
+  "occupied_fraction": 0.428,
+  "conditions": {
+    "raster": {
+      "queries": 163,
+      "within_tolerance": 0.288,
+      "interval_95": [
+        0.224,
+        0.362
+      ],
+      "refused": 8,
+      "within_tolerance_when_answered": 0.303,
+      "median_gap_m_answered": 1.702
+    },
+    "rope3d_xyz": {
+      "queries": 163,
+      "within_tolerance": 0.252,
+      "interval_95": [
+        0.191,
+        0.323
+      ],
+      "refused": 5,
+      "within_tolerance_when_answered": 0.259,
+      "median_gap_m_answered": 1.765
+    },
+    "rope3d_z_only": {
+      "queries": 163,
+      "within_tolerance": 0.227,
+      "interval_95": [
+        0.169,
+        0.297
+      ],
+      "refused": 4,
+      "within_tolerance_when_answered": 0.233,
+      "median_gap_m_answered": 1.784
+    },
+    "rope3d_scrambled": {
+      "queries": 163,
+      "within_tolerance": 0.215,
+      "interval_95": [
+        0.159,
+        0.284
+      ],
+      "refused": 8,
+      "within_tolerance_when_answered": 0.226,
+      "median_gap_m_answered": 1.73
+    },
+    "zeroed": {
+      "queries": 163,
+      "within_tolerance": 0.0,
+      "interval_95": [
+        0.0,
+        0.023
+      ],
+      "refused": 163,
+      "within_tolerance_when_answered": null,
+      "median_gap_m_answered": null
+    }
+  },
+  "mcnemar_vs_raster": {
+    "rope3d_xyz": {
+      "p_value": 0.286,
+      "only_first": 8,
+      "only_second": 14
+    },
+    "rope3d_z_only": {
+      "p_value": 0.0414,
+      "only_first": 5,
+      "only_second": 15
+    },
+    "rope3d_scrambled": {
+      "p_value": 0.0428,
+      "only_first": 9,
+      "only_second": 21
+    },
+    "zeroed": {
+      "p_value": 1.42e-14,
+      "only_first": 0,
+      "only_second": 47
+    }
+  },
+  "holm_adjusted_p": {
+    "zeroed": 0.0,
+    "rope3d_z_only": 0.1242,
+    "rope3d_scrambled": 0.1242,
+    "rope3d_xyz": 0.286
+  },
+  "trials": [
+    {
+      "room": "asset005",
+      "object": "cabinet 1",
+      "condition": "raster",
+      "answer_m": [
+        1.684,
+        -1.934
+      ],
+      "gap_m": 1.418,
+      "refused": false
+    },
+    {
+      "room": "asset005",
+      "object": "cabinet 1",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        1.684,
+        -1.934
+      ],
+      "gap_m": 1.418,
+      "refused": false
+    },
+    {
+      "room": "asset005",
+      "object": "cabinet 1",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        0.766,
+        -1.934
+      ],
+      "gap_m": 1.555,
+      "refused": false
+    },
+    {
+      "room": "asset005",
+      "object": "cabinet 1",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.684,
+        -1.934
+      ],
+      "gap_m": 1.418,
+      "refused": false
+    },
+    {
+      "room": "asset005",
+      "object": "cabinet 1",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset005",
+      "object": "cabinet 2",
+      "condition": "raster",
+      "answer_m": [
+        -1.991,
+        -1.934
+      ],
+      "gap_m": 0.43,
+      "refused": false
+    },
+    {
+      "room": "asset005",
+      "object": "cabinet 2",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        0.766,
+        -1.934
+      ],
+      "gap_m": 2.212,
+      "refused": false
+    },
+    {
+      "room": "asset005",
+      "object": "cabinet 2",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        0.766,
+        -1.934
+      ],
+      "gap_m": 2.212,
+      "refused": false
+    },
+    {
+      "room": "asset005",
+      "object": "cabinet 2",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.684,
+        -1.934
+      ],
+      "gap_m": 3.11,
+      "refused": false
+    },
+    {
+      "room": "asset005",
+      "object": "cabinet 2",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset005",
+      "object": "black chair",
+      "condition": "raster",
+      "answer_m": [
+        0.766,
+        -1.041
+      ],
+      "gap_m": 0.849,
+      "refused": false
+    },
+    {
+      "room": "asset005",
+      "object": "black chair",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        0.766,
+        -0.744
+      ],
+      "gap_m": 0.841,
+      "refused": false
+    },
+    {
+      "room": "asset005",
+      "object": "black chair",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        0.766,
+        -1.041
+      ],
+      "gap_m": 0.849,
+      "refused": false
+    },
+    {
+      "room": "asset005",
+      "object": "black chair",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        0.766,
+        -1.934
+      ],
+      "gap_m": 1.163,
+      "refused": false
+    },
+    {
+      "room": "asset005",
+      "object": "black chair",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset005",
+      "object": "gray chair",
+      "condition": "raster",
+      "answer_m": [
+        1.072,
+        0.744
+      ],
+      "gap_m": 1.911,
+      "refused": false
+    },
+    {
+      "room": "asset005",
+      "object": "gray chair",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        0.766,
+        0.744
+      ],
+      "gap_m": 1.607,
+      "refused": false
+    },
+    {
+      "room": "asset005",
+      "object": "gray chair",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.072,
+        0.744
+      ],
+      "gap_m": 1.911,
+      "refused": false
+    },
+    {
+      "room": "asset005",
+      "object": "gray chair",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        0.766,
+        0.744
+      ],
+      "gap_m": 1.607,
+      "refused": false
+    },
+    {
+      "room": "asset005",
+      "object": "gray chair",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset005",
+      "object": "black table",
+      "condition": "raster",
+      "answer_m": [
+        0.766,
+        -1.339
+      ],
+      "gap_m": 0.561,
+      "refused": false
+    },
+    {
+      "room": "asset005",
+      "object": "black table",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        0.766,
+        -1.934
+      ],
+      "gap_m": 0.55,
+      "refused": false
+    },
+    {
+      "room": "asset005",
+      "object": "black table",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        0.766,
+        -1.041
+      ],
+      "gap_m": 0.738,
+      "refused": false
+    },
+    {
+      "room": "asset005",
+      "object": "black table",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        0.766,
+        -1.934
+      ],
+      "gap_m": 0.55,
+      "refused": false
+    },
+    {
+      "room": "asset005",
+      "object": "black table",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset005",
+      "object": "phone",
+      "condition": "raster",
+      "answer_m": [
+        1.991,
+        -1.934
+      ],
+      "gap_m": 2.266,
+      "refused": false
+    },
+    {
+      "room": "asset005",
+      "object": "phone",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        1.684,
+        -1.934
+      ],
+      "gap_m": 1.96,
+      "refused": false
+    },
+    {
+      "room": "asset005",
+      "object": "phone",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.684,
+        -1.934
+      ],
+      "gap_m": 1.96,
+      "refused": false
+    },
+    {
+      "room": "asset005",
+      "object": "phone",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.991,
+        -1.934
+      ],
+      "gap_m": 2.266,
+      "refused": false
+    },
+    {
+      "room": "asset005",
+      "object": "phone",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset005",
+      "object": "brown table",
+      "condition": "raster",
+      "answer_m": [
+        1.684,
+        1.636
+      ],
+      "gap_m": 1.409,
+      "refused": false
+    },
+    {
+      "room": "asset005",
+      "object": "brown table",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        1.684,
+        1.041
+      ],
+      "gap_m": 1.525,
+      "refused": false
+    },
+    {
+      "room": "asset005",
+      "object": "brown table",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.684,
+        1.339
+      ],
+      "gap_m": 1.438,
+      "refused": false
+    },
+    {
+      "room": "asset005",
+      "object": "brown table",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.684,
+        0.744
+      ],
+      "gap_m": 1.655,
+      "refused": false
+    },
+    {
+      "room": "asset005",
+      "object": "brown table",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset005",
+      "object": "tube",
+      "condition": "raster",
+      "answer_m": [
+        1.991,
+        -1.934
+      ],
+      "gap_m": 3.011,
+      "refused": false
+    },
+    {
+      "room": "asset005",
+      "object": "tube",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        1.684,
+        0.744
+      ],
+      "gap_m": 0.968,
+      "refused": false
+    },
+    {
+      "room": "asset005",
+      "object": "tube",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.991,
+        -1.934
+      ],
+      "gap_m": 3.011,
+      "refused": false
+    },
+    {
+      "room": "asset005",
+      "object": "tube",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.684,
+        0.744
+      ],
+      "gap_m": 0.968,
+      "refused": false
+    },
+    {
+      "room": "asset005",
+      "object": "tube",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset005",
+      "object": "bean",
+      "condition": "raster",
+      "answer_m": [
+        1.072,
+        0.744
+      ],
+      "gap_m": 2.043,
+      "refused": false
+    },
+    {
+      "room": "asset005",
+      "object": "bean",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        0.766,
+        0.744
+      ],
+      "gap_m": 1.753,
+      "refused": false
+    },
+    {
+      "room": "asset005",
+      "object": "bean",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        0.766,
+        1.041
+      ],
+      "gap_m": 1.879,
+      "refused": false
+    },
+    {
+      "room": "asset005",
+      "object": "bean",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.072,
+        0.744
+      ],
+      "gap_m": 2.043,
+      "refused": false
+    },
+    {
+      "room": "asset005",
+      "object": "bean",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset005",
+      "object": "guitar",
+      "condition": "raster",
+      "answer_m": [
+        -0.766,
+        1.041
+      ],
+      "gap_m": 1.305,
+      "refused": false
+    },
+    {
+      "room": "asset005",
+      "object": "guitar",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        1.072,
+        1.041
+      ],
+      "gap_m": 0.965,
+      "refused": false
+    },
+    {
+      "room": "asset005",
+      "object": "guitar",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        -1.991,
+        1.636
+      ],
+      "gap_m": 2.661,
+      "refused": false
+    },
+    {
+      "room": "asset005",
+      "object": "guitar",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.072,
+        1.041
+      ],
+      "gap_m": 0.965,
+      "refused": false
+    },
+    {
+      "room": "asset005",
+      "object": "guitar",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset006",
+      "object": "black sofa",
+      "condition": "raster",
+      "answer_m": [
+        0.126,
+        1.088
+      ],
+      "gap_m": 0.963,
+      "refused": false
+    },
+    {
+      "room": "asset006",
+      "object": "black sofa",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        -0.126,
+        0.218
+      ],
+      "gap_m": 0.093,
+      "refused": false
+    },
+    {
+      "room": "asset006",
+      "object": "black sofa",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        -0.126,
+        0.218
+      ],
+      "gap_m": 0.093,
+      "refused": false
+    },
+    {
+      "room": "asset006",
+      "object": "black sofa",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        -0.126,
+        0.218
+      ],
+      "gap_m": 0.093,
+      "refused": false
+    },
+    {
+      "room": "asset006",
+      "object": "black sofa",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset006",
+      "object": "gray sofa",
+      "condition": "raster",
+      "answer_m": [
+        0.126,
+        1.088
+      ],
+      "gap_m": 0.588,
+      "refused": false
+    },
+    {
+      "room": "asset006",
+      "object": "gray sofa",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        -0.126,
+        0.218
+      ],
+      "gap_m": 1.458,
+      "refused": false
+    },
+    {
+      "room": "asset006",
+      "object": "gray sofa",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        -0.126,
+        0.218
+      ],
+      "gap_m": 1.458,
+      "refused": false
+    },
+    {
+      "room": "asset006",
+      "object": "gray sofa",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        -0.126,
+        0.218
+      ],
+      "gap_m": 1.458,
+      "refused": false
+    },
+    {
+      "room": "asset006",
+      "object": "gray sofa",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset006",
+      "object": "basket",
+      "condition": "raster",
+      "answer_m": [
+        1.382,
+        -2.828
+      ],
+      "gap_m": 2.553,
+      "refused": false
+    },
+    {
+      "room": "asset006",
+      "object": "basket",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        1.382,
+        -2.828
+      ],
+      "gap_m": 2.553,
+      "refused": false
+    },
+    {
+      "room": "asset006",
+      "object": "basket",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.382,
+        -2.828
+      ],
+      "gap_m": 2.553,
+      "refused": false
+    },
+    {
+      "room": "asset006",
+      "object": "basket",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.633,
+        -2.828
+      ],
+      "gap_m": 2.566,
+      "refused": false
+    },
+    {
+      "room": "asset006",
+      "object": "basket",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset008",
+      "object": "cube",
+      "condition": "raster",
+      "answer_m": [
+        0.752,
+        0.828
+      ],
+      "gap_m": 0.797,
+      "refused": false
+    },
+    {
+      "room": "asset008",
+      "object": "cube",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        0.752,
+        0.828
+      ],
+      "gap_m": 0.797,
+      "refused": false
+    },
+    {
+      "room": "asset008",
+      "object": "cube",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        0.752,
+        0.828
+      ],
+      "gap_m": 0.797,
+      "refused": false
+    },
+    {
+      "room": "asset008",
+      "object": "cube",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        0.752,
+        0.828
+      ],
+      "gap_m": 0.797,
+      "refused": false
+    },
+    {
+      "room": "asset008",
+      "object": "cube",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset008",
+      "object": "table",
+      "condition": "raster",
+      "answer_m": [
+        0.15,
+        0.828
+      ],
+      "gap_m": 1.41,
+      "refused": false
+    },
+    {
+      "room": "asset008",
+      "object": "table",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        0.15,
+        0.828
+      ],
+      "gap_m": 1.41,
+      "refused": false
+    },
+    {
+      "room": "asset008",
+      "object": "table",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        0.15,
+        0.828
+      ],
+      "gap_m": 1.41,
+      "refused": false
+    },
+    {
+      "room": "asset008",
+      "object": "table",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        0.15,
+        0.828
+      ],
+      "gap_m": 1.41,
+      "refused": false
+    },
+    {
+      "room": "asset008",
+      "object": "table",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset008",
+      "object": "bar stool",
+      "condition": "raster",
+      "answer_m": [
+        0.752,
+        1.159
+      ],
+      "gap_m": 1.292,
+      "refused": false
+    },
+    {
+      "room": "asset008",
+      "object": "bar stool",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        0.752,
+        0.828
+      ],
+      "gap_m": 1.044,
+      "refused": false
+    },
+    {
+      "room": "asset008",
+      "object": "bar stool",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        0.752,
+        0.828
+      ],
+      "gap_m": 1.044,
+      "refused": false
+    },
+    {
+      "room": "asset008",
+      "object": "bar stool",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        0.752,
+        0.828
+      ],
+      "gap_m": 1.044,
+      "refused": false
+    },
+    {
+      "room": "asset008",
+      "object": "bar stool",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset008",
+      "object": "stool",
+      "condition": "raster",
+      "answer_m": [
+        0.752,
+        0.828
+      ],
+      "gap_m": 1.723,
+      "refused": false
+    },
+    {
+      "room": "asset008",
+      "object": "stool",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        0.752,
+        0.828
+      ],
+      "gap_m": 1.723,
+      "refused": false
+    },
+    {
+      "room": "asset008",
+      "object": "stool",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        0.752,
+        0.828
+      ],
+      "gap_m": 1.723,
+      "refused": false
+    },
+    {
+      "room": "asset008",
+      "object": "stool",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        0.752,
+        0.828
+      ],
+      "gap_m": 1.723,
+      "refused": false
+    },
+    {
+      "room": "asset008",
+      "object": "stool",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset008",
+      "object": "car",
+      "condition": "raster",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset008",
+      "object": "car",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        0.752,
+        -2.153
+      ],
+      "gap_m": 4.184,
+      "refused": false
+    },
+    {
+      "room": "asset008",
+      "object": "car",
+      "condition": "rope3d_z_only",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset008",
+      "object": "car",
+      "condition": "rope3d_scrambled",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset008",
+      "object": "car",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset008",
+      "object": "ball",
+      "condition": "raster",
+      "answer_m": [
+        1.653,
+        -2.153
+      ],
+      "gap_m": 0.729,
+      "refused": false
+    },
+    {
+      "room": "asset008",
+      "object": "ball",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        1.954,
+        -2.153
+      ],
+      "gap_m": 1.029,
+      "refused": false
+    },
+    {
+      "room": "asset008",
+      "object": "ball",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.954,
+        -2.153
+      ],
+      "gap_m": 1.029,
+      "refused": false
+    },
+    {
+      "room": "asset008",
+      "object": "ball",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.653,
+        -2.153
+      ],
+      "gap_m": 0.729,
+      "refused": false
+    },
+    {
+      "room": "asset008",
+      "object": "ball",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset009",
+      "object": "bed",
+      "condition": "raster",
+      "answer_m": [
+        0.133,
+        1.312
+      ],
+      "gap_m": 0.265,
+      "refused": false
+    },
+    {
+      "room": "asset009",
+      "object": "bed",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        -0.133,
+        1.312
+      ],
+      "gap_m": 0.238,
+      "refused": false
+    },
+    {
+      "room": "asset009",
+      "object": "bed",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        0.133,
+        1.312
+      ],
+      "gap_m": 0.265,
+      "refused": false
+    },
+    {
+      "room": "asset009",
+      "object": "bed",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        0.133,
+        1.312
+      ],
+      "gap_m": 0.265,
+      "refused": false
+    },
+    {
+      "room": "asset009",
+      "object": "bed",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset009",
+      "object": "screen",
+      "condition": "raster",
+      "answer_m": [
+        0.133,
+        0.262
+      ],
+      "gap_m": 1.195,
+      "refused": false
+    },
+    {
+      "room": "asset009",
+      "object": "screen",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        0.133,
+        0.262
+      ],
+      "gap_m": 1.195,
+      "refused": false
+    },
+    {
+      "room": "asset009",
+      "object": "screen",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        0.133,
+        0.262
+      ],
+      "gap_m": 1.195,
+      "refused": false
+    },
+    {
+      "room": "asset009",
+      "object": "screen",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        -0.133,
+        0.262
+      ],
+      "gap_m": 1.264,
+      "refused": false
+    },
+    {
+      "room": "asset009",
+      "object": "screen",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset009",
+      "object": "monitor",
+      "condition": "raster",
+      "answer_m": [
+        0.664,
+        -1.837
+      ],
+      "gap_m": 1.718,
+      "refused": false
+    },
+    {
+      "room": "asset009",
+      "object": "monitor",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        0.664,
+        -1.837
+      ],
+      "gap_m": 1.718,
+      "refused": false
+    },
+    {
+      "room": "asset009",
+      "object": "monitor",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        0.664,
+        -1.837
+      ],
+      "gap_m": 1.718,
+      "refused": false
+    },
+    {
+      "room": "asset009",
+      "object": "monitor",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        0.664,
+        -0.787
+      ],
+      "gap_m": 2.444,
+      "refused": false
+    },
+    {
+      "room": "asset009",
+      "object": "monitor",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset009",
+      "object": "laptop",
+      "condition": "raster",
+      "answer_m": [
+        0.664,
+        -2.362
+      ],
+      "gap_m": 2.579,
+      "refused": false
+    },
+    {
+      "room": "asset009",
+      "object": "laptop",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        1.461,
+        -3.412
+      ],
+      "gap_m": 3.877,
+      "refused": false
+    },
+    {
+      "room": "asset009",
+      "object": "laptop",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        0.664,
+        -2.362
+      ],
+      "gap_m": 2.579,
+      "refused": false
+    },
+    {
+      "room": "asset009",
+      "object": "laptop",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        0.664,
+        -3.412
+      ],
+      "gap_m": 3.558,
+      "refused": false
+    },
+    {
+      "room": "asset009",
+      "object": "laptop",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset009",
+      "object": "cone",
+      "condition": "raster",
+      "answer_m": [
+        1.461,
+        -3.412
+      ],
+      "gap_m": 0.925,
+      "refused": false
+    },
+    {
+      "room": "asset009",
+      "object": "cone",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        1.727,
+        -3.412
+      ],
+      "gap_m": 1.145,
+      "refused": false
+    },
+    {
+      "room": "asset009",
+      "object": "cone",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.727,
+        -3.412
+      ],
+      "gap_m": 1.145,
+      "refused": false
+    },
+    {
+      "room": "asset009",
+      "object": "cone",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.727,
+        -3.412
+      ],
+      "gap_m": 1.145,
+      "refused": false
+    },
+    {
+      "room": "asset009",
+      "object": "cone",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset010",
+      "object": "bookshelf",
+      "condition": "raster",
+      "answer_m": [
+        0.656,
+        -0.179
+      ],
+      "gap_m": 0.381,
+      "refused": false
+    },
+    {
+      "room": "asset010",
+      "object": "bookshelf",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        0.656,
+        -0.179
+      ],
+      "gap_m": 0.381,
+      "refused": false
+    },
+    {
+      "room": "asset010",
+      "object": "bookshelf",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        0.656,
+        -0.179
+      ],
+      "gap_m": 0.381,
+      "refused": false
+    },
+    {
+      "room": "asset010",
+      "object": "bookshelf",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.706,
+        -0.179
+      ],
+      "gap_m": 1.426,
+      "refused": false
+    },
+    {
+      "room": "asset010",
+      "object": "bookshelf",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset010",
+      "object": "shelf",
+      "condition": "raster",
+      "answer_m": [
+        -0.131,
+        -0.179
+      ],
+      "gap_m": 1.351,
+      "refused": false
+    },
+    {
+      "room": "asset010",
+      "object": "shelf",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        -0.131,
+        -0.179
+      ],
+      "gap_m": 1.351,
+      "refused": false
+    },
+    {
+      "room": "asset010",
+      "object": "shelf",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        -0.131,
+        -0.179
+      ],
+      "gap_m": 1.351,
+      "refused": false
+    },
+    {
+      "room": "asset010",
+      "object": "shelf",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        0.131,
+        -0.179
+      ],
+      "gap_m": 1.202,
+      "refused": false
+    },
+    {
+      "room": "asset010",
+      "object": "shelf",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset010",
+      "object": "barrel",
+      "condition": "raster",
+      "answer_m": [
+        -0.131,
+        0.897
+      ],
+      "gap_m": 0.757,
+      "refused": false
+    },
+    {
+      "room": "asset010",
+      "object": "barrel",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        -0.394,
+        0.179
+      ],
+      "gap_m": 1.425,
+      "refused": false
+    },
+    {
+      "room": "asset010",
+      "object": "barrel",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        -0.656,
+        0.897
+      ],
+      "gap_m": 1.228,
+      "refused": false
+    },
+    {
+      "room": "asset010",
+      "object": "barrel",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        -0.131,
+        0.179
+      ],
+      "gap_m": 1.262,
+      "refused": false
+    },
+    {
+      "room": "asset010",
+      "object": "barrel",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset011",
+      "object": "shelf",
+      "condition": "raster",
+      "answer_m": [
+        1.876,
+        0.129
+      ],
+      "gap_m": 1.377,
+      "refused": false
+    },
+    {
+      "room": "asset011",
+      "object": "shelf",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        1.042,
+        0.645
+      ],
+      "gap_m": 0.464,
+      "refused": false
+    },
+    {
+      "room": "asset011",
+      "object": "shelf",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        2.293,
+        -1.678
+      ],
+      "gap_m": 3.053,
+      "refused": false
+    },
+    {
+      "room": "asset011",
+      "object": "shelf",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.042,
+        0.129
+      ],
+      "gap_m": 0.86,
+      "refused": false
+    },
+    {
+      "room": "asset011",
+      "object": "shelf",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset011",
+      "object": "bench",
+      "condition": "raster",
+      "answer_m": [
+        1.042,
+        -1.678
+      ],
+      "gap_m": 0.033,
+      "refused": false
+    },
+    {
+      "room": "asset011",
+      "object": "bench",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        1.042,
+        -1.678
+      ],
+      "gap_m": 0.033,
+      "refused": false
+    },
+    {
+      "room": "asset011",
+      "object": "bench",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.042,
+        -1.678
+      ],
+      "gap_m": 0.033,
+      "refused": false
+    },
+    {
+      "room": "asset011",
+      "object": "bench",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.459,
+        0.645
+      ],
+      "gap_m": 0.549,
+      "refused": false
+    },
+    {
+      "room": "asset011",
+      "object": "bench",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset011",
+      "object": "bookshelf",
+      "condition": "raster",
+      "answer_m": [
+        2.293,
+        0.129
+      ],
+      "gap_m": 1.273,
+      "refused": false
+    },
+    {
+      "room": "asset011",
+      "object": "bookshelf",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        1.042,
+        0.645
+      ],
+      "gap_m": 2.023,
+      "refused": false
+    },
+    {
+      "room": "asset011",
+      "object": "bookshelf",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        2.293,
+        0.645
+      ],
+      "gap_m": 1.784,
+      "refused": false
+    },
+    {
+      "room": "asset011",
+      "object": "bookshelf",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.876,
+        0.129
+      ],
+      "gap_m": 1.263,
+      "refused": false
+    },
+    {
+      "room": "asset011",
+      "object": "bookshelf",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset011",
+      "object": "chair",
+      "condition": "raster",
+      "answer_m": [
+        0.208,
+        0.645
+      ],
+      "gap_m": 1.483,
+      "refused": false
+    },
+    {
+      "room": "asset011",
+      "object": "chair",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        -0.208,
+        0.387
+      ],
+      "gap_m": 1.142,
+      "refused": false
+    },
+    {
+      "room": "asset011",
+      "object": "chair",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        -0.208,
+        0.645
+      ],
+      "gap_m": 1.085,
+      "refused": false
+    },
+    {
+      "room": "asset011",
+      "object": "chair",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        0.208,
+        0.645
+      ],
+      "gap_m": 1.483,
+      "refused": false
+    },
+    {
+      "room": "asset011",
+      "object": "chair",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset011",
+      "object": "guitar neck",
+      "condition": "raster",
+      "answer_m": [
+        1.042,
+        -1.678
+      ],
+      "gap_m": 2.756,
+      "refused": false
+    },
+    {
+      "room": "asset011",
+      "object": "guitar neck",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        1.459,
+        0.645
+      ],
+      "gap_m": 2.636,
+      "refused": false
+    },
+    {
+      "room": "asset011",
+      "object": "guitar neck",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.042,
+        -1.678
+      ],
+      "gap_m": 2.756,
+      "refused": false
+    },
+    {
+      "room": "asset011",
+      "object": "guitar neck",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.459,
+        0.645
+      ],
+      "gap_m": 2.636,
+      "refused": false
+    },
+    {
+      "room": "asset011",
+      "object": "guitar neck",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset017",
+      "object": "cabinet",
+      "condition": "raster",
+      "answer_m": [
+        1.139,
+        0.216
+      ],
+      "gap_m": 0.849,
+      "refused": false
+    },
+    {
+      "room": "asset017",
+      "object": "cabinet",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        0.228,
+        0.216
+      ],
+      "gap_m": 0.798,
+      "refused": false
+    },
+    {
+      "room": "asset017",
+      "object": "cabinet",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        0.228,
+        0.216
+      ],
+      "gap_m": 0.798,
+      "refused": false
+    },
+    {
+      "room": "asset017",
+      "object": "cabinet",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        0.228,
+        0.216
+      ],
+      "gap_m": 0.798,
+      "refused": false
+    },
+    {
+      "room": "asset017",
+      "object": "cabinet",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset017",
+      "object": "sofa",
+      "condition": "raster",
+      "answer_m": [
+        -0.228,
+        1.08
+      ],
+      "gap_m": 1.106,
+      "refused": false
+    },
+    {
+      "room": "asset017",
+      "object": "sofa",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        -0.228,
+        0.216
+      ],
+      "gap_m": 1.124,
+      "refused": false
+    },
+    {
+      "room": "asset017",
+      "object": "sofa",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        -0.228,
+        0.216
+      ],
+      "gap_m": 1.124,
+      "refused": false
+    },
+    {
+      "room": "asset017",
+      "object": "sofa",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        -0.228,
+        0.216
+      ],
+      "gap_m": 1.124,
+      "refused": false
+    },
+    {
+      "room": "asset017",
+      "object": "sofa",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset017",
+      "object": "bookshelf",
+      "condition": "raster",
+      "answer_m": [
+        0.228,
+        -0.216
+      ],
+      "gap_m": 2.783,
+      "refused": false
+    },
+    {
+      "room": "asset017",
+      "object": "bookshelf",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        0.228,
+        -0.216
+      ],
+      "gap_m": 2.783,
+      "refused": false
+    },
+    {
+      "room": "asset017",
+      "object": "bookshelf",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        0.228,
+        -0.216
+      ],
+      "gap_m": 2.783,
+      "refused": false
+    },
+    {
+      "room": "asset017",
+      "object": "bookshelf",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        -0.228,
+        -0.216
+      ],
+      "gap_m": 2.333,
+      "refused": false
+    },
+    {
+      "room": "asset017",
+      "object": "bookshelf",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset017",
+      "object": "vent",
+      "condition": "raster",
+      "answer_m": [
+        2.962,
+        -2.807
+      ],
+      "gap_m": 1.357,
+      "refused": false
+    },
+    {
+      "room": "asset017",
+      "object": "vent",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        1.139,
+        -2.807
+      ],
+      "gap_m": 1.144,
+      "refused": false
+    },
+    {
+      "room": "asset017",
+      "object": "vent",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        2.506,
+        -2.807
+      ],
+      "gap_m": 1.056,
+      "refused": false
+    },
+    {
+      "room": "asset017",
+      "object": "vent",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.139,
+        -2.807
+      ],
+      "gap_m": 1.144,
+      "refused": false
+    },
+    {
+      "room": "asset017",
+      "object": "vent",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset017",
+      "object": "ladder",
+      "condition": "raster",
+      "answer_m": [
+        -2.962,
+        -2.807
+      ],
+      "gap_m": 5.945,
+      "refused": false
+    },
+    {
+      "room": "asset017",
+      "object": "ladder",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        2.962,
+        -2.807
+      ],
+      "gap_m": 2.046,
+      "refused": false
+    },
+    {
+      "room": "asset017",
+      "object": "ladder",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        2.962,
+        -2.807
+      ],
+      "gap_m": 2.046,
+      "refused": false
+    },
+    {
+      "room": "asset017",
+      "object": "ladder",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        -2.962,
+        -2.807
+      ],
+      "gap_m": 5.945,
+      "refused": false
+    },
+    {
+      "room": "asset017",
+      "object": "ladder",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset017",
+      "object": "door",
+      "condition": "raster",
+      "answer_m": [
+        2.962,
+        -0.216
+      ],
+      "gap_m": 6.287,
+      "refused": false
+    },
+    {
+      "room": "asset017",
+      "object": "door",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        2.962,
+        -0.216
+      ],
+      "gap_m": 6.287,
+      "refused": false
+    },
+    {
+      "room": "asset017",
+      "object": "door",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        3.417,
+        -0.216
+      ],
+      "gap_m": 6.709,
+      "refused": false
+    },
+    {
+      "room": "asset017",
+      "object": "door",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        2.962,
+        -2.807
+      ],
+      "gap_m": 5.787,
+      "refused": false
+    },
+    {
+      "room": "asset017",
+      "object": "door",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset018",
+      "object": "stove",
+      "condition": "raster",
+      "answer_m": [
+        0.989,
+        0.822
+      ],
+      "gap_m": 0.956,
+      "refused": false
+    },
+    {
+      "room": "asset018",
+      "object": "stove",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        1.385,
+        1.151
+      ],
+      "gap_m": 0.754,
+      "refused": false
+    },
+    {
+      "room": "asset018",
+      "object": "stove",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        0.989,
+        0.822
+      ],
+      "gap_m": 0.956,
+      "refused": false
+    },
+    {
+      "room": "asset018",
+      "object": "stove",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        2.176,
+        0.164
+      ],
+      "gap_m": 0.011,
+      "refused": false
+    },
+    {
+      "room": "asset018",
+      "object": "stove",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset018",
+      "object": "ottoman",
+      "condition": "raster",
+      "answer_m": [
+        0.198,
+        0.822
+      ],
+      "gap_m": 1.102,
+      "refused": false
+    },
+    {
+      "room": "asset018",
+      "object": "ottoman",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        -0.198,
+        0.164
+      ],
+      "gap_m": 1.123,
+      "refused": false
+    },
+    {
+      "room": "asset018",
+      "object": "ottoman",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        0.198,
+        0.822
+      ],
+      "gap_m": 1.102,
+      "refused": false
+    },
+    {
+      "room": "asset018",
+      "object": "ottoman",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        0.198,
+        0.822
+      ],
+      "gap_m": 1.102,
+      "refused": false
+    },
+    {
+      "room": "asset018",
+      "object": "ottoman",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset018",
+      "object": "bench",
+      "condition": "raster",
+      "answer_m": [
+        0.198,
+        -0.493
+      ],
+      "gap_m": 1.347,
+      "refused": false
+    },
+    {
+      "room": "asset018",
+      "object": "bench",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        0.198,
+        -0.822
+      ],
+      "gap_m": 1.131,
+      "refused": false
+    },
+    {
+      "room": "asset018",
+      "object": "bench",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        0.198,
+        -0.493
+      ],
+      "gap_m": 1.347,
+      "refused": false
+    },
+    {
+      "room": "asset018",
+      "object": "bench",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        0.198,
+        -0.822
+      ],
+      "gap_m": 1.131,
+      "refused": false
+    },
+    {
+      "room": "asset018",
+      "object": "bench",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset018",
+      "object": "bowl",
+      "condition": "raster",
+      "answer_m": [
+        1.385,
+        0.822
+      ],
+      "gap_m": 0.526,
+      "refused": false
+    },
+    {
+      "room": "asset018",
+      "object": "bowl",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        1.385,
+        0.822
+      ],
+      "gap_m": 0.526,
+      "refused": false
+    },
+    {
+      "room": "asset018",
+      "object": "bowl",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.385,
+        0.822
+      ],
+      "gap_m": 0.526,
+      "refused": false
+    },
+    {
+      "room": "asset018",
+      "object": "bowl",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.385,
+        0.822
+      ],
+      "gap_m": 0.526,
+      "refused": false
+    },
+    {
+      "room": "asset018",
+      "object": "bowl",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset018",
+      "object": "basket",
+      "condition": "raster",
+      "answer_m": [
+        2.176,
+        0.822
+      ],
+      "gap_m": 1.428,
+      "refused": false
+    },
+    {
+      "room": "asset018",
+      "object": "basket",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        2.176,
+        0.822
+      ],
+      "gap_m": 1.428,
+      "refused": false
+    },
+    {
+      "room": "asset018",
+      "object": "basket",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        2.176,
+        0.822
+      ],
+      "gap_m": 1.428,
+      "refused": false
+    },
+    {
+      "room": "asset018",
+      "object": "basket",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.385,
+        0.822
+      ],
+      "gap_m": 1.148,
+      "refused": false
+    },
+    {
+      "room": "asset018",
+      "object": "basket",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset018",
+      "object": "mask",
+      "condition": "raster",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset018",
+      "object": "mask",
+      "condition": "rope3d_xyz",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset018",
+      "object": "mask",
+      "condition": "rope3d_z_only",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset018",
+      "object": "mask",
+      "condition": "rope3d_scrambled",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset018",
+      "object": "mask",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset018",
+      "object": "pillow",
+      "condition": "raster",
+      "answer_m": [
+        1.385,
+        0.822
+      ],
+      "gap_m": 0.31,
+      "refused": false
+    },
+    {
+      "room": "asset018",
+      "object": "pillow",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        0.989,
+        -2.137
+      ],
+      "gap_m": 2.862,
+      "refused": false
+    },
+    {
+      "room": "asset018",
+      "object": "pillow",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        0.989,
+        -2.137
+      ],
+      "gap_m": 2.862,
+      "refused": false
+    },
+    {
+      "room": "asset018",
+      "object": "pillow",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        2.176,
+        -2.137
+      ],
+      "gap_m": 3.066,
+      "refused": false
+    },
+    {
+      "room": "asset018",
+      "object": "pillow",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset019",
+      "object": "bookshelf",
+      "condition": "raster",
+      "answer_m": [
+        0.193,
+        0.177
+      ],
+      "gap_m": 2.417,
+      "refused": false
+    },
+    {
+      "room": "asset019",
+      "object": "bookshelf",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        -0.193,
+        -0.177
+      ],
+      "gap_m": 2.432,
+      "refused": false
+    },
+    {
+      "room": "asset019",
+      "object": "bookshelf",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        0.193,
+        0.177
+      ],
+      "gap_m": 2.417,
+      "refused": false
+    },
+    {
+      "room": "asset019",
+      "object": "bookshelf",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        -0.193,
+        -0.177
+      ],
+      "gap_m": 2.432,
+      "refused": false
+    },
+    {
+      "room": "asset019",
+      "object": "bookshelf",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset019",
+      "object": "trunk",
+      "condition": "raster",
+      "answer_m": [
+        0.964,
+        -2.295
+      ],
+      "gap_m": 1.689,
+      "refused": false
+    },
+    {
+      "room": "asset019",
+      "object": "trunk",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        0.964,
+        -1.236
+      ],
+      "gap_m": 1.886,
+      "refused": false
+    },
+    {
+      "room": "asset019",
+      "object": "trunk",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        2.121,
+        -2.295
+      ],
+      "gap_m": 2.846,
+      "refused": false
+    },
+    {
+      "room": "asset019",
+      "object": "trunk",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        0.964,
+        -0.883
+      ],
+      "gap_m": 2.054,
+      "refused": false
+    },
+    {
+      "room": "asset019",
+      "object": "trunk",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset019",
+      "object": "barrel",
+      "condition": "raster",
+      "answer_m": [
+        0.964,
+        -0.53
+      ],
+      "gap_m": 1.26,
+      "refused": false
+    },
+    {
+      "room": "asset019",
+      "object": "barrel",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        -0.964,
+        0.883
+      ],
+      "gap_m": 3.047,
+      "refused": false
+    },
+    {
+      "room": "asset019",
+      "object": "barrel",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        -2.507,
+        -1.236
+      ],
+      "gap_m": 2.963,
+      "refused": false
+    },
+    {
+      "room": "asset019",
+      "object": "barrel",
+      "condition": "rope3d_scrambled",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset019",
+      "object": "barrel",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset019",
+      "object": "basket",
+      "condition": "raster",
+      "answer_m": [
+        0.964,
+        -1.236
+      ],
+      "gap_m": 1.025,
+      "refused": false
+    },
+    {
+      "room": "asset019",
+      "object": "basket",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        0.964,
+        -2.295
+      ],
+      "gap_m": 0.721,
+      "refused": false
+    },
+    {
+      "room": "asset019",
+      "object": "basket",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        0.964,
+        -1.236
+      ],
+      "gap_m": 1.025,
+      "refused": false
+    },
+    {
+      "room": "asset019",
+      "object": "basket",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        0.964,
+        -2.295
+      ],
+      "gap_m": 0.721,
+      "refused": false
+    },
+    {
+      "room": "asset019",
+      "object": "basket",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset019",
+      "object": "coffee bean",
+      "condition": "raster",
+      "answer_m": [
+        2.121,
+        -2.295
+      ],
+      "gap_m": 2.923,
+      "refused": false
+    },
+    {
+      "room": "asset019",
+      "object": "coffee bean",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        2.121,
+        -2.295
+      ],
+      "gap_m": 2.923,
+      "refused": false
+    },
+    {
+      "room": "asset019",
+      "object": "coffee bean",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        2.121,
+        -2.295
+      ],
+      "gap_m": 2.923,
+      "refused": false
+    },
+    {
+      "room": "asset019",
+      "object": "coffee bean",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        2.121,
+        -2.295
+      ],
+      "gap_m": 2.923,
+      "refused": false
+    },
+    {
+      "room": "asset019",
+      "object": "coffee bean",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset036",
+      "object": "bookshelf",
+      "condition": "raster",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset036",
+      "object": "bookshelf",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        0.141,
+        0.259
+      ],
+      "gap_m": 2.003,
+      "refused": false
+    },
+    {
+      "room": "asset036",
+      "object": "bookshelf",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        0.141,
+        0.259
+      ],
+      "gap_m": 2.003,
+      "refused": false
+    },
+    {
+      "room": "asset036",
+      "object": "bookshelf",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        0.141,
+        -0.259
+      ],
+      "gap_m": 2.374,
+      "refused": false
+    },
+    {
+      "room": "asset036",
+      "object": "bookshelf",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset036",
+      "object": "painting",
+      "condition": "raster",
+      "answer_m": [
+        1.836,
+        -3.364
+      ],
+      "gap_m": 1.266,
+      "refused": false
+    },
+    {
+      "room": "asset036",
+      "object": "painting",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        1.836,
+        -3.364
+      ],
+      "gap_m": 1.266,
+      "refused": false
+    },
+    {
+      "room": "asset036",
+      "object": "painting",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.836,
+        -3.364
+      ],
+      "gap_m": 1.266,
+      "refused": false
+    },
+    {
+      "room": "asset036",
+      "object": "painting",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.836,
+        -3.364
+      ],
+      "gap_m": 1.266,
+      "refused": false
+    },
+    {
+      "room": "asset036",
+      "object": "painting",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset036",
+      "object": "pot",
+      "condition": "raster",
+      "answer_m": [
+        0.706,
+        -3.364
+      ],
+      "gap_m": 4.689,
+      "refused": false
+    },
+    {
+      "room": "asset036",
+      "object": "pot",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        0.141,
+        1.294
+      ],
+      "gap_m": 0.258,
+      "refused": false
+    },
+    {
+      "room": "asset036",
+      "object": "pot",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.554,
+        -3.364
+      ],
+      "gap_m": 4.761,
+      "refused": false
+    },
+    {
+      "room": "asset036",
+      "object": "pot",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        0.989,
+        1.294
+      ],
+      "gap_m": 0.21,
+      "refused": false
+    },
+    {
+      "room": "asset036",
+      "object": "pot",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset036",
+      "object": "table",
+      "condition": "raster",
+      "answer_m": [
+        -1.836,
+        -3.364
+      ],
+      "gap_m": 0.922,
+      "refused": false
+    },
+    {
+      "room": "asset036",
+      "object": "table",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        -1.836,
+        -1.294
+      ],
+      "gap_m": 2.045,
+      "refused": false
+    },
+    {
+      "room": "asset036",
+      "object": "table",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        -0.706,
+        -2.329
+      ],
+      "gap_m": 0.709,
+      "refused": false
+    },
+    {
+      "room": "asset036",
+      "object": "table",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        0.706,
+        -2.329
+      ],
+      "gap_m": 1.414,
+      "refused": false
+    },
+    {
+      "room": "asset036",
+      "object": "table",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset036",
+      "object": "basket",
+      "condition": "raster",
+      "answer_m": [
+        0.706,
+        -3.364
+      ],
+      "gap_m": 3.586,
+      "refused": false
+    },
+    {
+      "room": "asset036",
+      "object": "basket",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        0.706,
+        -3.364
+      ],
+      "gap_m": 3.586,
+      "refused": false
+    },
+    {
+      "room": "asset036",
+      "object": "basket",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        0.706,
+        -3.364
+      ],
+      "gap_m": 3.586,
+      "refused": false
+    },
+    {
+      "room": "asset036",
+      "object": "basket",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        0.141,
+        1.294
+      ],
+      "gap_m": 2.005,
+      "refused": false
+    },
+    {
+      "room": "asset036",
+      "object": "basket",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset036",
+      "object": "key",
+      "condition": "raster",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset036",
+      "object": "key",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        0.706,
+        -3.364
+      ],
+      "gap_m": 3.607,
+      "refused": false
+    },
+    {
+      "room": "asset036",
+      "object": "key",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        0.706,
+        -0.776
+      ],
+      "gap_m": 1.639,
+      "refused": false
+    },
+    {
+      "room": "asset036",
+      "object": "key",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        0.706,
+        -3.364
+      ],
+      "gap_m": 3.607,
+      "refused": false
+    },
+    {
+      "room": "asset036",
+      "object": "key",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset037",
+      "object": "ladder",
+      "condition": "raster",
+      "answer_m": [
+        3.051,
+        -2.271
+      ],
+      "gap_m": 2.196,
+      "refused": false
+    },
+    {
+      "room": "asset037",
+      "object": "ladder",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        2.582,
+        0.873
+      ],
+      "gap_m": 0.705,
+      "refused": false
+    },
+    {
+      "room": "asset037",
+      "object": "ladder",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.173,
+        -2.271
+      ],
+      "gap_m": 2.484,
+      "refused": false
+    },
+    {
+      "room": "asset037",
+      "object": "ladder",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        3.051,
+        0.873
+      ],
+      "gap_m": 0.699,
+      "refused": false
+    },
+    {
+      "room": "asset037",
+      "object": "ladder",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset037",
+      "object": "cabinet",
+      "condition": "raster",
+      "answer_m": [
+        3.051,
+        -2.271
+      ],
+      "gap_m": 6.689,
+      "refused": false
+    },
+    {
+      "room": "asset037",
+      "object": "cabinet",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        3.051,
+        -2.271
+      ],
+      "gap_m": 6.689,
+      "refused": false
+    },
+    {
+      "room": "asset037",
+      "object": "cabinet",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        3.051,
+        -2.271
+      ],
+      "gap_m": 6.689,
+      "refused": false
+    },
+    {
+      "room": "asset037",
+      "object": "cabinet",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        3.051,
+        -2.271
+      ],
+      "gap_m": 6.689,
+      "refused": false
+    },
+    {
+      "room": "asset037",
+      "object": "cabinet",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset037",
+      "object": "shelf 1",
+      "condition": "raster",
+      "answer_m": [
+        -0.235,
+        0.175
+      ],
+      "gap_m": 0.466,
+      "refused": false
+    },
+    {
+      "room": "asset037",
+      "object": "shelf 1",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        -0.235,
+        0.175
+      ],
+      "gap_m": 0.466,
+      "refused": false
+    },
+    {
+      "room": "asset037",
+      "object": "shelf 1",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        -0.235,
+        0.175
+      ],
+      "gap_m": 0.466,
+      "refused": false
+    },
+    {
+      "room": "asset037",
+      "object": "shelf 1",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        -0.235,
+        0.175
+      ],
+      "gap_m": 0.466,
+      "refused": false
+    },
+    {
+      "room": "asset037",
+      "object": "shelf 1",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset037",
+      "object": "barrel 1",
+      "condition": "raster",
+      "answer_m": [
+        1.173,
+        -2.271
+      ],
+      "gap_m": 1.714,
+      "refused": false
+    },
+    {
+      "room": "asset037",
+      "object": "barrel 1",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        1.173,
+        -2.271
+      ],
+      "gap_m": 1.714,
+      "refused": false
+    },
+    {
+      "room": "asset037",
+      "object": "barrel 1",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.173,
+        -2.271
+      ],
+      "gap_m": 1.714,
+      "refused": false
+    },
+    {
+      "room": "asset037",
+      "object": "barrel 1",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.173,
+        -2.271
+      ],
+      "gap_m": 1.714,
+      "refused": false
+    },
+    {
+      "room": "asset037",
+      "object": "barrel 1",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset037",
+      "object": "can",
+      "condition": "raster",
+      "answer_m": [
+        2.582,
+        -2.271
+      ],
+      "gap_m": 4.374,
+      "refused": false
+    },
+    {
+      "room": "asset037",
+      "object": "can",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        1.173,
+        -2.271
+      ],
+      "gap_m": 3.654,
+      "refused": false
+    },
+    {
+      "room": "asset037",
+      "object": "can",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        2.582,
+        -2.271
+      ],
+      "gap_m": 4.374,
+      "refused": false
+    },
+    {
+      "room": "asset037",
+      "object": "can",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        2.582,
+        -2.271
+      ],
+      "gap_m": 4.374,
+      "refused": false
+    },
+    {
+      "room": "asset037",
+      "object": "can",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset037",
+      "object": "ottoman",
+      "condition": "raster",
+      "answer_m": [
+        -0.235,
+        0.175
+      ],
+      "gap_m": 1.476,
+      "refused": false
+    },
+    {
+      "room": "asset037",
+      "object": "ottoman",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        0.235,
+        -0.524
+      ],
+      "gap_m": 1.713,
+      "refused": false
+    },
+    {
+      "room": "asset037",
+      "object": "ottoman",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        -0.235,
+        -0.524
+      ],
+      "gap_m": 1.244,
+      "refused": false
+    },
+    {
+      "room": "asset037",
+      "object": "ottoman",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        -0.235,
+        -0.524
+      ],
+      "gap_m": 1.244,
+      "refused": false
+    },
+    {
+      "room": "asset037",
+      "object": "ottoman",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset037",
+      "object": "barrel 2",
+      "condition": "raster",
+      "answer_m": [
+        1.173,
+        -2.271
+      ],
+      "gap_m": 3.151,
+      "refused": false
+    },
+    {
+      "room": "asset037",
+      "object": "barrel 2",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        1.173,
+        -2.271
+      ],
+      "gap_m": 3.151,
+      "refused": false
+    },
+    {
+      "room": "asset037",
+      "object": "barrel 2",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.173,
+        -2.271
+      ],
+      "gap_m": 3.151,
+      "refused": false
+    },
+    {
+      "room": "asset037",
+      "object": "barrel 2",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.173,
+        -2.271
+      ],
+      "gap_m": 3.151,
+      "refused": false
+    },
+    {
+      "room": "asset037",
+      "object": "barrel 2",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset037",
+      "object": "pot",
+      "condition": "raster",
+      "answer_m": [
+        1.173,
+        -2.271
+      ],
+      "gap_m": 0.249,
+      "refused": false
+    },
+    {
+      "room": "asset037",
+      "object": "pot",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        1.173,
+        -2.271
+      ],
+      "gap_m": 0.249,
+      "refused": false
+    },
+    {
+      "room": "asset037",
+      "object": "pot",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.173,
+        -2.271
+      ],
+      "gap_m": 0.249,
+      "refused": false
+    },
+    {
+      "room": "asset037",
+      "object": "pot",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.173,
+        -2.271
+      ],
+      "gap_m": 0.249,
+      "refused": false
+    },
+    {
+      "room": "asset037",
+      "object": "pot",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset037",
+      "object": "shelf 2",
+      "condition": "raster",
+      "answer_m": [
+        0.235,
+        0.175
+      ],
+      "gap_m": 2.154,
+      "refused": false
+    },
+    {
+      "room": "asset037",
+      "object": "shelf 2",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        1.173,
+        0.873
+      ],
+      "gap_m": 2.876,
+      "refused": false
+    },
+    {
+      "room": "asset037",
+      "object": "shelf 2",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        0.235,
+        0.175
+      ],
+      "gap_m": 2.154,
+      "refused": false
+    },
+    {
+      "room": "asset037",
+      "object": "shelf 2",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.173,
+        0.175
+      ],
+      "gap_m": 2.186,
+      "refused": false
+    },
+    {
+      "room": "asset037",
+      "object": "shelf 2",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset041",
+      "object": "cabinet 1",
+      "condition": "raster",
+      "answer_m": [
+        1.136,
+        1.348
+      ],
+      "gap_m": 0.86,
+      "refused": false
+    },
+    {
+      "room": "asset041",
+      "object": "cabinet 1",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        1.136,
+        1.348
+      ],
+      "gap_m": 0.86,
+      "refused": false
+    },
+    {
+      "room": "asset041",
+      "object": "cabinet 1",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.136,
+        1.348
+      ],
+      "gap_m": 0.86,
+      "refused": false
+    },
+    {
+      "room": "asset041",
+      "object": "cabinet 1",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.136,
+        1.348
+      ],
+      "gap_m": 0.86,
+      "refused": false
+    },
+    {
+      "room": "asset041",
+      "object": "cabinet 1",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset041",
+      "object": "black table",
+      "condition": "raster",
+      "answer_m": [
+        0.227,
+        1.348
+      ],
+      "gap_m": 1.762,
+      "refused": false
+    },
+    {
+      "room": "asset041",
+      "object": "black table",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        0.227,
+        1.348
+      ],
+      "gap_m": 1.762,
+      "refused": false
+    },
+    {
+      "room": "asset041",
+      "object": "black table",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        0.227,
+        1.348
+      ],
+      "gap_m": 1.762,
+      "refused": false
+    },
+    {
+      "room": "asset041",
+      "object": "black table",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        0.227,
+        1.348
+      ],
+      "gap_m": 1.762,
+      "refused": false
+    },
+    {
+      "room": "asset041",
+      "object": "black table",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset041",
+      "object": "stove",
+      "condition": "raster",
+      "answer_m": [
+        1.59,
+        1.348
+      ],
+      "gap_m": 1.088,
+      "refused": false
+    },
+    {
+      "room": "asset041",
+      "object": "stove",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        1.59,
+        1.348
+      ],
+      "gap_m": 1.088,
+      "refused": false
+    },
+    {
+      "room": "asset041",
+      "object": "stove",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.59,
+        1.348
+      ],
+      "gap_m": 1.088,
+      "refused": false
+    },
+    {
+      "room": "asset041",
+      "object": "stove",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.136,
+        1.348
+      ],
+      "gap_m": 0.834,
+      "refused": false
+    },
+    {
+      "room": "asset041",
+      "object": "stove",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset041",
+      "object": "brown table",
+      "condition": "raster",
+      "answer_m": [
+        0.227,
+        -1.348
+      ],
+      "gap_m": 2.46,
+      "refused": false
+    },
+    {
+      "room": "asset041",
+      "object": "brown table",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        0.227,
+        0.27
+      ],
+      "gap_m": 3.776,
+      "refused": false
+    },
+    {
+      "room": "asset041",
+      "object": "brown table",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        0.227,
+        0.27
+      ],
+      "gap_m": 3.776,
+      "refused": false
+    },
+    {
+      "room": "asset041",
+      "object": "brown table",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        0.227,
+        0.27
+      ],
+      "gap_m": 3.776,
+      "refused": false
+    },
+    {
+      "room": "asset041",
+      "object": "brown table",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset041",
+      "object": "cabinet 2",
+      "condition": "raster",
+      "answer_m": [
+        1.136,
+        1.348
+      ],
+      "gap_m": 4.155,
+      "refused": false
+    },
+    {
+      "room": "asset041",
+      "object": "cabinet 2",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        1.136,
+        -3.506
+      ],
+      "gap_m": 1.348,
+      "refused": false
+    },
+    {
+      "room": "asset041",
+      "object": "cabinet 2",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.136,
+        1.348
+      ],
+      "gap_m": 4.155,
+      "refused": false
+    },
+    {
+      "room": "asset041",
+      "object": "cabinet 2",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.136,
+        -3.506
+      ],
+      "gap_m": 1.348,
+      "refused": false
+    },
+    {
+      "room": "asset041",
+      "object": "cabinet 2",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset041",
+      "object": "vent",
+      "condition": "raster",
+      "answer_m": [
+        2.953,
+        -3.506
+      ],
+      "gap_m": 5.644,
+      "refused": false
+    },
+    {
+      "room": "asset041",
+      "object": "vent",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        2.953,
+        -3.506
+      ],
+      "gap_m": 5.644,
+      "refused": false
+    },
+    {
+      "room": "asset041",
+      "object": "vent",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        2.953,
+        -3.506
+      ],
+      "gap_m": 5.644,
+      "refused": false
+    },
+    {
+      "room": "asset041",
+      "object": "vent",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        2.953,
+        -3.506
+      ],
+      "gap_m": 5.644,
+      "refused": false
+    },
+    {
+      "room": "asset041",
+      "object": "vent",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset043",
+      "object": "pillar",
+      "condition": "raster",
+      "answer_m": [
+        1.056,
+        0.208
+      ],
+      "gap_m": 1.767,
+      "refused": false
+    },
+    {
+      "room": "asset043",
+      "object": "pillar",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        2.746,
+        -2.706
+      ],
+      "gap_m": 5.1,
+      "refused": false
+    },
+    {
+      "room": "asset043",
+      "object": "pillar",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.056,
+        1.041
+      ],
+      "gap_m": 1.306,
+      "refused": false
+    },
+    {
+      "room": "asset043",
+      "object": "pillar",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.056,
+        1.041
+      ],
+      "gap_m": 1.306,
+      "refused": false
+    },
+    {
+      "room": "asset043",
+      "object": "pillar",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset043",
+      "object": "shelf",
+      "condition": "raster",
+      "answer_m": [
+        1.056,
+        -1.041
+      ],
+      "gap_m": 0.335,
+      "refused": false
+    },
+    {
+      "room": "asset043",
+      "object": "shelf",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        -1.056,
+        -0.208
+      ],
+      "gap_m": 2.256,
+      "refused": false
+    },
+    {
+      "room": "asset043",
+      "object": "shelf",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        -2.746,
+        -1.041
+      ],
+      "gap_m": 3.604,
+      "refused": false
+    },
+    {
+      "room": "asset043",
+      "object": "shelf",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        -1.056,
+        -0.208
+      ],
+      "gap_m": 2.256,
+      "refused": false
+    },
+    {
+      "room": "asset043",
+      "object": "shelf",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset043",
+      "object": "table",
+      "condition": "raster",
+      "answer_m": [
+        0.211,
+        1.041
+      ],
+      "gap_m": 0.374,
+      "refused": false
+    },
+    {
+      "room": "asset043",
+      "object": "table",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        0.211,
+        1.041
+      ],
+      "gap_m": 0.374,
+      "refused": false
+    },
+    {
+      "room": "asset043",
+      "object": "table",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        0.211,
+        1.041
+      ],
+      "gap_m": 0.374,
+      "refused": false
+    },
+    {
+      "room": "asset043",
+      "object": "table",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        0.211,
+        1.041
+      ],
+      "gap_m": 0.374,
+      "refused": false
+    },
+    {
+      "room": "asset043",
+      "object": "table",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset043",
+      "object": "cabinet",
+      "condition": "raster",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset043",
+      "object": "cabinet",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        1.056,
+        -0.624
+      ],
+      "gap_m": 2.163,
+      "refused": false
+    },
+    {
+      "room": "asset043",
+      "object": "cabinet",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.056,
+        -0.624
+      ],
+      "gap_m": 2.163,
+      "refused": false
+    },
+    {
+      "room": "asset043",
+      "object": "cabinet",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.056,
+        -2.706
+      ],
+      "gap_m": 2.011,
+      "refused": false
+    },
+    {
+      "room": "asset043",
+      "object": "cabinet",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset043",
+      "object": "light fixture",
+      "condition": "raster",
+      "answer_m": [
+        1.056,
+        -2.706
+      ],
+      "gap_m": 3.937,
+      "refused": false
+    },
+    {
+      "room": "asset043",
+      "object": "light fixture",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        1.056,
+        -2.706
+      ],
+      "gap_m": 3.937,
+      "refused": false
+    },
+    {
+      "room": "asset043",
+      "object": "light fixture",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.056,
+        -2.706
+      ],
+      "gap_m": 3.937,
+      "refused": false
+    },
+    {
+      "room": "asset043",
+      "object": "light fixture",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        2.324,
+        -2.706
+      ],
+      "gap_m": 4.691,
+      "refused": false
+    },
+    {
+      "room": "asset043",
+      "object": "light fixture",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset050",
+      "object": "bed",
+      "condition": "raster",
+      "answer_m": [
+        0.201,
+        1.391
+      ],
+      "gap_m": 0.44,
+      "refused": false
+    },
+    {
+      "room": "asset050",
+      "object": "bed",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        0.201,
+        1.391
+      ],
+      "gap_m": 0.44,
+      "refused": false
+    },
+    {
+      "room": "asset050",
+      "object": "bed",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        -0.201,
+        0.278
+      ],
+      "gap_m": 0.784,
+      "refused": false
+    },
+    {
+      "room": "asset050",
+      "object": "bed",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        -0.201,
+        0.278
+      ],
+      "gap_m": 0.784,
+      "refused": false
+    },
+    {
+      "room": "asset050",
+      "object": "bed",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset050",
+      "object": "washing machine",
+      "condition": "raster",
+      "answer_m": [
+        1.003,
+        1.947
+      ],
+      "gap_m": 0.259,
+      "refused": false
+    },
+    {
+      "room": "asset050",
+      "object": "washing machine",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        1.404,
+        1.391
+      ],
+      "gap_m": 0.754,
+      "refused": false
+    },
+    {
+      "room": "asset050",
+      "object": "washing machine",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.003,
+        1.391
+      ],
+      "gap_m": 0.794,
+      "refused": false
+    },
+    {
+      "room": "asset050",
+      "object": "washing machine",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        2.207,
+        1.391
+      ],
+      "gap_m": 0.937,
+      "refused": false
+    },
+    {
+      "room": "asset050",
+      "object": "washing machine",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset050",
+      "object": "bucket",
+      "condition": "raster",
+      "answer_m": [
+        -1.003,
+        1.947
+      ],
+      "gap_m": 0.4,
+      "refused": false
+    },
+    {
+      "room": "asset050",
+      "object": "bucket",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        -0.201,
+        1.391
+      ],
+      "gap_m": 0.804,
+      "refused": false
+    },
+    {
+      "room": "asset050",
+      "object": "bucket",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        -1.003,
+        1.391
+      ],
+      "gap_m": 0.871,
+      "refused": false
+    },
+    {
+      "room": "asset050",
+      "object": "bucket",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        -0.602,
+        1.947
+      ],
+      "gap_m": 0.229,
+      "refused": false
+    },
+    {
+      "room": "asset050",
+      "object": "bucket",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset050",
+      "object": "ball",
+      "condition": "raster",
+      "answer_m": [
+        1.003,
+        -3.616
+      ],
+      "gap_m": 2.529,
+      "refused": false
+    },
+    {
+      "room": "asset050",
+      "object": "ball",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        2.207,
+        -3.616
+      ],
+      "gap_m": 3.732,
+      "refused": false
+    },
+    {
+      "room": "asset050",
+      "object": "ball",
+      "condition": "rope3d_z_only",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset050",
+      "object": "ball",
+      "condition": "rope3d_scrambled",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset050",
+      "object": "ball",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset050",
+      "object": "pillow",
+      "condition": "raster",
+      "answer_m": [
+        1.003,
+        -0.278
+      ],
+      "gap_m": 1.438,
+      "refused": false
+    },
+    {
+      "room": "asset050",
+      "object": "pillow",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        1.003,
+        -0.834
+      ],
+      "gap_m": 0.967,
+      "refused": false
+    },
+    {
+      "room": "asset050",
+      "object": "pillow",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.003,
+        -0.834
+      ],
+      "gap_m": 0.967,
+      "refused": false
+    },
+    {
+      "room": "asset050",
+      "object": "pillow",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.003,
+        -3.616
+      ],
+      "gap_m": 2.016,
+      "refused": false
+    },
+    {
+      "room": "asset050",
+      "object": "pillow",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset051",
+      "object": "sofa",
+      "condition": "raster",
+      "answer_m": [
+        0.266,
+        0.637
+      ],
+      "gap_m": 0.06,
+      "refused": false
+    },
+    {
+      "room": "asset051",
+      "object": "sofa",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        0.266,
+        0.637
+      ],
+      "gap_m": 0.06,
+      "refused": false
+    },
+    {
+      "room": "asset051",
+      "object": "sofa",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.331,
+        0.637
+      ],
+      "gap_m": 0.264,
+      "refused": false
+    },
+    {
+      "room": "asset051",
+      "object": "sofa",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        0.266,
+        0.637
+      ],
+      "gap_m": 0.06,
+      "refused": false
+    },
+    {
+      "room": "asset051",
+      "object": "sofa",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset051",
+      "object": "black unidentified object",
+      "condition": "raster",
+      "answer_m": [
+        1.864,
+        0.637
+      ],
+      "gap_m": 1.547,
+      "refused": false
+    },
+    {
+      "room": "asset051",
+      "object": "black unidentified object",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        1.864,
+        0.637
+      ],
+      "gap_m": 1.547,
+      "refused": false
+    },
+    {
+      "room": "asset051",
+      "object": "black unidentified object",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.864,
+        0.637
+      ],
+      "gap_m": 1.547,
+      "refused": false
+    },
+    {
+      "room": "asset051",
+      "object": "black unidentified object",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.864,
+        0.637
+      ],
+      "gap_m": 1.547,
+      "refused": false
+    },
+    {
+      "room": "asset051",
+      "object": "black unidentified object",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset051",
+      "object": "brown unidentified object",
+      "condition": "raster",
+      "answer_m": [
+        1.331,
+        0.637
+      ],
+      "gap_m": 2.907,
+      "refused": false
+    },
+    {
+      "room": "asset051",
+      "object": "brown unidentified object",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        1.331,
+        -1.657
+      ],
+      "gap_m": 3.589,
+      "refused": false
+    },
+    {
+      "room": "asset051",
+      "object": "brown unidentified object",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.864,
+        0.637
+      ],
+      "gap_m": 3.439,
+      "refused": false
+    },
+    {
+      "room": "asset051",
+      "object": "brown unidentified object",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.331,
+        0.637
+      ],
+      "gap_m": 2.907,
+      "refused": false
+    },
+    {
+      "room": "asset051",
+      "object": "brown unidentified object",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset051",
+      "object": "device",
+      "condition": "raster",
+      "answer_m": [
+        3.461,
+        -1.657
+      ],
+      "gap_m": 1.969,
+      "refused": false
+    },
+    {
+      "room": "asset051",
+      "object": "device",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        2.929,
+        -1.657
+      ],
+      "gap_m": 1.686,
+      "refused": false
+    },
+    {
+      "room": "asset051",
+      "object": "device",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        2.929,
+        -1.657
+      ],
+      "gap_m": 1.686,
+      "refused": false
+    },
+    {
+      "room": "asset051",
+      "object": "device",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.864,
+        0.637
+      ],
+      "gap_m": 0.308,
+      "refused": false
+    },
+    {
+      "room": "asset051",
+      "object": "device",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset051",
+      "object": "book",
+      "condition": "raster",
+      "answer_m": [
+        2.929,
+        -1.657
+      ],
+      "gap_m": 1.522,
+      "refused": false
+    },
+    {
+      "room": "asset051",
+      "object": "book",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        1.864,
+        0.637
+      ],
+      "gap_m": 1.501,
+      "refused": false
+    },
+    {
+      "room": "asset051",
+      "object": "book",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.864,
+        0.637
+      ],
+      "gap_m": 1.501,
+      "refused": false
+    },
+    {
+      "room": "asset051",
+      "object": "book",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.864,
+        0.637
+      ],
+      "gap_m": 1.501,
+      "refused": false
+    },
+    {
+      "room": "asset051",
+      "object": "book",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset051",
+      "object": "basket",
+      "condition": "raster",
+      "answer_m": [
+        -2.929,
+        1.402
+      ],
+      "gap_m": 0.028,
+      "refused": false
+    },
+    {
+      "room": "asset051",
+      "object": "basket",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        -2.929,
+        0.892
+      ],
+      "gap_m": 0.183,
+      "refused": false
+    },
+    {
+      "room": "asset051",
+      "object": "basket",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        -2.929,
+        1.402
+      ],
+      "gap_m": 0.028,
+      "refused": false
+    },
+    {
+      "room": "asset051",
+      "object": "basket",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        -3.461,
+        0.637
+      ],
+      "gap_m": 0.618,
+      "refused": false
+    },
+    {
+      "room": "asset051",
+      "object": "basket",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset051",
+      "object": "light fixture",
+      "condition": "raster",
+      "answer_m": [
+        3.461,
+        -1.912
+      ],
+      "gap_m": 4.587,
+      "refused": false
+    },
+    {
+      "room": "asset051",
+      "object": "light fixture",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        3.461,
+        -1.657
+      ],
+      "gap_m": 4.457,
+      "refused": false
+    },
+    {
+      "room": "asset051",
+      "object": "light fixture",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        3.461,
+        -1.657
+      ],
+      "gap_m": 4.457,
+      "refused": false
+    },
+    {
+      "room": "asset051",
+      "object": "light fixture",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        3.461,
+        -1.657
+      ],
+      "gap_m": 4.457,
+      "refused": false
+    },
+    {
+      "room": "asset051",
+      "object": "light fixture",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset051",
+      "object": "lamp",
+      "condition": "raster",
+      "answer_m": [
+        3.461,
+        -1.657
+      ],
+      "gap_m": 4.512,
+      "refused": false
+    },
+    {
+      "room": "asset051",
+      "object": "lamp",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        2.929,
+        -0.892
+      ],
+      "gap_m": 3.964,
+      "refused": false
+    },
+    {
+      "room": "asset051",
+      "object": "lamp",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        2.929,
+        -1.147
+      ],
+      "gap_m": 3.954,
+      "refused": false
+    },
+    {
+      "room": "asset051",
+      "object": "lamp",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        3.461,
+        -1.657
+      ],
+      "gap_m": 4.512,
+      "refused": false
+    },
+    {
+      "room": "asset051",
+      "object": "lamp",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset058",
+      "object": "cabinet 1",
+      "condition": "raster",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset058",
+      "object": "cabinet 1",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        0.712,
+        1.125
+      ],
+      "gap_m": 1.627,
+      "refused": false
+    },
+    {
+      "room": "asset058",
+      "object": "cabinet 1",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        0.712,
+        1.125
+      ],
+      "gap_m": 1.627,
+      "refused": false
+    },
+    {
+      "room": "asset058",
+      "object": "cabinet 1",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        0.142,
+        1.125
+      ],
+      "gap_m": 1.179,
+      "refused": false
+    },
+    {
+      "room": "asset058",
+      "object": "cabinet 1",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset058",
+      "object": "door",
+      "condition": "raster",
+      "answer_m": [
+        1.852,
+        -2.925
+      ],
+      "gap_m": 5.786,
+      "refused": false
+    },
+    {
+      "room": "asset058",
+      "object": "door",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        1.852,
+        -2.925
+      ],
+      "gap_m": 5.786,
+      "refused": false
+    },
+    {
+      "room": "asset058",
+      "object": "door",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.852,
+        -2.925
+      ],
+      "gap_m": 5.786,
+      "refused": false
+    },
+    {
+      "room": "asset058",
+      "object": "door",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.852,
+        -2.925
+      ],
+      "gap_m": 5.786,
+      "refused": false
+    },
+    {
+      "room": "asset058",
+      "object": "door",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset058",
+      "object": "cabinet 2",
+      "condition": "raster",
+      "answer_m": [
+        0.712,
+        1.125
+      ],
+      "gap_m": 0.537,
+      "refused": false
+    },
+    {
+      "room": "asset058",
+      "object": "cabinet 2",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        0.712,
+        1.125
+      ],
+      "gap_m": 0.537,
+      "refused": false
+    },
+    {
+      "room": "asset058",
+      "object": "cabinet 2",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        0.712,
+        1.125
+      ],
+      "gap_m": 0.537,
+      "refused": false
+    },
+    {
+      "room": "asset058",
+      "object": "cabinet 2",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        0.712,
+        1.125
+      ],
+      "gap_m": 0.537,
+      "refused": false
+    },
+    {
+      "room": "asset058",
+      "object": "cabinet 2",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset058",
+      "object": "chair",
+      "condition": "raster",
+      "answer_m": [
+        1.852,
+        -2.925
+      ],
+      "gap_m": 0.753,
+      "refused": false
+    },
+    {
+      "room": "asset058",
+      "object": "chair",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        1.852,
+        -2.925
+      ],
+      "gap_m": 0.753,
+      "refused": false
+    },
+    {
+      "room": "asset058",
+      "object": "chair",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.852,
+        -1.125
+      ],
+      "gap_m": 0.616,
+      "refused": false
+    },
+    {
+      "room": "asset058",
+      "object": "chair",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.852,
+        -2.925
+      ],
+      "gap_m": 0.753,
+      "refused": false
+    },
+    {
+      "room": "asset058",
+      "object": "chair",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset058",
+      "object": "table",
+      "condition": "raster",
+      "answer_m": [
+        1.567,
+        -2.925
+      ],
+      "gap_m": 3.1,
+      "refused": false
+    },
+    {
+      "room": "asset058",
+      "object": "table",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        0.712,
+        -2.925
+      ],
+      "gap_m": 3.17,
+      "refused": false
+    },
+    {
+      "room": "asset058",
+      "object": "table",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.567,
+        -2.925
+      ],
+      "gap_m": 3.1,
+      "refused": false
+    },
+    {
+      "room": "asset058",
+      "object": "table",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        0.712,
+        -2.925
+      ],
+      "gap_m": 3.17,
+      "refused": false
+    },
+    {
+      "room": "asset058",
+      "object": "table",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset061",
+      "object": "black desk",
+      "condition": "raster",
+      "answer_m": [
+        -0.241,
+        -0.597
+      ],
+      "gap_m": 0.709,
+      "refused": false
+    },
+    {
+      "room": "asset061",
+      "object": "black desk",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        -0.241,
+        0.199
+      ],
+      "gap_m": 1.161,
+      "refused": false
+    },
+    {
+      "room": "asset061",
+      "object": "black desk",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        -0.241,
+        0.199
+      ],
+      "gap_m": 1.161,
+      "refused": false
+    },
+    {
+      "room": "asset061",
+      "object": "black desk",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        -0.241,
+        0.199
+      ],
+      "gap_m": 1.161,
+      "refused": false
+    },
+    {
+      "room": "asset061",
+      "object": "black desk",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset061",
+      "object": "brown desk",
+      "condition": "raster",
+      "answer_m": [
+        1.205,
+        1.393
+      ],
+      "gap_m": 2.72,
+      "refused": false
+    },
+    {
+      "room": "asset061",
+      "object": "brown desk",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        0.241,
+        0.995
+      ],
+      "gap_m": 1.678,
+      "refused": false
+    },
+    {
+      "room": "asset061",
+      "object": "brown desk",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.205,
+        0.995
+      ],
+      "gap_m": 2.582,
+      "refused": false
+    },
+    {
+      "room": "asset061",
+      "object": "brown desk",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        0.241,
+        0.995
+      ],
+      "gap_m": 1.678,
+      "refused": false
+    },
+    {
+      "room": "asset061",
+      "object": "brown desk",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset061",
+      "object": "table",
+      "condition": "raster",
+      "answer_m": [
+        1.205,
+        1.792
+      ],
+      "gap_m": 0.346,
+      "refused": false
+    },
+    {
+      "room": "asset061",
+      "object": "table",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        1.205,
+        0.995
+      ],
+      "gap_m": 0.46,
+      "refused": false
+    },
+    {
+      "room": "asset061",
+      "object": "table",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.205,
+        0.995
+      ],
+      "gap_m": 0.46,
+      "refused": false
+    },
+    {
+      "room": "asset061",
+      "object": "table",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        0.241,
+        0.995
+      ],
+      "gap_m": 1.278,
+      "refused": false
+    },
+    {
+      "room": "asset061",
+      "object": "table",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset062",
+      "object": "equipment",
+      "condition": "raster",
+      "answer_m": [
+        1.778,
+        1.025
+      ],
+      "gap_m": 1.217,
+      "refused": false
+    },
+    {
+      "room": "asset062",
+      "object": "equipment",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        2.568,
+        -2.665
+      ],
+      "gap_m": 1.777,
+      "refused": false
+    },
+    {
+      "room": "asset062",
+      "object": "equipment",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.778,
+        1.025
+      ],
+      "gap_m": 1.217,
+      "refused": false
+    },
+    {
+      "room": "asset062",
+      "object": "equipment",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.383,
+        1.025
+      ],
+      "gap_m": 1.204,
+      "refused": false
+    },
+    {
+      "room": "asset062",
+      "object": "equipment",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset062",
+      "object": "table",
+      "condition": "raster",
+      "answer_m": [
+        0.198,
+        1.025
+      ],
+      "gap_m": 2.054,
+      "refused": false
+    },
+    {
+      "room": "asset062",
+      "object": "table",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        -0.593,
+        -2.665
+      ],
+      "gap_m": 1.471,
+      "refused": false
+    },
+    {
+      "room": "asset062",
+      "object": "table",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        0.198,
+        1.025
+      ],
+      "gap_m": 2.054,
+      "refused": false
+    },
+    {
+      "room": "asset062",
+      "object": "table",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        0.198,
+        1.025
+      ],
+      "gap_m": 2.054,
+      "refused": false
+    },
+    {
+      "room": "asset062",
+      "object": "table",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset062",
+      "object": "bar stool",
+      "condition": "raster",
+      "answer_m": [
+        1.383,
+        1.025
+      ],
+      "gap_m": 2.267,
+      "refused": false
+    },
+    {
+      "room": "asset062",
+      "object": "bar stool",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        0.988,
+        0.205
+      ],
+      "gap_m": 2.554,
+      "refused": false
+    },
+    {
+      "room": "asset062",
+      "object": "bar stool",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.383,
+        1.025
+      ],
+      "gap_m": 2.267,
+      "refused": false
+    },
+    {
+      "room": "asset062",
+      "object": "bar stool",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        -0.198,
+        0.205
+      ],
+      "gap_m": 1.942,
+      "refused": false
+    },
+    {
+      "room": "asset062",
+      "object": "bar stool",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset062",
+      "object": "lamp",
+      "condition": "raster",
+      "answer_m": [
+        -0.198,
+        1.025
+      ],
+      "gap_m": 0.709,
+      "refused": false
+    },
+    {
+      "room": "asset062",
+      "object": "lamp",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        -0.198,
+        1.025
+      ],
+      "gap_m": 0.709,
+      "refused": false
+    },
+    {
+      "room": "asset062",
+      "object": "lamp",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        0.988,
+        1.025
+      ],
+      "gap_m": 1.667,
+      "refused": false
+    },
+    {
+      "room": "asset062",
+      "object": "lamp",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        0.988,
+        0.205
+      ],
+      "gap_m": 1.463,
+      "refused": false
+    },
+    {
+      "room": "asset062",
+      "object": "lamp",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset069",
+      "object": "bookshelf 1",
+      "condition": "raster",
+      "answer_m": [
+        2.681,
+        -0.908
+      ],
+      "gap_m": 4.761,
+      "refused": false
+    },
+    {
+      "room": "asset069",
+      "object": "bookshelf 1",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        2.681,
+        -0.182
+      ],
+      "gap_m": 4.483,
+      "refused": false
+    },
+    {
+      "room": "asset069",
+      "object": "bookshelf 1",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        2.681,
+        -0.182
+      ],
+      "gap_m": 4.483,
+      "refused": false
+    },
+    {
+      "room": "asset069",
+      "object": "bookshelf 1",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        2.681,
+        -0.182
+      ],
+      "gap_m": 4.483,
+      "refused": false
+    },
+    {
+      "room": "asset069",
+      "object": "bookshelf 1",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset069",
+      "object": "bookshelf 2",
+      "condition": "raster",
+      "answer_m": [
+        3.169,
+        -0.908
+      ],
+      "gap_m": 2.439,
+      "refused": false
+    },
+    {
+      "room": "asset069",
+      "object": "bookshelf 2",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        2.681,
+        -0.182
+      ],
+      "gap_m": 2.249,
+      "refused": false
+    },
+    {
+      "room": "asset069",
+      "object": "bookshelf 2",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        2.681,
+        0.182
+      ],
+      "gap_m": 2.461,
+      "refused": false
+    },
+    {
+      "room": "asset069",
+      "object": "bookshelf 2",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        2.681,
+        0.182
+      ],
+      "gap_m": 2.461,
+      "refused": false
+    },
+    {
+      "room": "asset069",
+      "object": "bookshelf 2",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset069",
+      "object": "gray bed",
+      "condition": "raster",
+      "answer_m": [
+        -0.244,
+        0.182
+      ],
+      "gap_m": 2.775,
+      "refused": false
+    },
+    {
+      "room": "asset069",
+      "object": "gray bed",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        -0.244,
+        0.182
+      ],
+      "gap_m": 2.775,
+      "refused": false
+    },
+    {
+      "room": "asset069",
+      "object": "gray bed",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        -0.244,
+        0.182
+      ],
+      "gap_m": 2.775,
+      "refused": false
+    },
+    {
+      "room": "asset069",
+      "object": "gray bed",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        -0.244,
+        0.182
+      ],
+      "gap_m": 2.775,
+      "refused": false
+    },
+    {
+      "room": "asset069",
+      "object": "gray bed",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset069",
+      "object": "black bed",
+      "condition": "raster",
+      "answer_m": [
+        -0.244,
+        0.182
+      ],
+      "gap_m": 1.335,
+      "refused": false
+    },
+    {
+      "room": "asset069",
+      "object": "black bed",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        0.244,
+        0.182
+      ],
+      "gap_m": 1.711,
+      "refused": false
+    },
+    {
+      "room": "asset069",
+      "object": "black bed",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        -0.244,
+        0.182
+      ],
+      "gap_m": 1.335,
+      "refused": false
+    },
+    {
+      "room": "asset069",
+      "object": "black bed",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        -0.244,
+        0.182
+      ],
+      "gap_m": 1.335,
+      "refused": false
+    },
+    {
+      "room": "asset069",
+      "object": "black bed",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset069",
+      "object": "brown bed",
+      "condition": "raster",
+      "answer_m": [
+        -0.244,
+        0.182
+      ],
+      "gap_m": 2.699,
+      "refused": false
+    },
+    {
+      "room": "asset069",
+      "object": "brown bed",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        0.244,
+        0.182
+      ],
+      "gap_m": 3.099,
+      "refused": false
+    },
+    {
+      "room": "asset069",
+      "object": "brown bed",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        -0.244,
+        0.182
+      ],
+      "gap_m": 2.699,
+      "refused": false
+    },
+    {
+      "room": "asset069",
+      "object": "brown bed",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        0.244,
+        0.182
+      ],
+      "gap_m": 3.099,
+      "refused": false
+    },
+    {
+      "room": "asset069",
+      "object": "brown bed",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset069",
+      "object": "bowl",
+      "condition": "raster",
+      "answer_m": [
+        1.219,
+        1.271
+      ],
+      "gap_m": 1.702,
+      "refused": false
+    },
+    {
+      "room": "asset069",
+      "object": "bowl",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        1.706,
+        0.908
+      ],
+      "gap_m": 2.067,
+      "refused": false
+    },
+    {
+      "room": "asset069",
+      "object": "bowl",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.706,
+        0.908
+      ],
+      "gap_m": 2.067,
+      "refused": false
+    },
+    {
+      "room": "asset069",
+      "object": "bowl",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.706,
+        1.271
+      ],
+      "gap_m": 2.164,
+      "refused": false
+    },
+    {
+      "room": "asset069",
+      "object": "bowl",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset069",
+      "object": "gray stool",
+      "condition": "raster",
+      "answer_m": [
+        1.706,
+        0.908
+      ],
+      "gap_m": 2.439,
+      "refused": false
+    },
+    {
+      "room": "asset069",
+      "object": "gray stool",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        1.219,
+        0.908
+      ],
+      "gap_m": 1.977,
+      "refused": false
+    },
+    {
+      "room": "asset069",
+      "object": "gray stool",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.219,
+        1.271
+      ],
+      "gap_m": 1.877,
+      "refused": false
+    },
+    {
+      "room": "asset069",
+      "object": "gray stool",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.219,
+        0.908
+      ],
+      "gap_m": 1.977,
+      "refused": false
+    },
+    {
+      "room": "asset069",
+      "object": "gray stool",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset069",
+      "object": "brown stool",
+      "condition": "raster",
+      "answer_m": [
+        1.706,
+        1.271
+      ],
+      "gap_m": 1.934,
+      "refused": false
+    },
+    {
+      "room": "asset069",
+      "object": "brown stool",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        1.219,
+        0.908
+      ],
+      "gap_m": 1.421,
+      "refused": false
+    },
+    {
+      "room": "asset069",
+      "object": "brown stool",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.706,
+        1.271
+      ],
+      "gap_m": 1.934,
+      "refused": false
+    },
+    {
+      "room": "asset069",
+      "object": "brown stool",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.219,
+        0.908
+      ],
+      "gap_m": 1.421,
+      "refused": false
+    },
+    {
+      "room": "asset069",
+      "object": "brown stool",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset069",
+      "object": "barrel",
+      "condition": "raster",
+      "answer_m": [
+        1.219,
+        1.271
+      ],
+      "gap_m": 4.153,
+      "refused": false
+    },
+    {
+      "room": "asset069",
+      "object": "barrel",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        1.706,
+        0.908
+      ],
+      "gap_m": 4.569,
+      "refused": false
+    },
+    {
+      "room": "asset069",
+      "object": "barrel",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.706,
+        1.271
+      ],
+      "gap_m": 4.629,
+      "refused": false
+    },
+    {
+      "room": "asset069",
+      "object": "barrel",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.706,
+        1.271
+      ],
+      "gap_m": 4.629,
+      "refused": false
+    },
+    {
+      "room": "asset069",
+      "object": "barrel",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset069",
+      "object": "mug",
+      "condition": "raster",
+      "answer_m": [
+        3.169,
+        -2.36
+      ],
+      "gap_m": 3.044,
+      "refused": false
+    },
+    {
+      "room": "asset069",
+      "object": "mug",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        3.169,
+        -2.36
+      ],
+      "gap_m": 3.044,
+      "refused": false
+    },
+    {
+      "room": "asset069",
+      "object": "mug",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        3.169,
+        -2.36
+      ],
+      "gap_m": 3.044,
+      "refused": false
+    },
+    {
+      "room": "asset069",
+      "object": "mug",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        2.681,
+        -2.36
+      ],
+      "gap_m": 2.987,
+      "refused": false
+    },
+    {
+      "room": "asset069",
+      "object": "mug",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset069",
+      "object": "lamp",
+      "condition": "raster",
+      "answer_m": [
+        3.169,
+        0.908
+      ],
+      "gap_m": 1.985,
+      "refused": false
+    },
+    {
+      "room": "asset069",
+      "object": "lamp",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        2.681,
+        -0.545
+      ],
+      "gap_m": 1.064,
+      "refused": false
+    },
+    {
+      "room": "asset069",
+      "object": "lamp",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        3.169,
+        -0.545
+      ],
+      "gap_m": 1.549,
+      "refused": false
+    },
+    {
+      "room": "asset069",
+      "object": "lamp",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        3.169,
+        -0.545
+      ],
+      "gap_m": 1.549,
+      "refused": false
+    },
+    {
+      "room": "asset069",
+      "object": "lamp",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset075",
+      "object": "bed 1",
+      "condition": "raster",
+      "answer_m": [
+        0.223,
+        1.184
+      ],
+      "gap_m": 0.523,
+      "refused": false
+    },
+    {
+      "room": "asset075",
+      "object": "bed 1",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        0.223,
+        1.184
+      ],
+      "gap_m": 0.523,
+      "refused": false
+    },
+    {
+      "room": "asset075",
+      "object": "bed 1",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        0.223,
+        1.184
+      ],
+      "gap_m": 0.523,
+      "refused": false
+    },
+    {
+      "room": "asset075",
+      "object": "bed 1",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        0.223,
+        1.184
+      ],
+      "gap_m": 0.523,
+      "refused": false
+    },
+    {
+      "room": "asset075",
+      "object": "bed 1",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset075",
+      "object": "barrel",
+      "condition": "raster",
+      "answer_m": [
+        1.116,
+        1.184
+      ],
+      "gap_m": 0.505,
+      "refused": false
+    },
+    {
+      "room": "asset075",
+      "object": "barrel",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        1.562,
+        1.184
+      ],
+      "gap_m": 0.171,
+      "refused": false
+    },
+    {
+      "room": "asset075",
+      "object": "barrel",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.562,
+        1.184
+      ],
+      "gap_m": 0.171,
+      "refused": false
+    },
+    {
+      "room": "asset075",
+      "object": "barrel",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        2.008,
+        1.184
+      ],
+      "gap_m": 0.062,
+      "refused": false
+    },
+    {
+      "room": "asset075",
+      "object": "barrel",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset075",
+      "object": "table",
+      "condition": "raster",
+      "answer_m": [
+        1.116,
+        0.237
+      ],
+      "gap_m": 0.819,
+      "refused": false
+    },
+    {
+      "room": "asset075",
+      "object": "table",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        1.116,
+        1.184
+      ],
+      "gap_m": 1.318,
+      "refused": false
+    },
+    {
+      "room": "asset075",
+      "object": "table",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.116,
+        1.184
+      ],
+      "gap_m": 1.318,
+      "refused": false
+    },
+    {
+      "room": "asset075",
+      "object": "table",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.116,
+        1.184
+      ],
+      "gap_m": 1.318,
+      "refused": false
+    },
+    {
+      "room": "asset075",
+      "object": "table",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset075",
+      "object": "cabinet 1",
+      "condition": "raster",
+      "answer_m": [
+        1.116,
+        -1.658
+      ],
+      "gap_m": 2.104,
+      "refused": false
+    },
+    {
+      "room": "asset075",
+      "object": "cabinet 1",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        1.116,
+        -1.184
+      ],
+      "gap_m": 2.095,
+      "refused": false
+    },
+    {
+      "room": "asset075",
+      "object": "cabinet 1",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        -0.223,
+        -0.711
+      ],
+      "gap_m": 0.892,
+      "refused": false
+    },
+    {
+      "room": "asset075",
+      "object": "cabinet 1",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.116,
+        -0.711
+      ],
+      "gap_m": 2.179,
+      "refused": false
+    },
+    {
+      "room": "asset075",
+      "object": "cabinet 1",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset075",
+      "object": "bed 2",
+      "condition": "raster",
+      "answer_m": [
+        1.116,
+        1.184
+      ],
+      "gap_m": 2.56,
+      "refused": false
+    },
+    {
+      "room": "asset075",
+      "object": "bed 2",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        1.116,
+        1.184
+      ],
+      "gap_m": 2.56,
+      "refused": false
+    },
+    {
+      "room": "asset075",
+      "object": "bed 2",
+      "condition": "rope3d_z_only",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset075",
+      "object": "bed 2",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.116,
+        1.184
+      ],
+      "gap_m": 2.56,
+      "refused": false
+    },
+    {
+      "room": "asset075",
+      "object": "bed 2",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset075",
+      "object": "radio",
+      "condition": "raster",
+      "answer_m": [
+        1.562,
+        1.184
+      ],
+      "gap_m": 3.89,
+      "refused": false
+    },
+    {
+      "room": "asset075",
+      "object": "radio",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        1.562,
+        1.184
+      ],
+      "gap_m": 3.89,
+      "refused": false
+    },
+    {
+      "room": "asset075",
+      "object": "radio",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.562,
+        1.184
+      ],
+      "gap_m": 3.89,
+      "refused": false
+    },
+    {
+      "room": "asset075",
+      "object": "radio",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.562,
+        1.184
+      ],
+      "gap_m": 3.89,
+      "refused": false
+    },
+    {
+      "room": "asset075",
+      "object": "radio",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset075",
+      "object": "ball",
+      "condition": "raster",
+      "answer_m": [
+        2.008,
+        1.184
+      ],
+      "gap_m": 1.483,
+      "refused": false
+    },
+    {
+      "room": "asset075",
+      "object": "ball",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        2.454,
+        1.184
+      ],
+      "gap_m": 1.929,
+      "refused": false
+    },
+    {
+      "room": "asset075",
+      "object": "ball",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.562,
+        1.184
+      ],
+      "gap_m": 1.037,
+      "refused": false
+    },
+    {
+      "room": "asset075",
+      "object": "ball",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        2.454,
+        1.658
+      ],
+      "gap_m": 1.95,
+      "refused": false
+    },
+    {
+      "room": "asset075",
+      "object": "ball",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset075",
+      "object": "cabinet 2",
+      "condition": "raster",
+      "answer_m": [
+        1.116,
+        -1.658
+      ],
+      "gap_m": 1.864,
+      "refused": false
+    },
+    {
+      "room": "asset075",
+      "object": "cabinet 2",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        1.116,
+        -1.184
+      ],
+      "gap_m": 1.882,
+      "refused": false
+    },
+    {
+      "room": "asset075",
+      "object": "cabinet 2",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.116,
+        -0.711
+      ],
+      "gap_m": 2.006,
+      "refused": false
+    },
+    {
+      "room": "asset075",
+      "object": "cabinet 2",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.116,
+        -3.079
+      ],
+      "gap_m": 2.424,
+      "refused": false
+    },
+    {
+      "room": "asset075",
+      "object": "cabinet 2",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset090",
+      "object": "cabinet 1",
+      "condition": "raster",
+      "answer_m": [
+        0.166,
+        1.027
+      ],
+      "gap_m": 0.968,
+      "refused": false
+    },
+    {
+      "room": "asset090",
+      "object": "cabinet 1",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        0.166,
+        1.027
+      ],
+      "gap_m": 0.968,
+      "refused": false
+    },
+    {
+      "room": "asset090",
+      "object": "cabinet 1",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        0.83,
+        1.027
+      ],
+      "gap_m": 0.713,
+      "refused": false
+    },
+    {
+      "room": "asset090",
+      "object": "cabinet 1",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        0.166,
+        0.205
+      ],
+      "gap_m": 1.73,
+      "refused": false
+    },
+    {
+      "room": "asset090",
+      "object": "cabinet 1",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset090",
+      "object": "refrigerator",
+      "condition": "raster",
+      "answer_m": [
+        1.825,
+        -2.669
+      ],
+      "gap_m": 1.483,
+      "refused": false
+    },
+    {
+      "room": "asset090",
+      "object": "refrigerator",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        0.83,
+        -1.848
+      ],
+      "gap_m": 0.202,
+      "refused": false
+    },
+    {
+      "room": "asset090",
+      "object": "refrigerator",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.825,
+        -2.669
+      ],
+      "gap_m": 1.483,
+      "refused": false
+    },
+    {
+      "room": "asset090",
+      "object": "refrigerator",
+      "condition": "rope3d_scrambled",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset090",
+      "object": "refrigerator",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset090",
+      "object": "plant",
+      "condition": "raster",
+      "answer_m": [
+        1.493,
+        -1.437
+      ],
+      "gap_m": 0.912,
+      "refused": false
+    },
+    {
+      "room": "asset090",
+      "object": "plant",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        1.825,
+        -0.205
+      ],
+      "gap_m": 0.152,
+      "refused": false
+    },
+    {
+      "room": "asset090",
+      "object": "plant",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.825,
+        -1.437
+      ],
+      "gap_m": 0.946,
+      "refused": false
+    },
+    {
+      "room": "asset090",
+      "object": "plant",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.162,
+        -0.616
+      ],
+      "gap_m": 0.092,
+      "refused": false
+    },
+    {
+      "room": "asset090",
+      "object": "plant",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset090",
+      "object": "blackboard",
+      "condition": "raster",
+      "answer_m": [
+        1.162,
+        1.027
+      ],
+      "gap_m": 2.359,
+      "refused": false
+    },
+    {
+      "room": "asset090",
+      "object": "blackboard",
+      "condition": "rope3d_xyz",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset090",
+      "object": "blackboard",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        0.83,
+        0.205
+      ],
+      "gap_m": 1.855,
+      "refused": false
+    },
+    {
+      "room": "asset090",
+      "object": "blackboard",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        0.83,
+        0.205
+      ],
+      "gap_m": 1.855,
+      "refused": false
+    },
+    {
+      "room": "asset090",
+      "object": "blackboard",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset090",
+      "object": "cabinet 2",
+      "condition": "raster",
+      "answer_m": [
+        0.83,
+        -2.669
+      ],
+      "gap_m": 0.305,
+      "refused": false
+    },
+    {
+      "room": "asset090",
+      "object": "cabinet 2",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        0.83,
+        1.027
+      ],
+      "gap_m": 3.664,
+      "refused": false
+    },
+    {
+      "room": "asset090",
+      "object": "cabinet 2",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        0.83,
+        1.027
+      ],
+      "gap_m": 3.664,
+      "refused": false
+    },
+    {
+      "room": "asset090",
+      "object": "cabinet 2",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        0.83,
+        1.027
+      ],
+      "gap_m": 3.664,
+      "refused": false
+    },
+    {
+      "room": "asset090",
+      "object": "cabinet 2",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset090",
+      "object": "cabinet 3",
+      "condition": "raster",
+      "answer_m": [
+        0.83,
+        -2.669
+      ],
+      "gap_m": 0.953,
+      "refused": false
+    },
+    {
+      "room": "asset090",
+      "object": "cabinet 3",
+      "condition": "rope3d_xyz",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset090",
+      "object": "cabinet 3",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        0.83,
+        1.027
+      ],
+      "gap_m": 2.768,
+      "refused": false
+    },
+    {
+      "room": "asset090",
+      "object": "cabinet 3",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        0.166,
+        1.027
+      ],
+      "gap_m": 3.051,
+      "refused": false
+    },
+    {
+      "room": "asset090",
+      "object": "cabinet 3",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset090",
+      "object": "basket",
+      "condition": "raster",
+      "answer_m": [
+        1.493,
+        -1.437
+      ],
+      "gap_m": 3.072,
+      "refused": false
+    },
+    {
+      "room": "asset090",
+      "object": "basket",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        1.825,
+        -2.669
+      ],
+      "gap_m": 3.504,
+      "refused": false
+    },
+    {
+      "room": "asset090",
+      "object": "basket",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.825,
+        -1.437
+      ],
+      "gap_m": 3.403,
+      "refused": false
+    },
+    {
+      "room": "asset090",
+      "object": "basket",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.825,
+        -2.669
+      ],
+      "gap_m": 3.504,
+      "refused": false
+    },
+    {
+      "room": "asset090",
+      "object": "basket",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset090",
+      "object": "cabinet 4",
+      "condition": "raster",
+      "answer_m": [
+        0.83,
+        -2.669
+      ],
+      "gap_m": 3.594,
+      "refused": false
+    },
+    {
+      "room": "asset090",
+      "object": "cabinet 4",
+      "condition": "rope3d_xyz",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset090",
+      "object": "cabinet 4",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        0.83,
+        1.027
+      ],
+      "gap_m": 0.005,
+      "refused": false
+    },
+    {
+      "room": "asset090",
+      "object": "cabinet 4",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        0.166,
+        1.027
+      ],
+      "gap_m": 0.459,
+      "refused": false
+    },
+    {
+      "room": "asset090",
+      "object": "cabinet 4",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset090",
+      "object": "bar",
+      "condition": "raster",
+      "answer_m": [
+        0.83,
+        -1.437
+      ],
+      "gap_m": 3.952,
+      "refused": false
+    },
+    {
+      "room": "asset090",
+      "object": "bar",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        0.83,
+        1.027
+      ],
+      "gap_m": 2.151,
+      "refused": false
+    },
+    {
+      "room": "asset090",
+      "object": "bar",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        0.83,
+        1.027
+      ],
+      "gap_m": 2.151,
+      "refused": false
+    },
+    {
+      "room": "asset090",
+      "object": "bar",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        0.83,
+        0.205
+      ],
+      "gap_m": 2.634,
+      "refused": false
+    },
+    {
+      "room": "asset090",
+      "object": "bar",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset103",
+      "object": "gray table",
+      "condition": "raster",
+      "answer_m": [
+        0.162,
+        1.202
+      ],
+      "gap_m": 0.779,
+      "refused": false
+    },
+    {
+      "room": "asset103",
+      "object": "gray table",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        0.162,
+        0.24
+      ],
+      "gap_m": 0.205,
+      "refused": false
+    },
+    {
+      "room": "asset103",
+      "object": "gray table",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        0.162,
+        1.202
+      ],
+      "gap_m": 0.779,
+      "refused": false
+    },
+    {
+      "room": "asset103",
+      "object": "gray table",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        0.162,
+        0.24
+      ],
+      "gap_m": 0.205,
+      "refused": false
+    },
+    {
+      "room": "asset103",
+      "object": "gray table",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset103",
+      "object": "shelf",
+      "condition": "raster",
+      "answer_m": [
+        0.808,
+        1.202
+      ],
+      "gap_m": 0.394,
+      "refused": false
+    },
+    {
+      "room": "asset103",
+      "object": "shelf",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        0.162,
+        1.202
+      ],
+      "gap_m": 0.831,
+      "refused": false
+    },
+    {
+      "room": "asset103",
+      "object": "shelf",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        0.162,
+        1.202
+      ],
+      "gap_m": 0.831,
+      "refused": false
+    },
+    {
+      "room": "asset103",
+      "object": "shelf",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        0.162,
+        1.202
+      ],
+      "gap_m": 0.831,
+      "refused": false
+    },
+    {
+      "room": "asset103",
+      "object": "shelf",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset103",
+      "object": "l-shape",
+      "condition": "raster",
+      "answer_m": [
+        0.808,
+        1.202
+      ],
+      "gap_m": 0.824,
+      "refused": false
+    },
+    {
+      "room": "asset103",
+      "object": "l-shape",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        0.808,
+        1.202
+      ],
+      "gap_m": 0.824,
+      "refused": false
+    },
+    {
+      "room": "asset103",
+      "object": "l-shape",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        0.808,
+        1.202
+      ],
+      "gap_m": 0.824,
+      "refused": false
+    },
+    {
+      "room": "asset103",
+      "object": "l-shape",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        0.808,
+        1.202
+      ],
+      "gap_m": 0.824,
+      "refused": false
+    },
+    {
+      "room": "asset103",
+      "object": "l-shape",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset103",
+      "object": "window",
+      "condition": "raster",
+      "answer_m": [
+        2.1,
+        -3.124
+      ],
+      "gap_m": 3.98,
+      "refused": false
+    },
+    {
+      "room": "asset103",
+      "object": "window",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        2.1,
+        -3.124
+      ],
+      "gap_m": 3.98,
+      "refused": false
+    },
+    {
+      "room": "asset103",
+      "object": "window",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        2.1,
+        -3.124
+      ],
+      "gap_m": 3.98,
+      "refused": false
+    },
+    {
+      "room": "asset103",
+      "object": "window",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        2.1,
+        -3.124
+      ],
+      "gap_m": 3.98,
+      "refused": false
+    },
+    {
+      "room": "asset103",
+      "object": "window",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset103",
+      "object": "sofa",
+      "condition": "raster",
+      "answer_m": [
+        0.808,
+        -3.124
+      ],
+      "gap_m": 0.017,
+      "refused": false
+    },
+    {
+      "room": "asset103",
+      "object": "sofa",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        0.808,
+        -3.124
+      ],
+      "gap_m": 0.017,
+      "refused": false
+    },
+    {
+      "room": "asset103",
+      "object": "sofa",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        0.808,
+        -3.124
+      ],
+      "gap_m": 0.017,
+      "refused": false
+    },
+    {
+      "room": "asset103",
+      "object": "sofa",
+      "condition": "rope3d_scrambled",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset103",
+      "object": "sofa",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset103",
+      "object": "screen",
+      "condition": "raster",
+      "answer_m": [
+        0.808,
+        1.202
+      ],
+      "gap_m": 3.994,
+      "refused": false
+    },
+    {
+      "room": "asset103",
+      "object": "screen",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        0.808,
+        1.202
+      ],
+      "gap_m": 3.994,
+      "refused": false
+    },
+    {
+      "room": "asset103",
+      "object": "screen",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        0.808,
+        1.202
+      ],
+      "gap_m": 3.994,
+      "refused": false
+    },
+    {
+      "room": "asset103",
+      "object": "screen",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        0.808,
+        1.202
+      ],
+      "gap_m": 3.994,
+      "refused": false
+    },
+    {
+      "room": "asset103",
+      "object": "screen",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset103",
+      "object": "robot arm",
+      "condition": "raster",
+      "answer_m": [
+        1.777,
+        1.202
+      ],
+      "gap_m": 2.633,
+      "refused": false
+    },
+    {
+      "room": "asset103",
+      "object": "robot arm",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        2.1,
+        0.24
+      ],
+      "gap_m": 2.208,
+      "refused": false
+    },
+    {
+      "room": "asset103",
+      "object": "robot arm",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.777,
+        0.24
+      ],
+      "gap_m": 1.941,
+      "refused": false
+    },
+    {
+      "room": "asset103",
+      "object": "robot arm",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.777,
+        -0.721
+      ],
+      "gap_m": 1.533,
+      "refused": false
+    },
+    {
+      "room": "asset103",
+      "object": "robot arm",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset103",
+      "object": "brown table",
+      "condition": "raster",
+      "answer_m": [
+        0.162,
+        1.202
+      ],
+      "gap_m": 3.183,
+      "refused": false
+    },
+    {
+      "room": "asset103",
+      "object": "brown table",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        0.162,
+        1.202
+      ],
+      "gap_m": 3.183,
+      "refused": false
+    },
+    {
+      "room": "asset103",
+      "object": "brown table",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        0.162,
+        1.202
+      ],
+      "gap_m": 3.183,
+      "refused": false
+    },
+    {
+      "room": "asset103",
+      "object": "brown table",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        0.162,
+        1.202
+      ],
+      "gap_m": 3.183,
+      "refused": false
+    },
+    {
+      "room": "asset103",
+      "object": "brown table",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset103",
+      "object": "picture frame",
+      "condition": "raster",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset103",
+      "object": "picture frame",
+      "condition": "rope3d_xyz",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset103",
+      "object": "picture frame",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.777,
+        1.202
+      ],
+      "gap_m": 2.342,
+      "refused": false
+    },
+    {
+      "room": "asset103",
+      "object": "picture frame",
+      "condition": "rope3d_scrambled",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset103",
+      "object": "picture frame",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset104",
+      "object": "cabinet 1",
+      "condition": "raster",
+      "answer_m": [
+        1.373,
+        -3.295
+      ],
+      "gap_m": 2.954,
+      "refused": false
+    },
+    {
+      "room": "asset104",
+      "object": "cabinet 1",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        1.373,
+        -3.295
+      ],
+      "gap_m": 2.954,
+      "refused": false
+    },
+    {
+      "room": "asset104",
+      "object": "cabinet 1",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.373,
+        -3.295
+      ],
+      "gap_m": 2.954,
+      "refused": false
+    },
+    {
+      "room": "asset104",
+      "object": "cabinet 1",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.373,
+        -3.295
+      ],
+      "gap_m": 2.954,
+      "refused": false
+    },
+    {
+      "room": "asset104",
+      "object": "cabinet 1",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset104",
+      "object": "bookshelf",
+      "condition": "raster",
+      "answer_m": [
+        1.373,
+        -1.267
+      ],
+      "gap_m": 3.297,
+      "refused": false
+    },
+    {
+      "room": "asset104",
+      "object": "bookshelf",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        3.022,
+        -3.295
+      ],
+      "gap_m": 5.881,
+      "refused": false
+    },
+    {
+      "room": "asset104",
+      "object": "bookshelf",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.373,
+        -0.76
+      ],
+      "gap_m": 3.001,
+      "refused": false
+    },
+    {
+      "room": "asset104",
+      "object": "bookshelf",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.373,
+        -0.76
+      ],
+      "gap_m": 3.001,
+      "refused": false
+    },
+    {
+      "room": "asset104",
+      "object": "bookshelf",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset104",
+      "object": "cabinets",
+      "condition": "raster",
+      "answer_m": [
+        3.022,
+        -3.295
+      ],
+      "gap_m": 7.07,
+      "refused": false
+    },
+    {
+      "room": "asset104",
+      "object": "cabinets",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        -3.571,
+        -3.295
+      ],
+      "gap_m": 3.871,
+      "refused": false
+    },
+    {
+      "room": "asset104",
+      "object": "cabinets",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        3.022,
+        -3.295
+      ],
+      "gap_m": 7.07,
+      "refused": false
+    },
+    {
+      "room": "asset104",
+      "object": "cabinets",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        3.022,
+        -3.295
+      ],
+      "gap_m": 7.07,
+      "refused": false
+    },
+    {
+      "room": "asset104",
+      "object": "cabinets",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset104",
+      "object": "cabinet 2",
+      "condition": "raster",
+      "answer_m": [
+        1.373,
+        -3.295
+      ],
+      "gap_m": 5.633,
+      "refused": false
+    },
+    {
+      "room": "asset104",
+      "object": "cabinet 2",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        1.373,
+        -3.295
+      ],
+      "gap_m": 5.633,
+      "refused": false
+    },
+    {
+      "room": "asset104",
+      "object": "cabinet 2",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.373,
+        -3.295
+      ],
+      "gap_m": 5.633,
+      "refused": false
+    },
+    {
+      "room": "asset104",
+      "object": "cabinet 2",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.373,
+        -3.295
+      ],
+      "gap_m": 5.633,
+      "refused": false
+    },
+    {
+      "room": "asset104",
+      "object": "cabinet 2",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset104",
+      "object": "wooden box",
+      "condition": "raster",
+      "answer_m": [
+        -0.275,
+        1.267
+      ],
+      "gap_m": 0.55,
+      "refused": false
+    },
+    {
+      "room": "asset104",
+      "object": "wooden box",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        -0.275,
+        1.267
+      ],
+      "gap_m": 0.55,
+      "refused": false
+    },
+    {
+      "room": "asset104",
+      "object": "wooden box",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.373,
+        -3.295
+      ],
+      "gap_m": 3.463,
+      "refused": false
+    },
+    {
+      "room": "asset104",
+      "object": "wooden box",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.373,
+        -3.295
+      ],
+      "gap_m": 3.463,
+      "refused": false
+    },
+    {
+      "room": "asset104",
+      "object": "wooden box",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset104",
+      "object": "stove",
+      "condition": "raster",
+      "answer_m": [
+        1.373,
+        1.267
+      ],
+      "gap_m": 0.941,
+      "refused": false
+    },
+    {
+      "room": "asset104",
+      "object": "stove",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        0.275,
+        1.267
+      ],
+      "gap_m": 1.963,
+      "refused": false
+    },
+    {
+      "room": "asset104",
+      "object": "stove",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        0.275,
+        1.267
+      ],
+      "gap_m": 1.963,
+      "refused": false
+    },
+    {
+      "room": "asset104",
+      "object": "stove",
+      "condition": "rope3d_scrambled",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset104",
+      "object": "stove",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset104",
+      "object": "cabinet 3",
+      "condition": "raster",
+      "answer_m": [
+        1.373,
+        -3.295
+      ],
+      "gap_m": 7.311,
+      "refused": false
+    },
+    {
+      "room": "asset104",
+      "object": "cabinet 3",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        1.373,
+        -3.295
+      ],
+      "gap_m": 7.311,
+      "refused": false
+    },
+    {
+      "room": "asset104",
+      "object": "cabinet 3",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.373,
+        -3.295
+      ],
+      "gap_m": 7.311,
+      "refused": false
+    },
+    {
+      "room": "asset104",
+      "object": "cabinet 3",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.373,
+        -3.295
+      ],
+      "gap_m": 7.311,
+      "refused": false
+    },
+    {
+      "room": "asset104",
+      "object": "cabinet 3",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset104",
+      "object": "bucket",
+      "condition": "raster",
+      "answer_m": [
+        1.373,
+        1.267
+      ],
+      "gap_m": 0.942,
+      "refused": false
+    },
+    {
+      "room": "asset104",
+      "object": "bucket",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        3.022,
+        1.774
+      ],
+      "gap_m": 2.189,
+      "refused": false
+    },
+    {
+      "room": "asset104",
+      "object": "bucket",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.923,
+        1.267
+      ],
+      "gap_m": 1.09,
+      "refused": false
+    },
+    {
+      "room": "asset104",
+      "object": "bucket",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        2.472,
+        1.267
+      ],
+      "gap_m": 1.442,
+      "refused": false
+    },
+    {
+      "room": "asset104",
+      "object": "bucket",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset104",
+      "object": "handle",
+      "condition": "raster",
+      "answer_m": [
+        1.373,
+        -3.295
+      ],
+      "gap_m": 5.384,
+      "refused": false
+    },
+    {
+      "room": "asset104",
+      "object": "handle",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        1.373,
+        -3.295
+      ],
+      "gap_m": 5.384,
+      "refused": false
+    },
+    {
+      "room": "asset104",
+      "object": "handle",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.373,
+        -3.295
+      ],
+      "gap_m": 5.384,
+      "refused": false
+    },
+    {
+      "room": "asset104",
+      "object": "handle",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.373,
+        -3.295
+      ],
+      "gap_m": 5.384,
+      "refused": false
+    },
+    {
+      "room": "asset104",
+      "object": "handle",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset104",
+      "object": "door",
+      "condition": "raster",
+      "answer_m": [
+        3.571,
+        -3.295
+      ],
+      "gap_m": 1.768,
+      "refused": false
+    },
+    {
+      "room": "asset104",
+      "object": "door",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        3.571,
+        -3.295
+      ],
+      "gap_m": 1.768,
+      "refused": false
+    },
+    {
+      "room": "asset104",
+      "object": "door",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        3.571,
+        -3.295
+      ],
+      "gap_m": 1.768,
+      "refused": false
+    },
+    {
+      "room": "asset104",
+      "object": "door",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        3.571,
+        -3.295
+      ],
+      "gap_m": 1.768,
+      "refused": false
+    },
+    {
+      "room": "asset104",
+      "object": "door",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset110",
+      "object": "cart",
+      "condition": "raster",
+      "answer_m": [
+        1.381,
+        -2.966
+      ],
+      "gap_m": 2.986,
+      "refused": false
+    },
+    {
+      "room": "asset110",
+      "object": "cart",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        0.276,
+        -0.684
+      ],
+      "gap_m": 1.865,
+      "refused": false
+    },
+    {
+      "room": "asset110",
+      "object": "cart",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        0.276,
+        -1.141
+      ],
+      "gap_m": 2.135,
+      "refused": false
+    },
+    {
+      "room": "asset110",
+      "object": "cart",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        0.276,
+        1.141
+      ],
+      "gap_m": 1.773,
+      "refused": false
+    },
+    {
+      "room": "asset110",
+      "object": "cart",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset110",
+      "object": "table",
+      "condition": "raster",
+      "answer_m": [
+        0.276,
+        0.228
+      ],
+      "gap_m": 2.815,
+      "refused": false
+    },
+    {
+      "room": "asset110",
+      "object": "table",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        0.276,
+        0.228
+      ],
+      "gap_m": 2.815,
+      "refused": false
+    },
+    {
+      "room": "asset110",
+      "object": "table",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        0.276,
+        0.228
+      ],
+      "gap_m": 2.815,
+      "refused": false
+    },
+    {
+      "room": "asset110",
+      "object": "table",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        0.276,
+        1.141
+      ],
+      "gap_m": 2.651,
+      "refused": false
+    },
+    {
+      "room": "asset110",
+      "object": "table",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset110",
+      "object": "bed",
+      "condition": "raster",
+      "answer_m": [
+        -0.276,
+        0.228
+      ],
+      "gap_m": 1.442,
+      "refused": false
+    },
+    {
+      "room": "asset110",
+      "object": "bed",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        -0.276,
+        0.228
+      ],
+      "gap_m": 1.442,
+      "refused": false
+    },
+    {
+      "room": "asset110",
+      "object": "bed",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        -0.276,
+        -1.141
+      ],
+      "gap_m": 0.42,
+      "refused": false
+    },
+    {
+      "room": "asset110",
+      "object": "bed",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        -0.276,
+        0.228
+      ],
+      "gap_m": 1.442,
+      "refused": false
+    },
+    {
+      "room": "asset110",
+      "object": "bed",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset110",
+      "object": "lamp",
+      "condition": "raster",
+      "answer_m": [
+        3.591,
+        -1.141
+      ],
+      "gap_m": 5.732,
+      "refused": false
+    },
+    {
+      "room": "asset110",
+      "object": "lamp",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        3.039,
+        1.141
+      ],
+      "gap_m": 4.149,
+      "refused": false
+    },
+    {
+      "room": "asset110",
+      "object": "lamp",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        3.039,
+        1.141
+      ],
+      "gap_m": 4.149,
+      "refused": false
+    },
+    {
+      "room": "asset110",
+      "object": "lamp",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        3.039,
+        1.141
+      ],
+      "gap_m": 4.149,
+      "refused": false
+    },
+    {
+      "room": "asset110",
+      "object": "lamp",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset110",
+      "object": "basket",
+      "condition": "raster",
+      "answer_m": [
+        1.381,
+        1.597
+      ],
+      "gap_m": 1.561,
+      "refused": false
+    },
+    {
+      "room": "asset110",
+      "object": "basket",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        1.934,
+        1.141
+      ],
+      "gap_m": 1.935,
+      "refused": false
+    },
+    {
+      "room": "asset110",
+      "object": "basket",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        -1.381,
+        1.141
+      ],
+      "gap_m": 1.138,
+      "refused": false
+    },
+    {
+      "room": "asset110",
+      "object": "basket",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.381,
+        -2.966
+      ],
+      "gap_m": 3.903,
+      "refused": false
+    },
+    {
+      "room": "asset110",
+      "object": "basket",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset110",
+      "object": "rail",
+      "condition": "raster",
+      "answer_m": [
+        -0.276,
+        -0.684
+      ],
+      "gap_m": 2.868,
+      "refused": false
+    },
+    {
+      "room": "asset110",
+      "object": "rail",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        -0.276,
+        -0.684
+      ],
+      "gap_m": 2.868,
+      "refused": false
+    },
+    {
+      "room": "asset110",
+      "object": "rail",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        -0.276,
+        -1.141
+      ],
+      "gap_m": 2.537,
+      "refused": false
+    },
+    {
+      "room": "asset110",
+      "object": "rail",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        -0.276,
+        0.228
+      ],
+      "gap_m": 3.613,
+      "refused": false
+    },
+    {
+      "room": "asset110",
+      "object": "rail",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset116",
+      "object": "ottoman",
+      "condition": "raster",
+      "answer_m": [
+        -0.216,
+        0.981
+      ],
+      "gap_m": 0.011,
+      "refused": false
+    },
+    {
+      "room": "asset116",
+      "object": "ottoman",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        1.078,
+        0.981
+      ],
+      "gap_m": 0.803,
+      "refused": false
+    },
+    {
+      "room": "asset116",
+      "object": "ottoman",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        0.216,
+        0.981
+      ],
+      "gap_m": 0.011,
+      "refused": false
+    },
+    {
+      "room": "asset116",
+      "object": "ottoman",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        -2.803,
+        -2.551
+      ],
+      "gap_m": 3.888,
+      "refused": false
+    },
+    {
+      "room": "asset116",
+      "object": "ottoman",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset116",
+      "object": "trunk",
+      "condition": "raster",
+      "answer_m": [
+        1.078,
+        0.981
+      ],
+      "gap_m": 2.125,
+      "refused": false
+    },
+    {
+      "room": "asset116",
+      "object": "trunk",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        1.078,
+        -2.551
+      ],
+      "gap_m": 3.483,
+      "refused": false
+    },
+    {
+      "room": "asset116",
+      "object": "trunk",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.078,
+        -2.551
+      ],
+      "gap_m": 3.483,
+      "refused": false
+    },
+    {
+      "room": "asset116",
+      "object": "trunk",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.078,
+        -2.551
+      ],
+      "gap_m": 3.483,
+      "refused": false
+    },
+    {
+      "room": "asset116",
+      "object": "trunk",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset116",
+      "object": "cabinet 1",
+      "condition": "raster",
+      "answer_m": [
+        1.078,
+        -2.551
+      ],
+      "gap_m": 4.404,
+      "refused": false
+    },
+    {
+      "room": "asset116",
+      "object": "cabinet 1",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        1.078,
+        -2.551
+      ],
+      "gap_m": 4.404,
+      "refused": false
+    },
+    {
+      "room": "asset116",
+      "object": "cabinet 1",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.078,
+        -2.551
+      ],
+      "gap_m": 4.404,
+      "refused": false
+    },
+    {
+      "room": "asset116",
+      "object": "cabinet 1",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.078,
+        -2.551
+      ],
+      "gap_m": 4.404,
+      "refused": false
+    },
+    {
+      "room": "asset116",
+      "object": "cabinet 1",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset116",
+      "object": "brown unidentified object",
+      "condition": "raster",
+      "answer_m": [
+        1.078,
+        0.981
+      ],
+      "gap_m": 2.104,
+      "refused": false
+    },
+    {
+      "room": "asset116",
+      "object": "brown unidentified object",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        1.078,
+        0.981
+      ],
+      "gap_m": 2.104,
+      "refused": false
+    },
+    {
+      "room": "asset116",
+      "object": "brown unidentified object",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        2.372,
+        -2.551
+      ],
+      "gap_m": 0.85,
+      "refused": false
+    },
+    {
+      "room": "asset116",
+      "object": "brown unidentified object",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.078,
+        0.981
+      ],
+      "gap_m": 2.104,
+      "refused": false
+    },
+    {
+      "room": "asset116",
+      "object": "brown unidentified object",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset116",
+      "object": "lamp",
+      "condition": "raster",
+      "answer_m": [
+        2.372,
+        -2.551
+      ],
+      "gap_m": 5.571,
+      "refused": false
+    },
+    {
+      "room": "asset116",
+      "object": "lamp",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        2.372,
+        -2.551
+      ],
+      "gap_m": 5.571,
+      "refused": false
+    },
+    {
+      "room": "asset116",
+      "object": "lamp",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        2.372,
+        -2.551
+      ],
+      "gap_m": 5.571,
+      "refused": false
+    },
+    {
+      "room": "asset116",
+      "object": "lamp",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        2.372,
+        -2.551
+      ],
+      "gap_m": 5.571,
+      "refused": false
+    },
+    {
+      "room": "asset116",
+      "object": "lamp",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset116",
+      "object": "gray unidentified object",
+      "condition": "raster",
+      "answer_m": [
+        2.372,
+        -2.551
+      ],
+      "gap_m": 2.575,
+      "refused": false
+    },
+    {
+      "room": "asset116",
+      "object": "gray unidentified object",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        1.078,
+        -2.551
+      ],
+      "gap_m": 2.649,
+      "refused": false
+    },
+    {
+      "room": "asset116",
+      "object": "gray unidentified object",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        2.372,
+        -2.551
+      ],
+      "gap_m": 2.575,
+      "refused": false
+    },
+    {
+      "room": "asset116",
+      "object": "gray unidentified object",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.078,
+        -2.551
+      ],
+      "gap_m": 2.649,
+      "refused": false
+    },
+    {
+      "room": "asset116",
+      "object": "gray unidentified object",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset116",
+      "object": "cabinet 2",
+      "condition": "raster",
+      "answer_m": [
+        1.078,
+        -2.551
+      ],
+      "gap_m": 2.704,
+      "refused": false
+    },
+    {
+      "room": "asset116",
+      "object": "cabinet 2",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        1.078,
+        -2.551
+      ],
+      "gap_m": 2.704,
+      "refused": false
+    },
+    {
+      "room": "asset116",
+      "object": "cabinet 2",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        1.078,
+        -2.551
+      ],
+      "gap_m": 2.704,
+      "refused": false
+    },
+    {
+      "room": "asset116",
+      "object": "cabinet 2",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        1.078,
+        -2.551
+      ],
+      "gap_m": 2.704,
+      "refused": false
+    },
+    {
+      "room": "asset116",
+      "object": "cabinet 2",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset116",
+      "object": "basket",
+      "condition": "raster",
+      "answer_m": [
+        2.803,
+        -2.551
+      ],
+      "gap_m": 2.105,
+      "refused": false
+    },
+    {
+      "room": "asset116",
+      "object": "basket",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        2.803,
+        -2.551
+      ],
+      "gap_m": 2.105,
+      "refused": false
+    },
+    {
+      "room": "asset116",
+      "object": "basket",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        2.803,
+        -2.551
+      ],
+      "gap_m": 2.105,
+      "refused": false
+    },
+    {
+      "room": "asset116",
+      "object": "basket",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        2.803,
+        -2.551
+      ],
+      "gap_m": 2.105,
+      "refused": false
+    },
+    {
+      "room": "asset116",
+      "object": "basket",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset116",
+      "object": "camera",
+      "condition": "raster",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    },
+    {
+      "room": "asset116",
+      "object": "camera",
+      "condition": "rope3d_xyz",
+      "answer_m": [
+        2.803,
+        -2.551
+      ],
+      "gap_m": 3.957,
+      "refused": false
+    },
+    {
+      "room": "asset116",
+      "object": "camera",
+      "condition": "rope3d_z_only",
+      "answer_m": [
+        -0.216,
+        -0.196
+      ],
+      "gap_m": 1.129,
+      "refused": false
+    },
+    {
+      "room": "asset116",
+      "object": "camera",
+      "condition": "rope3d_scrambled",
+      "answer_m": [
+        -0.216,
+        -0.196
+      ],
+      "gap_m": 1.129,
+      "refused": false
+    },
+    {
+      "room": "asset116",
+      "object": "camera",
+      "condition": "zeroed",
+      "answer_m": null,
+      "gap_m": null,
+      "refused": true
+    }
+  ]
+}

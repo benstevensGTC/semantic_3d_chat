@@ -1241,6 +1241,45 @@ claims to be changes nothing. And one of the relational probes turned out not to
 be a probe at all — *"which is higher?"* scores 68.9% **with the scene zeroed**,
 because Gemma knows a lamp sits above a rug without looking.
 
+### Does a bigger Gemma help?
+
+Partly, and not where it was needed. E4B was downloaded and run against E2B on
+the same twenty-five rooms and the same 163 questions, with the same controls.
+
+A finding fell out before any number did: **a semantic point cloud is not
+portable between models.** Each point's vector is one decoder's vision-projector
+output, so its width *is* that decoder's hidden size -- 1536 for E2B, 2560 for
+E4B. The map E2B built cannot be fed to E4B at all, and the vision tower being
+identical does not help. Changing model means rebuilding the world.
+
+| condition | E2B | E4B |
+| --- | --- | --- |
+| raster order | 21.5% | **28.8%** |
+| 3D rotary | 20.9% | 25.2% |
+| 3D rotary, height only | 22.7% | 22.7% |
+| 3D rotary, positions scrambled | 17.2% | 21.5% |
+| zeroed scene | 7.4% (76 refusals) | **0.0% (163 refusals)** |
+| random baseline | 14.4% | 14.4% |
+
+**Scale buys perception and honesty.** E4B is about seven points better on every
+real condition. It is also better behaved: with the scene zeroed it declines all
+163 questions, where E2B answered 76 of them and scored 7.4% by inventing
+locations from nothing. For a robot, a model that knows when it cannot see is
+worth more than a model that guesses.
+
+**Scale does not buy use of the rotary channel.** Real positions against
+scrambled ones: p = 0.35 for E2B, p = 0.18 for E4B. Both directional, neither
+significant. Doubling the decoder does not make it read metres in a channel it
+was never trained to read there. That points at adaptation -- a LoRA on the
+decoder -- rather than at a larger frozen model.
+
+![Model comparison](reports/figures/rope3d_study/model_comparison.png)
+
+A correction worth recording: on this twenty-five-room subset E2B shows a
+3.7-point real-versus-scrambled gap, where over all 120 rooms it showed 0.3
+points. The 120-room figure is the reliable one -- 804 items against 163 -- and
+neither subset number should be read as evidence on its own.
+
 ### What this adds up to
 
 The representation carries the geometry and the readout cannot compose over it.
