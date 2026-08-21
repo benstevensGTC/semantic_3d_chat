@@ -29,18 +29,28 @@ CACHE = PROJECT_ROOT / "data" / "spatial_lens" / "phrase_embeddings.npz"
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.parse_args()
+    parser.add_argument(
+        "--token-budgets", type=int, nargs="+", default=[512, 1024, 2048],
+        help="every point budget the sweeps use: a different budget drops "
+             "different objects below min_points, which changes the phrases",
+    )
+    args = parser.parse_args()
 
+    # A budget change is not cosmetic: fewer points means fewer objects clear
+    # min_points, which changes which categories have two members and therefore
+    # which "the cabinet nearest the sofa" phrases exist at all. Caching only
+    # the default budget makes every other one fail on a stale cache.
     phrases: set[str] = set()
-    for room in available_rooms():
-        for example in room_examples(room):
-            phrases.add(example.phrase)
-        for example in relational_examples(room):
-            phrases.add(example.phrase)
-        for example in disambiguation_examples(room):
-            phrases.add(example.phrase)
+    for budget in args.token_budgets:
+        for room in available_rooms():
+            for builder in (room_examples, relational_examples, disambiguation_examples):
+                for example in builder(room, token_budget=budget):
+                    phrases.add(example.phrase)
     ordered = sorted(phrases)
-    print(f"{len(ordered)} distinct phrases across {len(available_rooms())} rooms")
+    print(
+        f"{len(ordered)} distinct phrases across {len(available_rooms())} rooms "
+        f"and budgets {args.token_budgets}"
+    )
 
     from semantic_3d_chat.language.local_lm import load_local_language_model
 

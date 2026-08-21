@@ -18,6 +18,13 @@ STEPS=${STEPS:-3600}
 HOLDOUT=${HOLDOUT:-30}
 OUT=reports/gemma4/metrics/point_grounding_capacity
 mkdir -p "$OUT"
+# Every run's output goes here as well as to stdout. Four runs of this sweep
+# failed instantly on a stale phrase cache and left no trace, because the first
+# launch sent stdout to /dev/null; from the results directory alone that is
+# indistinguishable from "not started yet".
+LOG=${LOG:-$OUT/sweep.log}
+exec > >(tee -a "$LOG") 2>&1
+echo "=== sweep started $(date -u +%Y-%m-%dT%H:%M:%SZ) ==="
 
 run () {
   local tag="$1"; shift
