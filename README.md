@@ -1140,6 +1140,128 @@ are recorded because the corrections are more informative than the numbers.
 | Asset rooms joined the pool mid-sweep | Early and late runs would have been measured on different data |
 | Disambiguation test set held two distinct targets | A score of zero that measured nothing |
 
+### What the measurements say
+
+120 asset rooms, 90 for training and 30 held out, every run on the same
+optimiser-step budget. Each task has its own chance line -- one in however many
+objects for naming, one in *k* for "which cabinet" -- so accuracy is quoted
+beside it. Reading 65% and 23% as "good and less good" would be the wrong
+comparison: one is three times its baseline, the other is half of its own.
+
+**Naming an object.** The phrase says what to find, so this is mostly a
+semantic task with a positional readout — and it works.
+
+| variant | accuracy | chance | lift | median gap |
+| --- | --- | --- | --- | --- |
+| 3D rotary | 64.8% | 21.1% | **3.08×** | **0.15 m** |
+| learned absolute | 63.0% | 21.1% | 2.99× | 0.19 m |
+| no position at all | 51.9% | 21.1% | 2.46× | 0.45 m |
+| colour instead of Gemma | 41.2% | 21.1% | 1.95× | 1.22 m |
+
+Position matters decisively — removing it costs 13 points and triples the
+error (paired McNemar, p ≈ 10⁻⁸). *Which* position barely matters for accuracy
+(rotary vs absolute, p = 0.38) and matters consistently for precision.
+
+![Naming ablation](reports/figures/rope3d_study/asset_object.png)
+
+**"The cabinet nearest the bookshelf."** Two of a kind in the room, so
+semantics narrows the field and stops; only distance can choose. Nothing works.
+
+| variant | accuracy | chance 45.2% |
+| --- | --- | --- |
+| learned absolute | 24.2% | 0.54× |
+| 3D rotary | 22.6% | 0.50× |
+| no position at all | 21.0% | 0.46× |
+| 3D rotary + word-level query | 17.7% | 0.39× |
+| colour instead of Gemma | 15.3% | 0.34× |
+
+Every variant is indistinguishable from every other and all sit at half their
+own baseline. Position contributes nothing here (p = 0.83 against no-position),
+which is the sharpest result in the study: the same encoding that is worth
+p = 0.020 on relational queries is worth nothing when the candidates share a
+category.
+
+![Which cabinet](reports/figures/rope3d_study/asset_disambiguation.png)
+
+**Everything that could have explained it away, and did not.**
+
+| what was varied | on the failing task |
+| --- | --- |
+| reader capacity, 4.1M → 60.8M (15×) | 22.6% → 22.6% |
+| rotary band, 2 m → 32 m | 21.0% – 25.8% |
+| points per room, 512 → 2048 | 0.63× – 0.64× of chance |
+| query representation, pooled → word-level | 22.6% → 17.7% |
+| semantic features, Gemma → colour | 22.6% → 15.3% |
+| training rooms, 24 → 90 | 12.1% – 17.7% |
+
+The same knobs demonstrably work on the task that succeeds: the rotary band
+traces an inverted U peaking at room scale, and points per room lift the naming
+result from 2.24× to 3.73× chance. They are live everywhere except here.
+
+![Capacity](reports/figures/rope3d_study/capacity.png)
+![Rotary band](reports/figures/rope3d_study/wavelength.png)
+
+**Scale helps, and it helps precision more than recognition.**
+
+| training rooms | rotary | learned absolute |
+| --- | --- | --- |
+| 6 | 32.8% / 1.35 m | 33.1% / 1.60 m |
+| 12 | 41.2% / 1.33 m | 38.6% / 1.15 m |
+| 24 | 53.7% / **0.24 m** | 45.7% / 0.84 m |
+| 48 | 57.4% / 0.21 m | 54.1% / 0.58 m |
+| 90 | 64.8% / 0.15 m | 63.0% / 0.19 m |
+
+Accuracy climbs steadily; positional error sits near 1.3 m until about
+twenty-four rooms and then falls fivefold. Relative encoding reaches precise
+localisation sooner — 3.5× tighter at twenty-four rooms — and absolute codes
+catch up by ninety, which is a data-efficiency advantage rather than a higher
+ceiling.
+
+Four seeds put the noise floor at ±2 points on accuracy and ±0.02 m on the gap,
+so anything smaller than that in the table above is not readable.
+
+![Scaling](reports/figures/rope3d_study/asset_scaling.png)
+
+**Gemma reading the field directly.** No training at all: the point cloud is
+pooled into scene tokens and injected through the decoder's own image pathway,
+with the rotary channel driven by metres instead of sequence position. Measured
+over all 120 rooms, 804 localisation queries.
+
+| condition | within 1 m | Holm-adjusted p vs raster |
+| --- | --- | --- |
+| raster order | 19.8% | — |
+| 3D rotary (all axes) | 16.8% | 0.11 |
+| 3D rotary (height only) | 19.7% | 1.0 |
+| 3D rotary, positions scrambled | 16.5% | 0.099 |
+| zeroed scene | 5.8% | ≈ 0 |
+
+The scene tokens are necessary — zeroing them collapses the result and produces
+412 refusals. The 3D positions are not used: scrambling which place each token
+claims to be changes nothing. And one of the relational probes turned out not to
+be a probe at all — *"which is higher?"* scores 68.9% **with the scene zeroed**,
+because Gemma knows a lamp sits above a rug without looking.
+
+### What this adds up to
+
+The representation carries the geometry and the readout cannot compose over it.
+Both halves are measured rather than asserted: the same tokens support 0.15 m
+localisation, and no encoding, query format, feature set, reader size or amount
+of data lets anything compare two distances.
+
+That is a narrower claim than the project set out to make, and a more useful
+one. The next step is not a better positional encoding — it is a readout that
+can select a set, measure each member against a reference and rank them:
+two-stage object proposals, iterative refinement, or pointer decoding, which is
+what the ReferIt3D-family models actually use.
+
+**Limitations, stated rather than omitted.** Only Gemma-4-E2B is available
+locally, so model scale is untested. The vision encoder is pinned at 224×224.
+The disambiguation test rests on 26 distinct held-out targets, because a room
+yields about two however many phrasings it produces and only 28% of rooms can
+pose the question at all. Its scaling curve starts at 24 rooms, since the
+stratified split leaves no capable rooms in smaller training slices. Every
+figure is one seed per point, with the spread reported separately.
+
 ### Browser compatibility surface
 
 The browser route remains available for local API/debug compatibility, but the
